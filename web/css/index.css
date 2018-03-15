@@ -1,0 +1,12 @@
+body {
+  max-width: 1280px;
+  margin: 0px auto;
+}
+
+#map-inputs .row > div ~ div:not(.show) {
+    display: none;
+}
+
+#map-grouping tbody tr {
+  cursor: pointer;
+}
