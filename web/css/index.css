@@ -10,3 +10,41 @@ body {
 #map-grouping tbody tr {
   cursor: pointer;
 }
+
+.row {
+  margin-top: 5px;
+}
+
+#spinner:not(.show) {
+  display: none;
+}
+
+#spinner::before {
+  background: #000;
+  bottom: 0px;
+  content: '';
+  left: 0px;
+  opacity: 0.5;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+}
+
+#spinner div {
+  background: #FFF;
+  border-radius: 20px;
+  height: 120px;
+  left: 50%;
+  margin-left: -60px;
+  margin-top: -60px;
+  position: fixed;
+  text-align: center;
+  top: 50%;
+  width: 120px;
+}
+
+#spinner .glyphicon {
+  animation: spin 5s infinite linear;
+  font-size: 100px;
+  line-height: 120px;
+}

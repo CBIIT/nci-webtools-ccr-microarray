@@ -1,0 +1,75 @@
+<% if (groups.length > 1) { %>
+  <div class="row">
+    <div class="col-xs-3">
+      <label for="primary_group">Choose contrast to show:</label>
+      <select name="primary_group" class="form-control">
+        <option value="">--- Select Group ---</option>
+        <% for (var index = 0; index < groups.length; index++) { %>
+          <option<%=primary_group==groups[index]?" selected":""%>><%=groups[index]%></option>
+        <% } %>
+      </select>
+    </div>
+    <div class="col-xs-3">
+      <label for="contrast_group">vs:</label>
+      <select name="contrast_group" class="form-control">
+        <option value="">--- Select Group ---</option>
+        <% for (var index = 0; index < groups.length; index++) { %>
+          <option<%=contrast_group==groups[index]?" selected":""%>><%=groups[index]%></option>
+        <% } %>
+      </select>
+    </div>
+    <div class="col-xs-3">
+      <label for="pvalue_degs">P-value threshold for DEGs:</label>
+      <input type="number" name="pvalue_degs" value="<%=pvalue_degs%>" class="form-control"/>
+    </div>
+    <div class="col-xs-3">
+      <label for="fold_degs">Fold Change threshold for DEGs:</label>
+      <input type="number" name="fold_degs" value="<%=fold_degs%>" class="form-control"/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">
+      <label for="pvalue_pathways">P-value threshold for pathways:</label>
+      <input type="number" name="pvalue_pathways" value="<%=pvalue_pathways%>" class="form-control"/>
+    </div>
+    <div class="col-xs-3">
+      <label for="gene_set">Choose Gene Set for ssGSEA:</label>
+      <select name="gene_set" class="form-control">
+        <option value="">--- Select Gene Set ---</option>
+        <optgroup label="Human">
+          <option value="h.all.v6.1.symbols.gmt"<%=gene_set=="h.all.v6.1.symbols.gmt"?" selected":""%>>H: Hallmark Gene Sets</option>
+          <option value="c1.all.v6.1.symbols.gmt"<%=gene_set=="c1.all.v6.1.symbols.gmt"?" selected":""%>>C1: Positional Gene Sets</option>
+          <option value="c2.all.v6.1.symbols.gmt"<%=gene_set=="c2.all.v6.1.symbols.gmt"?" selected":""%>>C2: Curated Gene Sets</option>
+          <option value="c3.all.v6.1.symbols.gmt"<%=gene_set=="c3.all.v6.1.symbols.gmt"?" selected":""%>>C3: Motif Gene Sets</option>
+          <option value="c4.all.v6.1.symbols.gmt"<%=gene_set=="c4.all.v6.1.symbols.gmt"?" selected":""%>>C4: Computational Gene Sets</option>
+          <option value="c5.all.v6.1.symbols.gmt"<%=gene_set=="c5.all.v6.1.symbols.gmt"?" selected":""%>>C5: GO gene sets</option>
+          <option value="c6.all.v6.1.symbols.gmt"<%=gene_set=="c6.all.v6.1.symbols.gmt"?" selected":""%>>C6: Oncogenic Signatures</option>
+          <option value="c7.all.v6.1.symbols.gmt"<%=gene_set=="c7.all.v6.1.symbols.gmt"?" selected":""%>>C7: Immunologic Signatures</option>
+        </optgroup>
+        <optgroup label="Mouse">
+          <option value="mouse_H_v5p2.gmt"<%=gene_set=="mouse_H_v5p2.gmt"?" selected":""%>>H: Hallmark Gene Sets</option>
+          <option value="mouse_C2_v5p2.gmt"<%=gene_set=="mouse_C2_v5p2.gmt"?" selected":""%>>C2: Curated Gene Sets</option>
+          <option value="mouse_C3_v5p2.gmt"<%=gene_set=="mouse_C3_v5p2.gmt"?" selected":""%>>C3: Motif Gene Sets</option>
+          <option value="mouse_C4_v5p2.gmt"<%=gene_set=="mouse_C4_v5p2.gmt"?" selected":""%>>C4: Computational Gene Sets</option>
+          <option value="mouse_C5_v5p2.gmt"<%=gene_set=="mouse_C5_v5p2.gmt"?" selected":""%>>C5: GO gene sets</option>
+          <option value="mouse_C6_v5p2.gmt"<%=gene_set=="mouse_C6_v5p2.gmt"?" selected":""%>>C6: Oncogenic Signatures</option>
+          <option value="mouse_C7_v5p2.gmt"<%=gene_set=="mouse_C7_v5p2.gmt"?" selected":""%>>C7: Immunologic Signatures</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="col-xs-3">
+      <label for="pvalue_ssgsea">P-value threshold for ssGSEA:</label>
+      <input type="number" name="pvalue_ssgsea" value="<%=pvalue_ssgsea%>" class="form-control"/>
+    </div>
+    <div class="col-xs-3">
+      <label for="fold_ssgsea">Fold Change threshold for ssGSEA:</label>
+      <input type="number" name="fold_ssgsea" value="<%=fold_ssgsea%>" class="form-control"/>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-9"/>
+    <div class="col-xs-3">
+      <button name="runXYZ" class="form-control" disabled>Run XYZ</button>
+    </div>
+  </div>
+<% } %>

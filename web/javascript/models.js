@@ -1,8 +1,24 @@
+let sync = Backbone.sync
+Backbone.sync = function() {
+    $('#spinner').addClass('show');
+    return sync.apply(this,arguments).fail((resp) => {
+        var resp = resp.responseJSON;
+        new app.BootstrapDialogView({
+            model: new app.BootstrapDialogModel({
+                message: resp.error||resp,
+                title: "Error"
+            })
+        });
+    }).always(() => {
+        $('#spinner').removeClass('show');
+    });
+}
+
 app.TemplatesModel = Backbone.Model.extend({
     defaults: {},
     fetch: function() {
         var $that = this,
-            templateList = ["main","inputs","upload","cels","geo","grouping","results"],
+            templateList = ["main","inputs","upload","cels","geo","grouping","preflight","results"],
             templateObject = {},
             deferred = $.Deferred(),
             after = _.after(templateList.length,function() {
@@ -30,6 +46,16 @@ app.InputsModel = Backbone.Model.extend({
         project_id: "",
         analysis_type: "",
         cel_files: []
+    }
+});
+
+app.UploadModel = Backbone.Model.extend({
+    defaults: {
+        parent: {},
+        input: {},
+        name: "",
+        multiple: false,
+        accepts: null
     }
 });
 
@@ -66,18 +92,29 @@ app.GroupingModel = Backbone.Model.extend({
     }
 });
 
+app.PreFlightModel = Backbone.Model.extend({
+    defaults: {
+        groups: [],
+        primary_group: "",
+        contrast_group: "",
+        pvalue_degs: 0.05,
+        fold_degs: 1.5,
+        pvalue_pathways: 0.05,
+        gene_set: "",
+        pvalue_ssgsea: 1,
+        fold_ssgsea: 0
+    }
+});
+
 app.ResultsModel = Backbone.Model.extend({
     defaults: {
     },
     url: '/runXYZ'
 });
 
-app.UploadModel = Backbone.Model.extend({
+app.BootstrapDialogModel = Backbone.Model.extend({
     defaults: {
-        parent: {},
-        input: {},
-        name: "",
-        multiple: false,
-        accepts: null
+        message: "",
+        title: ""
     }
 });
