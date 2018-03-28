@@ -12,6 +12,12 @@ app.MainView = Backbone.View.extend({
         app.views.inputs = new app.InputsView({
             model: app.models.inputs
         });
+        //////////////////////////////////////////// ToDo: Moveto actual result
+        app.models.results = new app.ResultsModel();
+        app.views.results = new app.ResultsView({
+            model: app.models.results
+        });
+
     }
 });
 
@@ -129,7 +135,7 @@ app.CelsView = Backbone.View.extend({
                 model: app.models.grouping
             });
         }
-}
+    }
 });
 
 app.UploadView = Backbone.View.extend({
@@ -322,6 +328,64 @@ app.PreFlightView = Backbone.View.extend({
             primary_group = this.model.get('primary_group'),
             contrast_group = this.model.get('contrast_group');
         this.$el.find('button[name="runXYZ"]').prop('disabled',!(groups.includes(primary_group) && groups.includes(contrast_group) && (primary_group != contrast_group)));
+    }
+});
+
+app.ResultsView = Backbone.View.extend({
+    el: "#map-results",
+    initialize: function() {
+        app.models.rawhist = new app.RawhistModel();
+        app.views.rawhist = new app.RawhistView({
+            model: app.models.rawhist
+        });
+        app.models.rmahist = new app.RmahistModel();
+        app.views.rmahist = new app.RmahistView({
+            model: app.models.rmahist
+        });
+    }
+})
+
+app.RawhistView = Backbone.View.extend({
+    el: "#map-rawhist",
+    initialize: function() {
+        var $that = this;
+        this.model.fetch().done(function() {
+            Plotly.newPlot(
+                $that.$el.prop('id'),
+                $that.model.get('data'),
+                {
+                    title: $that.model.get('title'),
+                    xaxis: {
+                        title: $that.model.get('xtitle')
+                    },
+                    yaxis: {
+                        title: $that.model.get('ytitle')
+                    }
+                }
+            )
+        });
+    }
+});
+
+app.RmahistView = Backbone.View.extend({
+    el: "#map-rmahist",
+    initialize: function() {
+        var $that = this;
+        this.model.fetch().done(function() {
+            Plotly.newPlot(
+                $that.$el.prop('id'),
+                $that.model.get('data'),
+                {
+                    title: $that.model.get('title'),
+                    xaxis: {
+                        title: $that.model.get('xtitle')
+                    },
+                    yaxis: {
+                        title: $that.model.get('ytitle')
+                    }
+                }
+            )
+        });
     }
 });
 

@@ -112,6 +112,66 @@ app.ResultsModel = Backbone.Model.extend({
     url: '/runXYZ'
 });
 
+app.RawhistModel = Backbone.Model.extend({
+    defaults: {
+        data: [],
+        title: "Raw Samples distribution",
+        xtitle: "log-intensity",
+        ytitle: "density"
+    },
+    url: '/getRawhist',
+    parse: function(resp) {
+        resp = resp[0];
+        var reorder = Array(resp.x[0].length).fill({x:[], y:[]});
+        for (var i = 0; i < reorder.length; i++) {
+            reorder[i] = {
+                x:[],
+                y:[],
+                mode: 'markers',
+                type: 'scatter'
+            };
+        }
+        for (var i = 0; i < resp.x.length; i++) {
+            for (var j = 0; j < resp.x[i].length; j++) {
+                reorder[j].x.push(resp.x[i][j]);
+                reorder[j].y.push(resp.y[i][j]);
+            }
+        }
+        resp = { data: reorder };
+        console.log(resp);
+        return resp;
+    }
+});
+
+app.RmahistModel = Backbone.Model.extend({
+    defaults: {
+        data: [],
+        title: "Distribution after Normalization",
+        xtitle: "log-intensity",
+        ytitle: "density"
+    },
+    url: '/getRmahist',
+    parse: function(resp) {
+        var reorder = Array(resp.x[0].length).fill({x:[], y:[]});
+        for (var i = 0; i < reorder.length; i++) {
+            reorder[i] = {
+                x:[],
+                y:[],
+                mode: 'markers',
+                type: 'scatter'
+            };
+        }
+        for (var i = 0; i < resp.x.length; i++) {
+            for (var j = 0; j < resp.x[i].length; j++) {
+                reorder[j].x.push(resp.x[i][j]);
+                reorder[j].y.push(resp.y[i][j]);
+            }
+        }
+        resp = { data: reorder };
+        console.log(resp);
+        return resp;
+    }
+});
 app.BootstrapDialogModel = Backbone.Model.extend({
     defaults: {
         message: "",
