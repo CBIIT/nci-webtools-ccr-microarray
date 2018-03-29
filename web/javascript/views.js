@@ -14,10 +14,11 @@ app.MainView = Backbone.View.extend({
         });
         //////////////////////////////////////////// ToDo: Moveto actual result
         app.models.results = new app.ResultsModel();
-        app.views.results = new app.ResultsView({
-            model: app.models.results
+        app.models.results.save().done(function() {
+            app.views.results = new app.ResultsView({
+                model: app.models.results
+            });
         });
-
     }
 });
 
@@ -334,58 +335,58 @@ app.PreFlightView = Backbone.View.extend({
 app.ResultsView = Backbone.View.extend({
     el: "#map-results",
     initialize: function() {
-        app.models.rawhist = new app.RawhistModel();
-        app.views.rawhist = new app.RawhistView({
+        this.template = _.template(app.templates.get('results'));
+        this.render.apply(this);
+    },
+    events: {
+        "click a": 'uncollapse'
+    },
+    uncollapse: function(e) {
+        e.preventDefault();
+        $(e.target.getAttribute('href')).addClass('in').siblings().removeClass('in');
+        return false;
+    },
+    render: function() {
+        this.$el.html(this.template(this.model.attributes));
+        app.models.rawhist = new app.HistModel({
+            data: this.model.get('rawhist'),
+            title: "Raw Samples distribution",
+            xtitle: "log-intensity",
+            ytitle: "density"
+        });
+        app.views.rawhist = new app.HistView({
+            el: "#map-rawhist",
             model: app.models.rawhist
         });
-        app.models.rmahist = new app.RmahistModel();
-        app.views.rmahist = new app.RmahistView({
+        app.models.rmahist = new app.HistModel({
+            data: this.model.get('rmahist'),
+            title: "Distribution after Normalization",
+            xtitle: "log-intensity",
+            ytitle: "density"
+        });
+        app.views.rmahist = new app.HistView({
+            el: "#map-rmahist",
             model: app.models.rmahist
         });
     }
 })
 
-app.RawhistView = Backbone.View.extend({
-    el: "#map-rawhist",
+app.HistView = Backbone.View.extend({
     initialize: function() {
         var $that = this;
-        this.model.fetch().done(function() {
-            Plotly.newPlot(
-                $that.$el.prop('id'),
-                $that.model.get('data'),
-                {
-                    title: $that.model.get('title'),
-                    xaxis: {
-                        title: $that.model.get('xtitle')
-                    },
-                    yaxis: {
-                        title: $that.model.get('ytitle')
-                    }
+        Plotly.newPlot(
+            $that.$el.prop('id'),
+            $that.model.get('data'),
+            {
+                title: $that.model.get('title'),
+                xaxis: {
+                    title: $that.model.get('xtitle')
+                },
+                yaxis: {
+                    title: $that.model.get('ytitle')
                 }
-            )
-        });
-    }
-});
-
-app.RmahistView = Backbone.View.extend({
-    el: "#map-rmahist",
-    initialize: function() {
-        var $that = this;
-        this.model.fetch().done(function() {
-            Plotly.newPlot(
-                $that.$el.prop('id'),
-                $that.model.get('data'),
-                {
-                    title: $that.model.get('title'),
-                    xaxis: {
-                        title: $that.model.get('xtitle')
-                    },
-                    yaxis: {
-                        title: $that.model.get('ytitle')
-                    }
-                }
-            )
-        });
+            }
+        )
     }
 });
 
