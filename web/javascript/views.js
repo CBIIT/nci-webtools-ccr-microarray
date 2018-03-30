@@ -348,31 +348,52 @@ app.ResultsView = Backbone.View.extend({
     },
     render: function() {
         this.$el.html(this.template(this.model.attributes));
-        app.models.rawhist = new app.HistModel({
+        app.models.rawhist = new app.PlotModel({
             data: this.model.get('rawhist'),
             title: "Raw Samples distribution",
             xtitle: "log-intensity",
             ytitle: "density"
         });
-        app.views.rawhist = new app.HistView({
+        app.views.rawhist = new app.PlotView({
             el: "#map-rawhist",
             model: app.models.rawhist
         });
-        app.models.rmahist = new app.HistModel({
+        app.models.rmahist = new app.PlotModel({
             data: this.model.get('rmahist'),
             title: "Distribution after Normalization",
             xtitle: "log-intensity",
             ytitle: "density"
         });
-        app.views.rmahist = new app.HistView({
+        app.views.rmahist = new app.PlotView({
             el: "#map-rmahist",
             model: app.models.rmahist
+        });
+        app.models.rawbox = new app.PlotModel({
+            data: this.model.get('rawbox'),
+            title: "",
+            ytitle: ""
+        });
+        app.views.rawbox = new app.PlotView({
+            el: "#map-rawbox",
+            model: app.models.rawbox
+        });
+        app.models.rmabox = new app.PlotModel({
+            data: this.model.get('rmabox'),
+            title: "",
+            ytitle: ""
+        });
+        app.views.rmabox = new app.PlotView({
+            el: "#map-rmabox",
+            model: app.models.rmabox
         });
     }
 })
 
-app.HistView = Backbone.View.extend({
+app.PlotView = Backbone.View.extend({
     initialize: function() {
+        this.render.apply(this);
+    },
+    render: function() {
         var $that = this;
         Plotly.newPlot(
             $that.$el.prop('id'),

@@ -11,7 +11,7 @@ var app = {
     },
     functions: {
         histRtoJS: function(data) {
-            var reorder = Array(data.x[0].length).fill({x:[], y:[]});
+            var reorder = Array(data.x[0].length);
             for (var i = 0; i < reorder.length; i++) {
                 reorder[i] = {
                     x:[],
@@ -24,6 +24,18 @@ var app = {
                 for (var j = 0; j < data.x[i].length; j++) {
                     reorder[j].x.push(data.x[i][j]);
                     reorder[j].y.push(data.y[i][j]);
+                }
+            }
+            return reorder;
+        },
+        boxRtoJS: function(data) {
+            var reorder = Array(Object.keys(data).length);
+            var i = 0;
+            for (var prop in data) {
+                reorder[i++] = {
+                    y: data[prop],
+                    name: prop,
+                    type: 'box'
                 }
             }
             return reorder;
