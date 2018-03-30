@@ -108,21 +108,28 @@ app.PreFlightModel = Backbone.Model.extend({
 
 app.ResultsModel = Backbone.Model.extend({
     defaults: {
-        rawhist: {},
-        rmahist: {}
+        rawbox: {},
+        rawhist: [],
+        rmabox: {},
+        rmahist: []
     },
     url: '/runXYZ',
     parse: function(resp) {
         resp.rawhist = app.functions.histRtoJS(resp.rawhist);
         resp.rmahist = app.functions.histRtoJS(resp.rmahist);
+        resp.rawbox = app.functions.boxRtoJS(resp.rawbox);
+        resp.rmabox = app.functions.boxRtoJS(resp.rmabox);
         console.log(resp);
         return resp;
     }
 });
 
-app.HistModel = Backbone.Model.extend({
+app.PlotModel = Backbone.Model.extend({
     defaults: {
-        data: []
+        data: [],
+        title: "",
+        xtitle: "",
+        ytitle: ""
     }
 });
 
