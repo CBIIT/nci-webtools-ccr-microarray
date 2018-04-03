@@ -1,6 +1,39 @@
-body {
-  max-width: 1280px;
-  margin: 0px auto;
+#map-header {
+  color: #FFF;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#map-header img {
+  margin: 1em 0px;
+}
+
+#map-banner {
+  background: #729829;
+  line-height: 2em;
+}
+
+#map-nav {
+  background: #3E3E3E;
+}
+
+#map-nav .nav>li>a:focus,
+#map-nav .nav>li>a:hover {
+  background: #666;
+}
+
+#map-nav a {
+  color: #FFF;
+  line-height: 4em;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding-left: 0px;
+}
+
+.nav-item {
+  padding-right: 1em;
 }
 
 #map-inputs .row > div ~ div:not(.show) {
@@ -9,6 +42,10 @@ body {
 
 #map-grouping tbody tr {
   cursor: pointer;
+}
+
+#map-results a {
+  color: #333;
 }
 
 .row {

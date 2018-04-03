@@ -18,7 +18,7 @@ app.TemplatesModel = Backbone.Model.extend({
     defaults: {},
     fetch: function() {
         var $that = this,
-            templateList = ["main","inputs","upload","cels","geo","grouping","preflight","results"],
+            templateList = ["main","nav","inputs","upload","cels","geo","grouping","preflight","results"],
             templateObject = {},
             deferred = $.Deferred(),
             after = _.after(templateList.length,function() {
@@ -32,11 +32,6 @@ app.TemplatesModel = Backbone.Model.extend({
             });
         });
         return deferred;
-    }
-});
-
-app.MainModel = Backbone.Model.extend({
-    defaults: {
     }
 });
 
