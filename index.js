@@ -2,7 +2,8 @@ var express = require('express'),
     R = require("r-script"),
     app = express(),
     bodyParser = require('body-parser'),
-    fs = require('fs');
+    fs = require('fs'),
+    argv = require('minimist')(process.argv.slice(2));
 
 app.use([bodyParser.json(),bodyParser.urlencoded({extended: true})]);
 app.use(express.static('web'));
@@ -43,4 +44,4 @@ app.use((err,req,res,next) => {
   res.status(500).send({error: err});
 });
 
-app.listen(80);
+app.listen(argv.p||80);
