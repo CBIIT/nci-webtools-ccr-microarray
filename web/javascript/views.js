@@ -5,20 +5,32 @@ app.MainView = Backbone.View.extend({
         this.render.apply(this);
     },
     render: function() {
-        this.$el.html(this.template(this.model.attributes));
+        this.$el.html(this.template());
+        app.views.nav = new app.NavView();
         app.models.inputs = new app.InputsModel({
             parent: this.$el
         });
         app.views.inputs = new app.InputsView({
             model: app.models.inputs
         });
-        //////////////////////////////////////////// ToDo: Moveto actual result
-        app.models.results = new app.ResultsModel();
-        app.models.results.save().done(function() {
-            app.views.results = new app.ResultsView({
-                model: app.models.results
-            });
-        });
+    }
+});
+
+app.NavView = Backbone.View.extend({
+    el: '#map-nav',
+    initialize: function() {
+        this.template = _.template(app.templates.get('nav'));
+        this.render.apply(this);
+    },
+    events: {
+        'click a': 'doNothing'
+    },
+    doNothing: function(e) {
+        e.preventDefault();
+        return false;
+    },
+    render: function() {
+        this.$el.html(this.template());        
     }
 });
 
@@ -308,8 +320,10 @@ app.PreFlightView = Backbone.View.extend({
             gsecode: app.models.files.get('gsecode'),
             files: this.model.get('files')
         });
-        resultsModel.save().done(() => {
-            console.log(resultsModel.attributes);
+        resultsModel.save().done(function() {
+            app.views.results = new app.ResultsView({
+                model: resultsModel
+            });
         });
     },
     remove: function() {
@@ -339,7 +353,7 @@ app.ResultsView = Backbone.View.extend({
         this.render.apply(this);
     },
     events: {
-        "click a": 'uncollapse'
+        'click a:not([data-toggle])': 'uncollapse'
     },
     uncollapse: function(e) {
         e.preventDefault();
