@@ -1,4 +1,5 @@
-examples/
-node_modules/
-tmp/
-*.out
+/config/project.settings.js
+/config/cedcd.settings
+node_modules
+npm-debug.log
+yarn-error.log*
