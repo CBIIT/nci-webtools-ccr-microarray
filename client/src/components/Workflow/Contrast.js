@@ -15,11 +15,13 @@ class Contrast extends Component {
   render() {
 
     let options =[];
+    let tmp_options=[]
     // find the unique value in grups 
     this.props.data.dataList.filter(function(v,i,self){
-        if(options.indexOf(v['groups'])==-1&&v['groups']!=""){
+        if(tmp_options.indexOf(v['groups'])==-1&&v['groups']!=""){
           var d = <Option value={v['groups']}>{v['groups']}</Option>
           options.push(d);
+          tmp_options.push(v['groups']);
         }
       })
 
@@ -33,7 +35,7 @@ class Contrast extends Component {
     }
     else{
 
-    	button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
+    	button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} disabled >
               <span>Run Contrast</span>
             </Button>);
     }

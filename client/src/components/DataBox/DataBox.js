@@ -32,16 +32,9 @@ class DataBox extends Component {
 
 
  showModal = () => {
-    
-    if(this.state.selected.length>0){  // if user select records in table 
-
       this.setState({
         visible: true,
       });
-    }else{
-       message.warning('Please select GSM(s) first');
-
-    }
   }
 
  handleOk = () => {
@@ -65,9 +58,15 @@ class DataBox extends Component {
       // alert 
        message.warning('Please type the tag name. ');
      }else{
-      this.props.assignGroup(document.getElementById("input_group_name").value,this.state.selected)
 
-      this.child.current.unselect(); // after create tag, previous selected record will unselect. 
+        if(this.state.selected.length>0){  // if user select records in table 
+            this.props.assignGroup(document.getElementById("input_group_name").value,this.state.selected)
+
+            this.child.current.unselect(); // after create tag, previous selected record will unselect. 
+          }else{
+
+             message.warning('Please select some gsm(s). ');
+          }
      }
 
   }
@@ -95,19 +94,15 @@ class DataBox extends Component {
 
     // define group btn
     if(this.props.data.dataList.length>0){
-      define_group_click_btn=<div><Button  type="primary" onClick={this.showModal} >Define Group</Button></div>;
+      define_group_click_btn=<div><Button  type="primary" onClick={this.showModal} >Group</Button></div>;
     }
     
 
     // controll display fo tags[preplot,postplot,DEG]
-  	if(this.props.data.compared){
-    		prePlotsBox = (<TabPane tab="Pre-normalization QC Plots" key="2"><PrePlotsBox data={this.props.data}/>
-
+    prePlotsBox = (<TabPane tab="Pre-normalization QC Plots" key="2"><PrePlotsBox data={this.props.data}/>
           </TabPane>);
-    		postPlotsBox = (<TabPane tab="Post-normalization Plots" key="3"><PostPlotsBox data={this.props.data}/></TabPane>);
-    		degBox = (<TabPane tab="DEG-Enrichments Results" key="4">Content of Tab Pane 3</TabPane>);
-  	}
-
+    postPlotsBox = (<TabPane tab="Post-normalization Plots" key="3"><PostPlotsBox data={this.props.data}/></TabPane>);
+    degBox = (<TabPane tab="DEG-Enrichments Results" key="4">Content of Tab Pane 3</TabPane>);
 
     // control tab  SSGSEA
   	if(this.props.data.done_gsea){
