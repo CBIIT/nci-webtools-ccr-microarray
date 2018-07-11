@@ -33,6 +33,14 @@ class Analysis extends Component {
 		this.handleSelectType = this.handleSelectType.bind(this);
 	}
 
+	//use for generate UUID
+	uuidv4() {  
+	  return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+	    return v.toString(16);
+	  });
+	}
+
 	changeProject(event){
 		let workflow = Object.assign({},this.state.workflow);
 		workflow.projectID = event.target.value;
@@ -105,19 +113,49 @@ class Analysis extends Component {
 	}
 
 	loadGSE = () =>{
+
 		let workflow = Object.assign({},this.state.workflow);
+
+		if(workflow.dataList!=""){
+
+			// user click load after data already loaded..
+			// Then it is a transaction 
+			window.location.reload(true);
+		}
 	    let reqBody = {};
 	    reqBody.code = workflow.accessionCode;
 
 	    // this pid will be used to create a tmp folder to store the data. 
 	    // need to validate if it is a validate project
-	    reqBody.pid=workflow.projectID=Date.now()+workflow.projectID;
-	    workflow.uploading = true;
-	    workflow.progressing = true;
-	    workflow.loading_info = "Loading GEO Data...";
-	    this.setState({
-	      workflow:workflow
-	    });
+	    if(workflow.projectID===""){
+	    	message.warning('Project Id is null, the system will assign one');
+	    }
+	    if(workflow.projectID.length<10){
+	    	workflow.projectID=this.uuidv4()+workflow.projectID;
+	    }
+        reqBody.pid=workflow.projectID;
+	
+
+		// disable the input , prevent user to change the project id
+	    document.getElementById("input-project-name").disabled=true
+
+	    if(workflow.accessionCode==""){
+	    	message.warning('Accession Code is required. ');
+
+		    this.setState({
+		      workflow:workflow
+		    });
+	    	return;
+	    }else{
+
+	    	workflow.uploading = true;
+		    workflow.progressing = true;
+		    workflow.loading_info = "Loading GEO Data...";
+		    this.setState({
+		      workflow:workflow
+		    });
+	    }
+	    
 	    fetch('./api/analysis/gse',{
 			method: "POST",
 			body: JSON.stringify(reqBody),
@@ -133,6 +171,13 @@ class Analysis extends Component {
 				workflow.dataList = list.files;
 				// init group with default value
 				workflow.group = new Array(list.files.length).fill('Ctl');
+
+				// disable the input , prevent user to change the access code
+	    		document.getElementById("input-access-code").disabled=true
+
+	    		// change the word of load btn
+	    		document.getElementById("btn-project-load-gse").innerHTML="Next Project"
+
 
 				this.setState({
 			      workflow:workflow
@@ -203,6 +248,7 @@ class Analysis extends Component {
 	}
 
 	handleUpload = () => {
+
 		let workflow = Object.assign({},this.state.workflow);
 	    const fileList = workflow.fileList;
 	    const formData = new FormData();
