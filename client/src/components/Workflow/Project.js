@@ -22,8 +22,10 @@ class Project extends Component {
         multiple:true,
         fileList: this.props.data.fileList
       };
+
       let type_content = "";
       if(this.props.data.projectID == ""){
+        // default this.props.data.analysisType = -1
         type_content = (<Select defaultValue={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType} disabled>
             <Option value="-1">Select Type...</Option>
             <Option value="0">GEO Data</Option>

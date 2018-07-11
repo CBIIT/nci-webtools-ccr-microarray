@@ -11,10 +11,20 @@ class Contrast extends Component {
 	componentDidMount(){
 	}
 
+
   render() {
-  	let options = this.props.data.groups.map((item, idx) =>{
-  			return (<Option value="{item.id}">{item.tag}</Option>);
-  	});
+
+    let options =[];
+    // find the unique value in grups 
+    this.props.data.dataList.filter(function(v,i,self){
+        if(options.indexOf(v['groups'])==-1&&v['groups']!=""){
+          var d = <Option value={v['groups']}>{v['groups']}</Option>
+          options.push(d);
+        }
+      })
+
+
+
   	let button = "";
     if(this.props.data.group_1 != "-1" && this.props.data.group_2 != "-1" && this.props.data.group_1 != this.props.data.group_2){
     	button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
@@ -22,7 +32,8 @@ class Contrast extends Component {
             </Button>);
     }
     else{
-    	button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast}>
+
+    	button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
               <span>Run Contrast</span>
             </Button>);
     }
