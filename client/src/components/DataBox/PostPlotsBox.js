@@ -33,16 +33,16 @@ class PostPlotsBox extends Component {
 			var histplotANLink = './images/'+this.props.data.projectID+this.props.data.HistplotAN;
 		 
 
-		 	const histplotAN =<img src= {histplotANLink}/>;
+		 	const histplotAN =<img style={{width:"75%"}} src= {histplotANLink}/>;
 
 		 	var list_mAplotAN=[];
 		 	for (var i = this.props.data.MAplotAN.length - 1; i >= 0; i--) {
 		 		var link = "./images/"+this.props.data.projectID+this.props.data.MAplotAN[i]
-		 		list_mAplotAN.push(<div><img src={link} style={{width:"100%"}}/></div>)
+		 		list_mAplotAN.push(<div><img src={link} style={{width:"75%"}} /></div>)
 		 	}
 
 		 	var link2 ="./images/"+this.props.data.projectID+this.props.data.BoxplotAN;
-		 	var boxplotAN =<img src={link2}/>;
+		 	var boxplotAN =<img src={link2} style={{width:"75%"}} />;
 
 		    var PCAIframe = <div><iframe src={"http://localhost:9000/images/"+this.props.data.projectID+this.props.data.PCA}  width={'105%'} height={'65%'} style={{'overflow':'hidden'}} frameBorder={'0'}/></div>
 

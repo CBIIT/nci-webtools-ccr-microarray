@@ -32,24 +32,24 @@ class PrePlotsBox extends Component {
  	if(typeof(this.props.data.HistplotBN)!="undefined"){
  		var histplotBNLink = './images/'+this.props.data.projectID+this.props.data.HistplotBN;
  
-	 	const histplotBN =<img src= {histplotBNLink}/>;
+	 	const histplotBN =<img src= {histplotBNLink}  style={{width:"75%"}} />;
 
 
 	 	var list_mAplotBN=[];
 	 	for (var i = this.props.data.MAplotBN.length - 1; i >= 0; i--) {
 	 		var link = "./images/"+this.props.data.projectID+this.props.data.MAplotBN[i]
-	 		list_mAplotBN.push(<div><img src={link} style={{width:"100%"}}/></div>)
+	 		list_mAplotBN.push(<div><img src={link} style={{width:"75%"}}/></div>)
 	 	}
 
 
 	 	var link2 ="./images/"+this.props.data.projectID+this.props.data.BoxplotBN;
-	 	var boxplotBN =<img src={link2}/>;
+	 	var boxplotBN =<img style={{width:"75%"}} src={link2}/>;
 
 	    var link3 = "./images/"+this.props.data.projectID+this.props.data.RLEplotBN;
-	 	var rleplotBN=<img src={link3} style={{width:"100%"}}/>;
+	 	var rleplotBN=<img style={{width:"75%"}} src={link3} style={{width:"100%"}}/>;
 
 	 	var link4="./images/"+this.props.data.projectID+this.props.data.NUSEplotBN;
-	 	var nusplotBN=<img src={link4}/>;
+	 	var nusplotBN=<img style={{width:"75%"}} src={link4}/>;
 
 
 	    var maplot_style = 	{
