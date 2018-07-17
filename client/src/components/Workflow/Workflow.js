@@ -19,7 +19,7 @@ class Workflow extends Component {
         <div className="container-board-left">
         	<label>CCBR Microarray Analysis Workflow</label>
         	<div className="blocks">
-        		<Project data={this.props.data} changeProject={this.props.changeProject} changeCode={this.props.changeCode} handleSelectType={this.props.handleSelectType} fileRemove={this.props.fileRemove} beforeUpload={this.props.beforeUpload} handleUpload={this.props.handleUpload} loadGSE={this.props.loadGSE}/>
+        		<Project data={this.props.data}  resetWorkFlowProject={this.props.resetWorkFlowProject} changeProject={this.props.changeProject} changeCode={this.props.changeCode} handleSelectType={this.props.handleSelectType} fileRemove={this.props.fileRemove} beforeUpload={this.props.beforeUpload} handleUpload={this.props.handleUpload} loadGSE={this.props.loadGSE}/>
         		{contrastBox}
         		{SSGSEAFilterBox}
         	</div>

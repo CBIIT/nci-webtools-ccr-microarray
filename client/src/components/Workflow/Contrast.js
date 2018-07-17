@@ -47,20 +47,48 @@ class Contrast extends Component {
             <Option value="-1">---Select Group---</Option>
             {options}
           </Select>);
+
+    var content ="";
+    if(options.length<=1){
+
+        content=<div className="block ">
+                
+                <label className="title">Choose contrast to show:</label>
+                
+                <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled  >
+                  <Option value="-1">---Select Group---</Option>
+                </Select>
+                
+                <label className="title">VS:</label>
+                 <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled >
+                   <Option value="-1">---Select Group---</Option>
+                </Select>
+                <label className="title">P-value threshold for DEGs:</label>
+                <Input disabled onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs}/>
+                <label className="title">Fold Change threshold for DEGs:</label>
+                <Input disabled  onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}/>
+                <label className="title">P-value threshold for pathways:</label>
+                <Input disabled onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways}/>
+                {button}
+              </div>
+    }else{
+        content=<div className="block">
+                  <label className="title">Choose contrast to show:</label>
+                  {group_1_content}
+                  <label className="title">VS:</label>
+                  {group_2_content}
+                  <label className="title">P-value threshold for DEGs:</label>
+                  <Input onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs}/>
+                  <label className="title">Fold Change threshold for DEGs:</label>
+                  <Input onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}/>
+                  <label className="title">P-value threshold for pathways:</label>
+                  <Input onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways}/>
+                  {button}
+                </div>
+
+    }
 	return (
-		<div className="block">
-			<label className="title">Choose contrast to show:</label>
-			{group_1_content}
-			<label className="title">VS:</label>
-			{group_2_content}
-			<label className="title">P-value threshold for DEGs:</label>
-			<Input onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs}/>
-			<label className="title">Fold Change threshold for DEGs:</label>
-			<Input onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}/>
-			<label className="title">P-value threshold for pathways:</label>
-			<Input onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways}/>
-			{button}
-		</div>
+	     content
 	);
   }
 }

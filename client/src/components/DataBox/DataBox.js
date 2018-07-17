@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Tabs,Table,Button,Input,Modal,message} from 'antd';
+import DEGBox from './DEGBox'
 import GSMData from './GSMData'
 import PrePlotsBox from './PrePlotsBox'
 import PostPlotsBox from './PostPlotsBox'
+import SSGSEATable from './SSGSEATable'
 const TabPane = Tabs.TabPane;
 
 class DataBox extends Component {
@@ -97,16 +99,25 @@ class DataBox extends Component {
       define_group_click_btn=<div><Button  type="primary" onClick={this.showModal} >Group</Button></div>;
     }
     
+    if(this.props.data.compared){
+           // controll display fo tags[preplot,postplot,DEG]
+          prePlotsBox = (<TabPane tab="Pre-normalization QC Plots"  key="2"><PrePlotsBox data={this.props.data}/>
+                </TabPane>);
+          postPlotsBox = (<TabPane tab="Post-normalization Plots"  key="3"><PostPlotsBox data={this.props.data}/></TabPane>);
+          degBox = (<TabPane tab="DEG-Enrichments Results"  key="4"><DEGBox data={this.props.data}/></TabPane>);
 
-    // controll display fo tags[preplot,postplot,DEG]
-    prePlotsBox = (<TabPane tab="Pre-normalization QC Plots" key="2"><PrePlotsBox data={this.props.data}/>
-          </TabPane>);
-    postPlotsBox = (<TabPane tab="Post-normalization Plots" key="3"><PostPlotsBox data={this.props.data}/></TabPane>);
-    degBox = (<TabPane tab="DEG-Enrichments Results" key="4">Content of Tab Pane 3</TabPane>);
+      }else{
+          // controll display fo tags[preplot,postplot,DEG]
+          prePlotsBox = (<TabPane tab="Pre-normalization QC Plots" disabled key="2">No data
+                </TabPane>);
+          postPlotsBox = (<TabPane tab="Post-normalization Plots" disabled key="3">No data</TabPane>);
+          degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="4">No data</TabPane>);
 
+      }
+   
     // control tab  SSGSEA
   	if(this.props.data.done_gsea){
-  		ssGSEABox = (<TabPane tab="ssGSEA Results" key="5">Content of Tab Pane 3</TabPane>);	
+  		ssGSEABox = (<TabPane tab="ssGSEA Results" key="5"><SSGSEATable data={this.props.data}/></TabPane>);	
   	}
 
   
@@ -118,9 +129,9 @@ class DataBox extends Component {
 
     // define group list in the modal
     const columns = [  // define table column names
-      { title: 'Tag', dataIndex: 'name', key: 'name' },
+      { title: 'Tag', dataIndex: 'name', key: 'name',width:4},
       { title: 'Metabolite IDs', dataIndex: 'gsms', key: 'gsms' },
-      { title: 'Action', dataIndex:'name', key:'x',render:(e)=> (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>)},
+      { title: 'Action',dataIndex:'name',width:4,render:(e)=> (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>)}
     ];
 
 

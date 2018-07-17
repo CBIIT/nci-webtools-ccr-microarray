@@ -32,22 +32,38 @@ class Project extends Component {
 
       if(this.props.data.analysisType == "0"){
         source = (
-          <div>
+          <div className="row">
+           <div className="col-sm-12">
             <label className="title">Accession Code</label>
             <Input id="input-access-code" onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
+            </div>
+             <div className="col-sm-6">
             <button id="btn-project-load-gse" type="button" className="ant-btn upload-start ant-btn-primary" onClick={this.props.loadGSE}>
               <span>{uploading ? 'Uploading' : 'Load' }</span>
             </button>
+            </div>
+             <div className="col-sm-6">
+                         <Button
+                          className="upload-start"
+                          type="primary"
+                          onClick={this.props.resetWorkFlowProject}
+                        >
+                        Reset
+                        </Button>
+                    </div>
           </div>
         );
       }
       else if(this.props.data.analysisType == "1"){
-        source = (<div className="upload-block">
+        source = (<div className="upload-block row">
+                   <div className="col-sm-12">
                     <Upload {...properties}>
                       <Button>
                         <Icon type="upload" /> Select File
                       </Button>
                     </Upload>
+                    </div>
+                     <div className="col-sm-6">
                     <Button
 
                       id="btn-project-upload"
@@ -59,19 +75,40 @@ class Project extends Component {
                     >
                     {uploading ? 'Uploading' : 'Load' }
                     </Button>
+                   </div>
+
+                     <div className="col-sm-6">
+                         <Button
+                          className="upload-start"
+                          type="primary"
+                          onClick={this.props.resetWorkFlowProject}
+                        >
+                        Reset
+                        </Button>
+                    </div>
                   </div>);
       }
       else{
-        source =  (<div className="upload-block">
- 
-                    <Button
-                      className="upload-start"
-                      type="primary"
-                   
-                      disabled
-                    >
-                    Load
-                    </Button>
+        source =  (<div className="upload-block row">
+                    <div className="col-sm-6">
+                        <Button
+                          className="upload-start"
+                          type="primary"
+                       
+                          disabled
+                        >
+                        Load
+                        </Button>
+                    </div>
+                    <div className="col-sm-6">
+                         <Button
+                          className="upload-start"
+                          type="primary"
+                          onClick={this.props.resetWorkFlowProject}
+                        >
+                        Reset
+                        </Button>
+                    </div>
                   </div>);;
       }
       return (

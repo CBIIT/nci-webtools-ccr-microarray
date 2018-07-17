@@ -35,8 +35,9 @@ process = function(){
   # pid <- "1531255643968123"
   # listGroups<-c('Ctl_1','Ctl_1','Ctl_1','KO_1','KO_1','KO_1','Ctl_2','Ctl_2','Ctl_2','KO_2','KO_2','KO_2')
 
-  #path<-paste0(getwd(),"/service/data/",pid,sep="")
+  path<-paste0(getwd(),"/service/data/",pid,sep="")
 
+  # path<-paste0(getwd(),"/data/",pid,sep="")
 
   print ("---------------")
   print(path)
