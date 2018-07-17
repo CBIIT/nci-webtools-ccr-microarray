@@ -1,5 +1,9 @@
-/config/project.settings.js
-/config/cedcd.settings
+/config/microarray.settings
+/service/data
 node_modules
 npm-debug.log
 yarn-error.log*
+package-lock.json
+/service/.DS_Store
+.DS_Store
+.Rproj.user

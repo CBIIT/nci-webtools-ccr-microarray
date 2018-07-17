@@ -18,5 +18,5 @@
   },
   "homepage": ".",
   "//": "proxy attribute below is only for development purpose",
-  "proxy": "http://localhost:8221"
+  "proxy": "http://localhost:9000"
 }

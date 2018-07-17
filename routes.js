@@ -27,6 +27,10 @@ module.exports = function(app){
 	app.use('/api/analysis', m_analysis);
 	app.use('/api/user', m_user);
 
+
+	//Serves all the request which includes /images in the url from Images folder
+	app.use('/images', express.static(__dirname + '/service/data'));
+	
 	// All other routes should redirect to error page
     app.get('/*', function (req, res) {
 	  res.sendFile(path.join(config.root, 'client/www', 'index.html'));
