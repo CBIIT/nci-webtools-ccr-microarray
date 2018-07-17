@@ -8,7 +8,7 @@ require('./config/express')(app);
 require('./routes')(app);
 
 app.listen(config.port, function(){
-  console.log('Project CEDCD listening on port :' + config.port);
+  console.log('Project Microarray listening on port :' + config.port);
 });
 
 // when shutdown signal is received, do graceful shutdown
