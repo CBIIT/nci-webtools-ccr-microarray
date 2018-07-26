@@ -113,8 +113,6 @@ class Project extends Component {
       }
       return (
         <div className="block">
-        	<label className="title">Enter Project ID</label>
-          <Input  id="input-project-name" onChange={(e) => this.props.changeProject(e)} value={this.props.data.projectID}/>
           <label className="title">Choose type of analysis</label>
           {type_content}
           {source}

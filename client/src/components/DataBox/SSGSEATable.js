@@ -24,41 +24,29 @@ class SSGSEATable extends Component {
   	let content ="";
   	if(this.props.data.ssGSEA.length > 0){
 		const columns = [{
-		  title: '0',
-		  dataIndex: 0,
+		  title: 'logFC',
+		  dataIndex: 'logFC',
+		  sorter: (a, b) => a["logFC"]-b["logFC"],
 		},{
-		  title: '1',
-		  dataIndex: 1,
+		  title: 'Avg.Enrichment.Score',
+		  dataIndex: 'Avg.Enrichment.Score',
+		  sorter: (a, b) => a["Avg.Enrichment.Score"]-b["Avg.Enrichment.Score"],
 		},{
-		  title: '2',
-		  dataIndex: 2,
+		  title: 't',
+		  dataIndex: 't',
+		  sorter: (a, b) => a["t"]-b["t"],
 		},{
-		  title: '3',
-		  dataIndex: 3,
+		  title: 'P.Value',
+		  dataIndex: 'P.Value',
+		  sorter: (a, b) => a['P.Value']-b['P.Value'],
 		},{
-		  title: '4',
-		  dataIndex: 4,
+		  title: 'adj.P.Val',
+		  dataIndex: 'adj.P.Val',
+		  sorter: (a, b) => a['adj.P.Val']-b['adj.P.Val'],
 		},{
-		  title: '5',
-		  dataIndex: 5,
-		},{
-		  title: '6',
-		  dataIndex: 6,
-		},{
-		  title: '7',
-		  dataIndex: 7,
-		},{
-		  title: '8',
-		  dataIndex: 8,
-		},{
-		  title: '9',
-		  dataIndex: 9,
-		},{
-		  title: '10',
-		  dataIndex: 10,
-		},{
-		  title: '11',
-		  dataIndex: 11,
+		  title: 'B',
+		  dataIndex: 'B',
+		  sorter: (a, b) => a['B']-b['B'],
 		},];
 		
 

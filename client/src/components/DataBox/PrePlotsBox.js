@@ -46,7 +46,7 @@ class PrePlotsBox extends Component {
 	 	var boxplotBN =<img style={{width:"75%"}} src={link2}/>;
 
 	    var link3 = "./images/"+this.props.data.projectID+this.props.data.RLEplotBN;
-	 	var rleplotBN=<img style={{width:"75%"}} src={link3} style={{width:"100%"}}/>;
+	 	var rleplotBN=<img style={{width:"75%"}} src={link3} />;
 
 	 	var link4="./images/"+this.props.data.projectID+this.props.data.NUSEplotBN;
 	 	var nusplotBN=<img style={{width:"75%"}} src={link4}/>;
