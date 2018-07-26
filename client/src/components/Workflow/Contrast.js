@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Input, Select, Button} from 'antd';
-const Option = Select.Option;
+const { Option, OptGroup } = Select;
 
 class Contrast extends Component {
 
@@ -11,6 +11,9 @@ class Contrast extends Component {
 	componentDidMount(){
 	}
 
+  handleGeneChange(){
+
+  }
 
   render() {
 
@@ -34,12 +37,11 @@ class Contrast extends Component {
             </Button>);
     }
     else{
-
-    	button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} disabled >
+    	 button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} disabled >
               <span>Run Contrast</span>
             </Button>);
     }
-	let group_1_content = (<Select defaultValue={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
+	 let group_1_content = (<Select defaultValue={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
             <Option value="-1">---Select Group---</Option>
             {options}
           </Select>);
@@ -69,6 +71,37 @@ class Contrast extends Component {
                 <Input disabled  onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}/>
                 <label className="title">P-value threshold for pathways:</label>
                 <Input disabled onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways}/>
+                <label className="title">Choose Gene Set for ssGSEA:</label>
+                  <Select defaultValue="human$H: Hallmark Gene Sets"  disabled
+                        style={{ width: '100%' }}
+                        onChange={(e) => this.props.handleGeneChange(e)} 
+                      >
+                        <OptGroup label="Human">
+                          <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
+                          <Option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</Option>
+                          <Option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
+                          <Option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
+                          <Option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
+                          <Option value="human$C5: GO gene sets">C5: GO gene sets</Option>
+                          <Option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
+                          <Option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
+                        </OptGroup>
+                        <OptGroup label="Mouse">
+                          <Option value="mouse$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
+                          <Option value="mouse$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
+                          <Option value="mouse$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
+                          <Option value="mouse$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
+                          <Option value="mouse$C5: GO gene sets">C5: GO gene sets</Option>
+                          <Option value="mouse$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
+                          <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
+                        </OptGroup>
+                      </Select>
+                         <label className="title">P-value threshold for ssGSEA</label>
+                        <Input disabled onChange={(e) => this.props.changePssGSEA(e)} value={this.props.data.pssGSEA}/>
+               
+                         <label className="title">Fold Change threshold for ssGSEA</label>
+                        <Input disabled onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA}/>
+                        <br/>
                 {button}
               </div>
     }else{
@@ -83,6 +116,37 @@ class Contrast extends Component {
                   <Input onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}/>
                   <label className="title">P-value threshold for pathways:</label>
                   <Input onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways}/>
+                   <label className="title">Choose Gene Set for ssGSEA:</label>
+                   <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
+                        style={{ width: '100%' }}
+                        onChange={(e) => this.props.handleGeneChange(e)} 
+                      >
+                        <OptGroup label="Human">
+                          <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
+                          <Option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</Option>
+                          <Option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
+                          <Option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
+                          <Option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
+                          <Option value="human$C5: GO gene sets">C5: GO gene sets</Option>
+                          <Option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
+                          <Option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
+                        </OptGroup>
+                        <OptGroup label="Mouse">
+                          <Option value="mouse$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
+                          <Option value="mouse$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
+                          <Option value="mouse$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
+                          <Option value="mouse$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
+                          <Option value="mouse$C5: GO gene sets">C5: GO gene sets</Option>
+                          <Option value="mouse$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
+                          <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
+                        </OptGroup>
+                      </Select>
+                         <label className="title">P-value threshold for ssGSEA</label>
+                        <Input onChange={(e) => this.props.changePssGSEA(e)} value={this.props.data.pssGSEA}/>
+               
+                         <label className="title">Fold Change threshold for ssGSEA</label>
+                        <Input onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA}/>
+                      <br/>
                   {button}
                 </div>
 

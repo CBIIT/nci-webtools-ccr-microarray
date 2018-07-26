@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
-import {Spin, message, Icon } from 'antd';
+import {Spin, message, Icon,Button } from 'antd';
+const ButtonGroup = Button.Group;
 
 class Analysis extends Component {
 
@@ -22,8 +23,13 @@ class Analysis extends Component {
       			group_2:"-1",
       			pDEGs:0.05,
       			foldDEGs:1.5,
+      			species:"human",
+      			genSet:"H: Hallmark Gene Sets",
       			pPathways:0.05,
+      			pssGSEA:0.05,
+      			foldssGSEA:1.5,
       			compared:false,
+      			uploaded:false,
       			done_gsea:false
 
 			}
@@ -62,6 +68,26 @@ class Analysis extends Component {
 	changePathways = (event) =>{
 		let workflow = Object.assign({},this.state.workflow);
 		workflow.pPathways = event.target.value;
+		this.setState({workflow:workflow});
+	}
+
+	handleGeneChange = (value) =>{
+		let workflow = Object.assign({},this.state.workflow);
+		workflow.species = value.split("$")[0];
+		workflow.genSet = value.split("$")[1];
+		this.setState({workflow:workflow});
+	}
+
+	
+	changeFoldSSGSEA= (event) =>{
+		let workflow = Object.assign({},this.state.workflow);
+		workflow.foldssGSEA = event.target.value;
+		this.setState({workflow:workflow});
+	}
+
+	changePssGSEA= (event) =>{
+		let workflow = Object.assign({},this.state.workflow);
+		workflow.pssGSEA = event.target.value;
 		this.setState({workflow:workflow});
 	}
 
@@ -127,6 +153,14 @@ class Analysis extends Component {
 		reqBody.pDEGs="";
 		reqBody.foldDEGs="";
 		reqBody.pPathways="";
+		reqBody.genSet="";
+	    reqBody.pssGSEA="";
+	    reqBody.foldssGSEA="";
+	    reqBody.species="";
+	    reqBody.genSet="";
+	    reqBody.group_1="";
+	    reqBody.group_2="";
+	    reqBody.source="";
 
 		if(workflow.dataList!=""){
 			// user click load after data already loaded.then it is a new transaction 
@@ -140,14 +174,8 @@ class Analysis extends Component {
 	    	
 
 	    // this pid will be used to create a tmp folder to store the data. 
-	    // need to validate if it is a validate project
-	    if(workflow.projectID===""){
-	    	message.warning('Project Id is null, the system will assign one');
-	    	workflow.projectID=this.uuidv4();
-	    	reqBody.projectId=workflow.projectID;
-	    }else{
-	    	 reqBody.projectId=workflow.projectID;
-	    }
+	    workflow.projectID=this.uuidv4();
+	    reqBody.projectId=workflow.projectID;
 	   
 	   	// gruop info
 	   	var groups=[]
@@ -159,9 +187,6 @@ class Analysis extends Component {
 			}
 		}
 		reqBody.groups = groups;
-		// disable the input , prevent user to change the project id
-	    document.getElementById("input-project-name").disabled=true
-
 	    
 	    // define action
 	    reqBody.actions = "loadGSE";
@@ -177,6 +202,7 @@ class Analysis extends Component {
 	    fetch('./api/analysis/run',{
 			method: "POST",
 			body: JSON.stringify(reqBody),
+			credentials: "same-origin",
 			headers: {
 		        'Content-Type': 'application/json'
 		    }
@@ -225,10 +251,24 @@ class Analysis extends Component {
 		reqBody.pDEGs="";
 		reqBody.foldDEGs="";
 		reqBody.pPathways="";
+		reqBody.genSet="";
+	    reqBody.pssGSEA="";
+	    reqBody.foldssGSEA="";
+	    reqBody.species="";
+	    reqBody.genSet="";
 
 		reqBody.code = workflow.accessionCode;
 		reqBody.projectId = workflow.projectID;
 		reqBody.groups =[];
+		reqBody.group_1=workflow.group_1;
+		reqBody.group_2=workflow.group_2;
+		if(workflow.uploaded){
+			reqBody.source="upload";
+		}else{
+			reqBody.source="fetch";
+		}
+
+
 		for(var i in workflow.dataList){
 			if(workflow.dataList[i].groups!=""){
 				reqBody.groups.push(workflow.dataList[i].groups)
@@ -238,13 +278,20 @@ class Analysis extends Component {
 			}
 		}
 
-		if(workflow.pDEGs==""||workflow.foldDEGs==""||workflow.pPathways==""){
+		if(workflow.pDEGs==""||workflow.foldDEGs==""||workflow.pPathways==""||workflow.foldssGSEA==""||workflow.pssGSEA==""){
 	    	message.warning('All the threshold is required!');
 	    	return;
 	    }
+
+	    reqBody.genSet=workflow.genSet;
+	    reqBody.pssGSEA=workflow.pssGSEA;
+	    reqBody.foldssGSEA=workflow.foldssGSEA;
 		reqBody.pDEGs = workflow.pDEGs;
 		reqBody.foldDEGs = workflow.foldDEGs;
 		reqBody.pPathways = workflow.pPathways;
+
+		reqBody.species=workflow.species;
+	    reqBody.genSet=workflow.genSet;
 
 		workflow.progressing = true;
 		workflow.loading_info = "Running Contrast... (this might take a few minutes)";
@@ -256,6 +303,7 @@ class Analysis extends Component {
 	    fetch('./api/analysis/run',{
 			method: "POST",
 			body: JSON.stringify(reqBody),
+			credentials: "same-origin",
 			headers: {
 		        'Content-Type': 'application/json'
 		    }
@@ -265,14 +313,15 @@ class Analysis extends Component {
 				)
 			.then(result => {
 				if(result.status==200){
-					 var d =result.data.split("+++ssGSEA+++\"")[1];
-					 let list =JSON.parse(decodeURIComponent(d));
-					 // too many record, shows first 1000
-					 workflow.diff_expr_genes=list.listData.diff_expr_genes.listDEGs["RNA_1-Ctl"].slice(1, 1000);
-					 workflow.ssGSEA=list.listData.ssGSEA.ssgsResults;
-					 workflow.pathways_up=list.listData.pathways_down['RNA_1-Ctl']['upregulated_pathways'].slice(1, 1000);
-					 workflow.pathways_down=list.listData.pathways_down['RNA_1-Ctl']['downregulated_pathways'].slice(1, 1000);
-				     var plots=list.listData.norm_celfiles.listData;
+					 workflow.diff_expr_genes=result.data.diff_expr_genes;
+					 workflow.ssGSEA=result.data.ssGSEA;
+					 workflow.pathways_up=result.data.pathways_up;
+					 workflow.pathways_down=result.data.pathways_down;
+					 workflow.progressing = false;
+				 	 workflow.compared=true;
+			   		 workflow.done_gsea=true;
+
+			   		 var plots=result.data.listPlots;
 						workflow.progressing = false;
 						workflow.HistplotBN = plots[0];                  // svg file
 						workflow.MAplotBN =plots[1].listData;			// images list[jpg]
@@ -286,28 +335,35 @@ class Analysis extends Component {
 						workflow.Heatmapolt = plots[9];	
 						// hard code the path for plot
 						workflow.pathwayHeatMap="/geneHeatmap.jpg";
-						workflow.volcanoPlot="/volcano.html";				// html file
-						workflow.compared=true;
-						workflow.done_gsea=true;
+						workflow.volcanoPlot="/volcano.html";	
+
 					this.setState({
 				      workflow:workflow
 				    });
 				    message.success('Plots loaded successfully.');
 				}else{
+
+					 workflow.progressing = false;
 					 message.success('Generate plots fails.');	
 				}
 				
 			});
 	}
 
-	handleUpload = () => {
 
+	handleUpload = () => {
 		let workflow = Object.assign({},this.state.workflow);
 	    const fileList = workflow.fileList;
 	    const formData = new FormData();
+
+	     // this pid will be used to create a tmp folder to store the data. 
+	   	workflow.projectID=this.uuidv4();
+	    formData.append('projectId',workflow.projectID)
+
 	    fileList.forEach((file) => {
 	      formData.append('cels', file);
 	    });
+	   
 	    workflow.uploading = true;
 	    workflow.progressing = true;
 	    this.setState({
@@ -315,21 +371,44 @@ class Analysis extends Component {
 	    });
 	    fetch('./api/analysis/upload',{
 			method: "POST",
-			body: formData
+			body: formData,
+			processData: false,
+     		contentType: false
 		})
 			.then(res => res.json())
 			.then(result => {
-				let list = result.data;
-				workflow.uploading = false;
-				workflow.progressing = false;
-				workflow.dataList = list.files ;
-				// init group with default value
-				workflow.group = new Array(list.files.length).fill('Ctl');
+				if(result.status==200){
+					var data = result.data.split("+++getCELfiles+++\"")[1]
+					let list =JSON.parse(decodeURIComponent(data));
+					//let list = result.data;
+					workflow.uploading = false;
+					workflow.progressing = false;
+					if(list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
+						message.success('load data fails.');
+						return;
+					}
+					workflow.dataList = list.files;
+			
+		    		// change the word of load btn
+		    		document.getElementById("btn-project-upload").disabled=true
 
-				this.setState({
-			      workflow:workflow
-			    });
-			    message.success('load successfully.');
+		    		// init group with default value
+					workflow.group = new Array(list.files.length).fill('Ctl');
+					workflow.uploaded=true;
+					this.setState({
+				      workflow:workflow
+				    });
+				    message.success('load successfully.');
+			    }else{
+
+			    	workflow.uploading = false;
+					workflow.progressing = false;
+					workflow.uploaded=true;
+					this.setState({
+				      workflow:workflow
+				    });
+				    message.success('load data fails.');	
+				}
 			});
 	    
 	  }
@@ -359,17 +438,42 @@ class Analysis extends Component {
 		message.success('Delete  group successfully.');
 
 	}
+
+	hideWorkFlow=()=>{
+	    document.getElementsByClassName("container-board-left")[0].style.display = 'none';
+	    document.getElementsByClassName("container-board-right")[0].style.width = window.document.documentElement.clientWidth-30;
+	    document.getElementById("panel-show").style.display ='inherit';
+	    document.getElementById("panel-hide").style.display ='none';
+	  }
+
+	  showWorkFlow=()=>{
+	    document.getElementsByClassName("container-board-left")[0].style.display = 'block';
+	    document.getElementsByClassName("container-board-right")[0].removeAttribute("style") ;
+        document.getElementById("panel-show").style.display ='none';
+	    document.getElementById("panel-hide").style.display ='inherit';
+	  }
+
+
 	render() {
 		let modal = this.state.workflow.progressing?"progress":"progress-hidden";
 		const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin />;
 		return (
 			<div className="content">
 				<div className="container container-board">
-			      <Workflow data={this.state.workflow} resetWorkFlowProject={this.resetWorkFlowProject}  changeProject={this.changeProject} 
+				   	<div style={{'padding-top':'10px'}}><label>
+		            Analysis Workflow &nbsp;&nbsp;
+		              <a id="panel-hide" onClick={this.hideWorkFlow} size="small" style={{'line-height': "initial",'font-size': "smaller","padding-left":"90px","padding-left":"calc(25% - 148px)"}}><Icon type="caret-left" /></a>
+		              <a id="panel-show" onClick={this.showWorkFlow}  size="small" style={{'line-height': "initial",'font-size': "smaller",'display':'none',"padding-left":"0px"}}><Icon type="caret-right" /></a>
+
+		          </label></div>
+			      <Workflow data={this.state.workflow}
+						handleGeneChange={this.handleGeneChange} changeFoldSSGSEA={this.changeFoldSSGSEA} changePssGSEA={this.changePssGSEA}
+			      		resetWorkFlowProject={this.resetWorkFlowProject}  changeProject={this.changeProject} 
 			      		changeCode={this.changeCode} handleSelectType={this.handleSelectType}  
 			      		fileRemove={this.fileRemove} beforeUpload={this.beforeUpload} handleUpload={this.handleUpload} 
 			      		loadGSE={this.loadGSE} handleGroup1Select={this.handleGroup1Select}  handleGroup2Select={this.handleGroup2Select} 
 			      		changePDEGs={this.changePDEGs} changeFoldDEGs={this.changeFoldDEGs} changePathways={this.changePathways} runContrast={this.runContrast}/>
+			
 			      <DataBox  data={this.state.workflow} assignGroup={this.assignGroup} deleteGroup={this.deleteGroup}/>
 			    </div>
 			    <div className={modal}>

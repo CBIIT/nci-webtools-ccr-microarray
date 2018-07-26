@@ -47,7 +47,7 @@ class PostPlotsBox extends Component {
 		    var PCAIframe = <div><iframe src={"http://localhost:9000/images/"+this.props.data.projectID+this.props.data.PCA}  width={'105%'} height={'65%'} style={{'overflow':'hidden'}} frameBorder={'0'}/></div>
 
 
-		    var HeatMapIframe = <div><iframe src={"http://localhost:9000/images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
+		    var HeatMapIframe = <div><iframe src={"http://localhost:9000/images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
 
 
 		    var maplot_style = 	{

@@ -96,7 +96,7 @@ class DataBox extends Component {
 
     // define group btn
     if(this.props.data.dataList.length>0){
-      define_group_click_btn=<div><Button  type="primary" onClick={this.showModal} >Group</Button></div>;
+      define_group_click_btn=<div><Button  type="primary" onClick={this.showModal} >Group Management</Button></div>;
     }
     
     if(this.props.data.compared){
@@ -129,7 +129,7 @@ class DataBox extends Component {
 
     // define group list in the modal
     const columns = [  // define table column names
-      { title: 'Tag', dataIndex: 'name', key: 'name',width:4},
+      { title: 'Group', dataIndex: 'name', key: 'name',width:4},
       { title: 'Metabolite IDs', dataIndex: 'gsms', key: 'gsms' },
       { title: 'Action',dataIndex:'name',width:4,render:(e)=> (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>)}
     ];
@@ -167,15 +167,15 @@ class DataBox extends Component {
             <Button key="back" onClick={this.handleCancel}>Close</Button>,
           ]}
         >
-          <h3>Provide a tag name for the following selected GSM(s)</h3>
+          <h3>Provide a Group name for the following selected GSM(s)</h3>
           <p>{selected_gsms}</p>
 
-          <p>Tag Name:</p>
+          <p>Group Name:</p>
           <p>
               <Input placeholder={"Tag Name"} id={"input_group_name"} style={{width:'150px'}}/>
-              <Button  type="primary" onClick={this.createTag} >Create Tag</Button>
+              <Button  type="primary" onClick={this.createTag} >Add</Button>
           </p>
-          <p>Saved Tag List:</p>
+          <p>Saved Group List:</p>
           {group_table}
         </Modal>
 
@@ -185,8 +185,12 @@ class DataBox extends Component {
 
 
 
-  	let content = (<Tabs onChange={this.handleTabChange} type="card" tabBarExtraContent={define_group_click_btn}>
-    				<TabPane tab="GSM Data" key="1"><GSMData ref={this.child}  data={this.props.data} selected={this.selection}/></TabPane>
+  	let content = (<Tabs onChange={this.handleTabChange} type="card" >
+    				<TabPane tab="GSM Data" key="1">
+            {define_group_click_btn}
+            <GSMData ref={this.child}  data={this.props.data} selected={this.selection}/>
+
+            </TabPane>
     				{prePlotsBox}
     				{postPlotsBox}
     				{degBox}
