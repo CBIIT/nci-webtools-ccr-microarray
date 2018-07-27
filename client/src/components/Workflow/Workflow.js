@@ -8,9 +8,6 @@ class Workflow extends Component {
 	constructor(props){
 		super(props);
 	}
-
-
-
   render() {
       let contrastBox = "";
         contrastBox = <Contrast data={this.props.data} 

@@ -21,11 +21,7 @@ router.post('/upload',function(req, res){
 
   // Emitted whenever a field / value pair has been received.
   form.on('field', function(name, value) {
-      console.log(name)
-      console.log(value)
       if (name == "projectId") {
-            console.log("field")
-            console.log(value)
             pid=value;
             form.uploadDir = path.join(__dirname, '/../service/data/'+  value);
              if (!fs.existsSync(form.uploadDir)){
@@ -38,7 +34,6 @@ router.post('/upload',function(req, res){
   });
 
   var number_of_files=0;
-
 
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
@@ -77,10 +72,7 @@ router.post('/upload',function(req, res){
       data.push("req.body.pssGSEA");
       data.push("req.body.foldssGSEA)");
       data.push("upload");
-
- 
-
-      R.execute("caller.R",data, function(err,returnValue){
+      R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
               res.json({status:404, msg:err});
             }
@@ -88,29 +80,11 @@ router.post('/upload',function(req, res){
               res.json({status:200, data:returnValue});
             }
         });
-
-
   });
-
   // parse the incoming request containing the form data
   form.parse(req)
-
-  
 });
 
-
-
-
-router.get('/test', function(req, res) {
-
-  if(req.session.page_views){
-      req.session.page_views++;
-      res.send("You visited this page " + req.session.page_views + " times");
-   } else {
-      req.session.page_views = 1;
-      res.send("Welcome to this page for the first time!");
-   }
-});
 
 router.post('/run', function(req, res) {
   let data = [];
@@ -130,8 +104,6 @@ router.post('/run', function(req, res) {
   data.push(req.body.foldssGSEA);
   data.push(req.body.source)
 
-  console.log(data);
-
   if(req.body.pDEGs){
     data.push(req.body.pDEGs);
   }
@@ -145,9 +117,7 @@ router.post('/run', function(req, res) {
   }
 
   // using session
-
-  //if it is action is runContrast , then group is not changed and gen is not change.
-  
+  //if it is action is runContrast , then 
   if(req.session.option&&req.session.option==req.body.group_1+req.body.group_2+req.body.species+req.body.genSet){
       res.json({
                   status:200, 
@@ -156,7 +126,7 @@ router.post('/run', function(req, res) {
 
   }else{
         console.log("Session not used, run R script; ")
-        R.execute("caller.R",data, function(err,returnValue){
+        R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
               res.json({status:404, msg:err});
             }
@@ -165,8 +135,6 @@ router.post('/run', function(req, res) {
                  req.session.runContrastData = returnValue;
                  req.session.option=req.body.group_1+req.body.group_2+req.body.species+req.body.genSet;
                  console.log("store data in req.session")
-                 console.log(req.session.option)
-
                if(req.body.actions == "runContrast"){
                     returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
                }
@@ -175,79 +143,7 @@ router.post('/run', function(req, res) {
             }
         });
   }
-
-
 });
-
-
-
-router.get('/run2', function(req, res) {
-  let data = [];
-  //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-      data.push("code"); 
-      data.push(pid);
-      data.push(new Array(3).fill("Ctl"));
-      data.push("loadCEL");
-      data.push("req.body.pDEGs");
-      data.push("req.body.foldDEGs");
-      data.push("req.body.pPathways");
-      data.push("req.body.group_1");
-      data.push("req.body.group_2");
-      data.push("req.body.species");
-      data.push("req.body.genSet");
-      data.push("req.body.pssGSEA");
-      data.push("req.body.foldssGSEA)");
-      data.push("upload");
-
-  console.log(data);
-
-  if(req.body.pDEGs){
-    data.push(req.body.pDEGs);
-  }
-
-  if(req.body.foldDEGs){
-    data.push(req.body.foldDEGs);
-  } 
-  
-  if(req.body.pPathways){
-     data.push(req.body.pPathways);
-  }
-
-  // using session
-
-  //if it is action is runContrast , then group is not changed and gen is not change.
-  
-  if(req.session.option&&req.session.option==req.body.group_1+req.body.group_2+req.body.species+req.body.genSet){
-      res.json({
-                  status:200, 
-                  data:filter(req.session.runContrastData,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA)
-              });
-
-  }else{
-        console.log("Session not used, run R script; ")
-        R.execute("caller.R",data, function(err,returnValue){
-          if(err){
-              res.json({status:404, msg:err});
-            }
-            else{
-                  // store return value in session (deep copy)
-                 req.session.runContrastData = returnValue;
-                 req.session.option=req.body.group_1+req.body.group_2+req.body.species+req.body.genSet;
-                 console.log("store data in req.session")
-                 console.log(req.session.option)
-
-               if(req.body.actions == "runContrast"){
-                    returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
-               }
-               // filter out data based on the filter
-              res.json({status:200, data:returnValue});
-            }
-        });
-  }
-
-
-});
-
 
 function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                console.log("filter")
@@ -263,21 +159,14 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                workflow.pathways_down=[];
                workflow.listPlots=[];
 
-
                var d =returnValue.split("+++ssGSEA+++\"")[1];
-            
                // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
                var data_dir = d.substring(0,d.indexOf("{"));
                let list =JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"),d.length)));
-
                // get plots
-
               workflow.listPlots=list.norm_celfiles["listData"];
-
-
                // filter 
                // deg {RNA_1-Ctl: Array(22690), RNA_2-Ctl: Array(22690)}
-
                var deg = list.diff_expr_genes.listDEGs;
                for(var i in list.diff_expr_genes.listDEGs){
                   for(var j in deg[i]){
@@ -310,14 +199,9 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                       }
                   }
                }
-
                 console.log(workflow.pathways_down.length)
-
                 console.log(workflow.pathways_up.length)
-
-
                // filter ssGEA
-
                 var ssGSEA = list.ssGSEA.DEss;
                // pathway ={{RNA_1-Ctl: {{upregulated_pathways:array},{downregulated_pathways:array}}}
                for(var i in pathway){
@@ -329,11 +213,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                       }
                   }
                }
-
                console.log(workflow.ssGSEA.length)
-
-
-
                // too many record, shows first 2000
                if(workflow.diff_expr_genes.length>2000){
                 workflow.diff_expr_genes=workflow.diff_expr_genes.slice(1, 2000);
@@ -347,8 +227,6 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                if(workflow.pathways_down.length>2000){
                 workflow.pathways_down= workflow.pathways_down.slice(1, 2000);
                }
-
-
                return workflow;
 }
 

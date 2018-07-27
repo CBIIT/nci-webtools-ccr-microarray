@@ -44,10 +44,10 @@ class PostPlotsBox extends Component {
 		 	var link2 ="./images/"+this.props.data.projectID+this.props.data.BoxplotAN;
 		 	var boxplotAN =<img src={link2} style={{width:"75%"}} />;
 
-		    var PCAIframe = <div><iframe src={"http://localhost:9000/images/"+this.props.data.projectID+this.props.data.PCA}  width={'105%'} height={'65%'} style={{'overflow':'hidden'}} frameBorder={'0'}/></div>
+		    var PCAIframe = <div><iframe src={"./images/"+this.props.data.projectID+this.props.data.PCA}  width={'105%'} height={'65%'} style={{'overflow':'hidden'}} frameBorder={'0'}/></div>
 
 
-		    var HeatMapIframe = <div><iframe src={"http://localhost:9000/images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
+		    var HeatMapIframe = <div><iframe src={"./images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
 
 
 		    var maplot_style = 	{

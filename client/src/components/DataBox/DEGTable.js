@@ -90,11 +90,7 @@ class DEGTable extends Component {
 
   	}else{
 
-  		// for testing   
-
-  		//content = <div><iframe src={"http://localhost:9000/images/1531248646100s/heatmapAfterNorm.html"}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
-
-
+  		content=<div>No data</div>
 						
   	}
 
