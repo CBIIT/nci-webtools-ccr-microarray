@@ -6,9 +6,7 @@ const Search = Input.Search;
 
 
 class PUGTable extends Component {
-
-
-
+	// term: search keywords
 	state = {
     	term:"" 
 	 };
@@ -19,11 +17,9 @@ class PUGTable extends Component {
 
 	componentDidMount(){
 	}
-
 	
   render() {
 
-  
 
   	let content ="";
   	if(this.props.data.length > 0){

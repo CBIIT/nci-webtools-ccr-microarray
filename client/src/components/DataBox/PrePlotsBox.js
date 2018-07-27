@@ -51,7 +51,6 @@ class PrePlotsBox extends Component {
 	 	var link4="./images/"+this.props.data.projectID+this.props.data.NUSEplotBN;
 	 	var nusplotBN=<img style={{width:"75%"}} src={link4}/>;
 
-
 	    var maplot_style = 	{
 	    						'height':'auto',
 	  						  	'max-height':'100%',
@@ -86,9 +85,6 @@ class PrePlotsBox extends Component {
 						      <Option value="tag5">NUSE</Option>
 						    </Select>,tabs]
  	}
- 	
-					 
-
  	return(
 		  <div>
 		    {content}

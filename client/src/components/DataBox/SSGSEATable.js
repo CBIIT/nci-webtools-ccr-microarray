@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 import { Table ,Select} from 'antd';
 
 
-
-
-
 class SSGSEATable extends Component {
-
-
 
 	constructor(props){
 		super(props);
@@ -15,11 +10,8 @@ class SSGSEATable extends Component {
 
 	componentDidMount(){
 	}
-
 	
   render() {
-
-  
 
   	let content ="";
   	if(this.props.data.ssGSEA.length > 0){
@@ -54,13 +46,7 @@ class SSGSEATable extends Component {
 			
   	  	content = <Table columns={columns} dataSource={data} />;
   	}else{
-
-  		// for testing   
-
-  		//content = <div><iframe src={"http://localhost:9000/images/1531248646100s/heatmapAfterNorm.html"}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
-
-
-						
+		content=<div>No data</div>				
   	}
 
 	return content;

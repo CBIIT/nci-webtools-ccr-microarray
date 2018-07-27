@@ -35,7 +35,7 @@ class DEGBox extends Component {
  	if(typeof(this.props.data.diff_expr_genes)!="undefined"){
 			
 
-		    var volcanoPlotIframe = <div><iframe src={"http://localhost:9000/images/"+this.props.data.projectID+this.props.data.volcanoPlot}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
+		    var volcanoPlotIframe = <div><iframe src={"./images/"+this.props.data.projectID+this.props.data.volcanoPlot}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
 		
 		 	let tabs =[ <div id="deg_tag1" className="deg_plot">
 		  							<DEGTable data={this.props.data.diff_expr_genes} />
