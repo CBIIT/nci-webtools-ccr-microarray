@@ -461,8 +461,8 @@ class Analysis extends Component {
 			<div className="content">
 				<div className="container container-board">
 				   	<div style={{'padding-top':'10px'}}><label>
-		            Analysis Workflow &nbsp;&nbsp;
-		              <a id="panel-hide" onClick={this.hideWorkFlow} size="small" style={{'line-height': "initial",'font-size': "smaller","padding-left":"90px","padding-left":"calc(25% - 148px)"}}><Icon type="caret-left" /></a>
+		           &nbsp;Analysis Workflow &nbsp;&nbsp;
+		              <a id="panel-hide" onClick={this.hideWorkFlow} size="small" style={{'line-height': "initial",'font-size': "smaller","padding-left":"90px","padding-left":"calc(20% - 138px)"}}><Icon type="caret-left" /></a>
 		              <a id="panel-show" onClick={this.showWorkFlow}  size="small" style={{'line-height': "initial",'font-size': "smaller",'display':'none',"padding-left":"0px"}}><Icon type="caret-right" /></a>
 
 		          </label></div>
