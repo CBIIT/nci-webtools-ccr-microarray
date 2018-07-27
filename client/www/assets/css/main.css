@@ -123,15 +123,16 @@ label{
   padding-bottom:15px;
 }
 .container-board-left{
-  width:25%;
+  width:21%;
   float:left;
   margin-top:0px;
+  margin-right:10px;
 }
 .container-board-right{
-  width:calc(75% - 15px);
+  width:calc(79% - 10px);
   float:left;
   margin-top:0px;
-  margin-left:10px;
+  margin-left:0px;
 }
 .blocks{
   border:1px solid #eee;
@@ -194,7 +195,11 @@ label{
     border-color: #d9d9d9 !important;
 }
 .ant-table{
+  font-size:12px !important;
+  padding-top: 15px !important;
+}
 
+.ant-table{
   font-size:12px !important;
   padding-top: 15px !important;
 }
@@ -202,3 +207,46 @@ label{
 .ant-modal-header{
   background: #e8e8e8  !important;
 }
+
+
+.ant-table-thead{
+  font-size:13px !important;
+}
+
+.input-search{
+  position:absolute !important;
+  top:48px;
+  left:180px;
+  width: 200px  !important;
+  min-height:15px;
+  height:35px;
+  } 
+
+.input-search-for-deg-path{
+  position:absolute !important;
+  top:48px;
+  left:260px;
+  width: 200px  !important;
+  min-height:15px;
+  height:35px;
+  } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -90,7 +90,7 @@ class PUGTable extends Component {
 	    }
 
 		content=<div>
-					<div><Search  placeholder="input search text" style={{ width: 200 , "min-height":"15px",height:"35px"}}  onSearch={value => this.setState({term: value})} /></div>
+					<div><Search  placeholder="input search text" className="input-search-for-deg-path" onSearch={value => this.setState({term: value})} /></div>
 					<div><Table  columns={columns} dataSource={data.filter(searchFilter,this)} /></div>
 				</div>	
   	  	
