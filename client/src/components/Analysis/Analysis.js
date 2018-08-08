@@ -39,6 +39,15 @@ class Analysis extends Component {
 		this.handleSelectType = this.handleSelectType.bind(this);
 	}
 
+	componentDidMount () {
+        const script = document.createElement("script");
+
+        script.src = "https://use.typekit.net/foobar.js";
+        script.async = true;
+
+        document.body.appendChild(script);
+    }
+
 	//use for generate UUID
 	uuidv4() {  
 	  return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -199,7 +208,7 @@ class Analysis extends Component {
 		 });
 	    
 	    
-	    fetch('./api/analysis/run',{
+	    fetch('./api/analysis/load',{
 			method: "POST",
 			body: JSON.stringify(reqBody),
 			credentials: "same-origin",
@@ -300,7 +309,7 @@ class Analysis extends Component {
 	    this.setState({
 	      workflow:workflow
 	    });
-	    fetch('./api/analysis/run',{
+	    fetch('./api/analysis/runContrast',{
 			method: "POST",
 			body: JSON.stringify(reqBody),
 			credentials: "same-origin",
@@ -374,9 +383,8 @@ class Analysis extends Component {
 			body: formData,
 			processData: false,
      		contentType: false
-		})
-			.then(res => res.json())
-			.then(result => {
+		}).then(res => res.json())
+		  .then(result => {
 				if(result.status==200){
 					var data = result.data.split("+++getCELfiles+++\"")[1]
 					let list =JSON.parse(decodeURIComponent(data));
@@ -462,8 +470,8 @@ class Analysis extends Component {
 				<div className="container container-board">
 				   	<div style={{'padding-top':'10px'}}><label>
 		           &nbsp;Analysis Workflow &nbsp;&nbsp;
-		              <a id="panel-hide" onClick={this.hideWorkFlow} size="small" style={{'line-height': "initial",'font-size': "smaller","padding-left":"90px","padding-left":"calc(20% - 138px)"}}><Icon type="caret-left" /></a>
-		              <a id="panel-show" onClick={this.showWorkFlow}  size="small" style={{'line-height': "initial",'font-size': "smaller",'display':'none',"padding-left":"0px"}}><Icon type="caret-right" /></a>
+		              <a id="panel-hide" onClick={this.hideWorkFlow} size="small" style={{'position':'absolute','top':'235px','line-height': "initial",'font-size': "smaller","padding-left":"100px"}}><Icon type="caret-left" /></a>
+		              <a id="panel-show" onClick={this.showWorkFlow}  size="small" style={{'position':'absolute','top':'235px','line-height': "initial",'font-size': "smaller",'display':'none',"left":"0px"}}><Icon type="caret-right" /></a>
 
 		          </label></div>
 			      <Workflow data={this.state.workflow}
