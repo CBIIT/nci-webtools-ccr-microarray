@@ -38,8 +38,6 @@ router.post('/upload',function(req, res){
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
   form.on('file', function(field, file) {
-    console.log(file.path)
-    console.log(file.name)
     number_of_files=number_of_files+1;
     fs.rename(file.path, path.join(form.uploadDir, file.name));
   });
@@ -55,8 +53,6 @@ router.post('/upload',function(req, res){
 
   // once all the files have been uploaded, send a response to the client
   form.on('end', function() {
-      console.log("form.on end")
-      console.log(number_of_files)
       let data = [];
       data.push("code"); 
       data.push(pid);
@@ -86,7 +82,37 @@ router.post('/upload',function(req, res){
 });
 
 
-router.post('/run', function(req, res) {
+router.post('/load', function(req, res) {
+  let data = [];
+  //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
+  data.push(req.body.code); 
+  data.push(req.body.projectId);
+  data.push(req.body.groups);
+  data.push(req.body.actions);
+  data.push(req.body.pDEGs);
+  data.push(req.body.foldDEGs);
+  data.push(req.body.pPathways);
+  data.push(req.body.group_1);
+  data.push(req.body.group_2);
+  data.push(req.body.species);
+  data.push(req.body.genSet);
+  data.push(req.body.pssGSEA);
+  data.push(req.body.foldssGSEA);
+  data.push(req.body.source)
+
+
+  R.execute("wrapper.R",data, function(err,returnValue){
+          if(err){
+              res.json({status:404, msg:err});
+            }else{
+              res.json({status:200, data:returnValue});
+            }
+        });
+});
+
+
+
+router.post('/runContrast', function(req, res) {
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push(req.body.code); 
@@ -118,7 +144,11 @@ router.post('/run', function(req, res) {
 
   // using session
   //if it is action is runContrast , then 
-  if(req.session.option&&req.session.option==req.body.group_1+req.body.group_2+req.body.species+req.body.genSet){
+  if( req.session.groups&&
+      req.session.groups==req.body.groups&&
+      req.session.projectId==req.body.projectId&&
+      req.session.option==req.body.group_1+req.body.group_2+req.body.species+req.body.genSet
+    ){
       res.json({
                   status:200, 
                   data:filter(req.session.runContrastData,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA)
@@ -134,10 +164,12 @@ router.post('/run', function(req, res) {
                   // store return value in session (deep copy)
                  req.session.runContrastData = returnValue;
                  req.session.option=req.body.group_1+req.body.group_2+req.body.species+req.body.genSet;
+                 req.session.groups=req.body.groups;
+                 req.session.projectId=req.body.projectId;
                  console.log("store data in req.session")
-               if(req.body.actions == "runContrast"){
-                    returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
-               }
+                 if(req.body.actions == "runContrast"){
+                      returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
+                 }
                // filter out data based on the filter
               res.json({status:200, data:returnValue});
             }
@@ -145,13 +177,9 @@ router.post('/run', function(req, res) {
   }
 });
 
+
 function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
-               console.log("filter")
-               console.log(pDEGs);
-               console.log(foldDEGs);
-               console.log(pPathways);
-               console.log(foldssGSEA);
-               console.log(pssGSEA);
+
                var  workflow ={};
                workflow.diff_expr_genes=[];
                workflow.ssGSEA=[];

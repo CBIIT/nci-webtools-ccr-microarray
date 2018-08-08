@@ -55,6 +55,13 @@ class DEGTable extends Component {
 		  title: 'ENTREZ',
 		  dataIndex: 'ENTREZ',
 		  sorter: (a, b) => a["ENTREZ"]-b["ENTREZ"],
+		  onCellClick:function(record, event){
+		  	//https://www.ncbi.nlm.nih.gov/gene/171281
+		  	if(record.ENTREZ!=""&&record.ENTREZ!="NA"){
+		  		window.open("https://www.ncbi.nlm.nih.gov/gene/"+record.ENTREZ);
+		  	}
+		  	
+		  }
 		}, {
 		  title: 'probsetID',
 		  dataIndex: 'probsetID',
@@ -83,7 +90,7 @@ class DEGTable extends Component {
 	    }
 
 		content=<div>
-					<div><Search  placeholder="input search text"  classname="input-search-for-deg-path"  onSearch={value => this.setState({term: value})} /></div>
+					<div><Search  placeholder="input search text"  className="input-search-for-deg-path"  onSearch={value => this.setState({term: value})} /></div>
 					<div><Table  columns={columns} dataSource={data.filter(searchFilter,this)} /></div>
 				</div>	
 

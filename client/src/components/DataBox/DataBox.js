@@ -83,7 +83,7 @@ class DataBox extends Component {
 
     // define group btn
     if(this.props.data.dataList.length>0){
-      define_group_click_btn=<div><Button  type="primary" onClick={this.showModal} >Group Management</Button></div>;
+      define_group_click_btn=<div><Button  type="primary" onClick={this.showModal} >Manage Group</Button></div>;
     }
     
     if(this.props.data.compared){
