@@ -16,7 +16,7 @@ class PostPlotsBox extends Component {
 	componentDidMount() {
 	    // When the component is mounted, add your DOM listener to the elem.
 	    // (The "nv" elem is assigned in the render function.)
-	   	document.getElementById("tag3").addEventListener("mouseover", function(e){
+	   	document.getElementById("post_tag3").addEventListener("mouseover", function(e){
     	if(e.target.localName ==="use"){
     		let words = e.target.parentElement.cloneNode(true);
     		let defs =e.target.parentElement.parentElement.parentElement.childNodes[1].cloneNode(true)
@@ -38,10 +38,14 @@ class PostPlotsBox extends Component {
 					last_t_y=last_t_y+diff
     			}
     		}
-    		document.getElementById('tag3-tooltip-defs').removeChild(document.getElementById('tag3-tooltip-defs').firstChild)
-    		document.getElementById('tag3-tooltip-defs').appendChild(defs);
-    		document.getElementById('tag3-tooltip-svg').removeChild(document.getElementById('tag3-tooltip-svg').firstChild)
-    		document.getElementById('tag3-tooltip-svg').appendChild(words);
+    		if(document.getElementById('post-tag3-tooltip-defs').firstChild!==null){
+			document.getElementById('post-tag3-tooltip-defs').removeChild(document.getElementById('tag3-tooltip-defs').firstChild)
+			}
+			document.getElementById('post-tag3-tooltip-defs').appendChild(defs);
+			if(document.getElementById('post-tag3-tooltip-svg').firstChild!==null){
+	    		document.getElementById('post-tag3-tooltip-svg').removeChild(document.getElementById('tag3-tooltip-svg').firstChild)
+			}
+    		document.getElementById('post-tag3-tooltip-svg').appendChild(words);
 	    	}
 		});
 
@@ -54,6 +58,8 @@ class PostPlotsBox extends Component {
 	}
 
 	handleSelectionChange(value) {
+
+
 		  var list = document.getElementsByClassName("plot");
 		  for (var i = 0; i < list.length; i++) {
 				list[i].classList.add("hide");
@@ -80,7 +86,12 @@ class PostPlotsBox extends Component {
 		 	}
 
 		 	var link2 ="./images/"+this.props.data.projectID+this.props.data.BoxplotAN;
-		 	var boxplotAN =<ReactSVG path={link2} style={{width:"75%"}} />;
+		 	var boxplotAN =<ReactSVG 
+		 							path={link2} style={{width:"75%"}} 
+		 							renumerateIRIElements={false}
+							 		svgClassName="svg-class-name"
+							 		className="wrapper-class-name"
+		 		 />;
 
 		    var PCAIframe = <div><iframe  title={"PCA"} src={"./images/"+this.props.data.projectID+this.props.data.PCA}  width={'105%'} height={'65%'} style={{'overflow':'hidden'}} frameBorder={'0'}/></div>
 
@@ -102,7 +113,7 @@ class PostPlotsBox extends Component {
 			let tooltip_svg_title={
 							"padding-top": "20px"
 						}
-						
+
 		    let maplot_style = 	{
 		    						'height':'auto',
 		  						  	'max-height':'100%',
@@ -113,9 +124,9 @@ class PostPlotsBox extends Component {
 		  						</div>,
 		  						  <div id="post_tag2" className="plot hide" style={maplot_style}>{list_mAplotAN}</div>,
 		  						  <div id="post_tag3" className="plot hide">
-		  						  		<div id="tag3-tooltip" style={tooltip}>
-											<div id="tag3-tooltip-svg-title" style={tooltip_svg_title}>Point :</div>
-											<div id="tag3-tooltip-svg-div">
+		  						  		<div id="post-tag3-tooltip" style={tooltip}>
+											<div id="post-tag3-tooltip-svg-title" style={tooltip_svg_title}>Point :</div>
+											<div id="post-tag3-tooltip-svg-div">
 											<svg style={tooltip_svg_div} 
 												 xmlns="http://www.w3.org/2000/svg"
 												 xmlnsXlink="http://www.w3.org/1999/xlink" 
@@ -123,8 +134,8 @@ class PostPlotsBox extends Component {
 												 height="600pt" 
 												 viewBox="0 0 40 600" 
 												 version="1.1" >
-												 <defs id="tag3-tooltip-defs">  </defs>
-												 <g id="tag3-tooltip-svg">  </g>
+												 <defs id="post-tag3-tooltip-defs">  </defs>
+												 <g id="post-tag3-tooltip-svg">  </g>
 											</svg>
 											</div>
 											</div>
