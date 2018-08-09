@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table ,Select,Input} from 'antd';
+import { Table,Input} from 'antd';
 const Search = Input.Search;
 
 
@@ -13,13 +13,7 @@ class DEGTable extends Component {
 		super(props);
 	}
 
-	componentDidMount(){
-	}
-
-	
   render() {
-
-
   	let content = "";
   	if(this.props.data.length > 0){
 		const columns = [{
@@ -57,7 +51,7 @@ class DEGTable extends Component {
 		  sorter: (a, b) => a["ENTREZ"]-b["ENTREZ"],
 		  onCellClick:function(record, event){
 		  	//https://www.ncbi.nlm.nih.gov/gene/171281
-		  	if(record.ENTREZ!=""&&record.ENTREZ!="NA"){
+		  	if(record.ENTREZ!==""&&record.ENTREZ!=="NA"){
 		  		window.open("https://www.ncbi.nlm.nih.gov/gene/"+record.ENTREZ);
 		  	}
 		  	
@@ -80,7 +74,7 @@ class DEGTable extends Component {
 		const data = this.props.data;
 
 	    const searchFilter = (row) => {
-	    	if(this.state.term ==""){
+	    	if(this.state.term ===""){
 	    		return true;
 	    	}
 

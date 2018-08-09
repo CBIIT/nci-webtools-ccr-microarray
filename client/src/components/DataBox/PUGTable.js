@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table ,Select,Input} from 'antd';
+import { Table,Input} from 'antd';
 const Search = Input.Search;
 
 
@@ -15,12 +15,7 @@ class PUGTable extends Component {
 		super(props);
 	}
 
-	componentDidMount(){
-	}
-	
   render() {
-
-
   	let content ="";
   	if(this.props.data.length > 0){
 		const columns = [{
@@ -78,7 +73,7 @@ class PUGTable extends Component {
 		 const data = this.props.data;
 			
   	  	  const searchFilter = (row) => {
-	    	if(this.state.term ==""){
+	    	if(this.state.term ===""){
 	    		return true;
 	    	}
 
