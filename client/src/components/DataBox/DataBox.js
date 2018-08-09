@@ -109,9 +109,9 @@ class DataBox extends Component {
     }
     // define group list in the modal
     const columns = [  // define table column names
-      { title: 'Group', dataIndex: 'name', key: 'name',width:4},
+      { title: 'Group', dataIndex: 'name', key: 'name',width:90},
       { title: 'Metabolite IDs', dataIndex: 'gsms', key: 'gsms' },
-      { title: 'Action',dataIndex:'name',width:4,render:(e)=> (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>)}
+      { title: 'Action',dataIndex:'name',width:90,render:(e)=> (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>)}
     ];
 
     // get group and gsm(s)  [{grupa: gsm1,gsm2,gsm3}]
@@ -139,20 +139,18 @@ class DataBox extends Component {
     dataSource={groups_data_list} />
 
     // define group modal
-    let modal = <Modal visible={visible}  title="GSM Group" onOk={this.handleOk} onCancel={this.handleCancel}
+    let modal = <Modal visible={visible}  title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
         footer={[
             <Button key="back" onClick={this.handleCancel}>Close</Button>,
           ]}
         >
-          <h3>Provide a Group name for the following selected GSM(s)</h3>
+          <p><b>Provide a Group name for the following selected GSM(s)</b></p>
           <p>{selected_gsms}</p>
-
-          <p>Group Name:</p>
-          <p>
-              <Input placeholder={"Group Name"} id={"input_group_name"} style={{width:'150px'}}/>
+          <p>Group Name:&nbsp;&nbsp;
+              <Input placeholder={"Group Name"} id={"input_group_name"} style={{width:'150px'}}/>&nbsp;
               <Button  type="primary" onClick={this.createTag} >Add</Button>
           </p>
-          <p>Saved Group List:</p>
+          <b>Saved Group List:</b> <br/>
           {group_table}
         </Modal>
     // end  group modal
