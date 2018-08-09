@@ -134,6 +134,18 @@ process = function(){
     return(list(ssGSEA=ssGSEA_results[1]))
   }
 
+
+  if(action=="pathwaysHeapMap"){
+   
+    # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
+    # # # Output should dynamically respond to user-selected contrast
+    diff_expr_genes<-readRDS(file = paste0(workspace,"diff_expr_genes.rds"))
+    
+    ssGSEA_results = ss(diff_expr_genes,species,geneSet,workspace,projectId)
+
+    return(list(ssGSEA=ssGSEA_results[1]))
+  }
+
 }
 
 toJSON(process(), auto_unbox = T,force = TRUE)  

@@ -13,22 +13,20 @@ class PostPlotsBox extends Component {
 	}
 
 
-
 	componentDidMount() {
 	    // When the component is mounted, add your DOM listener to the elem.
 	    // (The "nv" elem is assigned in the render function.)
 	   	document.getElementById("tag3").addEventListener("mouseover", function(e){
-    	if(e.target.localName == "use"){
+    	if(e.target.localName ==="use"){
     		let words = e.target.parentElement.cloneNode(true);
     		let defs =e.target.parentElement.parentElement.parentElement.childNodes[1].cloneNode(true)
-    		let top = e.target.getAttribute("y");
     		var last_o_y=0;
     		var last_t_y=0;
     		for(let i = words.children.length-1; i>=0; i--){
     			console.log(1)
     			// change x and y accordinate
     			words.children[i].setAttribute("x",20);
-    			if(last_o_y==0){
+    			if(last_o_y===0){
     				// the last element
     				last_o_y=words.children[i].getAttribute("y");
     				last_t_y=20;
@@ -69,34 +67,27 @@ class PostPlotsBox extends Component {
 
  	let content =""
 
- 	if(typeof(this.props.data.HistplotAN)!="undefined"){
+ 	if(typeof(this.props.data.HistplotAN)!=="undefined"){
 			var histplotANLink = './images/'+this.props.data.projectID+this.props.data.HistplotAN;
 		 
 
-		 	const histplotAN =<img style={{width:"75%"}} src= {histplotANLink}/>;
+		 	const histplotAN =<img style={{width:"75%"}} src= {histplotANLink} alt={"Histogram"}/>;
 
 		 	var list_mAplotAN=[];
 		 	for (var i = this.props.data.MAplotAN.length - 1; i >= 0; i--) {
 		 		var link = "./images/"+this.props.data.projectID+this.props.data.MAplotAN[i]
-		 		list_mAplotAN.push(<div><img src={link} style={{width:"75%"}} /></div>)
+		 		list_mAplotAN.push(<div><img src={link} style={{width:"75%"}} alt={"MAplots"}/></div>)
 		 	}
 
 		 	var link2 ="./images/"+this.props.data.projectID+this.props.data.BoxplotAN;
 		 	var boxplotAN =<ReactSVG path={link2} style={{width:"75%"}} />;
 
-		    var PCAIframe = <div><iframe src={"./images/"+this.props.data.projectID+this.props.data.PCA}  width={'105%'} height={'65%'} style={{'overflow':'hidden'}} frameBorder={'0'}/></div>
+		    var PCAIframe = <div><iframe  title={"PCA"} src={"./images/"+this.props.data.projectID+this.props.data.PCA}  width={'105%'} height={'65%'} style={{'overflow':'hidden'}} frameBorder={'0'}/></div>
 
 
-		    var HeatMapIframe = <div><iframe src={"./images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
+		    let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
 
-
-		     var maplot_style = 	{
-	    						'height':'auto',
-	  						  	'max-height':'100%',
-	  						  	'overflow':'scroll'
-	  						 };
-
-		  let tooltip = {
+		    let tooltip = {
 							"position": "absolute",
 						    "background": "white",
 						    "left": "526px"
@@ -111,9 +102,8 @@ class PostPlotsBox extends Component {
 			let tooltip_svg_title={
 							"padding-top": "20px"
 						}
-
-
-		    var maplot_style = 	{
+						
+		    let maplot_style = 	{
 		    						'height':'auto',
 		  						  	'max-height':'100%',
 		  						  	'overflow':'scroll'

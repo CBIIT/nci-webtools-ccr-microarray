@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table ,Select,Input} from 'antd';
+import ReactSVG from 'react-svg'
 const Search = Input.Search;
 
 
@@ -60,7 +61,11 @@ class GSMData extends Component {
   	const { loading, selectedRowKeys } = this.state;
 
 
-  	let content = (<p>Select one of the analyze type on the left and click on Load to load GSM data</p>);
+
+  	let content =<div>
+		  			<p>Select one of the analyze type on the left and click on Load to load GSM data</p>
+  			    </div>;
+
   	if(this.props.data.dataList.length > 0){
 		const columns = [{
 		  title: 'gsm',
@@ -100,7 +105,7 @@ class GSMData extends Component {
 	  
 
 	    const searchFilter = (row) => {
-	    	if(this.state.term ==""){
+	    	if(this.state.term ===""){
 	    		return true;
 	    	}
 

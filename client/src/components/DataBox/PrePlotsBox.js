@@ -11,17 +11,16 @@ class PrePlotsBox extends Component {
 	    // When the component is mounted, add your DOM listener to the elem.
 	    // (The "nv" elem is assigned in the render function.)
 	   	document.getElementById("tag3").addEventListener("mouseover", function(e){
-    	if(e.target.localName == "use"){
+    	if(e.target.localName === "use"){
     		let words = e.target.parentElement.cloneNode(true);
     		let defs =e.target.parentElement.parentElement.parentElement.childNodes[1].cloneNode(true)
-    		let top = e.target.getAttribute("y");
     		var last_o_y=0;
     		var last_t_y=0;
     		for(let i = words.children.length-1; i>=0; i--){
     			console.log(1)
     			// change x and y accordinate
     			words.children[i].setAttribute("x",20);
-    			if(last_o_y==0){
+    			if(last_o_y===0){
     				// the last element
     				last_o_y=words.children[i].getAttribute("y");
     				last_t_y=20;
@@ -42,17 +41,16 @@ class PrePlotsBox extends Component {
 
 
 		document.getElementById("tag4").addEventListener("mouseover", function(e){
-    	if(e.target.localName == "use"){
+    	if(e.target.localName === "use"){
     		let words = e.target.parentElement.cloneNode(true);
     		let defs =e.target.parentElement.parentElement.parentElement.childNodes[1].cloneNode(true)
-    		let top = e.target.getAttribute("y");
     		var last_o_y=0;
     		var last_t_y=0;
     		for(let i = words.children.length-1; i>=0; i--){
     			console.log(1)
     			// change x and y accordinate
     			words.children[i].setAttribute("x",20);
-    			if(last_o_y==0){
+    			if(last_o_y===0){
     				// the last element
     				last_o_y=words.children[i].getAttribute("y");
     				last_t_y=20;
@@ -72,17 +70,16 @@ class PrePlotsBox extends Component {
 		});
 
 		document.getElementById("tag5").addEventListener("mouseover", function(e){
-    	if(e.target.localName == "use"){
+    	if(e.target.localName === "use"){
     		let words = e.target.parentElement.cloneNode(true);
     		let defs =e.target.parentElement.parentElement.parentElement.childNodes[1].cloneNode(true)
-    		let top = e.target.getAttribute("y");
     		var last_o_y=0;
     		var last_t_y=0;
     		for(let i = words.children.length-1; i>=0; i--){
     			console.log(1)
     			// change x and y accordinate
     			words.children[i].setAttribute("x",20);
-    			if(last_o_y==0){
+    			if(last_o_y===0){
     				// the last element
     				last_o_y=words.children[i].getAttribute("y");
     				last_t_y=20;
@@ -125,27 +122,30 @@ class PrePlotsBox extends Component {
 
  	let content =""; 
 
- 	if(typeof(this.props.data.HistplotBN)!="undefined"){
+ 	if(typeof(this.props.data.HistplotBN)!=="undefined"){
  		var histplotBNLink = './images/'+this.props.data.projectID+this.props.data.HistplotBN;
  
-	 	const histplotBN =<img src= {histplotBNLink}  style={{width:"75%"}} />;
+	 	const histplotBN =<img src= {histplotBNLink}  style={{width:"75%"}} alt="Histogram"/>;
 
 
 	 	var list_mAplotBN=[];
 	 	for (var i = this.props.data.MAplotBN.length - 1; i >= 0; i--) {
 	 		var link = "./images/"+this.props.data.projectID+this.props.data.MAplotBN[i]
-	 		list_mAplotBN.push(<div><img src={link} style={{width:"75%"}}/></div>)
+	 		list_mAplotBN.push(<div><img src={link} style={{width:"75%"}} alt="MAplot"/></div>)
 	 	}
 
 
 	 	var link2 ="./images/"+this.props.data.projectID+this.props.data.BoxplotBN;
-	 	var boxplotBN =<ReactSVG style={{width:"75%"}} path={link2}/>;
+	 	var boxplotBN =<ReactSVG src={link2} style={{width:"75%"}} renumerateIRIElements={false}
+/>;
 
 	    var link3 = "./images/"+this.props.data.projectID+this.props.data.RLEplotBN;
-	 	var rleplotBN=<ReactSVG style={{width:"75%"}} path={link3} />;
+	 	var rleplotBN=<ReactSVG  path={link3} style={{width:"75%"}} renumerateIRIElements={false}
+/>;
 
 	 	var link4="./images/"+this.props.data.projectID+this.props.data.NUSEplotBN;
-	 	var nusplotBN=<ReactSVG style={{width:"75%"}} path={link4}/>;
+	 	var nusplotBN=<ReactSVG  path={link4}  style={{width:"75%"}} renumerateIRIElements={false}
+/>;
 
 	    var maplot_style = 	{
 	    						'height':'auto',
