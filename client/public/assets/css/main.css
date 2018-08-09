@@ -222,6 +222,16 @@ label{
   height:35px;
   } 
 
+
+.input-search-gsm{
+  position:absolute !important;
+  top:48px;
+  left:150px;
+  width: 200px  !important;
+  min-height:15px;
+  height:35px;
+  } 
+
 .input-search-for-deg-path{
   position:absolute !important;
   top:48px;

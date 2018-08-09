@@ -39,11 +39,11 @@ class PostPlotsBox extends Component {
     			}
     		}
     		if(document.getElementById('post-tag3-tooltip-defs').firstChild!==null){
-			document.getElementById('post-tag3-tooltip-defs').removeChild(document.getElementById('tag3-tooltip-defs').firstChild)
+			document.getElementById('post-tag3-tooltip-defs').removeChild(document.getElementById('post-tag3-tooltip-defs').firstChild)
 			}
 			document.getElementById('post-tag3-tooltip-defs').appendChild(defs);
 			if(document.getElementById('post-tag3-tooltip-svg').firstChild!==null){
-	    		document.getElementById('post-tag3-tooltip-svg').removeChild(document.getElementById('tag3-tooltip-svg').firstChild)
+	    		document.getElementById('post-tag3-tooltip-svg').removeChild(document.getElementById('post-tag3-tooltip-svg').firstChild)
 			}
     		document.getElementById('post-tag3-tooltip-svg').appendChild(words);
 	    	}

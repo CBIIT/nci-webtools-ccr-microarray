@@ -196,7 +196,7 @@ class GSMData extends Component {
 	    }
 
 		content=<div>
-					<div><Search  placeholder="input search text" className="input-search"  onSearch={value => this.setState({term: value})} /></div>
+					<div><Search  placeholder="input search text" className="input-search-gsm" onSearch={value => this.setState({term: value})} /></div>
 					<div><Table rowSelection={rowSelection} columns={columns} dataSource={data.filter(searchFilter,this)} /></div>
 				</div>	
   	  	
