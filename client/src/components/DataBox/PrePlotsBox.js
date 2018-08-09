@@ -39,68 +39,13 @@ class PrePlotsBox extends Component {
 	    	}
 		});
 
-
-		document.getElementById("tag4").addEventListener("mouseover", function(e){
-    	if(e.target.localName === "use"){
-    		let words = e.target.parentElement.cloneNode(true);
-    		let defs =e.target.parentElement.parentElement.parentElement.childNodes[1].cloneNode(true)
-    		var last_o_y=0;
-    		var last_t_y=0;
-    		for(let i = words.children.length-1; i>=0; i--){
-    			console.log(1)
-    			// change x and y accordinate
-    			words.children[i].setAttribute("x",20);
-    			if(last_o_y===0){
-    				// the last element
-    				last_o_y=words.children[i].getAttribute("y");
-    				last_t_y=20;
-    				words.children[i].setAttribute("y",20);
-    			}else{
-    				let diff = words.children[i].getAttribute("y")-last_o_y;
-    				last_o_y=words.children[i].getAttribute("y");
-					words.children[i].setAttribute("y",last_t_y+diff);
-					last_t_y=last_t_y+diff
-    			}
-    		}
-    		document.getElementById('tag4-tooltip-defs').removeChild(document.getElementById('tag4-tooltip-defs').firstChild)
-    		document.getElementById('tag4-tooltip-defs').appendChild(defs);
-    		document.getElementById('tag4-tooltip-svg').removeChild(document.getElementById('tag4-tooltip-svg').firstChild)
-    		document.getElementById('tag4-tooltip-svg').appendChild(words);
-	    	}
-		});
-
-		document.getElementById("tag5").addEventListener("mouseover", function(e){
-    	if(e.target.localName === "use"){
-    		let words = e.target.parentElement.cloneNode(true);
-    		let defs =e.target.parentElement.parentElement.parentElement.childNodes[1].cloneNode(true)
-    		var last_o_y=0;
-    		var last_t_y=0;
-    		for(let i = words.children.length-1; i>=0; i--){
-    			console.log(1)
-    			// change x and y accordinate
-    			words.children[i].setAttribute("x",20);
-    			if(last_o_y===0){
-    				// the last element
-    				last_o_y=words.children[i].getAttribute("y");
-    				last_t_y=20;
-    				words.children[i].setAttribute("y",20);
-    			}else{
-    				let diff = words.children[i].getAttribute("y")-last_o_y;
-    				last_o_y=words.children[i].getAttribute("y");
-					words.children[i].setAttribute("y",last_t_y+diff);
-					last_t_y=last_t_y+diff
-    			}
-    		}
-    		document.getElementById('tag5-tooltip-defs').removeChild(document.getElementById('tag5-tooltip-defs').firstChild)
-    		document.getElementById('tag5-tooltip-defs').appendChild(defs);
-    		document.getElementById('tag5-tooltip-svg').removeChild(document.getElementById('tag5-tooltip-svg').firstChild)
-    		document.getElementById('tag5-tooltip-svg').appendChild(words);
-	    	}
-		});
   	}
 
 	constructor(props){
 		super(props);
+		 this.state = {boxplot:""};
+
+		this.handleSelectionChange = this.handleSelectionChange.bind(this);
 	}
 
 	handleSelectChange = (key) => {
@@ -109,11 +54,47 @@ class PrePlotsBox extends Component {
 
 
 	handleSelectionChange(value) {
-		  var list = document.getElementsByClassName("plot2");
-		  for (var i = 0; i < list.length; i++) {
+
+		// shw the svg independently to solve the problem of svg confilction 
+
+		let link2 ="./images/"+this.props.data.projectID+this.props.data.BoxplotBN;
+
+	    let link3 = "./images/"+this.props.data.projectID+this.props.data.RLEplotBN;
+
+	 	let link4="./images/"+this.props.data.projectID+this.props.data.NUSEplotBN;
+
+
+	 	var list = document.getElementsByClassName("plot2");
+		for (var i = 0; i < list.length; i++) {
 				list[i].classList.add("hide");
-			}
-		  document.getElementById(value).className= document.getElementById(value).className.replace("hide", "");
+		}
+		if(document.getElementById('tag3-tooltip-defs').firstChild!==null){
+			document.getElementById('tag3-tooltip-defs').removeChild(document.getElementById('tag3-tooltip-defs').firstChild)
+		}
+
+		if(document.getElementById('tag3-tooltip-svg').firstChild!==null){
+    		document.getElementById('tag3-tooltip-svg').removeChild(document.getElementById('tag3-tooltip-svg').firstChild)
+		}
+
+	 	if(value==="tag5"){
+	 		this.setState({boxplot:link4});
+	 	}
+
+	 	if(value==="tag4"){
+	 		this.setState({boxplot:link3});
+	 	}
+
+	 	if(value==="tag3"){
+	 		this.setState({boxplot:link2});
+	 	}
+
+	 	 if(value!=="tag5"&&value!=="tag3"&&value!=="tag4"){
+	 	 	document.getElementById(value).className= document.getElementById(value).className.replace("hide", "");
+	 		
+	 	}else{
+	 		document.getElementById("tag3").className= document.getElementById("tag3").className.replace("hide", "");
+	 	}
+
 		}
 
 // HistplotBN,MAplotBN,BoxplotBN,RLEplotBN,NUSEplotBN,HistplotAN,MAplotAN,BoxplotAN,PCA,Heatmapolt,time_cost
@@ -135,18 +116,7 @@ class PrePlotsBox extends Component {
 	 	}
 
 
-	 	var link2 ="./images/"+this.props.data.projectID+this.props.data.BoxplotBN;
-	 	var boxplotBN =<ReactSVG src={link2} style={{width:"75%"}} renumerateIRIElements={false}
-/>;
-
-	    var link3 = "./images/"+this.props.data.projectID+this.props.data.RLEplotBN;
-	 	var rleplotBN=<ReactSVG  path={link3} style={{width:"75%"}} renumerateIRIElements={false}
-/>;
-
-	 	var link4="./images/"+this.props.data.projectID+this.props.data.NUSEplotBN;
-	 	var nusplotBN=<ReactSVG  path={link4}  style={{width:"75%"}} renumerateIRIElements={false}
-/>;
-
+	
 	    var maplot_style = 	{
 	    						'height':'auto',
 	  						  	'max-height':'100%',
@@ -187,44 +157,13 @@ class PrePlotsBox extends Component {
 							</svg>
 							</div>
 							</div>
-							{boxplotBN}
-					</div>,
-	  	   		    <div id="tag4" className="plot2 hide">
-	  	   		    	 <div id="tag4-tooltip" style={tooltip}>
-							<div id="tag4-tooltip-svg-title" style={tooltip_svg_title}>Point :</div>
-							<div id="tag4-tooltip-svg-div">
-							<svg style={tooltip_svg_div} 
-								 xmlns="http://www.w3.org/2000/svg"
-								 xmlnsXlink="http://www.w3.org/1999/xlink" 
-								 width="40pt" 
-								 height="600pt" 
-								 viewBox="0 0 40 600" 
-								 version="1.1" >
-								 <defs id="tag4-tooltip-defs">  </defs>
-								 <g id="tag4-tooltip-svg">  </g>
-							</svg>
-							</div>
-							</div>
-	  	   		    		{rleplotBN}
-	  	   		    </div>,
-	  	   		    <div id="tag5" className="plot2 hide">
-	  	   		    	<div id="tag5-tooltip" style={tooltip}>
-							<div id="tag5-tooltip-svg-title" style={tooltip_svg_title}>Point :</div>
-							<div id="tag5-tooltip-svg-div">
-							<svg style={tooltip_svg_div} 
-								 xmlns="http://www.w3.org/2000/svg"
-								 xmlnsXlink="http://www.w3.org/1999/xlink" 
-								 width="40pt" 
-								 height="600pt" 
-								 viewBox="0 0 40 600" 
-								 version="1.1" >
-								 <defs id="tag5-tooltip-defs">  </defs>
-								 <g id="tag5-tooltip-svg">  </g>
-							</svg>
-							</div>
-							</div>
-	  	   		    	{nusplotBN}
-	  	   		    </div>]
+							<ReactSVG  
+	  						path={this.state.boxplot}  
+	  						renumerateIRIElements={false}
+						 	svgClassName="svg-class-name"
+						 	className="wrapper-class-name"/>
+
+					</div>]
 
 	  	content = [<Select defaultValue="tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
 						      <Option value="tag1">Histogram</Option>
