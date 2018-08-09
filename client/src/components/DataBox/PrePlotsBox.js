@@ -32,9 +32,14 @@ class PrePlotsBox extends Component {
 					last_t_y=last_t_y+diff
     			}
     		}
-    		document.getElementById('tag3-tooltip-defs').removeChild(document.getElementById('tag3-tooltip-defs').firstChild)
-    		document.getElementById('tag3-tooltip-defs').appendChild(defs);
-    		document.getElementById('tag3-tooltip-svg').removeChild(document.getElementById('tag3-tooltip-svg').firstChild)
+
+    		if(document.getElementById('tag3-tooltip-defs').firstChild!==null){
+			document.getElementById('tag3-tooltip-defs').removeChild(document.getElementById('tag3-tooltip-defs').firstChild)
+			}
+			document.getElementById('tag3-tooltip-defs').appendChild(defs);
+			if(document.getElementById('tag3-tooltip-svg').firstChild!==null){
+	    		document.getElementById('tag3-tooltip-svg').removeChild(document.getElementById('tag3-tooltip-svg').firstChild)
+			}
     		document.getElementById('tag3-tooltip-svg').appendChild(words);
 	    	}
 		});
