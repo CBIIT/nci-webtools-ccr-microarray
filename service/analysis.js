@@ -75,7 +75,7 @@ router.post('/upload',function(req, res){
 router.post('/loadGSE', function(req, res) {
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-  data.push(req.body.actions);
+  data.push("loadGSE"); // action
   data.push(req.body.projectId);
   data.push(req.body.code); 
   data.push(req.body.groups);
@@ -90,31 +90,35 @@ router.post('/loadGSE', function(req, res) {
 });
 
 
-router.post('/load', function(req, res) {
+
+router.post('/pathwaysHeapMap', function(req, res) {
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-  data.push(req.body.actions);
+  data.push("pathwaysHeapMap");
   data.push(req.body.projectId);
 
-  data.push(req.body.code); 
-  
-  data.push(req.body.groups);
-  
-  data.push(req.body.pDEGs);
-  data.push(req.body.foldDEGs);
-  data.push(req.body.pPathways);
   data.push(req.body.group_1);
   data.push(req.body.group_2);
+
+  R.execute("wrapper.R",data, function(err,returnValue){
+          if(err){
+              res.json({status:404, msg:err});
+            }else{
+              res.json({status:200, data:returnValue});
+            }
+        });
+});
+
+
+
+router.post('/runSSGSEA', function(req, res) {
+  let data = [];
+  //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
+  data.push("runSSGSEA");
+  data.push(req.body.projectId);
+
   data.push(req.body.species);
   data.push(req.body.genSet);
-  data.push(req.body.pssGSEA);
-  data.push(req.body.foldssGSEA);
-  data.push(req.body.source)
-  data.push(req.body.source)
-  data.push(req.body.source)
-  data.push(req.body.source)
-  data.push(req.body.source)
-
 
   R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
@@ -130,14 +134,11 @@ router.post('/load', function(req, res) {
 router.post('/runContrast', function(req, res) {
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-  data.push(req.body.actions);
+  data.push("runContrast"); // action
   data.push(req.body.projectId);
 
   data.push(req.body.code); 
-  
-
   data.push(req.body.groups);
-  
   data.push(req.body.pDEGs);
   data.push(req.body.foldDEGs);
   data.push(req.body.pPathways);
@@ -197,6 +198,7 @@ router.post('/runContrast', function(req, res) {
 });
 
 
+
 function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
 
                var  workflow ={};
@@ -211,7 +213,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                var data_dir = d.substring(0,d.indexOf("{"));
                let list =JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"),d.length)));
                // get plots
-              workflow.listPlots=list.norm_celfiles["listData"];
+               workflow.listPlots=list.norm_celfiles["listData"];
                // filter 
                // deg {RNA_1-Ctl: Array(22690), RNA_2-Ctl: Array(22690)}
                var deg = list.diff_expr_genes.listDEGs;

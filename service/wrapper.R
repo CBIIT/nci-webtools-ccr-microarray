@@ -89,10 +89,10 @@ process = function(){
     #If user selects 'ANALYZE CEL FILES', call this function, input path of files (length of group assignments must match number of files for testing purposes):
     #celfiles = processCELfiles('pid',c('Ctl_1','Ctl_1','Ctl_1','KO_1','KO_1','KO_1','Ctl_2','Ctl_2','Ctl_2','KO_2','KO_2','KO_2'))
       listGroups<-c()
-      if(args[5]!=""){
-        listGroups<-unlist((strsplit(args[5],",")))
+      if(args[4]!=""){
+        listGroups<-unlist((strsplit(args[4],",")))
       }else{
-        listGroups<-toString(args[5])
+        listGroups<-toString(args[4])
       }
 
       if(access_code==""||projectId==""||listGroups==""){
@@ -106,6 +106,37 @@ process = function(){
 
 
   if(action=="runContrast"){
+    i<-4
+    access_code<-toString(args[i])
+    i<-i+1
+    listGroups<-c()
+    if(args[i]!=""){
+      listGroups<-unlist((strsplit(args[i],",")))
+    }else{
+      listGroups<-toString(args[i])
+    }
+    i<-i+1
+    pDEGs<-toString(args[i])
+    i<-i+1
+    foldDEGs<-toString(args[i])
+    i<-i+1
+    pPathways<-toString(args[i])
+    i<-i+1
+    cgroup1<-toString(args[i])
+    i<-i+1
+    cgroup2<-toString(args[i])
+    i<-i+1
+    species<-toString(args[i])
+    i<-i+1
+    geneSet<-toString(args[i])
+    i<-i+1
+    pSsGSEA<-toString(args[i])
+    i<-i+1
+    foldSsGSEA<-toString(args[i])
+    i<-i+1
+    source<-toString(args[i])
+    
+
     #If user selects 'ANALYZE CEL FILES', call this function, input path of files (length of group assignments must match number of files for testing purposes):
     #celfiles = processCELfiles('/Users/valdezkm/Documents/2___Combined',c('Ctl_1','Ctl_1','Ctl_1','KO_1','KO_1','KO_1','Ctl_2','Ctl_2','Ctl_2','KO_2','KO_2','KO_2'))
 
@@ -113,6 +144,7 @@ process = function(){
 
     #celfiles = getLocalGEOfiles('pid','GSE37874', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
    
+
     if(source=="upload"){
           celfiles = processCELfiles(projectId,listGroups,workspace) 
        }else{
@@ -146,7 +178,7 @@ process = function(){
 
     exportJson=list(diff_expr_genes=diff_expr_genes[1],pathways_up=l2p_pathways[0],pathways_down=l2p_pathways[1],ssGSEA=ssGSEA_results[1]) 
     write(toJSON(exportJson,auto_unbox = T,force = TRUE), paste0(workspace,"result.json"))
-    print(workspace)
+
     return(list(norm_celfiles=norm_celfiles,diff_expr_genes=diff_expr_genes[1],pathways=l2p_pathways,ssGSEA=ssGSEA_results))
 
   }
@@ -157,6 +189,9 @@ process = function(){
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
     # # # Output should dynamically respond to user-selected contrast
     diff_expr_genes<-readRDS(file = paste0(workspace,"diff_expr_genes.rds"))
+
+    species<-toString(args[4])
+    geneSet<-toString(args[5])
     
     ssGSEA_results = ss(diff_expr_genes,species,geneSet,workspace,projectId)
 
@@ -172,6 +207,9 @@ process = function(){
     diff_expr_genes<-readRDS(file = paste0(workspace,"diff_expr_genes.rds"))
 
     l2p_pathways<-readRDS(file = paste0(workspace,"l2p_pathways.rds"))
+    
+    cgroup1<-toString(args[4])
+    cgroup2<-toString(args[5])
 
     contrast <-c(paste0(cgroup1,"-",cgroup2))
 

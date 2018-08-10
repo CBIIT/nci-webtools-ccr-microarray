@@ -143,6 +143,8 @@ class Analysis extends Component {
 		window.location.reload(true);
 	}
 
+
+
 	loadGSE = () =>{
 
 		let workflow = Object.assign({},this.state.workflow);
@@ -150,7 +152,6 @@ class Analysis extends Component {
 		reqBody.code="";
 		reqBody.projectId="";
 		reqBody.groups="";
-		reqBody.actions="";
 		
 
 		if(workflow.dataList!=""){
@@ -179,8 +180,6 @@ class Analysis extends Component {
 		}
 		reqBody.groups = groups;
 	    
-	    // define action
-	    reqBody.actions = "loadGSE";
 
 	    workflow.uploading = true;
 		workflow.progressing = true;
