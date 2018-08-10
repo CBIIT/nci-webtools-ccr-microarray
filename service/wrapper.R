@@ -9,39 +9,45 @@ process = function(){
   #args --van  --args code projectID groups action pDEGs foldDEGs pPathways  contrast-group1 contract-group2
   args <- commandArgs(trailingOnly=TRUE)
 
-  access_code <- toString(args[2])
-
+  action<-toString(args[2])
   projectId <- toString(args[3])
 
-  listGroups<-c()
-  if(args[4]!=""){
-    listGroups<-unlist((strsplit(args[4],",")))
-  }else{
-    listGroups<-toString(args[4])
-  }
+  # access_code <- toString(args[2])
+
+  # projectId <- toString(args[3])
+
+  # listGroups<-c()
+  # if(args[4]!=""){
+  #   listGroups<-unlist((strsplit(args[4],",")))
+  # }else{
+  #   listGroups<-toString(args[4])
+  # }
   
-  action<-toString(args[5])
+  # action<-toString(args[5])
 
-  pDEGs<-toString(args[6])
+  # pDEGs<-toString(args[6])
 
-  foldDEGs<-toString(args[7])
+  # foldDEGs<-toString(args[7])
   
-  pPathways<-toString(args[8])
+  # pPathways<-toString(args[8])
 
-  cgroup1<-toString(args[9])
+  # cgroup1<-toString(args[9])
 
-  cgroup2<-toString(args[10])
+  # cgroup2<-toString(args[10])
 
-  species<-toString(args[11])
+  # species<-toString(args[11])
 
-  geneSet<-toString(args[12])
+  # geneSet<-toString(args[12])
 
-  pSsGSEA<-toString(args[13])
+  # pSsGSEA<-toString(args[13])
 
-  foldSsGSEA<-toString(args[14])
+  # foldSsGSEA<-toString(args[14])
 
-  source<-toString(args[15])
+  # source<-toString(args[15])
 
+  # upOrDown<-toString(args[16])
+
+  # pathway_name<-toString(args[17])
 
   #return(args)
 
@@ -62,7 +68,18 @@ process = function(){
   if(action == "loadGSE"){
       #### 1) Process GEO files function takes gseid and returns ExpressionFeatureSet object  ####
       #celfiles = processGEOfiles('pid','GSE37874', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
-      
+      access_code<-toString(args[4])
+      listGroups<-c()
+      if(args[5]!=""){
+        listGroups<-unlist((strsplit(args[5],",")))
+      }else{
+        listGroups<-toString(args[5])
+      }
+
+      if(access_code==""||projectId==""||listGroups==""){
+        return ("Request field(s) is missing")
+      }
+
       celfiles = processGEOfiles(projectId,access_code,listGroups,workspace)  
       return(celfiles)  
   }
@@ -71,6 +88,17 @@ process = function(){
   if(action =="loadCEL"){
     #If user selects 'ANALYZE CEL FILES', call this function, input path of files (length of group assignments must match number of files for testing purposes):
     #celfiles = processCELfiles('pid',c('Ctl_1','Ctl_1','Ctl_1','KO_1','KO_1','KO_1','Ctl_2','Ctl_2','Ctl_2','KO_2','KO_2','KO_2'))
+      listGroups<-c()
+      if(args[5]!=""){
+        listGroups<-unlist((strsplit(args[5],",")))
+      }else{
+        listGroups<-toString(args[5])
+      }
+
+      if(access_code==""||projectId==""||listGroups==""){
+        return ("Request field(s) is missing")
+      }
+
     celfiles = processCELfiles(projectId,listGroups,workspace) 
     return(celfiles)  
   }
@@ -112,6 +140,7 @@ process = function(){
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
     # # # Output should dynamically respond to user-selected contrast
     saveRDS(diff_expr_genes, file = paste0(workspace,"diff_expr_genes.rds"))
+    saveRDS(l2p_pathways, file = paste0(workspace,"l2p_pathways.rds"))
     
     ssGSEA_results = ss(diff_expr_genes,species,geneSet,workspace,projectId)
 
@@ -136,14 +165,21 @@ process = function(){
 
 
   if(action=="pathwaysHeapMap"){
-   
-    # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
-    # # # Output should dynamically respond to user-selected contrast
-    diff_expr_genes<-readRDS(file = paste0(workspace,"diff_expr_genes.rds"))
-    
-    ssGSEA_results = ss(diff_expr_genes,species,geneSet,workspace,projectId)
+   ##geneHeatmap = function(degs, paths, contrast, upOrDown, pathway_name,saveImageFileName) {
+   #geneHeatmap(diff_expr_genes, l2p_pathways, 'RNA_1-Ctl', 'upregulated_pathways','oxidation-reduction process')   #if GEO
+   #geneHeatmap(diff_expr_genes, l2p_pathways, 'KO_1-Ctl_1', 'upregulated_pathways','oxidation-reduction process')   #if CEL file upload
 
-    return(list(ssGSEA=ssGSEA_results[1]))
+    diff_expr_genes<-readRDS(file = paste0(workspace,"diff_expr_genes.rds"))
+
+    l2p_pathways<-readRDS(file = paste0(workspace,"l2p_pathways.rds"))
+
+    contrast <-c(paste0(cgroup1,"-",cgroup2))
+
+    saveImageFileName<-paste0(workspace,"pathwaysHeapMap.jpeg"))
+
+    geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName)
+
+    return("success")
   }
 
 }
