@@ -151,17 +151,7 @@ class Analysis extends Component {
 		reqBody.projectId="";
 		reqBody.groups="";
 		reqBody.actions="";
-		reqBody.pDEGs="";
-		reqBody.foldDEGs="";
-		reqBody.pPathways="";
-		reqBody.genSet="";
-	    reqBody.pssGSEA="";
-	    reqBody.foldssGSEA="";
-	    reqBody.species="";
-	    reqBody.genSet="";
-	    reqBody.group_1="";
-	    reqBody.group_2="";
-	    reqBody.source="";
+		
 
 		if(workflow.dataList!=""){
 			// user click load after data already loaded.then it is a new transaction 
@@ -200,7 +190,7 @@ class Analysis extends Component {
 		 });
 	    
 	    
-	    fetch('./api/analysis/load',{
+	    fetch('./api/analysis/loadGSE',{
 			method: "POST",
 			body: JSON.stringify(reqBody),
 			credentials: "same-origin",

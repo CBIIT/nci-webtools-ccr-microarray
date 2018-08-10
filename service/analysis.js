@@ -54,20 +54,10 @@ router.post('/upload',function(req, res){
   // once all the files have been uploaded, send a response to the client
   form.on('end', function() {
       let data = [];
-      data.push("code"); 
+      data.push("loadCEL"); // action
       data.push(pid);
       data.push(new Array(number_of_files).fill("Ctl"));
-      data.push("loadCEL");
-      data.push("req.body.pDEGs");
-      data.push("req.body.foldDEGs");
-      data.push("req.body.pPathways");
-      data.push("req.body.group_1");
-      data.push("req.body.group_2");
-      data.push("req.body.species");
-      data.push("req.body.genSet");
-      data.push("req.body.pssGSEA");
-      data.push("req.body.foldssGSEA)");
-      data.push("upload");
+
       R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
               res.json({status:404, msg:err});
@@ -82,13 +72,34 @@ router.post('/upload',function(req, res){
 });
 
 
+router.post('/loadGSE', function(req, res) {
+  let data = [];
+  //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
+  data.push(req.body.actions);
+  data.push(req.body.projectId);
+  data.push(req.body.code); 
+  data.push(req.body.groups);
+
+  R.execute("wrapper.R",data, function(err,returnValue){
+          if(err){
+              res.json({status:404, msg:err});
+            }else{
+              res.json({status:200, data:returnValue});
+            }
+        });
+});
+
+
 router.post('/load', function(req, res) {
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-  data.push(req.body.code); 
-  data.push(req.body.projectId);
-  data.push(req.body.groups);
   data.push(req.body.actions);
+  data.push(req.body.projectId);
+
+  data.push(req.body.code); 
+  
+  data.push(req.body.groups);
+  
   data.push(req.body.pDEGs);
   data.push(req.body.foldDEGs);
   data.push(req.body.pPathways);
@@ -98,6 +109,10 @@ router.post('/load', function(req, res) {
   data.push(req.body.genSet);
   data.push(req.body.pssGSEA);
   data.push(req.body.foldssGSEA);
+  data.push(req.body.source)
+  data.push(req.body.source)
+  data.push(req.body.source)
+  data.push(req.body.source)
   data.push(req.body.source)
 
 
@@ -115,10 +130,14 @@ router.post('/load', function(req, res) {
 router.post('/runContrast', function(req, res) {
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-  data.push(req.body.code); 
-  data.push(req.body.projectId);
-  data.push(req.body.groups);
   data.push(req.body.actions);
+  data.push(req.body.projectId);
+
+  data.push(req.body.code); 
+  
+
+  data.push(req.body.groups);
+  
   data.push(req.body.pDEGs);
   data.push(req.body.foldDEGs);
   data.push(req.body.pPathways);
