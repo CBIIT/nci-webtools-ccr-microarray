@@ -264,6 +264,24 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                }
                console.log(workflow.ssGSEA.length)
                // too many record, shows first 2000
+
+               // sort result;
+               //objs.sort(function(a,b) {return (a.last_nom > b.last_nom) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0);} );
+               diff_expr_genes.sort(function(e1,e2){
+                  return (e1["P.Value"]>e2["P.Value"]) ? 1 :((e2["P.Value"]>e1["P.Value"])? -1: 0)
+               })
+               pathways_up.sort(function(e1,e2){
+                  return (e1["pval"]>e2["pval"]) ? 1 :((e2["pval"]>e1["pval"])? -1: 0)
+               })
+
+               pathways_down.sort(function(e1,e2){
+                  return (e1["pval"]>e2["pval"]) ? 1 :((e2["pval"]>e1["pval"])? -1: 0)
+               })
+
+               ssGSEA.sort(function(e1,e2){
+                  return (e1["P.Value"]>e2["P.Value"]) ? 1 :((e2["P.Value"]>e1["P.Value"])? -1: 0)
+               })
+               
                if(workflow.diff_expr_genes.length>2000){
                 workflow.diff_expr_genes=workflow.diff_expr_genes.slice(1, 2000);
                }

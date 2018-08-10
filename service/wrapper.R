@@ -66,6 +66,7 @@ process = function(){
   # cgroup2<-"RNA_1"
 
   if(action == "loadGSE"){
+     
       #### 1) Process GEO files function takes gseid and returns ExpressionFeatureSet object  ####
       #celfiles = processGEOfiles('pid','GSE37874', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
       access_code<-toString(args[4])
@@ -76,7 +77,7 @@ process = function(){
         listGroups<-toString(args[5])
       }
 
-      if(access_code==""||projectId==""||listGroups==""){
+      if(access_code==""||projectId==""){
         return ("Request field(s) is missing")
       }
 
@@ -213,7 +214,7 @@ process = function(){
 
     contrast <-c(paste0(cgroup1,"-",cgroup2))
 
-    saveImageFileName<-paste0(workspace,"pathwaysHeapMap.jpeg"))
+    saveImageFileName<-paste0(workspace,"pathwaysHeapMap.jpeg")
 
     geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName)
 
