@@ -252,7 +252,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                 console.log(workflow.pathways_up.length)
                // filter ssGEA
                 var ssGSEA = list.ssGSEA.DEss;
-               // pathway ={{RNA_1-Ctl: {{upregulated_pathways:array},{downregulated_pathways:array}}}
+                console.log(list.ssGSEA)
                for(var i in pathway){
                   for( var j in ssGSEA[i]){
                     if(list.ssGSEA.DEss[i][j]["logFC"]<foldssGSEA||list.ssGSEA.DEss[i][j]["P.Value"]<pssGSEA){
@@ -262,7 +262,9 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                       }
                   }
                }
-               console.log(workflow.ssGSEA.length)
+
+               var ssGSEA = list.ssGSEA.DEss;
+               console.log(list.ssGSEA.ssgsResults)
                // too many record, shows first 2000
 
                // sort result;
@@ -281,7 +283,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                ssGSEA.sort(function(e1,e2){
                   return (e1["P.Value"]>e2["P.Value"]) ? 1 :((e2["P.Value"]>e1["P.Value"])? -1: 0)
                })
-               
+
                if(workflow.diff_expr_genes.length>2000){
                 workflow.diff_expr_genes=workflow.diff_expr_genes.slice(1, 2000);
                }
