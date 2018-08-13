@@ -9,8 +9,6 @@ const TabPane = Tabs.TabPane;
 
 class DataBox extends Component {
 
- 
-
 	constructor(props){
 		super(props);
     this.child = React.createRef();
@@ -20,8 +18,6 @@ class DataBox extends Component {
     visible: false,
     selected:[]
     }
-    
-
 	}
 
 	componentDidMount(){
@@ -30,8 +26,6 @@ class DataBox extends Component {
 	handleTabChange = (key) => {
 	  console.log(key);
 	}
-
-
 
  showModal = () => {
       this.setState({
@@ -55,22 +49,17 @@ class DataBox extends Component {
   }
 
   createTag=()=>{
-    
      if(document.getElementById("input_group_name").value==""){
       // alert 
        message.warning('Please type the tag name. ');
      }else{
-
         if(this.state.selected.length>0){  // if user select records in table 
             this.props.assignGroup(document.getElementById("input_group_name").value,this.state.selected)
-
             this.child.current.unselect(); // after create tag, previous selected record will unselect. 
           }else{
-
              message.warning('Please select some gsm(s). ');
           }
      }
-
   }
 
   deleteTag=(event)=>{
@@ -81,22 +70,20 @@ class DataBox extends Component {
       }else{
         this.props.deleteGroup(group_name)
       }
-      
   }
+
   render() {
 
     const { visible, loading } = this.state;
-
   	let prePlotsBox = "";
   	let postPlotsBox = "";
   	let degBox = "";
   	let ssGSEABox = "";
     let define_group_click_btn = "";
 
-
     // define group btn
     if(this.props.data.dataList.length>0){
-      define_group_click_btn=<div><Button  type="primary" onClick={this.showModal} >Group</Button></div>;
+      define_group_click_btn=<div><Button  type="primary" onClick={this.showModal} >Manage Group</Button></div>;
     }
     
     if(this.props.data.compared){
@@ -105,35 +92,27 @@ class DataBox extends Component {
                 </TabPane>);
           postPlotsBox = (<TabPane tab="Post-normalization Plots"  key="3"><PostPlotsBox data={this.props.data}/></TabPane>);
           degBox = (<TabPane tab="DEG-Enrichments Results"  key="4"><DEGBox data={this.props.data}/></TabPane>);
-
       }else{
           // controll display fo tags[preplot,postplot,DEG]
-          prePlotsBox = (<TabPane tab="Pre-normalization QC Plots" disabled key="2">No data
-                </TabPane>);
+          prePlotsBox = (<TabPane tab="Pre-normalization QC Plots" disabled key="2">No data </TabPane>);
           postPlotsBox = (<TabPane tab="Post-normalization Plots" disabled key="3">No data</TabPane>);
           degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="4">No data</TabPane>);
-
       }
-   
     // control tab  SSGSEA
   	if(this.props.data.done_gsea){
   		ssGSEABox = (<TabPane tab="ssGSEA Results" key="5"><SSGSEATable data={this.props.data}/></TabPane>);	
   	}
 
-  
     var selected_gsms = ""; 
     for(var key in this.state.selected){
       selected_gsms=selected_gsms+this.props.data.dataList[this.state.selected[key]-1].gsm+",";
     }
-    // define group modal
-
     // define group list in the modal
     const columns = [  // define table column names
-      { title: 'Tag', dataIndex: 'name', key: 'name',width:4},
+      { title: 'Group', dataIndex: 'name', key: 'name',width:90},
       { title: 'Metabolite IDs', dataIndex: 'gsms', key: 'gsms' },
-      { title: 'Action',dataIndex:'name',width:4,render:(e)=> (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>)}
+      { title: 'Action',dataIndex:'name',width:90,render:(e)=> (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>)}
     ];
-
 
     // get group and gsm(s)  [{grupa: gsm1,gsm2,gsm3}]
     var groups_data= new Map();
@@ -159,46 +138,39 @@ class DataBox extends Component {
     columns={columns}
     dataSource={groups_data_list} />
 
-
-
-
-    let modal = <Modal visible={visible}  title="GSM Tag" onOk={this.handleOk} onCancel={this.handleCancel}
+    // define group modal
+    let modal = <Modal visible={visible}  title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
         footer={[
             <Button key="back" onClick={this.handleCancel}>Close</Button>,
           ]}
         >
-          <h3>Provide a tag name for the following selected GSM(s)</h3>
+          <p><b>Provide a Group name for the following selected GSM(s)</b></p>
           <p>{selected_gsms}</p>
-
-          <p>Tag Name:</p>
-          <p>
-              <Input placeholder={"Tag Name"} id={"input_group_name"} style={{width:'150px'}}/>
-              <Button  type="primary" onClick={this.createTag} >Create Tag</Button>
+          <p>Group Name:&nbsp;&nbsp;
+              <Input placeholder={"Group Name"} id={"input_group_name"} style={{width:'150px'}}/>&nbsp;
+              <Button  type="primary" onClick={this.createTag} >Add</Button>
           </p>
-          <p>Saved Tag List:</p>
+          <b>Saved Group List:</b> <br/>
           {group_table}
         </Modal>
-
-
     // end  group modal
 
-
-
-
-  	let content = (<Tabs onChange={this.handleTabChange} type="card" tabBarExtraContent={define_group_click_btn}>
-    				<TabPane tab="GSM Data" key="1"><GSMData ref={this.child}  data={this.props.data} selected={this.selection}/></TabPane>
-    				{prePlotsBox}
-    				{postPlotsBox}
-    				{degBox}
-    				{ssGSEABox}
-  					</Tabs>);
-
-	return (
-	    <div className="container-board-right">
-	    	{content}
-        {modal}
-		</div>
-	);
+  	let content = (<Tabs onChange={this.handleTabChange} type="card" >
+                			<TabPane tab="GSM Data" key="1">
+                          {define_group_click_btn}
+                          <GSMData ref={this.child}  data={this.props.data} selected={this.selection}/>
+                      </TabPane>
+              				{prePlotsBox}
+              				{postPlotsBox}
+              				{degBox}
+              				{ssGSEABox}
+          					</Tabs>);
+  	return (
+  	    <div className="container-board-right">
+  	    	{content}
+          {modal}
+  		</div>
+  	);
   }
 }
 

@@ -26,7 +26,8 @@ module.exports = function(app){
     app.use(bodyParser.json({
         limit: '4mb' // 100kb default is too small
     }));
-    app.use(fileUpload());
+    
+    //app.use(fileUpload());
     app.use(methodOverride());
     app.use(cookieParser());
     app.use(session({secret: 'microarray token', cookie: {maxAge: config.maxAge}, resave: true, saveUninitialized: true }));
