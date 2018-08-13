@@ -210,15 +210,15 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
 
                var d =returnValue.split("+++ssGSEA+++\"")[1];
                // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-               var data_dir = d.substring(0,d.indexOf("{"));
+               let data_dir = d.substring(0,d.indexOf("{"));
                let list =JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"),d.length)));
                // get plots
                workflow.listPlots=list.norm_celfiles["listData"];
                // filter 
                // deg {RNA_1-Ctl: Array(22690), RNA_2-Ctl: Array(22690)}
-               var deg = list.diff_expr_genes.listDEGs;
-               for(var i in list.diff_expr_genes.listDEGs){
-                  for(var j in deg[i]){
+               let deg = list.diff_expr_genes.listDEGs;
+               for(let i in list.diff_expr_genes.listDEGs){
+                  for(let j in deg[i]){
                     if(deg[i][j]["P.Value"]<pDEGs||deg[i][j].FC<foldDEGs){
                       deg[i].splice(j, 1);
                     }else{
@@ -230,17 +230,17 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                //console.log(workflow.diff_expr_genes.length)
 
                // filter pathway
-               var pathway = list.pathways;
+               let pathway = list.pathways;
                // pathway ={{RNA_1-Ctl: {{upregulated_pathways:array},{downregulated_pathways:array}}}
-               for(var i in list.pathways){
-                  for( var j in list.pathways[i]["upregulated_pathways"]){
+               for(let i in list.pathways){
+                  for( let j in list.pathways[i]["upregulated_pathways"]){
                     if(list.pathways[i]["upregulated_pathways"][j]["pval"]<pPathways){
                         list.pathways[i]["upregulated_pathways"].splice(j, 1);
                       }else{
                         workflow.pathways_up.push(list.pathways[i]["upregulated_pathways"][j])
                       }
                   }
-                  for(var j in list.pathways[i]["downregulated_pathways"]){
+                  for(let j in list.pathways[i]["downregulated_pathways"]){
                     if(list.pathways[i]["downregulated_pathways"][j]["pval"]<pPathways){
                         list.pathways[i]["downregulated_pathways"].splice(j, 1);
                       }else{
@@ -250,19 +250,16 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                }
                // filter ssGEA
                 var ssGSEA = list.ssGSEA.DEss;
-                //console.log(list.ssGSEA)
-               for(var i in pathway){
-                  for( var j in ssGSEA[i]){
-                    if(list.ssGSEA.DEss[i][j]["logFC"]<foldssGSEA||list.ssGSEA.DEss[i][j]["P.Value"]<pssGSEA){
-                        list.ssGSEA.DEss[i].splice(j, 1);
+                console.log(ssGSEA)
+                  for( let j in ssGSEA[0]){
+                    if(list.ssGSEA.DEss[0][j]["logFC"]<foldssGSEA||list.ssGSEA.DEss[0][j]["P.Value"]<pssGSEA){
+                        list.ssGSEA.DEss[0].splice(j, 1);
                       }else{
                          workflow.ssGSEA.push(list.ssGSEA.DEss[i][j]);
                       }
                   }
-               }
 
-               var ssGSEA = list.ssGSEA.DEss;
-               //console.log(list.ssGSEA.ssgsResults)
+               console.log(list.ssGSEA.ssgsResults)
                // too many record, shows first 2000
 
                // sort result;
