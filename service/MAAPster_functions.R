@@ -622,7 +622,7 @@ ss = function(deg_normAnnot, species, geneSet,workspace,projectId){
     pheatmap(paths,annotation_col=matCol,annotation_colors=matColors,drop_levels=TRUE,fontsize=7, main='Enrichment Scores for Top 50 Differentially Expressed ssGSEA Pathways',filename=saveImageFileName,width=12,height = 12)
   }
   print("+++ssGSEA+++")
-  return(list(ssgsResults=ssgsResults, DEss=DEss,column=fit1))
+  return(list(ssgsResults=ssgsResults, DEss=DEss))
 }
 #ssGSEA_results = ss(diff_expr_genes,'human','C2: Curated Gene Sets')
 
