@@ -31,7 +31,7 @@ var execute = function(file, data, callback){
 
 	child.on('close', (code) => {
 		if(code > 0){
-			callback(code, {});
+			callback(body, {});
 		}
 		else{
 			callback(null, body);
