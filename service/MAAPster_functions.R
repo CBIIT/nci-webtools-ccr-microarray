@@ -3,6 +3,7 @@
 
 #id is access code
 
+##
 processGEOfiles <- function(projectId,id,listGroups,workspace){
   library(GEOquery)
   library(oligo)
@@ -101,14 +102,15 @@ getLocalGEOfiles <- function(projectId,id,listGroups,workspace){
 #celfiles = processGEOfiles('GSE37874', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    #mouse example    
 
 #### 1) Process files function takes path to celfiles and returns ExpressionFeatureSet object ####
-processCELfiles <- function(projectId,listGroups) {
+processCELfiles <- function(projectId,listGroups,workspace) {
   library(tools)
   library(Biobase)
   library(oligo)
-  workspace<-paste0(getwd(),"/data/",projectId,sep="")
+  print(workspace)
   SampleName = list.files(path = workspace, pattern = '/*CEL*.gz', ignore.case = T, full.names=T)
   celfiles = read.celfiles(SampleName)
   pData(celfiles)$title = basename(file_path_sans_ext(SampleName))  #add sample name to pheno
+  
   pData(celfiles)$groups = listGroups                               #add groups to pheno
   ####creates a list of colors specific to each group
   fs = factor(pData(celfiles)$groups)
@@ -129,11 +131,10 @@ processCELfiles <- function(projectId,listGroups) {
 
 
 
-getCELfiles <- function(projectId,listGroups) {
+getCELfiles <- function(projectId,listGroups,workspace) {
   library(tools)
   library(Biobase)
   library(oligo)
-  workspace<-paste0(getwd(),"/data/",projectId,sep="")
   SampleName = list.files(path = workspace, pattern = '/*CEL*.gz', ignore.case = T, full.names=T)
   celfiles = read.celfiles(SampleName)
   pData(celfiles)$title = basename(file_path_sans_ext(SampleName))  #add sample name to pheno
@@ -231,7 +232,7 @@ calc = function(raw,path) {
     text3d(pca$x, pca$y, pca$z, group.v, cex=0.6, adj=1.5)
     par3d(mouseMode = "trackball")
     # END 3D PCA / BEGIN HEATMAP #                                                      #Heatmap
-    writeWebGL(dir = file.path(path, "webGL"),width = 500, reuse = TRUE)
+    writeWebGL(dir = file.path(path, "webGL"),width = 650, reuse = TRUE)
 
     PCA<-"/webGL/index.html"
 
@@ -559,7 +560,7 @@ geneHeatmap = function(degs, paths, contrast, upOrDown, pathway_name,saveImageFi
 
 #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
 # Output should dynamically respond to user-selected contrast
-ss = function(deg_normAnnot, species, geneSet,workspace, saveImageFileName,projectId){
+ss = function(deg_normAnnot, species, geneSet,workspace,projectId){
   library(GSEABase)
   library(GSVA)
   library(pheatmap)
@@ -616,6 +617,8 @@ ss = function(deg_normAnnot, species, geneSet,workspace, saveImageFileName,proje
     matColors = list(group = unique(deg_normAnnot$pheno$colors[sampleColumns]))
     names(matColors$group) = unique(deg_normAnnot$pheno$groups[sampleColumns])
     paths = t(scale(t(paths))) 
+    saveImageFileName<-paste0(workspace,'/geneHeatmap',i,'.jpg',sep="")
+    
     pheatmap(paths,annotation_col=matCol,annotation_colors=matColors,drop_levels=TRUE,fontsize=7, main='Enrichment Scores for Top 50 Differentially Expressed ssGSEA Pathways',filename=saveImageFileName,width=12,height = 12)
   }
   print("+++ssGSEA+++")

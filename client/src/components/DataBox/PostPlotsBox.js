@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Select } from 'antd';
+import ReactSVG from 'react-svg'
 
 const Option = Select.Option;
 
@@ -11,11 +12,54 @@ class PostPlotsBox extends Component {
 		super(props);
 	}
 
+
+	componentDidMount() {
+	    // When the component is mounted, add your DOM listener to the elem.
+	    // (The "nv" elem is assigned in the render function.)
+	   	document.getElementById("post_tag3").addEventListener("mouseover", function(e){
+    	if(e.target.localName ==="use"){
+    		let words = e.target.parentElement.cloneNode(true);
+    		let defs =e.target.parentElement.parentElement.parentElement.childNodes[1].cloneNode(true)
+    		var last_o_y=0;
+    		var last_t_y=0;
+    		for(let i = words.children.length-1; i>=0; i--){
+    			console.log(1)
+    			// change x and y accordinate
+    			words.children[i].setAttribute("x",20);
+    			if(last_o_y===0){
+    				// the last element
+    				last_o_y=words.children[i].getAttribute("y");
+    				last_t_y=20;
+    				words.children[i].setAttribute("y",20);
+    			}else{
+    				let diff = words.children[i].getAttribute("y")-last_o_y;
+    				last_o_y=words.children[i].getAttribute("y");
+					words.children[i].setAttribute("y",last_t_y+diff);
+					last_t_y=last_t_y+diff
+    			}
+    		}
+    		if(document.getElementById('post-tag3-tooltip-defs').firstChild!==null){
+			document.getElementById('post-tag3-tooltip-defs').removeChild(document.getElementById('post-tag3-tooltip-defs').firstChild)
+			}
+			document.getElementById('post-tag3-tooltip-defs').appendChild(defs);
+			if(document.getElementById('post-tag3-tooltip-svg').firstChild!==null){
+	    		document.getElementById('post-tag3-tooltip-svg').removeChild(document.getElementById('post-tag3-tooltip-svg').firstChild)
+			}
+    		document.getElementById('post-tag3-tooltip-svg').appendChild(words);
+	    	}
+		});
+
+  	}
+
+
+
 	handleSelectChange = (key) => {
 	  console.log(key);
 	}
 
 	handleSelectionChange(value) {
+
+
 		  var list = document.getElementsByClassName("plot");
 		  for (var i = 0; i < list.length; i++) {
 				list[i].classList.add("hide");
@@ -29,28 +73,48 @@ class PostPlotsBox extends Component {
 
  	let content =""
 
- 	if(typeof(this.props.data.HistplotAN)!="undefined"){
+ 	if(typeof(this.props.data.HistplotAN)!=="undefined"){
 			var histplotANLink = './images/'+this.props.data.projectID+this.props.data.HistplotAN;
 		 
 
-		 	const histplotAN =<img style={{width:"75%"}} src= {histplotANLink}/>;
+		 	const histplotAN =<img style={{width:"75%"}} src= {histplotANLink} alt={"Histogram"}/>;
 
 		 	var list_mAplotAN=[];
 		 	for (var i = this.props.data.MAplotAN.length - 1; i >= 0; i--) {
 		 		var link = "./images/"+this.props.data.projectID+this.props.data.MAplotAN[i]
-		 		list_mAplotAN.push(<div><img src={link} style={{width:"75%"}} /></div>)
+		 		list_mAplotAN.push(<div><img src={link} style={{width:"75%"}} alt={"MAplots"}/></div>)
 		 	}
 
 		 	var link2 ="./images/"+this.props.data.projectID+this.props.data.BoxplotAN;
-		 	var boxplotAN =<img src={link2} style={{width:"75%"}} />;
+		 	var boxplotAN =<ReactSVG 
+		 							path={link2} style={{width:"75%"}} 
+		 							renumerateIRIElements={false}
+							 		svgClassName="svg-class-name"
+							 		className="wrapper-class-name"
+		 		 />;
 
-		    var PCAIframe = <div><iframe src={"http://localhost:9000/images/"+this.props.data.projectID+this.props.data.PCA}  width={'105%'} height={'65%'} style={{'overflow':'hidden'}} frameBorder={'0'}/></div>
+		    var PCAIframe = <div><iframe  title={"PCA"} src={"./images/"+this.props.data.projectID+this.props.data.PCA}  width={'105%'} height={'65%'} style={{'overflow':'hidden'}} frameBorder={'0'}/></div>
 
 
-		    var HeatMapIframe = <div><iframe src={"http://localhost:9000/images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
+		    let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
 
+		    let tooltip = {
+							"position": "absolute",
+						    "background": "white",
+						    "left": "526px"
+						}
+			let tooltip_svg_div={
+						   "transform": "rotate(90deg)",
+						   "position": "absolute",
+						   "top": "-365px",
+						   "left": "-125px"
+						}
 
-		    var maplot_style = 	{
+			let tooltip_svg_title={
+							"padding-top": "20px"
+						}
+
+		    let maplot_style = 	{
 		    						'height':'auto',
 		  						  	'max-height':'100%',
 		  						  	'overflow':'scroll'
@@ -59,7 +123,24 @@ class PostPlotsBox extends Component {
 		  							{histplotAN}
 		  						</div>,
 		  						  <div id="post_tag2" className="plot hide" style={maplot_style}>{list_mAplotAN}</div>,
-		  						  <div id="post_tag3" className="plot hide">{boxplotAN}</div>,
+		  						  <div id="post_tag3" className="plot hide">
+		  						  		<div id="post-tag3-tooltip" style={tooltip}>
+											<div id="post-tag3-tooltip-svg-title" style={tooltip_svg_title}>Point :</div>
+											<div id="post-tag3-tooltip-svg-div">
+											<svg style={tooltip_svg_div} 
+												 xmlns="http://www.w3.org/2000/svg"
+												 xmlnsXlink="http://www.w3.org/1999/xlink" 
+												 width="40pt" 
+												 height="600pt" 
+												 viewBox="0 0 40 600" 
+												 version="1.1" >
+												 <defs id="post-tag3-tooltip-defs">  </defs>
+												 <g id="post-tag3-tooltip-svg">  </g>
+											</svg>
+											</div>
+											</div>
+											{boxplotAN}
+									</div>,
 		  						  <div id="post_tag4" className="plot hide">{PCAIframe}</div>,
 		  						  <div id="post_tag5" className="plot hide">{HeatMapIframe}</div>]
 

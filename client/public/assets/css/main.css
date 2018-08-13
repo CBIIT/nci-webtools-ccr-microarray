@@ -115,7 +115,7 @@ label{
   background: #eee;
 }
 .container{
-  width:1440px;
+  width:100%;
 }
 .container-board{
   background: rgb(255, 255, 255);
@@ -123,15 +123,16 @@ label{
   padding-bottom:15px;
 }
 .container-board-left{
-  width:25%;
+  width:21%;
   float:left;
-  margin-top:15px;
+  margin-top:0px;
+  margin-right:10px;
 }
 .container-board-right{
-  width:calc(75% - 10px);
+  width:calc(79% - 10px);
   float:left;
-  margin-top:40px;
-  margin-left:10px;
+  margin-top:0px;
+  margin-left:0px;
 }
 .blocks{
   border:1px solid #eee;
@@ -159,7 +160,7 @@ label{
   text-align: center;
   background: rgba(0,0,0,0.4);
   padding-top:15%;
-  position:absolute;
+  position:fixed;
   top:0px;
   left:0px;
   width:100%;
@@ -193,4 +194,69 @@ label{
     background-color: #f5f5f5 !important;
     border-color: #d9d9d9 !important;
 }
+.ant-table{
+  font-size:12px !important;
+  padding-top: 15px !important;
+}
+
+.ant-table{
+  font-size:12px !important;
+  padding-top: 15px !important;
+}
+
+.ant-modal-header{
+  background: #e8e8e8  !important;
+}
+
+
+.ant-table-thead{
+  font-size:13px !important;
+}
+
+.input-search{
+  position:absolute !important;
+  top:48px;
+  left:180px;
+  width: 200px  !important;
+  min-height:15px;
+  height:35px;
+  } 
+
+
+.input-search-gsm{
+  position:absolute !important;
+  top:48px;
+  left:150px;
+  width: 200px  !important;
+  min-height:15px;
+  height:35px;
+  } 
+
+.input-search-for-deg-path{
+  position:absolute !important;
+  top:48px;
+  left:260px;
+  width: 200px  !important;
+  min-height:15px;
+  height:35px;
+  } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

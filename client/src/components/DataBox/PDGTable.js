@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import { Table ,Select} from 'antd';
 
-
-
-
-
 class PUGTable extends Component {
-
-
 
 	constructor(props){
 		super(props);
@@ -18,9 +12,6 @@ class PUGTable extends Component {
 
 	
   render() {
-
-  
-
   	let content ="";
   	if(this.props.data.length > 0){
 		const columns = [{
@@ -60,19 +51,12 @@ class PUGTable extends Component {
 		  title: 'tot.back.genes',
 		  dataIndex: 'tot.back.genes',
 		}];
-		
 
 		const data = this.props.data;
 			
   	  	content = <Table columns={columns} dataSource={data} />;
   	}else{
-
-  		// for testing   
-
-  		//content = <div><iframe src={"http://localhost:9000/images/1531248646100s/heatmapAfterNorm.html"}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
-
-
-						
+		content=<div>No data</div>				
   	}
 
 	return content;

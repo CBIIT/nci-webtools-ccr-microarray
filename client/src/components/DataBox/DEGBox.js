@@ -19,7 +19,7 @@ class DEGBox extends Component {
 	}
 
 	handleSelectionChange(value) {
-		  var list = document.getElementsByClassName("plot");
+		  var list = document.getElementsByClassName("deg_plot");
 		  for (var i = 0; i < list.length; i++) {
 				list[i].classList.add("hide");
 			}
@@ -32,17 +32,17 @@ class DEGBox extends Component {
 
  	let content =""
 
- 	if(typeof(this.props.data.diff_expr_genes)!="undefined"){
+ 	if(typeof(this.props.data.diff_expr_genes)!=="undefined"){
 			
 
-		    var volcanoPlotIframe = <div><iframe src={"http://localhost:9000/images/"+this.props.data.projectID+this.props.data.volcanoPlot}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
+		    var volcanoPlotIframe = <div><iframe title="volcanoPlot" src={"./images/"+this.props.data.projectID+this.props.data.volcanoPlot}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
 		
-		 	let tabs =[ <div id="deg_tag1" className="plot">
+		 	let tabs =[ <div id="deg_tag1" className="deg_plot">
 		  							<DEGTable data={this.props.data.diff_expr_genes} />
 		  						</div>,
-		  						  <div id="deg_tag2" className="plot hide" ><PUGTable data={this.props.data.pathways_up}/></div>,
-		  						  <div id="deg_tag3" className="plot hide"><PDGTable data={this.props.data.pathways_down}/></div>,
-		  						  <div id="deg_tag4" className="plot hide">{volcanoPlotIframe}</div>]
+		  						  <div id="deg_tag2" className="deg_plot hide" ><PUGTable data={this.props.data.pathways_up}/></div>,
+		  						  <div id="deg_tag3" className="deg_plot hide"><PDGTable data={this.props.data.pathways_down}/></div>,
+		  						  <div id="deg_tag4" className="deg_plot hide">{volcanoPlotIframe}</div>]
 
 		   content = [<Select defaultValue="deg_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
 							      <Option value="deg_tag1">Differentially Expressed Genes</Option>
