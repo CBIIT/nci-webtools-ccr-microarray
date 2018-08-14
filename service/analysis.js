@@ -96,9 +96,10 @@ router.post('/pathwaysHeapMap', function(req, res) {
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push("pathwaysHeapMap");
   data.push(req.body.projectId);
-
   data.push(req.body.group_1);
   data.push(req.body.group_2);
+  data.push(req.body.upOrDown);
+  data.push(req.body.pathway_name);
 
   R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
@@ -167,7 +168,7 @@ router.post('/runContrast', function(req, res) {
   if( req.session.groups&&
       req.session.groups==req.body.groups&&
       req.session.projectId==req.body.projectId&&
-      req.session.option==req.body.group_1+req.body.group_2+req.body.species+req.body.genSet
+      req.session.option==req.body.group_1+req.body.group_2+req.body.genSet
     ){
       res.json({
                   status:200, 
@@ -183,7 +184,7 @@ router.post('/runContrast', function(req, res) {
             else{
                   // store return value in session (deep copy)
                  req.session.runContrastData = returnValue;
-                 req.session.option=req.body.group_1+req.body.group_2+req.body.species+req.body.genSet;
+                 req.session.option=req.body.group_1+req.body.group_2+req.body.genSet;
                  req.session.groups=req.body.groups;
                  req.session.projectId=req.body.projectId;
                  console.log("store data in req.session")
@@ -204,6 +205,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                var  workflow ={};
                workflow.diff_expr_genes=[];
                workflow.ssGSEA=[];
+               workflow.ssGSEA2=[];
                workflow.pathways_up=[];
                workflow.pathways_down=[];
                workflow.listPlots=[];
@@ -250,17 +252,18 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                }
                // filter ssGEA
                 var ssGSEA = list.ssGSEA.DEss;
-                console.log(ssGSEA)
-                  for( let j in ssGSEA[0]){
-                    if(list.ssGSEA.DEss[0][j]["logFC"]<foldssGSEA||list.ssGSEA.DEss[0][j]["P.Value"]<pssGSEA){
-                        list.ssGSEA.DEss[0].splice(j, 1);
-                      }else{
-                         workflow.ssGSEA.push(list.ssGSEA.DEss[i][j]);
-                      }
-                  }
 
-               console.log(list.ssGSEA.ssgsResults)
-               // too many record, shows first 2000
+                console.log(ssGSEA)
+                for(let key in ssGSEA){
+                    for( let j in ssGSEA[key]){
+                      if(list.ssGSEA.DEss[key][j]["logFC"]<foldssGSEA||list.ssGSEA.DEss[key][j]["P.Value"]<pssGSEA){
+                          list.ssGSEA.DEss[key].splice(j, 1);
+                        }else{
+                           workflow.ssGSEA.push(list.ssGSEA.DEss[key][j]);
+                        }
+                  }
+                }
+                workflow.ssGSEA2=ssGSEA;
 
                // sort result;
                //objs.sort(function(a,b) {return (a.last_nom > b.last_nom) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0);} );
@@ -279,17 +282,17 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                   return (e1["P.Value"]>e2["P.Value"]) ? 1 :((e2["P.Value"]>e1["P.Value"])? -1: 0)
                })
 
-               if(workflow.diff_expr_genes.length>2000){
-                workflow.diff_expr_genes=workflow.diff_expr_genes.slice(1, 2000);
+               if(workflow.diff_expr_genes.length>20000){
+                workflow.diff_expr_genes=workflow.diff_expr_genes.slice(1, 20000);
                }
-               if(workflow.ssGSEA.length>2000){
-                workflow.ssGSEA=workflow.ssGSEA.slice(1, 2000);
+               if(workflow.ssGSEA.length>20000){
+                workflow.ssGSEA=workflow.ssGSEA.slice(1, 20000);
                }
-               if(workflow.pathways_up.length>2000){
-                 workflow.pathways_up=workflow.pathways_up.slice(1, 2000);
+               if(workflow.pathways_up.length>20000){
+                 workflow.pathways_up=workflow.pathways_up.slice(1, 20000);
                }
-               if(workflow.pathways_down.length>2000){
-                workflow.pathways_down= workflow.pathways_down.slice(1, 2000);
+               if(workflow.pathways_down.length>20000){
+                workflow.pathways_down= workflow.pathways_down.slice(1, 20000);
                }
                return workflow;
 }

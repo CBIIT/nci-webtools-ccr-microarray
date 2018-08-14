@@ -10,10 +10,13 @@ class PUGTable extends Component {
 	componentDidMount(){
 	}
 
+
+
 	
   render() {
+  	
   	let content ="";
-  	if(this.props.data.length > 0){
+  	if(this.props.data.pathways_down.length > 0){
 		const columns = [{
 		  title: 'path_id',
 		  dataIndex: 'path_id',
@@ -65,7 +68,7 @@ class PUGTable extends Component {
 		},{
 		}];
 
-		const data = this.props.data;
+		const data = this.props.data.pathways_down;
 			
   	  	content = <Table columns={columns} dataSource={data} />;
   	}else{

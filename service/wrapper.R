@@ -211,14 +211,15 @@ process = function(){
     
     cgroup1<-toString(args[4])
     cgroup2<-toString(args[5])
+    upOrDown<-toString(args[6])
+    pathway_name<-toString(args[7])
 
     contrast <-c(paste0(cgroup1,"-",cgroup2))
+    pic_name<-paste0(workspace,"pathwaysHeapMap.",sample(1:6,1,replace=T),"jpg")
+    saveImageFileName<-paste0(workspace,pic_name)
+    geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,workspace)
 
-    saveImageFileName<-paste0(workspace,"pathwaysHeapMap.jpeg")
-
-    geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName)
-
-    return("success")
+    return(list(pic_name=pic_name))
   }
 
 }
