@@ -11,6 +11,9 @@ var rimraf = require('rimraf');
 
 router.post('/upload',function(req, res){
 
+    logger.info("API:/upload ", "req :",req);
+
+
   // create an incoming form object
   var form = new formidable.IncomingForm();
 
@@ -60,9 +63,12 @@ router.post('/upload',function(req, res){
 
       R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
+             logger.info("API:/upload result ","status 404 ");
+              logger.warn("API:/upload result ","status 404 ", err);
               res.json({status:404, msg:err});
             }
             else{
+               logger.info("API:/upload result ","status 200 ");
               res.json({status:200, data:returnValue});
             }
         });
@@ -79,11 +85,19 @@ router.post('/loadGSE', function(req, res) {
   data.push(req.body.projectId);
   data.push(req.body.code); 
   data.push(req.body.groups);
+  logger.info("API:/loadGSE ",
+              "code:",req.body.code,
+              "groups:",req.body.groups,
+              "projectId:",req.body.projectId
+             );
 
   R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
+              logger.info("API:/loadGSE result ","status 404 ");
+              logger.warn("API:/loadGSE result ","status 404 ", err);
               res.json({status:404, msg:err});
             }else{
+              logger.info("API:/loadGSE result ","status 200 ");
               res.json({status:200, data:returnValue});
             }
         });
@@ -92,6 +106,7 @@ router.post('/loadGSE', function(req, res) {
 
 
 router.post('/pathwaysHeapMap', function(req, res) {
+
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push("pathwaysHeapMap");
@@ -101,25 +116,13 @@ router.post('/pathwaysHeapMap', function(req, res) {
   data.push(req.body.upOrDown);
   data.push(req.body.pathway_name);
 
-  R.execute("wrapper.R",data, function(err,returnValue){
-          if(err){
-              res.json({status:404, msg:err});
-            }else{
-              res.json({status:200, data:returnValue});
-            }
-        });
-});
-
-
-
-router.post('/runSSGSEA', function(req, res) {
-  let data = [];
-  //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-  data.push("runSSGSEA");
-  data.push(req.body.projectId);
-
-  data.push(req.body.species);
-  data.push(req.body.genSet);
+  logger.info("API:/pathwaysHeapMap ",
+             "projectId :",req.body.projectId,
+             "group_1 :", req.body.group_1,
+             "group_2 :",req.body.group_2,
+             "upOrDown :",req.body.upOrDown,
+             "pathway_name :",req.body.pathway_name
+             );
 
   R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
@@ -163,6 +166,22 @@ router.post('/runContrast', function(req, res) {
      data.push(req.body.pPathways);
   }
 
+    logger.info("API:/runContrast ",
+              "code:",req.body.code,
+              "groups:",req.body.groups,
+              "pDEGs:",req.body.pDEGs,
+              "foldDEGs:",req.body.foldDEGs,
+              "pPathways:",req.body.pPathways,
+              "group_1:",req.body.group_1,
+              "group_2:",req.body.group_2,
+              "species:",req.body.species,
+              "genSet:",req.body.genSet,
+              "pssGSEA:",req.body.pssGSEA,
+              "foldssGSEA:",req.body.foldssGSEA,
+              "source:",req.body.source
+             );
+
+
   // using session
   //if it is action is runContrast , then 
   if( req.session.groups&&
@@ -170,13 +189,14 @@ router.post('/runContrast', function(req, res) {
       req.session.projectId==req.body.projectId&&
       req.session.option==req.body.group_1+req.body.group_2+req.body.genSet
     ){
+      logger.info("API:/runContrast ","Contrast uses session ")
       res.json({
                   status:200, 
                   data:filter(req.session.runContrastData,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA)
               });
 
   }else{
-        console.log("Session not used, run R script; ")
+       logger.info("API:/runContrast ","Session is not used, run R script; ")
         R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
               res.json({status:404, msg:err});
@@ -187,7 +207,7 @@ router.post('/runContrast', function(req, res) {
                  req.session.option=req.body.group_1+req.body.group_2+req.body.genSet;
                  req.session.groups=req.body.groups;
                  req.session.projectId=req.body.projectId;
-                 console.log("store data in req.session")
+                 logger.info("API:/runContrast ","store data in req.session")
                  if(req.body.actions == "runContrast"){
                       returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
                  }
@@ -201,6 +221,13 @@ router.post('/runContrast', function(req, res) {
 
 
 function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
+              logger.info("API: function filter ",
+                "pDEGs: ",pDEGs,
+                "foldDEGs: ",foldDEGs,
+                "pPathways: ",pPathways,
+                "foldssGSEA: ",foldssGSEA,
+                "pssGSEA: ",pssGSEA
+                )
 
                var  workflow ={};
                workflow.diff_expr_genes=[];
@@ -281,6 +308,13 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                workflow.ssGSEA.sort(function(e1,e2){
                   return (e1["P.Value"]>e2["P.Value"]) ? 1 :((e2["P.Value"]>e1["P.Value"])? -1: 0)
                })
+
+                logger.info("API: function filter result :",
+                "workflow.diff_expr_genes.length: ",workflow.diff_expr_genes.length,
+                "workflow.ssGSEA.length: ",workflow.ssGSEA.length,
+                "workflow.pathways_up.length: ",workflow.pathways_up.length,
+                "workflow.pathways_down.length: ",workflow.pathways_down.length,
+                )
 
                if(workflow.diff_expr_genes.length>20000){
                 workflow.diff_expr_genes=workflow.diff_expr_genes.slice(1, 20000);
