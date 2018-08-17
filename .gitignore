@@ -8,3 +8,4 @@ package-lock.json
 .DS_Store
 .Rproj.user
 /bak/
+*.log
