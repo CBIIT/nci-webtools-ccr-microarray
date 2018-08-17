@@ -16,6 +16,10 @@ class SSGSEATable extends Component {
   	let content ="";
   	if(this.props.data.ssGSEA.length > 0){
 		const columns = [{
+		  title: 'Name',
+		  dataIndex: '_row',
+		 sorter: (a, b) => ('' + a["_row"]).localeCompare(b.a["_row"]),
+		},{
 		  title: 'logFC',
 		  dataIndex: 'logFC',
 		  sorter: (a, b) => a["logFC"]-b["logFC"],

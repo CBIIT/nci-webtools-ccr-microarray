@@ -7,3 +7,5 @@ package-lock.json
 /service/.DS_Store
 .DS_Store
 .Rproj.user
+/bak/
+*.log

@@ -40,8 +40,8 @@ class DEGBox extends Component {
 		 	let tabs =[ <div id="deg_tag1" className="deg_plot">
 		  							<DEGTable data={this.props.data.diff_expr_genes} />
 		  						</div>,
-		  						  <div id="deg_tag2" className="deg_plot hide" ><PUGTable data={this.props.data.pathways_up}/></div>,
-		  						  <div id="deg_tag3" className="deg_plot hide"><PDGTable data={this.props.data.pathways_down}/></div>,
+		  						  <div id="deg_tag2" className="deg_plot hide" ><PUGTable data={this.props.data}/></div>,
+		  						  <div id="deg_tag3" className="deg_plot hide"><PDGTable data={this.props.data}/></div>,
 		  						  <div id="deg_tag4" className="deg_plot hide">{volcanoPlotIframe}</div>]
 
 		   content = [<Select defaultValue="deg_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>

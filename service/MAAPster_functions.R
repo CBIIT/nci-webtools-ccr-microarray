@@ -518,9 +518,9 @@ pathways = function(degs,species,workspace,projectId) {
 
 #### 5) Function for gene heatmap from l2p pathways.  Input: deg function output, l2p pathways, contrast, choice of up or down pathways, and name of pathway. ####
 #Output should change dynamically with user-selected contrast and l2p pathway (from either up OR downregulated pathways) 
-geneHeatmap = function(degs, paths, contrast, upOrDown, pathway_name,saveImageFileName) {
+geneHeatmap = function(degs, paths, contrast, upOrDown, pathway_name,saveImageFileName,workspace) {
   library(pheatmap)
-  human2mouse = read.delim(paste0(workspace,'/human2mouse.csv', sep = ''),sep=',')
+  human2mouse = read.delim(paste0(workspace,'../human2mouse.csv', sep = ''),sep=',')
   paths = paths[[contrast]][[upOrDown]]
   genes = paths$gene.list[paths$description==pathway_name]              #select user input pathway, extract genes
   genes = strsplit(as.character(genes),' ')
