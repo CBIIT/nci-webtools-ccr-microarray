@@ -153,7 +153,7 @@ process = function(){
           celfiles = getLocalGEOfiles(projectId,access_code,listGroups,workspace) 
        }
     
-    norm_celfiles = calc(celfiles,workspace)
+    norm_celfiles = QCnorm(celfiles,workspace)
 
     #### 3) Differentially Expressed Genes function takes files, group and contrast data. Returns list of DEGs for each contrast, annotated normalized data, and pheno data ####
     # Output should dynamically respond to user-selected contrast
@@ -164,11 +164,11 @@ process = function(){
     # # or if using processCELfiles() function for test example, create this contrasts variable:
     # #cons = c("KO_1-Ctl_1","KO_2-Ctl_2")
  
-    diff_expr_genes = deg(norm_celfiles[[11]],cons,projectId,workspace)       #Call function
+    diff_expr_genes = diffExprGenes(norm_celfiles[[11]],cons,projectId,workspace)       #Call function
 
     # # #### 4) l2p pathway analysis function, takes DEGs and species as input, returns list of up and downregulated pathways for each contrast ####
     # # # Output should dynamically respond to user-selected contrast
-    l2p_pathways = pathways(diff_expr_genes,species,workspace,projectId)
+    l2p_pathways = l2pPathways(diff_expr_genes,species,workspace,projectId)
 
 
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
@@ -176,7 +176,7 @@ process = function(){
     saveRDS(diff_expr_genes, file = paste0(workspace,"diff_expr_genes.rds"))
     saveRDS(l2p_pathways, file = paste0(workspace,"l2p_pathways.rds"))
     
-    ssGSEA_results = ss(diff_expr_genes,species,geneSet,workspace,projectId)
+    ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,workspace,projectId)
 
     exportJson=list(diff_expr_genes=diff_expr_genes[1],pathways_up=l2p_pathways[0],pathways_down=l2p_pathways[1],ssGSEA=ssGSEA_results[1]) 
     write(toJSON(exportJson,auto_unbox = T,force = TRUE), paste0(workspace,"result.json"))
@@ -195,7 +195,7 @@ process = function(){
     species<-toString(args[4])
     geneSet<-toString(args[5])
     
-    ssGSEA_results = ss(diff_expr_genes,species,geneSet,workspace,projectId)
+    ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,workspace,projectId)
 
     return(list(ssGSEA=ssGSEA_results[1]))
   }
