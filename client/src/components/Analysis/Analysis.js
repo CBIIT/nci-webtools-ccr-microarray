@@ -11,7 +11,7 @@ class Analysis extends Component {
 		this.state = {
 			workflow:{
 				projectID:"",
-				analysisType:"-1",
+				analysisType:"0",
 				accessionCode:"",
 				fileList: [],
       			uploading: false,
