@@ -24,7 +24,6 @@ class Project extends Component {
       };
 
       let type_content = (<Select defaultValue={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
-            <Option value="-1">Select Type...</Option>
             <Option value="0">GEO Data</Option>
             <Option value="1">Upload CEL files</Option>
           </Select>);
