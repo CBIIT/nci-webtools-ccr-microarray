@@ -313,7 +313,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                 "workflow.diff_expr_genes.length: ",workflow.diff_expr_genes.length,
                 "workflow.ssGSEA.length: ",workflow.ssGSEA.length,
                 "workflow.pathways_up.length: ",workflow.pathways_up.length,
-                "workflow.pathways_down.length: ",workflow.pathways_down.length,
+                "workflow.pathways_down.length: ",workflow.pathways_down.length
                 )
 
                if(workflow.diff_expr_genes.length>20000){
