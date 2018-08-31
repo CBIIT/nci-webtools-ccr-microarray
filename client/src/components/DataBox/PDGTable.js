@@ -18,54 +18,54 @@ class PUGTable extends Component {
   	let content ="";
   	if(this.props.data.pathways_down.length > 0){
 		const columns = [{
-		  title: 'path_id',
-		  dataIndex: 'path_id',
-		   sorter: (a, b) => ('' + a["path_id"]).localeCompare(b["path_id"]),
+		  title: 'Pathway_ID',
+		  dataIndex: 'Pathway_ID',
+		  sorter: (a, b) => a["Pathway_ID"]-b["Pathway_ID"],
 		}, {
-		  title: 'source',
-		  dataIndex: 'source',
-		  sorter: (a, b) => ('' + a["source"]).localeCompare(b["source"]),
+		  title: 'Source',
+		  dataIndex: 'Source',
+		  sorter: (a, b) => ('' + a.source).localeCompare(b.source),
 		}, {
-		  title: 'description',
-		  dataIndex: 'description',
-		  sorter: (a, b) => ('' + a["description"]).localeCompare(b["description"]),
+		  title: 'Description',
+		  dataIndex: 'Description',
+		  sorter: (a, b) => ('' + a.description).localeCompare(b.description),
 		}, {
-		  title: 'type',
-		  dataIndex: 'type',
-		   sorter: (a, b) => ('' + a["type"]).localeCompare(b["type"]),
+		  title: 'Type',
+		  dataIndex: 'Type',
+		  sorter: (a, b) => ('' + a.type).localeCompare(b.type),
 		}, {
-		  title: 'pval',
-		  dataIndex: 'pval',
+		  title: 'P_Val',
+		  dataIndex: 'P_Val',
 		  sorter: (a, b) => a.pval-b.pval,
 		}, {
-		  title: 'fdr',
-		  dataIndex: 'fdr',
+		  title: 'FDR',
+		  dataIndex: 'FDR',
 		  sorter: (a, b) => a.fdr-b.fdr,
 		}, {
-		  title: 'ratio',
-		  dataIndex: 'ratio',
+		  title: 'Ratio',
+		  dataIndex: 'Ratio',
 		  sorter: (a, b) => a.ratio-b.ratio,
 		}, {
-		  title: 'gene.list',
-		  dataIndex: 'gene.list',
+		  title: 'Gene_List',
+		  dataIndex: 'Gene_List',
 		  sorter: (a, b) => ('' + a["gene.list"]).localeCompare(b["gene.list"]),
 		}, {
-		  title: 'nb.hits',
-		  dataIndex: 'nb.hits',
-		  sorter: (a, b) => a["nb.hits"]-b["nb.hits"],
+		  title: 'Number_Hits',
+		  dataIndex: 'Number_Hits',
+		  sorter: (a, b) => a.hits-b.hits,
 		}, {
-		  title: 'nb.genes.path',
-		  dataIndex: 'nb.genes.path',
-		  sorter: (a, b) => a["nb.genes.path"]-b["nb.genes.path"],
+		  title: 'Number_Genes_Pathway',
+		  dataIndex: 'Number_Genes_Pathway',
+		  sorter: (a, b) => a['nb.genes.path']-b['nb.genes.path'],
+
 		},{
-		  title: 'nb.user.genes',
-		  dataIndex: 'nb.user.genes',
-		  sorter: (a, b) => a["nb.user.genes"]-b["nb.user.genes"],
+		  title: 'Number_User_Genes',
+		  dataIndex: 'Number_User_Genes',
+		  sorter: (a, b) => a['nb.user.genes']-b['nb.user.genes'],
 		},{
-		  title: 'tot.back.genes',
-		  dataIndex: 'tot.back.genes',
-		  sorter: (a, b) => a["tot.back.genes"]-b["tot.back.genes"],
-		},{
+		  title: 'Total_Number_Genes',
+		  dataIndex: 'Total_Number_Genes',
+		  sorter: (a, b) => a['tot.back.genes']-b['tot.back.genes'],
 		}];
 
 		const data = this.props.data.pathways_down;

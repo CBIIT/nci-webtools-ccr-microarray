@@ -111,15 +111,15 @@ router.post('/pathwaysHeapMap', function(req, res) {
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push("pathwaysHeapMap");
   data.push(req.body.projectId);
-  data.push(req.body.group_1);
-  data.push(req.body.group_2);
+  data.push(req.body.group1);
+  data.push(req.body.group2);
   data.push(req.body.upOrDown);
   data.push(req.body.pathway_name);
 
   logger.info("API:/pathwaysHeapMap ",
              "projectId :",req.body.projectId,
-             "group_1 :", req.body.group_1,
-             "group_2 :",req.body.group_2,
+             "group_1 :", req.body.group1,
+             "group_2 :",req.body.group2,
              "upOrDown :",req.body.upOrDown,
              "pathway_name :",req.body.pathway_name
              );
@@ -185,7 +185,7 @@ router.post('/runContrast', function(req, res) {
   // using session
   //if it is action is runContrast , then 
   if( req.session.groups&&
-      req.session.groups==req.body.groups&&
+      JSON.stringify(req.session.groups)==JSON.stringify(req.body.groups)&&
       req.session.projectId==req.body.projectId&&
       req.session.option==req.body.group_1+req.body.group_2+req.body.genSet
     ){
@@ -208,10 +208,12 @@ router.post('/runContrast', function(req, res) {
                  req.session.groups=req.body.groups;
                  req.session.projectId=req.body.projectId;
                  logger.info("API:/runContrast ","store data in req.session")
+                  // filter out data based on the filter
                  if(req.body.actions == "runContrast"){
                       returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
                  }
-               // filter out data based on the filter
+
+              
               res.json({status:200, data:returnValue});
             }
         });
@@ -228,7 +230,6 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                 "foldssGSEA: ",foldssGSEA,
                 "pssGSEA: ",pssGSEA
                 )
-
                var  workflow ={};
                workflow.diff_expr_genes=[];
                workflow.ssGSEA=[];
@@ -248,7 +249,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                let deg = list.diff_expr_genes.listDEGs;
                for(let i in list.diff_expr_genes.listDEGs){
                   for(let j in deg[i]){
-                    if(deg[i][j]["P.Value"]<pDEGs||deg[i][j].FC<foldDEGs){
+                    if(deg[i][j]["P.Value"]>pDEGs||Math.abs(deg[i][j].FC)>foldDEGs){
                       deg[i].splice(j, 1);
                     }else{
                       workflow.diff_expr_genes.push(deg[i][j]);
@@ -263,14 +264,14 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                // pathway ={{RNA_1-Ctl: {{upregulated_pathways:array},{downregulated_pathways:array}}}
                for(let i in list.pathways){
                   for( let j in list.pathways[i]["upregulated_pathways"]){
-                    if(list.pathways[i]["upregulated_pathways"][j]["pval"]<pPathways){
+                    if(list.pathways[i]["upregulated_pathways"][j]["P_Value"]>pPathways){
                         list.pathways[i]["upregulated_pathways"].splice(j, 1);
                       }else{
                         workflow.pathways_up.push(list.pathways[i]["upregulated_pathways"][j])
                       }
                   }
                   for(let j in list.pathways[i]["downregulated_pathways"]){
-                    if(list.pathways[i]["downregulated_pathways"][j]["pval"]<pPathways){
+                    if(list.pathways[i]["downregulated_pathways"][j]["P_Value"]>pPathways){
                         list.pathways[i]["downregulated_pathways"].splice(j, 1);
                       }else{
                         workflow.pathways_down.push(list.pathways[i]["downregulated_pathways"][j])
@@ -280,7 +281,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                // filter ssGEA
                 var ssGSEA = list.ssGSEA.DEss;
 
-                console.log(ssGSEA)
+                
                 for(let key in ssGSEA){
                     for( let j in ssGSEA[key]){
                       if(list.ssGSEA.DEss[key][j]["logFC"]<foldssGSEA||list.ssGSEA.DEss[key][j]["P.Value"]<pssGSEA){
@@ -295,26 +296,20 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                // sort result;
                //objs.sort(function(a,b) {return (a.last_nom > b.last_nom) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0);} );
                workflow.diff_expr_genes.sort(function(e1,e2){
-                  return (e1["P.Value"]>e2["P.Value"]) ? 1 :((e2["P.Value"]>e1["P.Value"])? -1: 0)
+                  return (e1["P.Value"]<e2["P.Value"]) ? 1 : -1
                })
                workflow.pathways_up.sort(function(e1,e2){
-                  return (e1["pval"]>e2["pval"]) ? 1 :((e2["pval"]>e1["pval"])? -1: 0)
+                  return (e1["P_Value"]<e2["P_Value"]) ? 1 : -1
                })
 
                workflow.pathways_down.sort(function(e1,e2){
-                  return (e1["pval"]>e2["pval"]) ? 1 :((e2["pval"]>e1["pval"])? -1: 0)
+                  return (e1["P_Value"]<e2["P_Value"]) ? 1 : -1
                })
 
                workflow.ssGSEA.sort(function(e1,e2){
-                  return (e1["P.Value"]>e2["P.Value"]) ? 1 :((e2["P.Value"]>e1["P.Value"])? -1: 0)
+                  return (e1["P.Value"]<e2["P.Value"]) ? 1 : -1
                })
 
-                logger.info("API: function filter result :",
-                "workflow.diff_expr_genes.length: ",workflow.diff_expr_genes.length,
-                "workflow.ssGSEA.length: ",workflow.ssGSEA.length,
-                "workflow.pathways_up.length: ",workflow.pathways_up.length,
-                "workflow.pathways_down.length: ",workflow.pathways_down.length
-                )
 
                if(workflow.diff_expr_genes.length>20000){
                 workflow.diff_expr_genes=workflow.diff_expr_genes.slice(1, 20000);
@@ -328,6 +323,14 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                if(workflow.pathways_down.length>20000){
                 workflow.pathways_down= workflow.pathways_down.slice(1, 20000);
                }
+
+
+                logger.info("API: function filter result :",
+                "workflow.diff_expr_genes.length: ",workflow.diff_expr_genes.length,
+                "workflow.ssGSEA.length: ",workflow.ssGSEA.length,
+                "workflow.pathways_up.length: ",workflow.pathways_up.length,
+                "workflow.pathways_down.length: ",workflow.pathways_down.length
+                )
                return workflow;
 }
 

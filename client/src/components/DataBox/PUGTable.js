@@ -36,9 +36,10 @@ class PUGTable extends Component {
 		 // not reflected in interface 
 		 let reqBody = {};
 			 reqBody.projectId=this.props.data.projectID;
-			 reqBody.group1=this.props.data.group1;
-			 reqBody.group2=this.props.data.group2;
+			 reqBody.group1=this.props.data.group_1;
+			 reqBody.group2=this.props.data.group_2;
 			 reqBody.upOrDown="upregulated_pathways";
+			 reqBody.pathway_name=row.Description;
 
 		fetch('./api/analysis/pathwaysHeapMap',{
 			method: "POST",
@@ -82,54 +83,42 @@ class PUGTable extends Component {
   	let content ="";
   	if(this.props.data.pathways_up.length > 0){
 		const columns = [{
-		  title: 'path_id',
-		  dataIndex: 'path_id',
-		  sorter: (a, b) => a["path_id"]-b["path_id"],
+		  title: 'Pathway_ID',
+		  dataIndex: 'Pathway_ID',
 		}, {
-		  title: 'source',
-		  dataIndex: 'source',
-		  sorter: (a, b) => ('' + a.source).localeCompare(b.source),
+		  title: 'Source',
+		  dataIndex: 'Source',
 		}, {
-		  title: 'description',
-		  dataIndex: 'description',
-		  sorter: (a, b) => ('' + a.description).localeCompare(b.description),
+		  title: 'Description',
+		  dataIndex: 'Description',
 		}, {
-		  title: 'type',
-		  dataIndex: 'type',
-		  sorter: (a, b) => ('' + a.type).localeCompare(b.type),
+		  title: 'Type',
+		  dataIndex: 'Type',
 		}, {
-		  title: 'pval',
-		  dataIndex: 'pval',
-		  sorter: (a, b) => a.pval-b.pval,
+		  title: 'P_Value',
+		  dataIndex: 'P_Value',
 		}, {
-		  title: 'fdr',
-		  dataIndex: 'fdr',
-		  sorter: (a, b) => a.fdr-b.fdr,
+		  title: 'FDR',
+		  dataIndex: 'FDR',
 		}, {
-		  title: 'ratio',
-		  dataIndex: 'ratio',
-		  sorter: (a, b) => a.ratio-b.ratio,
+		  title: 'Ratio',
+		  dataIndex: 'Ratio',
 		}, {
-		  title: 'gene.list',
-		  dataIndex: 'gene.list',
-		  sorter: (a, b) => ('' + a["gene.list"]).localeCompare(b["gene.list"]),
+		  title: 'Gene_List',
+		  dataIndex: 'Gene_List',
 		}, {
-		  title: 'nb.hits',
-		  dataIndex: 'nb.hits',
-		  sorter: (a, b) => a.hits-b.hits,
+		  title: 'Number_Hits',
+		  dataIndex: 'Number_Hits',
 		}, {
-		  title: 'nb.genes.path',
-		  dataIndex: 'nb.genes.path',
-		  sorter: (a, b) => a['nb.genes.path']-b['nb.genes.path'],
+		  title: 'Number_Genes_Pathway',
+		  dataIndex: 'Number_Genes_Pathway',
 
 		},{
-		  title: 'nb.user.genes',
-		  dataIndex: 'nb.user.genes',
-		  sorter: (a, b) => a['nb.user.genes']-b['nb.user.genes'],
+		  title: 'Number_User_Genes',
+		  dataIndex: 'Number_User_Genes',
 		},{
-		  title: 'tot.back.genes',
-		  dataIndex: 'tot.back.genes',
-		  sorter: (a, b) => a['tot.back.genes']-b['tot.back.genes'],
+		  title: 'Total_Number_Genes',
+		  dataIndex: 'Total_Number_Genes',
 		}];
 		
 
@@ -140,9 +129,10 @@ class PUGTable extends Component {
 	    		return true;
 	    	}
 
-	    	if (row["source"].includes(this.state.term)) return true;
-	    	if (row["description"].includes(this.state.term)) return true;
-	    	if (row["type"].includes(this.state.term)) return true;
+	    	if (row["Source"].includes(this.state.term)) return true;
+	    	if (row["Description"].includes(this.state.term)) return true;
+	    	if (row["Type"].includes(this.state.term)) return true;
+	    	if (row["Pathway_ID"].includes(this.state.term)) return true;
 
 	    	return false;
 	    }

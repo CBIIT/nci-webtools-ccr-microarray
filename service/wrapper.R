@@ -1,6 +1,6 @@
 library(jsonlite)
-#library(mpstr)
-source('./service/MAAPster_functions.R')
+library(mpstr)
+#source('./service/MAAPster_functions.R')
 
 
 
@@ -170,7 +170,6 @@ process = function(){
     # # # Output should dynamically respond to user-selected contrast
     l2p_pathways = l2pPathways(diff_expr_genes,species,workspace,projectId)
 
-
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
     # # # Output should dynamically respond to user-selected contrast
     saveRDS(diff_expr_genes, file = paste0(workspace,"diff_expr_genes.rds"))
@@ -216,11 +215,11 @@ process = function(){
     pathway_name<-toString(args[7])
 
     contrast <-c(paste0(cgroup1,"-",cgroup2))
-    pic_name<-paste0(workspace,"pathwaysHeapMap.",sample(1:6,1,replace=T),"jpg")
-    saveImageFileName<-paste0(workspace,pic_name)
-    geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,workspace)
+    saveImageFileName<-paste0(workspace,"pathwaysHeapMap",sample(1:6,1,replace=T),".jpg")
+    pic_name<-
+    geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,getwd())
 
-    return(list(pic_name=pic_name))
+    return(list(pic_name=saveImageFileName))
   }
 
 }
