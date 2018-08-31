@@ -81,44 +81,142 @@ class PUGTable extends Component {
 
   	const {visible} = this.state;
   	let content ="";
+  	var content_length =this.props.data.pathways_up.length;
   	if(this.props.data.pathways_up.length > 0){
 		const columns = [{
 		  title: 'Pathway_ID',
 		  dataIndex: 'Pathway_ID',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return a["Pathway_ID"]-b["Pathway_ID"];
+		  	}
+		  }
+		  	
 		}, {
 		  title: 'Source',
 		  dataIndex: 'Source',
+		  sorter:function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return ('' + a.Source).localeCompare(b.Source);
+		  	}
+		  }
 		}, {
 		  title: 'Description',
 		  dataIndex: 'Description',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return ('' + a.Description).localeCompare(b.Description);
+		  	}
+		  }
 		}, {
 		  title: 'Type',
 		  dataIndex: 'Type',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return ('' + a.Type).localeCompare(b.Type);
+		  	}
+		  }
 		}, {
 		  title: 'P_Value',
 		  dataIndex: 'P_Value',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return a.P_Value-b.P_Value;
+		  	}
+		  }
 		}, {
 		  title: 'FDR',
 		  dataIndex: 'FDR',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return a.FDR-b.FDR;
+		  	}
+		  }
 		}, {
 		  title: 'Ratio',
 		  dataIndex: 'Ratio',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return a.Ratio-b.Ratio;
+		  	}
+		  }
 		}, {
 		  title: 'Gene_List',
 		  dataIndex: 'Gene_List',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return ('' + a["Gene_List"]).localeCompare(b["Gene_List"]);
+		  	}
+		  }
 		}, {
 		  title: 'Number_Hits',
 		  dataIndex: 'Number_Hits',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return a.Number_Hits-b.Number_Hits;
+		  	}
+		  }
 		}, {
 		  title: 'Number_Genes_Pathway',
 		  dataIndex: 'Number_Genes_Pathway',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return a['Number_Genes_Pathway']-b['Number_Genes_Pathway'];
+		  	}
+		  }
 
 		},{
 		  title: 'Number_User_Genes',
 		  dataIndex: 'Number_User_Genes',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return a['Number_User_Genes']-b['Number_User_Genes'];
+		  	}
+		  }
 		},{
 		  title: 'Total_Number_Genes',
 		  dataIndex: 'Total_Number_Genes',
+		  sorter: function(a, b) {
+		  	if(content_length>15000){
+		  		console.log(content_length);
+		  		// to be finished
+		  	}else{
+		  		return a['Total_Number_Genes']-b['Total_Number_Genes'];
+		  	}
+		  }
 		}];
 		
 
@@ -128,7 +226,6 @@ class PUGTable extends Component {
 	    	if(this.state.term ===""){
 	    		return true;
 	    	}
-
 	    	if (row["Source"].includes(this.state.term)) return true;
 	    	if (row["Description"].includes(this.state.term)) return true;
 	    	if (row["Type"].includes(this.state.term)) return true;
