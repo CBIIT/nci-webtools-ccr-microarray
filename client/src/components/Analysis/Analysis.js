@@ -403,14 +403,25 @@ class Analysis extends Component {
 	  }
 
 	assignGroup=(group_name,dataList_keys)=>{
-		let workflow = Object.assign({},this.state.workflow);
-		for(var key in dataList_keys){
-			workflow.dataList[dataList_keys[key]-1].groups=group_name;
+		// validate group_name
+		let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
+		if(group_name.match(pattern))
+		{
+			let workflow = Object.assign({},this.state.workflow);
+			for(var key in dataList_keys){
+				workflow.dataList[dataList_keys[key]-1].groups=group_name;
+			}
+			this.setState({
+				      workflow:workflow
+				    });
+			message.success('Add group successfully.');
 		}
-		this.setState({
-			      workflow:workflow
-			    });
-		message.success('Add group successfully.');
+		else
+		{
+			message.success('The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1');
+			return false;
+		}
+		
 	}
 
 	deleteGroup=(group_name)=>{

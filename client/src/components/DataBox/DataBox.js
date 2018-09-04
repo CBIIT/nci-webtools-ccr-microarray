@@ -145,6 +145,7 @@ class DataBox extends Component {
           ]}
         >
           <p><b>Provide a Group name for the following selected GSM(s)</b></p>
+           <p><small>*Group name should start with letter and can combine with number. Ex. RNA_1 </small></p>
           <p>{selected_gsms}</p>
           <p>Group Name:&nbsp;&nbsp;
               <Input placeholder={"Group Name"} id={"input_group_name"} style={{width:'150px'}}/>&nbsp;

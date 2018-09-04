@@ -168,6 +168,16 @@ process = function(){
 
     # # #### 4) l2p pathway analysis function, takes DEGs and species as input, returns list of up and downregulated pathways for each contrast ####
     # # # Output should dynamically respond to user-selected contrast
+
+    ## auto correct species
+    if(grepl("mouse",celfiles@annotation)){
+      species<-"mouse"
+    }
+
+    if(grepl("human",celfiles@annotation)){
+      species<-"human"
+    }
+    
     l2p_pathways = l2pPathways(diff_expr_genes,species,workspace,projectId)
 
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
@@ -215,11 +225,12 @@ process = function(){
     pathway_name<-toString(args[7])
 
     contrast <-c(paste0(cgroup1,"-",cgroup2))
-    saveImageFileName<-paste0(workspace,"pathwaysHeapMap",sample(1:6,1,replace=T),".jpg")
-    pic_name<-
+    
+    pic_name<-paste0("pathwaysHeapMap",sample(1:6,1,replace=T),".jpg")
+    saveImageFileName<-paste0(workspace,pic_name)
     geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,getwd())
 
-    return(list(pic_name=saveImageFileName))
+    return(list(pic_name=pic_name))
   }
 
 }
