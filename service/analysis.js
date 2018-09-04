@@ -249,7 +249,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                let deg = list.diff_expr_genes.listDEGs;
                for(let i in list.diff_expr_genes.listDEGs){
                   for(let j in deg[i]){
-                    if(deg[i][j]["P.Value"]>pDEGs||Math.abs(deg[i][j].FC)>foldDEGs){
+                    if(deg[i][j]["P.Value"]>pDEGs||Math.abs(deg[i][j].FC)>=foldDEGs){
                       deg[i].splice(j, 1);
                     }else{
                       workflow.diff_expr_genes.push(deg[i][j]);

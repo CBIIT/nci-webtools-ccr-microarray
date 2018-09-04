@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Table,Input,message,Modal,Button} from 'antd';
+import 'intro.js/introjs.css';
+import { Steps } from 'intro.js-react';
 const Search = Input.Search;
 
 
@@ -15,10 +17,20 @@ class PUGTable extends Component {
 	    this.state = {
     	term:"" ,
     	heapMap:"",
-    	visible: false
+    	visible: false,
+    	stepsEnabled: true,
+        initialStep: 0,
+        steps: [
+        {
+          element: '.patyway_up_1',
+          intro: 'Click Row to show gene heapMap',
+        },
+      ]
 	 	}
 	}
-
+ onExit = () => {
+    this.setState(() => ({ stepsEnabled: false }));
+  };
 
  handleOk = () => {
     this.setState({ loading: true });
@@ -244,16 +256,26 @@ class PUGTable extends Component {
 	        </Modal>
 	    // end  group modal
 
-		content=<div>
+		content=<div> <Steps
+			          enabled={this.state.stepsEnabled}
+			          steps={this.state.steps}
+			          initialStep={this.state.initialStep}
+			          onExit={this.onExit}
+			        />
 					<div><Search  placeholder="input search text" className="input-search-for-deg-path" onSearch={value => this.setState({term: value})} /></div>
 					<div><Table 
 							columns={columns} 
 							dataSource={data.filter(searchFilter,this) }   
 							onRowClick={(row, idx, event)=>this.showHeapMap(row, idx, event)}  
+							rowClassName={(record, index)=>"patyway_up_"+index}
 					      /> 
-					      {modal}
-      	</div>
-				</div>	
+					{modal}
+      				</div>
+				</div>
+				
+
+			      
+
   	  	
   	}else{
 
