@@ -16,7 +16,7 @@ module.exports = {
 	},
 
 	// Server port
-    logDir: './',
+    logDir: './log/',
 
     //cel file upload path
     uploadPath: 'H:\\MicroArray\\uploads\\',
