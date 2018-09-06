@@ -136,7 +136,8 @@ class DataBox extends Component {
     })
     let group_table = <Table
     columns={columns}
-    dataSource={groups_data_list} />
+    dataSource={groups_data_list} 
+    />
 
     // define group modal
     let modal = <Modal visible={visible}  title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
@@ -157,7 +158,7 @@ class DataBox extends Component {
     // end  group modal
 
   	let content = (<Tabs onChange={this.handleTabChange} type="card" >
-                			<TabPane tab="GSM Data" key="1">
+                			<TabPane tab="GSM Data" key="GSM_1">
                           {define_group_click_btn}
                           <GSMData ref={this.child}  data={this.props.data} selected={this.selection}/>
                       </TabPane>

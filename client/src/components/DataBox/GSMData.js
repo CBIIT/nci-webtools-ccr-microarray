@@ -122,24 +122,29 @@ class GSMData extends Component {
 		  title: 'gsm',
 		  dataIndex: 'gsm',
 		  width:'15%',
+		
 		  sorter: (a, b) => ('' + a.gsm).localeCompare(b.gsm),
 		}, {
 		  title: 'title',
 		  dataIndex: 'title',
 		  width:'30%',
+	
 		  sorter: (a, b) => this.compareByAlph(a.title,b.title),
 		}, {
 		  title: 'description',
 		  dataIndex: 'description',
 		  width:'30%',
+		  
 		  sorter: (a, b) => a.description.length - b.description.length,
 		}, {
 		  title: 'group',
 		  dataIndex: 'groups',
 		  width:'20%',
+	
 		  sorter: (a, b) => this.compareByAlph(a.groups,b.groups),
 		}];
 		let count = 1;
+
 		this.props.data.dataList.forEach(function(fl){
 			fl.key = count++;
 		});

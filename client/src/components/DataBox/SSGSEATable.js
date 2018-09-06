@@ -63,7 +63,7 @@ class SSGSEATable extends Component {
 
 
   	  	let tabs =[ <div id="ss_tag1" className="ss_plot">
-		  							<Table columns={columns} dataSource={data} />
+		  							<Table rowKey='Name' columns={columns} dataSource={data} />
 		  						</div>,
 		  						  <div id="ss_tag2" className="ss_plot hide" >
 		  						 <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
