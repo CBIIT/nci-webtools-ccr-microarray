@@ -200,6 +200,14 @@ class Analysis extends Component {
 			.then(res => res.json())
 			.then(result => {
 			if(result.status==200){
+
+				if (result.data === undefined || result.data.length == 0) {
+						 
+						workflow.uploading = false;
+						workflow.progressing = false;
+					    message.success('Load data fails');	
+				}
+
 				var data = result.data.split("+++loadGSE+++\"")[1]
 				let list =JSON.parse(decodeURIComponent(data));
 				//let list = result.data;
@@ -303,6 +311,12 @@ class Analysis extends Component {
 				)
 			.then(result => {
 				if(result.status==200){
+					if (result.data === undefined || result.data.length == 0) {
+						 
+						workflow.uploading = false;
+						workflow.progressing = false;
+					    message.success('Run contrast fails.');	
+					}
 					 workflow.diff_expr_genes=result.data.diff_expr_genes;
 					 workflow.ssGSEA=result.data.ssGSEA;
 					 workflow.pathways_up=result.data.pathways_up;
