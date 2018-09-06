@@ -85,6 +85,7 @@ class PUGTable extends Component {
 		const columns = [{
 		  title: 'Pathway_ID',
 		  dataIndex: 'Pathway_ID',
+		   width: "10%",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -97,6 +98,7 @@ class PUGTable extends Component {
 		}, {
 		  title: 'Source',
 		  dataIndex: 'Source',
+		   width: "8%",
 		  sorter:function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -108,6 +110,7 @@ class PUGTable extends Component {
 		}, {
 		  title: 'Description',
 		  dataIndex: 'Description',
+		  width:"14%",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -119,6 +122,7 @@ class PUGTable extends Component {
 		}, {
 		  title: 'Type',
 		  dataIndex: 'Type',
+		  width:"7%",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -130,6 +134,7 @@ class PUGTable extends Component {
 		}, {
 		  title: 'P_Value',
 		  dataIndex: 'P_Value',
+		   width: "8%",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -141,6 +146,7 @@ class PUGTable extends Component {
 		}, {
 		  title: 'FDR',
 		  dataIndex: 'FDR',
+		   width: "8%",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -152,6 +158,7 @@ class PUGTable extends Component {
 		}, {
 		  title: 'Ratio',
 		  dataIndex: 'Ratio',
+		   width: "8%",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -163,6 +170,7 @@ class PUGTable extends Component {
 		}, {
 		  title: 'Gene_List',
 		  dataIndex: 'Gene_List',
+		  width:"12%",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -174,6 +182,7 @@ class PUGTable extends Component {
 		}, {
 		  title: 'Number_Hits',
 		  dataIndex: 'Number_Hits',
+		  width:"85px",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -185,6 +194,7 @@ class PUGTable extends Component {
 		}, {
 		  title: 'Number_Genes_Pathway',
 		  dataIndex: 'Number_Genes_Pathway',
+		   width:"95px",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -197,6 +207,7 @@ class PUGTable extends Component {
 		},{
 		  title: 'Number_User_Genes',
 		  dataIndex: 'Number_User_Genes',
+		  width:"85px",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -208,6 +219,7 @@ class PUGTable extends Component {
 		},{
 		  title: 'Total_Number_Genes',
 		  dataIndex: 'Total_Number_Genes',
+		  width:"90px",
 		  sorter: function(a, b) {
 		  	if(content_length>15000){
 		  		console.log(content_length);
@@ -243,7 +255,7 @@ class PUGTable extends Component {
 	            <Button key="back" onClick={this.handleCancel}>Close</Button>,
 	          ]}
 	        >
-	          <img src={this.state.heapMap} style={{width:"75%"}} alt="heapMap"/>
+	          <img src={this.state.heapMap} style={{width:"100%"}} alt="heapMap"/>
 	        </Modal>
 	    // end  group modal
 
