@@ -249,7 +249,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                let deg = list.diff_expr_genes.listDEGs;
                for(let i in list.diff_expr_genes.listDEGs){
                   for(let j in deg[i]){
-                    if(deg[i][j]["P.Value"]>pDEGs||Math.abs(deg[i][j].FC)>=foldDEGs){
+                    if(deg[i][j]["P.Value"]>pDEGs||Math.abs(deg[i][j].FC)<foldDEGs){
                       deg[i].splice(j, 1);
                     }else{
                       workflow.diff_expr_genes.push(deg[i][j]);
@@ -279,19 +279,26 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                   }
                }
                // filter ssGEA
-                var ssGSEA = list.ssGSEA.DEss;
-
-                
+                let ssGSEA = list.ssGSEA.DEss;
                 for(let key in ssGSEA){
-                    for( let j in ssGSEA[key]){
-                      if(list.ssGSEA.DEss[key][j]["logFC"]<foldssGSEA||list.ssGSEA.DEss[key][j]["P.Value"]<pssGSEA){
-                          list.ssGSEA.DEss[key].splice(j, 1);
-                        }else{
-                           workflow.ssGSEA.push(list.ssGSEA.DEss[key][j]);
-                        }
-                  }
+                  ssGSEA=ssGSEA[key];
                 }
-                workflow.ssGSEA2=ssGSEA;
+                // combine ssGSEA column
+                let ssColumns = list.ssColumn;
+                for (let i in ssColumns){
+                     ssGSEA[i]["column"] = ssColumns[i]["_row"];
+                }
+
+                for( let j in ssGSEA){
+                      if(Math.abs(ssGSEA[j]["logFC"])<foldssGSEA||lssGSEA[j]["P.Value"]<pssGSEA){
+                          ssGSEA.splice(j, 1);
+                      }else{
+                           workflow.ssGSEA.push(ssGSEA[j]);
+                      }
+                }
+
+
+                workflow.ssGSEA=ssGSEA;
 
                // sort result;
                //objs.sort(function(a,b) {return (a.last_nom > b.last_nom) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0);} );
@@ -305,10 +312,11 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                workflow.pathways_down.sort(function(e1,e2){
                   return (e1["P_Value"]<e2["P_Value"]) ? 1 : -1
                })
-
-               workflow.ssGSEA.sort(function(e1,e2){
-                  return (e1["P.Value"]<e2["P.Value"]) ? 1 : -1
+               
+              workflow.ssGSEA.sort(function(e1,e2){
+                    return (e1["P.Value"]<e2["P.Value"]) ? 1 : -1
                })
+              
 
 
                if(workflow.diff_expr_genes.length>20000){
