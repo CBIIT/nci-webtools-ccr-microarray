@@ -97,7 +97,7 @@ process = function(){
         listGroups<-toString(args[4])
       }
 
-      if(access_code==""||projectId==""||listGroups==""){
+      if(projectId==""||listGroups==""){
         return ("Request field(s) is missing")
       }
 
@@ -148,7 +148,7 @@ process = function(){
    
 
     if(source=="upload"){
-          celfiles = processCELfiles(projectId,listGroups,workspace) 
+          celfiles = getCELfiles(projectId,listGroups,workspace) 
        }else{
           celfiles = getLocalGEOfiles(projectId,access_code,listGroups,workspace) 
        }

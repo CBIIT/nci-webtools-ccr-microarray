@@ -11,7 +11,7 @@ var rimraf = require('rimraf');
 
 router.post('/upload',function(req, res){
 
-    logger.info("API:/upload ", "req :",req);
+    logger.info("API:/upload ");
 
 
   // create an incoming form object
@@ -64,11 +64,11 @@ router.post('/upload',function(req, res){
       R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
              logger.info("API:/upload result ","status 404 ");
-              logger.warn("API:/upload result ","status 404 ", err);
+             logger.warn("API:/upload result ","status 404 ", err);
               res.json({status:404, msg:err});
             }
             else{
-               logger.info("API:/upload result ","status 200 ");
+              logger.info("API:/upload result ","status 200 ");
               res.json({status:200, data:returnValue});
             }
         });
@@ -233,7 +233,6 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                var  workflow ={};
                workflow.diff_expr_genes=[];
                workflow.ssGSEA=[];
-               workflow.ssGSEA2=[];
                workflow.pathways_up=[];
                workflow.pathways_down=[];
                workflow.listPlots=[];
@@ -282,11 +281,6 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                 let ssGSEA = list.ssGSEA.DEss;
                 for(let key in ssGSEA){
                   ssGSEA=ssGSEA[key];
-                }
-                // combine ssGSEA column
-                let ssColumns = list.ssColumn;
-                for (let i in ssColumns){
-                     ssGSEA[i]["column"] = ssColumns[i]["_row"];
                 }
 
                 for( let j in ssGSEA){
