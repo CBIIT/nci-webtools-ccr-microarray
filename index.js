@@ -3,6 +3,7 @@
 var express = require('express');
 var config = require('./config');
 var app = express();
+var logger = require('./components/logger');
 
 require('./config/express')(app);
 require('./routes')(app);
@@ -15,4 +16,28 @@ app.listen(config.port, function(){
 process.on( 'SIGINT', function(){
     console.log( 'gracefully shutting down :)' );
     process.exit();
+});
+
+
+var schedule = require('node-schedule');
+var rimraf = require('rimraf');
+ 
+var j = schedule.scheduleJob('0 0 0 * * *', function(){
+  logger.info("scheduleJob: clean data start ");
+  console.log("scheduleJob: clean data start ");
+  const { lstatSync, readdirSync } = require('fs')	
+  const { join } = require('path')
+
+  const isDirectory = source => lstatSync(source).isDirectory()
+  const getDirectories = source =>readdirSync(source).map(name => join(source, name)).filter(isDirectory)
+  //rimraf('/some/directory', function () { console.log('done'); });
+  let dirs = getDirectories("./service/data")
+  for(let d in dirs){
+  	console.log(dirs[d])
+  	logger.info("scheduleJob: clean data done "," folder : ",dirs[d]);
+  	rimraf(dirs[d], function () { 
+  		logger.info("scheduleJob: clean data done ");
+  		console.log("scheduleJob: clean data done ");
+  	 });
+  }
 });

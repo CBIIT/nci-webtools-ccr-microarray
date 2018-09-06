@@ -66,7 +66,7 @@ class SSGSEATable extends Component {
 		  							<Table columns={columns} dataSource={data} />
 		  						</div>,
 		  						  <div id="ss_tag2" className="ss_plot hide" >
-		  						 <img src= {link}  style={{width:"75%"}} alt="Pathway Heatmap"/>
+		  						 <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
 		  						</div>
 		  		  ]
 	    content = [<Select defaultValue="ss_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
