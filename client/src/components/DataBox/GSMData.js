@@ -187,7 +187,7 @@ class GSMData extends Component {
 					}
 
 		let tooltip_svg_title={
-						"padding-top": "20px"
+						"paddingTop": "20px"
 					}
 
 	 content =<div id="tag3" className="plot2">
