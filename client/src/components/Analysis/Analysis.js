@@ -390,8 +390,12 @@ class Analysis extends Component {
 						message.success('load data fails.');
 						return;
 					}
+					for(let i in list.files){
+						list.files[i]["gsm"]=list.files[i]["_row"];
+						//list.files[i]["gsm"]=list.files[i].title.split("_")[0];
+					}
 					workflow.dataList = list.files;
-			
+				
 		    		// change the word of load btn
 		    		document.getElementById("btn-project-upload").disabled=true
 
