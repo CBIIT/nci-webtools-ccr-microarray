@@ -124,7 +124,7 @@ class PrePlotsBox extends Component {
 	
 	    var maplot_style = 	{
 	    						'height':'auto',
-	  						  	'max-height':'100%',
+	  						  	'maxHeight':'100%',
 	  						  	'overflow':'scroll'
 	  						 };
 
@@ -141,7 +141,7 @@ class PrePlotsBox extends Component {
 					}
 
 		let tooltip_svg_title={
-						"padding-top": "20px"
+						"paddingTop": "20px"
 					}
 
 		let tabs =[ <div id="tag1" className="plot2">{histplotBN}</div>,
@@ -171,11 +171,11 @@ class PrePlotsBox extends Component {
 					</div>]
 
 	  	content = [<Select defaultValue="tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
-						      <Option value="tag1">Histogram</Option>
-						      <Option value="tag2">MAplots</Option>
-						      <Option value="tag3">Boxplots</Option>
-						      <Option value="tag4">RLE</Option>
-						      <Option value="tag5">NUSE</Option>
+						      <Option  key="tag1" value="tag1">Histogram</Option>
+						      <Option  key="tag2" value="tag2">MAplots</Option>
+						      <Option  key="tag3" value="tag3">Boxplots</Option>
+						      <Option  key="tag4" value="tag4">RLE</Option>
+						      <Option  key="tag5" value="tag5">NUSE</Option>
 						    </Select>,tabs]
  	}else{
 
@@ -186,11 +186,11 @@ class PrePlotsBox extends Component {
 	  	   		    <div id="tag5" className="plot2 hide">No data for NUSE</div>]
 
 	  	content = [<Select defaultValue="tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
-						      <Option value="tag1">Histogram</Option>
-						      <Option value="tag2">MAplots</Option>
-						      <Option value="tag3">Boxplots</Option>
-						      <Option value="tag4">RLE</Option>
-						      <Option value="tag5">NUSE</Option>
+						      <Option key="tag1" value="tag1">Histogram</Option>
+						      <Option key="tag2" value="tag2">MAplots</Option>
+						      <Option key="tag3" value="tag3">Boxplots</Option>
+						      <Option key="tag4" value="tag4">RLE</Option>
+						      <Option key="tag5" value="tag5">NUSE</Option>
 						    </Select>,tabs]
  	}
  	return(

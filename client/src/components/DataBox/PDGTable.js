@@ -262,6 +262,7 @@ class PUGTable extends Component {
 		content=<div>
 					<div><Search  placeholder="input search text" className="input-search-for-deg-path" onSearch={value => this.setState({term: value})} /></div>
 					<div><Table 
+							rowKey='Pathway_ID'
 							columns={columns} 
 							dataSource={data.filter(searchFilter,this) }   
 							onRowClick={(row, idx, event)=>this.showHeapMap(row, idx, event)}  
