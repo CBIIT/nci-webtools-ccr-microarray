@@ -9,4 +9,3 @@ package-lock.json
 .Rproj.user
 /bak/
 *.log
-/log/*
