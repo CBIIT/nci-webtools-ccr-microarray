@@ -196,6 +196,7 @@ class GSMData extends Component {
 					}
 
 	 content =<div id="tag3" className="plot2">
+
 	 			<div id="tag3-tooltip" style={tooltip}>
 							<div id="tag3-tooltip-svg-title" style={tooltip_svg_title}></div>
 							<div id="tag3-tooltip-svg-div">Point:
@@ -219,7 +220,8 @@ class GSMData extends Component {
 						 	className="wrapper-class-name"/>
 						 	</div>
 
-					</div>;
+					</div>
+					;
 
   	}
 

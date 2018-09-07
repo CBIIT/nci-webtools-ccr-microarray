@@ -88,19 +88,19 @@ class DataBox extends Component {
     
     if(this.props.data.compared){
            // controll display fo tags[preplot,postplot,DEG]
-          prePlotsBox = (<TabPane tab="Pre-normalization QC Plots"  key="2"><PrePlotsBox data={this.props.data}/>
+          prePlotsBox = (<TabPane tab="Pre-normalization QC Plots"  key="Pre-normalization_QC_Plots"><PrePlotsBox key="prePlotsBox" data={this.props.data}/>
                 </TabPane>);
-          postPlotsBox = (<TabPane tab="Post-normalization Plots"  key="3"><PostPlotsBox data={this.props.data}/></TabPane>);
-          degBox = (<TabPane tab="DEG-Enrichments Results"  key="4"><DEGBox data={this.props.data}/></TabPane>);
+          postPlotsBox = (<TabPane tab="Post-normalization Plots"  key="Post-normalization_Plots"><PostPlotsBox  key="postPlotsBox" data={this.props.data}/></TabPane>);
+          degBox = (<TabPane tab="DEG-Enrichments Results"  key="DEG-Enrichments_Results"><DEGBox  key="degBox" data={this.props.data}/></TabPane>);
       }else{
           // controll display fo tags[preplot,postplot,DEG]
-          prePlotsBox = (<TabPane tab="Pre-normalization QC Plots" disabled key="2">No data </TabPane>);
-          postPlotsBox = (<TabPane tab="Post-normalization Plots" disabled key="3">No data</TabPane>);
-          degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="4">No data</TabPane>);
+          prePlotsBox = (<TabPane tab="Pre-normalization QC Plots" disabled key="Pre-normalization_QC_Plots">No data </TabPane>);
+          postPlotsBox = (<TabPane tab="Post-normalization Plots" disabled key="Post-normalization_Plots">No data</TabPane>);
+          degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results">No data</TabPane>);
       }
     // control tab  SSGSEA
   	if(this.props.data.done_gsea){
-  		ssGSEABox = (<TabPane tab="ssGSEA Results" key="5"><SSGSEATable data={this.props.data}/></TabPane>);	
+  		ssGSEABox = (<TabPane tab="ssGSEA Results" key="ssGSEA_Results"><SSGSEATable key="ssgseaTable"data={this.props.data}/></TabPane>);	
   	}
 
     var selected_gsms = ""; 
@@ -109,9 +109,9 @@ class DataBox extends Component {
     }
     // define group list in the modal
     const columns = [  // define table column names
-      { title: 'Group', dataIndex: 'name', key: 'name',width:90},
-      { title: 'Metabolite IDs', dataIndex: 'gsms', key: 'gsms' },
-      { title: 'Action',dataIndex:'name',width:90,render:(e)=> (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>)}
+      { title: 'Group', dataIndex: 'name', key:'name',width:90},
+      { title: 'Metabolite IDs', dataIndex: 'gsms', key:'gsms' },
+      { title: 'Action',dataIndex:'name',key:'key',width:90,render:(e)=> (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>)}
     ];
 
     // get group and gsm(s)  [{grupa: gsm1,gsm2,gsm3}]
@@ -131,7 +131,7 @@ class DataBox extends Component {
 
     var groups_data_list=[];
     groups_data.forEach(function(value,key,map){
-       var d ={'name':key,'gsms':value};
+       var d ={'key':key,'name':key,'gsms':value};
         groups_data_list.push(d);
     })
     let group_table = <Table
@@ -140,7 +140,7 @@ class DataBox extends Component {
     />
 
     // define group modal
-    let modal = <Modal visible={visible}  title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
+    let modal = <Modal key="group_define_modal" visible={visible}  title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
         footer={[
             <Button key="back" onClick={this.handleCancel}>Close</Button>,
           ]}
