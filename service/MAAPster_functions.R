@@ -225,16 +225,18 @@ calc = function(raw,path) {
       tedf = tedf[ , apply(tedf, 2, var) != 0]
     }
     pca=prcomp(tedf, scale. = T)
-    open3d()
-    bg3d('white')
-    plot3d(pca$x[,1:3], type='s',size=2, col=pData(raw)$colors)
-    group.v=as.vector(pData(raw)$title)
-    text3d(pca$x, pca$y, pca$z, group.v, cex=0.6, adj=1.5)
-    par3d(mouseMode = "trackball")
+    #options(rgl.useNULL=TRUE)
+    #open3d()
+    #bg3d('white')
+    #plot3d(pca$x[,1:3], type='s',size=2, col=pData(raw)$colors)
+    #group.v=as.vector(pData(raw)$title)
+    #text3d(pca$x, pca$y, pca$z, group.v, cex=0.6, adj=1.5)
+    #par3d(mouseMode = "trackball")
     # END 3D PCA / BEGIN HEATMAP #                                                      #Heatmap
-    writeWebGL(dir = file.path(path, "webGL"),width = 650, reuse = TRUE)
+    #writeWebGL(dir = file.path(path, "webGL"),width = 650, reuse = TRUE)
 
-    PCA<-"/webGL/index.html"
+    #PCA<-"/webGL/index.html"
+    PCA<-pca
 
     mat=as.matrix(dist(t(exprs(norm))))
     rownames(mat)=pData(norm)$title
