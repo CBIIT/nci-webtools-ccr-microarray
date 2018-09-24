@@ -25,4 +25,4 @@ var all = {
     uploadCount: 100
 };
 
-module.exports = _.merge(all, require('./template.js'), require('./microarray.settings'));
+module.exports = _.merge(all, require('./template.js'), require('../../config/microarray.settings'));

@@ -29,7 +29,7 @@ module.exports = function(app){
 
 
 	//Serves all the request which includes /images in the url from Images folder
-	app.use('/images', express.static(__dirname + '/service/data'));
+	app.use('/images', express.static(config.uploadPath));
 	
 	// All other routes should redirect to error page
     app.get('/*', function (req, res) {

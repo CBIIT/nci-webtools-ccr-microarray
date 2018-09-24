@@ -4,16 +4,17 @@
 
 'use strict';
 
-
+ var config = require('../config');
  var winston = require('winston');
  require('winston-daily-rotate-file');
  winston.emitErrs = true;
 
+ console.log(config.logDir)
 
   var logger = new (winston.Logger)({
     transports: [
       new (winston.transports.DailyRotateFile)({
-            filename: './log/application.log',
+            filename: config.logDir+'/application.log',
             datePattern: "yyyy-MM-dd.",
             zippedArchive: false,
             maxSize: '20m',

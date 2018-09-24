@@ -326,20 +326,63 @@ class Analysis extends Component {
 			   		 workflow.done_gsea=true;
 
 			   		 var plots=result.data.listPlots;
-						workflow.progressing = false;
+						
 						workflow.HistplotBN = plots[0];                  // svg file
-						workflow.MAplotBN =plots[1].listData;			// images list[jpg]
+						workflow.MAplotBN =plots[1];			// images list[jpg]
 						workflow.BoxplotBN = plots[2];					// svg file
 						workflow.RLEplotBN = plots[3];					// svg file
 						workflow.NUSEplotBN = plots[4];					// svg file
 						workflow.HistplotAN = plots[5];					// svg file
-						workflow.MAplotAN = plots[6].listData;			// images list[jpg]
+						workflow.MAplotAN = plots[6];			// images list[jpg]
 						workflow.BoxplotAN = plots[7];					// svg file
 						workflow.PCA = plots[8];							// html file
 						workflow.Heatmapolt = plots[9];	
 						// hard code the path for plot
 						workflow.pathwayHeatMap="/geneHeatmap.jpg";
 						workflow.volcanoPlot="/volcano.html";	
+						workflow.progressing = false;
+						workflow.color=[];
+
+						let uniqueColorCodeArray = plots[8].color.filter(function(item, pos) {
+						    return plots[8].color.indexOf(item) == pos;
+						})
+
+						let size    = uniqueColorCodeArray.length;
+
+						let rainbow = new Array(size);
+
+						for (let i=0; i<size; i++) {
+
+						  let red   = sin_to_hex(i, 0 * Math.PI * 2/3); // 0   deg
+						  let blue  = sin_to_hex(i, 1 * Math.PI * 2/3); // 120 deg
+						  let green = sin_to_hex(i, 2 * Math.PI * 2/3); // 240 deg
+						  rainbow[i] = "#"+ red + green + blue;
+
+						}
+
+						function sin_to_hex(i, phase) {
+
+						  let sin = Math.sin(Math.PI / size * 2 * i + phase);
+						  let int = Math.floor(sin * 127) + 128;
+						  let hex = int.toString(16);
+						  return hex.length === 1 ? "0"+hex : hex;
+
+						}
+
+
+						workflow.BoxplotBN.color=workflow.BoxplotBN.color.map(x => rainbow[x/5]);
+						workflow.RLEplotBN.color=workflow.RLEplotBN.color.map(x => rainbow[x/5]);
+						workflow.NUSEplotBN.color=workflow.NUSEplotBN.color.map(x => rainbow[x/5]);
+						workflow.BoxplotAN.color=workflow.BoxplotAN.color.map(x => rainbow[x/5]);
+						workflow.PCA.color=workflow.PCA.color.map(x => rainbow[x/5]);
+
+
+						workflow.RLEplotBN = plots[3];					
+						workflow.NUSEplotBN = plots[4];	
+						workflow.BoxplotAN = plots[7];					
+						workflow.PCA = plots[8];		
+					
+
 
 					this.setState({
 				      workflow:workflow

@@ -1,0 +1,31 @@
+
+var parameters = {
+  x: [-66.5686,-42.2258,116.3071,-76.6501,-75.8413,126.2074,-18.325,-33.5442,101.4577,-29.6699,-90.7314,89.584] ,
+  y: [29.7351,25.4327,30.0101,-4.5431,87.6816,10.6801,-137.5637,-28.121,7.5256,-68.064,33.0598,14.1669] ,
+  z: [83.6255,40.6016,21.3177,52.7756,-4.6564,52.9971,23.7174,-61.8339,-52.0835,-22.117,-93.3307,-41.0134] ,
+  text:["GSM929282_++_PBS_8.CEL.gz","GSM929283_++_PBS_9.CEL.gz","GSM929284_++_PBS_10.CEL.gz","GSM929285_++_APAP_12.CEL.gz","GSM929286_++_APAP_13.CEL.gz","GSM929287_++_APAP_14.CEL.gz","GSM929288_cn_PBS_4.CEL.gz","GSM929289_cn_PBS_5.CEL.gz","GSM929290_cn_PBS_16.CEL.gz","GSM929291_cn_APAP_2.CEL.gz","GSM929292_cn_APAP_3.CEL.gz","GSM929293_cn_APAP_17.CEL.gz"],
+  mode: 'markers+text',
+  marker: {
+		size: 10,
+		color: ['red', "yellow","blue",'red', "yellow","blue",'red', "yellow","blue",'red', "yellow","blue"],
+  },
+  type: 'scatter3d'
+}
+
+var layout = {
+  title: 'This is a test plot',
+  margin: {
+	l: 0,
+	r: 0,
+	b: 0,
+	t: 0
+  },
+  scene: {
+    xaxis: {title: 'PCA'},
+    yaxis: {title: 'Wavelength'},
+    zaxis: {title: 'OD'}
+  }
+};
+
+var plotDiv = document.querySelector('#plot')
+Plotly.newPlot(plotDiv, [parameters], layout);

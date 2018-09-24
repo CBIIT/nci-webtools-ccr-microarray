@@ -10,8 +10,7 @@ var path = require('path');
 var rimraf = require('rimraf');
 
 router.post('/upload',function(req, res){
-
-    logger.info("API:/upload ");
+logger.info("API:/upload ");
 
 
   // create an incoming form object
@@ -26,7 +25,7 @@ router.post('/upload',function(req, res){
   form.on('field', function(name, value) {
       if (name == "projectId") {
             pid=value;
-            form.uploadDir = path.join(__dirname, '/../service/data/'+  value);
+            form.uploadDir = path.join(config.uploadPath,"/"+value);
              if (!fs.existsSync(form.uploadDir)){
                  fs.mkdirSync(form.uploadDir);
               }else{
@@ -59,6 +58,8 @@ router.post('/upload',function(req, res){
       let data = [];
       data.push("loadCEL"); // action
       data.push(pid);
+       //data path
+      data.push(config.uploadPath);
       data.push(new Array(number_of_files).fill("Ctl"));
 
       R.execute("wrapper.R",data, function(err,returnValue){
@@ -81,14 +82,20 @@ router.post('/upload',function(req, res){
 router.post('/loadGSE', function(req, res) {
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-  data.push("loadGSE"); // action
+  // action
+  data.push("loadGSE"); 
   data.push(req.body.projectId);
+  //data path
+  data.push(config.uploadPath);
   data.push(req.body.code); 
   data.push(req.body.groups);
+
+
   logger.info("API:/loadGSE ",
               "code:",req.body.code,
               "groups:",req.body.groups,
-              "projectId:",req.body.projectId
+              "projectId:",req.body.projectId,
+              "data_repo_path:",config.uploadPath
              );
 
   R.execute("wrapper.R",data, function(err,returnValue){
@@ -111,17 +118,23 @@ router.post('/pathwaysHeapMap', function(req, res) {
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push("pathwaysHeapMap");
   data.push(req.body.projectId);
+   //data path
+  data.push(config.uploadPath);
   data.push(req.body.group1);
   data.push(req.body.group2);
   data.push(req.body.upOrDown);
   data.push(req.body.pathway_name);
+    //configuration path
+  data.push(config.configPath);
 
   logger.info("API:/pathwaysHeapMap ",
              "projectId :",req.body.projectId,
              "group_1 :", req.body.group1,
              "group_2 :",req.body.group2,
              "upOrDown :",req.body.upOrDown,
-             "pathway_name :",req.body.pathway_name
+             "pathway_name :",req.body.pathway_name,
+             "data_repo_path:",config.uploadPath,
+             "configPath:",config.configPath
              );
 
   R.execute("wrapper.R",data, function(err,returnValue){
@@ -140,7 +153,8 @@ router.post('/runContrast', function(req, res) {
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push("runContrast"); // action
   data.push(req.body.projectId);
-
+   //data path
+  data.push(config.uploadPath);
   data.push(req.body.code); 
   data.push(req.body.groups);
   data.push(req.body.pDEGs);
@@ -178,7 +192,8 @@ router.post('/runContrast', function(req, res) {
               "genSet:",req.body.genSet,
               "pssGSEA:",req.body.pssGSEA,
               "foldssGSEA:",req.body.foldssGSEA,
-              "source:",req.body.source
+              "source:",req.body.source,
+              "data_repo_path:",config.uploadPath
              );
 
 
@@ -214,7 +229,10 @@ router.post('/runContrast', function(req, res) {
                  }
 
               
-              res.json({status:200, data:returnValue});
+              res.json({
+                status:200,
+                data:returnValue    
+                });
             }
         });
   }
