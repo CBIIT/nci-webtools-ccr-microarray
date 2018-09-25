@@ -213,7 +213,7 @@ class Analysis extends Component {
 				//let list = result.data;
 				workflow.uploading = false;
 				workflow.progressing = false;
-				if(list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
+				if(typeof(list)=="undefined"||list==null||list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
 					message.success('load data fails.');
 					return;
 				}

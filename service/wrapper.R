@@ -135,6 +135,8 @@ process = function(){
     foldSsGSEA<-toString(args[i])
     i<-i+1
     source<-toString(args[i])
+     i<-i+1
+    config_path<-toString(args[i])
 
     #copy configuration files into data repo 
 
@@ -156,17 +158,19 @@ process = function(){
     
     norm_celfiles = QCnorm(celfiles,data_repo_path)
 
-    boxplot_DataBN<-list(col=colnames(norm_celfiles@listData[[3]]),data=t(norm_celfiles@listData[[3]]),color=pData(norm_celfiles[[11]])$colors)
+    col_name<-celfiles[["files"]][["title"]]
 
-    RLE_data<-list(col=colnames(norm_celfiles@listData[[4]]),data=t(norm_celfiles@listData[[4]]),color=pData(norm_celfiles[[11]])$colors)
+    boxplot_DataBN<-list(col=col_name,data=t(norm_celfiles@listData[[3]]),color=pData(norm_celfiles[[11]])$colors)
+
+    RLE_data<-list(col=col_name,data=t(norm_celfiles@listData[[4]]),color=pData(norm_celfiles[[11]])$colors)
 
 
-    NUSE_data<-list(col=colnames(norm_celfiles@listData[[5]]),data=t(norm_celfiles@listData[[5]]),color=pData(norm_celfiles[[11]])$colors)
+    NUSE_data<-list(col=col_name,data=t(norm_celfiles@listData[[5]]),color=pData(norm_celfiles[[11]])$colors)
     
-    boxplot_DataAN<-list(col=colnames(norm_celfiles@listData[[8]]),data=t(norm_celfiles@listData[[8]]),color=pData(norm_celfiles[[11]])$colors)
+    boxplot_DataAN<-list(col=col_name,data=t(norm_celfiles@listData[[8]]),color=pData(norm_celfiles[[11]])$colors)
     
     pcaData<-list(
-      col=colnames(norm_celfiles[[9]]),
+      col=col_name,
       row=rownames(norm_celfiles[[9]]),
       x=norm_celfiles[[9]][,1],
       y=norm_celfiles[[9]][,2],
@@ -211,7 +215,7 @@ process = function(){
       species<-"human"
     }
     
-    l2p_pathways = l2pPathways(diff_expr_genes,species,data_repo_path,projectId)
+    l2p_pathways = l2pPathways(diff_expr_genes,species,data_repo_path,projectId,config_path)
 
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
     # # # Output should dynamically respond to user-selected contrast
@@ -220,8 +224,6 @@ process = function(){
     
     ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId)
 
-    exportJson=list(diff_expr_genes=diff_expr_genes[1],pathways_up=l2p_pathways[0],pathways_down=l2p_pathways[1],ssGSEA=ssGSEA_results[1]) 
-    write(toJSON(exportJson,auto_unbox = T,force = TRUE), paste0(data_repo_path,"result.json"))
 
     return(list(norm_celfiles=return_plot_data,diff_expr_genes=diff_expr_genes[1],pathways=l2p_pathways,ssGSEA=ssGSEA_results,ssColumn=ssGSEA_results[["DEss"]][[cons]][0]))
 
