@@ -22,15 +22,15 @@ process.on( 'SIGINT', function(){
 });
 
 
-// copy config files into data repo
-ncp.limit = 16;
+// // copy config files into data repo
+// ncp.limit = 16;
  
-ncp(config.configPath, config.uploadPath, function (err) {
- if (err) {
-   return console.error(err);
- }
- console.log('copy configure into data repo done!');
-});
+// ncp(config.configPath, config.uploadPath, function (err) {
+//  if (err) {
+//    return console.error(err);
+//  }
+//  console.log('copy configure into data repo done!');
+// });
 
 
 

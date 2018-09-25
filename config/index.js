@@ -7,6 +7,35 @@
 var path = require('path');
 var _ = require('lodash');
 var argv = require('minimist')(process.argv.slice(2));
+var setting = require('./microarray_setting.json');
+var fs = require('fs');
+
+let  configure ={
+
+		// Server port
+	    logDir: path.normalize(__dirname + '/../../')+setting.development.log_dir,
+
+	    //cel file upload path
+	    uploadPath: path.normalize(__dirname + '/../../')+setting.development.upload_path,
+
+	    configPath: path.normalize(__dirname + '/../../')+setting.development.config_path
+
+	};
+
+
+// check dir
+
+if (!fs.existsSync(configure.logDir)){
+                 fs.mkdirSync(configure.logDir);
+}
+if (!fs.existsSync(configure.uploadPath)){
+                 fs.mkdirSync(configure.uploadPath);
+}
+if (!fs.existsSync(configure.configPath)){
+                 fs.mkdirSync(configure.configPath);
+}
+
+
 
 var all = {
 	
@@ -25,4 +54,6 @@ var all = {
     uploadCount: 100
 };
 
-module.exports = _.merge(all, require('./template.js'), require('./microarray.setting'));
+
+
+module.exports = _.merge(all, require('./template.js'), configure);
