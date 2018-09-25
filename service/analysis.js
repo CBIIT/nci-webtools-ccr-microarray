@@ -167,6 +167,7 @@ router.post('/runContrast', function(req, res) {
   data.push(req.body.pssGSEA);
   data.push(req.body.foldssGSEA);
   data.push(req.body.source)
+  data.push(config.configPath);
 
   if(req.body.pDEGs){
     data.push(req.body.pDEGs);
