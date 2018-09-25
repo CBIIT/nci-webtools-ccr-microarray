@@ -370,10 +370,10 @@ class Analysis extends Component {
 						}
 
 
-						workflow.BoxplotBN.color=workflow.BoxplotBN.color.map(x => rainbow[x/5]);
-						workflow.RLEplotBN.color=workflow.RLEplotBN.color.map(x => rainbow[x/5]);
-						workflow.NUSEplotBN.color=workflow.NUSEplotBN.color.map(x => rainbow[x/5]);
-						workflow.BoxplotAN.color=workflow.BoxplotAN.color.map(x => rainbow[x/5]);
+						workflow.BoxplotBN.color=workflow.BoxplotBN.color.map(x => rainbow[x/5-1]);
+						workflow.RLEplotBN.color=workflow.RLEplotBN.color.map(x => rainbow[x/5-1]);
+						workflow.NUSEplotBN.color=workflow.NUSEplotBN.color.map(x => rainbow[x/5-1]);
+						workflow.BoxplotAN.color=workflow.BoxplotAN.color.map(x => rainbow[x/5-1]);
 						workflow.PCA.color=workflow.PCA.color.map(x => rainbow[x/5]);
 
 
