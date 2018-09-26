@@ -46,7 +46,7 @@ class PrePlotsBox extends Component {
                 let list_mAplotBN = [];
                 for (let i = this.props.data.MAplotBN.length-1; i >= 0; i--){
                     let link = "./images/" + this.props.data.projectID+this.props.data.MAplotBN[i]
-                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img key={"mAplotBN"+i} src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
                     }
 
             let BoxplotRenderData =[]
@@ -64,8 +64,8 @@ class PrePlotsBox extends Component {
                 BoxplotRenderData.push(boxplotData)
             }
 
-            let Boxplots =<Plot key="BoxPlotBN"  data={BoxplotRenderData}
-            layout={{title: 'BoxPlot'}}/>
+            let Boxplots =<Plot  data={BoxplotRenderData}
+            layout={{title: 'BoxPlot', showlegend: false}}/>
 
 
 
@@ -86,8 +86,8 @@ class PrePlotsBox extends Component {
 
 
 
-            let RLE =<Plot key="RLEBN" data={RLERenderData}
-            layout={{title: 'RLE Plot'}}/>
+            let RLE =<Plot data={RLERenderData}
+            layout={{title: 'RLE Plot', showlegend: false}}/>
 
 
 
@@ -108,8 +108,8 @@ class PrePlotsBox extends Component {
 
 
 
-            let NUSE =<Plot key="NUSEBN" data={NUSERenderData}
-            layout={{title: 'NUSE Plot'}}/>
+            let NUSE =<Plot  data={NUSERenderData}
+            layout={{title: 'NUSE Plot', showlegend: false}}/>
 
 
 

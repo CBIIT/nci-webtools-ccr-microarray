@@ -67,8 +67,8 @@ class PostPlotsBox extends Component {
                 BoxplotANRenderData.push(boxplotData)
             }
 
-            let boxplotAN =<Plot key="BoxPlotAN"  data={BoxplotANRenderData}
-            layout={{title: 'BoxPlot'}}/>
+            let boxplotAN =<Plot data={BoxplotANRenderData}
+            layout={{title: 'BoxPlot',showlegend: false}}/>
 
 
             let pcaData =this.props.data.PCA;
