@@ -15,7 +15,7 @@
             filename: config.logDir+'/application.log',
             datePattern: "yyyy-MM-dd.",
             zippedArchive: false,
-            maxSize: '20m',
+            maxSize: '1024m',
             timestamp: true,
             maxFiles: '1d',
             prepend: true
