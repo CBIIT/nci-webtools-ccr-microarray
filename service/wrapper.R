@@ -158,7 +158,7 @@ process = function(){
     
     norm_celfiles = QCnorm(celfiles,data_repo_path)
 
-    col_name<-celfiles[["files"]][["title"]]
+    col_name<-pData(celfiles)$title
 
     boxplot_DataBN<-list(col=col_name,data=t(norm_celfiles@listData[[3]]),color=pData(norm_celfiles[[11]])$colors)
 
@@ -170,8 +170,8 @@ process = function(){
     boxplot_DataAN<-list(col=col_name,data=t(norm_celfiles@listData[[8]]),color=pData(norm_celfiles[[11]])$colors)
     
     pcaData<-list(
-      col=col_name,
-      row=rownames(norm_celfiles[[9]]),
+      col=colnames(norm_celfiles[[9]]),
+      row=col_name,
       x=norm_celfiles[[9]][,1],
       y=norm_celfiles[[9]][,2],
       z=norm_celfiles[[9]][,3],
@@ -222,7 +222,7 @@ process = function(){
     saveRDS(diff_expr_genes, file = paste0(data_repo_path,"diff_expr_genes.rds"))
     saveRDS(l2p_pathways, file = paste0(data_repo_path,"l2p_pathways.rds"))
     
-    ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId)
+    ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
 
 
     return(list(norm_celfiles=return_plot_data,diff_expr_genes=diff_expr_genes[1],pathways=l2p_pathways,ssGSEA=ssGSEA_results,ssColumn=ssGSEA_results[["DEss"]][[cons]][0]))
