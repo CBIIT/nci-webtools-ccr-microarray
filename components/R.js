@@ -23,13 +23,15 @@ var execute = function(file, data, callback){
 
 	child.stdout.on('data', (d) => {
 		body += d.toString('utf8');
+		logger.info("stdout:"+d.toString('utf8'));
 	});
 
 	child.stderr.on('data', (data) => {
-		logger.debug("info:"+data);
+		logger.info("stderr:"+data);
 	});
 
 	child.on('close', (code) => {
+		logger.info("code:"+code);
 		if(code > 0){
 			callback(body, {});
 		}

@@ -538,8 +538,17 @@ class Analysis extends Component {
 			      <DataBox  data={this.state.workflow} assignGroup={this.assignGroup} deleteGroup={this.deleteGroup}/>
 			    </div>
 			    <div className={modal}>
+			    	<div style={{
+			    		"width": "180px",
+			    		"height": "175px",
+			    		"background": "#efefef",
+			    		"position": "absolute",
+			    		"left": "calc(50% - 80px)",
+			    		"padding": "2%",
+			    		"border-radius": "58%"}}>
 					<Spin indicator={antIcon} style={{color:"black"}} />
 					<label className="loading-info">{this.state.workflow.loading_info}</label>
+					</div>
 				</div>
 			</div>
 		);

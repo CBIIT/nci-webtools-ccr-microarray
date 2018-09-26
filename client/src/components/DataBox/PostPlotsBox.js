@@ -44,7 +44,7 @@ class PostPlotsBox extends Component {
 		 	var list_mAplotAN=[];
 		 	for (var i = this.props.data.MAplotAN.length - 1; i >= 0; i--) {
 		 		var link = "./images/"+this.props.data.projectID+this.props.data.MAplotAN[i]
-		 		list_mAplotAN.push(<div><img src={link} style={{width:"75%"}} alt={"MAplots"}/></div>)
+		 		list_mAplotAN.push(<div key={"mAplotAN"+i}><img src={link} style={{width:"75%"}} alt={"MAplots"}/></div>)
 		 	}
 
 
@@ -127,7 +127,7 @@ class PostPlotsBox extends Component {
 		   
 		    let maplot_style = 	{
 		    						'height':'auto',
-		  						  	'max-height':'100%',
+		  						  	'maxHeight':'100%',
 		  						  	'overflow':'scroll'
 		  						 };
 		 	let tabs =[ <div key="post_tag1" id="post_tag1" className="plot">

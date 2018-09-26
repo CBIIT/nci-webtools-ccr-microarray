@@ -9,8 +9,6 @@
  require('winston-daily-rotate-file');
  winston.emitErrs = true;
 
- console.log(config.logDir)
-
   var logger = new (winston.Logger)({
     transports: [
       new (winston.transports.DailyRotateFile)({
@@ -32,7 +30,6 @@
     exitOnError: false
   });
 
-  logger.info('Hello World!');
 
 
 
