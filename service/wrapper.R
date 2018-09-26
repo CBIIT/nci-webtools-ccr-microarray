@@ -219,8 +219,8 @@ process = function(){
 
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
     # # # Output should dynamically respond to user-selected contrast
-    saveRDS(diff_expr_genes, file = paste0(data_repo_path,"diff_expr_genes.rds"))
-    saveRDS(l2p_pathways, file = paste0(data_repo_path,"l2p_pathways.rds"))
+    saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
+    saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
     
     ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
 
@@ -234,7 +234,7 @@ process = function(){
    
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
     # # # Output should dynamically respond to user-selected contrast
-    diff_expr_genes<-readRDS(file = paste0(data_repo_path,"diff_expr_genes.rds"))
+    diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
 
     species<-toString(args[4])
     geneSet<-toString(args[5])
@@ -250,9 +250,9 @@ process = function(){
    #geneHeatmap(diff_expr_genes, l2p_pathways, 'RNA_1-Ctl', 'upregulated_pathways','oxidation-reduction process')   #if GEO
    #geneHeatmap(diff_expr_genes, l2p_pathways, 'KO_1-Ctl_1', 'upregulated_pathways','oxidation-reduction process')   #if CEL file upload
 
-    diff_expr_genes<-readRDS(file = paste0(data_repo_path,"diff_expr_genes.rds"))
+    diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
 
-    l2p_pathways<-readRDS(file = paste0(data_repo_path,"l2p_pathways.rds"))
+    l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
     
     cgroup1<-toString(args[5])
     cgroup2<-toString(args[6])
