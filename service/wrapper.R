@@ -51,7 +51,7 @@ process = function(){
 
   #return(args)
 
-  data_repo_path<-paste0(toString(args[4]),"/",projectId,'/',sep="")
+  data_repo_path<-paste0(toString(args[4]),"/",projectId,sep="")
   setwd(toString(args[4]))
 
 
