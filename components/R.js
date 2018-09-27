@@ -20,13 +20,14 @@ var execute = function(file, data, callback){
 	});
 	var child = child_process.spawn("Rscript", args, options);
 	var body = '';
+	var err_message = '';
 
 	child.stdout.on('data', (d) => {
 		body += d.toString('utf8');
-		logger.info("stdout:"+d.toString('utf8'));
 	});
 
-	child.stderr.on('data', (data) => {
+	child.stderr.on('data', (e) => {
+		err_message += e.toString('utf8');
 		logger.info("stderr:"+data);
 	});
 
@@ -36,7 +37,7 @@ var execute = function(file, data, callback){
 			callback(body, {});
 		}
 		else{
-			callback(null, body);
+			callback(null, err_message);
 		}
 	});
 };
