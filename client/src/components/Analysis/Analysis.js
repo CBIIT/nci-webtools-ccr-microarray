@@ -591,7 +591,7 @@ class Analysis extends Component {
 
 	hideWorkFlow=()=>{
 	    document.getElementsByClassName("container-board-left")[0].style.display = 'none';
-	    document.getElementsByClassName("container-board-right")[0].style.width = window.document.documentElement.clientWidth-30;
+	    document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth-50;
 	    document.getElementById("panel-show").style.display ='inherit';
 	    document.getElementById("panel-hide").style.display ='none';
 	  }
@@ -610,12 +610,7 @@ class Analysis extends Component {
 		return (
 			<div className="content">
 				<div className="container container-board">
-				   	<div style={{'paddingTop':'10px'}}><label>
-		           &nbsp;Analysis Workflow &nbsp;&nbsp;
-		              <a id="panel-hide" onClick={this.hideWorkFlow} size="small" style={{'position':'absolute','top':'235px','lineHeight': "initial",'fontSize': "smaller","paddingLeft":"calc(20%)","left":"23px"}}><Icon type="caret-left" /></a>
-		              <a id="panel-show" onClick={this.showWorkFlow}  size="small" style={{'position':'absolute','top':'235px','lineHeight': "initial",'fontSize': "smaller",'display':'none',"left":"0px"}}><Icon type="caret-right" /></a>
-
-		          </label></div>
+				
 			      <Workflow data={this.state.workflow}
 						handleGeneChange={this.handleGeneChange} changeFoldSSGSEA={this.changeFoldSSGSEA} changePssGSEA={this.changePssGSEA}
 			      		resetWorkFlowProject={this.resetWorkFlowProject}  changeProject={this.changeProject} 
@@ -623,7 +618,11 @@ class Analysis extends Component {
 			      		fileRemove={this.fileRemove} beforeUpload={this.beforeUpload} handleUpload={this.handleUpload} 
 			      		loadGSE={this.loadGSE} handleGroup1Select={this.handleGroup1Select}  handleGroup2Select={this.handleGroup2Select} 
 			      		changePDEGs={this.changePDEGs} changeFoldDEGs={this.changeFoldDEGs} changePathways={this.changePathways} runContrast={this.runContrast}/>
-			
+				   	<div style={{'paddingTop':'10px',"width":"16px","float":"left"}}><label>
+		              <a id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
+		              <a id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
+
+		          </label></div>
 			      <DataBox  data={this.state.workflow} assignGroup={this.assignGroup} deleteGroup={this.deleteGroup}/>
 			    </div>
 			    <div className={modal}>
