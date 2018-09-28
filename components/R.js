@@ -24,7 +24,7 @@ var execute = function(file, data, callback){
 
 	child.stdout.on('data', (d) => {
 		body += d.toString('utf8');
-		//logger.info("stdout:"+body);
+		logger.info("stdout:"+body);
 	});
 
 	child.stderr.on('data', (e) => {
