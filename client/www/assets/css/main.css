@@ -115,7 +115,9 @@ label{
   background: #eee;
 }
 .container{
+  max-width: 1440px;
   width:100%;
+  padding-top: 10px;
 }
 .container-board{
   background: rgb(255, 255, 255);
@@ -129,7 +131,7 @@ label{
   margin-right:10px;
 }
 .container-board-right{
-  width:calc(79% - 10px);
+  width:calc(79% - 26px);
   float:left;
   margin-top:0px;
   margin-left:0px;
