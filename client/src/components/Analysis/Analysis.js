@@ -188,7 +188,7 @@ class Analysis extends Component {
 		      workflow:workflow
 		 });
 	    
-		    try{
+	 try{
 		    fetch('./api/analysis/loadGSE',{
 				method: "POST",
 				body: JSON.stringify(reqBody),
@@ -272,6 +272,13 @@ class Analysis extends Component {
 				});
 			}catch(err){
 
+				    		workflow.uploading = false;
+							workflow.progressing = false;
+							this.setState({
+						      workflow:workflow
+						    });
+					
+						 message.error('load data fails.');	
 
 			}
 	}
@@ -483,12 +490,25 @@ class Analysis extends Component {
 			  .then(result => {
 					if(result.status==200){
 						var data = result.data.split("+++getCELfiles+++\"")[1]
+
+						if (typeof(data) === "undefined" ||data =="" ) {
+							 
+							workflow.uploading = false;
+							workflow.progressing = false;
+						    message.error('update data fails');	
+							this.setState({
+						      workflow:workflow
+						    });
+						    return;
+						}
+
 						let list =JSON.parse(decodeURIComponent(data));
+
 						//let list = result.data;
 						workflow.uploading = false;
 						workflow.progressing = false;
 						if(list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
-							message.success('load data fails.');
+							message.err('load data fails.');
 							return;
 						}
 						for(let i in list.files){
@@ -515,18 +535,19 @@ class Analysis extends Component {
 						this.setState({
 					      workflow:workflow
 					    });
-					    message.warning('load data fails.');	
+					    message.err('load data fails.');	
 					}
 				});
-			 }catch(err){
+			   }catch(err){
 
-				workflow.uploading = false;
-				workflow.progressing = false;
-				message.success('Run contrast fails');	
-				console.log(err);
-				this.setState({
-						      workflow:workflow
-						    });
+				
+				    	workflow.uploading = false;
+						workflow.progressing = false;
+						workflow.uploaded=true;
+						this.setState({
+					      workflow:workflow
+					    });
+					    message.err('load data fails.');	
 			}
 		    
 	  }
