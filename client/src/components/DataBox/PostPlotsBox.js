@@ -11,6 +11,20 @@ class PostPlotsBox extends Component {
 
 	constructor(props){
 		super(props);
+
+		 if (typeof(this.props.data.HistplotAN) !== "undefined") {
+                 let histplotANLink = './images/'+this.props.data.projectID+this.props.data.HistplotAN;
+		 		 let histplotAN =<img style={{width:"75%"}} src= {histplotANLink} alt={"Histogram"}/>;
+                 this.state = { content : histplotAN };
+        }else{
+
+             this.state = { content : "No Data" };
+        }
+       
+
+        this.handleSelectionChange = this.handleSelectionChange.bind(this);
+
+
 	}
 
 
@@ -21,63 +35,72 @@ class PostPlotsBox extends Component {
 
 	handleSelectionChange(value) {
 
+		if(value=="Histogram"){ // 
 
-		  var list = document.getElementsByClassName("plot");
-		  for (var i = 0; i < list.length; i++) {
-				list[i].classList.add("hide");
-			}
-		  document.getElementById(value).className= document.getElementById(value).className.replace("hide", "");
-		}	
+		    let histplotANLink = './images/'+this.props.data.projectID+this.props.data.HistplotAN;
+			let histplotAN =<img style={{width:"75%"}} src= {histplotANLink} alt={"Histogram"}/>;
+		    this.state = { content : histplotAN };
+		 }
 
-// HistplotBN,MAplotBN,BoxplotBN,RLEplotBN,NUSEplotBN,HistplotAN,MAplotAN,BoxplotAN,PCA,Heatmapolt,time_cost
-   
- render() {
+         if(value=="MAplots"){ // 
 
- 	let content =""
-
- 	if(typeof(this.props.data.HistplotAN)!=="undefined"){
-			var histplotANLink = './images/'+this.props.data.projectID+this.props.data.HistplotAN;
-		 
-
-		 	const histplotAN =<img style={{width:"75%"}} src= {histplotANLink} alt={"Histogram"}/>;
-
-		 	var list_mAplotAN=[];
-		 	for (var i = this.props.data.MAplotAN.length - 1; i >= 0; i--) {
-		 		var link = "./images/"+this.props.data.projectID+this.props.data.MAplotAN[i]
-		 		list_mAplotAN.push(<div key={"mAplotAN"+i}><img src={link} style={{width:"75%"}} alt={"MAplots"}/></div>)
-		 	}
+         		let maplot_style={
+		    						'height':'auto',
+		  						  	'maxHeight':'100%',
+		  						  	'overflow':'scroll'
+		  						 };
 
 
+               let list_mAplotAN=[];
+			 	for (var i = this.props.data.MAplotAN.length - 1; i >= 0; i--) {
+			 		var link = "./images/"+this.props.data.projectID+this.props.data.MAplotAN[i]
+			 		list_mAplotAN.push(<div key={"mAplotAN"+i}><img src={link} style={{width:"75%"}} alt={"MAplots"}/></div>)
+			 	}
 
+                this.setState({ content: <div style={ maplot_style } > { list_mAplotAN } </div> });
 
+        }
 
+        if(value=="Boxplots"){ // 
 
+           
             let BoxplotANRenderData =[]
-            let BoxplotANData = this.props.data.BoxplotAN
+            let BoxplotANsData = this.props.data.BoxplotAN
             for(let i = 0; i<this.props.data.BoxplotAN.col.length-1;i++){
 
                 let boxplotData = {
-                    y:BoxplotANData.data[i],
+                    y:BoxplotANsData.data[i],
                     type:"box",
-                    name:BoxplotANData.col[i],
+                    name:BoxplotANsData.col[i],
                      marker:{
-                      color: BoxplotANData.color[i]
+                      color: BoxplotANsData.color[i]
                     }
                 }
                 BoxplotANRenderData.push(boxplotData)
             }
 
-            let boxplotAN =<Plot data={BoxplotANRenderData}
-            layout={{title: 'BoxPlot',showlegend: false}}/>
+           	let plot_layout ={showlegend: false,autosize:true}
+            let plot_style= {}
 
+
+            let Boxplots =<Plot  data={BoxplotANRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
+
+             this.setState({ content: <div> {Boxplots}</div> });
+
+                       
+
+        }
+
+        if(value=="PCA"){ // 
 
             let pcaData =this.props.data.PCA;
-		    var PCAIframe =<Plot data={[{
+		    var PCAIframe =<Plot  data={[{
+
                 x: pcaData.x,
                 y: pcaData.y,
                 z: pcaData.z,
                 text: pcaData.row,
-                mode: 'markers+text',
+                mode: 'markers',
                 marker: {
                     size: 10,
                     color: pcaData.color
@@ -85,7 +108,7 @@ class PostPlotsBox extends Component {
                 type: 'scatter3d',
                
             }]} layout={{
-                title:'This is a test plot',
+            	autosize:true,
                 margin: {
                     l: 0,
                     r: 0,
@@ -94,7 +117,7 @@ class PostPlotsBox extends Component {
                 },
                 scene: {
                     xaxis: {
-                        title: pcaData.col[1],
+                        title: pcaData.col[0],
                         backgroundcolor: "#DDDDDD",
                         gridcolor: "rgb(255, 255, 255)",
                         showbackground: true,
@@ -102,73 +125,51 @@ class PostPlotsBox extends Component {
 
                     },
                     yaxis: {
-                        title:  pcaData.col[2],
+                        title:  pcaData.col[1],
                         backgroundcolor: "#EEEEEE",
                         gridcolor: "rgb(255, 255, 255)",
                         showbackground: true,
                         zerolinecolor: "rgb(255, 255, 255)"
                     },
                     zaxis: {
-                        title:  pcaData.col[3],
+                        title:  pcaData.col[2],
                         backgroundcolor: "#cccccc",
                         gridcolor: "rgb(255, 255, 255)",
                         showbackground: true,
                         zerolinecolor: "rgb(255, 255, 255)"
                     }
                 }}
-            } />
+            }  useResizeHandler={true} />
+
+            this.setState({ content: <div> {PCAIframe}</div> });
+        }
 
 
+        if(value=="Heatmap"){ // 
 
+ 			let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
 
+            this.setState({ content: <div>{HeatMapIframe}</div> });
+        }
+     }	
 
-		    let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
+// HistplotBN,MAplotBN,BoxplotBN,RLEplotBN,NUSEplotBN,HistplotAN,MAplotAN,BoxplotAN,PCA,Heatmapolt,time_cost
+   
+ render() {
 
-		   
-		    let maplot_style = 	{
-		    						'height':'auto',
-		  						  	'maxHeight':'100%',
-		  						  	'overflow':'scroll'
-		  						 };
-		 	let tabs =[ <div key="post_tag1" id="post_tag1" className="plot">
-		  							{histplotAN}
-		  						</div>,
-		  						  <div key="post_tag2" id="post_tag2" className="plot hide" style={maplot_style}>{list_mAplotAN}</div>,
-		  						  <div key="post_tag3" id="post_tag3" className="plot hide">
-											{boxplotAN}
-									</div>,
-		  						  <div key="post_tag4" id="post_tag4" className="plot hide">{PCAIframe}</div>,
-		  						  <div key="post_tag5" id="post_tag5" className="plot hide">{HeatMapIframe}</div>]
+ 	let content ="No Data"
 
-		   content = [<Select key="select_post_tag2" defaultValue="post_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
-							      <Option key="opt_post_tag1" value="post_tag1">Histogram</Option>
-							      <Option key="opt_post_tag2" value="post_tag2">MAplots</Option>
-							      <Option key="opt_post_tag3" value="post_tag3">Boxplots</Option>
-							      <Option key="opt_post_tag4" value="post_tag4">PCA</Option>
-							      <Option key="opt_post_tag5" value="post_tag5">Heatmap</Option>
-							    </Select>,tabs]
+ 	if(typeof(this.props.data.HistplotAN)!=="undefined"){
+			 
+		   content = [<Select key="select_post_tag2" defaultValue="Histogram" style={{ width: 240 }} onChange={this.handleSelectionChange}>
+							      <Option key="opt_post_tag1" value="Histogram">Histogram</Option>
+							      <Option key="opt_post_tag2" value="MAplots">MAplots</Option>
+							      <Option key="opt_post_tag3" value="Boxplots">Boxplots</Option>
+							      <Option key="opt_post_tag4" value="PCA">PCA</Option>
+							      <Option key="opt_post_tag5" value="Heatmap">Heatmap</Option>
+							    </Select>,this.state.content]
 
- 		}else{
-
- 				let tabs =[ <div key="post_tag1" id="post_tag1" className="plot">
-		  							No data for Histogram
-		  						</div>,
-		  						  <div key="post_tag2" id="post_tag2" className="plot hide" >No data for MAplots</div>,
-		  						  <div key="post_tag3" id="post_tag3" className="plot hide">No data for Boxplots</div>,
-		  						  <div key="post_tag4" id="post_tag4" className="plot hide">No data for 3DPCA</div>,
-		  						  <div key="post_tag5" id="post_tag5" className="plot hide">No data for HeatMap</div>]
-
-		   		content = [<Select key="select_post_tag2" defaultValue="post_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
-							      <Option key="opt_post_tag1" value="post_tag1">Histogram</Option>
-							      <Option key="opt_post_tag2" value="post_tag2">MAplots</Option>
-							      <Option key="opt_post_tag3" value="post_tag3">Boxplots</Option>
-							      <Option key="opt_post_tag4" value="post_tag4">PCA</Option>
-							      <Option key="opt_post_tag5" value="post_tag5">Heatmap</Option>
-							    </Select>,tabs]
-
- 		}
- 	
-					 
+ 	}
 
  	return(
 		  <div>
