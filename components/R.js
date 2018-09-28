@@ -1,4 +1,4 @@
-/**
+	/**
  * component for calling R script
  */
 
@@ -24,6 +24,7 @@ var execute = function(file, data, callback){
 
 	child.stdout.on('data', (d) => {
 		body += d.toString('utf8');
+		//logger.info("stdout:"+body);
 	});
 
 	child.stderr.on('data', (e) => {
@@ -33,11 +34,11 @@ var execute = function(file, data, callback){
 
 	child.on('close', (code) => {
 		logger.info("code:"+code);
-		if(code > 0){
-			callback(body, {});
+		if(code>0){
+			callback(true, err_message);
 		}
 		else{
-			callback(null, err_message);
+			callback(false, body);
 		}
 	});
 };

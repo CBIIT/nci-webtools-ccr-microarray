@@ -188,55 +188,92 @@ class Analysis extends Component {
 		      workflow:workflow
 		 });
 	    
-	    
-	    fetch('./api/analysis/loadGSE',{
-			method: "POST",
-			body: JSON.stringify(reqBody),
-			credentials: "same-origin",
-			headers: {
-		        'Content-Type': 'application/json'
-		    }
-		})
-			.then(res => res.json())
-			.then(result => {
-			if(result.status==200){
+		    try{
+		    fetch('./api/analysis/loadGSE',{
+				method: "POST",
+				body: JSON.stringify(reqBody),
+				credentials: "same-origin",
+				headers: {
+			        'Content-Type': 'application/json'
+			    }
+			})
+				.then(res => res.json())
+				.then(result => {
+				if(result.status==200){
 
-				if (result.data === undefined || result.data.length == 0) {
-						 
+					if (result.data === "undefined" || Object.keys(result.data).length === 0 ) {
+							 
+							workflow.uploading = false;
+							workflow.progressing = false;
+						    message.error('Load data fails');	
+							this.setState({
+						      workflow:workflow
+						    });
+						    return;
+					}
+
+					var data = result.data.split("+++loadGSE+++\"")[1]
+
+					if (typeof(data) === "undefined" ||data =="" ) {
+							 
+							workflow.uploading = false;
+							workflow.progressing = false;
+						    message.error('Load data fails');	
+							this.setState({
+						      workflow:workflow
+						    });
+						    return;
+					}
+
+					let list =JSON.parse(decodeURIComponent(data));
+					//let list = result.data;
+
+					if(typeof(list)=="undefined"||list==null||list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
+						
 						workflow.uploading = false;
-						workflow.progressing = false;
-					    message.success('Load data fails');	
-				}
+							workflow.progressing = false;
+						    message.error('Load data fails');	
+							this.setState({
+						      workflow:workflow
+						    });
+					
+						return;
+					}
 
-				var data = result.data.split("+++loadGSE+++\"")[1]
-				let list =JSON.parse(decodeURIComponent(data));
-				//let list = result.data;
-				workflow.uploading = false;
-				workflow.progressing = false;
-				if(typeof(list)=="undefined"||list==null||list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
-					message.success('load data fails.');
-					return;
-				}
-				workflow.dataList = list.files;
-				// init group with default value
-				workflow.group = new Array(list.files.length).fill('Ctl');
+					workflow.uploading = false;
+					workflow.progressing = false;
 
-				// disable the input , prevent user to change the access code
-	    		document.getElementById("input-access-code").disabled=true
+					workflow.dataList = list.files;
+					// init group with default value
+					workflow.group = new Array(list.files.length).fill('Ctl');
 
-	    		// change the word of load btn
-	    		document.getElementById("btn-project-load-gse").disabled=true
+					// disable the input , prevent user to change the access code
+		    		document.getElementById("input-access-code").disabled=true
+
+		    		// change the word of load btn
+		    		document.getElementById("btn-project-load-gse").disabled=true
+					
+					this.setState({
+						      workflow:workflow
+						    });
+
+				    message.success('load successfully.');
+
+				    }else{
+
+				    		workflow.uploading = false;
+							workflow.progressing = false;
+							this.setState({
+						      workflow:workflow
+						    });
+					
+						 message.error('load data fails.');	
+					}
+				});
+			}catch(err){
 
 
-				this.setState({
-			      workflow:workflow
-			    });
-			    message.success('load successfully.');
-
-			    }else{
-					 message.success('load data fails.');	
-				}
-			});
+			}
 	}
 
 	runContrast = () =>{
@@ -292,109 +329,128 @@ class Analysis extends Component {
 	    reqBody.genSet=workflow.genSet;
 
 		workflow.progressing = true;
-		workflow.loading_info = "Running Contrast... (this might take a few minutes)";
+		workflow.loading_info = "Running Contrast...";
 		 // define action
 	    reqBody.actions = "runContrast";
 	    this.setState({
 	      workflow:workflow
 	    });
-	    fetch('./api/analysis/runContrast',{
-			method: "POST",
-			body: JSON.stringify(reqBody),
-			credentials: "same-origin",
-			headers: {
-		        'Content-Type': 'application/json'
-		    }
-		})
-			.then(
-				res => res.json()
-				)
-			.then(result => {
-				if(result.status==200){
-					if (result.data === undefined || result.data.length == 0) {
-						 
-						workflow.uploading = false;
-						workflow.progressing = false;
-					    message.success('Run contrast fails.');	
-					}
-					 workflow.diff_expr_genes=result.data.diff_expr_genes;
-					 workflow.ssGSEA=result.data.ssGSEA;
-					 workflow.pathways_up=result.data.pathways_up;
-					 workflow.pathways_down=result.data.pathways_down;
-					 workflow.progressing = false;
-				 	 workflow.compared=true;
-			   		 workflow.done_gsea=true;
 
-			   		 var plots=result.data.listPlots;
-						
-						workflow.HistplotBN = plots[0];                  // svg file
-						workflow.MAplotBN =plots[1];			// images list[jpg]
-						workflow.BoxplotBN = plots[2];					// svg file
-						workflow.RLEplotBN = plots[3];					// svg file
-						workflow.NUSEplotBN = plots[4];					// svg file
-						workflow.HistplotAN = plots[5];					// svg file
-						workflow.MAplotAN = plots[6];			// images list[jpg]
-						workflow.BoxplotAN = plots[7];					// svg file
-						workflow.PCA = plots[8];							// html file
-						workflow.Heatmapolt = plots[9];	
-						// hard code the path for plot
-						workflow.pathwayHeatMap="/geneHeatmap.jpg";
-						workflow.volcanoPlot="/volcano.html";	
-						workflow.progressing = false;
-						workflow.color=[];
-
-						let uniqueColorCodeArray = plots[8].color.filter(function(item, pos) {
-						    return plots[8].color.indexOf(item) == pos;
-						})
-
-						let size    = uniqueColorCodeArray.length;
-
-						let rainbow = new Array(size);
-
-						for (let i=0; i<size; i++) {
-
-						  let red   = sin_to_hex(i, 0 * Math.PI * 2/3); // 0   deg
-						  let blue  = sin_to_hex(i, 1 * Math.PI * 2/3); // 120 deg
-						  let green = sin_to_hex(i, 2 * Math.PI * 2/3); // 240 deg
-						  rainbow[i] = "#"+ red + green + blue;
-
-						}
-
-						function sin_to_hex(i, phase) {
-
-						  let sin = Math.sin(Math.PI / size * 2 * i + phase);
-						  let int = Math.floor(sin * 127) + 128;
-						  let hex = int.toString(16);
-						  return hex.length === 1 ? "0"+hex : hex;
-
-						}
-
-
-						workflow.BoxplotBN.color=workflow.BoxplotBN.color.map(x => rainbow[x/5-1]);
-						workflow.RLEplotBN.color=workflow.RLEplotBN.color.map(x => rainbow[x/5-1]);
-						workflow.NUSEplotBN.color=workflow.NUSEplotBN.color.map(x => rainbow[x/5-1]);
-						workflow.BoxplotAN.color=workflow.BoxplotAN.color.map(x => rainbow[x/5-1]);
-						workflow.PCA.color=workflow.PCA.color.map(x => rainbow[x/5]);
-
-
-						workflow.RLEplotBN = plots[3];					
-						workflow.NUSEplotBN = plots[4];	
-						workflow.BoxplotAN = plots[7];					
-						workflow.PCA = plots[8];		
+	 try { 
+		    fetch('./api/analysis/runContrast',{
+				method: "POST",
+				body: JSON.stringify(reqBody),
+				credentials: "same-origin",
+				headers: {
+			        'Content-Type': 'application/json'
+			    }
+			})
+				.then(
+					res => res.json()
+					)
+				.then(result => {
+					if(result.status==200){
 					
 
+					if (result.data === "undefined" || Object.keys(result.data).length === 0 ) {
+							 
+							workflow.uploading = false;
+							workflow.progressing = false;
+						    message.success('Run contrast fails');	
+							this.setState({
+						      workflow:workflow
+						    });
+						    return;
+					}
 
-					this.setState({
-				      workflow:workflow
-				    });
-				    message.success('Plots loaded successfully.');
-				}else{
+						 workflow.diff_expr_genes=result.data.diff_expr_genes;
+						 workflow.ssGSEA=result.data.ssGSEA;
+						 workflow.pathways_up=result.data.pathways_up;
+						 workflow.pathways_down=result.data.pathways_down;
+						 workflow.progressing = false;
+					 	 workflow.compared=true;
+				   		 workflow.done_gsea=true;
 
-					 workflow.progressing = false;
-					 message.success('Generate plots fails.');	
-				}
-				
-			});
+				   		 var plots=result.data.listPlots;
+							
+							workflow.HistplotBN = plots[0];                  // svg file
+							workflow.MAplotBN =plots[1];			// images list[jpg]
+							workflow.BoxplotBN = plots[2];					// svg file
+							workflow.RLEplotBN = plots[3];					// svg file
+							workflow.NUSEplotBN = plots[4];					// svg file
+							workflow.HistplotAN = plots[5];					// svg file
+							workflow.MAplotAN = plots[6];			// images list[jpg]
+							workflow.BoxplotAN = plots[7];					// svg file
+							workflow.PCA = plots[8];							// html file
+							workflow.Heatmapolt = plots[9];	
+							// hard code the path for plot
+							workflow.pathwayHeatMap="/geneHeatmap.jpg";
+							workflow.volcanoPlot="/volcano.html";	
+							workflow.progressing = false;
+							workflow.color=[];
+
+							let uniqueColorCodeArray = plots[8].color.filter(function(item, pos) {
+							    return plots[8].color.indexOf(item) == pos;
+							})
+
+							let size    = uniqueColorCodeArray.length;
+
+							let rainbow = new Array(size);
+
+							for (let i=0; i<size; i++) {
+
+							  let red   = sin_to_hex(i, 0 * Math.PI * 2/3); // 0   deg
+							  let blue  = sin_to_hex(i, 1 * Math.PI * 2/3); // 120 deg
+							  let green = sin_to_hex(i, 2 * Math.PI * 2/3); // 240 deg
+							  rainbow[i] = "#"+ red + green + blue;
+
+							}
+
+							function sin_to_hex(i, phase) {
+
+							  let sin = Math.sin(Math.PI / size * 2 * i + phase);
+							  let int = Math.floor(sin * 127) + 128;
+							  let hex = int.toString(16);
+							  return hex.length === 1 ? "0"+hex : hex;
+
+							}
+
+
+							workflow.BoxplotBN.color=workflow.BoxplotBN.color.map(x => rainbow[x/5-1]);
+							workflow.RLEplotBN.color=workflow.RLEplotBN.color.map(x => rainbow[x/5-1]);
+							workflow.NUSEplotBN.color=workflow.NUSEplotBN.color.map(x => rainbow[x/5-1]);
+							workflow.BoxplotAN.color=workflow.BoxplotAN.color.map(x => rainbow[x/5-1]);
+							workflow.PCA.color=workflow.PCA.color.map(x => rainbow[x/5]);
+
+
+							workflow.RLEplotBN = plots[3];					
+							workflow.NUSEplotBN = plots[4];	
+							workflow.BoxplotAN = plots[7];					
+							workflow.PCA = plots[8];		
+						
+
+
+						this.setState({
+					      workflow:workflow
+					    });
+					    message.success('Plots loaded successfully.');
+					}else{
+
+						 workflow.progressing = false;
+						 message.warning('Generate plots fails.');	
+					}
+					
+				});
+			}catch(err){
+
+				workflow.uploading = false;
+				workflow.progressing = false;
+				message.success('Run contrast fails');	
+				console.log(err);
+				this.setState({
+						      workflow:workflow
+						    });
+			}
 	}
 
 
@@ -416,51 +472,63 @@ class Analysis extends Component {
 	    this.setState({
 	      workflow:workflow
 	    });
-	    fetch('./api/analysis/upload',{
-			method: "POST",
-			body: formData,
-			processData: false,
-     		contentType: false
-		}).then(res => res.json())
-		  .then(result => {
-				if(result.status==200){
-					var data = result.data.split("+++getCELfiles+++\"")[1]
-					let list =JSON.parse(decodeURIComponent(data));
-					//let list = result.data;
-					workflow.uploading = false;
-					workflow.progressing = false;
-					if(list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
-						message.success('load data fails.');
-						return;
-					}
-					for(let i in list.files){
-						list.files[i]["gsm"]=list.files[i]["_row"];
-						//list.files[i]["gsm"]=list.files[i].title.split("_")[0];
-					}
-					workflow.dataList = list.files;
-				
-		    		// change the word of load btn
-		    		document.getElementById("btn-project-upload").disabled=true
 
-		    		// init group with default value
-					workflow.group = new Array(list.files.length).fill('Ctl');
-					workflow.uploaded=true;
-					this.setState({
-				      workflow:workflow
-				    });
-				    message.success('load successfully.');
-			    }else{
+	 try { 
+		    fetch('./api/analysis/upload',{
+				method: "POST",
+				body: formData,
+				processData: false,
+	     		contentType: false
+			}).then(res => res.json())
+			  .then(result => {
+					if(result.status==200){
+						var data = result.data.split("+++getCELfiles+++\"")[1]
+						let list =JSON.parse(decodeURIComponent(data));
+						//let list = result.data;
+						workflow.uploading = false;
+						workflow.progressing = false;
+						if(list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
+							message.success('load data fails.');
+							return;
+						}
+						for(let i in list.files){
+							list.files[i]["gsm"]=list.files[i]["_row"];
+							//list.files[i]["gsm"]=list.files[i].title.split("_")[0];
+						}
+						workflow.dataList = list.files;
+					
+			    		// change the word of load btn
+			    		document.getElementById("btn-project-upload").disabled=true
 
-			    	workflow.uploading = false;
-					workflow.progressing = false;
-					workflow.uploaded=true;
-					this.setState({
-				      workflow:workflow
-				    });
-				    message.success('load data fails.');	
-				}
-			});
-	    
+			    		// init group with default value
+						workflow.group = new Array(list.files.length).fill('Ctl');
+						workflow.uploaded=true;
+						this.setState({
+					      workflow:workflow
+					    });
+					    message.success('load successfully.');
+				    }else{
+
+				    	workflow.uploading = false;
+						workflow.progressing = false;
+						workflow.uploaded=true;
+						this.setState({
+					      workflow:workflow
+					    });
+					    message.warning('load data fails.');	
+					}
+				});
+			 }catch(err){
+
+				workflow.uploading = false;
+				workflow.progressing = false;
+				message.success('Run contrast fails');	
+				console.log(err);
+				this.setState({
+						      workflow:workflow
+						    });
+			}
+		    
 	  }
 
 	assignGroup=(group_name,dataList_keys)=>{
@@ -545,7 +613,7 @@ class Analysis extends Component {
 			    		"position": "absolute",
 			    		"left": "calc(50% - 80px)",
 			    		"padding": "2%",
-			    		"border-radius": "58%"}}>
+			    		"borderRadius": "50%"}}>
 					<Spin indicator={antIcon} style={{color:"black"}} />
 					<label className="loading-info">{this.state.workflow.loading_info}</label>
 					</div>

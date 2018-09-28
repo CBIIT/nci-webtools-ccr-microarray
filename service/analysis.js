@@ -102,7 +102,7 @@ router.post('/loadGSE', function(req, res) {
           if(err){
               logger.info("API:/loadGSE result ","status 404 ");
               logger.warn("API:/loadGSE result ","status 404 ", err);
-              res.json({status:404, msg:err});
+              res.json({status:404, msg:returnValue});
             }else{
               logger.info("API:/loadGSE result ","status 200 ");
               res.json({status:200, data:returnValue});
@@ -139,7 +139,7 @@ router.post('/pathwaysHeapMap', function(req, res) {
 
   R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
-              res.json({status:404, msg:err});
+              res.json({status:404, msg:returnValue});
             }else{
               res.json({status:200, data:returnValue});
             }
@@ -215,7 +215,7 @@ router.post('/runContrast', function(req, res) {
        logger.info("API:/runContrast ","Session is not used, run R script; ")
         R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
-              res.json({status:404, msg:err});
+              res.json({status:404, msg:returnValue});
             }
             else{
                   // store return value in session (deep copy)
