@@ -88,14 +88,14 @@ class DataBox extends Component {
     
     if(this.props.data.compared){
            // controll display fo tags[preplot,postplot,DEG]
-          prePlotsBox = (<TabPane tab="Pre-normalization QC Plots"  key="Pre-normalization_QC_Plots"><PrePlotsBox key="prePlotsBox" data={this.props.data}/>
+          prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots"  key="Pre-normalization_QC_Plots"><PrePlotsBox key="prePlotsBox" data={this.props.data}/>
                 </TabPane>);
-          postPlotsBox = (<TabPane tab="Post-normalization Plots"  key="Post-normalization_Plots"><PostPlotsBox  key="postPlotsBox" data={this.props.data}/></TabPane>);
+          postPlotsBox = (<TabPane tab="Post-Normalization Plots"  key="Post-normalization_Plots"><PostPlotsBox  key="postPlotsBox" data={this.props.data}/></TabPane>);
           degBox = (<TabPane tab="DEG-Enrichments Results"  key="DEG-Enrichments_Results"><DEGBox  key="degBox" data={this.props.data}/></TabPane>);
       }else{
           // controll display fo tags[preplot,postplot,DEG]
-          prePlotsBox = (<TabPane tab="Pre-normalization QC Plots" disabled key="Pre-normalization_QC_Plots">No data </TabPane>);
-          postPlotsBox = (<TabPane tab="Post-normalization Plots" disabled key="Post-normalization_Plots">No data</TabPane>);
+          prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots" disabled key="Pre-normalization_QC_Plots">No data </TabPane>);
+          postPlotsBox = (<TabPane tab="Post-Normalization Plots" disabled key="Post-normalization_Plots">No data</TabPane>);
           degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results">No data</TabPane>);
       }
     // control tab  SSGSEA

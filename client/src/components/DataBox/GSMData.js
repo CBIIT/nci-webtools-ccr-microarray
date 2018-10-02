@@ -58,12 +58,9 @@ class GSMData extends Component {
 
         const { loading, selectedRowKeys } = this.state;
 
-
-
-        let content = < div >
-            <
-            p > Select one of the analyze type on the left and click on Load to load GSM data < /p> <
-            /div>;
+        let content = <div>
+            <p>Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here. </p>
+       </div>;
 
         if (this.props.data.dataList.length > 0) {
             const columns = [{
@@ -129,12 +126,7 @@ class GSMData extends Component {
             /></div>
             </div>	
 
-        } else {
-
-            content="";
-
-
-        }
+        } 
 
         return content;
     }

@@ -153,6 +153,7 @@ class Analysis extends Component {
 		reqBody.projectId="";
 		reqBody.groups="";
 		
+		document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default"
 
 		if(workflow.dataList!=""){
 			// user click load after data already loaded.then it is a new transaction 
@@ -201,8 +202,11 @@ class Analysis extends Component {
 				.then(result => {
 				if(result.status==200){
 
+
+
 					if (result.data === "undefined" || Object.keys(result.data).length === 0 ) {
-							 
+							 document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+				    		
 							workflow.uploading = false;
 							workflow.progressing = false;
 						    message.error('Load data fails');	
@@ -215,7 +219,8 @@ class Analysis extends Component {
 					var data = result.data.split("+++loadGSE+++\"")[1]
 
 					if (typeof(data) === "undefined" ||data =="" ) {
-							 
+							 document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+				    		
 							workflow.uploading = false;
 							workflow.progressing = false;
 						    message.error('Load data fails');	
@@ -229,7 +234,8 @@ class Analysis extends Component {
 					//let list = result.data;
 
 					if(typeof(list)=="undefined"||list==null||list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
-						
+						document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+				    		
 						workflow.uploading = false;
 							workflow.progressing = false;
 						    message.error('Load data fails');	
@@ -260,7 +266,8 @@ class Analysis extends Component {
 				    message.success('load successfully.');
 
 				    }else{
-
+				    		document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+				    		
 				    		workflow.uploading = false;
 							workflow.progressing = false;
 							this.setState({
@@ -271,7 +278,8 @@ class Analysis extends Component {
 					}
 				});
 			}catch(err){
-
+							//change button style
+							document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
 				    		workflow.uploading = false;
 							workflow.progressing = false;
 							this.setState({
@@ -357,7 +365,6 @@ class Analysis extends Component {
 					)
 				.then(result => {
 					if(result.status==200){
-					
 
 					if (result.data === "undefined" || Object.keys(result.data).length === 0 ) {
 							 
@@ -444,6 +451,9 @@ class Analysis extends Component {
 					}else{
 
 						 workflow.progressing = false;
+						 this.setState({
+					      workflow:workflow
+					    });
 						 message.warning('Generate plots fails.');	
 					}
 					
@@ -466,6 +476,7 @@ class Analysis extends Component {
 	    const fileList = workflow.fileList;
 	    const formData = new FormData();
 
+	   
 	     // this pid will be used to create a tmp folder to store the data. 
 	   	workflow.projectID=this.uuidv4();
 	    formData.append('projectId',workflow.projectID)
@@ -479,6 +490,9 @@ class Analysis extends Component {
 	    this.setState({
 	      workflow:workflow
 	    });
+
+	     document.getElementById("btn-project-upload").className ="ant-btn upload-start ant-btn-default"
+
 
 	 try { 
 		    fetch('./api/analysis/upload',{
@@ -535,10 +549,10 @@ class Analysis extends Component {
 						this.setState({
 					      workflow:workflow
 					    });
-					    message.err('load data fails.');	
+					    message.error('load data fails.');	
 					}
 				});
-			   }catch(err){
+			   }catch(error){
 
 				
 				    	workflow.uploading = false;
@@ -547,7 +561,7 @@ class Analysis extends Component {
 						this.setState({
 					      workflow:workflow
 					    });
-					    message.err('load data fails.');	
+					    message.error('load data fails.');	
 			}
 		    
 	  }
