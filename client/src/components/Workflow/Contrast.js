@@ -55,7 +55,7 @@ class Contrast extends Component {
 
         content=<div className="block ">
                 
-                <label className="title">Choose contrast to show:</label>
+                <label className="title">Choose Contrast To Show:</label>
                 
                 <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled  >
                   <Option value="-1">---Select Group---</Option>
@@ -65,13 +65,13 @@ class Contrast extends Component {
                  <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled >
                    <Option value="-1">---Select Group---</Option>
                 </Select>
-                <label className="title">P-value threshold for DEGs:</label>
+                <label className="title">P-value Threshold For DEGs:</label>
                 <Input disabled onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs}/>
-                <label className="title">Fold Change threshold for DEGs:</label>
+                <label className="title">Fold Change Threshold For DEGs:</label>
                 <Input disabled  onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}/>
-                <label className="title">P-value threshold for pathways:</label>
+                <label className="title">P-value Threshold For Pathways:</label>
                 <Input disabled onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways}/>
-                <label className="title">Choose Gene Set for ssGSEA:</label>
+                <label className="title">Choose Gene Set For ssGSEA:</label>
                   <Select defaultValue="human$H: Hallmark Gene Sets"  disabled
                         style={{ width: '100%' }}
                         onChange={(e) => this.props.handleGeneChange(e)} 
@@ -96,27 +96,27 @@ class Contrast extends Component {
                           <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
                         </OptGroup>
                       </Select>
-                         <label className="title">P-value threshold for ssGSEA</label>
+                         <label className="title">P-value Threshold For ssGSEA</label>
                         <Input disabled onChange={(e) => this.props.changePssGSEA(e)} value={this.props.data.pssGSEA}/>
                
-                         <label className="title">Fold Change threshold for ssGSEA</label>
+                         <label className="title">Fold Change Threshold For ssGSEA</label>
                         <Input disabled onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA}/>
-                        <br/>
+                        <br/><br/>
                 {button}
               </div>
     }else{
         content=<div className="block">
-                  <label className="title">Choose contrast to show:</label>
+                  <label className="title">Choose Contrast To Show:</label>
                   {group_1_content}
                   <label className="title">VS:</label>
                   {group_2_content}
-                  <label className="title">P-value threshold for DEGs:</label>
+                  <label className="title">P-value Threshold For DEGs:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   <Input onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs}/>
-                  <label className="title">Fold Change threshold for DEGs:</label>
+                  <label className="title">Fold Change Threshold For DEGs:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   <Input onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}/>
-                  <label className="title">P-value threshold for pathways:</label>
+                  <label className="title">P-value Threshold For Pathways:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   <Input onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways}/>
-                   <label className="title">Choose Gene Set for ssGSEA:</label>
+                   <label className="title">Choose Gene Set For ssGSEA:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                    <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
                         style={{ width: '100%' }}
                         onChange={(e) => this.props.handleGeneChange(e)} 
@@ -141,12 +141,12 @@ class Contrast extends Component {
                           <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
                         </OptGroup>
                       </Select>
-                         <label className="title">P-value threshold for ssGSEA</label>
+                         <label className="title">P-value Threshold For ssGSEA<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                         <Input onChange={(e) => this.props.changePssGSEA(e)} value={this.props.data.pssGSEA}/>
                
-                         <label className="title">Fold Change threshold for ssGSEA</label>
+                         <label className="title">Fold Change Threshold For ssGSEA<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                         <Input onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA}/>
-                      <br/>
+                      <br/><br/>
                   {button}
                 </div>
 

@@ -4,7 +4,7 @@
 	"development": {
         "log_dir": "log",
         "upload_path": "tmp",
-        "config_path": "app/data"
+        "config_path": "app/data_mac"
     },
     "mail":{
     	"host": "mailfwd.nih.gov",
