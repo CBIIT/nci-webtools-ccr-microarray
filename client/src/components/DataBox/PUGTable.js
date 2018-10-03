@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table,Input,message,Modal,Button} from 'antd';
+import { Table,Input,message,Modal,Button,Tooltip} from 'antd';
 import 'intro.js/introjs.css';
 import { Steps } from 'intro.js-react';
 const Search = Input.Search;
@@ -131,7 +131,14 @@ class PUGTable extends Component {
 		  	}else{
 		  		return ('' + a.Description).localeCompare(b.Description);
 		  	}
-		  }
+		  },
+		    render: (text, record, index) => (
+                        <div className="single-line" style={{"maxWidth":"100px"}}>
+                        <Tooltip title={text} placement="topLeft" >
+                          <span>{text}</span>
+                        </Tooltip>
+                      </div>
+            ),
 		}, {
 		  title: 'Type',
 		  dataIndex: 'Type',
@@ -191,7 +198,14 @@ class PUGTable extends Component {
 		  	}else{
 		  		return ('' + a["Gene_List"]).localeCompare(b["Gene_List"]);
 		  	}
-		  }
+		  },
+		    render: (text, record, index) => (
+                        <div className="single-line" style={{"maxWidth":"100px"}}>
+                        <Tooltip title={text} placement="topLeft" >
+                          <span>{text}</span>
+                        </Tooltip>
+                      </div>
+            ),
 		}, {
 		  title: 'Number_Hits',
 		  dataIndex: 'Number_Hits',

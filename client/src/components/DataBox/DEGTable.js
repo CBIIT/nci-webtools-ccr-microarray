@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table,Input} from 'antd';
+import { Table,Input,Tooltip} from 'antd';
 const Search = Input.Search;
 
 
@@ -44,7 +44,14 @@ class DEGTable extends Component {
 		  title: 'DESC',
 		  dataIndex: 'DESC',
 		  width:'150px',
-		   sorter: (a, b) => a.DESC.length - b.DESC.length,
+		  sorter: (a, b) => a.DESC.length - b.DESC.length,
+		  render: (text, record, index) => (
+          <div className="single-line" style={{"maxWidth":"100px"}}>
+            <Tooltip title={text} placement="topLeft" >
+              <span>{text}</span>
+            </Tooltip>
+          </div>
+        ),
 		}, {
 		  title: 'ENTREZ',
 		  dataIndex: 'ENTREZ',
