@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Select, Input } from 'antd';
+import { Table, Select, Input,Tooltip} from 'antd';
 import ReactSVG from 'react-svg'
 
 const Search = Input.Search;
@@ -66,26 +66,43 @@ class GSMData extends Component {
             const columns = [{
                 title: 'gsm',
                 dataIndex: 'gsm',
-                width: '15%',
-
+                width: '18%',
                 sorter: (a, b) => ('' + a.gsm).localeCompare(b.gsm),
+                render: (text, record, index) => (
+                          <div className="single-line" style={{"maxWidth":"150px"}}>
+                            <Tooltip title={text} placement="topLeft" >
+                              <span>{text}</span>
+                            </Tooltip>
+                          </div>
+                ),
             }, {
                 title: 'title',
                 dataIndex: 'title',
                 width: '30%',
-
                 sorter: (a, b) => this.compareByAlph(a.title, b.title),
+                render: (text, record, index) => (
+                      <div className="single-line"   style={{"maxWidth":"300px"}}>
+                        <Tooltip title={text} placement="topLeft" >
+                          <span>{text}</span>
+                        </Tooltip>
+                      </div>
+                    ),
             }, {
                 title: 'description',
                 dataIndex: 'description',
-                width: '30%',
-
+                 width: '30%',
                 sorter: (a, b) => a.description.length - b.description.length,
+                     render: (text, record, index) => (
+                      <div className="single-line" style={{"maxWidth":"300px"}}>
+                        <Tooltip title={text} placement="topLeft">
+                          <span>{text}</span>
+                        </Tooltip>
+                      </div>
+                    ),
             }, {
                 title: 'group',
                 dataIndex: 'groups',
-                width: '20%',
-
+                width: '15%',
                 sorter: (a, b) => this.compareByAlph(a.groups, b.groups),
             }];
             let count = 1;
