@@ -11,7 +11,7 @@ class Analysis extends Component {
 		this.state = {
 			workflow:{
 				projectID:"",
-				analysisType:"-1",
+				analysisType:"0",
 				accessionCode:"",
 				fileList: [],
       			uploading: false,
@@ -153,6 +153,7 @@ class Analysis extends Component {
 		reqBody.projectId="";
 		reqBody.groups="";
 		
+		document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default"
 
 		if(workflow.dataList!=""){
 			// user click load after data already loaded.then it is a new transaction 
@@ -188,47 +189,106 @@ class Analysis extends Component {
 		      workflow:workflow
 		 });
 	    
-	    
-	    fetch('./api/analysis/loadGSE',{
-			method: "POST",
-			body: JSON.stringify(reqBody),
-			credentials: "same-origin",
-			headers: {
-		        'Content-Type': 'application/json'
-		    }
-		})
-			.then(res => res.json())
-			.then(result => {
-			if(result.status==200){
-				var data = result.data.split("+++loadGSE+++\"")[1]
-				let list =JSON.parse(decodeURIComponent(data));
-				//let list = result.data;
-				workflow.uploading = false;
-				workflow.progressing = false;
-				if(list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
-					message.success('load data fails.');
-					return;
-				}
-				workflow.dataList = list.files;
-				// init group with default value
-				workflow.group = new Array(list.files.length).fill('Ctl');
-
-				// disable the input , prevent user to change the access code
-	    		document.getElementById("input-access-code").disabled=true
-
-	    		// change the word of load btn
-	    		document.getElementById("btn-project-load-gse").disabled=true
+	 try{
+		    fetch('./api/analysis/loadGSE',{
+				method: "POST",
+				body: JSON.stringify(reqBody),
+				credentials: "same-origin",
+				headers: {
+			        'Content-Type': 'application/json'
+			    }
+			})
+				.then(res => res.json())
+				.then(result => {
+				if(result.status==200){
 
 
-				this.setState({
-			      workflow:workflow
-			    });
-			    message.success('load successfully.');
 
-			    }else{
-					 message.success('load data fails.');	
-				}
-			});
+					if (result.data === "undefined" || Object.keys(result.data).length === 0 ) {
+							 document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+				    		
+							workflow.uploading = false;
+							workflow.progressing = false;
+						    message.error('Load data fails');	
+							this.setState({
+						      workflow:workflow
+						    });
+						    return;
+					}
+
+					var data = result.data.split("+++loadGSE+++\"")[1]
+
+					if (typeof(data) === "undefined" ||data =="" ) {
+							 document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+				    		
+							workflow.uploading = false;
+							workflow.progressing = false;
+						    message.error('Load data fails');	
+							this.setState({
+						      workflow:workflow
+						    });
+						    return;
+					}
+
+					let list =JSON.parse(decodeURIComponent(data));
+					//let list = result.data;
+
+					if(typeof(list)=="undefined"||list==null||list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
+						document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+				    		
+						workflow.uploading = false;
+							workflow.progressing = false;
+						    message.error('Load data fails');	
+							this.setState({
+						      workflow:workflow
+						    });
+					
+						return;
+					}
+
+					workflow.uploading = false;
+					workflow.progressing = false;
+
+					workflow.dataList = list.files;
+					// init group with default value
+					workflow.group = new Array(list.files.length).fill('Ctl');
+
+					// disable the input , prevent user to change the access code
+		    		document.getElementById("input-access-code").disabled=true
+
+		    		// change the word of load btn
+		    		document.getElementById("btn-project-load-gse").disabled=true
+					
+					this.setState({
+						      workflow:workflow
+						    });
+
+				    message.success('load successfully.');
+
+				    }else{
+				    		document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+				    		
+				    		workflow.uploading = false;
+							workflow.progressing = false;
+							this.setState({
+						      workflow:workflow
+						    });
+					
+						 message.error('load data fails.');	
+					}
+				});
+			}catch(err){
+							//change button style
+							document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+				    		workflow.uploading = false;
+							workflow.progressing = false;
+							this.setState({
+						      workflow:workflow
+						    });
+					
+						 message.error('load data fails.');	
+
+			}
 	}
 
 	runContrast = () =>{
@@ -284,60 +344,130 @@ class Analysis extends Component {
 	    reqBody.genSet=workflow.genSet;
 
 		workflow.progressing = true;
-		workflow.loading_info = "Running Contrast... (this might take a few minutes)";
+		workflow.loading_info = "Running Contrast...";
 		 // define action
 	    reqBody.actions = "runContrast";
 	    this.setState({
 	      workflow:workflow
 	    });
-	    fetch('./api/analysis/runContrast',{
-			method: "POST",
-			body: JSON.stringify(reqBody),
-			credentials: "same-origin",
-			headers: {
-		        'Content-Type': 'application/json'
-		    }
-		})
-			.then(
-				res => res.json()
-				)
-			.then(result => {
-				if(result.status==200){
-					 workflow.diff_expr_genes=result.data.diff_expr_genes;
-					 workflow.ssGSEA=result.data.ssGSEA;
-					 workflow.pathways_up=result.data.pathways_up;
-					 workflow.pathways_down=result.data.pathways_down;
-					 workflow.progressing = false;
-				 	 workflow.compared=true;
-			   		 workflow.done_gsea=true;
 
-			   		 var plots=result.data.listPlots;
-						workflow.progressing = false;
-						workflow.HistplotBN = plots[0];                  // svg file
-						workflow.MAplotBN =plots[1].listData;			// images list[jpg]
-						workflow.BoxplotBN = plots[2];					// svg file
-						workflow.RLEplotBN = plots[3];					// svg file
-						workflow.NUSEplotBN = plots[4];					// svg file
-						workflow.HistplotAN = plots[5];					// svg file
-						workflow.MAplotAN = plots[6].listData;			// images list[jpg]
-						workflow.BoxplotAN = plots[7];					// svg file
-						workflow.PCA = plots[8];							// html file
-						workflow.Heatmapolt = plots[9];	
-						// hard code the path for plot
-						workflow.pathwayHeatMap="/geneHeatmap.jpg";
-						workflow.volcanoPlot="/volcano.html";	
+	 try { 
+		    fetch('./api/analysis/runContrast',{
+				method: "POST",
+				body: JSON.stringify(reqBody),
+				credentials: "same-origin",
+				headers: {
+			        'Content-Type': 'application/json'
+			    }
+			})
+				.then(
+					res => res.json()
+					)
+				.then(result => {
+					if(result.status==200){
 
-					this.setState({
-				      workflow:workflow
-				    });
-				    message.success('Plots loaded successfully.');
-				}else{
+					if (result.data === "undefined" || Object.keys(result.data).length === 0 ) {
+							 
+							workflow.uploading = false;
+							workflow.progressing = false;
+						    message.success('Run contrast fails');	
+							this.setState({
+						      workflow:workflow
+						    });
+						    return;
+					}
 
-					 workflow.progressing = false;
-					 message.success('Generate plots fails.');	
-				}
-				
-			});
+						 workflow.diff_expr_genes=result.data.diff_expr_genes;
+						 workflow.ssGSEA=result.data.ssGSEA;
+						 workflow.pathways_up=result.data.pathways_up;
+						 workflow.pathways_down=result.data.pathways_down;
+						 workflow.progressing = false;
+					 	 workflow.compared=true;
+				   		 workflow.done_gsea=true;
+
+				   		 var plots=result.data.listPlots;
+							
+							workflow.HistplotBN = plots[0];                  // svg file
+							workflow.MAplotBN =plots[1];			// images list[jpg]
+							workflow.BoxplotBN = plots[2];					// svg file
+							workflow.RLEplotBN = plots[3];					// svg file
+							workflow.NUSEplotBN = plots[4];					// svg file
+							workflow.HistplotAN = plots[5];					// svg file
+							workflow.MAplotAN = plots[6];			// images list[jpg]
+							workflow.BoxplotAN = plots[7];					// svg file
+							workflow.PCA = plots[8];							// html file
+							workflow.Heatmapolt = plots[9];	
+							// hard code the path for plot
+							workflow.pathwayHeatMap="/geneHeatmap.jpg";
+							workflow.volcanoPlot="/volcano.html";	
+							workflow.progressing = false;
+							workflow.color=[];
+
+							let uniqueColorCodeArray = plots[8].color.filter(function(item, pos) {
+							    return plots[8].color.indexOf(item) == pos;
+							})
+
+							let size    = uniqueColorCodeArray.length;
+
+							let rainbow = new Array(size);
+
+							for (let i=0; i<size; i++) {
+
+							  let red   = sin_to_hex(i, 0 * Math.PI * 2/3); // 0   deg
+							  let blue  = sin_to_hex(i, 1 * Math.PI * 2/3); // 120 deg
+							  let green = sin_to_hex(i, 2 * Math.PI * 2/3); // 240 deg
+							  rainbow[i] = "#"+ red + green + blue;
+
+							}
+
+							function sin_to_hex(i, phase) {
+
+							  let sin = Math.sin(Math.PI / size * 2 * i + phase);
+							  let int = Math.floor(sin * 127) + 128;
+							  let hex = int.toString(16);
+							  return hex.length === 1 ? "0"+hex : hex;
+
+							}
+
+
+							workflow.BoxplotBN.color=workflow.BoxplotBN.color.map(x => rainbow[x/5-1]);
+							workflow.RLEplotBN.color=workflow.RLEplotBN.color.map(x => rainbow[x/5-1]);
+							workflow.NUSEplotBN.color=workflow.NUSEplotBN.color.map(x => rainbow[x/5-1]);
+							workflow.BoxplotAN.color=workflow.BoxplotAN.color.map(x => rainbow[x/5-1]);
+							workflow.PCA.color=workflow.PCA.color.map(x => rainbow[x/5]);
+
+
+							workflow.RLEplotBN = plots[3];					
+							workflow.NUSEplotBN = plots[4];	
+							workflow.BoxplotAN = plots[7];					
+							workflow.PCA = plots[8];		
+						
+
+
+						this.setState({
+					      workflow:workflow
+					    });
+					    message.success('Plots loaded successfully.');
+					}else{
+
+						 workflow.progressing = false;
+						 this.setState({
+					      workflow:workflow
+					    });
+						 message.warning('Generate plots fails.');	
+					}
+					
+				});
+			}catch(err){
+
+				workflow.uploading = false;
+				workflow.progressing = false;
+				message.success('Run contrast fails');	
+				console.log(err);
+				this.setState({
+						      workflow:workflow
+						    });
+			}
 	}
 
 
@@ -346,6 +476,7 @@ class Analysis extends Component {
 	    const fileList = workflow.fileList;
 	    const formData = new FormData();
 
+	   
 	     // this pid will be used to create a tmp folder to store the data. 
 	   	workflow.projectID=this.uuidv4();
 	    formData.append('projectId',workflow.projectID)
@@ -359,58 +490,102 @@ class Analysis extends Component {
 	    this.setState({
 	      workflow:workflow
 	    });
-	    fetch('./api/analysis/upload',{
-			method: "POST",
-			body: formData,
-			processData: false,
-     		contentType: false
-		}).then(res => res.json())
-		  .then(result => {
-				if(result.status==200){
-					var data = result.data.split("+++getCELfiles+++\"")[1]
-					let list =JSON.parse(decodeURIComponent(data));
-					//let list = result.data;
-					workflow.uploading = false;
-					workflow.progressing = false;
-					if(list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
-						message.success('load data fails.');
-						return;
+
+	     document.getElementById("btn-project-upload").className ="ant-btn upload-start ant-btn-default"
+
+
+	 try { 
+		    fetch('./api/analysis/upload',{
+				method: "POST",
+				body: formData,
+				processData: false,
+	     		contentType: false
+			}).then(res => res.json())
+			  .then(result => {
+					if(result.status==200){
+						var data = result.data.split("+++getCELfiles+++\"")[1]
+
+						if (typeof(data) === "undefined" ||data =="" ) {
+							 
+							workflow.uploading = false;
+							workflow.progressing = false;
+						    message.error('update data fails');	
+							this.setState({
+						      workflow:workflow
+						    });
+						    return;
+						}
+
+						let list =JSON.parse(decodeURIComponent(data));
+
+						//let list = result.data;
+						workflow.uploading = false;
+						workflow.progressing = false;
+						if(list.files==null||typeof(list.files)=="undefined"||list.files.length==0){
+							message.err('load data fails.');
+							return;
+						}
+						for(let i in list.files){
+							list.files[i]["gsm"]=list.files[i]["_row"];
+							//list.files[i]["gsm"]=list.files[i].title.split("_")[0];
+						}
+						workflow.dataList = list.files;
+					
+			    		// change the word of load btn
+			    		document.getElementById("btn-project-upload").disabled=true
+
+			    		// init group with default value
+						workflow.group = new Array(list.files.length).fill('Ctl');
+						workflow.uploaded=true;
+						this.setState({
+					      workflow:workflow
+					    });
+					    message.success('load successfully.');
+				    }else{
+
+				    	workflow.uploading = false;
+						workflow.progressing = false;
+						workflow.uploaded=true;
+						this.setState({
+					      workflow:workflow
+					    });
+					    message.error('load data fails.');	
 					}
-					workflow.dataList = list.files;
-			
-		    		// change the word of load btn
-		    		document.getElementById("btn-project-upload").disabled=true
+				});
+			   }catch(error){
 
-		    		// init group with default value
-					workflow.group = new Array(list.files.length).fill('Ctl');
-					workflow.uploaded=true;
-					this.setState({
-				      workflow:workflow
-				    });
-				    message.success('load successfully.');
-			    }else{
-
-			    	workflow.uploading = false;
-					workflow.progressing = false;
-					workflow.uploaded=true;
-					this.setState({
-				      workflow:workflow
-				    });
-				    message.success('load data fails.');	
-				}
-			});
-	    
+				
+				    	workflow.uploading = false;
+						workflow.progressing = false;
+						workflow.uploaded=true;
+						this.setState({
+					      workflow:workflow
+					    });
+					    message.error('load data fails.');	
+			}
+		    
 	  }
 
 	assignGroup=(group_name,dataList_keys)=>{
-		let workflow = Object.assign({},this.state.workflow);
-		for(var key in dataList_keys){
-			workflow.dataList[dataList_keys[key]-1].groups=group_name;
+		// validate group_name
+		let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
+		if(group_name.match(pattern))
+		{
+			let workflow = Object.assign({},this.state.workflow);
+			for(var key in dataList_keys){
+				workflow.dataList[dataList_keys[key]-1].groups=group_name;
+			}
+			this.setState({
+				      workflow:workflow
+				    });
+			message.success('Add group successfully.');
 		}
-		this.setState({
-			      workflow:workflow
-			    });
-		message.success('Add group successfully.');
+		else
+		{
+			message.success('The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1');
+			return false;
+		}
+		
 	}
 
 	deleteGroup=(group_name)=>{
@@ -430,7 +605,7 @@ class Analysis extends Component {
 
 	hideWorkFlow=()=>{
 	    document.getElementsByClassName("container-board-left")[0].style.display = 'none';
-	    document.getElementsByClassName("container-board-right")[0].style.width = window.document.documentElement.clientWidth-30;
+	    document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth-50;
 	    document.getElementById("panel-show").style.display ='inherit';
 	    document.getElementById("panel-hide").style.display ='none';
 	  }
@@ -449,12 +624,7 @@ class Analysis extends Component {
 		return (
 			<div className="content">
 				<div className="container container-board">
-				   	<div style={{'paddingTop':'10px'}}><label>
-		           &nbsp;Analysis Workflow &nbsp;&nbsp;
-		              <a id="panel-hide" onClick={this.hideWorkFlow} size="small" style={{'position':'absolute','top':'235px','lineHeight': "initial",'fontSize': "smaller","paddingLeft":"calc(20%)","left":"23px"}}><Icon type="caret-left" /></a>
-		              <a id="panel-show" onClick={this.showWorkFlow}  size="small" style={{'position':'absolute','top':'235px','lineHeight': "initial",'fontSize': "smaller",'display':'none',"left":"0px"}}><Icon type="caret-right" /></a>
-
-		          </label></div>
+				
 			      <Workflow data={this.state.workflow}
 						handleGeneChange={this.handleGeneChange} changeFoldSSGSEA={this.changeFoldSSGSEA} changePssGSEA={this.changePssGSEA}
 			      		resetWorkFlowProject={this.resetWorkFlowProject}  changeProject={this.changeProject} 
@@ -462,12 +632,25 @@ class Analysis extends Component {
 			      		fileRemove={this.fileRemove} beforeUpload={this.beforeUpload} handleUpload={this.handleUpload} 
 			      		loadGSE={this.loadGSE} handleGroup1Select={this.handleGroup1Select}  handleGroup2Select={this.handleGroup2Select} 
 			      		changePDEGs={this.changePDEGs} changeFoldDEGs={this.changeFoldDEGs} changePathways={this.changePathways} runContrast={this.runContrast}/>
-			
+				   	<div style={{'paddingTop':'10px',"width":"16px","float":"left"}}><label>
+		              <a id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
+		              <a id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
+
+		          </label></div>
 			      <DataBox  data={this.state.workflow} assignGroup={this.assignGroup} deleteGroup={this.deleteGroup}/>
 			    </div>
 			    <div className={modal}>
+			    	<div style={{
+			    		"width": "180px",
+			    		"height": "175px",
+			    		"background": "#efefef",
+			    		"position": "absolute",
+			    		"left": "calc(50% - 80px)",
+			    		"padding": "2%",
+			    		"borderRadius": "50%"}}>
 					<Spin indicator={antIcon} style={{color:"black"}} />
 					<label className="loading-info">{this.state.workflow.loading_info}</label>
+					</div>
 				</div>
 			</div>
 		);

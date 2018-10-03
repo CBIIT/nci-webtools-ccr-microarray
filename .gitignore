@@ -1,5 +1,4 @@
-/config/microarray.settings
-/service/caller_as_api.R
+config/*.json
 node_modules
 npm-debug.log
 yarn-error.log*
@@ -8,4 +7,7 @@ package-lock.json
 .DS_Store
 .Rproj.user
 /bak/
+/mpstr_pathworks_mac/
+/mpstr_pathworks_linux/
 *.log
+config/microarray_setting.json

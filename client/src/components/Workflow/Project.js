@@ -24,7 +24,6 @@ class Project extends Component {
       };
 
       let type_content = (<Select defaultValue={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
-            <Option value="-1">Select Type...</Option>
             <Option value="0">GEO Data</Option>
             <Option value="1">Upload CEL files</Option>
           </Select>);
@@ -34,12 +33,12 @@ class Project extends Component {
         source = (
           <div className="row">
            <div className="col-sm-12">
-            <label className="title">Accession Code</label>
+            <label className="title">Accession Code<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
             <Input id="input-access-code" onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
             </div>
              <div className="col-sm-6">
             <button id="btn-project-load-gse" type="button" className="ant-btn upload-start ant-btn-primary" onClick={this.props.loadGSE}>
-              <span>{uploading ? 'Uploading' : 'Load' }</span>
+              <span>{uploading ? 'Load' : 'Load' }</span>
             </button>
             </div>
              <div className="col-sm-6">
@@ -65,7 +64,6 @@ class Project extends Component {
                     </div>
                      <div className="col-sm-6">
                     <Button
-
                       id="btn-project-upload"
                       className="upload-start"
                       type="primary"
@@ -73,7 +71,7 @@ class Project extends Component {
                       disabled={this.props.data.fileList.length === 0}
                       loading={uploading}
                     >
-                    {uploading ? 'Uploading' : 'Load' }
+                    {uploading ? 'Load' : 'Load' }
                     </Button>
                    </div>
 
@@ -93,7 +91,7 @@ class Project extends Component {
                     <div className="col-sm-6">
                         <Button
                           className="upload-start"
-                          type="primary"
+                          type="default"
                        
                           disabled
                         >

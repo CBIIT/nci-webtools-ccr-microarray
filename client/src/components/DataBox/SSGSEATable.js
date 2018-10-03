@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Table ,Select} from 'antd';
 
+const Option = Select.Option;
+
 
 class SSGSEATable extends Component {
 
@@ -11,6 +13,16 @@ class SSGSEATable extends Component {
 	componentDidMount(){
 	}
 	
+
+	handleSelectionChange(value) {
+	  var list = document.getElementsByClassName("ss_plot");
+		  for (var i = 0; i < list.length; i++) {
+				list[i].classList.add("hide");
+			}
+		  document.getElementById(value).className= document.getElementById(value).className.replace("hide", "");
+		}	
+
+
   render() {
 
   	let content ="";
@@ -47,8 +59,21 @@ class SSGSEATable extends Component {
 		
 
 		const data = this.props.data.ssGSEA;
-			
-  	  	content = <Table columns={columns} dataSource={data} />;
+		var link = "./images/"+this.props.data.projectID+"/geneHeatmap1.jpg"
+
+
+  	  	let tabs =[ <div id="ss_tag1" className="ss_plot">
+		  							<Table rowKey='Name' columns={columns} dataSource={data} />
+		  						</div>,
+		  						  <div id="ss_tag2" className="ss_plot hide" >
+		  						 <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
+		  						</div>
+		  		  ]
+	    content = [<Select defaultValue="ss_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
+							      <Option value="ss_tag1">Single Sample GSEA</Option>
+							      <Option value="ss_tag2">Pathway Heatmap</Option>
+							    </Select>,tabs]
+
   	}else{
 		content=<div>No data</div>				
   	}
