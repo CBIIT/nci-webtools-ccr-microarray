@@ -115,7 +115,9 @@ label{
   background: #eee;
 }
 .container{
+  max-width: 1440px;
   width:100%;
+  padding-top: 10px;
 }
 .container-board{
   background: rgb(255, 255, 255);
@@ -129,7 +131,7 @@ label{
   margin-right:10px;
 }
 .container-board-right{
-  width:calc(79% - 10px);
+  width:calc(79% - 26px);
   float:left;
   margin-top:0px;
   margin-left:0px;
@@ -142,8 +144,8 @@ label{
 .block{
   border:1px solid #eee;
   border-radius: 4px;
-  margin:5px;
-  padding:0px 5px 5px 5px;
+  margin:10px;
+  padding:8px 5px 10px 5px;
 }
 .block .title{
   font-size:0.85em;
@@ -241,9 +243,11 @@ label{
   height:35px;
   } 
 
-
-
-
+ .single-line{  
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 
 
 

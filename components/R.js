@@ -1,4 +1,4 @@
-/**
+	/**
  * component for calling R script
  */
 
@@ -20,21 +20,25 @@ var execute = function(file, data, callback){
 	});
 	var child = child_process.spawn("Rscript", args, options);
 	var body = '';
+	var err_message = '';
 
 	child.stdout.on('data', (d) => {
 		body += d.toString('utf8');
+		logger.info("stdout:"+body);
 	});
 
-	child.stderr.on('data', (data) => {
-		logger.debug("info:"+data);
+	child.stderr.on('data', (e) => {
+		err_message += e.toString('utf8');
+		logger.info("stderr:"+err_message);
 	});
 
 	child.on('close', (code) => {
-		if(code > 0){
-			callback(body, {});
+		logger.info("code:"+code);
+		if(code>0){
+			callback(true, err_message);
 		}
 		else{
-			callback(null, body);
+			callback(false, body);
 		}
 	});
 };

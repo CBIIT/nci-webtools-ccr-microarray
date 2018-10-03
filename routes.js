@@ -6,7 +6,6 @@
 var express = require('express');
 var m_analysis = require('./service/analysis');
 var m_common = require('./service/common');
-var m_user = require('./service/user');
 var config = require('./config');
 var path = require('path');
 
@@ -25,11 +24,10 @@ module.exports = function(app){
 
 	app.use('/api/', m_common);
 	app.use('/api/analysis', m_analysis);
-	app.use('/api/user', m_user);
 
 
 	//Serves all the request which includes /images in the url from Images folder
-	app.use('/images', express.static(__dirname + '/service/data'));
+	app.use('/images', express.static(config.uploadPath));
 	
 	// All other routes should redirect to error page
     app.get('/*', function (req, res) {

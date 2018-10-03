@@ -10,8 +10,7 @@ var path = require('path');
 var rimraf = require('rimraf');
 
 router.post('/upload',function(req, res){
-
-    logger.info("API:/upload ", "req :",req);
+logger.info("API:/upload ");
 
 
   // create an incoming form object
@@ -26,7 +25,7 @@ router.post('/upload',function(req, res){
   form.on('field', function(name, value) {
       if (name == "projectId") {
             pid=value;
-            form.uploadDir = path.join(__dirname, '/../service/data/'+  value);
+            form.uploadDir = path.join(config.uploadPath,"/"+value);
              if (!fs.existsSync(form.uploadDir)){
                  fs.mkdirSync(form.uploadDir);
               }else{
@@ -59,16 +58,18 @@ router.post('/upload',function(req, res){
       let data = [];
       data.push("loadCEL"); // action
       data.push(pid);
+       //data path
+      data.push(config.uploadPath);
       data.push(new Array(number_of_files).fill("Ctl"));
 
       R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
              logger.info("API:/upload result ","status 404 ");
-              logger.warn("API:/upload result ","status 404 ", err);
+             logger.warn("API:/upload result ","status 404 ", err);
               res.json({status:404, msg:err});
             }
             else{
-               logger.info("API:/upload result ","status 200 ");
+              logger.info("API:/upload result ","status 200 ");
               res.json({status:200, data:returnValue});
             }
         });
@@ -81,21 +82,27 @@ router.post('/upload',function(req, res){
 router.post('/loadGSE', function(req, res) {
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-  data.push("loadGSE"); // action
+  // action
+  data.push("loadGSE"); 
   data.push(req.body.projectId);
+  //data path
+  data.push(config.uploadPath);
   data.push(req.body.code); 
   data.push(req.body.groups);
+
+
   logger.info("API:/loadGSE ",
               "code:",req.body.code,
               "groups:",req.body.groups,
-              "projectId:",req.body.projectId
+              "projectId:",req.body.projectId,
+              "data_repo_path:",config.uploadPath
              );
 
   R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
               logger.info("API:/loadGSE result ","status 404 ");
               logger.warn("API:/loadGSE result ","status 404 ", err);
-              res.json({status:404, msg:err});
+              res.json({status:404, msg:returnValue});
             }else{
               logger.info("API:/loadGSE result ","status 200 ");
               res.json({status:200, data:returnValue});
@@ -111,22 +118,28 @@ router.post('/pathwaysHeapMap', function(req, res) {
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push("pathwaysHeapMap");
   data.push(req.body.projectId);
-  data.push(req.body.group_1);
-  data.push(req.body.group_2);
+   //data path
+  data.push(config.uploadPath);
+  data.push(req.body.group1);
+  data.push(req.body.group2);
   data.push(req.body.upOrDown);
   data.push(req.body.pathway_name);
+    //configuration path
+  data.push(config.configPath);
 
   logger.info("API:/pathwaysHeapMap ",
              "projectId :",req.body.projectId,
-             "group_1 :", req.body.group_1,
-             "group_2 :",req.body.group_2,
+             "group_1 :", req.body.group1,
+             "group_2 :",req.body.group2,
              "upOrDown :",req.body.upOrDown,
-             "pathway_name :",req.body.pathway_name
+             "pathway_name :",req.body.pathway_name,
+             "data_repo_path:",config.uploadPath,
+             "configPath:",config.configPath
              );
 
   R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
-              res.json({status:404, msg:err});
+              res.json({status:404, msg:returnValue});
             }else{
               res.json({status:200, data:returnValue});
             }
@@ -140,7 +153,8 @@ router.post('/runContrast', function(req, res) {
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push("runContrast"); // action
   data.push(req.body.projectId);
-
+   //data path
+  data.push(config.uploadPath);
   data.push(req.body.code); 
   data.push(req.body.groups);
   data.push(req.body.pDEGs);
@@ -153,6 +167,7 @@ router.post('/runContrast', function(req, res) {
   data.push(req.body.pssGSEA);
   data.push(req.body.foldssGSEA);
   data.push(req.body.source)
+  data.push(config.configPath);
 
   if(req.body.pDEGs){
     data.push(req.body.pDEGs);
@@ -178,14 +193,15 @@ router.post('/runContrast', function(req, res) {
               "genSet:",req.body.genSet,
               "pssGSEA:",req.body.pssGSEA,
               "foldssGSEA:",req.body.foldssGSEA,
-              "source:",req.body.source
+              "source:",req.body.source,
+              "data_repo_path:",config.uploadPath
              );
 
 
   // using session
   //if it is action is runContrast , then 
   if( req.session.groups&&
-      req.session.groups==req.body.groups&&
+      JSON.stringify(req.session.groups)==JSON.stringify(req.body.groups)&&
       req.session.projectId==req.body.projectId&&
       req.session.option==req.body.group_1+req.body.group_2+req.body.genSet
     ){
@@ -199,7 +215,7 @@ router.post('/runContrast', function(req, res) {
        logger.info("API:/runContrast ","Session is not used, run R script; ")
         R.execute("wrapper.R",data, function(err,returnValue){
           if(err){
-              res.json({status:404, msg:err});
+              res.json({status:404, msg:returnValue});
             }
             else{
                   // store return value in session (deep copy)
@@ -208,11 +224,16 @@ router.post('/runContrast', function(req, res) {
                  req.session.groups=req.body.groups;
                  req.session.projectId=req.body.projectId;
                  logger.info("API:/runContrast ","store data in req.session")
+                  // filter out data based on the filter
                  if(req.body.actions == "runContrast"){
                       returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
                  }
-               // filter out data based on the filter
-              res.json({status:200, data:returnValue});
+
+              
+              res.json({
+                status:200,
+                data:returnValue    
+                });
             }
         });
   }
@@ -228,11 +249,9 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                 "foldssGSEA: ",foldssGSEA,
                 "pssGSEA: ",pssGSEA
                 )
-
                var  workflow ={};
                workflow.diff_expr_genes=[];
                workflow.ssGSEA=[];
-               workflow.ssGSEA2=[];
                workflow.pathways_up=[];
                workflow.pathways_down=[];
                workflow.listPlots=[];
@@ -248,7 +267,7 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                let deg = list.diff_expr_genes.listDEGs;
                for(let i in list.diff_expr_genes.listDEGs){
                   for(let j in deg[i]){
-                    if(deg[i][j]["P.Value"]<pDEGs||deg[i][j].FC<foldDEGs){
+                    if(deg[i][j]["P.Value"]>pDEGs||Math.abs(deg[i][j].FC)<foldDEGs){
                       deg[i].splice(j, 1);
                     }else{
                       workflow.diff_expr_genes.push(deg[i][j]);
@@ -263,14 +282,14 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                // pathway ={{RNA_1-Ctl: {{upregulated_pathways:array},{downregulated_pathways:array}}}
                for(let i in list.pathways){
                   for( let j in list.pathways[i]["upregulated_pathways"]){
-                    if(list.pathways[i]["upregulated_pathways"][j]["pval"]<pPathways){
+                    if(list.pathways[i]["upregulated_pathways"][j]["P_Value"]>pPathways){
                         list.pathways[i]["upregulated_pathways"].splice(j, 1);
                       }else{
                         workflow.pathways_up.push(list.pathways[i]["upregulated_pathways"][j])
                       }
                   }
                   for(let j in list.pathways[i]["downregulated_pathways"]){
-                    if(list.pathways[i]["downregulated_pathways"][j]["pval"]<pPathways){
+                    if(list.pathways[i]["downregulated_pathways"][j]["P_Value"]>pPathways){
                         list.pathways[i]["downregulated_pathways"].splice(j, 1);
                       }else{
                         workflow.pathways_down.push(list.pathways[i]["downregulated_pathways"][j])
@@ -278,43 +297,40 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                   }
                }
                // filter ssGEA
-                var ssGSEA = list.ssGSEA.DEss;
-
-                console.log(ssGSEA)
+                let ssGSEA = list.ssGSEA.DEss;
                 for(let key in ssGSEA){
-                    for( let j in ssGSEA[key]){
-                      if(list.ssGSEA.DEss[key][j]["logFC"]<foldssGSEA||list.ssGSEA.DEss[key][j]["P.Value"]<pssGSEA){
-                          list.ssGSEA.DEss[key].splice(j, 1);
-                        }else{
-                           workflow.ssGSEA.push(list.ssGSEA.DEss[key][j]);
-                        }
-                  }
+                  ssGSEA=ssGSEA[key];
                 }
-                workflow.ssGSEA2=ssGSEA;
+
+                for( let j in ssGSEA){
+                      if(Math.abs(ssGSEA[j]["logFC"])<foldssGSEA||lssGSEA[j]["P.Value"]<pssGSEA){
+                          ssGSEA.splice(j, 1);
+                      }else{
+                           workflow.ssGSEA.push(ssGSEA[j]);
+                      }
+                }
+
+
+                workflow.ssGSEA=ssGSEA;
 
                // sort result;
                //objs.sort(function(a,b) {return (a.last_nom > b.last_nom) ? 1 : ((b.last_nom > a.last_nom) ? -1 : 0);} );
                workflow.diff_expr_genes.sort(function(e1,e2){
-                  return (e1["P.Value"]>e2["P.Value"]) ? 1 :((e2["P.Value"]>e1["P.Value"])? -1: 0)
+                  return (e1["P.Value"]<e2["P.Value"]) ? 1 : -1
                })
                workflow.pathways_up.sort(function(e1,e2){
-                  return (e1["pval"]>e2["pval"]) ? 1 :((e2["pval"]>e1["pval"])? -1: 0)
+                  return (e1["P_Value"]<e2["P_Value"]) ? 1 : -1
                })
 
                workflow.pathways_down.sort(function(e1,e2){
-                  return (e1["pval"]>e2["pval"]) ? 1 :((e2["pval"]>e1["pval"])? -1: 0)
+                  return (e1["P_Value"]<e2["P_Value"]) ? 1 : -1
                })
-
-               workflow.ssGSEA.sort(function(e1,e2){
-                  return (e1["P.Value"]>e2["P.Value"]) ? 1 :((e2["P.Value"]>e1["P.Value"])? -1: 0)
+               
+              workflow.ssGSEA.sort(function(e1,e2){
+                    return (e1["P.Value"]<e2["P.Value"]) ? 1 : -1
                })
+              
 
-                logger.info("API: function filter result :",
-                "workflow.diff_expr_genes.length: ",workflow.diff_expr_genes.length,
-                "workflow.ssGSEA.length: ",workflow.ssGSEA.length,
-                "workflow.pathways_up.length: ",workflow.pathways_up.length,
-                "workflow.pathways_down.length: ",workflow.pathways_down.length,
-                )
 
                if(workflow.diff_expr_genes.length>20000){
                 workflow.diff_expr_genes=workflow.diff_expr_genes.slice(1, 20000);
@@ -328,6 +344,14 @@ function filter(returnValue,pDEGs,foldDEGs,pPathways,foldssGSEA,pssGSEA){
                if(workflow.pathways_down.length>20000){
                 workflow.pathways_down= workflow.pathways_down.slice(1, 20000);
                }
+
+
+                logger.info("API: function filter result :",
+                "workflow.diff_expr_genes.length: ",workflow.diff_expr_genes.length,
+                "workflow.ssGSEA.length: ",workflow.ssGSEA.length,
+                "workflow.pathways_up.length: ",workflow.pathways_up.length,
+                "workflow.pathways_down.length: ",workflow.pathways_down.length
+                )
                return workflow;
 }
 

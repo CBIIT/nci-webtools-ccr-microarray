@@ -4,29 +4,23 @@
 
 'use strict';
 
-var winston = require('winston');
-var config = require('../config');
-winston.emitErrs = true;
+ var config = require('../config');
+ var winston = require('winston');
+ require('winston-daily-rotate-file');
+ winston.emitErrs = true;
 
-const tsFormat = () => (new Date()).toLocaleTimeString();
-
-var logger = new winston.Logger({
+  var logger = new (winston.Logger)({
     transports: [
-	    new (require('winston-daily-rotate-file'))({
-	      filename: config.logDir + '/-info.log',
-	      timestamp: tsFormat,
-	      datePattern: 'yyyy-MM-dd',
-	      prepend: true,
-	      level: 'warn'
-	    }),
-        new winston.transports.File({
-         filename: config.logDir + '/-info.log',
-          timestamp: tsFormat,
-          datePattern: 'yyyy-MM-dd',
-          prepend: true,
-          level: 'info'
-        }),
-        new winston.transports.Console({
+      new (winston.transports.DailyRotateFile)({
+            filename: config.logDir+'/application.log',
+            datePattern: "yyyy-MM-dd.",
+            zippedArchive: false,
+            maxSize: '1024m',
+            timestamp: true,
+            maxFiles: '1d',
+            prepend: true
+          }),
+       new winston.transports.Console({
             level: 'debug',
             handleExceptions: true,
             json: false,
@@ -34,6 +28,10 @@ var logger = new winston.Logger({
         })
     ],
     exitOnError: false
-});
+  });
+
+
+
+
 
 module.exports = logger;
