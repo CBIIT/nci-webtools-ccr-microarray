@@ -1,5 +1,3 @@
-/config/microarray.settings
-/service/caller_as_api.R
 node_modules
 npm-debug.log
 yarn-error.log*
