@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
 import { Spin, message, Icon, Button } from 'antd';
+import Plot from 'react-plotly.js';
+
+
 const ButtonGroup = Button.Group;
 
 class Analysis extends Component {
@@ -132,7 +135,7 @@ class Analysis extends Component {
                     if (result.status == 200) {
                         if (result.data != "") {
 
-                            let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
+                            let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+this.state.projectID+result.data}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
 
                             this.setState({ Heatmapolt: <div>{HeatMapIframe}</div> });
                         } else {
@@ -289,7 +292,7 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
-                            let histplotANLink = './images/' + this.props.data.projectID + result.data;
+                            let histplotANLink = './images/' + this.state.projectID + result.data;
                             let histplotAN = <img src={ histplotANLink } style={{ width: "75%" }} alt="Histogram" />;
                             this.setState({ HistplotAN: histplotAN });
                         } else {
@@ -319,7 +322,7 @@ class Analysis extends Component {
                         if (result.data != "") {
                             let list_mAplotBN = [];
                             for (let i = result.data.length - 1; i >= 0; i--) {
-                                let link = "./images/" + this.props.data.projectID + result.data[i]
+                                let link = "./images/" + this.state.projectID + result.data[i]
                                 list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
                             }
                             let maplot_style = {
@@ -505,7 +508,7 @@ class Analysis extends Component {
                         if (result.data != "") {
                             let list_mAplotBN = [];
                             for (let i = result.data.length - 1; i >= 0; i--) {
-                                let link = "./images/" + this.props.data.projectID + result.data[i]
+                                let link = "./images/" + this.state.projectID + result.data[i]
                                 list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
                             }
                             let maplot_style = {
@@ -544,7 +547,7 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
-                            let histplotBNLink = './images/' + this.props.data.projectID + result.data;
+                            let histplotBNLink = './images/' + this.state.projectID + result.data;
                             let histplotBN = <img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" />;
                             this.setState({ HistplotBN: histplotBN });
 
@@ -923,17 +926,6 @@ class Analysis extends Component {
                 }).then(result => {
                     if (result.status == 200) {
 
-                        // get all the plots at once
-                        this.getHistplotBN();
-                        this.getNUSE();
-                        this.getRLE();
-                        this.getBoxplotBN();
-                        this.getMAplotsBN();
-                        this.getHeatmapolt();
-                        this.getPCA();
-                        this.getBoxplotAN();
-                        this.getHistplotAN();
-                        this.getMAplotAN();
 
                         // updata current open tab
                         if (workflow.current_working_on_object == "pathways_up") {
@@ -1208,6 +1200,18 @@ class Analysis extends Component {
                             changePathways_up={this.changePathways_up}
                             changePathways_down={this.changePathways_down}
                             changessGSEA={this.changessGSEA}
+
+                            getHistplotBN={this.getHistplotBN}
+                            getMAplotsBN={this.getMAplotsBN}
+                            getBoxplotBN={this.getBoxplotBN}
+                            getRLE={this.getRLE}
+                            getNUSE={this.getNUSE}
+
+                             getBoxplotAN={this.getBoxplotAN}
+                             getMAplotAN={this.getMAplotAN}
+                             getHistplotAN={this.getHistplotAN}
+                             getPCA={this.getPCA}
+                             getHeatmapolt={this.getHeatmapolt}
                             />
                 </div>
                 <div className={modal}>

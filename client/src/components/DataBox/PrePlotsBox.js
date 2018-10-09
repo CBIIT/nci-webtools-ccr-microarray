@@ -17,25 +17,31 @@ class PrePlotsBox extends Component {
 
     handleSelectionChange(value) {
         if (value == "Histogram") {
-            this.upateCurrentWorkingTabAndObject("getHistplotBN")
+            this.props.upateCurrentWorkingTabAndObject("getHistplotBN");
+            this.props.getHistplotBN();
             this.state = { content: this.props.data.HistplotBN };
         }
         if (value == "MAplots") { // 
-            this.upateCurrentWorkingTabAndObject("getMAplotsBN")
+            this.props.upateCurrentWorkingTabAndObject("getMAplotsBN");
+            this.props.getMAplotsBN();
             this.state = { content: this.props.data.MAplotsBN };
         }
         if (value == "Boxplots") { // 
             this.props.upateCurrentWorkingTabAndObject("getBoxplotBN");
+            this.props.getBoxplotBN();
             this.state = { content: this.props.data.BoxplotBN };
         }
         if (value == "RLE") { // 
-
-            this.props.upateCurrentWorkingTabAndObject("getRLE")
+            this.props.upateCurrentWorkingTabAndObject("getRLE");
+            this.props.getRLE();
             this.state = { content: this.props.data.RLE };
+     
         }
         if (value == "NUSE") {
-            this.upateCurrentWorkingTabAndObject("getNUSE")
+            this.props.upateCurrentWorkingTabAndObject("getNUSE")
+            this.props.getNUSE();
             this.state = { content: this.props.data.NUSE };
+
         }
     }
 

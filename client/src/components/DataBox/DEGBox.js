@@ -17,22 +17,22 @@ class DEGBox extends Component {
     }
      componentDidMount(){
         this.props.upateCurrentWorkingTabAndObject("deg")
-        handleSelectionChange("deg_tag1")
+        this.handleSelectionChange("deg_tag1")
     }
 
 
     handleSelectionChange(value) {
         if(value=="deg_tag1"){
          this.props.upateCurrentWorkingTabAndObject("deg")
-         this.setState({ content:  <div><DEGTable changeDeg={this.props.changeDeg} data={this.props.data} /></div>});
+         this.setState({ content: <div><DEGTable changeDeg={this.props.changeDeg} data={this.props.data} /></div>});
         }
         if(value=="deg_tag2"){
          this.props.upateCurrentWorkingTabAndObject("pathways_up")
-           this.setState({ content:  <div><PUGTable changePathways_up={this.props.changePathways_up} data={this.props.data}/></div>);
+           this.setState({ content:  <div><PUGTable changePathways_up={this.props.changePathways_up} data={this.props.data}/></div>});
         }
         if(value=="deg_tag3"){
          this.props.upateCurrentWorkingTabAndObject("pathways_down")
-         this.setState({ content:  <div><PDGTable changePathways_down={this.props.changePathways_down} data={this.props.data}/>}</div>);
+         this.setState({ content:  <div><PDGTable changePathways_down={this.props.changePathways_down} data={this.props.data}/>}</div>});
 
         }
         if(value=="deg_tag4"){
@@ -45,7 +45,7 @@ class DEGBox extends Component {
 
     render() {
 
-            content = [<Select defaultValue="deg_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
+           let content = [<Select defaultValue="deg_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
 							      <Option value="deg_tag1">Differentially Expressed Genes</Option>
 							      <Option value="deg_tag2">Pathways for Upregulated Genes</Option>
 							      <Option value="deg_tag3">Pathways for Downregulated Genes</Option>
