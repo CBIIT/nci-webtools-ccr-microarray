@@ -11,20 +11,20 @@ require('./routes')(app);
 
 var config = require('./config');
 
-app.listen(config.port, function(){
-  console.log('Project Microarray listening on port :' + config.port);
+app.listen(config.port, function() {
+    console.log('Project Microarray listening on port :' + config.port);
 });
 
 // when shutdown signal is received, do graceful shutdown
-process.on( 'SIGINT', function(){
-    console.log( 'gracefully shutting down :)' );
+process.on('SIGINT', function() {
+    console.log('gracefully shutting down :)');
     process.exit();
 });
 
 
 // // copy config files into data repo
 // ncp.limit = 16;
- 
+
 // ncp(config.configPath, config.uploadPath, function (err) {
 //  if (err) {
 //    return console.error(err);
@@ -38,7 +38,7 @@ process.on( 'SIGINT', function(){
 
 // var schedule = require('node-schedule');
 // var rimraf = require('rimraf');
- 
+
 // var j = schedule.scheduleJob('0 0 0 * * *', function(){
 //   logger.info("scheduleJob: clean data start ");
 //   console.log("scheduleJob: clean data start ");

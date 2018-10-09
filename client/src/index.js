@@ -5,7 +5,7 @@ import App from './components/App/App';
 import { unregister } from './registerServiceWorker';
 
 ReactDOM.render((
-	<BrowserRouter>
+    <BrowserRouter>
 		<App />
 	</BrowserRouter>), document.getElementById('root'));
 
