@@ -19,27 +19,32 @@ class PostPlotsBox extends Component {
     handleSelectionChange(value) {
 
         if (value == "Histogram") { // 
-            this.props.upateCurrentWorkingTabAndObject("getHistplotAN")
+            this.props.upateCurrentWorkingTabAndObject("getHistplotAN");
+            this.props.getHistplotAN();
             this.state = { content: this.props.data.HistplotAN };
         }
 
         if (value == "MAplots") { // 
-            this.props.upateCurrentWorkingTabAndObject("getMAplotAN")
+            this.props.upateCurrentWorkingTabAndObject("getMAplotAN");
+            this.props.getMAplotAN();
             this.state = { content: this.props.data.MAplotAN };
         }
 
         if (value == "Boxplots") { // 
-            this.props.upateCurrentWorkingTabAndObject("getBoxplotAN");.
+            this.props.upateCurrentWorkingTabAndObject("getBoxplotAN");
+            this.props.getBoxplotAN();
             this.state = { content: this.props.data.BoxplotAN };
         }
 
         if (value == "PCA") { //
             this.props.upateCurrentWorkingTabAndObject("getPCA");
+            this.props.getPCA();
             this.state = { content: this.props.data.PCA };
         }
 
         if (value == "Heatmap") { // 
             this.props.upateCurrentWorkingTabAndObject("getHeatmapolt");
+            this.props.getHeatmapolt();
             this.state = { content: this.props.data.Heatmapolt };
         }
     }

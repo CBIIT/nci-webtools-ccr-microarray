@@ -21,7 +21,7 @@ class DataBox extends Component {
     }
 
 
-    update(){
+    update() {
 
     }
 
@@ -93,10 +93,26 @@ class DataBox extends Component {
         if (this.props.data.compared) {
             // controll display fo tags[preplot,postplot,DEG]
             prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots"  key="Pre-normalization_QC_Plots">
-                <PrePlotsBox key="prePlotsBox" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/>
+                <PrePlotsBox key="prePlotsBox" 
+                    getHistplotBN={this.props.getHistplotBN}
+                    getMAplotsBN={this.props.getMAplotsBN}
+                    getBoxplotBN={this.props.getBoxplotBN}
+                    getRLE={this.props.getRLE}
+                    getNUSE={this.props.getNUSE}
+                    data={this.props.data} 
+                    upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}
+                />
                 </TabPane>);
             postPlotsBox = (<TabPane tab="Post-Normalization Plots"  key="Post-normalization_Plots">
-                <PostPlotsBox  key="postPlotsBox" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject} /></TabPane>);
+                <PostPlotsBox  key="postPlotsBox" 
+                     getBoxplotAN={this.props.getBoxplotAN}
+                     getMAplotAN={this.props.getMAplotAN}
+                     getHistplotAN={this.props.getHistplotAN}
+                     getPCA={this.props.getPCA}
+                     getHeatmapolt={this.props.getHeatmapolt}
+                     data={this.props.data} 
+                     upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject} 
+                /></TabPane>);
             degBox = (<TabPane tab="DEG-Enrichments Results"  key="DEG-Enrichments_Results">
                 <DEGBox  key="degBox" data={this.props.data} 
                          changeDeg={this.props.changeDeg} 
