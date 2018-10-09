@@ -793,7 +793,7 @@ function getGSEA(data, threadhold, sorting, search_keyword, page_size, page_numb
 
     // filter data
     for (let j in data) {
-        if (Math.abs(data[j]["logFC"]) < threadhold.foldssGSEA &&  data[j]["P.Value"] < threadhold.pssGSEA) {
+        if (Math.abs(data[j]["logFC"]) < threadhold.foldssGSEA && data[j]["P.Value"] < threadhold.pssGSEA) {
             result.push(data[j])
         }
     }
@@ -913,15 +913,21 @@ function toObject(returnValue) {
 
     var list = "";
 
-    if (config.env = "dev") {
-        list = JSON.parse(decodeURIComponent(returnValue));
-    } else {
-        let d = returnValue.split("+++ssGSEA+++\"")[1];
-        // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-        let data_dir = d.substring(0, d.indexOf("{"));
-        list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
-    }
+    // if (config.env = "dev") {
+    //     list = JSON.parse(decodeURIComponent(returnValue));
+    // } else {
+    //     let d = returnValue.split("+++ssGSEA+++\"")[1];
+    //     // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+    //     let data_dir = d.substring(0, d.indexOf("{"));
+    //     list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
+    // }
 
+
+
+    let d = returnValue.split("+++ssGSEA+++\"")[1];
+    // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+    let data_dir = d.substring(0, d.indexOf("{"));
+    list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
 
 
     // get plots
@@ -932,12 +938,12 @@ function toObject(returnValue) {
     }
 
     let ssGSEA = list.ssGSEA.DEss;
-    for(let key in ssGSEA){
-                  ssGSEA=ssGSEA[key];
+    for (let key in ssGSEA) {
+        ssGSEA = ssGSEA[key];
     }
 
     for (let j in ssGSEA) {
-            workflow.ssGSEA.push(ssGSEA[j]);
+        workflow.ssGSEA.push(ssGSEA[j]);
     }
 
     let deg = list.diff_expr_genes.listDEGs;
