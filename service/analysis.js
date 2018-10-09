@@ -203,11 +203,11 @@ router.post('/runContrast', function(req, res) {
     data.push(req.body.source)
     data.push(config.configPath);
     // mock data
-    if (config.env = "dev") {
-        data.push("dev");
-    } else {
-        data.push("prod");
-    }
+    // if (config.env = "dev") {
+    //     data.push("dev");
+    // } else {
+    //     data.push("prod");
+    // }
 
 
 
