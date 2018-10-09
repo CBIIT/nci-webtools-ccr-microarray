@@ -12,7 +12,7 @@ class Analysis extends Component {
             workflow: {
                 projectID: "",
                 analysisType: "0",
-                accessionCode: "GSE37874",
+                accessionCode: "",
                 fileList: [],
                 uploading: false,
                 progressing: false,
