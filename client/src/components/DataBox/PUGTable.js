@@ -93,17 +93,7 @@ class PUGTable extends Component {
             term: "",
             heapMap: "",
             visible: false,
-            table_content: "",
-            sorting_target: "",
-            sorting_direction: "",
-            page_number: 1,
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: false,
+            table_content: ""
         }
 
         this.handleTableChange = this.handleTableChange.bind(this)
@@ -112,19 +102,19 @@ class PUGTable extends Component {
     }
 
     componentDidMount() {
-            this.fetch();
+        this.fetch();
     }
 
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = { ...this.state.pagination };
-        pager.current = pagination.current;
-        this.setState({
-            pagination: pager,
-        });
-        if(!sorter){
-            sorter={
-                field : "P_Value",
-                rder : "descend"
+        this.props.changePathways_up({
+                        loading: true,
+                        data: [],
+                        pagination,
+         })
+        if (!sorter) {
+            sorter = {
+                field: "P_Value",
+                rder: "descend"
             }
         }
         if (!sorter.field) {
@@ -149,19 +139,19 @@ class PUGTable extends Component {
     }
 
     fetch = (params = {}) => {
-        if(!params.pPathways){
-            params ={
-            page_size: 10,
-            page_number: 1,
-            sorting: {
-                name: "P_Value",
-                order: "descend",
-            },
-            pPathways: this.props.data.pPathways,
-            search_keyword: "",
+        if (!params.pPathways) {
+            params = {
+                page_size: 10,
+                page_number: 1,
+                sorting: {
+                    name: "P_Value",
+                    order: "descend",
+                },
+                pPathways: this.props.data.pPathways,
+                search_keyword: "",
+            }
         }
-        }
-        
+
         console.log('params:', params);
         this.setState({ loading: true });
         fetch('./api/analysis/getUpPathWays', {
@@ -176,7 +166,7 @@ class PUGTable extends Component {
             )
             .then(result => {
                 if (result.status == 200) {
-                    const pagination = { ...this.state.pagination };
+                    const pagination = { ...this.props.data.pathways_up.pagination };
                     // Read total count from server
                     // pagination.total = data.totalCount;
                     pagination.total = result.data.totalCount;
@@ -185,11 +175,14 @@ class PUGTable extends Component {
                         result.data.records[i].key = "pathway_up" + i;
                     }
 
-                    this.setState({
+
+
+                    this.props.changePathways_up({
                         loading: false,
                         data: result.data.records,
                         pagination,
-                    });
+                    })
+
                 } else {
                     message.warning('no data');
                 }
@@ -278,9 +271,9 @@ class PUGTable extends Component {
                     <div>
                      <Table 
                         columns={columns}
-                        dataSource={this.state.data}
-                        pagination={this.state.pagination}
-                        loading={this.state.loading}
+                        dataSource={this.props.data.pathways_up.data}
+                        pagination={this.props.data.pathways_up.pagination}
+                        loading={this.props.data.pathways_up.loading}
                         onChange={this.handleTableChange}
                         />
                     {modal}

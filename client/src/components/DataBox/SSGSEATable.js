@@ -1,36 +1,36 @@
 import React, { Component } from 'react';
-import { Table, Select ,message} from 'antd';
+import { Table, Select, message } from 'antd';
 
 const Option = Select.Option;
 
 const columns = [{
     title: 'Name',
     dataIndex: '_row',
-    sorter:true,
+    sorter: true,
 }, {
     title: 'logFC',
     dataIndex: 'logFC',
-    sorter:true,
+    sorter: true,
 }, {
     title: 'Avg.Enrichment.Score',
-    dataIndex: 'Avg.Enrichment.Score',
-    sorter:true,
+    dataIndex: '',
+    sorter: true,
 }, {
     title: 't',
     dataIndex: 't',
-    sorter:true,
+    sorter: true,
 }, {
     title: 'P.Value',
     dataIndex: 'P.Value',
-    sorter:true,
+    sorter: true,
 }, {
     title: 'adj.P.Val',
     dataIndex: 'adj.P.Val',
-    sorter:true,
+    sorter: true,
 }, {
     title: 'B',
     dataIndex: 'B',
-    sorter:true,
+    sorter: true,
 }, ];
 
 
@@ -39,33 +39,25 @@ class SSGSEATable extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: false,
-        }
-
         this.handleTableChange = this.handleTableChange.bind(this)
         this.fetch = this.fetch.bind(this)
+        this.handleSelectionChange = this.handleSelectionChange.bind(this)
 
     }
 
 
     componentDidMount() {
         this.fetch();
+        this.props.upateCurrentWorkingTabAndObject("ssGSEA")
     }
 
 
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = { ...this.state.pagination };
-        pager.current = pagination.current;
-        this.setState({
-            pagination: pager,
-        });
+        this.props.changessGSEA({
+            loading: true,
+            data: [],
+            pagination,
+        })
         if (!sorter) {
             sorter = {
                 field: "P.Value",
@@ -124,7 +116,7 @@ class SSGSEATable extends Component {
             )
             .then(result => {
                 if (result.status == 200) {
-                    const pagination = { ...this.state.pagination };
+                    const pagination = { ...this.props.data.ssGSEA.pagination };
                     // Read total count from server
                     // pagination.total = data.totalCount;
                     pagination.total = result.data.totalCount;
@@ -133,11 +125,12 @@ class SSGSEATable extends Component {
                         result.data.records[i].key = "GSEA" + i;
                     }
 
-                    this.setState({
+                    this.props.changessGSEA({
                         loading: false,
                         data: result.data.records,
                         pagination,
-                    });
+                    })
+
                 } else {
                     message.warning('no data');
                 }
@@ -148,6 +141,15 @@ class SSGSEATable extends Component {
 
 
     handleSelectionChange(value) {
+
+        if(value=="ss_tag1"){
+         this.props.upateCurrentWorkingTabAndObject("ssGSEA")
+        }
+        if(value=="ss_tag2"){
+         this.props.upateCurrentWorkingTabAndObject("pathwayHeatMap")
+        }
+
+
         var list = document.getElementsByClassName("ss_plot");
         for (var i = 0; i < list.length; i++) {
             list[i].classList.add("hide");
@@ -160,17 +162,14 @@ class SSGSEATable extends Component {
 
         let content = "";
 
-
-        const data = this.props.data.ssGSEA;
         var link = "./images/" + this.props.data.projectID + "/geneHeatmap1.jpg"
-
 
         let tabs = [<div id="ss_tag1" className="ss_plot">
                             <Table 
                                 columns={columns}
-                                dataSource={this.state.data}
-                                pagination={this.state.pagination}
-                                loading={this.state.loading}
+                                dataSource={this.props.data.ssGSEA.data}
+                                pagination={this.props.data.ssGSEA.pagination}
+                                loading={this.props.data.ssGSEA.loading}
                                 onChange={this.handleTableChange}
                                 />
                                 </div>,
