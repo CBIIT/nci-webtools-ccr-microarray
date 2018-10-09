@@ -6,14 +6,14 @@ const columns = [{
     dataIndex: 'Pathway_ID',
     width: "10%",
     key: 'Pathway_ID',
- sorter: true,
+    sorter: true,
 
 }, {
     title: 'Source',
     dataIndex: 'Source',
     width: "8%",
     key: 'Source',
-   sorter: true,
+    sorter: true,
 }, {
     title: 'Description',
     dataIndex: 'Description',
@@ -50,7 +50,7 @@ const columns = [{
     dataIndex: 'Ratio',
     width: "8%",
     key: 'Ratio',
-   sorter: true,
+    sorter: true,
 }, {
     title: 'Gene_List',
     dataIndex: 'Gene_List',
@@ -75,7 +75,7 @@ const columns = [{
     dataIndex: 'Number_Genes_Pathway',
     width: "95px",
     key: 'Number_Genes_Pathway',
-   sorter: true,
+    sorter: true,
 
 }, {
     title: 'Number_User_Genes',
@@ -88,7 +88,7 @@ const columns = [{
     dataIndex: 'Total_Number_Genes',
     width: "90px",
     key: 'Total_Number_Genes',
-   sorter: true,
+    sorter: true,
 }];
 
 class PUGTable extends Component {
@@ -101,15 +101,7 @@ class PUGTable extends Component {
             term: "",
             heapMap: "",
             visible: false,
-            table_content: "",
-            page_number: 1,
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: false,
+            table_content: ""
         }
 
         this.handleTableChange = this.handleTableChange.bind(this)
@@ -121,11 +113,11 @@ class PUGTable extends Component {
     }
 
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = { ...this.state.pagination };
-        pager.current = pagination.current;
-        this.setState({
-            pagination: pager,
-        });
+         this.props.changePathways_down({
+                        loading: true,
+                        data: [],
+                        pagination,
+         })
         if (!sorter) {
             sorter = {
                 field: "P_Value",
@@ -181,7 +173,7 @@ class PUGTable extends Component {
             )
             .then(result => {
                 if (result.status == 200) {
-                    const pagination = { ...this.state.pagination };
+                    const pagination = { ...this.props.data.pathways_down.pagination };
                     // Read total count from server
                     // pagination.total = data.totalCount;
                     pagination.total = result.data.totalCount;
@@ -189,12 +181,11 @@ class PUGTable extends Component {
                     for (let i = 0; i < result.data.records.length; i++) {
                         result.data.records[i].key = "pathway_up" + i;
                     }
-
-                    this.setState({
+                    this.props.changePathways_down({
                         loading: false,
                         data: result.data.records,
                         pagination,
-                    });
+                    })
                 } else {
                     message.warning('no data');
                 }
@@ -284,9 +275,9 @@ class PUGTable extends Component {
                     <div>
                      <Table 
                         columns={columns}
-                        dataSource={this.state.data}
-                        pagination={this.state.pagination}
-                        loading={this.state.loading}
+                        dataSource={this.props.data.pathways_down.data}
+                        pagination={this.props.data.pathways_down.pagination}
+                        loading={this.props.data.pathways_down.loading}
                         onChange={this.handleTableChange}
                         />
                     {modal}

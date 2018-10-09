@@ -92,19 +92,27 @@ class DataBox extends Component {
 
         if (this.props.data.compared) {
             // controll display fo tags[preplot,postplot,DEG]
-            prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots"  key="Pre-normalization_QC_Plots"><PrePlotsBox key="prePlotsBox" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/>
+            prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots"  key="Pre-normalization_QC_Plots">
+                <PrePlotsBox key="prePlotsBox" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/>
                 </TabPane>);
-            postPlotsBox = (<TabPane tab="Post-Normalization Plots"  key="Post-normalization_Plots"><PostPlotsBox  key="postPlotsBox" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject} /></TabPane>);
-            degBox = (<TabPane tab="DEG-Enrichments Results"  key="DEG-Enrichments_Results"><DEGBox  key="degBox" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
+            postPlotsBox = (<TabPane tab="Post-Normalization Plots"  key="Post-normalization_Plots">
+                <PostPlotsBox  key="postPlotsBox" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject} /></TabPane>);
+            degBox = (<TabPane tab="DEG-Enrichments Results"  key="DEG-Enrichments_Results">
+                <DEGBox  key="degBox" data={this.props.data} 
+                         changeDeg={this.props.changeDeg} 
+                         changePathways_up={this.props.changePathways_up}
+                         changePathways_down={this.props.changePathways_down}
+                         upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
         } else {
             // controll display fo tags[preplot,postplot,DEG]
-            prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots" disabled key="Pre-normalization_QC_Plots" upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}>No data </TabPane>);
-            postPlotsBox = (<TabPane tab="Post-Normalization Plots" disabled key="Post-normalization_Plots" upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}>No data</TabPane>);
-            degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results" upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}>No data</TabPane>);
+            prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots" disabled key="Pre-normalization_QC_Plots" >No data </TabPane>);
+            postPlotsBox = (<TabPane tab="Post-Normalization Plots" disabled key="Post-normalization_Plots" >No data</TabPane>);
+            degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results" >No data</TabPane>);
         }
         // control tab  SSGSEA
         if (this.props.data.done_gsea) {
-            ssGSEABox = (<TabPane tab="ssGSEA Results" key="ssGSEA_Results"><SSGSEATable key="ssgseaTable"data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
+            ssGSEABox = (<TabPane tab="ssGSEA Results" key="ssGSEA_Results">
+                <SSGSEATable  changessGSEA={this.props.changessGSEA} key="ssgseaTable" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
         }
 
         var selected_gsms = "";

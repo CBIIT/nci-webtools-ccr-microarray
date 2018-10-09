@@ -203,11 +203,11 @@ router.post('/runContrast', function(req, res) {
     data.push(req.body.source)
     data.push(config.configPath);
     // mock data
-    // if (config.env = "dev") {
-    //     data.push("dev");
-    // } else {
-    //     data.push("prod");
-    // }
+    if (config.env = "dev") {
+        data.push("dev");
+    } else {
+        data.push("prod");
+    }
 
 
 
@@ -236,17 +236,133 @@ router.post('/runContrast', function(req, res) {
         req.session.projectId == req.body.projectId &&
         req.session.option == req.body.group_1 + req.body.group_2 + req.body.genSet
     ) {
-        let retun_data = ""
-        if (req.body.targetObject == "UpPathWays") {
-            let threadhold = {
-                P_Value: req.body.pPathways
+        let retun_data = "";
+        let type = req.body.targetObject;
+        if (type == "getHistplotAN") {
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[5]
+            } else {
+                return_data = "";
             }
-            retun_data = getUpPathWays(req.session.runContrastData.pathways_up, threadhold, req.body.sorting, req.body.search_keyword, req.body.page_size)
 
         }
 
-        //if DownPathWays
+        if (type == "getBoxplotAN") {
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[7]
+            } else {
+                return_data = "";
+            }
 
+        }
+
+        if (type == "getMAplotAN") {
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[6]
+            } else {
+                return_data = "";
+            }
+        }
+
+        if (type = "getPCA") {
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[8]
+            } else {
+                return_data = "";
+            }
+
+        }
+
+        if (type == "getHeatmapolt") {
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[9]
+            } else {
+                return_data = "";
+            }
+        }
+     
+
+          if (type == "getHistplotBN") {
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[0]
+            } else {
+                return_data = "";
+            }
+
+        }
+
+        if (type == "getMAplotsBN") {
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[1]
+            } else {
+                return_data = "";
+            }
+
+        }
+
+        if (type == "getBoxplotBN") {
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[2]
+            } else {
+                return_data = "";
+            }
+
+        }
+
+        if (type == "getRLE") {
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[3]
+            } else {
+                return_data = "";
+            }
+        }
+
+        if (type == "getNUSE") {
+
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[4]
+            } else {
+                return_data = "";
+            }
+        }
+
+
+        if (type == "getPostPCA") {
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[8]
+            } else {
+                return_data = "";
+            }
+        }
+
+        if (type == "deg") {
+            return_data = getDEG(req)
+        }
+
+        if (type == "ssGSEA") {
+            return_data = getGSEA(req)
+        }
+
+
+        if (type == "pathways_up") {
+            return_data = getUpPathWays(req)
+        }
+
+        if (type == "pathways_down") {
+            return_data = getDownPathWays(req)
+        }
+
+
+        if(type=="volcanoPlot"){
+
+            return_data ="/volcano.html"
+        }
+
+
+        if(type=="pathwayHeatMap"){
+
+            return_data ="/geneHeatmap.jpg"
+        }
 
         logger.info("API:/runContrast ", "Contrast uses session ")
         res.json({
@@ -295,104 +411,165 @@ router.post('/runContrast', function(req, res) {
 
 
 
-
-router.post('/getHistplotAN', function(req, res) {
+function getPlots(req, type) {
     let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[5]
-    } else {
-        return_data = "";
+    if (type == "getHistplotAN") {
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[5]
+        } else {
+            return_data = "";
+        }
+
     }
 
+    if (type == "getBoxplotAN") {
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[7]
+        } else {
+            return_data = "";
+        }
+
+    }
+
+    if (type == "getMAplotAN") {
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[6]
+        } else {
+            return_data = "";
+        }
+    }
+
+    if (type = "getPCA") {
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[8]
+        } else {
+            return_data = "";
+        }
+
+    }
+
+    if (type == "getHeatmapolt") {
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[9]
+        } else {
+            return_data = "";
+        }
+    }
+    if (type == "getBoxplotAN") {
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[7]
+        } else {
+            return_data = "";
+        }
+    }
+
+
+    if (type == "getHistplotBN") {
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[0]
+        } else {
+            return_data = "";
+        }
+
+    }
+
+    if (type == "getMAplotsBN") {
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[1]
+        } else {
+            return_data = "";
+        }
+
+    }
+
+    if (type == "getBoxplotBN") {
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[2]
+        } else {
+            return_data = "";
+        }
+
+    }
+
+    if (type == "getRLE") {
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[3]
+        } else {
+            return_data = "";
+        }
+    }
+
+    if (type == "getNUSE") {
+
+        if (req.session && req.session.runContrastData) {
+            return_data = req.session.runContrastData.listPlots[4]
+        } else {
+            return_data = "";
+        }
+    }
+
+
+    return return_data
+}
+
+
+
+router.post('/getHistplotBN', function(req, res) {
     res.json({
         status: 200,
-        data: return_data
+        data: getPlots(req, "getHistplotBN")
     });
 });
 
+
+
+
+router.post('/getHistplotAN', function(req, res) {
+    res.json({
+        status: 200,
+        data: getPlots(req, "getHistplotAN")
+    });
+});
 
 
 
 router.post('/getBoxplotAN', function(req, res) {
-    let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[7]
-    } else {
-        return_data = "";
-    }
-
     res.json({
         status: 200,
-        data: return_data
+        data: getPlots(req, "getBoxplotAN")
     });
 });
-
-
-
 
 router.post('/getMAplotAN', function(req, res) {
-    let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[6]
-    } else {
-        return_data = "";
-    }
-
     res.json({
         status: 200,
-        data: return_data
+        data: getPlots(req, "getMAplotAN")
     });
+
 });
-
-
-
 
 
 router.post('/getPCA', function(req, res) {
-    let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[8]
-    } else {
-        return_data = "";
-    }
-
     res.json({
         status: 200,
-        data: return_data
+        data: getPlots(req, "getPCA")
     });
 });
 
 
-
-
-
 router.post('/getHeatmapolt', function(req, res) {
-    let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[9]
-    } else {
-        return_data = "";
-    }
-
     res.json({
         status: 200,
-        data: return_data
+        data: getPlots(req, "getHeatmapolt")
     });
 });
 
 
 
 router.post('/getBoxplotAN', function(req, res) {
-    let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[7]
-    } else {
-        return_data = "";
-    }
-
     res.json({
         status: 200,
-        data: return_data
+        data: getPlots(req, "getBoxplotAN")
     });
 });
 
@@ -400,16 +577,9 @@ router.post('/getBoxplotAN', function(req, res) {
 
 
 router.post('/getMAplotsBN', function(req, res) {
-    let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[1]
-    } else {
-        return_data = "";
-    }
-
     res.json({
         status: 200,
-        data: return_data
+        data: getPlots(req, "getMAplotsBN")
     });
 });
 
@@ -418,125 +588,37 @@ router.post('/getMAplotsBN', function(req, res) {
 
 
 router.post('/getBoxplotBN', function(req, res) {
-    let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[2]
-    } else {
-        return_data = "";
-    }
-
     res.json({
         status: 200,
-        data: return_data
+        data: getPlots(req, "getBoxplotBN")
     });
 });
 
 router.post('/getRLE', function(req, res) {
-    let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[3]
-    } else {
-        return_data = "";
-    }
     res.json({
         status: 200,
-        data: return_data
+        data: getPlots(req, "getRLE")
     });
-
 
 });
 
 
 router.post('/getNUSE', function(req, res) {
-    let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[4]
-    } else {
-        return_data = "";
-    }
-
     res.json({
         status: 200,
-        data: return_data
+        data: getPlots(req, "getNUSE")
     });
 });
 
 
-
-router.post('/getPostBoxPlot', function(req, res) {
-    let return_data = "";
-    if (typeof(req.session.runContrastData) != "undefined") {
-        return_data = req.session.runContrastData.listPlots[7]
-    } else {
-        return_data = "";
-    }
-
-    res.json({
-        status: 200,
-        data: return_data
-    });
-
-});
-
-
-router.post('/getPostPCA', function(req, res) {
-    let return_data = "";
-    if (req.session && req.session.runContrastData) {
-        return_data = req.session.runContrastData.listPlots[8]
-    } else {
-        return_data = "";
-    }
-    res.json({
-        status: 200,
-        data: return_data
-    });
-
-
-});
 
 
 router.post('/getUpPathWays', function(req, res) {
 
     if (req.session && req.session.runContrastData) {
-        let threadhold = {}
-        if (!req.body.pPathways) {
-            threadhold = {
-                P_Value: 0.05
-            }
-        } else {
-            threadhold = {
-                P_Value: req.body.pPathways
-            }
-        }
-
-        if (!req.body.sorting) {
-            req.body.sorting = {
-                field: "P_Value",
-                rder: "descend"
-            }
-        }
-
-        if (!req.body.search_keyword) {
-            req.body.search_keyword = ""
-        }
-
-        if (!req.body.page_size) {
-            req.body.page_size = 10
-        }
-
-        if (!req.body.page_number) {
-            req.body.page_number = 1
-        }
-
         res.json({
             status: 200,
-            data: getPathWays(
-                req.session.runContrastData.pathways_up,
-                threadhold,
-                req.body.sorting,
-                req.body.search_keyword,
-                req.body.page_size,
-                req.body.page_number)
+            data: getUpPathWays(req)
         });
 
     } else {
@@ -545,8 +627,6 @@ router.post('/getUpPathWays', function(req, res) {
             data: ""
         });
     }
-
-
 
 });
 
@@ -554,45 +634,9 @@ router.post('/getUpPathWays', function(req, res) {
 router.post('/getDownPathWays', function(req, res) {
 
     if (req.session && req.session.runContrastData) {
-        let threadhold = {}
-        if (!req.body.pPathways) {
-            threadhold = {
-                P_Value: 0.05
-            }
-        } else {
-            threadhold = {
-                P_Value: req.body.pPathways
-            }
-        }
-
-        if (!req.body.sorting) {
-            req.body.sorting = {
-                field: "P_Value",
-                rder: "descend"
-            }
-        }
-
-        if (!req.body.search_keyword) {
-            req.body.search_keyword = ""
-        }
-
-        if (!req.body.page_size) {
-            req.body.page_size = 10
-        }
-
-        if (!req.body.page_number) {
-            req.body.page_number = 1
-        }
-
         res.json({
             status: 200,
-            data: getPathWays(
-                req.session.runContrastData.pathways_down,
-                threadhold,
-                req.body.sorting,
-                req.body.search_keyword,
-                req.body.page_size,
-                req.body.page_number)
+            data: getDownPathWays(req)
         });
 
     } else {
@@ -605,52 +649,15 @@ router.post('/getDownPathWays', function(req, res) {
 
 
 });
+
 
 router.post('/getGSEA', function(req, res) {
 
     if (req.session && req.session.runContrastData) {
-        let threadhold = {}
-        if (!req.body.p_value) {
-            threadhold = {
-                pssGSEA: 0.05,
-                foldssGSEA: 1.5
-            }
-        } else {
-            threadhold = {
-                pssGSEA: req.body.pssGSEA,
-                foldssGSEA: req.body.foldssGSEA
-
-            }
-        }
-
-        if (!req.body.sorting) {
-            req.body.sorting = {
-                field: "P.Value",
-                rder: "descend"
-            }
-        }
-
-        if (!req.body.search_keyword) {
-            req.body.search_keyword = ""
-        }
-
-        if (!req.body.page_size) {
-            req.body.page_size = 10
-        }
-
-        if (!req.body.page_number) {
-            req.body.page_number = 1
-        }
 
         res.json({
             status: 200,
-            data: getGSEA(
-                req.session.runContrastData.diff_expr_genes,
-                threadhold,
-                req.body.sorting,
-                req.body.search_keyword,
-                req.body.page_size,
-                req.body.page_number)
+            data: getGSEA(req)
         });
 
     } else {
@@ -663,56 +670,14 @@ router.post('/getGSEA', function(req, res) {
 
 
 });
-
-
 
 router.post('/getDEG', function(req, res) {
 
     if (req.session && req.session.runContrastData) {
-        let threadhold = {}
-        if (!req.body.p_value) {
-            threadhold = {
-                P_Value: 0.05,
-                foldDEGs: 1.5
-            }
-        } else {
-            threadhold = {
-                P_Value: req.body.p_value,
-                foldDEGs: req.body.foldDEGs
-
-            }
-        }
-
-        if (!req.body.sorting) {
-            req.body.sorting = {
-                field: "P.Value",
-                rder: "descend"
-            }
-        }
-
-        if (!req.body.search_keyword) {
-            req.body.search_keyword = ""
-        }
-
-        if (!req.body.page_size) {
-            req.body.page_size = 10
-        }
-
-        if (!req.body.page_number) {
-            req.body.page_number = 1
-        }
-
         res.json({
             status: 200,
-            data: getDEG(
-                req.session.runContrastData.diff_expr_genes,
-                threadhold,
-                req.body.sorting,
-                req.body.search_keyword,
-                req.body.page_size,
-                req.body.page_number)
+            data: getDEG(req)
         });
-
     } else {
         res.json({
             status: 404,
@@ -720,10 +685,187 @@ router.post('/getDEG', function(req, res) {
         });
     }
 
-
-
 });
 
+
+function getUpPathWays(req) {
+    let threadhold = {}
+    if (!req.body.pPathways) {
+        threadhold = {
+            P_Value: 0.05
+        }
+    } else {
+        threadhold = {
+            P_Value: req.body.pPathways
+        }
+    }
+
+    if (!req.body.sorting) {
+        req.body.sorting = {
+            field: "P_Value",
+            rder: "descend"
+        }
+    }
+
+    if (!req.body.search_keyword) {
+        req.body.search_keyword = ""
+    }
+
+    if (!req.body.page_size) {
+        req.body.page_size = 10
+    }
+
+    if (!req.body.page_number) {
+        req.body.page_number = 1
+    }
+
+
+    return getPathWays(
+        req.session.runContrastData.pathways_up,
+        threadhold,
+        req.body.sorting,
+        req.body.search_keyword,
+        req.body.page_size,
+        req.body.page_number)
+
+}
+
+
+
+function getDownPathWays(req) {
+    let threadhold = {}
+    if (!req.body.pPathways) {
+        threadhold = {
+            P_Value: 0.05
+        }
+    } else {
+        threadhold = {
+            P_Value: req.body.pPathways
+        }
+    }
+
+    if (!req.body.sorting) {
+        req.body.sorting = {
+            field: "P_Value",
+            rder: "descend"
+        }
+    }
+
+    if (!req.body.search_keyword) {
+        req.body.search_keyword = ""
+    }
+
+    if (!req.body.page_size) {
+        req.body.page_size = 10
+    }
+
+    if (!req.body.page_number) {
+        req.body.page_number = 1
+    }
+
+    return getPathWays(
+        req.session.runContrastData.pathways_down,
+        threadhold,
+        req.body.sorting,
+        req.body.search_keyword,
+        req.body.page_size,
+        req.body.page_number)
+}
+
+
+
+
+
+function getGSEA(req) {
+    let threadhold = {}
+    if (!req.body.p_value) {
+        threadhold = {
+            pssGSEA: 0.05,
+            foldssGSEA: 1.5
+        }
+    } else {
+        threadhold = {
+            pssGSEA: req.body.pssGSEA,
+            foldssGSEA: req.body.foldssGSEA
+
+        }
+    }
+
+    if (!req.body.sorting) {
+        req.body.sorting = {
+            field: "P.Value",
+            rder: "descend"
+        }
+    }
+
+    if (!req.body.search_keyword) {
+        req.body.search_keyword = ""
+    }
+
+    if (!req.body.page_size) {
+        req.body.page_size = 10
+    }
+
+    if (!req.body.page_number) {
+        req.body.page_number = 1
+    }
+
+    return getGSEA_filter(
+        req.session.runContrastData.ssGSEA,
+        threadhold,
+        req.body.sorting,
+        req.body.search_keyword,
+        req.body.page_size,
+        req.body.page_number)
+}
+
+
+
+
+
+function getDEG(req) {
+
+    let threadhold = {}
+    if (!req.body.p_value) {
+        threadhold = {
+            P_Value: 0.05,
+            foldDEGs: 1.5
+        }
+    } else {
+        threadhold = {
+            P_Value: req.body.p_value,
+            foldDEGs: req.body.foldDEGs
+
+        }
+    }
+
+    if (!req.body.sorting) {
+        req.body.sorting = {
+            field: "P.Value",
+            rder: "descend"
+        }
+    }
+
+    if (!req.body.search_keyword) {
+        req.body.search_keyword = ""
+    }
+
+    if (!req.body.page_size) {
+        req.body.page_size = 10
+    }
+
+    if (!req.body.page_number) {
+        req.body.page_number = 1
+    }
+    return getDEG_filter(
+        req.session.runContrastData.diff_expr_genes,
+        threadhold,
+        req.body.sorting,
+        req.body.search_keyword,
+        req.body.page_size,
+        req.body.page_number)
+
+}
 
 
 
@@ -763,7 +905,6 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
         })
 
     }
-
     // search
     if (search_keyword != "") {
 
@@ -787,7 +928,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
 
 
-function getGSEA(data, threadhold, sorting, search_keyword, page_size, page_number) {
+function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, page_number) {
 
     let result = []
 
@@ -843,7 +984,7 @@ function getGSEA(data, threadhold, sorting, search_keyword, page_size, page_numb
 
 
 
-function getDEG(data, threadhold, sorting, search_keyword, page_size, page_number) {
+function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, page_number) {
 
     let result = []
 
@@ -913,21 +1054,20 @@ function toObject(returnValue) {
 
     var list = "";
 
-    // if (config.env = "dev") {
-    //     list = JSON.parse(decodeURIComponent(returnValue));
-    // } else {
-    //     let d = returnValue.split("+++ssGSEA+++\"")[1];
-    //     // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-    //     let data_dir = d.substring(0, d.indexOf("{"));
-    //     list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
-    // }
+    if (config.env = "dev") {
+        list = JSON.parse(decodeURIComponent(returnValue));
+    } else {
+        let d = returnValue.split("+++ssGSEA+++\"")[1];
+        // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+        let data_dir = d.substring(0, d.indexOf("{"));
+        list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
+    }
 
 
-
-    let d = returnValue.split("+++ssGSEA+++\"")[1];
-    // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-    let data_dir = d.substring(0, d.indexOf("{"));
-    list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
+    // let d = returnValue.split("+++ssGSEA+++\"")[1];
+    //    // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+    //    let data_dir = d.substring(0, d.indexOf("{"));
+    //    list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
 
 
     // get plots

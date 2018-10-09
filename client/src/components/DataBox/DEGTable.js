@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Input, Tooltip ,message} from 'antd';
+import { Table, Input, Tooltip, message } from 'antd';
 const Search = Input.Search;
 
 const columns = [{
@@ -72,34 +72,28 @@ class DEGTable extends Component {
 
         this.state = {
             term: "",
-            page_number: 1,
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: false,
         }
 
         this.handleTableChange = this.handleTableChange.bind(this)
         this.fetch = this.fetch.bind(this)
     }
 
-     componentDidMount() {
-            this.fetch();
+    componentDidMount() {
+        this.fetch();
     }
 
     handleTableChange = (pagination, filters, sorter) => {
-        const pager = { ...this.state.pagination };
-        pager.current = pagination.current;
-        this.setState({
-            pagination: pager,
-        });
-        if(!sorter){
-            sorter={
-                field : "P.Value",
-                rder : "descend"
+
+         this.props.changeDeg({
+                        loading: true,
+                        data: [],
+                        pagination,
+         })
+
+        if (!sorter) {
+            sorter = {
+                field: "P.Value",
+                rder: "descend"
             }
         }
         if (!sorter.field) {
@@ -118,27 +112,27 @@ class DEGTable extends Component {
                 name: sorter.field,
                 order: sorter.order,
             },
-            foldDEGs:this.props.data.foldDEGs,
+            foldDEGs: this.props.data.foldDEGs,
             P_Value: this.props.data.pDEGs,
             search_keyword: "",
         });
     }
 
     fetch = (params = {}) => {
-        if(!params.foldDEGs){
-            params ={
-            page_size: 10,
-            page_number: 1,
-            sorting: {
-                name: "P.Value",
-                order: "descend",
-            },
-            foldDEGs:this.props.data.foldDEGs,
-            P_Value: this.props.data.pDEGs,
-            search_keyword: "",
+        if (!params.foldDEGs) {
+            params = {
+                page_size: 10,
+                page_number: 1,
+                sorting: {
+                    name: "P.Value",
+                    order: "descend",
+                },
+                foldDEGs: this.props.data.foldDEGs,
+                P_Value: this.props.data.pDEGs,
+                search_keyword: "",
+            }
         }
-        }
-        
+
         console.log('params:', params);
         this.setState({ loading: true });
         fetch('./api/analysis/getDEG', {
@@ -153,8 +147,8 @@ class DEGTable extends Component {
             )
             .then(result => {
                 if (result.status == 200) {
-                    const pagination = { ...this.state.pagination };
-                    // Read total count from server
+                    const pagination = { ...this.props.data.diff_expr_genes.pagination };
+                    // Read total count from server 
                     // pagination.total = data.totalCount;
                     pagination.total = result.data.totalCount;
 
@@ -162,12 +156,12 @@ class DEGTable extends Component {
                         result.data.records[i].key = "DEG" + i;
                     }
 
-                    this.setState({
+                    this.props.changeDeg({
                         loading: false,
                         data: result.data.records,
                         pagination,
-                    });
-                } else {
+                    })
+                } else {    
                     message.warning('no data');
                 }
 
@@ -193,9 +187,9 @@ class DEGTable extends Component {
                     <div>
                         <Table 
                             columns={columns}
-                            dataSource={this.state.data}
-                            pagination={this.state.pagination}
-                            loading={this.state.loading}
+                            dataSource={this.props.data.diff_expr_genes.data}
+                            pagination={this.props.data.diff_expr_genes.pagination}
+                            loading={this.props.data.diff_expr_genes.loading}
                             onChange={this.handleTableChange}
                         />
                     </div>

@@ -32,17 +32,82 @@ class Analysis extends Component {
                 uploaded: false,
                 done_gsea: false,
                 current_working_on_object: "",
-                diff_expr_genes: "",
-                ssGSEA: "",
-                pathways_up: "",
-                pathways_down: ""
+                diff_expr_genes: {
+                    data: [],
+                    pagination: {
+                        current: 1,
+                        pageSize: 10,
+
+                    },
+                    loading: true,
+                },
+                ssGSEA: {
+                    data: [],
+                    pagination: {
+                        current: 1,
+                        pageSize: 10,
+
+                    },
+                    loading: true,
+                },
+                pathways_up: {
+
+                    data: [],
+                    pagination: {
+                        current: 1,
+                        pageSize: 10,
+
+                    },
+                    loading: true,
+                },
+                pathways_down: {
+                    data: [],
+                    pagination: {
+                        current: 1,
+                        pageSize: 10,
+
+                    },
+                    loading: true,
+                },
+                NUSE: "",
+                RLE: "",
+                BoxplotBN: "",
+                MAplotsBN: "",
+                HistplotBN: "",
+
+
+                HistplotAN: "",
+                MAplotAN: "",
+                BoxplotAN: "",
+                PCA: "",
+                Heatmapolt: "",
+
+
+
             }
         };
+
+        this.changePathways_up = this.changePathways_up.bind(this);
+        this.changePathways_down = this.changePathways_down.bind(this);
+        this.changessGSEA = this.changessGSEA.bind(this);
+        this.changeDeg = this.changeDeg.bind(this);
         this.changeProject = this.changeProject.bind(this);
         this.changeCode = this.changeCode.bind(this);
         this.handleSelectType = this.handleSelectType.bind(this);
         this.upateCurrentWorkingTabAndObject = this.upateCurrentWorkingTabAndObject.bind(this);
         this.runContrast = this.runContrast.bind(this);
+        this.getHistplotBN = this.getHistplotBN.bind(this);
+        this.getNUSE = this.getNUSE.bind(this);
+        this.getRLE = this.getRLE.bind(this);
+        this.getBoxplotBN = this.getBoxplotBN.bind(this);
+        this.getMAplotsBN = this.getMAplotsBN.bind(this);
+        this.getHeatmapolt = this.getHeatmapolt.bind(this);
+        this.getPCA = this.getPCA.bind(this);
+        this.getBoxplotAN = this.getBoxplotAN.bind(this);
+        this.getHistplotAN = this.getHistplotAN.bind(this);
+        this.getMAplotAN = this.getMAplotAN.bind(this);
+
+
     }
 
 
@@ -53,6 +118,478 @@ class Analysis extends Component {
                 v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
+    }
+    getHeatmapolt() {
+
+        try {
+            fetch('./api/analysis/getHeatmapolt', {
+                    method: "POST",
+                    body: "",
+                    processData: false,
+                    contentType: false
+                }).then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        if (result.data != "") {
+
+                            let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+this.props.data.projectID+this.props.data.Heatmapolt}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
+
+                            this.setState({ Heatmapolt: <div>{HeatMapIframe}</div> });
+                        } else {
+
+                            this.setState({ Heatmapolt: "No Data" });
+                        }
+
+                    } else {
+                        message.error('Load histplot fails.');
+                    }
+
+                })
+        } catch (error) {
+            message.error('Load data fails.');
+        }
+
+    }
+    getPCA() {
+
+        try {
+            fetch('./api/analysis/getPCA', {
+                    method: "POST",
+                    body: "",
+                    processData: false,
+                    contentType: false
+                }).then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        if (result.data != "") {
+
+
+                            let pcaData = result.data;
+                            var PCAIframe = <Plot  data={[{
+
+                                        x: pcaData.x,
+                                        y: pcaData.y,
+                                        z: pcaData.z,
+                                        text: pcaData.row,
+                                        mode: 'markers',
+                                        marker: {
+                                            size: 10,
+                                            color: pcaData.color
+                                        },
+                                        type: 'scatter3d',
+                                       
+                                    }]} layout={{
+                                        autosize:true,
+                                        margin: {
+                                            l: 0,
+                                            r: 0,
+                                            b: 0,
+                                            t: 0
+                                        },
+                                        scene: {
+                                            xaxis: {
+                                                title: pcaData.col[0],
+                                                backgroundcolor: "#DDDDDD",
+                                                gridcolor: "rgb(255, 255, 255)",
+                                                showbackground: true,
+                                                zerolinecolor: "rgb(255, 255, 255)"
+
+                                            },
+                                            yaxis: {
+                                                title:  pcaData.col[1],
+                                                backgroundcolor: "#EEEEEE",
+                                                gridcolor: "rgb(255, 255, 255)",
+                                                showbackground: true,
+                                                zerolinecolor: "rgb(255, 255, 255)"
+                                            },
+                                            zaxis: {
+                                                title:  pcaData.col[2],
+                                                backgroundcolor: "#cccccc",
+                                                gridcolor: "rgb(255, 255, 255)",
+                                                showbackground: true,
+                                                zerolinecolor: "rgb(255, 255, 255)"
+                                            }
+                                        }}
+                                    }  useResizeHandler={true} />
+
+                            this.setState({ PCA: <div> {PCAIframe}</div> });
+                        } else {
+
+                            this.setState({ PCA: "No Data" });
+                        }
+
+
+                    } else {
+                        message.error('Load histplot fails.');
+                    }
+
+                })
+        } catch (error) {
+            message.error('Load data fails.');
+        }
+
+    }
+    getBoxplotAN() {
+        try {
+            fetch('./api/analysis/getBoxplotAN', {
+                    method: "POST",
+                    body: "",
+                    processData: false,
+                    contentType: false
+                }).then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        if (result.data != "") {
+                            let BoxplotRenderData = []
+                            let BoxplotsData = result.data
+                            for (let i = 0; i < result.data.col.length - 1; i++) {
+
+                                let boxplotData = {
+                                    y: BoxplotsData.data[i],
+                                    type: "box",
+                                    name: BoxplotsData.col[i],
+                                    marker: {
+                                        color: BoxplotsData.color[i]
+                                    }
+                                }
+                                BoxplotRenderData.push(boxplotData)
+                            }
+
+                            let plot_layout = { showlegend: false, autosize: true }
+                            let plot_style = {}
+
+                            let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
+
+                            this.setState({ BoxplotAN: <div> {Boxplots}</div> });
+                        } else {
+
+                            this.setState({ BoxplotAN: "No Data" });
+                        }
+
+
+                    } else {
+                        message.error('Load histplot fails.');
+                    }
+
+                })
+        } catch (error) {
+            message.error('Load data fails.');
+        }
+
+    }
+
+    getHistplotAN() {
+        try {
+            fetch('./api/analysis/getHistplotAN', {
+                    method: "POST",
+                    body: "",
+                    processData: false,
+                    contentType: false
+                }).then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        if (result.data != "") {
+                            let histplotANLink = './images/' + this.props.data.projectID + result.data;
+                            let histplotAN = <img src={ histplotANLink } style={{ width: "75%" }} alt="Histogram" />;
+                            this.setState({ HistplotAN: histplotAN });
+                        } else {
+                            this.setState({ HistplotAN: "No Data" });
+                        }
+
+                    } else {
+                        message.error('Load histplot fails.');
+                    }
+
+                })
+        } catch (error) {
+            message.error('Load data fails.');
+        }
+    }
+
+    getMAplotAN() {
+        try {
+            fetch('./api/analysis/getMAplotAN', {
+                    method: "POST",
+                    body: "",
+                    processData: false,
+                    contentType: false
+                }).then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        if (result.data != "") {
+                            let list_mAplotBN = [];
+                            for (let i = result.data.length - 1; i >= 0; i--) {
+                                let link = "./images/" + this.props.data.projectID + result.data[i]
+                                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                            }
+                            let maplot_style = {
+                                'height': 'auto',
+                                'maxHeight': '100%',
+                                'overflow': 'scroll'
+                            };
+
+                            this.setState({ MAplotAN: <div style={ maplot_style } > { list_mAplotBN } </div> });
+                        } else {
+
+                            this.setState({ MAplotAN: "No Data" });
+                        }
+
+
+                    } else {
+                        message.error('Load histplot fails.');
+                    }
+
+                })
+        } catch (error) {
+            message.error('Load data fails.');
+        }
+
+    }
+    getNUSE() {
+        try {
+            fetch('./api/analysis/getNUSE', {
+                    method: "POST",
+                    body: "",
+                    processData: false,
+                    contentType: false
+                }).then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+
+                        let NUSERenderData = []
+                        let NUSEplotsData = result.data
+                        for (let i = 0; i < result.data.col.length - 1; i++) {
+
+                            let boxplotData = {
+                                y: NUSEplotsData.data[i],
+                                type: "box",
+                                name: NUSEplotsData.col[i],
+                                marker: {
+                                    color: NUSEplotsData.color[i]
+                                }
+                            }
+                            NUSERenderData.push(boxplotData)
+                        }
+
+                        let plot_layout = { showlegend: false, autosize: true }
+                        let plot_style = {}
+
+                        let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
+
+                        this.setState({ NUSE: <div> {NUSE}</div> });
+
+
+                    } else {
+                        message.error('Load histplot fails.');
+                    }
+
+                })
+        } catch (error) {
+            message.error('Load data fails.');
+        }
+    }
+
+    getRLE() {
+
+        try {
+            fetch('./api/analysis/getRLE', {
+                    method: "POST",
+                    body: "",
+                    processData: false,
+                    contentType: false
+                }).then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        if (result.data != "") {
+                            let RLERenderData = []
+                            let RLEplotsData = result.data
+                            for (let i = 0; i < result.data.col.length - 1; i++) {
+
+                                let boxplotData = {
+                                    y: RLEplotsData.data[i],
+                                    type: "box",
+                                    name: RLEplotsData.col[i],
+                                    marker: {
+                                        color: RLEplotsData.color[i]
+                                    }
+                                }
+                                RLERenderData.push(boxplotData)
+                            }
+
+
+                            let plot_layout = { showlegend: false, autosize: true }
+                            let plot_style = {}
+
+                            let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
+
+                            this.setState({ RLE: <div> {RLE}</div> });
+                        } else {
+
+                            this.setState({ RLE: "No Data" });
+                        }
+
+
+                    } else {
+                        message.error('Load histplot fails.');
+                    }
+
+                })
+        } catch (error) {
+            message.error('Load data fails.');
+        }
+
+
+    }
+
+    getBoxplotBN() {
+
+        try {
+            fetch('./api/analysis/getBoxplotBN', {
+                    method: "POST",
+                    body: "",
+                    processData: false,
+                    contentType: false
+                }).then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        if (result.data != "") {
+                            let BoxplotRenderData = []
+                            let BoxplotsData = result.data
+                            for (let i = 0; i < result.data.col.length - 1; i++) {
+
+                                let boxplotData = {
+                                    y: BoxplotsData.data[i],
+                                    type: "box",
+                                    name: BoxplotsData.col[i],
+                                    marker: {
+                                        color: BoxplotsData.color[i]
+                                    }
+                                }
+                                BoxplotRenderData.push(boxplotData)
+                            }
+
+                            let plot_layout = { showlegend: false, autosize: true }
+                            let plot_style = {}
+
+                            let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
+
+                            this.setState({ BoxplotBN: <div> {Boxplots}</div> });
+                        } else {
+
+                            this.setState({ BoxplotBN: "No Data" });
+                        }
+
+
+                    } else {
+                        message.error('Load histplot fails.');
+                    }
+
+                })
+        } catch (error) {
+            message.error('Load data fails.');
+        }
+
+    }
+
+    getMAplotsBN() {
+
+        try {
+            fetch('./api/analysis/getMAplotsBN', {
+                    method: "POST",
+                    body: "",
+                    processData: false,
+                    contentType: false
+                }).then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        if (result.data != "") {
+                            let list_mAplotBN = [];
+                            for (let i = result.data.length - 1; i >= 0; i--) {
+                                let link = "./images/" + this.props.data.projectID + result.data[i]
+                                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                            }
+                            let maplot_style = {
+                                'height': 'auto',
+                                'maxHeight': '100%',
+                                'overflow': 'scroll'
+                            };
+
+                            this.setState({ MAplotsBN: <div style={ maplot_style } > { list_mAplotBN } </div> });
+                        } else {
+
+                            this.setState({ MAplotsBN: "No Data" });
+                        }
+
+
+                    } else {
+                        message.error('Load histplot fails.');
+                    }
+
+                })
+        } catch (error) {
+            message.error('Load data fails.');
+        }
+    }
+
+
+    getHistplotBN() {
+
+        try {
+            fetch('./api/analysis/getHistplotAN', {
+                    method: "POST",
+                    body: "",
+                    processData: false,
+                    contentType: false
+                }).then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        if (result.data != "") {
+                            let histplotBNLink = './images/' + this.props.data.projectID + result.data;
+                            let histplotBN = <img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" />;
+                            this.setState({ HistplotBN: histplotBN });
+
+                        } else {
+
+                            this.setState({ HistplotBN: "No Data" });
+
+                        }
+
+
+                    } else {
+                        message.error('Load histplot fails.');
+                    }
+
+                })
+        } catch (error) {
+            message.error('Load data fails.');
+        }
+
+    }
+
+
+
+    changeDeg(obj) {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.diff_expr_genes = obj;
+        this.setState({ workflow: workflow });
+    }
+
+    changePathways_up(obj) {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.pathways_up = obj;
+        this.setState({ workflow: workflow });
+    }
+    changePathways_down(obj) {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.pathways_down = obj;
+        this.setState({ workflow: workflow });
+    }
+
+
+    changessGSEA(obj) {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.ssGSEA = obj;
+        this.setState({ workflow: workflow });
     }
 
     upateCurrentWorkingTabAndObject = (e) => {
@@ -362,6 +899,9 @@ class Analysis extends Component {
         workflow.loading_info = "Running Contrast...";
         // define action
         reqBody.actions = "runContrast";
+
+
+        this.clean_data();
         this.setState({
             workflow: workflow
         });
@@ -382,20 +922,33 @@ class Analysis extends Component {
                     return response.json();
                 }).then(result => {
                     if (result.status == 200) {
+
+                        // get all the plots at once
+                        this.getHistplotBN();
+                        this.getNUSE();
+                        this.getRLE();
+                        this.getBoxplotBN();
+                        this.getMAplotsBN();
+                        this.getHeatmapolt();
+                        this.getPCA();
+                        this.getBoxplotAN();
+                        this.getHistplotAN();
+                        this.getMAplotAN();
+
                         // updata current open tab
-                        if (workflow.current_working_on_object == "UpPathWays") {
+                        if (workflow.current_working_on_object == "pathways_up") {
                             workflow.pathways_up = result.data;
                         }
 
-                        if (workflow.current_working_on_object == "DownPathWays") {
+                        if (workflow.current_working_on_object == "pathways_down") {
                             workflow.pathways_down = result.data;
                         }
 
-                        if (workflow.current_working_on_object == "GSEA") {
+                        if (workflow.current_working_on_object == "ssGSEA") {
                             workflow.ssGSEA = result.data;
                         }
 
-                        if (workflow.current_working_on_object == "DEG") {
+                        if (workflow.current_working_on_object == "deg") {
                             workflow.diff_expr_genes = result.data;
                         }
                         workflow.progressing = false;
@@ -524,6 +1077,61 @@ class Analysis extends Component {
 
     }
 
+    clean_data() {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.diff_expr_genes = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 10,
+
+            },
+            loading: true,
+        };
+        workflow.ssGSEA = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 10,
+
+            },
+            loading: true,
+        };
+        workflow.pathways_up = {
+
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 10,
+
+            },
+            loading: true,
+        };
+        workflow.pathways_down = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 10,
+
+            },
+            loading: true,
+        };
+        workflow.NUSE = "";
+        workflow.RLE = "";
+        workflow.BoxplotBN = "";
+        workflow.MAplotsBN = "";
+        workflow.HistplotBN = "";
+        workflow.HistplotAN = "";
+        workflow.MAplotAN = "";
+        workflow.BoxplotAN = "";
+        workflow.PCA = "";
+        workflow.Heatmapolt = "";
+
+        this.setState({
+            workflow: workflow
+        });
+    }
+
     assignGroup = (group_name, dataList_keys) => {
         // validate group_name
         let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
@@ -592,7 +1200,15 @@ class Analysis extends Component {
                       <a id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
 
                   </label></div>
-                  <DataBox  data={this.state.workflow} upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} assignGroup={this.assignGroup} deleteGroup={this.deleteGroup}/>
+                  <DataBox  data={this.state.workflow} 
+                            upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} 
+                            assignGroup={this.assignGroup} 
+                            deleteGroup={this.deleteGroup}
+                            changeDeg={this.changeDeg}
+                            changePathways_up={this.changePathways_up}
+                            changePathways_down={this.changePathways_down}
+                            changessGSEA={this.changessGSEA}
+                            />
                 </div>
                 <div className={modal}>
                     <div style={{
