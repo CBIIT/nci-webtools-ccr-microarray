@@ -10,47 +10,47 @@ var argv = require('minimist')(process.argv.slice(2));
 var setting = require('./microarray_setting.json');
 var fs = require('fs');
 
-let  configure ={
+let configure = {
 
-		// Server port
-	    logDir: path.normalize(__dirname + '/../../')+setting.development.log_dir,
+    // Server port
+    logDir: path.normalize(__dirname + '/../../') + setting.development.log_dir,
 
-	    //cel file upload path
-	    uploadPath: path.normalize(__dirname + '/../../')+setting.development.upload_path,
+    //cel file upload path
+    uploadPath: path.normalize(__dirname + '/../../') + setting.development.upload_path,
 
-	    configPath: path.normalize(__dirname + '/../../')+setting.development.config_path
+    configPath: path.normalize(__dirname + '/../../') + setting.development.config_path
 
-	};
+};
 
 
 // check dir
 
-if (!fs.existsSync(configure.logDir)){
-                 fs.mkdirSync(configure.logDir);
+if (!fs.existsSync(configure.logDir)) {
+    fs.mkdirSync(configure.logDir);
 }
-if (!fs.existsSync(configure.uploadPath)){
-                 fs.mkdirSync(configure.uploadPath);
+if (!fs.existsSync(configure.uploadPath)) {
+    fs.mkdirSync(configure.uploadPath);
 }
-if (!fs.existsSync(configure.configPath)){
-                 fs.mkdirSync(configure.configPath);
+if (!fs.existsSync(configure.configPath)) {
+    fs.mkdirSync(configure.configPath);
 }
 
 
 
 var all = {
-	
-	// Root path of server
+
+    // Root path of server
     root: path.normalize(__dirname + '/..'),
 
-	//cookie max age in millseconds
-	maxAge: 3600000,
+    //cookie max age in millseconds
+    maxAge: 3600000,
 
-	//time to live in the local cache
-	object_ttl: 24 * 60 * 60,
+    //time to live in the local cache
+    object_ttl: 24 * 60 * 60,
 
-	port: argv.p || 8221,
+    port: argv.p || 8221,
 
-	//cel file max count
+    //cel file max count
     uploadCount: 100
 };
 

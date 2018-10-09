@@ -4,7 +4,7 @@ var fs = require('fs');
 var config = require('../config');
 
 router.get('/', function(req, res, next) {
-	res.json({status:200,data:'Welcome to CEDCD API Center.'});
+    res.json({ status: 200, data: 'Welcome to CEDCD API Center.' });
 });
 
 module.exports = router;
