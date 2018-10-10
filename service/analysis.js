@@ -202,12 +202,13 @@ router.post('/runContrast', function(req, res) {
     data.push(req.body.foldssGSEA);
     data.push(req.body.source)
     data.push(config.configPath);
+   
     // mock data
-    if (config.env = "dev") {
-        data.push("dev");
-    } else {
-        data.push("prod");
-    }
+    // if (config.env = "dev") {
+    //     data.push("dev");
+    // } else {
+    //     data.push("prod");
+    // }
 
 
 
@@ -238,102 +239,8 @@ router.post('/runContrast', function(req, res) {
     ) {
         let retun_data = "";
         let type = req.body.targetObject;
-        if (type == "getHistplotAN") {
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[5]
-            } else {
-                return_data = "";
-            }
-
-        }
-
-        if (type == "getBoxplotAN") {
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[7]
-            } else {
-                return_data = "";
-            }
-
-        }
-
-        if (type == "getMAplotAN") {
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[6]
-            } else {
-                return_data = "";
-            }
-        }
-
-        if (type = "getPCA") {
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[8]
-            } else {
-                return_data = "";
-            }
-
-        }
-
-        if (type == "getHeatmapolt") {
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[9]
-            } else {
-                return_data = "";
-            }
-        }
-     
-
-          if (type == "getHistplotBN") {
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[0]
-            } else {
-                return_data = "";
-            }
-
-        }
-
-        if (type == "getMAplotsBN") {
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[1]
-            } else {
-                return_data = "";
-            }
-
-        }
-
-        if (type == "getBoxplotBN") {
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[2]
-            } else {
-                return_data = "";
-            }
-
-        }
-
-        if (type == "getRLE") {
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[3]
-            } else {
-                return_data = "";
-            }
-        }
-
-        if (type == "getNUSE") {
-
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[4]
-            } else {
-                return_data = "";
-            }
-        }
-
-
-        if (type == "getPostPCA") {
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[8]
-            } else {
-                return_data = "";
-            }
-        }
+        
+  
 
         if (type == "deg") {
             return_data = getDEG(req)
@@ -353,15 +260,15 @@ router.post('/runContrast', function(req, res) {
         }
 
 
-        if(type=="volcanoPlot"){
+        if (type == "volcanoPlot") {
 
-            return_data ="/volcano.html"
+            return_data = "/volcano.html"
         }
 
 
-        if(type=="pathwayHeatMap"){
+        if (type == "pathwayHeatMap") {
 
-            return_data ="/geneHeatmap.jpg"
+            return_data = "/geneHeatmap.jpg"
         }
 
         logger.info("API:/runContrast ", "Contrast uses session ")
@@ -399,10 +306,141 @@ router.post('/runContrast', function(req, res) {
                 //      returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
                 // }
 
+
+                let retun_data = "";
+                let type = req.body.targetObject;
+                if (type == "getHistplotAN") {
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[5]
+                    } else {
+                        return_data = "";
+                    }
+
+                }
+
+                if (type == "getBoxplotAN") {
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[7]
+                    } else {
+                        return_data = "";
+                    }
+
+                }
+
+                if (type == "getMAplotAN") {
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[6]
+                    } else {
+                        return_data = "";
+                    }
+                }
+
+                if (type == "getPCA") {
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[8]
+                    } else {
+                        return_data = "";
+                    }
+
+                }
+
+                if (type == "getHeatmapolt") {
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[9]
+                    } else {
+                        return_data = "";
+                    }
+                }
+
+
+                if (type == "getHistplotBN") {
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[0]
+                    } else {
+                        return_data = "";
+                    }
+
+                }
+
+                if (type == "getMAplotsBN") {
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[1]
+                    } else {
+                        return_data = "";
+                    }
+
+                }
+
+                if (type == "getBoxplotBN") {
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[2]
+                    } else {
+                        return_data = "";
+                    }
+
+                }
+
+                if (type == "getRLE") {
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[3]
+                    } else {
+                        return_data = "";
+                    }
+                }
+
+                if (type == "getNUSE") {
+
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[4]
+                    } else {
+                        return_data = "";
+                    }
+                }
+
+
+                if (type == "getPostPCA") {
+                    if (req.session && req.session.runContrastData) {
+                        return_data = req.session.runContrastData.listPlots[8]
+                    } else {
+                        return_data = "";
+                    }
+                }
+
+                if (type == "deg") {
+                    return_data = getDEG(req)
+                }
+
+                if (type == "ssGSEA") {
+                    return_data = getGSEA(req)
+                }
+
+
+                if (type == "pathways_up") {
+                    return_data = getUpPathWays(req)
+                }
+
+                if (type == "pathways_down") {
+                    return_data = getDownPathWays(req)
+                }
+
+
+                if (type == "volcanoPlot") {
+
+                    return_data = "/volcano.html"
+                }
+
+
+                if (type == "pathwayHeatMap") {
+
+                    return_data = "/geneHeatmap.jpg"
+                }
+
+                logger.info("API:/runContrast ", "Contrast uses session ")
                 res.json({
                     status: 200,
-                    data: ""
+                    data: retun_data
                 });
+
             }
         });
 
@@ -439,7 +477,7 @@ function getPlots(req, type) {
         }
     }
 
-    if (type = "getPCA") {
+    if (type == "getPCA") {
         if (req.session && req.session.runContrastData) {
             return_data = req.session.runContrastData.listPlots[8]
         } else {
@@ -1054,21 +1092,22 @@ function toObject(returnValue) {
 
     var list = "";
 
-    if (config.env = "dev") {
-        list = JSON.parse(decodeURIComponent(returnValue));
-    } else {
-        let d = returnValue.split("+++ssGSEA+++\"")[1];
-        // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-        let data_dir = d.substring(0, d.indexOf("{"));
-        list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
-    }
+
+    //// mock data
+    // if (config.env = "dev") {
+    //     list = JSON.parse(decodeURIComponent(returnValue));
+    // } else {
+    //     let d = returnValue.split("+++ssGSEA+++\"")[1];
+    //     // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+    //     let data_dir = d.substring(0, d.indexOf("{"));
+    //     list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
+    // }
 
 
-    // let d = returnValue.split("+++ssGSEA+++\"")[1];
-    //    // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-    //    let data_dir = d.substring(0, d.indexOf("{"));
-    //    list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
-
+    let d = returnValue.split("+++ssGSEA+++\"")[1];
+    // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+    let data_dir = d.substring(0, d.indexOf("{"));
+    list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
 
     // get plots
     workflow.listPlots = list.norm_celfiles["listData"];

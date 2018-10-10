@@ -11,6 +11,11 @@ require('./routes')(app);
 
 var config = require('./config');
 
+// In server envs, the node express is behind a proxy (i.e. Apache mod proxy), set the ip-address of
+// your trusted reverse proxy server configured as proxy or others.
+app.set('trust proxy', 'loopback');
+
+
 app.listen(config.port, function() {
     console.log('Project Microarray listening on port :' + config.port);
 });

@@ -10,37 +10,36 @@ class PrePlotsBox extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { content: "No Data" };
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
-        this.handleSelectionChange("Histogram")
+       
+    }
+
+    componentDidMount() {
+         this.handleSelectionChange("Histogram")
     }
 
     handleSelectionChange(value) {
         if (value == "Histogram") {
             this.props.upateCurrentWorkingTabAndObject("getHistplotBN");
             this.props.getHistplotBN();
-            this.state = { content: this.props.data.HistplotBN };
+            
         }
         if (value == "MAplots") { // 
             this.props.upateCurrentWorkingTabAndObject("getMAplotsBN");
             this.props.getMAplotsBN();
-            this.state = { content: this.props.data.MAplotsBN };
         }
         if (value == "Boxplots") { // 
             this.props.upateCurrentWorkingTabAndObject("getBoxplotBN");
             this.props.getBoxplotBN();
-            this.state = { content: this.props.data.BoxplotBN };
         }
         if (value == "RLE") { // 
             this.props.upateCurrentWorkingTabAndObject("getRLE");
             this.props.getRLE();
-            this.state = { content: this.props.data.RLE };
      
         }
         if (value == "NUSE") {
             this.props.upateCurrentWorkingTabAndObject("getNUSE")
             this.props.getNUSE();
-            this.state = { content: this.props.data.NUSE };
 
         }
     }
@@ -56,7 +55,7 @@ class PrePlotsBox extends Component {
                         <Option key="opt-tag3" value="Boxplots" > Boxplots </Option> 
                         <Option key="opt-tag4" value="RLE" > RLE </Option> 
                         <Option key="opt-tag5" value="NUSE" > NUSE </Option> 
-                        </Select>, this.state.content]
+                        </Select>, this.props.data.preplots]
 
 
 
