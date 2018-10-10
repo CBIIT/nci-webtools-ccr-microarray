@@ -1,59 +1,57 @@
 import React, { Component } from 'react';
-import {Input, Select, Button} from 'antd';
+import { Input, Select, Button } from 'antd';
 const { Option, OptGroup } = Select;
 
 class Contrast extends Component {
 
-	constructor(props){
-		super(props);
-	}
+    constructor(props) {
+        super(props);
+    }
 
-	componentDidMount(){
-	}
+    componentDidMount() {}
 
-  handleGeneChange(){
+    handleGeneChange() {
 
-  }
+    }
 
-  render() {
+    render() {
 
-    let options =[];
-    let tmp_options=[]
-    // find the unique value in grups 
-    this.props.data.dataList.filter(function(v,i,self){
-        if(tmp_options.indexOf(v['groups'])==-1&&v['groups']!=""){
-          var d = <Option key={v['groups']} value={v['groups']}>{v['groups']}</Option>
-          options.push(d);
-          tmp_options.push(v['groups']);
+        let options = [];
+        let tmp_options = []
+        // find the unique value in grups 
+        this.props.data.dataList.filter(function(v, i, self) {
+            if (tmp_options.indexOf(v['groups']) == -1 && v['groups'] != "") {
+                var d = <Option key={v['groups']} value={v['groups']}>{v['groups']}</Option>
+                options.push(d);
+                tmp_options.push(v['groups']);
+            }
+        })
+
+
+
+        let button = "";
+        if (this.props.data.group_1 != "-1" && this.props.data.group_2 != "-1" && this.props.data.group_1 != this.props.data.group_2) {
+            button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
+              <span>Run Contrast</span>
+            </Button>);
+        } else {
+            button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} disabled >
+              <span>Run Contrast</span>
+            </Button>);
         }
-      })
-
-
-
-  	let button = "";
-    if(this.props.data.group_1 != "-1" && this.props.data.group_2 != "-1" && this.props.data.group_1 != this.props.data.group_2){
-    	button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
-              <span>Run Contrast</span>
-            </Button>);
-    }
-    else{
-    	 button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} disabled >
-              <span>Run Contrast</span>
-            </Button>);
-    }
-	 let group_1_content = (<Select defaultValue={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
+        let group_1_content = (<Select defaultValue={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
             <Option value="-1">---Select Group---</Option>
             {options}
           </Select>);
-    let group_2_content = (<Select defaultValue={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
+        let group_2_content = (<Select defaultValue={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
             <Option value="-1">---Select Group---</Option>
             {options}
           </Select>);
 
-    var content ="";
-    if(options.length<=1){
+        var content = "";
+        if (options.length <= 1) {
 
-        content=<div className="block ">
+            content = <div className="block ">
                 
                 <label className="title">Choose Contrast To Show:</label>
                 
@@ -104,8 +102,8 @@ class Contrast extends Component {
                         <br/><br/>
                 {button}
               </div>
-    }else{
-        content=<div className="block">
+        } else {
+            content = <div className="block">
                   <label className="title">Choose Contrast To Show:</label>
                   {group_1_content}
                   <label className="title">VS:</label>
@@ -150,11 +148,11 @@ class Contrast extends Component {
                   {button}
                 </div>
 
+        }
+        return (
+            content
+        );
     }
-	return (
-	     content
-	);
-  }
 }
 
 export default Contrast;

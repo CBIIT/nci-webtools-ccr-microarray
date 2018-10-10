@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Select, Input,Tooltip} from 'antd';
+import { Table, Select, Input, Tooltip } from 'antd';
 import ReactSVG from 'react-svg'
 
 const Search = Input.Search;
@@ -69,7 +69,7 @@ class GSMData extends Component {
                 width: '18%',
                 sorter: (a, b) => ('' + a.gsm).localeCompare(b.gsm),
                 render: (text, record, index) => (
-                          <div className="single-line" style={{"maxWidth":"150px"}}>
+                    <div className="single-line" style={{"maxWidth":"150px"}}>
                             <Tooltip title={text} placement="topLeft" >
                               <span>{text}</span>
                             </Tooltip>
@@ -81,24 +81,24 @@ class GSMData extends Component {
                 width: '30%',
                 sorter: (a, b) => this.compareByAlph(a.title, b.title),
                 render: (text, record, index) => (
-                      <div className="single-line"   style={{"maxWidth":"300px"}}>
+                    <div className="single-line"   style={{"maxWidth":"300px"}}>
                         <Tooltip title={text} placement="topLeft" >
                           <span>{text}</span>
                         </Tooltip>
                       </div>
-                    ),
+                ),
             }, {
                 title: 'description',
                 dataIndex: 'description',
-                 width: '30%',
+                width: '30%',
                 sorter: (a, b) => a.description.length - b.description.length,
-                     render: (text, record, index) => (
-                      <div className="single-line" style={{"maxWidth":"300px"}}>
+                render: (text, record, index) => (
+                    <div className="single-line" style={{"maxWidth":"300px"}}>
                         <Tooltip title={text} placement="topLeft">
                           <span>{text}</span>
                         </Tooltip>
                       </div>
-                    ),
+                ),
             }, {
                 title: 'group',
                 dataIndex: 'groups',
@@ -141,9 +141,9 @@ class GSMData extends Component {
             /></div>
             <div> <Table rowSelection = { rowSelection } columns = { columns } dataSource = { data.filter(searchFilter, this) }
             /></div>
-            </div>	
+            </div>
 
-        } 
+        }
 
         return content;
     }

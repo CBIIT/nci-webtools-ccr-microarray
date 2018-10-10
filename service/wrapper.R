@@ -137,6 +137,25 @@ process = function(){
     source<-toString(args[i])
      i<-i+1
     config_path<-toString(args[i])
+      i<-i+1
+    mode<-toString(args[i])
+
+    if(mode=="dev"){
+      data_repo_path<-"/Users/cheny39/Documents/GitHub/apps/microarray/tmp/test_data"
+      return_plot_data<-readRDS(file = paste0(data_repo_path,"/return_plot_data.rds"))
+      l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
+      diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
+      ssGSEA_results<-readRDS(file = paste0(data_repo_path,"/ssGSEA_results.rds"))
+      ssColumn<-readRDS(file = paste0(data_repo_path,"/ssColumn.rds"))
+
+      return(list(
+        norm_celfiles=return_plot_data,
+        diff_expr_genes=diff_expr_genes,
+        pathways=l2p_pathways,
+        ssGSEA=ssGSEA_results,
+        ssColumn=ssColumn
+        ))
+    }
 
     #copy configuration files into data repo 
 
@@ -219,11 +238,15 @@ process = function(){
 
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
     # # # Output should dynamically respond to user-selected contrast
-    saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
-    saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
+    
     
     ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
 
+    saveRDS(return_plot_data, file = paste0(data_repo_path,"/return_plot_data.rds"))
+    saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
+    saveRDS(diff_expr_genes[1], file = paste0(data_repo_path,"/diff_expr_genes.rds"))
+    saveRDS(ssGSEA_results, file = paste0(data_repo_path,"/ssGSEA_results.rds"))
+    saveRDS(ssGSEA_results[["DEss"]][[cons]][0], file = paste0(data_repo_path,"/ssColumn.rds"))
 
     return(list(norm_celfiles=return_plot_data,diff_expr_genes=diff_expr_genes[1],pathways=l2p_pathways,ssGSEA=ssGSEA_results,ssColumn=ssGSEA_results[["DEss"]][[cons]][0]))
 

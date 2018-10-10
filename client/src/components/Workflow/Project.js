@@ -1,37 +1,37 @@
 import React, { Component } from 'react';
-import {Input, Select, Upload, Button, Icon, message } from 'antd';
+import { Input, Select, Upload, Button, Icon, message } from 'antd';
 const Option = Select.Option;
 
 class Project extends Component {
 
-	constructor(props){
-		super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
 
-  render() {
-      const { uploading } = this.props.data;
-      const properties = {
-        action:'-',
-        onRemove: (file) => {
-          this.props.fileRemove(file);
-        },
-        beforeUpload: (file,fl) => {
-          this.props.beforeUpload(fl);
-          return false;
-        },
-        multiple:true,
-        fileList: this.props.data.fileList
-      };
+    render() {
+        const { uploading } = this.props.data;
+        const properties = {
+            action: '-',
+            onRemove: (file) => {
+                this.props.fileRemove(file);
+            },
+            beforeUpload: (file, fl) => {
+                this.props.beforeUpload(fl);
+                return false;
+            },
+            multiple: true,
+            fileList: this.props.data.fileList
+        };
 
-      let type_content = (<Select defaultValue={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
+        let type_content = (<Select defaultValue={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
             <Option value="0">GEO Data</Option>
             <Option value="1">Upload CEL files</Option>
           </Select>);
-      let source = "";
+        let source = "";
 
-      if(this.props.data.analysisType == "0"){
-        source = (
-          <div className="row">
+        if (this.props.data.analysisType == "0") {
+            source = (
+                <div className="row">
            <div className="col-sm-12">
             <label className="title">Accession Code<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
             <Input id="input-access-code" onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
@@ -51,10 +51,9 @@ class Project extends Component {
                         </Button>
                     </div>
           </div>
-        );
-      }
-      else if(this.props.data.analysisType == "1"){
-        source = (<div className="upload-block row">
+            );
+        } else if (this.props.data.analysisType == "1") {
+            source = (<div className="upload-block row">
                    <div className="col-sm-12">
                     <Upload {...properties}>
                       <Button>
@@ -85,9 +84,8 @@ class Project extends Component {
                         </Button>
                     </div>
                   </div>);
-      }
-      else{
-        source =  (<div className="upload-block row">
+        } else {
+            source = (<div className="upload-block row">
                     <div className="col-sm-6">
                         <Button
                           className="upload-start"
@@ -108,15 +106,15 @@ class Project extends Component {
                         </Button>
                     </div>
                   </div>);;
-      }
-      return (
-        <div className="block">
+        }
+        return (
+            <div className="block">
           <label className="title">Choose type of analysis</label>
           {type_content}
           {source}
-		    </div>
-      );
-  }
+        </div>
+        );
+    }
 }
 
 export default Project;

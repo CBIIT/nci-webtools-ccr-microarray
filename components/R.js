@@ -24,13 +24,31 @@ var execute = function(file, data, callback){
 
 	child.stdout.on('data', (d) => {
 		body += d.toString('utf8');
-		logger.info("stdout:"+body);
+		//logger.info("stdout:"+body);
 	});
+
 
 	child.stderr.on('data', (e) => {
 		err_message += e.toString('utf8');
-		logger.info("stderr:"+err_message);
+		//logger.info("stderr:"+err_message);
 	});
+
+	child.on('disconnect',()=>{
+		logger.info("disconnect with process")
+
+	})
+
+	child.on('error',(Error)=>{
+		logger.info(Error.prototype.message)
+		logger.info(Error.prototype.name)
+
+	})
+
+	child.on('exit',(code)=>{
+		logger.info("exit code:"+code);
+
+	})
+
 
 	child.on('close', (code) => {
 		logger.info("code:"+code);

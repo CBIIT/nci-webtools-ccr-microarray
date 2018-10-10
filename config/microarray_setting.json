@@ -1,15 +1,17 @@
  {
-
-	"env":"dev",
-	"development": {
-        "log_dir": "log",
-        "upload_path": "tmp",
-        "config_path": "data"
-    },
-    "mail":{
-    	"host": "mailfwd.nih.gov",
-		"port": 25,		
-		"from": "cedcdWebAdmin@nih.gov",
-		"to":"cheny39@nih.gov"
-    }
-}
+     "timeout":300000,
+     "env": "test",
+     "development":
+     {
+         "log_dir": "log",
+         "upload_path": "tmp",
+         "config_path": "data"
+     },
+     "mail":
+     {
+         "host": "mailfwd.nih.gov",
+         "port": 25,
+         "from": "cedcdWebAdmin@nih.gov",
+         "to": "cheny39@nih.gov"
+     }
+ }
