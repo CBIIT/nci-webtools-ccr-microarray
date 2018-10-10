@@ -106,6 +106,8 @@ router.post('/loadGSE', function(req, res) {
     );
 
 
+
+
     R.execute("wrapper.R", data, function(err, returnValue) {
         if (err) {
             logger.info("API:/loadGSE result ", "status 404 ");
@@ -168,12 +170,9 @@ router.post('/pathwaysHeapMap', function(req, res) {
 
 
 
+
+
 router.post('/runContrast', function(req, res) {
-
-
-  let secs = (+new Date) + 60 * 1000;
-  while ((+new Date) < secs);
-  
     let data = [];
     //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
     data.push("runContrast"); // action
@@ -208,7 +207,7 @@ router.post('/runContrast', function(req, res) {
     data.push(req.body.foldssGSEA);
     data.push(req.body.source)
     data.push(config.configPath);
-   
+
     // mock data
     // if (config.env = "dev") {
     //     data.push("dev");
@@ -246,8 +245,8 @@ router.post('/runContrast', function(req, res) {
     ) {
         let retun_data = "";
         let type = req.body.targetObject;
-        
-  
+
+
 
         if (type == "deg") {
             return_data = getDEG(req)
@@ -316,102 +315,7 @@ router.post('/runContrast', function(req, res) {
 
                 let retun_data = "";
                 let type = req.body.targetObject;
-                if (type == "getHistplotAN") {
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[5]
-                    } else {
-                        return_data = "";
-                    }
 
-                }
-
-                if (type == "getBoxplotAN") {
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[7]
-                    } else {
-                        return_data = "";
-                    }
-
-                }
-
-                if (type == "getMAplotAN") {
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[6]
-                    } else {
-                        return_data = "";
-                    }
-                }
-
-                if (type == "getPCA") {
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[8]
-                    } else {
-                        return_data = "";
-                    }
-
-                }
-
-                if (type == "getHeatmapolt") {
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[9]
-                    } else {
-                        return_data = "";
-                    }
-                }
-
-
-                if (type == "getHistplotBN") {
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[0]
-                    } else {
-                        return_data = "";
-                    }
-
-                }
-
-                if (type == "getMAplotsBN") {
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[1]
-                    } else {
-                        return_data = "";
-                    }
-
-                }
-
-                if (type == "getBoxplotBN") {
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[2]
-                    } else {
-                        return_data = "";
-                    }
-
-                }
-
-                if (type == "getRLE") {
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[3]
-                    } else {
-                        return_data = "";
-                    }
-                }
-
-                if (type == "getNUSE") {
-
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[4]
-                    } else {
-                        return_data = "";
-                    }
-                }
-
-
-                if (type == "getPostPCA") {
-                    if (req.session && req.session.runContrastData) {
-                        return_data = req.session.runContrastData.listPlots[8]
-                    } else {
-                        return_data = "";
-                    }
-                }
 
                 if (type == "deg") {
                     return_data = getDEG(req)
@@ -455,9 +359,43 @@ router.post('/runContrast', function(req, res) {
 });
 
 
+function sin_to_hex(i, phase,size) {
+
+    let sin = Math.sin(Math.PI / size * 2 * i + phase);
+    let int = Math.floor(sin * 127) + 128;
+    let hex = int.toString(16);
+    return hex.length === 1 ? "0" + hex : hex;
+
+}
 
 function getPlots(req, type) {
     let return_data = "";
+    
+    let uniqueColorCodeArray ="";
+
+    let size ="";
+
+    let rainbow =[];
+
+    if (req.session && req.session.runContrastData) {
+
+        uniqueColorCodeArray = req.session.runContrastData.listPlots[8].color.filter(function(item, pos) {
+            return req.session.runContrastData.listPlots[8].color.indexOf(item) == pos;
+        })
+        size = uniqueColorCodeArray.length;
+
+       rainbow= new Array(size);
+
+        for (let i = 0; i < size; i++) {
+
+            let red = sin_to_hex(i, 0 * Math.PI * 2 / 3,size); // 0   deg
+            let blue = sin_to_hex(i, 1 * Math.PI * 2 / 3,size); // 120 deg
+            let green = sin_to_hex(i, 2 * Math.PI * 2 / 3,size); // 240 deg
+            rainbow[i] = "#" + red + green + blue;
+
+        }
+    }
+
     if (type == "getHistplotAN") {
         if (req.session && req.session.runContrastData) {
             return_data = req.session.runContrastData.listPlots[5]
@@ -469,7 +407,9 @@ function getPlots(req, type) {
 
     if (type == "getBoxplotAN") {
         if (req.session && req.session.runContrastData) {
+            req.session.runContrastData.listPlots[7].color = req.session.runContrastData.listPlots[7].color.map(x => rainbow[x/5-1]);
             return_data = req.session.runContrastData.listPlots[7]
+
         } else {
             return_data = "";
         }
@@ -486,6 +426,7 @@ function getPlots(req, type) {
 
     if (type == "getPCA") {
         if (req.session && req.session.runContrastData) {
+            req.session.runContrastData.listPlots[8].color=req.session.runContrastData.listPlots[8].color.map(x => rainbow[x/5-1]);
             return_data = req.session.runContrastData.listPlots[8]
         } else {
             return_data = "";
@@ -502,6 +443,7 @@ function getPlots(req, type) {
     }
     if (type == "getBoxplotAN") {
         if (req.session && req.session.runContrastData) {
+            req.session.runContrastData.listPlots[7].color=req.session.runContrastData.listPlots[7].color.map(x => rainbow[x/5-1]);
             return_data = req.session.runContrastData.listPlots[7]
         } else {
             return_data = "";
@@ -529,6 +471,7 @@ function getPlots(req, type) {
 
     if (type == "getBoxplotBN") {
         if (req.session && req.session.runContrastData) {
+            req.session.runContrastData.listPlots[2].color=req.session.runContrastData.listPlots[2].color.map(x => rainbow[x/5-1]);
             return_data = req.session.runContrastData.listPlots[2]
         } else {
             return_data = "";
@@ -538,6 +481,7 @@ function getPlots(req, type) {
 
     if (type == "getRLE") {
         if (req.session && req.session.runContrastData) {
+            req.session.runContrastData.listPlots[3].color=req.session.runContrastData.listPlots[3].color.map(x => rainbow[x/5-1]);
             return_data = req.session.runContrastData.listPlots[3]
         } else {
             return_data = "";
@@ -547,6 +491,7 @@ function getPlots(req, type) {
     if (type == "getNUSE") {
 
         if (req.session && req.session.runContrastData) {
+            req.session.runContrastData.listPlots[4].color=req.session.runContrastData.listPlots[4].color.map(x => rainbow[x/5-1]);
             return_data = req.session.runContrastData.listPlots[4]
         } else {
             return_data = "";
@@ -1100,7 +1045,7 @@ function toObject(returnValue) {
     var list = "";
 
 
-    //// mock data
+    // //// mock data
     // if (config.env = "dev") {
     //     list = JSON.parse(decodeURIComponent(returnValue));
     // } else {
