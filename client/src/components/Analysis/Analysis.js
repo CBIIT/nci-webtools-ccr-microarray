@@ -72,20 +72,9 @@ class Analysis extends Component {
                     },
                     loading: true,
                 },
-                NUSE: "",
-                RLE: "",
-                BoxplotBN: "",
-                MAplotsBN: "",
-                HistplotBN: "",
-
-
-                HistplotAN: "",
-                MAplotAN: "",
-                BoxplotAN: "",
-                PCA: "",
-                Heatmapolt: "",
-
-
+                preplots: "",
+                postplot: "",
+                geneHeatmap:"/ssgseaHeatmap1.jpg",
 
             }
         };
@@ -109,7 +98,7 @@ class Analysis extends Component {
         this.getBoxplotAN = this.getBoxplotAN.bind(this);
         this.getHistplotAN = this.getHistplotAN.bind(this);
         this.getMAplotAN = this.getMAplotAN.bind(this);
-
+        this.clean_data = this.clean_data.bind(this);
 
     }
 
@@ -134,13 +123,15 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
+                            let workflow = Object.assign({}, this.state.workflow);
+                            let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+workflow.projectID+result.data}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
 
-                            let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+this.state.projectID+result.data}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
-
-                            this.setState({ Heatmapolt: <div>{HeatMapIframe}</div> });
+                            workflow.postplot = <div>{HeatMapIframe}</div>;
+                            this.setState({ workflow: workflow });
                         } else {
-
-                            this.setState({ Heatmapolt: "No Data" });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.postplot = "No Data";
+                            this.setState({ workflow: workflow });
                         }
 
                     } else {
@@ -215,10 +206,14 @@ class Analysis extends Component {
                                         }}
                                     }  useResizeHandler={true} />
 
-                            this.setState({ PCA: <div> {PCAIframe}</div> });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.postplot = <div> {PCAIframe}</div>;
+                            this.setState({ workflow: workflow });
                         } else {
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.postplot = "No Data";
+                            this.setState({ workflow: workflow });
 
-                            this.setState({ PCA: "No Data" });
                         }
 
 
@@ -263,10 +258,14 @@ class Analysis extends Component {
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
-                            this.setState({ BoxplotAN: <div> {Boxplots}</div> });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.postplot = <div> {Boxplots}</div>;
+                            this.setState({ workflow: workflow });
                         } else {
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.postplot = "No Data";
+                            this.setState({ workflow: workflow });
 
-                            this.setState({ BoxplotAN: "No Data" });
                         }
 
 
@@ -292,11 +291,16 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
-                            let histplotANLink = './images/' + this.state.projectID + result.data;
-                            let histplotAN = <img src={ histplotANLink } style={{ width: "75%" }} alt="Histogram" />;
-                            this.setState({ HistplotAN: histplotAN });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            let histplotANLink = './images/' + workflow.projectID + result.data;
+                            let histplotAN = <div><img src={ histplotANLink } style={{ width: "75%" }} alt="Histogram" /></div>;
+
+                            workflow.postplot = histplotAN;
+                            this.setState({ workflow: workflow });
                         } else {
-                            this.setState({ HistplotAN: "No Data" });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.postplot = "No Data";
+                            this.setState({ workflow: workflow });
                         }
 
                     } else {
@@ -319,10 +323,11 @@ class Analysis extends Component {
                 }).then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
+                        let workflow = Object.assign({}, this.state.workflow);
                         if (result.data != "") {
                             let list_mAplotBN = [];
                             for (let i = result.data.length - 1; i >= 0; i--) {
-                                let link = "./images/" + this.state.projectID + result.data[i]
+                                let link = "./images/" + workflow.projectID + result.data[i]
                                 list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
                             }
                             let maplot_style = {
@@ -331,10 +336,16 @@ class Analysis extends Component {
                                 'overflow': 'scroll'
                             };
 
-                            this.setState({ MAplotAN: <div style={ maplot_style } > { list_mAplotBN } </div> });
+
+                            workflow.postplot = <div style={ maplot_style } > { list_mAplotBN } </div>;
+                            this.setState({ workflow: workflow });
+
                         } else {
 
-                            this.setState({ MAplotAN: "No Data" });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.postplot = "No Data";
+                            this.setState({ workflow: workflow });
+
                         }
 
 
@@ -379,7 +390,9 @@ class Analysis extends Component {
 
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
-                        this.setState({ NUSE: <div> {NUSE}</div> });
+                        let workflow = Object.assign({}, this.state.workflow);
+                        workflow.preplots = <div> {NUSE}</div>;
+                        this.setState({ workflow: workflow });
 
 
                     } else {
@@ -425,10 +438,14 @@ class Analysis extends Component {
 
                             let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
-                            this.setState({ RLE: <div> {RLE}</div> });
-                        } else {
 
-                            this.setState({ RLE: "No Data" });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.preplots = <div> {RLE}</div>;
+                            this.setState({ workflow: workflow });
+                        } else {
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.preplots = "No Data";
+                            this.setState({ workflow: workflow });
                         }
 
 
@@ -476,10 +493,14 @@ class Analysis extends Component {
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
-                            this.setState({ BoxplotBN: <div> {Boxplots}</div> });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.preplots = <div> {Boxplots}</div>;
+                            this.setState({ workflow: workflow });
                         } else {
 
-                            this.setState({ BoxplotBN: "No Data" });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.preplots = "No Data";
+                            this.setState({ workflow: workflow });
                         }
 
 
@@ -506,9 +527,10 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
+                            let workflow = Object.assign({}, this.state.workflow);
                             let list_mAplotBN = [];
                             for (let i = result.data.length - 1; i >= 0; i--) {
-                                let link = "./images/" + this.state.projectID + result.data[i]
+                                let link = "./images/" + workflow.projectID + result.data[i]
                                 list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
                             }
                             let maplot_style = {
@@ -517,10 +539,15 @@ class Analysis extends Component {
                                 'overflow': 'scroll'
                             };
 
-                            this.setState({ MAplotsBN: <div style={ maplot_style } > { list_mAplotBN } </div> });
-                        } else {
 
-                            this.setState({ MAplotsBN: "No Data" });
+                            workflow.preplots = <div style={ maplot_style } > { list_mAplotBN } </div>;
+                            this.setState({ workflow: workflow });
+
+                        } else {
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.preplots = "No Data";
+                            this.setState({ workflow: workflow });
+
                         }
 
 
@@ -538,7 +565,7 @@ class Analysis extends Component {
     getHistplotBN() {
 
         try {
-            fetch('./api/analysis/getHistplotAN', {
+            fetch('./api/analysis/getHistplotBN', {
                     method: "POST",
                     body: "",
                     processData: false,
@@ -547,13 +574,16 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
-                            let histplotBNLink = './images/' + this.state.projectID + result.data;
-                            let histplotBN = <img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" />;
-                            this.setState({ HistplotBN: histplotBN });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            let histplotBNLink = './images/' + workflow.projectID + result.data;
+                            let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
+                            workflow.preplots = histplotBN;
+                            this.setState({ workflow: workflow });
 
                         } else {
-
-                            this.setState({ HistplotBN: "No Data" });
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.preplots = "No Data";
+                            this.setState({ workflow: workflow });
 
                         }
 
@@ -925,24 +955,93 @@ class Analysis extends Component {
                     return response.json();
                 }).then(result => {
                     if (result.status == 200) {
+                        let type = workflow.current_working_on_object;
+
+                        if (type == "getHistplotAN") {
+                            this.getHistplotAN();
+                        }
+
+                        if (type == "getBoxplotAN") {
+
+                            this.getBoxplotAN();
+                        }
+
+                        if (type == "getMAplotAN") {
+                            this.getMAplotAN();
+                        }
+
+                        if (type == "getPCA") {
+
+                            this.getPCA();
+                        }
+
+                        if (type == "getHeatmapolt") {
+                            this.getHeatmapolt();
+                        }
+
+
+                        if (type == "getHistplotBN") {
+                            this.getHistplotBN();
+                        }
+
+                        if (type == "getMAplotsBN") {
+                            this.getMAplotsBN();
+                        }
+
+                        if (type == "getBoxplotBN") {
+                            this.getBoxplotBN();
+
+                        }
+
+                        if (type == "getRLE") {
+                            this.getRLE();
+                        }
+
+                        if (type == "getNUSE") {
+                            this.getNUSE();
+                        }
+
+
+
+                        if (type == "volcanoPlot") {
+                            workflow.volcanoPlot="/volcano.html";   
+                        }
 
 
                         // updata current open tab
                         if (workflow.current_working_on_object == "pathways_up") {
+
+                            for (let i = 0; i < result.data.records.length; i++) {
+                                result.data.records[i].key = "pathway_up" + i;
+                            }
+
                             workflow.pathways_up = result.data;
                         }
 
                         if (workflow.current_working_on_object == "pathways_down") {
+                            for (let i = 0; i < result.data.records.length; i++) {
+                                result.data.records[i].key = "pathway_up" + i;
+                            }
                             workflow.pathways_down = result.data;
                         }
 
                         if (workflow.current_working_on_object == "ssGSEA") {
+
+                            for (let i = 0; i < result.data.records.length; i++) {
+                                result.data.records[i].key = "GSEA" + i;
+                            }
                             workflow.ssGSEA = result.data;
                         }
 
                         if (workflow.current_working_on_object == "deg") {
+
+                            for (let i = 0; i < result.data.records.length; i++) {
+                                result.data.records[i].key = "DEG" + i;
+                            }
+
                             workflow.diff_expr_genes = result.data;
                         }
+                        workflow.geneHeatmap="/ssgseaHeatmap1.jpg";
                         workflow.progressing = false;
                         workflow.compared = true;
                         workflow.done_gsea = true;
@@ -1108,16 +1207,9 @@ class Analysis extends Component {
             },
             loading: true,
         };
-        workflow.NUSE = "";
-        workflow.RLE = "";
-        workflow.BoxplotBN = "";
-        workflow.MAplotsBN = "";
-        workflow.HistplotBN = "";
-        workflow.HistplotAN = "";
-        workflow.MAplotAN = "";
-        workflow.BoxplotAN = "";
-        workflow.PCA = "";
-        workflow.Heatmapolt = "";
+        workflow.preplots = "";
+        workflow.postplots = "";
+
 
         this.setState({
             workflow: workflow

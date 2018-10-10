@@ -267,7 +267,6 @@ class PUGTable extends Component {
 
         content = <div>
                     <div><Search  placeholder="input search text" className="input-search-for-deg-path" onSearch={value => this.setState({term: value})} /></div>
-                    <Button key="test" onClick={this.handleTableChange}>handleTableChange</Button>,
                     <div>
                      <Table 
                         columns={columns}

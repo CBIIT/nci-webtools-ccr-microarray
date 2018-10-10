@@ -2,94 +2,97 @@ import React, { Component } from 'react';
 import { Table, Input, message, Modal, Button, Tooltip } from 'antd';
 const Search = Input.Search;
 const columns = [{
-    title: 'Pathway_ID',
-    dataIndex: 'Pathway_ID',
-    width: "10%",
-    key: 'Pathway_ID',
-    sorter: true,
+        title: 'Pathway_ID',
+        dataIndex: 'Pathway_ID',
+        width: "10%",
+        key: 'Pathway_ID',
+        sorter: true,
 
-}, {
-    title: 'Source',
-    dataIndex: 'Source',
-    width: "8%",
-    key: 'Source',
-    sorter: true,
-}, {
-    title: 'Description',
-    dataIndex: 'Description',
-    width: "14%",
-    key: 'Description',
-    sorter: true,
-    render: (text, record, index) => (
-        <div className="single-line" style={{"maxWidth":"100px"}}>
+    },
+    {
+        title: 'Source',
+        dataIndex: 'Source',
+        width: "8%",
+        key: 'Source',
+        sorter: true,
+    },
+    {
+        title: 'Description',
+        dataIndex: 'Description',
+        width: "14%",
+        key: 'Description',
+        sorter: true,
+        render: (text, record, index) => (
+            <div className="single-line" style={{"maxWidth":"100px"}}>
                         <Tooltip title={text} placement="top" >
                           <span>{text}</span>
                         </Tooltip>
                       </div>
-    ),
-}, {
-    title: 'Type',
-    dataIndex: 'Type',
-    width: "7%",
-    key: 'Type',
-    sorter: true,
-}, {
-    title: 'P_Value',
-    dataIndex: 'P_Value',
-    width: "8%",
-    key: 'P_Value',
-    sorter: true,
-}, {
-    title: 'FDR',
-    dataIndex: 'FDR',
-    width: "8%",
-    key: 'FDR',
-    sorter: true,
-}, {
-    title: 'Ratio',
-    dataIndex: 'Ratio',
-    width: "8%",
-    key: 'Ratio',
-    sorter: true,
-}, {
-    title: 'Gene_List',
-    dataIndex: 'Gene_List',
-    width: "12%",
-    key: 'Gene_List',
-    sorter: true,
-    render: (text, record, index) => (
-        <div className="single-line" style={{"maxWidth":"100px"}}>
+        ),
+    },  {
+        title: 'Type',
+        dataIndex: 'Type',
+        width: "7%",
+        key: 'Type',
+        sorter: true,
+    }, {
+        title: 'P_Value',
+        dataIndex: 'P_Value',
+        width: "8%",
+        key: 'P_Value',
+        sorter: true,
+    }, {
+        title: 'FDR',
+        dataIndex: 'FDR',
+        width: "8%",
+        key: 'FDR',
+        sorter: true,
+    }, {
+        title: 'Ratio',
+        dataIndex: 'Ratio',
+        width: "8%",
+        key: 'Ratio',
+        sorter: true,
+    }, {
+        title: 'Gene_List',
+        dataIndex: 'Gene_List',
+        width: "12%",
+        key: 'Gene_List',
+        sorter: true,
+        render: (text, record, index) => (
+            <div className="single-line" style={{"maxWidth":"100px"}}>
                         <Tooltip title={text} placement="top" >
                           <span>{text}</span>
                         </Tooltip>
                       </div>
-    ),
-}, {
-    title: 'Number_Hits',
-    dataIndex: 'Number_Hits',
-    width: "85px",
-    key: 'Number_Hits',
-    sorter: true,
-}, {
-    title: 'Number_Genes_Pathway',
-    dataIndex: 'Number_Genes_Pathway',
-    width: "95px",
-    key: 'Number_Genes_Pathway',
-    sorter: true,
+        ),
+    }, {
+        title: 'Number_Hits',
+        dataIndex: 'Number_Hits',
+        width: "85px",
+        key: 'Number_Hits',
+        sorter: true,
+    }, {
+        title: 'Number_Genes_Pathway',
+        dataIndex: 'Number_Genes_Pathway',
+        width: "95px",
+        key: 'Number_Genes_Pathway',
+        sorter: true,
 
-}, {
-    title: 'Number_User_Genes',
-    dataIndex: 'Number_User_Genes',
-    width: "85px",
-    key: 'Number_User_Genes',
-    sorter: true,
-}, {
-    title: 'Total_Number_Genes',
-    dataIndex: 'Total_Number_Genes',
-    width: "90px",
-    key: 'Total_Number_Genes',
-    sorter: true,
-}];
+    }, {
+        title: 'Number_User_Genes',
+        dataIndex: 'Number_User_Genes',
+        width: "85px",
+        key: 'Number_User_Genes',
+        sorter: true,
+    }, {
+        title: 'Total_Number_Genes',
+        dataIndex: 'Total_Number_Genes',
+        width: "90px",
+        key: 'Total_Number_Genes',
+        sorter: true,
+    }
+];
 
 class PUGTable extends Component {
 
@@ -113,11 +116,11 @@ class PUGTable extends Component {
     }
 
     handleTableChange = (pagination, filters, sorter) => {
-         this.props.changePathways_down({
-                        loading: true,
-                        data: [],
-                        pagination,
-         })
+        this.props.changePathways_down({
+            loading: true,
+            data: [],
+            pagination,
+        })
         if (!sorter) {
             sorter = {
                 field: "P_Value",
@@ -179,7 +182,7 @@ class PUGTable extends Component {
                     pagination.total = result.data.totalCount;
 
                     for (let i = 0; i < result.data.records.length; i++) {
-                        result.data.records[i].key = "pathway_up" + i;
+                        result.data.records[i].key = "pathway_down" + i;
                     }
                     this.props.changePathways_down({
                         loading: false,
@@ -262,7 +265,7 @@ class PUGTable extends Component {
         // define group modal
         let modal = <Modal width={"75%"} visible={visible}  onOk={this.handleOk} onCancel={this.handleCancel}
             footer={[
-                <Button key="back" onClick={this.handleCancel}>Close</Button>,
+                <Button key="back" onClick={this.handleCancel}>Close</Button>
               ]}
             >
               <img src={this.state.heapMap} style={{width:"100%"}} alt="heapMap"/>
@@ -271,7 +274,6 @@ class PUGTable extends Component {
 
         content = <div>
                     <div><Search  placeholder="input search text" className="input-search-for-deg-path" onSearch={value => this.setState({term: value})} /></div>
-                    <Button key="test" onClick={this.handleTableChange}>handleTableChange</Button>,
                     <div>
                      <Table 
                         columns={columns}

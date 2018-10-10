@@ -162,7 +162,7 @@ class SSGSEATable extends Component {
 
         let content = "";
 
-        var link = "./images/" + this.props.data.projectID + "/geneHeatmap1.jpg"
+        var link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
         let tabs = [<div id="ss_tag1" className="ss_plot">
                             <Table 
