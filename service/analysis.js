@@ -105,6 +105,7 @@ router.post('/loadGSE', function(req, res) {
         "data_repo_path:", config.uploadPath
     );
 
+
     R.execute("wrapper.R", data, function(err, returnValue) {
         if (err) {
             logger.info("API:/loadGSE result ", "status 404 ");
@@ -168,6 +169,11 @@ router.post('/pathwaysHeapMap', function(req, res) {
 
 
 router.post('/runContrast', function(req, res) {
+
+
+  let secs = (+new Date) + 60 * 1000;
+  while ((+new Date) < secs);
+  
     let data = [];
     //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
     data.push("runContrast"); // action
@@ -209,6 +215,7 @@ router.post('/runContrast', function(req, res) {
     // } else {
     //     data.push("prod");
     // }
+
 
 
 

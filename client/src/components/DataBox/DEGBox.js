@@ -32,7 +32,7 @@ class DEGBox extends Component {
         }
         if(value=="deg_tag3"){
          this.props.upateCurrentWorkingTabAndObject("pathways_down")
-         this.setState({ content:  <div><PDGTable changePathways_down={this.props.changePathways_down} data={this.props.data}/>}</div>});
+         this.setState({ content:  <div><PDGTable changePathways_down={this.props.changePathways_down} data={this.props.data}/></div>});
 
         }
         if(value=="deg_tag4"){
