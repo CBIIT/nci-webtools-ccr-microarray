@@ -16,9 +16,11 @@ var config = require('./config');
 app.set('trust proxy', 'loopback');
 
 
-app.listen(config.port, function() {
+const server = app.listen(config.port, function() {
     console.log('Project Microarray listening on port :' + config.port);
 });
+
+server.timeout = 300000;  
 
 // when shutdown signal is received, do graceful shutdown
 process.on('SIGINT', function() {

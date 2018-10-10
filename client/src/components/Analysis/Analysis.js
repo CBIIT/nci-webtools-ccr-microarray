@@ -1015,14 +1015,14 @@ class Analysis extends Component {
                                 result.data.records[i].key = "pathway_up" + i;
                             }
 
-                            workflow.pathways_up = result.data;
+                            workflow.pathways_up.data = result.data;
                         }
 
                         if (workflow.current_working_on_object == "pathways_down") {
                             for (let i = 0; i < result.data.records.length; i++) {
                                 result.data.records[i].key = "pathway_up" + i;
                             }
-                            workflow.pathways_down = result.data;
+                            workflow.pathways_down.data = result.data;
                         }
 
                         if (workflow.current_working_on_object == "ssGSEA") {
@@ -1030,7 +1030,7 @@ class Analysis extends Component {
                             for (let i = 0; i < result.data.records.length; i++) {
                                 result.data.records[i].key = "GSEA" + i;
                             }
-                            workflow.ssGSEA = result.data;
+                            workflow.ssGSEA.data = result.data;
                         }
 
                         if (workflow.current_working_on_object == "deg") {
@@ -1039,7 +1039,7 @@ class Analysis extends Component {
                                 result.data.records[i].key = "DEG" + i;
                             }
 
-                            workflow.diff_expr_genes = result.data;
+                            workflow.diff_expr_genes.data = result.data;
                         }
                         workflow.geneHeatmap="/ssgseaHeatmap1.jpg";
                         workflow.progressing = false;
