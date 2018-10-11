@@ -43,7 +43,7 @@ var all = {
     root: path.normalize(__dirname + '/..'),
 
     //cookie max age in millseconds
-    maxAge: 3600000,
+    maxAge: 60*60*1000,
 
     //time to live in the local cache
     object_ttl: 24 * 60 * 60,

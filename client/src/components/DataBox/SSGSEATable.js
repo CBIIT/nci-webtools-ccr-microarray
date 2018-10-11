@@ -87,59 +87,7 @@ class SSGSEATable extends Component {
         });
     }
 
-    fetch = (params = {}) => {
-        if (!params.pPathways) {
-            params = {
-                page_size: 10,
-                page_number: 1,
-                sorting: {
-                    name: "P.Value",
-                    order: "descend",
-                },
-                search_keyword: "",
-                pssGSEA: this.props.data.pssGSEA,
-                foldssGSEA: this.props.data.foldssGSEA,
-            }
-        }
-
-        console.log('params:', params);
-        this.setState({ loading: true });
-        fetch('./api/analysis/getGSEA', {
-                method: "POST",
-                body: JSON.stringify(params),
-                credentials: "same-origin",
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(
-                res => res.json()
-            )
-            .then(result => {
-                if (result.status == 200) {
-                    const pagination = { ...this.props.data.ssGSEA.pagination };
-                    // Read total count from server
-                    // pagination.total = data.totalCount;
-                    pagination.total = result.data.totalCount;
-
-                    for (let i = 0; i < result.data.records.length; i++) {
-                        result.data.records[i].key = "GSEA" + i;
-                    }
-
-                    this.props.changessGSEA({
-                        loading: false,
-                        data: result.data.records,
-                        pagination,
-                    })
-
-                } else {
-                    message.warning('no data');
-                }
-
-            });
-    }
-
-
-
+  
     handleSelectionChange(value) {
 
         if(value=="ss_tag1"){

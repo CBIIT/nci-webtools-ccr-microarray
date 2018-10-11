@@ -104,11 +104,11 @@ class PUGTable extends Component {
         }
 
         this.handleTableChange = this.handleTableChange.bind(this)
-        this.fetch = this.fetch.bind(this)
+   
     }
 
     componentDidMount() {
-        this.fetch();
+         this.props.getPathwayDown();
     }
 
     handleTableChange = (pagination, filters, sorter) => {
@@ -132,7 +132,7 @@ class PUGTable extends Component {
         }
 
 
-        this.fetch({
+        this.props.getPathwayDown({
             page_size: pagination.pageSize,
             page_number: pagination.current,
             sorting: {
@@ -144,53 +144,7 @@ class PUGTable extends Component {
         });
     }
 
-    fetch = (params = {}) => {
-        if (!params.pPathways) {
-            params = {
-                page_size: 10,
-                page_number: 1,
-                sorting: {
-                    name: "P_Value",
-                    order: "descend",
-                },
-                pPathways: this.props.data.pPathways,
-                search_keyword: "",
-            }
-        }
-
-        console.log('params:', params);
-        this.setState({ loading: true });
-        fetch('./api/analysis/getDownPathWays', {
-                method: "POST",
-                body: JSON.stringify(params),
-                credentials: "same-origin",
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(
-                res => res.json()
-            )
-            .then(result => {
-                if (result.status == 200) {
-                    const pagination = { ...this.props.data.pathways_down.pagination };
-                    // Read total count from server
-                    // pagination.total = data.totalCount;
-                    pagination.total = result.data.totalCount;
-
-                    for (let i = 0; i < result.data.records.length; i++) {
-                        result.data.records[i].key = "pathway_down" + i;
-                    }
-                    this.props.changePathways_down({
-                        loading: false,
-                        data: result.data.records,
-                        pagination,
-                    })
-                } else {
-                    message.warning('no data');
-                }
-
-            });
-    }
+    
 
 
 
