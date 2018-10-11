@@ -209,11 +209,11 @@ router.post('/runContrast', function(req, res) {
     data.push(config.configPath);
 
     // mock data
-    // if (config.env = "dev") {
-    //     data.push("dev");
-    // } else {
-    //     data.push("prod");
-    // }
+    if (config.env = "dev") {
+        data.push("dev");
+    } else {
+        data.push("prod");
+    }
 
 
 
@@ -1046,20 +1046,20 @@ function toObject(returnValue) {
 
 
     // //// mock data
-    // if (config.env = "dev") {
-    //     list = JSON.parse(decodeURIComponent(returnValue));
-    // } else {
-    //     let d = returnValue.split("+++ssGSEA+++\"")[1];
-    //     // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-    //     let data_dir = d.substring(0, d.indexOf("{"));
-    //     list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
-    // }
+    if (config.env = "dev") {
+        list = JSON.parse(decodeURIComponent(returnValue));
+    } else {
+        let d = returnValue.split("+++ssGSEA+++\"")[1];
+        // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+        let data_dir = d.substring(0, d.indexOf("{"));
+        list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
+    }
 
 
-    let d = returnValue.split("+++ssGSEA+++\"")[1];
-    // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-    let data_dir = d.substring(0, d.indexOf("{"));
-    list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
+    // let d = returnValue.split("+++ssGSEA+++\"")[1];
+    // // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+    // let data_dir = d.substring(0, d.indexOf("{"));
+    // list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
 
     // get plots
     workflow.listPlots = list.norm_celfiles["listData"];

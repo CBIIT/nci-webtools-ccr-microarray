@@ -70,9 +70,7 @@ class GSMData extends Component {
                 sorter: (a, b) => ('' + a.gsm).localeCompare(b.gsm),
                 render: (text, record, index) => (
                     <div className="single-line" style={{"maxWidth":"150px"}}>
-                            <Tooltip title={text} placement="topLeft" >
-                              <span>{text}</span>
-                            </Tooltip>
+                              <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                           </div>
                 ),
             }, {
@@ -81,10 +79,8 @@ class GSMData extends Component {
                 width: '30%',
                 sorter: (a, b) => this.compareByAlph(a.title, b.title),
                 render: (text, record, index) => (
-                    <div className="single-line"   style={{"maxWidth":"300px"}}>
-                        <Tooltip title={text} placement="topLeft" >
-                          <span>{text}</span>
-                        </Tooltip>
+                    <div className="single-line" style={{"maxWidth":"300px"}}>
+                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
             }, {
@@ -94,9 +90,7 @@ class GSMData extends Component {
                 sorter: (a, b) => a.description.length - b.description.length,
                 render: (text, record, index) => (
                     <div className="single-line" style={{"maxWidth":"300px"}}>
-                        <Tooltip title={text} placement="topLeft">
-                          <span>{text}</span>
-                        </Tooltip>
+                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
             }, {
