@@ -1189,7 +1189,7 @@ class Analysis extends Component {
             loading: true,
         };
         workflow.preplots = "";
-        workflow.postplots = "";
+        workflow.postplot = "";
 
 
         this.setState({
