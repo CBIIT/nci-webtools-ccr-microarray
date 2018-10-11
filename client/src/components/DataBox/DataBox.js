@@ -115,6 +115,9 @@ class DataBox extends Component {
                 /></TabPane>);
             degBox = (<TabPane tab="DEG-Enrichments Results"  key="DEG-Enrichments_Results">
                 <DEGBox  key="degBox" data={this.props.data} 
+                         getDEG={this.props.getDEG}
+                         getPathwayUp={this.props.getPathwayUp}
+                         getPathwayDown={this.props.getPathwayDown}
                          changeDeg={this.props.changeDeg} 
                          changePathways_up={this.props.changePathways_up}
                          changePathways_down={this.props.changePathways_down}

@@ -45,10 +45,12 @@ class DEGBox extends Component {
       
 
         let tabs =[ <div key="deg_tag1" id="deg_tag1" className="deg_plot">
-                                    <DEGTable changeDeg={this.props.changeDeg} data={this.props.data} />
+                                    <DEGTable changeDeg={this.props.changeDeg} data={this.props.data} getDEG={this.props.getDEG}
+                        />
                                 </div>,
-                                  <div key="deg_tag2_pathway_up" id="deg_tag2" className="deg_plot hide" ><PUGTable changePathways_up={this.props.changePathways_up} data={this.props.data}/></div>,
-                                  <div key="deg_tag3_pathway_down" id="deg_tag3" className="deg_plot hide"><PDGTable changePathways_down={this.props.changePathways_down} data={this.props.data}/></div>,
+                                  <div key="deg_tag2_pathway_up" id="deg_tag2" className="deg_plot hide" ><PUGTable changePathways_up={this.props.changePathways_up} data={this.props.data}  getPathwayUp={this.props.getPathwayUp}
+                        /></div>,
+                                  <div key="deg_tag3_pathway_down" id="deg_tag3" className="deg_plot hide"><PDGTable changePathways_down={this.props.changePathways_down} data={this.props.data}  getPathwayDown={this.props.getPathwayDown} /></div>,
                                   <div key="deg_tag4_volcano" id="deg_tag4" className="deg_plot hide">{volcanoPlotIframe}</div>]
 
 

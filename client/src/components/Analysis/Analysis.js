@@ -15,7 +15,7 @@ class Analysis extends Component {
             workflow: {
                 projectID: "",
                 analysisType: "0",
-                accessionCode: "",
+                accessionCode: "GSE37874",
                 fileList: [],
                 uploading: false,
                 progressing: false,
@@ -74,7 +74,7 @@ class Analysis extends Component {
                 },
                 preplots: "",
                 postplot: "",
-                geneHeatmap:"/ssgseaHeatmap1.jpg",
+                geneHeatmap: "/ssgseaHeatmap1.jpg",
 
             }
         };
@@ -98,8 +98,9 @@ class Analysis extends Component {
         this.getBoxplotAN = this.getBoxplotAN.bind(this);
         this.getHistplotAN = this.getHistplotAN.bind(this);
         this.getMAplotAN = this.getMAplotAN.bind(this);
-        this.clean_data = this.clean_data.bind(this);
-
+        this.getDEG = this.getDEG.bind(this);
+        this.getPathwayDown = this.getPathwayDown.bind(this);
+        this.getPathwayUp = this.getPathwayUp.bind(this);
     }
 
 
@@ -111,6 +112,222 @@ class Analysis extends Component {
             return v.toString(16);
         });
     }
+
+
+
+    getssGSEA = (params = {}) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        if (!params.pPathways) {
+            params = {
+                page_size: 10,
+                page_number: 1,
+                sorting: {
+                    name: "P.Value",
+                    order: "descend",
+                },
+                search_keyword: "",
+                pssGSEA: this.props.data.pssGSEA,
+                foldssGSEA: this.props.data.foldssGSEA,
+            }
+        }
+        workflow.ssGSEA.loading = true;
+        this.setState({ workflow: workflow });
+
+        fetch('./api/analysis/getGSEA', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(
+                res => res.json()
+            )
+            .then(result => {
+                if (result.status == 200) {
+                    let workflow2 = Object.assign({}, this.state.workflow);
+                    const pagination = { ...workflow2.ssGSEA.pagination };
+                    // Read total count from server
+                    // pagination.total = data.totalCount;
+                    pagination.total = result.data.totalCount;
+
+                    for (let i = 0; i < result.data.records.length; i++) {
+                        result.data.records[i].key = "GSEA" + i;
+                    }
+
+                    workflow2.ssGSEA = {
+                        loading: false,
+                        data: result.data.records,
+                        pagination,
+                    }
+                    this.setState({ workflow: workflow2 });
+
+
+                } else {
+                    message.warning('no data');
+                }
+
+            });
+    }
+
+
+
+
+    getPathwayUp = (params = {}) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        if (!params.pPathways) {
+            params = {
+                page_size: 10,
+                page_number: 1,
+                sorting: {
+                    name: "P_Value",
+                    order: "descend",
+                },
+                pPathways: workflow.pPathways,
+                search_keyword: "",
+            }
+        }
+
+        workflow.pathways_up.loading = true;
+        this.setState({ workflow: workflow });
+        fetch('./api/analysis/getUpPathWays', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(
+                res => res.json()
+            )
+            .then(result => {
+                if (result.status == 200) {
+                    let workflow2 = Object.assign({}, this.state.workflow);
+                    const pagination = { ...workflow.pathways_up.pagination };
+                    // Read total count from server
+                    // pagination.total = data.totalCount;
+                    pagination.total = result.data.totalCount;
+
+                    for (let i = 0; i < result.data.records.length; i++) {
+                        result.data.records[i].key = "pathway_up" + i;
+                    }
+                    workflow2.pathways_up = {
+                        loading: false,
+                        data: result.data.records,
+                        pagination,
+                    }
+                    this.setState({ workflow: workflow2 });
+
+                } else {
+                    message.warning('no data');
+                }
+
+            });
+    }
+
+    getPathwayDown = (params = {}) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        if (!params.pPathways) {
+            params = {
+                page_size: 10,
+                page_number: 1,
+                sorting: {
+                    name: "P_Value",
+                    order: "descend",
+                },
+                pPathways: workflow.pPathways,
+                search_keyword: "",
+            }
+        }
+
+        workflow.pathways_down.loading = true;
+        this.setState({ workflow: workflow });
+        fetch('./api/analysis/getDownPathWays', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(
+                res => res.json()
+            )
+            .then(result => {
+                if (result.status == 200) {
+                    let workflow2 = Object.assign({}, this.state.workflow);
+                    const pagination = { ...workflow.pathways_down.pagination };
+                    // Read total count from server
+                    // pagination.total = data.totalCount;
+                    pagination.total = result.data.totalCount;
+
+                    for (let i = 0; i < result.data.records.length; i++) {
+                        result.data.records[i].key = "pathway_down" + i;
+                    }
+                    workflow2.pathways_down = {
+                        loading: false,
+                        data: result.data.records,
+                        pagination,
+                    }
+                    this.setState({ workflow: workflow2 });
+                } else {
+                    message.warning('no data');
+                }
+
+            });
+    }
+
+    getDEG = (params = {}) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        if (!params.foldDEGs) {
+            params = {
+                page_size: 10,
+                page_number: 1,
+                sorting: {
+                    name: "P.Value",
+                    order: "descend",
+                },
+                foldDEGs: workflow.foldDEGs,
+                P_Value: workflow.pDEGs,
+                search_keyword: "",
+            }
+        }
+        workflow.diff_expr_genes.loading = true;
+        this.setState({ workflow: workflow });
+        fetch('./api/analysis/getDEG', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(
+                res => res.json()
+            )
+            .then(result => {
+                if (result.status == 200) {
+                    let workflow2 = Object.assign({}, this.state.workflow);
+                    const pagination = { ...workflow.diff_expr_genes.pagination };
+                    // Read total count from server 
+                    // pagination.total = data.totalCount;
+                    pagination.total = result.data.totalCount;
+
+                    for (let i = 0; i < result.data.records.length; i++) {
+                        result.data.records[i].key = "DEG" + i;
+                    }
+
+                    workflow2.diff_expr_genes = {
+                        loading: false,
+                        data: result.data.records,
+                        pagination,
+                    }
+                    this.setState({ workflow: workflow2 });
+                } else {
+                    message.warning('no data');
+                }
+
+            });
+    }
+
     getHeatmapolt() {
 
         try {
@@ -934,7 +1151,47 @@ class Analysis extends Component {
         reqBody.actions = "runContrast";
 
 
-        this.clean_data();
+        workflow.diff_expr_genes = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 10,
+
+            },
+            loading: true,
+        };
+        workflow.ssGSEA = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 10,
+
+            },
+            loading: true,
+        };
+        workflow.pathways_up = {
+
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 10,
+
+            },
+            loading: true,
+        };
+        workflow.pathways_down = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 10,
+
+            },
+            loading: true,
+        };
+        workflow.preplots = "";
+        workflow.postplots = "";
+
+
         this.setState({
             workflow: workflow
         });
@@ -1001,47 +1258,31 @@ class Analysis extends Component {
                             this.getNUSE();
                         }
 
-
-
                         if (type == "volcanoPlot") {
-                            workflow.volcanoPlot="/volcano.html";   
+                            workflow.volcanoPlot = "/volcano.html";
                         }
 
+                        if (type == "pathwayHeatMap") {
+                            workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
+                        }
 
-                        // updata current open tab
                         if (workflow.current_working_on_object == "pathways_up") {
 
-                            for (let i = 0; i < result.data.records.length; i++) {
-                                result.data.records[i].key = "pathway_up" + i;
-                            }
-
-                            workflow.pathways_up.data = result.data;
+                            this.getPathwayUp()
                         }
 
                         if (workflow.current_working_on_object == "pathways_down") {
-                            for (let i = 0; i < result.data.records.length; i++) {
-                                result.data.records[i].key = "pathway_up" + i;
-                            }
-                            workflow.pathways_down.data = result.data;
+                            this.getPathwayDown();
                         }
 
                         if (workflow.current_working_on_object == "ssGSEA") {
-
-                            for (let i = 0; i < result.data.records.length; i++) {
-                                result.data.records[i].key = "GSEA" + i;
-                            }
-                            workflow.ssGSEA.data = result.data;
+                            this.getssGSEA();
                         }
 
                         if (workflow.current_working_on_object == "deg") {
-
-                            for (let i = 0; i < result.data.records.length; i++) {
-                                result.data.records[i].key = "DEG" + i;
-                            }
-
-                            workflow.diff_expr_genes.data = result.data;
+                            this.getDEG();
                         }
-                        workflow.geneHeatmap="/ssgseaHeatmap1.jpg";
+                        workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                         workflow.progressing = false;
                         workflow.compared = true;
                         workflow.done_gsea = true;
@@ -1167,55 +1408,6 @@ class Analysis extends Component {
         }
 
     }
-
-    clean_data() {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.diff_expr_genes = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: true,
-        };
-        workflow.ssGSEA = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: true,
-        };
-        workflow.pathways_up = {
-
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: true,
-        };
-        workflow.pathways_down = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: true,
-        };
-        workflow.preplots = "";
-        workflow.postplots = "";
-
-
-        this.setState({
-            workflow: workflow
-        });
-    }
-
     assignGroup = (group_name, dataList_keys) => {
         // validate group_name
         let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
@@ -1304,6 +1496,10 @@ class Analysis extends Component {
                              getHistplotAN={this.getHistplotAN}
                              getPCA={this.getPCA}
                              getHeatmapolt={this.getHeatmapolt}
+
+                             getDEG={this.getDEG}
+                             getPathwayUp={this.getPathwayUp}
+                             getPathwayDown={this.getPathwayDown}
                             />
                 </div>
                 <div className={modal}>
