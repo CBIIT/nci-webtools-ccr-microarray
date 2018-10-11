@@ -33,9 +33,7 @@ const columns = [{
     sorter: true,
     render: (text, record, index) => (
         <div className="single-line" style={{"maxWidth":"100px"}}>
-            <Tooltip title={text} placement="topLeft" >
-              <span>{text}</span>
-            </Tooltip>
+             <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
           </div>
     ),
 }, {
