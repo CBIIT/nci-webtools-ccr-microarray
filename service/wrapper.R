@@ -81,6 +81,9 @@ process = function(){
       }
 
       celfiles = processGEOfiles(projectId,access_code,listGroups,data_repo_path)  
+      # remove downloaded tar file
+      fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
+      if (file.exists(fn)) file.remove(fn)
       return(celfiles)  
   }
 
