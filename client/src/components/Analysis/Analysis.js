@@ -278,7 +278,7 @@ class Analysis extends Component {
 
     getDEG = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-        if (!params.foldDEGs) {
+         if (!params.hasOwnProperty("search_keyword")){
             params = {
                 page_size: 10,
                 page_number: 1,
@@ -291,6 +291,22 @@ class Analysis extends Component {
                 search_keyword: "",
             }
         }
+
+        if (params.search_keyword != "") {
+            let keyword = params.search_keyword;
+            params = {
+                page_size: workflow.diff_expr_genes.pagination.pageSize,
+                page_number: workflow.diff_expr_genes.pagination.current,
+                sorting: {
+                    name: "P.Value",
+                    order: "descend",
+                },
+                foldDEGs: workflow.foldDEGs,
+                P_Value: workflow.pDEGs,
+                search_keyword: keyword
+            }
+        }
+       
         workflow.diff_expr_genes.loading = true;
         this.setState({ workflow: workflow });
         fetch('./api/analysis/getDEG', {
@@ -820,7 +836,13 @@ class Analysis extends Component {
 
     changeDeg(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.diff_expr_genes = obj;
+        if (obj.pagination) {
+            workflow.diff_expr_genes = obj;
+        } else {
+            obj.pagination = workflow.pagination;
+            workflow.diff_expr_genes = obj;
+        }
+
         this.setState({ workflow: workflow });
     }
 
