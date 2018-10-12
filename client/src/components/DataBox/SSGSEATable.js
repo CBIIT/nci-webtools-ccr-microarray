@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Table, Select, message } from 'antd';
-
+import { Table, Select, message,Input} from 'antd';
+const Search = Input.Search;
 const Option = Select.Option;
 
 const columns = [{
@@ -49,6 +49,19 @@ class SSGSEATable extends Component {
         this.props.getssGSEA();
         this.props.upateCurrentWorkingTabAndObject("ssGSEA")
     }
+
+
+  search=(value)=>{
+        this.props.changessGSEA({
+                        loading: true,
+                        data: []
+         })
+
+         this.props.getssGSEA({
+            search_keyword: value
+        });
+    }
+    
 
 
     handleTableChange = (pagination, filters, sorter) => {
@@ -112,6 +125,8 @@ class SSGSEATable extends Component {
         var link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
         let tabs = [<div id="ss_tag1" className="ss_plot">
+                        <div><Search  placeholder="input search text" className="input-search-for-ssgsea"  onSearch={value => this.search(value)} /></div>
+                         <div>
                             <Table 
                                 columns={columns}
                                 dataSource={this.props.data.ssGSEA.data}
@@ -119,6 +134,7 @@ class SSGSEATable extends Component {
                                 loading={this.props.data.ssGSEA.loading}
                                 onChange={this.handleTableChange}
                                 />
+                            </div>
                                 </div>,
             <div id="ss_tag2" className="ss_plot hide" >
                                  <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>

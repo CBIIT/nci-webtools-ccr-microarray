@@ -243,6 +243,16 @@ label{
   height:35px;
   } 
 
+
+.input-search-for-ssgsea{
+  position:absolute !important;
+  top:48px;
+  left:10px;
+  width: 200px  !important;
+  min-height:15px;
+  height:35px;
+  } 
+
  .single-line{  
     overflow: hidden;
     white-space: nowrap;
