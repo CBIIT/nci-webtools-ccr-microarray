@@ -40,14 +40,13 @@ class SSGSEATable extends Component {
     constructor(props) {
         super(props);
         this.handleTableChange = this.handleTableChange.bind(this)
-        this.fetch = this.fetch.bind(this)
         this.handleSelectionChange = this.handleSelectionChange.bind(this)
 
     }
 
 
     componentDidMount() {
-        this.fetch();
+        this.props.getssGSEA();
         this.props.upateCurrentWorkingTabAndObject("ssGSEA")
     }
 
@@ -73,7 +72,7 @@ class SSGSEATable extends Component {
         }
 
 
-        this.fetch({
+        this.props.getssGSEA({
             page_size: pagination.pageSize,
             page_number: pagination.current,
             sorting: {

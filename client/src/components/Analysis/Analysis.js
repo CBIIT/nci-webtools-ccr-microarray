@@ -101,6 +101,7 @@ class Analysis extends Component {
         this.getDEG = this.getDEG.bind(this);
         this.getPathwayDown = this.getPathwayDown.bind(this);
         this.getPathwayUp = this.getPathwayUp.bind(this);
+        this.getssGSEA =this.getssGSEA.bind(this);
     }
 
 
@@ -126,8 +127,8 @@ class Analysis extends Component {
                     order: "descend",
                 },
                 search_keyword: "",
-                pssGSEA: this.props.data.pssGSEA,
-                foldssGSEA: this.props.data.foldssGSEA,
+                pssGSEA: workflow.pssGSEA,
+                foldssGSEA: workflow.foldssGSEA,
             }
         }
         workflow.ssGSEA.loading = true;
@@ -227,7 +228,7 @@ class Analysis extends Component {
 
     getPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-        if (!params.pPathways) {
+          if (!params.hasOwnProperty("search_keyword")){
             params = {
                 page_size: 10,
                 page_number: 1,
@@ -237,6 +238,21 @@ class Analysis extends Component {
                 },
                 pPathways: workflow.pPathways,
                 search_keyword: "",
+            }
+        }
+
+
+        if (params.search_keyword != "") {
+            let keyword = params.search_keyword;
+            params = {
+                page_size: workflow.pathways_down.pagination.pageSize,
+                page_number: workflow.pathways_down.pagination.current,
+               sorting: {
+                    name: "P_Value",
+                    order: "descend",
+                },
+                pPathways: workflow.pPathways,
+                search_keyword: keyword
             }
         }
 
@@ -389,8 +405,6 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
-
-
                             let pcaData = result.data;
                             var PCAIframe = <Plot  data={[{
 
@@ -1522,6 +1536,8 @@ class Analysis extends Component {
                              getDEG={this.getDEG}
                              getPathwayUp={this.getPathwayUp}
                              getPathwayDown={this.getPathwayDown}
+                             getssGSEA={this.getssGSEA}
+                             
                             />
                 </div>
                 <div className={modal}>

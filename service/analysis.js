@@ -900,9 +900,14 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     }
     // search
     if (search_keyword != "") {
-
+        search_keyword = search_keyword.toLowerCase();
         result.filter(function(r) {
-            if (r.Description.toLowerCase().indexOf("search_keyword") > 0 || r.Gene_List.toLowerCase().indexOf("search_keyword") > 0) {
+            if (r.Pathway_ID.toLowerCase().indexOf(search_keyword) > 0 ||
+                r.Source.toLowerCase().indexOf(search_keyword) > 0 ||
+                r.Description.toLowerCase().indexOf(search_keyword) > 0 ||
+                r.Type.toLowerCase().indexOf(search_keyword) > 0 ||
+                r.Gene_List.toLowerCase().indexOf(search_keyword) > 0 
+            ) {
                 return true;
             } else {
                 return false;
@@ -955,9 +960,10 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
     // search
     if (search_keyword != "") {
-
+         search_keyword = search_keyword.toLowerCase();
         result.filter(function(r) {
-            if (r.Description.toLowerCase().indexOf("search_keyword") > 0 || r.Gene_List.toLowerCase().indexOf("search_keyword") > 0) {
+            if (r.Description.toLowerCase().indexOf(search_keyword) > 0 || 
+                r.Gene_List.toLowerCase().indexOf(search_keyword) > 0) {
                 return true;
             } else {
                 return false;
@@ -1012,9 +1018,11 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
 
     // search
     if (search_keyword != "") {
-
-        result.filter(function(r) {
-            if (r.Description.toLowerCase().indexOf("search_keyword") > 0 || r.Gene_List.toLowerCase().indexOf("search_keyword") > 0) {
+        search_keyword = search_keyword.toLowerCase();
+        result = result.filter(function(r) {
+            if (r.ACCNUM.toLowerCase().indexOf(search_keyword) !=-1 || 
+                r.DESC.toLowerCase().indexOf(search_keyword)  !=-1 || 
+                r.SYMBOL.toLowerCase().indexOf(search_keyword)  !=-1) {
                 return true;
             } else {
                 return false;
