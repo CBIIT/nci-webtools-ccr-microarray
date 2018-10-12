@@ -407,7 +407,7 @@ function getPlots(req, type) {
 
     if (type == "getBoxplotAN") {
         if (req.session && req.session.runContrastData) {
-            if (typeof(req.session.runContrastData.listPlots[7].color[0]) != "number") {
+            if (typeof(req.session.runContrastData.listPlots[7].color[0]) == "number") {
                 req.session.runContrastData.listPlots[7].color = req.session.runContrastData.listPlots[7].color.map(x => rainbow[x / 5 - 1]);
             }
             return_data = req.session.runContrastData.listPlots[7]
@@ -428,7 +428,7 @@ function getPlots(req, type) {
 
     if (type == "getPCA") {
         if (req.session && req.session.runContrastData) {
-            if (typeof(req.session.runContrastData.listPlots[8].color[0]) != "number") {
+            if (typeof(req.session.runContrastData.listPlots[8].color[0]) == "number") {
                 req.session.runContrastData.listPlots[8].color = req.session.runContrastData.listPlots[8].color.map(x => rainbow[x / 5 - 1]);
             }
             return_data = req.session.runContrastData.listPlots[8]
@@ -468,7 +468,7 @@ function getPlots(req, type) {
 
     if (type == "getBoxplotBN") {
         if (req.session && req.session.runContrastData) {
-            if (typeof(req.session.runContrastData.listPlots[2].color[0]) != "number") {
+            if (typeof(req.session.runContrastData.listPlots[2].color[0]) == "number") {
                 req.session.runContrastData.listPlots[2].color = req.session.runContrastData.listPlots[2].color.map(x => rainbow[x / 5 - 1]);
             }
             return_data = req.session.runContrastData.listPlots[2]
@@ -480,7 +480,7 @@ function getPlots(req, type) {
 
     if (type == "getRLE") {
         if (req.session && req.session.runContrastData) {
-            if (typeof(req.session.runContrastData.listPlots[3].color[0]) != "number") {
+            if (typeof(req.session.runContrastData.listPlots[3].color[0]) == "number") {
                 req.session.runContrastData.listPlots[3].color = req.session.runContrastData.listPlots[3].color.map(x => rainbow[x / 5 - 1]);
             }
             return_data = req.session.runContrastData.listPlots[3]
@@ -492,7 +492,7 @@ function getPlots(req, type) {
     if (type == "getNUSE") {
 
         if (req.session && req.session.runContrastData) {
-            if (typeof(req.session.runContrastData.listPlots[4].color[0]) != "number") {
+            if (typeof(req.session.runContrastData.listPlots[4].color[0]) == "number") {
                 req.session.runContrastData.listPlots[4].color = req.session.runContrastData.listPlots[4].color.map(x => rainbow[x / 5 - 1]);
             }
             return_data = req.session.runContrastData.listPlots[4]
