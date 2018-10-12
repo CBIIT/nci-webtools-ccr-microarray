@@ -118,7 +118,8 @@ class Analysis extends Component {
 
     getssGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-        if (!params.pPathways) {
+
+         if (!params.hasOwnProperty("search_keyword")){
             params = {
                 page_size: 10,
                 page_number: 1,
@@ -131,6 +132,24 @@ class Analysis extends Component {
                 foldssGSEA: workflow.foldssGSEA,
             }
         }
+
+
+        if (params.search_keyword != "") {
+            let keyword = params.search_keyword;
+            params = {
+                page_size: workflow.ssGSEA.pagination.pageSize,
+                page_number: workflow.ssGSEA.pagination.current,
+               sorting: {
+                    name: "P.Value",
+                    order: "descend",
+                },
+                search_keyword: keyword,
+                pssGSEA: workflow.pssGSEA,
+                foldssGSEA: workflow.foldssGSEA,
+            }
+        }
+
+
         workflow.ssGSEA.loading = true;
         this.setState({ workflow: workflow });
 
@@ -176,7 +195,8 @@ class Analysis extends Component {
 
     getPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-        if (!params.pPathways) {
+
+         if (!params.hasOwnProperty("search_keyword")){
             params = {
                 page_size: 10,
                 page_number: 1,
@@ -188,6 +208,22 @@ class Analysis extends Component {
                 search_keyword: "",
             }
         }
+
+
+        if (params.search_keyword != "") {
+            let keyword = params.search_keyword;
+            params = {
+                page_size: workflow.pathways_up.pagination.pageSize,
+                page_number: workflow.pathways_up.pagination.current,
+               sorting: {
+                    name: "P_Value",
+                    order: "descend",
+                },
+                pPathways: workflow.pPathways,
+                search_keyword: keyword
+            }
+        }
+
 
         workflow.pathways_up.loading = true;
         this.setState({ workflow: workflow });
@@ -862,19 +898,35 @@ class Analysis extends Component {
 
     changePathways_up(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.pathways_up = obj;
+          if (obj.pagination) {
+            workflow.pathways_up = obj;
+        } else {
+            obj.pagination = workflow.pagination;
+            workflow.pathways_up = obj;
+        }
         this.setState({ workflow: workflow });
     }
     changePathways_down(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.pathways_down = obj;
+         if (obj.pagination) {
+            workflow.pathways_down = obj;
+        } else {
+            obj.pagination = workflow.pagination;
+            workflow.pathways_down = obj;
+        }
+
         this.setState({ workflow: workflow });
     }
 
 
     changessGSEA(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.ssGSEA = obj;
+         if (obj.pagination) {
+            workflow.ssGSEA = obj;
+        } else {
+            obj.pagination = workflow.pagination;
+            workflow.ssGSEA = obj;
+        }
         this.setState({ workflow: workflow });
     }
 

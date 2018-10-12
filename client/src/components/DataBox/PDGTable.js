@@ -235,7 +235,7 @@ class PUGTable extends Component {
         // end  group modal
 
         content = <div>
-                    <div><Search  placeholder="input search text" className="input-search-for-deg-path" onSearch={value => this.search(value)}  /></div>
+                    <div><Search  placeholder="input search text" className="input-search-for-deg-path"  onSearch={value => this.search(value)} /></div>
                     <div>
                      <Table 
                         columns={columns}

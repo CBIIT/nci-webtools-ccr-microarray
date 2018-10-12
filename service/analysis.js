@@ -901,7 +901,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     // search
     if (search_keyword != "") {
         search_keyword = search_keyword.toLowerCase();
-        result.filter(function(r) {
+        result = result.filter(function(r) {
             if (r.Pathway_ID.toLowerCase().indexOf(search_keyword) > 0 ||
                 r.Source.toLowerCase().indexOf(search_keyword) > 0 ||
                 r.Description.toLowerCase().indexOf(search_keyword) > 0 ||
@@ -961,7 +961,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
     // search
     if (search_keyword != "") {
          search_keyword = search_keyword.toLowerCase();
-        result.filter(function(r) {
+        result=result.filter(function(r) {
             if (r.Description.toLowerCase().indexOf(search_keyword) > 0 || 
                 r.Gene_List.toLowerCase().indexOf(search_keyword) > 0) {
                 return true;

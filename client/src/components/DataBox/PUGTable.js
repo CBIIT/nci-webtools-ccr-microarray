@@ -100,6 +100,18 @@ class PUGTable extends Component {
         this.props.getPathwayUp();
     }
 
+
+  search=(value)=>{
+        this.props.changePathways_up({
+                        loading: true,
+                        data: []
+         })
+
+         this.props.getPathwayUp({
+            search_keyword: value
+        });
+    }
+    
     handleTableChange = (pagination, filters, sorter) => {
         this.props.changePathways_up({
                         loading: true,
@@ -209,7 +221,7 @@ class PUGTable extends Component {
         // end  group modal
 
         content = <div>
-                    <div><Search  placeholder="input search text" className="input-search-for-deg-path" onSearch={value => this.setState({term: value})} /></div>
+                    <div><Search  placeholder="input search text" className="input-search-for-deg-path"  onSearch={value => this.search(value)} /></div>
                     <div>
                      <Table 
                         columns={columns}
