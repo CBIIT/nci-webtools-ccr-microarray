@@ -67,17 +67,22 @@ class DEGTable extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            term: "",
-        }
-
         this.handleTableChange = this.handleTableChange.bind(this)
-
     }
 
     componentDidMount() {
       this.props.getDEG();
+    }
+
+    search=(value)=>{
+        this.props.changeDeg({
+                        loading: true,
+                        data: []
+         })
+
+         this.props.getDEG({
+            search_keyword: value
+        });
     }
 
     handleTableChange = (pagination, filters, sorter) => {
@@ -133,7 +138,7 @@ class DEGTable extends Component {
         }
 
         content = <div>
-                    <div><Search  placeholder="input search text"  className="input-search-for-deg-path"  onSearch={value => this.setState({term: value})} /></div>
+                    <div><Search  placeholder="input search text"  className="input-search-for-deg-path"  onSearch={value => this.search(value)} /></div>
                     <div>
                         <Table 
                             columns={columns}

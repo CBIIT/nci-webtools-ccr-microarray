@@ -35,25 +35,6 @@ class GSMData extends Component {
     }
 
 
-    handleSearch = (val) => {
-        if (val == "") {
-            // clear search 
-            this.setState({
-                data: Object.assign({}, this.props.data.dataList)
-            })
-        } else {
-            let data = Object.assign({}, this.props.data.dataList);
-            const result = data.filter(d => d["gsm"].indexOf(val) > 0 || d["title"].indexOf(val) > 0 || d["description"].indexOf(val) > 0);
-            this.setState({
-                data: result
-            })
-        }
-
-
-    }
-
-
-
     render() {
 
         const { loading, selectedRowKeys } = this.state;
