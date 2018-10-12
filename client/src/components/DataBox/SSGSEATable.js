@@ -13,7 +13,7 @@ const columns = [{
     sorter: true,
 }, {
     title: 'Avg.Enrichment.Score',
-    dataIndex: '',
+    dataIndex: 'Avg.Enrichment.Score',
     sorter: true,
 }, {
     title: 't',
