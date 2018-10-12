@@ -209,11 +209,11 @@ router.post('/runContrast', function(req, res) {
     data.push(config.configPath);
 
     // mock data
-    if (config.env = "dev") {
-        data.push("dev");
-    } else {
-        data.push("prod");
-    }
+    // if (config.env = "dev") {
+    //     data.push("dev");
+    // } else {
+    //     data.push("prod");
+    // }
 
 
 
@@ -902,11 +902,11 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     if (search_keyword != "") {
         search_keyword = search_keyword.toLowerCase();
         result = result.filter(function(r) {
-            if (r.Pathway_ID.toLowerCase().indexOf(search_keyword) > 0 ||
-                r.Source.toLowerCase().indexOf(search_keyword) > 0 ||
-                r.Description.toLowerCase().indexOf(search_keyword) > 0 ||
-                r.Type.toLowerCase().indexOf(search_keyword) > 0 ||
-                r.Gene_List.toLowerCase().indexOf(search_keyword) > 0 
+            if (r.Pathway_ID.toLowerCase().indexOf(search_keyword) !=-1  ||
+                r.Source.toLowerCase().indexOf(search_keyword) !=-1  ||
+                r.Description.toLowerCase().indexOf(search_keyword) !=-1  ||
+                r.Type.toLowerCase().indexOf(search_keyword) !=-1  ||
+                r.Gene_List.toLowerCase().indexOf(search_keyword) !=-1  
             ) {
                 return true;
             } else {
@@ -962,8 +962,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
     if (search_keyword != "") {
          search_keyword = search_keyword.toLowerCase();
         result=result.filter(function(r) {
-            if (r.Description.toLowerCase().indexOf(search_keyword) > 0 || 
-                r.Gene_List.toLowerCase().indexOf(search_keyword) > 0) {
+            if (r._row.toLowerCase().indexOf(search_keyword) !=-1 ) {
                 return true;
             } else {
                 return false;
@@ -1057,20 +1056,20 @@ function toObject(returnValue) {
 
 
     // //// mock data
-    if (config.env = "dev") {
-        list = JSON.parse(decodeURIComponent(returnValue));
-    } else {
-        let d = returnValue.split("+++ssGSEA+++\"")[1];
-        // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-        let data_dir = d.substring(0, d.indexOf("{"));
-        list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
-    }
+    // if (config.env = "dev") {
+    //     list = JSON.parse(decodeURIComponent(returnValue));
+    // } else {
+    //     let d = returnValue.split("+++ssGSEA+++\"")[1];
+    //     // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+    //     let data_dir = d.substring(0, d.indexOf("{"));
+    //     list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
+    // }
 
 
-    // let d = returnValue.split("+++ssGSEA+++\"")[1];
-    // // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-    // let data_dir = d.substring(0, d.indexOf("{"));
-    // list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
+    let d = returnValue.split("+++ssGSEA+++\"")[1];
+    // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+    let data_dir = d.substring(0, d.indexOf("{"));
+    list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
 
     // get plots
     workflow.listPlots = list.norm_celfiles["listData"];
