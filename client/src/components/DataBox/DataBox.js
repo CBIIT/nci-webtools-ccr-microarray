@@ -31,21 +31,13 @@ class DataBox extends Component {
         if (key == "Pre-normalization_QC_Plots") {
             if (this.props.data.preplots == "") {
                 this.props.getHistplotBN();
-                this.props.getMAplotsBN();
-                this.props.getBoxplotBN();
-                this.props.getRLE();
-                this.props.getNUSE();
             }
 
         }
 
         if (key == "Post-normalization_Plots") {
-            if (this.data.postplot == "") {
+            if (this.props.data.postplot == "") {
                 this.props.getHistplotAN();
-                this.props.getBoxplotAN();
-                this.props.getMAplotAN();
-                this.props.getPCA();
-                this.props.getHeatmapolt();
             }
         }
 
