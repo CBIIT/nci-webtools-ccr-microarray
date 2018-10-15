@@ -101,7 +101,7 @@ class Analysis extends Component {
         this.getDEG = this.getDEG.bind(this);
         this.getPathwayDown = this.getPathwayDown.bind(this);
         this.getPathwayUp = this.getPathwayUp.bind(this);
-        this.getssGSEA =this.getssGSEA.bind(this);
+        this.getssGSEA = this.getssGSEA.bind(this);
     }
 
 
@@ -119,7 +119,7 @@ class Analysis extends Component {
     getssGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
 
-         if (!params.hasOwnProperty("search_keyword")){
+        if (!params.hasOwnProperty("search_keyword")) {
             params = {
                 page_size: 10,
                 page_number: 1,
@@ -139,7 +139,7 @@ class Analysis extends Component {
             params = {
                 page_size: workflow.ssGSEA.pagination.pageSize,
                 page_number: workflow.ssGSEA.pagination.current,
-               sorting: {
+                sorting: {
                     name: "P.Value",
                     order: "descend",
                 },
@@ -196,7 +196,7 @@ class Analysis extends Component {
     getPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
 
-         if (!params.hasOwnProperty("search_keyword")){
+        if (!params.hasOwnProperty("search_keyword")) {
             params = {
                 page_size: 10,
                 page_number: 1,
@@ -215,7 +215,7 @@ class Analysis extends Component {
             params = {
                 page_size: workflow.pathways_up.pagination.pageSize,
                 page_number: workflow.pathways_up.pagination.current,
-               sorting: {
+                sorting: {
                     name: "P_Value",
                     order: "descend",
                 },
@@ -264,7 +264,7 @@ class Analysis extends Component {
 
     getPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-          if (!params.hasOwnProperty("search_keyword")){
+        if (!params.hasOwnProperty("search_keyword")) {
             params = {
                 page_size: 10,
                 page_number: 1,
@@ -283,7 +283,7 @@ class Analysis extends Component {
             params = {
                 page_size: workflow.pathways_down.pagination.pageSize,
                 page_number: workflow.pathways_down.pagination.current,
-               sorting: {
+                sorting: {
                     name: "P_Value",
                     order: "descend",
                 },
@@ -330,7 +330,7 @@ class Analysis extends Component {
 
     getDEG = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-         if (!params.hasOwnProperty("search_keyword")){
+        if (!params.hasOwnProperty("search_keyword")) {
             params = {
                 page_size: 10,
                 page_number: 1,
@@ -358,7 +358,7 @@ class Analysis extends Component {
                 search_keyword: keyword
             }
         }
-       
+
         workflow.diff_expr_genes.loading = true;
         this.setState({ workflow: workflow });
         fetch('./api/analysis/getDEG', {
@@ -898,7 +898,7 @@ class Analysis extends Component {
 
     changePathways_up(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-          if (obj.pagination) {
+        if (obj.pagination) {
             workflow.pathways_up = obj;
         } else {
             obj.pagination = workflow.pagination;
@@ -908,7 +908,7 @@ class Analysis extends Component {
     }
     changePathways_down(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-         if (obj.pagination) {
+        if (obj.pagination) {
             workflow.pathways_down = obj;
         } else {
             obj.pagination = workflow.pagination;
@@ -921,7 +921,7 @@ class Analysis extends Component {
 
     changessGSEA(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-         if (obj.pagination) {
+        if (obj.pagination) {
             workflow.ssGSEA = obj;
         } else {
             obj.pagination = workflow.pagination;
@@ -1068,7 +1068,6 @@ class Analysis extends Component {
             }
         }
         reqBody.groups = groups;
-
 
         workflow.uploading = true;
         workflow.progressing = true;
@@ -1279,7 +1278,6 @@ class Analysis extends Component {
         workflow.preplots = "";
         workflow.postplot = "";
 
-
         this.setState({
             workflow: workflow
         });
@@ -1354,22 +1352,53 @@ class Analysis extends Component {
                             workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                         }
 
-                        if (workflow.current_working_on_object == "pathways_up") {
+                        if (type == "pathways_up") {
 
                             this.getPathwayUp()
                         }
 
-                        if (workflow.current_working_on_object == "pathways_down") {
+                        if (type == "pathways_down") {
                             this.getPathwayDown();
                         }
 
-                        if (workflow.current_working_on_object == "ssGSEA") {
+                        if (type == "ssGSEA") {
                             this.getssGSEA();
                         }
 
-                        if (workflow.current_working_on_object == "deg") {
+                        if (type == "deg") {
                             this.getDEG();
                         }
+
+                        if (type == "Pre-normalization_QC_Plots") {
+                                this.getHistplotBN();
+                                this.getMAplotsBN();
+                                this.getBoxplotBN();
+                                this.getRLE();
+                                this.getNUSE();
+                        }
+
+                        if (type == "Post-normalization_Plots") {
+                                this.getHistplotAN();
+                                this.getBoxplotAN();
+                                this.getMAplotAN();
+                                this.getPCA();
+                                this.getHeatmapolt();
+                        }
+
+                        if (type == "DEG-Enrichments_Results") {
+                                this.getPathwayUp();
+                                this.getPathwayDown();
+                                this.getDEG();
+                        }
+
+                        if (type == "GSM_1") {
+                            // do nothing
+                        }
+
+                        if (type == "ssGSEA_Results") {
+                                this.getssGSEA();
+                        }
+
                         workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                         workflow.progressing = false;
                         workflow.compared = true;
