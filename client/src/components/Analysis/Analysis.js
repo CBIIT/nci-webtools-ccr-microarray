@@ -1371,18 +1371,12 @@ class Analysis extends Component {
 
                         if (type == "Pre-normalization_QC_Plots") {
                                 this.getHistplotBN();
-                                this.getMAplotsBN();
-                                this.getBoxplotBN();
-                                this.getRLE();
-                                this.getNUSE();
+                         
                         }
 
                         if (type == "Post-normalization_Plots") {
                                 this.getHistplotAN();
-                                this.getBoxplotAN();
-                                this.getMAplotAN();
-                                this.getPCA();
-                                this.getHeatmapolt();
+                           
                         }
 
                         if (type == "DEG-Enrichments_Results") {
