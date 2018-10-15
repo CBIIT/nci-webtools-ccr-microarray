@@ -26,7 +26,56 @@ class DataBox extends Component {
     }
 
     handleTabChange = (key) => {
-        console.log(key);
+        this.props.upateCurrentWorkingTabAndObject(key)
+
+        if (key == "Pre-normalization_QC_Plots") {
+            if (this.props.data.preplots == "") {
+                this.props.getHistplotBN();
+                this.props.getMAplotsBN();
+                this.props.getBoxplotBN();
+                this.props.getRLE();
+                this.props.getNUSE();
+            }
+
+        }
+
+        if (key == "Post-normalization_Plots") {
+            if (this.data.postplot == "") {
+                this.props.getHistplotAN();
+                this.props.getBoxplotAN();
+                this.props.getMAplotAN();
+                this.props.getPCA();
+                this.props.getHeatmapolt();
+            }
+        }
+
+        if (key == "DEG-Enrichments_Results") {
+            if (this.props.data.pathways_up.data.length == 0) {
+                this.props.getPathwayUp();
+            }
+            if (this.props.data.pathways_down.data.length == 0) {
+                this.props.getPathwayDown();
+            }
+            if (this.props.data.diff_expr_genes.data.length == 0) {
+                this.props.getDEG();
+            }
+        }
+
+        if (key == "GSM_1") {
+            console.log(key)
+            // do nothing
+        }
+
+        if (key == "ssGSEA_Results") {
+            console.log(key)
+            // if ssGSEA data length ==0 mean, the result is empty 
+            // or user re-run constrast the program clean the data.
+            // reload the data in this tag
+            if (this.props.data.ssGSEA.data.length == 0) {
+                this.props.getssGSEA();
+            }
+        }
+
     }
 
     showModal = () => {
