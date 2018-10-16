@@ -994,6 +994,10 @@ let workflow2 = Object.assign({}, this.state.workflow);
         workflow.projectID = this.uuidv4();
         reqBody.projectId = workflow.projectID;
 
+
+        // mock
+
+        // workflow.projectID = "test";
         // gruop info
         var groups = []
         for (var i in workflow.dataList) {
