@@ -146,7 +146,7 @@ process = function(){
 
     # store mock data
     if(mode=="dev"){
-      data_repo_path<-"../data"
+      data_repo_path<-"/Users/cheny39/Documents/GitHub/apps/microarray/tmp/test"
       return_plot_data<-readRDS(file = paste0(data_repo_path,"/return_plot_data.rds"))
       l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
       diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))

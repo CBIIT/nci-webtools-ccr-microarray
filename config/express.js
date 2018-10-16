@@ -12,10 +12,8 @@ var morgan = require('morgan');
 var fs = require('fs');
 var rfs = require('rotating-file-stream');
 var fileUpload = require('express-fileupload');
-var redis   = require("redis");
-var RedisStore = require('connect-redis')(session);
 var argv = require('minimist')(process.argv.slice(2));
-var client  = redis.createClient();
+var MemoryStore = require('memorystore')(session)
 
 module.exports = function(app) {
 
@@ -36,11 +34,9 @@ module.exports = function(app) {
     app.use(cookieParser());
 
     app.use(session({
-        store: new RedisStore({
-            host: 'localhost', 
-            port: argv.p, 
-            client: client,
-            ttl :  260}),
+        store: new MemoryStore({
+            checkPeriod: 86400000 // prune expired entries every 24h
+        }),
         secret: 'microarray token',
         cookie: { maxAge: null },
         resave: true,

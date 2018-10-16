@@ -13,6 +13,7 @@ class Analysis extends Component {
         super(props);
         this.state = {
             workflow: {
+                token: "",
                 projectID: "",
                 analysisType: "0",
                 accessionCode: "",
@@ -146,6 +147,7 @@ class Analysis extends Component {
                 search_keyword: keyword,
                 pssGSEA: workflow.pssGSEA,
                 foldssGSEA: workflow.foldssGSEA,
+                token: workflow.token,
             }
         }
 
@@ -206,6 +208,7 @@ class Analysis extends Component {
                 },
                 pPathways: workflow.pPathways,
                 search_keyword: "",
+                token: workflow.token,
             }
         }
 
@@ -274,6 +277,7 @@ class Analysis extends Component {
                 },
                 pPathways: workflow.pPathways,
                 search_keyword: "",
+                token: workflow.token,
             }
         }
 
@@ -341,6 +345,7 @@ class Analysis extends Component {
                 foldDEGs: workflow.foldDEGs,
                 P_Value: workflow.pDEGs,
                 search_keyword: "",
+                token: workflow.token,
             }
         }
 
@@ -355,7 +360,8 @@ class Analysis extends Component {
                 },
                 foldDEGs: workflow.foldDEGs,
                 P_Value: workflow.pDEGs,
-                search_keyword: keyword
+                search_keyword: keyword,
+                token: workflow.token,
             }
         }
 
@@ -398,43 +404,19 @@ class Analysis extends Component {
 
     getHeatmapolt() {
 
-        try {
-            fetch('./api/analysis/getHeatmapolt', {
-                    method: "POST",
-                    body: "",
-                    processData: false,
-                    contentType: false
-                }).then(res => res.json())
-                .then(result => {
-                    if (result.status == 200) {
-                        if (result.data != "") {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+workflow.projectID+result.data}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
+        let workflow = Object.assign({}, this.state.workflow);
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+workflow.projectID+"/heatmapAfterNorm.html"}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
+        workflow.postplot = <div>{HeatMapIframe}</div>;
+        this.setState({ workflow: workflow });
 
-                            workflow.postplot = <div>{HeatMapIframe}</div>;
-                            this.setState({ workflow: workflow });
-                        } else {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            workflow.postplot = "No Data";
-                            this.setState({ workflow: workflow });
-                        }
-
-                    } else {
-                        message.error('Load histplot fails.');
-                    }
-
-                })
-        } catch (error) {
-            message.error('Load data fails.');
-        }
 
     }
     getPCA() {
-
+        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getPCA', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify({ token: workflow2.token }),
                     processData: false,
                     contentType: false
                 }).then(res => res.json())
@@ -511,10 +493,11 @@ class Analysis extends Component {
 
     }
     getBoxplotAN() {
+        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getBoxplotAN', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify({ token: workflow2.token }),
                     processData: false,
                     contentType: false
                 }).then(res => res.json())
@@ -564,43 +547,22 @@ class Analysis extends Component {
     }
 
     getHistplotAN() {
-        try {
-            fetch('./api/analysis/getHistplotAN', {
-                    method: "POST",
-                    body: "",
-                    processData: false,
-                    contentType: false
-                }).then(res => res.json())
-                .then(result => {
-                    if (result.status == 200) {
-                        if (result.data != "") {
+        
                             let workflow = Object.assign({}, this.state.workflow);
-                            let histplotANLink = './images/' + workflow.projectID + result.data;
+                            let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.svg";
                             let histplotAN = <div><img src={ histplotANLink } style={{ width: "75%" }} alt="Histogram" /></div>;
 
                             workflow.postplot = histplotAN;
                             this.setState({ workflow: workflow });
-                        } else {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            workflow.postplot = "No Data";
-                            this.setState({ workflow: workflow });
-                        }
-
-                    } else {
-                        message.error('Load histplot fails.');
-                    }
-
-                })
-        } catch (error) {
-            message.error('Load data fails.');
-        }
+           
     }
 
     getMAplotAN() {
+        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getMAplotAN', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify({ token: workflow2.token }),
                     processData: false,
                     contentType: false
                 }).then(res => res.json())
@@ -643,10 +605,11 @@ class Analysis extends Component {
 
     }
     getNUSE() {
+        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getNUSE', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify({ token: workflow2.token }),
                     processData: false,
                     contentType: false
                 }).then(res => res.json())
@@ -689,11 +652,11 @@ class Analysis extends Component {
     }
 
     getRLE() {
-
+        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getRLE', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify({ token: workflow2.token }),
                     processData: false,
                     contentType: false
                 }).then(res => res.json())
@@ -745,11 +708,11 @@ class Analysis extends Component {
     }
 
     getBoxplotBN() {
-
+let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getBoxplotBN', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify({ token: workflow2.token }),
                     processData: false,
                     contentType: false
                 }).then(res => res.json())
@@ -799,11 +762,11 @@ class Analysis extends Component {
     }
 
     getMAplotsBN() {
-
+        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getMAplotsBN', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify({ token: workflow2.token }),
                     processData: false,
                     contentType: false
                 }).then(res => res.json())
@@ -847,38 +810,11 @@ class Analysis extends Component {
 
     getHistplotBN() {
 
-        try {
-            fetch('./api/analysis/getHistplotBN', {
-                    method: "POST",
-                    body: "",
-                    processData: false,
-                    contentType: false
-                }).then(res => res.json())
-                .then(result => {
-                    if (result.status == 200) {
-                        if (result.data != "") {
                             let workflow = Object.assign({}, this.state.workflow);
-                            let histplotBNLink = './images/' + workflow.projectID + result.data;
+                            let histplotBNLink = './images/' + workflow.projectID +"/histBeforeNorm.svg";
                             let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
                             workflow.preplots = histplotBN;
                             this.setState({ workflow: workflow });
-
-                        } else {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots = "No Data";
-                            this.setState({ workflow: workflow });
-
-                        }
-
-
-                    } else {
-                        message.error('Load histplot fails.');
-                    }
-
-                })
-        } catch (error) {
-            message.error('Load data fails.');
-        }
 
     }
 
@@ -1370,19 +1306,19 @@ class Analysis extends Component {
                         }
 
                         if (type == "Pre-normalization_QC_Plots") {
-                                this.getHistplotBN();
-                         
+                            this.getHistplotBN();
+
                         }
 
                         if (type == "Post-normalization_Plots") {
-                                this.getHistplotAN();
-                           
+                            this.getHistplotAN();
+
                         }
 
                         if (type == "DEG-Enrichments_Results") {
-                                this.getPathwayUp();
-                                this.getPathwayDown();
-                                this.getDEG();
+                            this.getPathwayUp();
+                            this.getPathwayDown();
+                            this.getDEG();
                         }
 
                         if (type == "GSM_1") {
@@ -1390,7 +1326,7 @@ class Analysis extends Component {
                         }
 
                         if (type == "ssGSEA_Results") {
-                                this.getssGSEA();
+                            this.getssGSEA();
                         }
 
                         workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
