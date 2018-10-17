@@ -7,7 +7,6 @@ var logger = require('./components/logger');
 var ncp = require('ncp').ncp;
 
 require('./routes')(app);
-require('./config/express')(app);
 
 
 var config = require('./config');

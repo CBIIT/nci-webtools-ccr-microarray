@@ -8,7 +8,7 @@ var m_analysis = require('./service/analysis');
 var m_common = require('./service/common');
 var config = require('./config');
 var path = require('path');
-
+var fs = require('fs');
 
 var compression = require('compression');
 var bodyParser = require('body-parser');
