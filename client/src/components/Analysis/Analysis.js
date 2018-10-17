@@ -76,6 +76,7 @@ class Analysis extends Component {
                 preplots: "",
                 postplot: "",
                 geneHeatmap: "/ssgseaHeatmap1.jpg",
+                volcanoPlot: "/volcano.html"
 
             }
         };
@@ -147,7 +148,6 @@ class Analysis extends Component {
                 search_keyword: keyword,
                 pssGSEA: workflow.pssGSEA,
                 foldssGSEA: workflow.foldssGSEA,
-                token: workflow.token,
             }
         }
 
@@ -162,7 +162,9 @@ class Analysis extends Component {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(
+            })
+            .then(this.handleErrors)
+            .then(
                 res => res.json()
             )
             .then(result => {
@@ -189,7 +191,7 @@ class Analysis extends Component {
                     message.warning('no data');
                 }
 
-            });
+            }).catch(error => console.log(error));
     }
 
 
@@ -208,7 +210,6 @@ class Analysis extends Component {
                 },
                 pPathways: workflow.pPathways,
                 search_keyword: "",
-                token: workflow.token,
             }
         }
 
@@ -237,7 +238,9 @@ class Analysis extends Component {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(
+            })
+            .then(this.handleErrors)
+            .then(
                 res => res.json()
             )
             .then(result => {
@@ -262,7 +265,7 @@ class Analysis extends Component {
                     message.warning('no data');
                 }
 
-            });
+            }).catch(error => console.log(error));
     }
 
     getPathwayDown = (params = {}) => {
@@ -277,7 +280,6 @@ class Analysis extends Component {
                 },
                 pPathways: workflow.pPathways,
                 search_keyword: "",
-                token: workflow.token,
             }
         }
 
@@ -305,7 +307,9 @@ class Analysis extends Component {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(
+            })
+            .then(this.handleErrors)
+            .then(
                 res => res.json()
             )
             .then(result => {
@@ -329,7 +333,7 @@ class Analysis extends Component {
                     message.warning('no data');
                 }
 
-            });
+            }).catch(error => console.log(error));
     }
 
     getDEG = (params = {}) => {
@@ -345,7 +349,6 @@ class Analysis extends Component {
                 foldDEGs: workflow.foldDEGs,
                 P_Value: workflow.pDEGs,
                 search_keyword: "",
-                token: workflow.token,
             }
         }
 
@@ -361,7 +364,6 @@ class Analysis extends Component {
                 foldDEGs: workflow.foldDEGs,
                 P_Value: workflow.pDEGs,
                 search_keyword: keyword,
-                token: workflow.token,
             }
         }
 
@@ -374,7 +376,9 @@ class Analysis extends Component {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }).then(
+            })
+            .then(this.handleErrors)
+            .then(
                 res => res.json()
             )
             .then(result => {
@@ -399,27 +403,28 @@ class Analysis extends Component {
                     message.warning('no data');
                 }
 
-            });
+            }).catch(error => console.log(error));
     }
 
     getHeatmapolt() {
 
         let workflow = Object.assign({}, this.state.workflow);
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+workflow.projectID+"/heatmapAfterNorm.html"}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/47008b9ec8ff4e4bba774f8b318ce679/heatmapAfterNorm.html"}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
         workflow.postplot = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
 
 
     }
     getPCA() {
-        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getPCA', {
                     method: "POST",
-                    body: JSON.stringify({ token: workflow2.token }),
+                    body:"",
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                })
+                .then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
@@ -486,21 +491,22 @@ class Analysis extends Component {
                         message.error('Load histplot fails.');
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
         }
 
     }
     getBoxplotAN() {
-        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getBoxplotAN', {
                     method: "POST",
-                    body: JSON.stringify({ token: workflow2.token }),
+                    body:"",
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                })
+                .then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
@@ -539,7 +545,7 @@ class Analysis extends Component {
                         message.error('Load histplot fails.');
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
         }
@@ -547,25 +553,26 @@ class Analysis extends Component {
     }
 
     getHistplotAN() {
-        
-                            let workflow = Object.assign({}, this.state.workflow);
-                            let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.svg";
-                            let histplotAN = <div><img src={ histplotANLink } style={{ width: "75%" }} alt="Histogram" /></div>;
 
-                            workflow.postplot = histplotAN;
-                            this.setState({ workflow: workflow });
-           
+        let workflow = Object.assign({}, this.state.workflow);
+        let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.svg";
+        let histplotAN = <div><img src={ histplotANLink } style={{ width: "75%" }} alt="Histogram" /></div>;
+
+        workflow.postplot = histplotAN;
+        this.setState({ workflow: workflow });
+
     }
 
     getMAplotAN() {
-        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getMAplotAN', {
                     method: "POST",
-                    body: JSON.stringify({ token: workflow2.token }),
+                    body: "",
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                })
+                .then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         let workflow = Object.assign({}, this.state.workflow);
@@ -590,26 +597,23 @@ class Analysis extends Component {
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.postplot = "No Data";
                             this.setState({ workflow: workflow });
-
                         }
-
 
                     } else {
                         message.error('Load histplot fails.');
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
         }
 
     }
     getNUSE() {
-        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getNUSE', {
                     method: "POST",
-                    body: JSON.stringify({ token: workflow2.token }),
+                    body: "",
                     processData: false,
                     contentType: false
                 }).then(res => res.json())
@@ -645,21 +649,21 @@ class Analysis extends Component {
                         message.error('Load histplot fails.');
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
         }
     }
 
     getRLE() {
-        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getRLE', {
                     method: "POST",
-                    body: JSON.stringify({ token: workflow2.token }),
+                    body: "",
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                }).then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
@@ -699,7 +703,7 @@ class Analysis extends Component {
                         message.error('Load histplot fails.');
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
         }
@@ -708,14 +712,14 @@ class Analysis extends Component {
     }
 
     getBoxplotBN() {
-let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getBoxplotBN', {
                     method: "POST",
-                    body: JSON.stringify({ token: workflow2.token }),
+                    body: "",
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                }).then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
@@ -754,7 +758,7 @@ let workflow2 = Object.assign({}, this.state.workflow);
                         message.error('Load histplot fails.');
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
         }
@@ -762,14 +766,14 @@ let workflow2 = Object.assign({}, this.state.workflow);
     }
 
     getMAplotsBN() {
-        let workflow2 = Object.assign({}, this.state.workflow);
         try {
             fetch('./api/analysis/getMAplotsBN', {
                     method: "POST",
-                    body: JSON.stringify({ token: workflow2.token }),
+                    body: "",
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                }).then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
@@ -801,7 +805,7 @@ let workflow2 = Object.assign({}, this.state.workflow);
                         message.error('Load histplot fails.');
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
         }
@@ -810,11 +814,11 @@ let workflow2 = Object.assign({}, this.state.workflow);
 
     getHistplotBN() {
 
-                            let workflow = Object.assign({}, this.state.workflow);
-                            let histplotBNLink = './images/' + workflow.projectID +"/histBeforeNorm.svg";
-                            let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
-                            workflow.preplots = histplotBN;
-                            this.setState({ workflow: workflow });
+        let workflow = Object.assign({}, this.state.workflow);
+        let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.svg";
+        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
+        workflow.preplots = histplotBN;
+        this.setState({ workflow: workflow });
 
     }
 
@@ -1025,6 +1029,7 @@ let workflow2 = Object.assign({}, this.state.workflow);
                         'Content-Type': 'application/json'
                     }
                 })
+                .then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
@@ -1100,7 +1105,8 @@ let workflow2 = Object.assign({}, this.state.workflow);
 
                         message.error('load data fails.');
                     }
-                });
+                })
+                .catch(error => console.log(error));
         } catch (err) {
             //change button style
             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
@@ -1217,7 +1223,7 @@ let workflow2 = Object.assign({}, this.state.workflow);
         };
         workflow.preplots = "";
         workflow.postplot = "";
-
+        workflow.volcanoPlot = "";
         this.setState({
             workflow: workflow
         });
@@ -1230,7 +1236,7 @@ let workflow2 = Object.assign({}, this.state.workflow);
                     headers: {
                         'Content-Type': 'application/json'
                     }
-                })
+                }).then(this.handleErrors)
                 .then(function(response) {
                     if (!response.ok) {
                         throw Error(response.statusText);
@@ -1351,7 +1357,7 @@ let workflow2 = Object.assign({}, this.state.workflow);
                         message.warning('Generate plots fails.');
                     }
 
-                });
+                }).catch(error => console.log(error));
         } catch (err) {
 
             workflow.uploading = false;
@@ -1394,7 +1400,9 @@ let workflow2 = Object.assign({}, this.state.workflow);
                     body: formData,
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                })
+                .then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         var data = result.data.split("+++getCELfiles+++\"")[1]
@@ -1445,7 +1453,7 @@ let workflow2 = Object.assign({}, this.state.workflow);
                         });
                         message.error('load data fails.');
                     }
-                });
+                }).catch(error => console.log(error));
         } catch (error) {
 
 
@@ -1491,6 +1499,13 @@ let workflow2 = Object.assign({}, this.state.workflow);
         });
         message.success('Delete  group successfully.');
 
+    }
+
+    handleErrors = (response) => {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response;
     }
 
     hideWorkFlow = () => {

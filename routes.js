@@ -9,7 +9,48 @@ var m_common = require('./service/common');
 var config = require('./config');
 var path = require('path');
 
+
+var compression = require('compression');
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var MemoryStore = require('memorystore')(session)
+
 module.exports = function(app){
+
+
+	app.use(express.static(path.join(config.root, 'client/www')));
+	//Serves all the request which includes /images in the url from Images folder
+	app.use('/images', express.static(config.uploadPath));
+    app.use(compression());
+    app.use(bodyParser.urlencoded({
+        limit: '40mb', // 100kb default is too small
+        extended: false
+    }));
+    app.use(bodyParser.json({
+        limit: '40mb' // 100kb default is too small
+    }));
+
+    app.use(methodOverride());
+
+    app.use(cookieParser());
+
+    app.use(session({
+        store: new MemoryStore({
+            checkPeriod: 86400000 // prune expired entries every 24h
+        }),
+        secret: 'microarray token',
+        cookie: { maxAge: null },
+        resave: true,
+        saveUninitialized: true
+    }));
+
+
+    let logDirectory = config.logDir;
+
+    // ensure log directory exists
+    fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 	//allows CrossDomainAccess to API
 	app.use(function(req, res, next){
@@ -21,16 +62,16 @@ module.exports = function(app){
 			next();
 		}
 	});
-
+	
 	app.use('/api/', m_common);
 	app.use('/api/analysis', m_analysis);
 
 
-	//Serves all the request which includes /images in the url from Images folder
-	app.use('/images', express.static(config.uploadPath));
-	
-	// All other routes should redirect to error page
+    // All other routes should redirect to error page
     app.get('/*', function (req, res) {
-	  res.sendFile(path.join(config.root, 'client/www', 'index.html'));
-	});
+      res.sendFile(path.join(config.root, 'client/www', 'error.html'));
+    });
+
+
+
 };
