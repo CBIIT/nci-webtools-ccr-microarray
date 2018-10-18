@@ -23,20 +23,10 @@ module.exports = function(app){
 	app.use(express.static(path.join(config.root, 'client/www')));
 	//Serves all the request which includes /images in the url from Images folder
 	app.use('/images', express.static(config.uploadPath));
-    app.use(compression());
-    app.use(bodyParser.urlencoded({
-        limit: '40mb', // 100kb default is too small
-        extended: false
-    }));
-    app.use(bodyParser.json({
-        limit: '40mb' // 100kb default is too small
-    }));
 
-    app.use(methodOverride());
 
-    app.use(cookieParser());
 
-    app.use(session({
+     app.use(session({
         store: new MemoryStore({
             checkPeriod: 86400000 // prune expired entries every 24h
         }),
@@ -46,6 +36,26 @@ module.exports = function(app){
         saveUninitialized: true
     }));
 
+
+    app.use(bodyParser.urlencoded({
+        limit: '40mb', // 100kb default is too small
+        extended: false
+    }));
+    app.use(bodyParser.json({
+        limit: '40mb' // 100kb default is too small
+    }));
+
+
+
+
+    app.use(cookieParser());
+    app.use(compression());
+    app.use(methodOverride());
+
+
+    app.use('/api/analysis', m_analysis);
+
+    
 
     let logDirectory = config.logDir;
 
@@ -62,9 +72,6 @@ module.exports = function(app){
 			next();
 		}
 	});
-	
-	app.use('/api/', m_common);
-	app.use('/api/analysis', m_analysis);
 
 
     // All other routes should redirect to error page

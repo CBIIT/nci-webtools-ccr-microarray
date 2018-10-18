@@ -26,7 +26,6 @@ class PostPlotsBox extends Component {
             this.props.getHistplotAN();
 
         }
-
         if (value == "MAplots") { // 
             this.props.upateCurrentWorkingTabAndObject("getMAplotAN");
             this.props.getMAplotAN();
@@ -44,7 +43,6 @@ class PostPlotsBox extends Component {
             this.props.getPCA();
 
         }
-
         if (value == "Heatmap") { // 
             this.props.upateCurrentWorkingTabAndObject("getHeatmapolt");
             this.props.getHeatmapolt();
