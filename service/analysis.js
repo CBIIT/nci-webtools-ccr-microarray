@@ -313,7 +313,14 @@ router.post('/runContrast', function(req, res) {
                 // }
 
 
-                let retun_data = "";
+                let return_data = "";
+
+                 return_data ={
+                    mAplotBN:req.session.runContrastData.listPlots[1],
+                    mAplotAN:req.session.runContrastData.listPlots[6]
+                }
+
+                
                 let type = req.body.targetObject;
 
 
@@ -334,22 +341,21 @@ router.post('/runContrast', function(req, res) {
                     return_data = getDownPathWays(req)
                 }
 
-
                 if (type == "volcanoPlot") {
-
                     return_data = "/volcano.html"
                 }
-
 
                 if (type == "pathwayHeatMap") {
 
                     return_data = "/geneHeatmap.jpg"
                 }
 
+               
+
                 logger.info("API:/runContrast ", "Contrast uses session ")
                 res.json({
                     status: 200,
-                    data: retun_data
+                    data: return_data
                 });
 
             }
@@ -369,6 +375,8 @@ function sin_to_hex(i, phase, size) {
 }
 
 function getPlots(req, type) {
+
+    console.time("getPlots")
     let return_data = "";
 
     let uniqueColorCodeArray = "";
@@ -377,7 +385,7 @@ function getPlots(req, type) {
 
     let rainbow = [];
 
-    if (req.session && req.session.runContrastData) {
+    if (req.session && req.session.runContrastData && (type == "getBoxplotAN" || type == "getPCA" || type == "getBoxplotBN" || type == "getRLE" || type == "getNUSE")) {
 
         uniqueColorCodeArray = req.session.runContrastData.listPlots[8].color.filter(function(item, pos) {
             return req.session.runContrastData.listPlots[8].color.indexOf(item) == pos;
@@ -396,112 +404,101 @@ function getPlots(req, type) {
         }
     }
 
-    if (type == "getHistplotAN") {
-        if (req.session && req.session.runContrastData) {
-            return_data = req.session.runContrastData.listPlots[5]
-        } else {
-            return_data = "";
-        }
-
-    }
-
-    if (type == "getBoxplotAN") {
-        if (req.session && req.session.runContrastData) {
-            if (typeof(req.session.runContrastData.listPlots[7].color[0]) == "number") {
-                req.session.runContrastData.listPlots[7].color = req.session.runContrastData.listPlots[7].color.map(x => rainbow[x / 5 - 1]);
+    switch (type) {
+        case "getHistplotAN":
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[5]
+            } else {
+                return_data = "";
             }
-            return_data = req.session.runContrastData.listPlots[7]
+            break;
+        case "getBoxplotAN":
+            if (req.session && req.session.runContrastData) {
+                if (typeof(req.session.runContrastData.listPlots[7].color[0]) == "number") {
+                    req.session.runContrastData.listPlots[7].color = req.session.runContrastData.listPlots[7].color.map(x => rainbow[x / 5 - 1]);
+                }
+                return_data = req.session.runContrastData.listPlots[7]
 
-        } else {
-            return_data = "";
-        }
-
-    }
-
-    if (type == "getMAplotAN") {
-        if (req.session && req.session.runContrastData) {
-            return_data = req.session.runContrastData.listPlots[6]
-        } else {
-            return_data = "";
-        }
-    }
-
-    if (type == "getPCA") {
-        if (req.session && req.session.runContrastData) {
-            if (typeof(req.session.runContrastData.listPlots[8].color[0]) == "number") {
-                req.session.runContrastData.listPlots[8].color = req.session.runContrastData.listPlots[8].color.map(x => rainbow[x / 5 - 1]);
+            } else {
+                return_data = "";
             }
-            return_data = req.session.runContrastData.listPlots[8]
-        } else {
-            return_data = "";
-        }
-
-    }
-
-    if (type == "getHeatmapolt") {
-        if (req.session && req.session.runContrastData) {
-            return_data = req.session.runContrastData.listPlots[9]
-        } else {
-            return_data = "";
-        }
-    }
-
-
-
-    if (type == "getHistplotBN") {
-        if (req.session && req.session.runContrastData) {
-            return_data = req.session.runContrastData.listPlots[0]
-        } else {
-            return_data = "";
-        }
-
-    }
-
-    if (type == "getMAplotsBN") {
-        if (req.session && req.session.runContrastData) {
-            return_data = req.session.runContrastData.listPlots[1]
-        } else {
-            return_data = "";
-        }
-
-    }
-
-    if (type == "getBoxplotBN") {
-        if (req.session && req.session.runContrastData) {
-            if (typeof(req.session.runContrastData.listPlots[2].color[0]) == "number") {
-                req.session.runContrastData.listPlots[2].color = req.session.runContrastData.listPlots[2].color.map(x => rainbow[x / 5 - 1]);
+            break;
+        case "getMAplotAN":
+            console.time("getMAplotAN")
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[6]
+            } else {
+                return_data = "";
             }
-            return_data = req.session.runContrastData.listPlots[2]
-        } else {
-            return_data = "";
-        }
-
-    }
-
-    if (type == "getRLE") {
-        if (req.session && req.session.runContrastData) {
-            if (typeof(req.session.runContrastData.listPlots[3].color[0]) == "number") {
-                req.session.runContrastData.listPlots[3].color = req.session.runContrastData.listPlots[3].color.map(x => rainbow[x / 5 - 1]);
+             console.timeEnd("getMAplotAN")
+            break;
+        case "getPCA":
+            if (req.session && req.session.runContrastData) {
+                if (typeof(req.session.runContrastData.listPlots[8].color[0]) == "number") {
+                    req.session.runContrastData.listPlots[8].color = req.session.runContrastData.listPlots[8].color.map(x => rainbow[x / 5 - 1]);
+                }
+                return_data = req.session.runContrastData.listPlots[8]
+            } else {
+                return_data = "";
             }
-            return_data = req.session.runContrastData.listPlots[3]
-        } else {
-            return_data = "";
-        }
-    }
 
-    if (type == "getNUSE") {
-
-        if (req.session && req.session.runContrastData) {
-            if (typeof(req.session.runContrastData.listPlots[4].color[0]) == "number") {
-                req.session.runContrastData.listPlots[4].color = req.session.runContrastData.listPlots[4].color.map(x => rainbow[x / 5 - 1]);
+            break;
+        case "getHeatmapolt":
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[9]
+            } else {
+                return_data = "";
             }
-            return_data = req.session.runContrastData.listPlots[4]
-        } else {
+            break;
+        case "getHistplotBN":
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[0]
+            } else {
+                return_data = "";
+            }
+            break;
+        case "getMAplotsBN":
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[1]
+            } else {
+                return_data = "";
+            }
+            break;
+        case "getBoxplotBN":
+            if (req.session && req.session.runContrastData) {
+                if (typeof(req.session.runContrastData.listPlots[2].color[0]) == "number") {
+                    req.session.runContrastData.listPlots[2].color = req.session.runContrastData.listPlots[2].color.map(x => rainbow[x / 5 - 1]);
+                }
+                return_data = req.session.runContrastData.listPlots[2]
+            } else {
+                return_data = "";
+            }
+            break;
+        case "getRLE":
+            if (req.session && req.session.runContrastData) {
+                if (typeof(req.session.runContrastData.listPlots[3].color[0]) == "number") {
+                    req.session.runContrastData.listPlots[3].color = req.session.runContrastData.listPlots[3].color.map(x => rainbow[x / 5 - 1]);
+                }
+                return_data = req.session.runContrastData.listPlots[3]
+            } else {
+                return_data = "";
+            }
+            break;
+        case "getNUSE":
+            if (req.session && req.session.runContrastData) {
+                if (typeof(req.session.runContrastData.listPlots[4].color[0]) == "number") {
+                    req.session.runContrastData.listPlots[4].color = req.session.runContrastData.listPlots[4].color.map(x => rainbow[x / 5 - 1]);
+                }
+                return_data = req.session.runContrastData.listPlots[4]
+            } else {
+                return_data = "";
+            }
+            break;
+        default:
             return_data = "";
-        }
     }
 
-
+    console.timeEnd('getPlots');
     return return_data
 }
 
@@ -534,10 +531,14 @@ router.post('/getBoxplotAN', function(req, res) {
 });
 
 router.post('/getMAplotAN', function(req, res) {
+     console.time("API_getMAplotAN")
+     var dd = getPlots(req, "getMAplotAN");
+       console.time("API_getMAplotAN")
     res.json({
         status: 200,
-        data: getPlots(req, "getMAplotAN")
+        data: dd
     });
+   
 
 });
 
@@ -902,11 +903,11 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     if (search_keyword != "") {
         search_keyword = search_keyword.toLowerCase();
         result = result.filter(function(r) {
-            if (r.Pathway_ID.toLowerCase().indexOf(search_keyword) !=-1  ||
-                r.Source.toLowerCase().indexOf(search_keyword) !=-1  ||
-                r.Description.toLowerCase().indexOf(search_keyword) !=-1  ||
-                r.Type.toLowerCase().indexOf(search_keyword) !=-1  ||
-                r.Gene_List.toLowerCase().indexOf(search_keyword) !=-1  
+            if (r.Pathway_ID.toLowerCase().indexOf(search_keyword) != -1 ||
+                r.Source.toLowerCase().indexOf(search_keyword) != -1 ||
+                r.Description.toLowerCase().indexOf(search_keyword) != -1 ||
+                r.Type.toLowerCase().indexOf(search_keyword) != -1 ||
+                r.Gene_List.toLowerCase().indexOf(search_keyword) != -1
             ) {
                 return true;
             } else {
@@ -960,9 +961,9 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
     // search
     if (search_keyword != "") {
-         search_keyword = search_keyword.toLowerCase();
-        result=result.filter(function(r) {
-            if (r._row.toLowerCase().indexOf(search_keyword) !=-1 ) {
+        search_keyword = search_keyword.toLowerCase();
+        result = result.filter(function(r) {
+            if (r._row.toLowerCase().indexOf(search_keyword) != -1) {
                 return true;
             } else {
                 return false;
@@ -1019,9 +1020,9 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
     if (search_keyword != "") {
         search_keyword = search_keyword.toLowerCase();
         result = result.filter(function(r) {
-            if (r.ACCNUM.toLowerCase().indexOf(search_keyword) !=-1 || 
-                r.DESC.toLowerCase().indexOf(search_keyword)  !=-1 || 
-                r.SYMBOL.toLowerCase().indexOf(search_keyword)  !=-1) {
+            if (r.ACCNUM.toLowerCase().indexOf(search_keyword) != -1 ||
+                r.DESC.toLowerCase().indexOf(search_keyword) != -1 ||
+                r.SYMBOL.toLowerCase().indexOf(search_keyword) != -1) {
                 return true;
             } else {
                 return false;
