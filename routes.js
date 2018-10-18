@@ -45,9 +45,6 @@ module.exports = function(app){
         limit: '40mb' // 100kb default is too small
     }));
 
-
-
-
     app.use(cookieParser());
     app.use(compression());
     app.use(methodOverride());
@@ -55,7 +52,7 @@ module.exports = function(app){
 
     app.use('/api/analysis', m_analysis);
 
-    
+
 
     let logDirectory = config.logDir;
 
