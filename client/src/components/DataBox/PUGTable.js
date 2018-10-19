@@ -97,7 +97,7 @@ class PUGTable extends Component {
     }
 
     componentDidMount() {
-        this.props.getPathwayUp();
+        //this.props.getPathwayUp();
     }
 
 

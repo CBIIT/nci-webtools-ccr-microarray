@@ -26,31 +26,119 @@ class DataBox extends Component {
     }
 
     handleTabChange = (key) => {
-        this.props.upateCurrentWorkingTabAndObject(key)
 
+       
         if (key == "Pre-normalization_QC_Plots") {
-            if (this.props.data.preplots == "") {
-                this.props.getHistplotBN();
+             let type = this.props.data.tag_pre_plot_status;
+            switch (type) {
+                case "":
+                    if (this.props.data.preplots.histplotBN == "") {
+                        this.props.getHistplotBN();
+                    }
+                    break;
+                case "getHistplotBN":
+                    if (this.props.data.preplots.histplotBN == "") {
+                        this.props.getHistplotBN();
+                    }
+                    break;
+                case "getMAplotsBN":
+                    if (this.props.data.preplots.list_mAplotBN == "") {
+                        this.props.getMAplotsBN();
+                    }
+                    break;
+                case "getBoxplotBN":
+                    if (this.props.data.preplots.Boxplots == "") {
+                        this.props.getBoxplotBN();
+                    }
+                    break;
+                case "getRLE":
+                    if (this.props.data.preplots.RLE == "") {
+                        this.props.getRLE();
+                    }
+                    break;
+                case "getNUSE":
+                    if (this.props.data.preplots.NUSE == "") {
+                        this.props.getNUSE();
+                    }
+                    break;
+                default:
+                    if (this.props.data.preplots.histplotBN == "") {
+                        this.props.getHistplotBN();
+                    }
             }
 
         }
 
         if (key == "Post-normalization_Plots") {
-            if (this.props.data.postplot == "") {
-                this.props.getHistplotAN();
+             let type = this.props.data.tag_post_plot_status;
+            switch (type) {
+                case "":
+                    if (this.props.data.postplot.histplotAN == "") {
+                        this.props.getHistplotAN();
+                    }
+                    break;
+                case "getHistplotAN":
+                    if (this.props.data.postplot.histplotAN == "") {
+                        this.props.getHistplotAN();
+                    }
+                    break;
+                case "getBoxplotAN":
+                    if (this.props.data.postplot.Boxplots == "") {
+                        this.props.getBoxplotAN();
+                    }
+                    break;
+                case "getPCA":
+                    if (this.props.data.postplot.PCA == "") {
+                        this.props.getPCA();
+                    }
+                    break;
+                case "getHistplotBN":
+                    if (this.props.data.postplot.Heatmapolt == "") {
+                        this.props.getHistplotBN();
+                    }
+                    break;
+
+                default:
+                    if(this.props.data.postplot.histplotAN == "") {
+                        this.props.getHistplotAN();
+                    }
             }
+
         }
 
         if (key == "DEG-Enrichments_Results") {
-            if (this.props.data.pathways_up.data.length == 0) {
-                this.props.getPathwayUp();
+
+             let type = this.props.data.tag_deg_plot_status;
+            switch (type) {
+                case "":
+                    if (this.props.data.diff_expr_genes.data.length == 0) {
+                        this.props.getDEG();
+                    }
+                    break;
+                case "pathways_up":
+                    if (this.props.data.pathways_up.data.length == 0) {
+                        this.props.getPathwayUp();
+                    }
+                    break;
+                case "pathways_down":
+                    if (this.props.data.pathways_down.data.length == 0) {
+                        this.props.getPathwayDown();
+                    }
+                    break;
+                case "deg":
+                    if (this.props.data.diff_expr_genes.data.length == 0) {
+                        this.props.getDEG();
+                    }
+                    break;;
+
+                default:
+                    if (this.props.data.diff_expr_genes.data.length == 0) {
+                        this.props.getDEG();
+                    }
             }
-            if (this.props.data.pathways_down.data.length == 0) {
-                this.props.getPathwayDown();
-            }
-            if (this.props.data.diff_expr_genes.data.length == 0) {
-                this.props.getDEG();
-            }
+
+
+
         }
 
         if (key == "GSM_1") {
@@ -67,6 +155,8 @@ class DataBox extends Component {
                 this.props.getssGSEA();
             }
         }
+
+        this.props.upateCurrentWorkingTab(key)
 
     }
 
@@ -165,9 +255,9 @@ class DataBox extends Component {
                          upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
         } else {
             // controll display fo tags[preplot,postplot,DEG]
-            prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots" disabled key="Pre-normalization_QC_Plots" >No data </TabPane>);
-            postPlotsBox = (<TabPane tab="Post-Normalization Plots" disabled key="Post-normalization_Plots" >No data</TabPane>);
-            degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results" >No data</TabPane>);
+            prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots"  disabled key="Pre-normalization_QC_Plots" > </TabPane>);
+            postPlotsBox = (<TabPane tab="Post-Normalization Plots" disabled key="Post-normalization_Plots" ></TabPane>);
+            degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results" ></TabPane>);
         }
         // control tab  SSGSEA
         if (this.props.data.done_gsea) {

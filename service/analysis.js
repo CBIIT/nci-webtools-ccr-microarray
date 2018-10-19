@@ -243,10 +243,13 @@ router.post('/runContrast', function(req, res) {
         req.session.projectId == req.body.projectId &&
         req.session.option == req.body.group_1 + req.body.group_2 + req.body.genSet
     ) {
-        let retun_data = "";
+        let return_data = "";
         let type = req.body.targetObject;
 
-
+        return_data ={
+                    mAplotBN:req.session.runContrastData.listPlots[1],
+                    mAplotAN:req.session.runContrastData.listPlots[6]
+                }
 
         if (type == "deg") {
             return_data = getDEG(req)
@@ -280,7 +283,7 @@ router.post('/runContrast', function(req, res) {
         logger.info("API:/runContrast ", "Contrast uses session ")
         res.json({
             status: 200,
-            data: retun_data
+            data: return_data
         });
 
     } else {

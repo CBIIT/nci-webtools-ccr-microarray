@@ -120,7 +120,7 @@ class PUGTable extends Component {
 
 
     componentDidMount() {
-         this.props.getPathwayDown();
+         //this.props.getPathwayDown();
     }
 
     handleTableChange = (pagination, filters, sorter) => {
