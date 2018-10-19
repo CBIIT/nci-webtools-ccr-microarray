@@ -45,7 +45,7 @@ class GSMData extends Component {
 
         if (this.props.data.dataList.length > 0) {
             const columns = [{
-                title: 'gsm',
+                title: 'GSM',
                 dataIndex: 'gsm',
                 width: '18%',
                 sorter: (a, b) => ('' + a.gsm).localeCompare(b.gsm),
@@ -55,7 +55,7 @@ class GSMData extends Component {
                           </div>
                 ),
             }, {
-                title: 'title',
+                title: 'TITLE',
                 dataIndex: 'title',
                 width: '30%',
                 sorter: (a, b) => this.compareByAlph(a.title, b.title),
@@ -65,7 +65,7 @@ class GSMData extends Component {
                       </div>
                 ),
             }, {
-                title: 'description',
+                title: 'DESCRIPTION',
                 dataIndex: 'description',
                 width: '30%',
                 sorter: (a, b) => a.description.length - b.description.length,
@@ -75,7 +75,7 @@ class GSMData extends Component {
                       </div>
                 ),
             }, {
-                title: 'group',
+                title: 'GROUP',
                 dataIndex: 'groups',
                 width: '15%',
                 sorter: (a, b) => this.compareByAlph(a.groups, b.groups),
