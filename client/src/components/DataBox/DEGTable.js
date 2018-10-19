@@ -13,7 +13,7 @@ const columns = [{
         sorter: true,
     },
     {
-        title: 'P.value',
+        title: 'P VALUE',
         dataIndex: 'P.Value',
         sorter: true,
     },

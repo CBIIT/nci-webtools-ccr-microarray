@@ -6,17 +6,17 @@ const Search = Input.Search;
 
 
 const columns = [{
-    title: 'Pathway_ID',
+    title: 'PATHWAY_ID',
     dataIndex: 'Pathway_ID',
     width: "10%",
     sorter: true,
 }, {
-    title: 'Source',
+    title: 'SOURCE',
     dataIndex: 'Source',
     width: "8%",
     sorter: true,
 }, {
-    title: 'Description',
+    title: 'DESCRIPTION',
     dataIndex: 'Description',
     width: "14%",
     sorter: true,
@@ -26,12 +26,12 @@ const columns = [{
                       </div>
     ),
 }, {
-    title: 'Type',
+    title: 'TYPE',
     dataIndex: 'Type',
     width: "7%",
     sorter: true,
 }, {
-    title: 'P_Value',
+    title: 'P_VALUE',
     dataIndex: 'P_Value',
     width: "8%",
     sorter: true,
@@ -41,12 +41,12 @@ const columns = [{
     width: "8%",
     sorter: true,
 }, {
-    title: 'Ratio',
+    title: 'RATIO',
     dataIndex: 'Ratio',
     width: "8%",
     sorter: true,
 }, {
-    title: 'Gene_List',
+    title: 'GENE_LIST',
     dataIndex: 'Gene_List',
     width: "12%",
     sorter: true,
@@ -56,23 +56,23 @@ const columns = [{
                       </div>
     ),
 }, {
-    title: 'Number_Hits',
+    title: 'NUMBER_HITS',
     dataIndex: 'Number_Hits',
     width: "85px",
     sorter: true,
 }, {
-    title: 'Number_Genes_Pathway',
+    title: 'NUMBER_GENES_PATHWAY',
     dataIndex: 'Number_Genes_Pathway',
     width: "95px",
     sorter: true,
 
 }, {
-    title: 'Number_User_Genes',
+    title: 'NUMBER_USER_GENES',
     dataIndex: 'Number_User_Genes',
     width: "85px",
     sorter: true,
 }, {
-    title: 'Total_Number_Genes',
+    title: 'TOTAL_NUMBER_GENES',
     dataIndex: 'Total_Number_Genes',
     width: "90px",
     sorter: true,

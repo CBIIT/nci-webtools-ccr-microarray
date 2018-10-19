@@ -4,7 +4,7 @@ const Search = Input.Search;
 const Option = Select.Option;
 
 const columns = [{
-    title: 'Name',
+    title: 'NAME',
     dataIndex: '_row',
     sorter: true,
 }, {
@@ -20,7 +20,7 @@ const columns = [{
     dataIndex: 't',
     sorter: true,
 }, {
-    title: 'P.Value',
+    title: 'P VALUE',
     dataIndex: 'P.Value',
     sorter: true,
 }, {
