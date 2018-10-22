@@ -104,9 +104,9 @@ class Contrast extends Component {
               </div>
         } else {
             content = <div className="block">
-                  <label className="title">Choose Contrast To Show:</label>
+                  <label className="title">Choose Contrast To Show: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_1_content}
-                  <label className="title">VS:</label>
+                  <label className="title">VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_2_content}
                   <label className="title">P-value Threshold For DEGs:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   <Input onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs}/>
