@@ -159,10 +159,6 @@ class DataBox extends Component {
 
     }
 
-    onChange= ()=>{
-        
-    }
-
     showModal = () => {
 
 
@@ -173,6 +169,10 @@ class DataBox extends Component {
                 // match the group
                 let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
                 group_name = "groupname_" + index_number;
+                document.getElementById("input_group_name").value = group_name;
+            }else{
+                group_name = "groupname_1";
+                document.getElementById("input_group_name").value = group_name;
             }
 
         }else{
@@ -236,7 +236,8 @@ class DataBox extends Component {
         if (group_name == "" || typeof(group_name) == 'undefined') {
             message.warning('No group selected for deleting.');
         } else {
-            this.props.deleteGroup(group_name)
+            group_name.tr
+            this.props.deleteGroup(group_name.trim())
         }
     }
 
@@ -331,10 +332,7 @@ class DataBox extends Component {
             var d = { 'key': key, 'name': key, 'gsms': value };
             groups_data_list.push(d);
         })
-        let group_table = <Table
-    columns={columns}
-    dataSource={groups_data_list} 
-    />
+        let group_table = <Table columns={columns} dataSource={groups_data_list}  />
 
         // define group modal
         let modal = <Modal key="group_define_modal" visible={visible}  title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
@@ -346,7 +344,7 @@ class DataBox extends Component {
           
           <p>{selected_gsms}</p>
           <p style={{color: "#215a82"}}><b>Group Name:</b></p>
-          <p> <Input onChange={this.onChange} placeholder={"Group Name"} id={"input_group_name"} style={{width:'405px'}} value={this.state.group_name}/>&nbsp;
+          <p> <Input  placeholder={"Group Name"} id={"input_group_name"} style={{width:'405px'}} defaultValue="groupname_1"/>&nbsp;
               <Button  type="primary" onClick={this.createTag} >Add</Button>
           </p>
            <p><small>*Group name should start with letter and can combine with number. Ex. RNA_1 </small></p>
