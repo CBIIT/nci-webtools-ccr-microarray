@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table, Input, message, Modal, Button, Tooltip } from 'antd';
 const Search = Input.Search;
 const columns = [{
-        title: 'Pathway_ID',
+        title: 'PATHWAY_ID',
         dataIndex: 'Pathway_ID',
         width: "10%",
         key: 'Pathway_ID',
@@ -10,33 +10,31 @@ const columns = [{
 
     },
     {
-        title: 'Source',
+        title: 'SOURCE',
         dataIndex: 'Source',
         width: "8%",
         key: 'Source',
         sorter: true,
     },
     {
-        title: 'Description',
+        title: 'DESCRIPTION',
         dataIndex: 'Description',
         width: "14%",
         key: 'Description',
         sorter: true,
         render: (text, record, index) => (
             <div className="single-line" style={{"maxWidth":"100px"}}>
-                        <Tooltip title={text} placement="top" >
-                          <span>{text}</span>
-                        </Tooltip>
+                        <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
         ),
     },  {
-        title: 'Type',
+        title: 'TYPE',
         dataIndex: 'Type',
         width: "7%",
         key: 'Type',
         sorter: true,
     }, {
-        title: 'P_Value',
+        title: 'P_VALUE',
         dataIndex: 'P_Value',
         width: "8%",
         key: 'P_Value',
@@ -48,45 +46,43 @@ const columns = [{
         key: 'FDR',
         sorter: true,
     }, {
-        title: 'Ratio',
+        title: 'RATIO',
         dataIndex: 'Ratio',
         width: "8%",
         key: 'Ratio',
         sorter: true,
     }, {
-        title: 'Gene_List',
+        title: 'GENE_LIST',
         dataIndex: 'Gene_List',
         width: "12%",
         key: 'Gene_List',
         sorter: true,
         render: (text, record, index) => (
             <div className="single-line" style={{"maxWidth":"100px"}}>
-                        <Tooltip title={text} placement="top" >
-                          <span>{text}</span>
-                        </Tooltip>
+                         <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
         ),
     }, {
-        title: 'Number_Hits',
+        title: 'NUMBER_HITS',
         dataIndex: 'Number_Hits',
         width: "85px",
         key: 'Number_Hits',
         sorter: true,
     }, {
-        title: 'Number_Genes_Pathway',
+        title: 'NUMBER_GENES_PATHWAY',
         dataIndex: 'Number_Genes_Pathway',
         width: "95px",
         key: 'Number_Genes_Pathway',
         sorter: true,
 
     }, {
-        title: 'Number_User_Genes',
+        title: 'NUMBER_USER_GENES',
         dataIndex: 'Number_User_Genes',
         width: "85px",
         key: 'Number_User_Genes',
         sorter: true,
     }, {
-        title: 'Total_Number_Genes',
+        title: 'TOTAL_NUMBER_GENES',
         dataIndex: 'Total_Number_Genes',
         width: "90px",
         key: 'Total_Number_Genes',
@@ -108,11 +104,23 @@ class PUGTable extends Component {
         }
 
         this.handleTableChange = this.handleTableChange.bind(this)
-        this.fetch = this.fetch.bind(this)
+   
     }
 
+    search=(value)=>{
+        this.props.changePathways_down({
+                        loading: true,
+                        data: []
+         })
+
+         this.props.getPathwayDown({
+            search_keyword: value
+        });
+    }
+
+
     componentDidMount() {
-        this.fetch();
+         //this.props.getPathwayDown();
     }
 
     handleTableChange = (pagination, filters, sorter) => {
@@ -136,7 +144,7 @@ class PUGTable extends Component {
         }
 
 
-        this.fetch({
+        this.props.getPathwayDown({
             page_size: pagination.pageSize,
             page_number: pagination.current,
             sorting: {
@@ -148,53 +156,7 @@ class PUGTable extends Component {
         });
     }
 
-    fetch = (params = {}) => {
-        if (!params.pPathways) {
-            params = {
-                page_size: 10,
-                page_number: 1,
-                sorting: {
-                    name: "P_Value",
-                    order: "descend",
-                },
-                pPathways: this.props.data.pPathways,
-                search_keyword: "",
-            }
-        }
-
-        console.log('params:', params);
-        this.setState({ loading: true });
-        fetch('./api/analysis/getDownPathWays', {
-                method: "POST",
-                body: JSON.stringify(params),
-                credentials: "same-origin",
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(
-                res => res.json()
-            )
-            .then(result => {
-                if (result.status == 200) {
-                    const pagination = { ...this.props.data.pathways_down.pagination };
-                    // Read total count from server
-                    // pagination.total = data.totalCount;
-                    pagination.total = result.data.totalCount;
-
-                    for (let i = 0; i < result.data.records.length; i++) {
-                        result.data.records[i].key = "pathway_down" + i;
-                    }
-                    this.props.changePathways_down({
-                        loading: false,
-                        data: result.data.records,
-                        pagination,
-                    })
-                } else {
-                    message.warning('no data');
-                }
-
-            });
-    }
+    
 
 
 
@@ -273,7 +235,7 @@ class PUGTable extends Component {
         // end  group modal
 
         content = <div>
-                    <div><Search  placeholder="input search text" className="input-search-for-deg-path" onSearch={value => this.setState({term: value})} /></div>
+                    <div><Search  placeholder="input search text" className="input-search-for-deg-path"  onSearch={value => this.search(value)} /></div>
                     <div>
                      <Table 
                         columns={columns}

@@ -13,6 +13,7 @@ class Analysis extends Component {
         super(props);
         this.state = {
             workflow: {
+                token: "",
                 projectID: "",
                 analysisType: "0",
                 accessionCode: "",
@@ -35,6 +36,11 @@ class Analysis extends Component {
                 uploaded: false,
                 done_gsea: false,
                 current_working_on_object: "",
+                current_working_on_tag: "",
+                tag_pre_plot_status: "",
+                tag_post_plot_status: "",
+                tag_deg_plot_status: "",
+                tag_ssgea_plot_status: "",
                 diff_expr_genes: {
                     data: [],
                     pagination: {
@@ -72,9 +78,25 @@ class Analysis extends Component {
                     },
                     loading: true,
                 },
-                preplots: "",
-                postplot: "",
-                geneHeatmap:"/ssgseaHeatmap1.jpg",
+                preplots: {
+                    histplotBN: "",
+                    list_mAplotBN: "",
+                    Boxplots: "",
+                    RLE: "",
+                    NUSE: "",
+                },
+                list_mAplotBN: "",
+                list_mAplotAN: "",
+                postplot: {
+                    histplotAN: "",
+                    list_mAplotAN: "",
+                    Boxplots: "",
+                    PCA: "",
+                    Heatmapolt: ""
+                },
+                geneHeatmap: "/ssgseaHeatmap1.jpg",
+                volcanoPlot: "/volcano.html",
+               
 
             }
         };
@@ -98,8 +120,10 @@ class Analysis extends Component {
         this.getBoxplotAN = this.getBoxplotAN.bind(this);
         this.getHistplotAN = this.getHistplotAN.bind(this);
         this.getMAplotAN = this.getMAplotAN.bind(this);
-        this.clean_data = this.clean_data.bind(this);
-
+        this.getDEG = this.getDEG.bind(this);
+        this.getPathwayDown = this.getPathwayDown.bind(this);
+        this.getPathwayUp = this.getPathwayUp.bind(this);
+        this.getssGSEA = this.getssGSEA.bind(this);
     }
 
 
@@ -111,53 +135,321 @@ class Analysis extends Component {
             return v.toString(16);
         });
     }
-    getHeatmapolt() {
 
-        try {
-            fetch('./api/analysis/getHeatmapolt', {
-                    method: "POST",
-                    body: "",
-                    processData: false,
-                    contentType: false
-                }).then(res => res.json())
-                .then(result => {
-                    if (result.status == 200) {
-                        if (result.data != "") {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            let HeatMapIframe = <div><iframe title={"Heatmap"} src={"./images/"+workflow.projectID+result.data}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
 
-                            workflow.postplot = <div>{HeatMapIframe}</div>;
-                            this.setState({ workflow: workflow });
-                        } else {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            workflow.postplot = "No Data";
-                            this.setState({ workflow: workflow });
-                        }
 
-                    } else {
-                        message.error('Load histplot fails.');
+    getssGSEA = (params = {}) => {
+        let workflow = Object.assign({}, this.state.workflow);
+
+        if (!params.hasOwnProperty("search_keyword")) {
+            params = {
+                page_size: 10,
+                page_number: 1,
+                sorting: {
+                    name: "P.Value",
+                    order: "descend",
+                },
+                search_keyword: "",
+                pssGSEA: workflow.pssGSEA,
+                foldssGSEA: workflow.foldssGSEA,
+            }
+        }
+
+
+        if (params.search_keyword != "") {
+            let keyword = params.search_keyword;
+            params = {
+                page_size: workflow.ssGSEA.pagination.pageSize,
+                page_number: workflow.ssGSEA.pagination.current,
+                sorting: {
+                    name: "P.Value",
+                    order: "descend",
+                },
+                search_keyword: keyword,
+                pssGSEA: workflow.pssGSEA,
+                foldssGSEA: workflow.foldssGSEA,
+            }
+        }
+
+        workflow.ssGSEA.loading = true;
+        this.setState({ workflow: workflow });
+
+        fetch('./api/analysis/getGSEA', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(
+                res => res.json()
+            )
+            .then(result => {
+                let workflow2 = Object.assign({}, this.state.workflow);
+                if (result.status == 200) {
+                    const pagination = { ...workflow2.ssGSEA.pagination };
+                    // Read total count from server
+                    // pagination.total = data.totalCount;
+                    pagination.total = result.data.totalCount;
+
+                    for (let i = 0; i < result.data.records.length; i++) {
+                        result.data.records[i].key = "GSEA" + i;
                     }
 
-                })
-        } catch (error) {
-            message.error('Load data fails.');
+                    workflow2.ssGSEA = {
+                        loading: false,
+                        data: result.data.records,
+                        pagination,
+                    }
+                    this.setState({ workflow: workflow2 });
+
+
+                } else {
+                    message.warning('no data');
+                }
+
+            }).catch(error => console.log(error));
+    }
+
+
+
+
+    getPathwayUp = (params = {}) => {
+        let workflow = Object.assign({}, this.state.workflow);
+
+        if (!params.hasOwnProperty("search_keyword")) {
+            params = {
+                page_size: 10,
+                page_number: 1,
+                sorting: {
+                    name: "P_Value",
+                    order: "descend",
+                },
+                pPathways: workflow.pPathways,
+                search_keyword: "",
+            }
         }
+
+
+        if (params.search_keyword != "") {
+            let keyword = params.search_keyword;
+            params = {
+                page_size: workflow.pathways_up.pagination.pageSize,
+                page_number: workflow.pathways_up.pagination.current,
+                sorting: {
+                    name: "P_Value",
+                    order: "descend",
+                },
+                pPathways: workflow.pPathways,
+                search_keyword: keyword
+            }
+        }
+        workflow.pathways_up.loading = true;
+        this.setState({ workflow: workflow });
+        fetch('./api/analysis/getUpPathWays', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(
+                res => res.json()
+            )
+            .then(result => {
+                let workflow2 = Object.assign({}, this.state.workflow);
+                if (result.status == 200) {
+                    const pagination = { ...workflow.pathways_up.pagination };
+                    // Read total count from server
+                    // pagination.total = data.totalCount;
+                    pagination.total = result.data.totalCount;
+
+                    for (let i = 0; i < result.data.records.length; i++) {
+                        result.data.records[i].key = "pathway_up" + i;
+                    }
+
+                    workflow2.pathways_up = {
+                        loading: false,
+                        data: result.data.records,
+                        pagination,
+                    }
+                    this.setState({ workflow: workflow2 });
+
+                } else {
+                    message.warning('no data');
+                }
+
+            }).catch(error => console.log(error));
+    }
+
+    getPathwayDown = (params = {}) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        if (!params.hasOwnProperty("search_keyword")) {
+            params = {
+                page_size: 10,
+                page_number: 1,
+                sorting: {
+                    name: "P_Value",
+                    order: "descend",
+                },
+                pPathways: workflow.pPathways,
+                search_keyword: "",
+            }
+        }
+
+
+        if (params.search_keyword != "") {
+            let keyword = params.search_keyword;
+            params = {
+                page_size: workflow.pathways_down.pagination.pageSize,
+                page_number: workflow.pathways_down.pagination.current,
+                sorting: {
+                    name: "P_Value",
+                    order: "descend",
+                },
+                pPathways: workflow.pPathways,
+                search_keyword: keyword
+            }
+        }
+        workflow.pathways_down.loading = true;
+        this.setState({ workflow: workflow });
+        fetch('./api/analysis/getDownPathWays', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(
+                res => res.json()
+            )
+            .then(result => {
+                let workflow2 = Object.assign({}, this.state.workflow);
+                if (result.status == 200) {
+                    const pagination = { ...workflow.pathways_down.pagination };
+                    // Read total count from server
+                    // pagination.total = data.totalCount;
+                    pagination.total = result.data.totalCount;
+
+                    for (let i = 0; i < result.data.records.length; i++) {
+                        result.data.records[i].key = "pathway_down" + i;
+                    }
+                    workflow2.pathways_down = {
+                        loading: false,
+                        data: result.data.records,
+                        pagination,
+                    }
+                    this.setState({ workflow: workflow2 });
+                } else {
+                    message.warning('no data');
+                }
+
+            }).catch(error => console.log(error));
+    }
+
+    getDEG = (params = {}) => {
+
+        let workflow = Object.assign({}, this.state.workflow);
+        if (!params.hasOwnProperty("search_keyword")) {
+            params = {
+                page_size: 10,
+                page_number: 1,
+                sorting: {
+                    name: "P.Value",
+                    order: "descend",
+                },
+                foldDEGs: workflow.foldDEGs,
+                P_Value: workflow.pDEGs,
+                search_keyword: "",
+            }
+        }
+
+        if (params.search_keyword != "") {
+            let keyword = params.search_keyword;
+            params = {
+                page_size: workflow.diff_expr_genes.pagination.pageSize,
+                page_number: workflow.diff_expr_genes.pagination.current,
+                sorting: {
+                    name: "P.Value",
+                    order: "descend",
+                },
+                foldDEGs: workflow.foldDEGs,
+                P_Value: workflow.pDEGs,
+                search_keyword: keyword,
+            }
+        }
+        workflow.diff_expr_genes.loading = true;
+        this.setState({ workflow: workflow });
+        fetch('./api/analysis/getDEG', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(
+                res => res.json()
+            )
+            .then(result => {
+                let workflow2 = Object.assign({}, this.state.workflow);
+                if (result.status == 200) {
+
+                    const pagination = { ...workflow.diff_expr_genes.pagination };
+                    // Read total count from server 
+                    // pagination.total = data.totalCount;
+                    pagination.total = result.data.totalCount;
+
+                    for (let i = 0; i < result.data.records.length; i++) {
+                        result.data.records[i].key = "DEG" + i;
+                    }
+                    workflow2.diff_expr_genes = {
+                        loading: false,
+                        data: result.data.records,
+                        pagination,
+                    }
+                    this.setState({ workflow: workflow2 });
+                } else {
+                    message.warning('no data');
+                }
+
+            }).catch(error => console.log(error));
+    }
+
+    getHeatmapolt() {
+
+        let workflow = Object.assign({}, this.state.workflow);
+        let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
+        workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
+        this.setState({ workflow: workflow });
+
 
     }
     getPCA() {
-
+        let workflow2 = Object.assign({}, this.state.workflow);
+        workflow2.progressing = true;
+        workflow2.loading_info = "Loading PCA...";
+        this.setState({ workflow: workflow2 });
         try {
             fetch('./api/analysis/getPCA', {
                     method: "POST",
                     body: "",
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                })
+                .then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
-
-
                             let pcaData = result.data;
                             var PCAIframe = <Plot  data={[{
 
@@ -207,11 +499,13 @@ class Analysis extends Component {
                                     }  useResizeHandler={true} />
 
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.postplot = <div> {PCAIframe}</div>;
+                            workflow.progressing = false;
+                            workflow.postplot.PCA = <div> {PCAIframe}</div>;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.postplot = "No Data";
+                            workflow.progressing = false;
+                            workflow.postplot.PCA = "No Data";
                             this.setState({ workflow: workflow });
 
                         }
@@ -219,22 +513,36 @@ class Analysis extends Component {
 
                     } else {
                         message.error('Load histplot fails.');
+                        let workflow = Object.assign({}, this.state.workflow);
+                        workflow.progressing = false;
+                        workflow.postplot.PCA = "No Data";
+                        this.setState({ workflow: workflow });
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
+            let workflow = Object.assign({}, this.state.workflow);
+            workflow.progressing = false;
+            this.setState({ workflow: workflow });
         }
 
     }
     getBoxplotAN() {
+        let workflow2 = Object.assign({}, this.state.workflow);
+        workflow2.progressing = true;
+        workflow2.loading_info = "Loading Boxplot...";
+        this.setState({ workflow: workflow2 });
+
         try {
             fetch('./api/analysis/getBoxplotAN', {
                     method: "POST",
                     body: "",
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                })
+                .then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
@@ -259,11 +567,13 @@ class Analysis extends Component {
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.postplot = <div> {Boxplots}</div>;
+                            workflow.progressing = false;
+                            workflow.postplot.Boxplots = <div> {Boxplots}</div>;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.postplot = "No Data";
+                            workflow.progressing = false;
+                            workflow.postplot.Boxplots = "No Data";
                             this.setState({ workflow: workflow });
 
                         }
@@ -271,95 +581,120 @@ class Analysis extends Component {
 
                     } else {
                         message.error('Load histplot fails.');
+                        let workflow = Object.assign({}, this.state.workflow);
+                        workflow.progressing = false;
+                        workflow.postplot.Boxplots = "No Data";
+                        this.setState({ workflow: workflow });
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
+            let workflow = Object.assign({}, this.state.workflow);
+            workflow.progressing = false;
+            workflow.postplot.Boxplots = "No Data";
+            this.setState({ workflow: workflow });
         }
 
     }
 
     getHistplotAN() {
-        try {
-            fetch('./api/analysis/getHistplotAN', {
-                    method: "POST",
-                    body: "",
-                    processData: false,
-                    contentType: false
-                }).then(res => res.json())
-                .then(result => {
-                    if (result.status == 200) {
-                        if (result.data != "") {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            let histplotANLink = './images/' + workflow.projectID + result.data;
-                            let histplotAN = <div><img src={ histplotANLink } style={{ width: "75%" }} alt="Histogram" /></div>;
 
-                            workflow.postplot = histplotAN;
-                            this.setState({ workflow: workflow });
-                        } else {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            workflow.postplot = "No Data";
-                            this.setState({ workflow: workflow });
-                        }
+        let workflow = Object.assign({}, this.state.workflow);
+        let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.svg";
+        let histplotAN = <div><img src={ histplotANLink } style={{ width: "75%" }} alt="Histogram" /></div>;
 
-                    } else {
-                        message.error('Load histplot fails.');
-                    }
+        workflow.postplot.histplotAN = histplotAN;
+        this.setState({ workflow: workflow });
 
-                })
-        } catch (error) {
-            message.error('Load data fails.');
-        }
     }
 
     getMAplotAN() {
-        try {
-            fetch('./api/analysis/getMAplotAN', {
-                    method: "POST",
-                    body: "",
-                    processData: false,
-                    contentType: false
-                }).then(res => res.json())
-                .then(result => {
-                    if (result.status == 200) {
-                        let workflow = Object.assign({}, this.state.workflow);
-                        if (result.data != "") {
-                            let list_mAplotBN = [];
-                            for (let i = result.data.length - 1; i >= 0; i--) {
-                                let link = "./images/" + workflow.projectID + result.data[i]
-                                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+        let workflow2 = Object.assign({}, this.state.workflow);
+        if (workflow2.list_mAplotAN == "") {
+            workflow2.progressing = true;
+            workflow2.loading_info = "Loading Plots...";
+            this.setState({ workflow: workflow2 });
+            try {
+                fetch('./api/analysis/getMAplotAN', {
+                        method: "POST",
+                        body: "",
+                        processData: false,
+                        contentType: false
+                    })
+                    .then(this.handleErrors)
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result.status == 200) {
+                            let workflow = Object.assign({}, this.state.workflow);
+                            if (result.data != "") {
+                                let list_mAplotBN = [];
+                                for (let i = result.data.length - 1; i >= 0; i--) {
+                                    let link = "./images/" + workflow.projectID + result.data[i]
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                                }
+                                let maplot_style = {
+                                    'height': 'auto',
+                                    'maxHeight': '100%',
+                                    'overflow': 'scroll'
+                                };
+
+
+                                workflow.postplot.list_mAplotAN = <div style={ maplot_style } > { list_mAplotBN } </div>;
+                                workflow.progressing = false;
+                                this.setState({ workflow: workflow });
+
+                            } else {
+
+                                let workflow = Object.assign({}, this.state.workflow);
+                                workflow.postplot.list_mAplotAN = "No Data";
+                                workflow.progressing = false;
+                                this.setState({ workflow: workflow });
                             }
-                            let maplot_style = {
-                                'height': 'auto',
-                                'maxHeight': '100%',
-                                'overflow': 'scroll'
-                            };
-
-
-                            workflow.postplot = <div style={ maplot_style } > { list_mAplotBN } </div>;
-                            this.setState({ workflow: workflow });
 
                         } else {
-
+                            message.error('Load histplot fails.');
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.postplot = "No Data";
+                            workflow.progressing = false;
                             this.setState({ workflow: workflow });
-
                         }
 
+                    }).catch(error => console.log(error));
+            } catch (error) {
+                message.error('Load data fails.');
+                let workflow = Object.assign({}, this.state.workflow);
+                workflow.progressing = false;
+                this.setState({ workflow: workflow });
+            }
+        } else {
+            let workflow2 = Object.assign({}, this.state.workflow);
+            let list_mAplotBN = [];
+            for (let i = workflow2.list_mAplotAN.length - 1; i >= 0; i--) {
+                let link = "./images/" + workflow2.projectID + workflow2.list_mAplotAN[i]
+                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+            }
+            let maplot_style = {
+                'height': 'auto',
+                'maxHeight': '100%',
+                'overflow': 'scroll'
+            };
 
-                    } else {
-                        message.error('Load histplot fails.');
-                    }
 
-                })
-        } catch (error) {
-            message.error('Load data fails.');
+            workflow2.postplot.list_mAplotAN = <div style={ maplot_style } > { list_mAplotBN } </div>;
+            workflow2.progressing = false;
+            this.setState({ workflow: workflow2 });
+
+
+
         }
 
     }
     getNUSE() {
+        let workflow2 = Object.assign({}, this.state.workflow);
+        workflow2.progressing = true;
+        workflow2.loading_info = "Loading NUSE...";
+        this.setState({ workflow: workflow2 });
+
         try {
             fetch('./api/analysis/getNUSE', {
                     method: "POST",
@@ -368,6 +703,7 @@ class Analysis extends Component {
                     contentType: false
                 }).then(res => res.json())
                 .then(result => {
+                    let workflow = Object.assign({}, this.state.workflow);
                     if (result.status == 200) {
 
                         let NUSERenderData = []
@@ -390,30 +726,40 @@ class Analysis extends Component {
 
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
-                        let workflow = Object.assign({}, this.state.workflow);
-                        workflow.preplots = <div> {NUSE}</div>;
+
+                        workflow.progressing = false;
+                        workflow.preplots.NUSE = <div> {NUSE}</div>;
                         this.setState({ workflow: workflow });
 
 
                     } else {
                         message.error('Load histplot fails.');
+                        workflow.progressing = false;
+                        this.setState({ workflow: workflow });
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
+            let workflow = Object.assign({}, this.state.workflow);
+            workflow.progressing = false;
+            this.setState({ workflow: workflow });
         }
     }
 
     getRLE() {
-
+        let workflow2 = Object.assign({}, this.state.workflow);
+        workflow2.progressing = true;
+        workflow2.loading_info = "Loading RLE...";
+        this.setState({ workflow: workflow2 });
         try {
             fetch('./api/analysis/getRLE', {
                     method: "POST",
                     body: "",
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                }).then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
@@ -440,11 +786,13 @@ class Analysis extends Component {
 
 
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots = <div> {RLE}</div>;
+                            workflow.progressing = false;
+                            workflow.preplots.RLE = <div> {RLE}</div>;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots = "No Data";
+                            workflow.preplots.RLE = "No Data";
+                            workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         }
 
@@ -453,9 +801,13 @@ class Analysis extends Component {
                         message.error('Load histplot fails.');
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
+            let workflow = Object.assign({}, this.state.workflow);
+            workflow.preplots.RLE = "No Data";
+            workflow.progressing = false;
+            this.setState({ workflow: workflow });
         }
 
 
@@ -463,13 +815,19 @@ class Analysis extends Component {
 
     getBoxplotBN() {
 
+        let workflow2 = Object.assign({}, this.state.workflow);
+        workflow2.progressing = true;
+        workflow2.loading_info = "Loading Plots...";
+        this.setState({ workflow: workflow2 });
+
         try {
             fetch('./api/analysis/getBoxplotBN', {
                     method: "POST",
                     body: "",
                     processData: false,
                     contentType: false
-                }).then(res => res.json())
+                }).then(this.handleErrors)
+                .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
@@ -494,108 +852,120 @@ class Analysis extends Component {
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots = <div> {Boxplots}</div>;
+                            workflow.preplots.Boxplots = <div> {Boxplots}</div>;
+                            workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         } else {
 
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots = "No Data";
+                            workflow.preplots.Boxplots = "No Data";
+                            workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         }
 
 
                     } else {
                         message.error('Load histplot fails.');
+                        let workflow = Object.assign({}, this.state.workflow);
+                        workflow.preplots.Boxplots = "No Data";
+                        workflow.progressing = false;
+                        this.setState({ workflow: workflow });
                     }
 
-                })
+                }).catch(error => console.log(error));
         } catch (error) {
             message.error('Load data fails.');
+            let workflow = Object.assign({}, this.state.workflow);
+            workflow.preplots.Boxplots = "No Data";
+            workflow.progressing = false;
+            this.setState({ workflow: workflow });
         }
 
     }
 
     getMAplotsBN() {
+        let workflow2 = Object.assign({}, this.state.workflow);
+        if (workflow2.list_mAplotBN == "") {
+            workflow2.progressing = true;
+            workflow2.loading_info = "Loading Plots...";
+            this.setState({ workflow: workflow2 });
+            try {
+                fetch('./api/analysis/getMAplotsBN', {
+                        method: "POST",
+                        body: "",
+                        processData: false,
+                        contentType: false
+                    }).then(this.handleErrors)
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result.status == 200) {
+                            if (result.data != "") {
+                                let workflow = Object.assign({}, this.state.workflow);
+                                let list_mAplotBN = [];
+                                for (let i = result.data.length - 1; i >= 0; i--) {
+                                    let link = "./images/" + workflow.projectID + result.data[i]
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                                }
+                                let maplot_style = {
+                                    'height': 'auto',
+                                    'maxHeight': '100%',
+                                    'overflow': 'scroll'
+                                };
+                                workflow.list_mAplotBN = result.data;
+                                workflow.preplots.list_mAplotBN = <div style={ maplot_style } > { list_mAplotBN } </div>;
+                                workflow.progressing = false;
+                                this.setState({ workflow: workflow });
 
-        try {
-            fetch('./api/analysis/getMAplotsBN', {
-                    method: "POST",
-                    body: "",
-                    processData: false,
-                    contentType: false
-                }).then(res => res.json())
-                .then(result => {
-                    if (result.status == 200) {
-                        if (result.data != "") {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            let list_mAplotBN = [];
-                            for (let i = result.data.length - 1; i >= 0; i--) {
-                                let link = "./images/" + workflow.projectID + result.data[i]
-                                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                            } else {
+                                let workflow = Object.assign({}, this.state.workflow);
+                                workflow.preplots.list_mAplotBN = "No Data";
+                                workflow.progressing = false;
+                                this.setState({ workflow: workflow });
                             }
-                            let maplot_style = {
-                                'height': 'auto',
-                                'maxHeight': '100%',
-                                'overflow': 'scroll'
-                            };
-
-
-                            workflow.preplots = <div style={ maplot_style } > { list_mAplotBN } </div>;
-                            this.setState({ workflow: workflow });
 
                         } else {
+                            message.error('Load histplot fails.');
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots = "No Data";
+                            workflow.preplots.list_mAplotBN = "No Data";
+                            workflow.progressing = false;
                             this.setState({ workflow: workflow });
-
                         }
 
+                    }).catch(error => console.log(error));
+            } catch (error) {
+                message.error('Load data fails.');
+                let workflow = Object.assign({}, this.state.workflow);
+                workflow.preplots.list_mAplotBN = "No Data";
+                workflow.progressing = false;
+                this.setState({ workflow: workflow });
+            }
 
-                    } else {
-                        message.error('Load histplot fails.');
-                    }
+        } else {
+            let list_mAplotBN = [];
+            for (let i = workflow2.list_mAplotBN.length - 1; i >= 0; i--) {
+                let link = "./images/" + workflow2.projectID + workflow2.list_mAplotBN[i]
+                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+            }
+            let maplot_style = {
+                'height': 'auto',
+                'maxHeight': '100%',
+                'overflow': 'scroll'
+            };
+            workflow2.preplots.list_mAplotBN = <div style={ maplot_style } > { list_mAplotBN } </div>;
+            this.setState({ workflow: workflow2 });
 
-                })
-        } catch (error) {
-            message.error('Load data fails.');
         }
+
     }
 
 
     getHistplotBN() {
 
-        try {
-            fetch('./api/analysis/getHistplotBN', {
-                    method: "POST",
-                    body: "",
-                    processData: false,
-                    contentType: false
-                }).then(res => res.json())
-                .then(result => {
-                    if (result.status == 200) {
-                        if (result.data != "") {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            let histplotBNLink = './images/' + workflow.projectID + result.data;
-                            let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
-                            workflow.preplots = histplotBN;
-                            this.setState({ workflow: workflow });
-
-                        } else {
-                            let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots = "No Data";
-                            this.setState({ workflow: workflow });
-
-                        }
-
-
-                    } else {
-                        message.error('Load histplot fails.');
-                    }
-
-                })
-        } catch (error) {
-            message.error('Load data fails.');
-        }
+        let workflow = Object.assign({}, this.state.workflow);
+        let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.svg";
+        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
+        workflow.preplots.histplotBN = histplotBN;
+        this.setState({ workflow: workflow });
 
     }
 
@@ -603,673 +973,746 @@ class Analysis extends Component {
 
     changeDeg(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.diff_expr_genes = obj;
+        if (obj.pagination) {
+            workflow.diff_expr_genes = obj;
+        } else {
+            obj.pagination = workflow.pagination;
+            workflow.diff_expr_genes = obj;
+        }
+
         this.setState({ workflow: workflow });
     }
 
     changePathways_up(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.pathways_up = obj;
+        if (obj.pagination) {
+            workflow.pathways_up = obj;
+        } else {
+            obj.pagination = workflow.pagination;
+            workflow.pathways_up = obj;
+        }
         this.setState({ workflow: workflow });
     }
     changePathways_down(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.pathways_down = obj;
+        if (obj.pagination) {
+            workflow.pathways_down = obj;
+        } else {
+            obj.pagination = workflow.pagination;
+            workflow.pathways_down = obj;
+        }
+
         this.setState({ workflow: workflow });
     }
 
 
     changessGSEA(obj) {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.ssGSEA = obj;
+        if (obj.pagination) {
+            workflow.ssGSEA = obj;
+        } else {
+            obj.pagination = workflow.pagination;
+            workflow.ssGSEA = obj;
+        }
         this.setState({ workflow: workflow });
     }
 
-    upateCurrentWorkingTabAndObject = (e) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.current_working_on_object = e;
-        this.setState({ workflow: workflow });
+upateCurrentWorkingTabAndObject = (e) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.current_working_on_object = e;
+    if(e == "getHistplotBN" || e == "getMAplotsBN" || e == "getBoxplotBN" || e == "getRLE" || e == "getNUSE" ) {
+        workflow.tag_pre_plot_status = e;
     }
-
-    changeProject(event) {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.projectID = event.target.value;
-        this.setState({ workflow: workflow });
+    if(e == "getHistplotAN" || e == "getBoxplotAN" || e == "getPCA" || e == "getHistplotBN" ) {
+         workflow.tag_post_plot_status = e;
     }
-
-    changePDEGs = (event) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.pDEGs = event.target.value;
-        this.setState({ workflow: workflow });
-    }
-
-    changeFoldDEGs = (event) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.foldDEGs = event.target.value;
-        this.setState({ workflow: workflow });
-    }
-
-    changePathways = (event) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.pPathways = event.target.value;
-        this.setState({ workflow: workflow });
-    }
-
-    handleGeneChange = (value) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.species = value.split("$")[0];
-        workflow.genSet = value.split("$")[1];
-        this.setState({ workflow: workflow });
+    if(e == "pathways_up" || e == "pathways_down" || e == "deg" ) {
+         workflow.tag_deg_plot_status = e;
     }
 
 
-    changeFoldSSGSEA = (event) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.foldssGSEA = event.target.value;
-        this.setState({ workflow: workflow });
-    }
+    this.setState({ workflow: workflow });
+}
 
-    changePssGSEA = (event) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.pssGSEA = event.target.value;
-        this.setState({ workflow: workflow });
-    }
+upateCurrentWorkingTab = (e) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.current_working_on_tag = e;
+    this.setState({ workflow: workflow });
+}
 
-    changeCode(event) {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.accessionCode = event.target.value;
-        this.setState({ workflow: workflow });
-    }
+changeProject(event) {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.projectID = event.target.value;
+    this.setState({ workflow: workflow });
+}
 
-    handleSelectType = (value) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.analysisType = value;
-        this.setState({ workflow: workflow });
-    }
+changePDEGs = (event) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.pDEGs = event.target.value;
+    this.setState({ workflow: workflow });
+}
 
-    handleGroup1Select = (value) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.group_1 = value;
-        this.setState({ workflow: workflow });
-    }
+changeFoldDEGs = (event) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.foldDEGs = event.target.value;
+    this.setState({ workflow: workflow });
+}
 
-    handleGroup2Select = (value) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.group_2 = value;
-        this.setState({ workflow: workflow });
-    }
+changePathways = (event) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.pPathways = event.target.value;
+    this.setState({ workflow: workflow });
+}
 
-    fileRemove = (file) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        const index = workflow.fileList.indexOf(file);
-        const newFileList = workflow.fileList.slice();
-        newFileList.splice(index, 1);
-        workflow.fileList = newFileList;
-        this.setState({ workflow: workflow });
-    }
+handleGeneChange = (value) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.species = value.split("$")[0];
+    workflow.genSet = value.split("$")[1];
+    this.setState({ workflow: workflow });
+}
 
-    beforeUpload = (fl) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        let names = [];
-        workflow.fileList.forEach(function(f) {
-            names.push(f.name);
-        });
-        fl.forEach(function(file) {
-            if (names.indexOf(file.name) == -1) {
-                workflow.fileList = [...workflow.fileList, file];
-            }
-        });
-        this.setState({ workflow: workflow });
-    }
 
-    resetWorkFlowProject = () => {
+changeFoldSSGSEA = (event) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.foldssGSEA = event.target.value;
+    this.setState({ workflow: workflow });
+}
+
+changePssGSEA = (event) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.pssGSEA = event.target.value;
+    this.setState({ workflow: workflow });
+}
+
+changeCode(event) {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.accessionCode = event.target.value;
+    this.setState({ workflow: workflow });
+}
+
+handleSelectType = (value) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.analysisType = value;
+    this.setState({ workflow: workflow });
+}
+
+handleGroup1Select = (value) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.group_1 = value;
+    this.setState({ workflow: workflow });
+}
+
+handleGroup2Select = (value) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.group_2 = value;
+    this.setState({ workflow: workflow });
+}
+
+fileRemove = (file) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    const index = workflow.fileList.indexOf(file);
+    const newFileList = workflow.fileList.slice();
+    newFileList.splice(index, 1);
+    workflow.fileList = newFileList;
+    this.setState({ workflow: workflow });
+}
+
+beforeUpload = (fl) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    let names = [];
+    workflow.fileList.forEach(function(f) {
+        names.push(f.name);
+    });
+    fl.forEach(function(file) {
+        if (names.indexOf(file.name) == -1) {
+            workflow.fileList = [...workflow.fileList, file];
+        }
+    });
+    this.setState({ workflow: workflow });
+}
+
+resetWorkFlowProject = () => {
+    window.location.reload(true);
+}
+
+
+
+loadGSE = () => {
+
+    let workflow = Object.assign({}, this.state.workflow);
+    let reqBody = {};
+    reqBody.code = "";
+    reqBody.projectId = "";
+    reqBody.groups = "";
+
+    document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default"
+
+    if (workflow.dataList != "") {
+        // user click load after data already loaded.then it is a new transaction 
         window.location.reload(true);
     }
+    if (workflow.accessionCode == "") {
+        message.warning('Accession Code is required. ');
+        return;
+    }
+    reqBody.code = workflow.accessionCode;
 
 
+    // this pid will be used to create a tmp folder to store the data. 
+    workflow.projectID = this.uuidv4();
+    reqBody.projectId = workflow.projectID;
 
-    loadGSE = () => {
 
-        let workflow = Object.assign({}, this.state.workflow);
-        let reqBody = {};
-        reqBody.code = "";
-        reqBody.projectId = "";
-        reqBody.groups = "";
+    // mock
 
-        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default"
-
-        if (workflow.dataList != "") {
-            // user click load after data already loaded.then it is a new transaction 
-            window.location.reload(true);
+    // workflow.projectID = "test";
+    // gruop info
+    var groups = []
+    for (var i in workflow.dataList) {
+        if (workflow.dataList[i].group == "") {
+            groups.push("Ctl")
+        } else {
+            groups.push(workflow.dataList[i].group)
         }
-        if (workflow.accessionCode == "") {
-            message.warning('Accession Code is required. ');
-            return;
-        }
-        reqBody.code = workflow.accessionCode;
+    }
+    reqBody.groups = groups;
 
+    workflow.uploading = true;
+    workflow.progressing = true;
+    workflow.loading_info = "Loading GEO Data...";
+    this.setState({
+        workflow: workflow
+    });
 
-        // this pid will be used to create a tmp folder to store the data. 
-        workflow.projectID = this.uuidv4();
-        reqBody.projectId = workflow.projectID;
-
-        // gruop info
-        var groups = []
-        for (var i in workflow.dataList) {
-            if (workflow.dataList[i].group == "") {
-                groups.push("Ctl")
-            } else {
-                groups.push(workflow.dataList[i].group)
-            }
-        }
-        reqBody.groups = groups;
-
-
-        workflow.uploading = true;
-        workflow.progressing = true;
-        workflow.loading_info = "Loading GEO Data...";
-        this.setState({
-            workflow: workflow
-        });
-
-        try {
-            fetch('./api/analysis/loadGSE', {
-                    method: "POST",
-                    body: JSON.stringify(reqBody),
-                    credentials: "same-origin",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(res => res.json())
-                .then(result => {
-                    if (result.status == 200) {
-                        if (result.data === "undefined" || Object.keys(result.data).length === 0) {
-                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
-                            workflow.uploading = false;
-                            workflow.progressing = false;
-                            message.error('Load data fails');
-                            this.setState({
-                                workflow: workflow
-                            });
-                            return;
-                        }
-
-                        var data = result.data.split("+++loadGSE+++\"")[1]
-
-                        if (typeof(data) === "undefined" || data == "") {
-                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
-                            workflow.uploading = false;
-                            workflow.progressing = false;
-                            message.error('Load data fails');
-                            this.setState({
-                                workflow: workflow
-                            });
-                            return;
-                        }
-
-                        let list = JSON.parse(decodeURIComponent(data));
-                        //let list = result.data;
-
-                        if (typeof(list) == "undefined" || list == null || list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
-                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
-                            workflow.uploading = false;
-                            workflow.progressing = false;
-                            message.error('Load data fails');
-                            this.setState({
-                                workflow: workflow
-                            });
-
-                            return;
-                        }
-
-                        workflow.uploading = false;
-                        workflow.progressing = false;
-
-                        workflow.dataList = list.files;
-                        // init group with default value
-                        workflow.group = new Array(list.files.length).fill('Ctl');
-
-                        // disable the input , prevent user to change the access code
-                        document.getElementById("input-access-code").disabled = true
-
-                        // change the word of load btn
-                        document.getElementById("btn-project-load-gse").disabled = true
-
-                        this.setState({
-                            workflow: workflow
-                        });
-
-                        message.success('load successfully.');
-
-                    } else {
+    try {
+        fetch('./api/analysis/loadGSE', {
+                method: "POST",
+                body: JSON.stringify(reqBody),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(res => res.json())
+            .then(result => {
+                if (result.status == 200) {
+                    if (result.data === "undefined" || Object.keys(result.data).length === 0) {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
 
                         workflow.uploading = false;
                         workflow.progressing = false;
+                        message.error('Load data fails');
+                        this.setState({
+                            workflow: workflow
+                        });
+                        return;
+                    }
+
+                    var data = result.data.split("+++loadGSE+++\"")[1]
+
+                    if (typeof(data) === "undefined" || data == "") {
+                        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+                        message.error('Load data fails');
+                        this.setState({
+                            workflow: workflow
+                        });
+                        return;
+                    }
+
+                    let list = JSON.parse(decodeURIComponent(data));
+                    //let list = result.data;
+
+                    if (typeof(list) == "undefined" || list == null || list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
+                        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+                        message.error('Load data fails');
                         this.setState({
                             workflow: workflow
                         });
 
-                        message.error('load data fails.');
+                        return;
                     }
-                });
-        } catch (err) {
-            //change button style
-            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-            workflow.uploading = false;
-            workflow.progressing = false;
-            this.setState({
-                workflow: workflow
-            });
 
-            message.error('load data fails.');
+                    workflow.uploading = false;
+                    workflow.progressing = false;
 
-        }
-    }
+                    workflow.dataList = list.files;
+                    // init group with default value
+                    workflow.group = new Array(list.files.length).fill('Ctl');
 
-    runContrast = () => {
-        let workflow = Object.assign({}, this.state.workflow);
-        let reqBody = {};
-        reqBody.code = "";
-        reqBody.projectId = "";
-        reqBody.groups = "";
-        reqBody.actions = "";
-        reqBody.pDEGs = "";
-        reqBody.foldDEGs = "";
-        reqBody.pPathways = "";
-        reqBody.genSet = "";
-        reqBody.pssGSEA = "";
-        reqBody.foldssGSEA = "";
-        reqBody.species = "";
-        reqBody.genSet = "";
-        reqBody.code = workflow.accessionCode;
-        reqBody.projectId = workflow.projectID;
-        reqBody.groups = [];
-        reqBody.group_1 = workflow.group_1;
-        reqBody.group_2 = workflow.group_2;
-        if (workflow.uploaded) {
-            reqBody.source = "upload";
-        } else {
-            reqBody.source = "fetch";
-        }
+                    // disable the input , prevent user to change the access code
+                    document.getElementById("input-access-code").disabled = true
 
+                    // change the word of load btn
+                    document.getElementById("btn-project-load-gse").disabled = true
 
-        for (var i in workflow.dataList) {
-            if (workflow.dataList[i].groups != "") {
-                reqBody.groups.push(workflow.dataList[i].groups)
-            } else {
-                // default value of the group is Ctl
-                reqBody.groups.push("Ctl")
-            }
-        }
+                    this.setState({
+                        workflow: workflow
+                    });
 
-        if (workflow.pDEGs == "" || workflow.foldDEGs == "" || workflow.pPathways == "" || workflow.foldssGSEA == "" || workflow.pssGSEA == "") {
-            message.warning('All the threshold is required!');
-            return;
-        }
+                    message.success('load successfully.');
 
-        reqBody.genSet = workflow.genSet;
-        reqBody.pssGSEA = workflow.pssGSEA;
-        reqBody.foldssGSEA = workflow.foldssGSEA;
-        reqBody.pDEGs = workflow.pDEGs;
-        reqBody.foldDEGs = workflow.foldDEGs;
-        reqBody.pPathways = workflow.pPathways;
+                } else {
+                    document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
 
-        reqBody.species = workflow.species;
-        reqBody.genSet = workflow.genSet;
-        reqBody.sorting = "";
-        if (workflow.current_working_on_object) {
-            reqBody.targetObject = workflow.current_working_on_object;
-        } else {
-            reqBody.targetObject = "";
-        }
+                    workflow.uploading = false;
+                    workflow.progressing = false;
+                    this.setState({
+                        workflow: workflow
+                    });
 
-        workflow.progressing = true;
-        workflow.loading_info = "Running Contrast...";
-        // define action
-        reqBody.actions = "runContrast";
-
-
-        this.clean_data();
+                    message.error('load data fails.');
+                }
+            })
+            .catch(error => console.log(error));
+    } catch (err) {
+        //change button style
+        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+        workflow.uploading = false;
+        workflow.progressing = false;
         this.setState({
             workflow: workflow
         });
 
-        try {
-            fetch('./api/analysis/runContrast', {
-                    method: "POST",
-                    body: JSON.stringify(reqBody),
-                    credentials: "same-origin",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(function(response) {
-                    if (!response.ok) {
-                        throw Error(response.statusText);
-                    }
-                    return response.json();
-                }).then(result => {
-                    if (result.status == 200) {
-                        let type = workflow.current_working_on_object;
+        message.error('load data fails.');
 
-                        if (type == "getHistplotAN") {
+    }
+}
+
+runContrast = () => {
+    let workflow = Object.assign({}, this.state.workflow);
+    let reqBody = {};
+    reqBody.code = "";
+    reqBody.projectId = "";
+    reqBody.groups = "";
+    reqBody.actions = "";
+    reqBody.pDEGs = "";
+    reqBody.foldDEGs = "";
+    reqBody.pPathways = "";
+    reqBody.genSet = "";
+    reqBody.pssGSEA = "";
+    reqBody.foldssGSEA = "";
+    reqBody.species = "";
+    reqBody.genSet = "";
+    reqBody.code = workflow.accessionCode;
+    reqBody.projectId = workflow.projectID;
+    reqBody.groups = [];
+    reqBody.group_1 = workflow.group_1;
+    reqBody.group_2 = workflow.group_2;
+    if (workflow.uploaded) {
+        reqBody.source = "upload";
+    } else {
+        reqBody.source = "fetch";
+    }
+
+
+    for (var i in workflow.dataList) {
+        if (workflow.dataList[i].groups != "") {
+            reqBody.groups.push(workflow.dataList[i].groups)
+        } else {
+            // default value of the group is Ctl
+            reqBody.groups.push("Ctl")
+        }
+    }
+
+    if (workflow.pDEGs == "" || workflow.foldDEGs == "" || workflow.pPathways == "" || workflow.foldssGSEA == "" || workflow.pssGSEA == "") {
+        message.warning('All the threshold is required!');
+        return;
+    }
+
+    reqBody.genSet = workflow.genSet;
+    reqBody.pssGSEA = workflow.pssGSEA;
+    reqBody.foldssGSEA = workflow.foldssGSEA;
+    reqBody.pDEGs = workflow.pDEGs;
+    reqBody.foldDEGs = workflow.foldDEGs;
+    reqBody.pPathways = workflow.pPathways;
+
+    reqBody.species = workflow.species;
+    reqBody.genSet = workflow.genSet;
+    reqBody.sorting = "";
+    if (workflow.current_working_on_object) {
+        reqBody.targetObject = workflow.current_working_on_object;
+    } else {
+        reqBody.targetObject = "";
+    }
+
+    workflow.progressing = true;
+    workflow.loading_info = "Running Contrast...";
+    // define action
+    reqBody.actions = "runContrast";
+
+
+    workflow.diff_expr_genes = {
+        data: [],
+        pagination: {
+            current: 1,
+            pageSize: 10,
+
+        },
+        loading: true,
+    };
+    workflow.ssGSEA = {
+        data: [],
+        pagination: {
+            current: 1,
+            pageSize: 10,
+
+        },
+        loading: true,
+    };
+    workflow.pathways_up = {
+
+        data: [],
+        pagination: {
+            current: 1,
+            pageSize: 10,
+
+        },
+        loading: true,
+    };
+    workflow.pathways_down = {
+        data: [],
+        pagination: {
+            current: 1,
+            pageSize: 10,
+
+        },
+        loading: true,
+    };
+    workflow.preplots = {
+        histplotBN: "",
+        list_mAplotBN: "",
+        Boxplots: "",
+        RLE: "",
+        NUSE: ""
+    };
+    workflow.postplot = {
+        histplotAN: "",
+        list_mAplotAN: "",
+        Boxplots: "",
+        PCA: "",
+        Heatmapolt: ""
+    };
+    workflow.volcanoPlot = "";
+    this.setState({
+        workflow: workflow
+    });
+
+    try {
+        fetch('./api/analysis/runContrast', {
+                method: "POST",
+                body: JSON.stringify(reqBody),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(this.handleErrors)
+            .then(function(response) {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            }).then(result => {
+                if (result.status == 200) {
+                    let type = workflow.current_working_on_object;
+                    if(workflow.current_working_on_tag==""|| workflow.current_working_on_tag=="GSM_1"){
+                        // means  I open the GSM
+                    }
+
+                     if(workflow.current_working_on_tag=="Pre-normalization_QC_Plots"){
+                        // means  I open the Pre-plot
+                        type = workflow.tag_pre_plot_status;
+                    }
+
+                     if(workflow.current_working_on_tag=="Post-normalization_Plots"){
+                        // means  I open the Post-plot
+                         type = workflow.tag_post_plot_status;
+                    }
+
+                     if(workflow.current_working_on_tag=="DEG-Enrichments_Results"){
+                        // means  I open the DEG
+                         type = workflow.tag_deg_plot_status;
+                    }
+
+                     if(workflow.current_working_on_tag=="ssGSEA_Results"){
+                        // means  I open the ssGSEA_Results
+                         type ="ssGSEA_Results";
+                    }
+
+                    if (result.data.mAplotBN != "") {
+                        workflow.list_mAplotBN = result.data.mAplotBN;
+                    }
+
+                    if (result.data.mAplotAN != "") {
+                        workflow.list_mAplotAN = result.data.mAplotAN;
+                    }
+
+                    switch (type) {
+                        case "getHistplotAN":
                             this.getHistplotAN();
-                        }
+                            break;
 
-                        if (type == "getBoxplotAN") {
-
+                        case "getBoxplotAN":
                             this.getBoxplotAN();
-                        }
+                            break;
 
-                        if (type == "getMAplotAN") {
+                        case "getMAplotAN":
                             this.getMAplotAN();
-                        }
+                            break;
 
-                        if (type == "getPCA") {
-
+                        case "getPCA":
                             this.getPCA();
-                        }
+                            break;
 
-                        if (type == "getHeatmapolt") {
+                        case "getHeatmapolt":
                             this.getHeatmapolt();
-                        }
+                            break;
 
-
-                        if (type == "getHistplotBN") {
+                        case "getHistplotBN":
                             this.getHistplotBN();
-                        }
+                            break;
 
-                        if (type == "getMAplotsBN") {
+                        case "getMAplotsBN":
                             this.getMAplotsBN();
-                        }
+                            break;
 
-                        if (type == "getBoxplotBN") {
+                        case "getBoxplotBN":
                             this.getBoxplotBN();
-
-                        }
-
-                        if (type == "getRLE") {
+                            break;
+                        case "getRLE":
                             this.getRLE();
-                        }
-
-                        if (type == "getNUSE") {
+                            break;
+                        case "getNUSE":
                             this.getNUSE();
-                        }
+                            break;
 
-
-
-                        if (type == "volcanoPlot") {
-                            workflow.volcanoPlot="/volcano.html";   
-                        }
-
-
-                        // updata current open tab
-                        if (workflow.current_working_on_object == "pathways_up") {
-
-                            for (let i = 0; i < result.data.records.length; i++) {
-                                result.data.records[i].key = "pathway_up" + i;
-                            }
-
-                            workflow.pathways_up.data = result.data;
-                        }
-
-                        if (workflow.current_working_on_object == "pathways_down") {
-                            for (let i = 0; i < result.data.records.length; i++) {
-                                result.data.records[i].key = "pathway_up" + i;
-                            }
-                            workflow.pathways_down.data = result.data;
-                        }
-
-                        if (workflow.current_working_on_object == "ssGSEA") {
-
-                            for (let i = 0; i < result.data.records.length; i++) {
-                                result.data.records[i].key = "GSEA" + i;
-                            }
-                            workflow.ssGSEA.data = result.data;
-                        }
-
-                        if (workflow.current_working_on_object == "deg") {
-
-                            for (let i = 0; i < result.data.records.length; i++) {
-                                result.data.records[i].key = "DEG" + i;
-                            }
-
-                            workflow.diff_expr_genes.data = result.data;
-                        }
-                        workflow.geneHeatmap="/ssgseaHeatmap1.jpg";
-                        workflow.progressing = false;
-                        workflow.compared = true;
-                        workflow.done_gsea = true;
-                        workflow.progressing = false;
-                        this.setState({
-                            workflow: workflow
-                        });
-                        message.success('Plots loaded successfully.');
-                    } else {
-
-                        workflow.progressing = false;
-                        this.setState({
-                            workflow: workflow
-                        });
-                        message.warning('Generate plots fails.');
+                        case "pathwayHeatMap":
+                            workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
+                            break;
+                        case "pathways_up":
+                            this.getPathwayUp()
+                            break;
+                        case "pathways_down":
+                            this.getPathwayDown();
+                            break;
+                        case "ssGSEA":
+                            this.getssGSEA();
+                            break;
+                        case "deg":
+                            this.getDEG();
+                            break;
+                        case "Pre-normalization_QC_Plots":
+                            this.getHistplotBN();
+                            break;
+                        case "Post-normalization_Plots":
+                            this.getHistplotAN();
+                            break;
+                        case "DEG-Enrichments_Results":
+                            this.getDEG();
+                            break;
+                        case "GSM_1":
+                            // do nothing
+                            break;
+                        case "ssGSEA_Results":
+                            this.getssGSEA();
+                            break;
                     }
 
-                });
-        } catch (err) {
+                    workflow.volcanoPlot = "/volcano.html";
+                    workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
+                    workflow.compared = true;
+                    workflow.done_gsea = true;
+                    workflow.progressing = false;
+                    this.setState({
+                        workflow: workflow
+                    });
+                    message.success('Plots loaded successfully.');
+                } else {
 
-            workflow.uploading = false;
-            workflow.progressing = false;
-            message.success('Run contrast fails');
-            console.log(err);
-            this.setState({
-                workflow: workflow
-            });
-        }
-    }
+                    workflow.progressing = false;
+                    this.setState({
+                        workflow: workflow
+                    });
+                    message.warning('Generate plots fails.');
+                }
 
+            }).catch(error => console.log(error));
+    } catch (err) {
 
-    handleUpload = () => {
-        let workflow = Object.assign({}, this.state.workflow);
-        const fileList = workflow.fileList;
-        const formData = new FormData();
-
-
-        // this pid will be used to create a tmp folder to store the data. 
-        workflow.projectID = this.uuidv4();
-        formData.append('projectId', workflow.projectID)
-
-        fileList.forEach((file) => {
-            formData.append('cels', file);
-        });
-
-        workflow.uploading = true;
-        workflow.progressing = true;
+        workflow.uploading = false;
+        workflow.progressing = false;
+        message.success('Run contrast fails');
+        console.log(err);
         this.setState({
             workflow: workflow
         });
+    }
+}
 
-        document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default"
+
+handleUpload = () => {
+    let workflow = Object.assign({}, this.state.workflow);
+    const fileList = workflow.fileList;
+    const formData = new FormData();
 
 
-        try {
-            fetch('./api/analysis/upload', {
-                    method: "POST",
-                    body: formData,
-                    processData: false,
-                    contentType: false
-                }).then(res => res.json())
-                .then(result => {
-                    if (result.status == 200) {
-                        var data = result.data.split("+++getCELfiles+++\"")[1]
+    // this pid will be used to create a tmp folder to store the data. 
+    workflow.projectID = this.uuidv4();
+    formData.append('projectId', workflow.projectID)
 
-                        if (typeof(data) === "undefined" || data == "") {
+    fileList.forEach((file) => {
+        formData.append('cels', file);
+    });
 
-                            workflow.uploading = false;
-                            workflow.progressing = false;
-                            message.error('update data fails');
-                            this.setState({
-                                workflow: workflow
-                            });
-                            return;
-                        }
+    workflow.uploading = true;
+    workflow.progressing = true;
+    this.setState({
+        workflow: workflow
+    });
 
-                        let list = JSON.parse(decodeURIComponent(data));
+    document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default"
 
-                        //let list = result.data;
-                        workflow.uploading = false;
-                        workflow.progressing = false;
-                        if (list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
-                            message.err('load data fails.');
-                            return;
-                        }
-                        for (let i in list.files) {
-                            list.files[i]["gsm"] = list.files[i]["_row"];
-                            //list.files[i]["gsm"]=list.files[i].title.split("_")[0];
-                        }
-                        workflow.dataList = list.files;
 
-                        // change the word of load btn
-                        document.getElementById("btn-project-upload").disabled = true
+    try {
+        fetch('./api/analysis/upload', {
+                method: "POST",
+                body: formData,
+                processData: false,
+                contentType: false
+            })
+            .then(this.handleErrors)
+            .then(res => res.json())
+            .then(result => {
+                if (result.status == 200) {
+                    var data = result.data.split("+++getCELfiles+++\"")[1]
 
-                        // init group with default value
-                        workflow.group = new Array(list.files.length).fill('Ctl');
-                        workflow.uploaded = true;
-                        this.setState({
-                            workflow: workflow
-                        });
-                        message.success('load successfully.');
-                    } else {
+                    if (typeof(data) === "undefined" || data == "") {
 
                         workflow.uploading = false;
                         workflow.progressing = false;
-                        workflow.uploaded = true;
+                        message.error('update data fails');
                         this.setState({
                             workflow: workflow
                         });
-                        message.error('load data fails.');
+                        return;
                     }
-                });
-        } catch (error) {
+
+                    let list = JSON.parse(decodeURIComponent(data));
+
+                    //let list = result.data;
+                    workflow.uploading = false;
+                    workflow.progressing = false;
+                    if (list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
+                        message.err('load data fails.');
+                        return;
+                    }
+                    for (let i in list.files) {
+                        list.files[i]["gsm"] = list.files[i]["_row"];
+                        //list.files[i]["gsm"]=list.files[i].title.split("_")[0];
+                    }
+                    workflow.dataList = list.files;
+
+                    // change the word of load btn
+                    document.getElementById("btn-project-upload").disabled = true
+
+                    // init group with default value
+                    workflow.group = new Array(list.files.length).fill('Ctl');
+                    workflow.uploaded = true;
+                    this.setState({
+                        workflow: workflow
+                    });
+                    message.success('load successfully.');
+                } else {
+
+                    workflow.uploading = false;
+                    workflow.progressing = false;
+                    workflow.uploaded = true;
+                    this.setState({
+                        workflow: workflow
+                    });
+                    message.error('load data fails.');
+                }
+            }).catch(error => console.log(error));
+    } catch (error) {
 
 
-            workflow.uploading = false;
-            workflow.progressing = false;
-            workflow.uploaded = true;
-            this.setState({
-                workflow: workflow
-            });
-            message.error('load data fails.');
-        }
-
-    }
-
-    clean_data() {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.diff_expr_genes = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: true,
-        };
-        workflow.ssGSEA = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: true,
-        };
-        workflow.pathways_up = {
-
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: true,
-        };
-        workflow.pathways_down = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 10,
-
-            },
-            loading: true,
-        };
-        workflow.preplots = "";
-        workflow.postplots = "";
-
-
+        workflow.uploading = false;
+        workflow.progressing = false;
+        workflow.uploaded = true;
         this.setState({
             workflow: workflow
         });
+        message.error('load data fails.');
     }
 
-    assignGroup = (group_name, dataList_keys) => {
-        // validate group_name
-        let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
-        if (group_name.match(pattern)) {
-            let workflow = Object.assign({}, this.state.workflow);
-            for (var key in dataList_keys) {
-                workflow.dataList[dataList_keys[key] - 1].groups = group_name;
-            }
-            this.setState({
-                workflow: workflow
-            });
-            message.success('Add group successfully.');
-        } else {
-            message.success('The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1');
-            return false;
-        }
-
-    }
-
-    deleteGroup = (group_name) => {
-
+}
+assignGroup = (group_name, dataList_keys) => {
+    // validate group_name
+    let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
+    if (group_name.match(pattern)) {
         let workflow = Object.assign({}, this.state.workflow);
-        for (var key in workflow.dataList) {
-            if (workflow.dataList[key].groups == group_name) {
-                workflow.dataList[key].groups = ""
-            }
+        for (var key in dataList_keys) {
+            workflow.dataList[dataList_keys[key] - 1].groups = group_name;
         }
         this.setState({
             workflow: workflow
         });
-        message.success('Delete  group successfully.');
-
+        message.success('Add group successfully.');
+    } else {
+        message.success('The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1');
+        return false;
     }
 
-    hideWorkFlow = () => {
-        document.getElementsByClassName("container-board-left")[0].style.display = 'none';
-        document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 50;
-        document.getElementById("panel-show").style.display = 'inherit';
-        document.getElementById("panel-hide").style.display = 'none';
+}
+
+deleteGroup = (group_name) => {
+
+    let workflow = Object.assign({}, this.state.workflow);
+    for (var key in workflow.dataList) {
+        if (workflow.dataList[key].groups == group_name) {
+            workflow.dataList[key].groups = ""
+        }
     }
+    this.setState({
+        workflow: workflow
+    });
+    message.success('Delete  group successfully.');
 
-    showWorkFlow = () => {
-        document.getElementsByClassName("container-board-left")[0].style.display = 'block';
-        document.getElementsByClassName("container-board-right")[0].removeAttribute("style");
-        document.getElementById("panel-show").style.display = 'none';
-        document.getElementById("panel-hide").style.display = 'inherit';
+}
+
+handleErrors = (response) => {
+    if (!response.ok) {
+        throw Error(response.statusText);
     }
+    return response;
+}
+
+hideWorkFlow = () => {
+    document.getElementsByClassName("container-board-left")[0].style.display = 'none';
+    document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 50;
+    document.getElementById("panel-show").style.display = 'inherit';
+    document.getElementById("panel-hide").style.display = 'none';
+}
+
+showWorkFlow = () => {
+    document.getElementsByClassName("container-board-left")[0].style.display = 'block';
+    document.getElementsByClassName("container-board-right")[0].removeAttribute("style");
+    document.getElementById("panel-show").style.display = 'none';
+    document.getElementById("panel-hide").style.display = 'inherit';
+}
 
 
-    render() {
-        let modal = this.state.workflow.progressing ? "progress" : "progress-hidden";
-        const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin />;
-        return (
-            <div className="content">
+render() {
+    let modal = this.state.workflow.progressing ? "progress" : "progress-hidden";
+    const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin />;
+    return (
+        <div className="content">
                 <div className="container container-board">
                 
                   <Workflow data={this.state.workflow}
@@ -1286,6 +1729,7 @@ class Analysis extends Component {
                   </label></div>
                   <DataBox  data={this.state.workflow} 
                             upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} 
+                            upateCurrentWorkingTab={this.upateCurrentWorkingTab}
                             assignGroup={this.assignGroup} 
                             deleteGroup={this.deleteGroup}
                             changeDeg={this.changeDeg}
@@ -1304,6 +1748,12 @@ class Analysis extends Component {
                              getHistplotAN={this.getHistplotAN}
                              getPCA={this.getPCA}
                              getHeatmapolt={this.getHeatmapolt}
+
+                             getDEG={this.getDEG}
+                             getPathwayUp={this.getPathwayUp}
+                             getPathwayDown={this.getPathwayDown}
+                             getssGSEA={this.getssGSEA}
+                             
                             />
                 </div>
                 <div className={modal}>
@@ -1320,8 +1770,8 @@ class Analysis extends Component {
                     </div>
                 </div>
             </div>
-        );
-    }
+    );
+}
 }
 
 export default Analysis;

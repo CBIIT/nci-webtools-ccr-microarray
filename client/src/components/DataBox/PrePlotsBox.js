@@ -11,51 +11,81 @@ class PrePlotsBox extends Component {
     constructor(props) {
         super(props);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
-       
+
     }
 
     componentDidMount() {
-         this.handleSelectionChange("Histogram")
+        this.handleSelectionChange("preHistogram")
     }
 
     handleSelectionChange(value) {
-        if (value == "Histogram") {
+
+        var list = document.getElementsByClassName("plot1");
+
+
+        if (value == "preHistogram") {
             this.props.upateCurrentWorkingTabAndObject("getHistplotBN");
-            this.props.getHistplotBN();
-            
+            if (this.props.data.preplots.histplotBN=="") { 
+                this.props.getHistplotBN(); 
+            }
         }
-        if (value == "MAplots") { // 
+        if (value == "preMAplots") { // 
             this.props.upateCurrentWorkingTabAndObject("getMAplotsBN");
-            this.props.getMAplotsBN();
+             if (this.props.data.preplots.list_mAplotBN=="") { 
+                this.props.getMAplotsBN();
+            }
         }
-        if (value == "Boxplots") { // 
+        if (value == "preBoxplots") { // 
             this.props.upateCurrentWorkingTabAndObject("getBoxplotBN");
-            this.props.getBoxplotBN();
+             if (this.props.data.preplots.Boxplots=="") { 
+                 this.props.getBoxplotBN();
+            }
         }
-        if (value == "RLE") { // 
+        if (value == "preRLE") { // 
             this.props.upateCurrentWorkingTabAndObject("getRLE");
-            this.props.getRLE();
-     
-        }
-        if (value == "NUSE") {
-            this.props.upateCurrentWorkingTabAndObject("getNUSE")
-            this.props.getNUSE();
+             if (this.props.data.preplots.RLE=="") { 
+                 this.props.getRLE();
+            }
 
         }
+        if (value == "preNUSE") {
+            this.props.upateCurrentWorkingTabAndObject("getNUSE")
+          
+             if (this.props.data.preplots.NUSE=="") { 
+                this.props.getNUSE();
+            }
+
+        }
+
+        for (var i = 0; i < list.length; i++) {
+            list[i].classList.add("hide");
+        }
+        document.getElementById(value).className = document.getElementById(value).className.replace("hide", "");
+
     }
 
     // HistplotBN,MAplotBN,BoxplotBN,RLEplotBN,NUSEplotBN,HistplotAN,MAplotAN,BoxplotAN,PCA,Heatmapolt,time_cost
 
     render() {
 
-        let content = [<Select key="select-pre-plots" defaultValue="Histogram"
+
+        let tabs = [<div id="preHistogram" key="pre_tag1" className="plot1" > { this.props.data.preplots.histplotBN } </div>,
+            <div id="preMAplots" key="pre_tag2"  className="plot1 hide"  > { this.props.data.preplots.list_mAplotBN } </div>,
+            <div id="preBoxplots" key="pre_tag3"  className="plot1 hide"> {this.props.data.preplots.Boxplots}</div>,
+            <div id="preRLE" key="pre_tag4"  className="plot1 hide"> {this.props.data.preplots.RLE} </div>,
+            <div id="preNUSE" key="pre_tag5"  className="plot1 hide"> {this.props.data.preplots.NUSE} </div>
+        ]
+
+
+
+        let content = [<Select key="select-pre-plots" defaultValue="preHistogram"
                         style = { { width: 240 } } onChange={ this.handleSelectionChange } >
-                        <Option key="opt-tag1" value="Histogram" > Histogram </Option> 
-                        <Option key="opt-tag2" value="MAplots" > MAplots </Option>
-                        <Option key="opt-tag3" value="Boxplots" > Boxplots </Option> 
-                        <Option key="opt-tag4" value="RLE" > RLE </Option> 
-                        <Option key="opt-tag5" value="NUSE" > NUSE </Option> 
-                        </Select>, this.props.data.preplots]
+                        <Option key="pre_opt-tag1" value="preHistogram" > Histogram </Option> 
+                        <Option key="pre_opt-tag2" value="preMAplots" > MAplots </Option>
+                        <Option key="pre_opt-tag3" value="preBoxplots" > Boxplots </Option> 
+                        <Option key="pre_opt-tag4" value="preRLE" > RLE </Option> 
+                        <Option key="pre_opt-tag5" value="preNUSE" > NUSE </Option> 
+                        </Select>, tabs]
 
 
 

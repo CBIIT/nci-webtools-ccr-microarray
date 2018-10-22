@@ -81,6 +81,9 @@ process = function(){
       }
 
       celfiles = processGEOfiles(projectId,access_code,listGroups,data_repo_path)  
+      # remove downloaded tar file
+      fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
+      if (file.exists(fn)) file.remove(fn)
       return(celfiles)  
   }
 
@@ -140,14 +143,15 @@ process = function(){
       i<-i+1
     mode<-toString(args[i])
 
+
+    # store mock data
     if(mode=="dev"){
-      data_repo_path<-"/Users/cheny39/Documents/GitHub/apps/microarray/tmp/test_data"
+      data_repo_path<-"/Users/cheny39/Documents/GitHub/apps/microarray/tmp/test"
       return_plot_data<-readRDS(file = paste0(data_repo_path,"/return_plot_data.rds"))
       l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
       diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
       ssGSEA_results<-readRDS(file = paste0(data_repo_path,"/ssGSEA_results.rds"))
       ssColumn<-readRDS(file = paste0(data_repo_path,"/ssColumn.rds"))
-
       return(list(
         norm_celfiles=return_plot_data,
         diff_expr_genes=diff_expr_genes,

@@ -26,32 +26,13 @@ class GSMData extends Component {
         this.setState({ selectedRowKeys });
     }
 
-
+    
     unselect = () => {
         this.setState({
             selectedRowKeys: [],
             loading: false,
         });
     }
-
-
-    handleSearch = (val) => {
-        if (val == "") {
-            // clear search 
-            this.setState({
-                data: Object.assign({}, this.props.data.dataList)
-            })
-        } else {
-            let data = Object.assign({}, this.props.data.dataList);
-            const result = data.filter(d => d["gsm"].indexOf(val) > 0 || d["title"].indexOf(val) > 0 || d["description"].indexOf(val) > 0);
-            this.setState({
-                data: result
-            })
-        }
-
-
-    }
-
 
 
     render() {
@@ -64,43 +45,37 @@ class GSMData extends Component {
 
         if (this.props.data.dataList.length > 0) {
             const columns = [{
-                title: 'gsm',
+                title: 'GSM',
                 dataIndex: 'gsm',
                 width: '18%',
                 sorter: (a, b) => ('' + a.gsm).localeCompare(b.gsm),
                 render: (text, record, index) => (
                     <div className="single-line" style={{"maxWidth":"150px"}}>
-                            <Tooltip title={text} placement="topLeft" >
-                              <span>{text}</span>
-                            </Tooltip>
+                              <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                           </div>
                 ),
             }, {
-                title: 'title',
+                title: 'TITLE',
                 dataIndex: 'title',
                 width: '30%',
                 sorter: (a, b) => this.compareByAlph(a.title, b.title),
                 render: (text, record, index) => (
-                    <div className="single-line"   style={{"maxWidth":"300px"}}>
-                        <Tooltip title={text} placement="topLeft" >
-                          <span>{text}</span>
-                        </Tooltip>
+                    <div className="single-line" style={{"maxWidth":"300px"}}>
+                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
             }, {
-                title: 'description',
+                title: 'DESCRIPTION',
                 dataIndex: 'description',
                 width: '30%',
                 sorter: (a, b) => a.description.length - b.description.length,
                 render: (text, record, index) => (
                     <div className="single-line" style={{"maxWidth":"300px"}}>
-                        <Tooltip title={text} placement="topLeft">
-                          <span>{text}</span>
-                        </Tooltip>
+                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
             }, {
-                title: 'group',
+                title: 'GROUP',
                 dataIndex: 'groups',
                 width: '15%',
                 sorter: (a, b) => this.compareByAlph(a.groups, b.groups),
