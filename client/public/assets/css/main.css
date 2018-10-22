@@ -206,9 +206,6 @@ label{
   padding-top: 15px !important;
 }
 
-.ant-modal-header{
-  background: #e8e8e8  !important;
-}
 
 
 .ant-table-thead{
@@ -318,5 +315,34 @@ label{
   background-color: #215a82 !important;
   border-color: #215a82 !important;
 }
+
+
+.ant-tabs-nav .ant-tabs-tab:hover {
+  color: #3070a7 !important;
+}
+.ant-tabs-nav .ant-tabs-tab:active {
+  color: #215a82 !important;
+}
+
+.ant-tabs-nav .ant-tabs-tab-active {
+  color: #215a82 !important;
+  font-weight: 600 !important;
+}
+
+
+.ant-modal-header {
+    background: #215a82 !important;
+    color: #ffffff !important;
+}
+
+
+.ant-modal-title{
+  color: #ffffff !important;
+}
+
+.ant-modal-close-x{
+  color: #ffffff !important;
+}
+
 
 

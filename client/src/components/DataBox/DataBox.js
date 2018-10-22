@@ -304,18 +304,18 @@ class DataBox extends Component {
         // define group modal
         let modal = <Modal key="group_define_modal" visible={visible}  title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
         footer={[
-            <Button key="back" onClick={this.handleCancel}>Close</Button>,
+            <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
         >
-          <p><b>Provide a Group name for the following selected GSM(s)</b></p>
+          <p style={{color: "#215a82"}}><b>Selected GSM(s)</b></p>
           
           <p>{selected_gsms}</p>
-          <p>Group Name:&nbsp;&nbsp;
-              <Input placeholder={"Group Name"} id={"input_group_name"} style={{width:'150px'}}/>&nbsp;
+          <p style={{color: "#215a82"}}><b>Group Name:</b></p>
+          <p> <Input placeholder={"Group Name"} id={"input_group_name"} style={{width:'405px'}}/>&nbsp;
               <Button  type="primary" onClick={this.createTag} >Add</Button>
           </p>
            <p><small>*Group name should start with letter and can combine with number. Ex. RNA_1 </small></p>
-          <b>Saved Group List:</b> <br/>
+          <p><b style={{color: "#215a82"}}>Saved Group List:</b> </p>
           {group_table}
         </Modal>
         // end  group modal
