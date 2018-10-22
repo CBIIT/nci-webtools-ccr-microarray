@@ -95,7 +95,8 @@ class Analysis extends Component {
                     Heatmapolt: ""
                 },
                 geneHeatmap: "/ssgseaHeatmap1.jpg",
-                volcanoPlot: "/volcano.html"
+                volcanoPlot: "/volcano.html",
+               
 
             }
         };

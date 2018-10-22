@@ -16,20 +16,19 @@ class DataBox extends Component {
             group: "",
             loading: false,
             visible: false,
-            selected: []
+            selected: [],
+            group_name: "",
+            used: false
         }
     }
 
 
-    update() {
-
-    }
 
     handleTabChange = (key) => {
 
-       
+
         if (key == "Pre-normalization_QC_Plots") {
-             let type = this.props.data.tag_pre_plot_status;
+            let type = this.props.data.tag_pre_plot_status;
             switch (type) {
                 case "":
                     if (this.props.data.preplots.histplotBN == "") {
@@ -70,7 +69,7 @@ class DataBox extends Component {
         }
 
         if (key == "Post-normalization_Plots") {
-             let type = this.props.data.tag_post_plot_status;
+            let type = this.props.data.tag_post_plot_status;
             switch (type) {
                 case "":
                     if (this.props.data.postplot.histplotAN == "") {
@@ -99,7 +98,7 @@ class DataBox extends Component {
                     break;
 
                 default:
-                    if(this.props.data.postplot.histplotAN == "") {
+                    if (this.props.data.postplot.histplotAN == "") {
                         this.props.getHistplotAN();
                     }
             }
@@ -108,7 +107,7 @@ class DataBox extends Component {
 
         if (key == "DEG-Enrichments_Results") {
 
-             let type = this.props.data.tag_deg_plot_status;
+            let type = this.props.data.tag_deg_plot_status;
             switch (type) {
                 case "":
                     if (this.props.data.diff_expr_genes.data.length == 0) {
@@ -160,10 +159,34 @@ class DataBox extends Component {
 
     }
 
+    onChange= ()=>{
+        
+    }
+
     showModal = () => {
-        this.setState({
-            visible: true,
-        });
+
+
+        let group_name = this.state.group_name;
+        if (this.state.group_name != "") {
+
+            if (this.state.used) {
+                // match the group
+                let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
+                group_name = "groupname_" + index_number;
+            }
+
+        }else{
+            group_name = "groupname_1";
+        }
+
+          this.setState({
+                visible: true,
+                group_name: group_name,
+                used: false
+            });
+
+
+
     }
 
     handleOk = () => {
@@ -174,9 +197,10 @@ class DataBox extends Component {
     }
 
     handleCancel = () => {
-        this.setState({ group: "", selected: [], visible: false }); 
+        this.setState({ group: "", selected: [], visible: false });
         // call child unselect function
         this.child.current.unselect();
+
     }
 
     selection = (selectedRowKeys) => {
@@ -188,13 +212,22 @@ class DataBox extends Component {
             // alert 
             message.warning('Please type the tag name. ');
         } else {
-            if (this.state.selected.length > 0) { // if user select records in table 
+            if (this.state.selected.length > 0) {
+                // if user select records in table 
                 this.props.assignGroup(document.getElementById("input_group_name").value, this.state.selected)
                 this.child.current.unselect(); // after create tag, previous selected record will unselect. 
+
+                if (document.getElementById("input_group_name").value == this.state.group_name) {
+                    this.setState({
+                        used: true
+                    });
+                }
+
             } else {
                 message.warning('Please select some gsm(s). ');
             }
         }
+
     }
 
     deleteTag = (event) => {
@@ -313,7 +346,7 @@ class DataBox extends Component {
           
           <p>{selected_gsms}</p>
           <p style={{color: "#215a82"}}><b>Group Name:</b></p>
-          <p> <Input placeholder={"Group Name"} id={"input_group_name"} style={{width:'405px'}}/>&nbsp;
+          <p> <Input onChange={this.onChange} placeholder={"Group Name"} id={"input_group_name"} style={{width:'405px'}} value={this.state.group_name}/>&nbsp;
               <Button  type="primary" onClick={this.createTag} >Add</Button>
           </p>
            <p><small>*Group name should start with letter and can combine with number. Ex. RNA_1 </small></p>
