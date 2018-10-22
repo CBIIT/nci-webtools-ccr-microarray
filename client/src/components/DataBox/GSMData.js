@@ -26,7 +26,7 @@ class GSMData extends Component {
         this.setState({ selectedRowKeys });
     }
 
-
+    
     unselect = () => {
         this.setState({
             selectedRowKeys: [],
