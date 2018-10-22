@@ -343,7 +343,7 @@ class DataBox extends Component {
           <p style={{color: "#215a82"}}><b>Selected GSM(s)</b></p>
           
           <p>{selected_gsms}</p>
-          <p style={{color: "#215a82"}}><b>Group Name:</b> <small>*(Must start with an ASCII letter,a-z or A-Z)</small></p>
+          <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
           <p> <Input  placeholder={"Group Name"} id={"input_group_name"} style={{width:'405px'}} defaultValue="GSMGroup_1"/>&nbsp;
               <Button  type="primary" onClick={this.createTag} >Add</Button>
           </p>
