@@ -168,15 +168,15 @@ class DataBox extends Component {
             if (this.state.used) {
                 // match the group
                 let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
-                group_name = "groupname_" + index_number;
+                group_name = "GSMGroup_" + index_number;
                 document.getElementById("input_group_name").value = group_name;
             }else{
-                group_name = "groupname_1";
+                group_name = "GSMGroup_";
                 document.getElementById("input_group_name").value = group_name;
             }
 
         }else{
-            group_name = "groupname_1";
+            group_name = "GSMGroup_1";
         }
 
           this.setState({
@@ -307,9 +307,9 @@ class DataBox extends Component {
         }
         // define group list in the modal
         const columns = [ // define table column names
-            { title: 'Group', dataIndex: 'name', key: 'name', width: 90 },
-            { title: 'Metabolite IDs', dataIndex: 'gsms', key: 'gsms' },
-            { title: 'Action', dataIndex: 'name', key: 'key', width: 90, render: (e) => (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>) }
+            { title: 'GROUP', dataIndex: 'name', key: 'name', width: 90 },
+            { title: 'GMS(s)', dataIndex: 'gsms', key: 'gsms' },
+            { title: 'ACTION', dataIndex: 'name', key: 'key', width: 90, render: (e) => (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>) }
         ];
 
         // get group and gsm(s)  [{grupa: gsm1,gsm2,gsm3}]
@@ -343,12 +343,11 @@ class DataBox extends Component {
           <p style={{color: "#215a82"}}><b>Selected GSM(s)</b></p>
           
           <p>{selected_gsms}</p>
-          <p style={{color: "#215a82"}}><b>Group Name:</b></p>
-          <p> <Input  placeholder={"Group Name"} id={"input_group_name"} style={{width:'405px'}} defaultValue="groupname_1"/>&nbsp;
+          <p style={{color: "#215a82"}}><b>Group Name:</b> <small>*(Must start with an ASCII letter,a-z or A-Z)</small></p>
+          <p> <Input  placeholder={"Group Name"} id={"input_group_name"} style={{width:'405px'}} defaultValue="GSMGroup_1"/>&nbsp;
               <Button  type="primary" onClick={this.createTag} >Add</Button>
           </p>
-           <p><small>*Group name should start with letter and can combine with number. Ex. RNA_1 </small></p>
-          <p><b style={{color: "#215a82"}}>Saved Group List:</b> </p>
+          <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
           {group_table}
         </Modal>
         // end  group modal
