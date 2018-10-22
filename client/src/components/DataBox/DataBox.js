@@ -174,7 +174,9 @@ class DataBox extends Component {
     }
 
     handleCancel = () => {
-        this.setState({ group: "", selected: [], visible: false });
+        this.setState({ group: "", selected: [], visible: false }); 
+        // call child unselect function
+        this.child.current.unselect();
     }
 
     selection = (selectedRowKeys) => {
