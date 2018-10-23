@@ -147,7 +147,7 @@ class DEGTable extends Component {
         }
 
         content = <div>
-                    <div><Search  placeholder="input search text"  className="input-search-for-deg-path"  onSearch={value => this.search(value)} /></div>
+                    <div><Search  aria-label="search deg" placeholder="input search text"  className="input-search-for-deg-path"  onSearch={value => this.search(value)} /></div>
                     <div>
                         <Table 
                             columns={columns}
