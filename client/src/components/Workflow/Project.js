@@ -34,7 +34,7 @@ class Project extends Component {
                 <div className="row">
            <div className="col-sm-12">
             <label className="title">Accession Code<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-            <Input id="input-access-code" onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
+            <Input  aria-label="input accessionCode"  id="input-access-code" onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
             </div>
              <div className="col-sm-6">
             <button id="btn-project-load-gse" type="button" className="ant-btn upload-start ant-btn-primary" onClick={this.props.loadGSE}>
