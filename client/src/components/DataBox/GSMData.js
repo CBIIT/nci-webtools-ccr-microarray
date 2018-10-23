@@ -26,7 +26,7 @@ class GSMData extends Component {
         this.setState({ selectedRowKeys });
     }
 
-    
+
     unselect = () => {
         this.setState({
             selectedRowKeys: [],
@@ -34,7 +34,14 @@ class GSMData extends Component {
         });
     }
 
+    handleSelectAll = () => {
+        console.log("handle select all ")
+    }
+    handleSelection=(key)=>{
+        console.log(key)
 
+        
+    }
     render() {
 
         const { loading, selectedRowKeys } = this.state;
@@ -45,6 +52,13 @@ class GSMData extends Component {
 
         if (this.props.data.dataList.length > 0) {
             const columns = [{
+                title: <div><label for="select-all" class="sr-only">Select ALl Items</label><input id="select-all" onClick={()=>{this.handleSelectAll()} } type="checkbox"/></div>,
+                dataIndex: 'select',
+                width: '15px',
+                render: (text, record, index) => (
+                    <div><label for="select-GSM" class="sr-only">Select ALl Items</label><input id="select-GSM" onClick={()=>{this.handleSelection(index)} } type="checkbox"/></div>
+                ),
+            }, {
                 title: 'GSM',
                 dataIndex: 'gsm',
                 width: '18%',
@@ -90,27 +104,23 @@ class GSMData extends Component {
             const data = [...this.props.data.dataList];
             //this.state.data;
 
-            const rowSelection = {
-                selectedRowKeys,
-                onChange: this.onSelectChange,
-            };
-
-
-
             const searchFilter = (row) => {
                 if (this.state.term === "") {
                     return true;
                 }
-
                 if (row["gsm"].includes(this.state.term)) return true;
                 if (row["title"].includes(this.state.term)) return true;
                 if (row["description"].includes(this.state.term)) return true;
 
                 return false;
             }
+               const rowSelection = {
+                selectedRowKeys,
+                onChange: this.onSelectChange,
+            };
 
             content = <div>
-                <div> <Search placeholder = "input search text"
+                <div> <Search aria-label="search" placeholder = "input search text"
             className = "input-search-gsm"
             onSearch = { value => this.setState({ term: value }) }
             /></div>
