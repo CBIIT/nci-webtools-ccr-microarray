@@ -21,7 +21,7 @@ class Analysis extends Component {
                 fileList: [],
                 uploading: false,
                 progressing: false,
-                loading_info: "",
+                loading_info: "loading",
                 dataList: [],
                 groups: [],
                 group_1: "-1",
