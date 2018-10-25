@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
+import About from '../About/About';
 import { Spin, message, Icon, Button } from 'antd';
 import Plot from 'react-plotly.js';
 
@@ -20,7 +21,7 @@ class Analysis extends Component {
                 fileList: [],
                 uploading: false,
                 progressing: false,
-                loading_info: "",
+                loading_info: "loading",
                 dataList: [],
                 groups: [],
                 group_1: "-1",
@@ -1707,14 +1708,45 @@ showWorkFlow = () => {
     document.getElementById("panel-hide").style.display = 'inherit';
 }
 
+ changeTab(tab){
+      console.log(tab)
+      if(document.getElementById("li-about")!=null){
+        if (tab == "about") {
+            document.getElementById("li-about").className = "active"
+            document.getElementById("li-analysis").className = ""
+            document.getElementById("tab_about").className = ""
+            document.getElementById("tab_analysis").className = "hide"
+        }
+
+        if (tab == "analysis") {
+            document.getElementById("li-about").className = ""
+            document.getElementById("li-analysis").className = "active"
+            document.getElementById("tab_about").className = "hide"
+            document.getElementById("tab_analysis").className = ""
+        }
+      }
+        
+    }
+
 
 render() {
     let modal = this.state.workflow.progressing ? "progress" : "progress-hidden";
-    const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin />;
+    const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin  />;
     return (
+        <div>
+          <div className="header-nav">
+            <div className="div-container">
+                <ul className="nav navbar-nav">
+                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className=""> <a href="#about" className="nav-link" >About Microarray</a></li>
+                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className="active"> <a href="#analysis"  className="nav-link">Analysis</a></li>
+                </ul>
+                <span className="nav-help"><a href="#help"  id="help-btn" >Help</a></span>
+            </div>
+        </div>
         <div className="content">
+                <div id="tab_about" className="hide"> <About/></div>
+                <div id="tab_analysis">
                 <div className="container container-board">
-                
                   <Workflow data={this.state.workflow}
                         handleGeneChange={this.handleGeneChange} changeFoldSSGSEA={this.changeFoldSSGSEA} changePssGSEA={this.changePssGSEA}
                         resetWorkFlowProject={this.resetWorkFlowProject}  changeProject={this.changeProject} 
@@ -1722,11 +1754,11 @@ render() {
                         fileRemove={this.fileRemove} beforeUpload={this.beforeUpload} handleUpload={this.handleUpload} 
                         loadGSE={this.loadGSE} handleGroup1Select={this.handleGroup1Select}  handleGroup2Select={this.handleGroup2Select} 
                         changePDEGs={this.changePDEGs} changeFoldDEGs={this.changeFoldDEGs} changePathways={this.changePathways} runContrast={this.runContrast}/>
-                    <div style={{'paddingTop':'10px',"width":"16px","float":"left"}}><label>
-                      <a id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
-                      <a id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
+                    <div style={{'paddingTop':'10px',"width":"16px","float":"left"}}>
+                      <a  aria-label="panel display controller " id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
+                      <a  aria-label="panel display controller" id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
 
-                  </label></div>
+                  </div>
                   <DataBox  data={this.state.workflow} 
                             upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} 
                             upateCurrentWorkingTab={this.upateCurrentWorkingTab}
@@ -1765,11 +1797,13 @@ render() {
                         "left": "calc(50% - 80px)",
                         "padding": "2%",
                         "borderRadius": "50%"}}>
-                    <Spin indicator={antIcon} style={{color:"black"}} />
-                    <label className="loading-info">{this.state.workflow.loading_info}</label>
+                    <Spin indicator={antIcon} style={{color:"black"}} aria-label="loading"/>
+                    <label className="loading-info" aria-label="loading-info">{this.state.workflow.loading_info}</label>
                     </div>
                 </div>
             </div>
+            </div>
+    </div>
     );
 }
 }

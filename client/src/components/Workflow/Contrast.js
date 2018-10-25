@@ -55,24 +55,25 @@ class Contrast extends Component {
                 
                 <label className="title">Choose Contrast To Show:</label>
                 
-                <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled  >
+                <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled   aria-label="Select Group 1">
                   <Option value="-1">---Select Group---</Option>
                 </Select>
                 
                 <label className="title">VS:</label>
-                 <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled >
+                 <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled aria-label="Select Group 2">
                    <Option value="-1">---Select Group---</Option>
                 </Select>
                 <label className="title">P-value Threshold For DEGs:</label>
-                <Input disabled onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs}/>
+                <Input disabled onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs} aria-label="P-value Threshold For DEGs"/>
                 <label className="title">Fold Change Threshold For DEGs:</label>
-                <Input disabled  onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}/>
+                <Input disabled  onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs} aria-label="Fold Change Threshold For DEGs"/>
                 <label className="title">P-value Threshold For Pathways:</label>
-                <Input disabled onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways}/>
+                <Input disabled onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways} aria-label="P-value Threshold For Pathways"/>
                 <label className="title">Choose Gene Set For ssGSEA:</label>
                   <Select defaultValue="human$H: Hallmark Gene Sets"  disabled
                         style={{ width: '100%' }}
                         onChange={(e) => this.props.handleGeneChange(e)} 
+                        aria-label="Gene Set For ssGSEA"
                       >
                         <OptGroup label="Human">
                           <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
@@ -95,10 +96,10 @@ class Contrast extends Component {
                         </OptGroup>
                       </Select>
                          <label className="title">P-value Threshold For ssGSEA</label>
-                        <Input disabled onChange={(e) => this.props.changePssGSEA(e)} value={this.props.data.pssGSEA}/>
+                        <Input disabled onChange={(e) => this.props.changePssGSEA(e)} value={this.props.data.pssGSEA} aria-label="P-value Threshold For ssGSEA"/>
                
                          <label className="title">Fold Change Threshold For ssGSEA</label>
-                        <Input disabled onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA}/>
+                        <Input disabled onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA} aria-label="Fold Change Threshold For ssGSEA"/>
                         <br/><br/>
                 {button}
               </div>
@@ -109,15 +110,16 @@ class Contrast extends Component {
                   <label className="title">VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_2_content}
                   <label className="title">P-value Threshold For DEGs:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                  <Input onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs}/>
+                  <Input onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs} aria-label="P-value Threshold For DEGs"/>
                   <label className="title">Fold Change Threshold For DEGs:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                  <Input onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}/>
+                  <Input onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}  aria-label="Fold Change Threshold For DEGs"/>
                   <label className="title">P-value Threshold For Pathways:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                  <Input onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways}/>
+                  <Input onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways} aria-label="P-value Threshold For Pathways"/>
                    <label className="title">Choose Gene Set For ssGSEA:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                    <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
                         style={{ width: '100%' }}
                         onChange={(e) => this.props.handleGeneChange(e)} 
+                        aria-label="Gene Set For ssGSEA"
                       >
                         <OptGroup label="Human">
                           <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
@@ -140,10 +142,10 @@ class Contrast extends Component {
                         </OptGroup>
                       </Select>
                          <label className="title">P-value Threshold For ssGSEA<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                        <Input onChange={(e) => this.props.changePssGSEA(e)} value={this.props.data.pssGSEA}/>
+                        <Input onChange={(e) => this.props.changePssGSEA(e)} value={this.props.data.pssGSEA}  aria-label="P-value Threshold For ssGSEA"/>
                
                          <label className="title">Fold Change Threshold For ssGSEA<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                        <Input onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA}/>
+                        <Input onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA} aria-label="Fold Change Threshold For ssGSEA"/>
                       <br/><br/>
                   {button}
                 </div>

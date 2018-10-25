@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Table, Select, Input, Tooltip } from 'antd';
+import { CustomCheckbox } from './CustomCheckbox';
 import ReactSVG from 'react-svg'
 
 const Search = Input.Search;
 const Option = Select.Option;
+const Selections = []
 
 class GSMData extends Component {
 
@@ -26,7 +28,7 @@ class GSMData extends Component {
         this.setState({ selectedRowKeys });
     }
 
-    
+
     unselect = () => {
         this.setState({
             selectedRowKeys: [],
@@ -34,7 +36,42 @@ class GSMData extends Component {
         });
     }
 
+    handleSelectAll = () => {
+        console.log("handle select all ")
+    }
+    handleSelection = (key) => {
+        console.log(key)
+        let selectedRowKeys = this.getCheckedBoxes("select-GSM")
 
+
+    }
+
+    // Pass the checkbox name to the function
+    getCheckedBoxes(chkboxName) {
+        var checkboxes = document.getElementsByClassName(chkboxName);
+        // loop over them all
+        for (var i = 0; i < checkboxes.length; i++) {
+            // And stick the checked ones onto an array...
+            let key =parseInt(checkboxes[i].parentElement.parentElement.parentElement.getAttribute("data-row-key"));
+            if (checkboxes[i].checked) {
+
+                if (!Selections.includes(key)) {
+                    Selections.push(key);
+                }
+            } else {
+                // if it is uncheck and Seletions has the element
+                if (Selections.includes(key)) {
+                    var index = Selections.indexOf(key);
+                    if (index > -1) {
+                        Selections.splice(index, 1); //remove the element
+                    }
+                }
+            }
+
+        }
+        // Return the array if it is non-empty, or null
+        console.log(Selections)
+    }
     render() {
 
         const { loading, selectedRowKeys } = this.state;
@@ -90,27 +127,23 @@ class GSMData extends Component {
             const data = [...this.props.data.dataList];
             //this.state.data;
 
-            const rowSelection = {
-                selectedRowKeys,
-                onChange: this.onSelectChange,
-            };
-
-
-
             const searchFilter = (row) => {
                 if (this.state.term === "") {
                     return true;
                 }
-
                 if (row["gsm"].includes(this.state.term)) return true;
                 if (row["title"].includes(this.state.term)) return true;
                 if (row["description"].includes(this.state.term)) return true;
 
                 return false;
             }
+            const rowSelection = {
+                selectedRowKeys,
+                onChange: this.onSelectChange,
+            };
 
             content = <div>
-                <div> <Search placeholder = "input search text"
+                <div> <Search aria-label="search" placeholder = "input search text"
             className = "input-search-gsm"
             onSearch = { value => this.setState({ term: value }) }
             /></div>
