@@ -145,21 +145,21 @@ process = function(){
 
 
     # store mock data
-    if(mode=="dev"){
-      data_repo_path<-"/Users/cheny39/Documents/GitHub/apps/microarray/tmp/test"
-      return_plot_data<-readRDS(file = paste0(data_repo_path,"/return_plot_data.rds"))
-      l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
-      diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
-      ssGSEA_results<-readRDS(file = paste0(data_repo_path,"/ssGSEA_results.rds"))
-      ssColumn<-readRDS(file = paste0(data_repo_path,"/ssColumn.rds"))
-      return(list(
-        norm_celfiles=return_plot_data,
-        diff_expr_genes=diff_expr_genes,
-        pathways=l2p_pathways,
-        ssGSEA=ssGSEA_results,
-        ssColumn=ssColumn
-        ))
-    }
+    # if(mode=="dev"){
+    #   data_repo_path<-"/Users/cheny39/Documents/GitHub/apps/microarray/tmp/test"
+    #   return_plot_data<-readRDS(file = paste0(data_repo_path,"/return_plot_data.rds"))
+    #   l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
+    #   diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
+    #   ssGSEA_results<-readRDS(file = paste0(data_repo_path,"/ssGSEA_results.rds"))
+    #   ssColumn<-readRDS(file = paste0(data_repo_path,"/ssColumn.rds"))
+    #   return(list(
+    #     norm_celfiles=return_plot_data,
+    #     diff_expr_genes=diff_expr_genes,
+    #     pathways=l2p_pathways,
+    #     ssGSEA=ssGSEA_results,
+    #     ssColumn=ssColumn
+    #     ))
+    # }
 
     #copy configuration files into data repo 
 
@@ -200,7 +200,6 @@ process = function(){
       z=norm_celfiles[[9]][,3],
       color=pData(norm_celfiles[[11]])$colors
       )
-
     return_plot_data <- List(
         norm_celfiles[[1]],
         norm_celfiles[[2]]@listData,
@@ -225,7 +224,6 @@ process = function(){
     # #cons = c("KO_1-Ctl_1","KO_2-Ctl_2")
  
     diff_expr_genes = diffExprGenes(norm_celfiles[[11]],cons,projectId,data_repo_path)       #Call function
-
     # # #### 4) l2p pathway analysis function, takes DEGs and species as input, returns list of up and downregulated pathways for each contrast ####
     # # # Output should dynamically respond to user-selected contrast
 
@@ -237,12 +235,10 @@ process = function(){
     if(grepl("human",celfiles@annotation)){
       species<-"human"
     }
-    
     l2p_pathways = l2pPathways(diff_expr_genes,species,data_repo_path,projectId,config_path)
 
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
     # # # Output should dynamically respond to user-selected contrast
-    
     
     ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
 
