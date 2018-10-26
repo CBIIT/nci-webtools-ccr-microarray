@@ -125,6 +125,7 @@ class Analysis extends Component {
         this.getPathwayDown = this.getPathwayDown.bind(this);
         this.getPathwayUp = this.getPathwayUp.bind(this);
         this.getssGSEA = this.getssGSEA.bind(this);
+        this.changeLoadingStatus = this.changeLoadingStatus.bind(this);
     }
 
 
@@ -1136,7 +1137,14 @@ resetWorkFlowProject = () => {
     window.location.reload(true);
 }
 
+changeLoadingStatus=(progressing,loading_info)=>{
 
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.progressing = progressing;
+    workflow.loading_info = loading_info;
+    this.setState({ workflow: workflow });
+
+}
 
 loadGSE = () => {
 
@@ -1768,6 +1776,7 @@ render() {
                             changePathways_up={this.changePathways_up}
                             changePathways_down={this.changePathways_down}
                             changessGSEA={this.changessGSEA}
+                            changeLoadingStatus ={this.changeLoadingStatus}
 
                             getHistplotBN={this.getHistplotBN}
                             getMAplotsBN={this.getMAplotsBN}

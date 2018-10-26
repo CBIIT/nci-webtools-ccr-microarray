@@ -244,7 +244,7 @@ process = function(){
 
     saveRDS(return_plot_data, file = paste0(data_repo_path,"/return_plot_data.rds"))
     saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
-    saveRDS(diff_expr_genes[1], file = paste0(data_repo_path,"/diff_expr_genes.rds"))
+    saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
     saveRDS(ssGSEA_results, file = paste0(data_repo_path,"/ssGSEA_results.rds"))
     saveRDS(ssGSEA_results[["DEss"]][[cons]][0], file = paste0(data_repo_path,"/ssColumn.rds"))
 
@@ -269,6 +269,7 @@ process = function(){
 
 
   if(action=="pathwaysHeapMap"){
+   
    ##geneHeatmap = function(degs, paths, contrast, upOrDown, pathway_name,saveImageFileName) {
    #geneHeatmap(diff_expr_genes, l2p_pathways, 'RNA_1-Ctl', 'upregulated_pathways','oxidation-reduction process')   #if GEO
    #geneHeatmap(diff_expr_genes, l2p_pathways, 'KO_1-Ctl_1', 'upregulated_pathways','oxidation-reduction process')   #if CEL file upload
@@ -285,9 +286,12 @@ process = function(){
 
     contrast <-c(paste0(cgroup1,"-",cgroup2))
     
-    pic_name<-paste0("pathwaysHeapMap",sample(1:1000,1,replace=T),".jpg")
-    saveImageFileName<-paste0(data_repo_path,pic_name)
-    geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,config_path)
+    pic_name<-paste0("pathwaysHeapMap",sample(1:99999,1,replace=T),".jpg")
+    saveImageFileName<-paste0(data_repo_path,"/",pic_name)
+
+    #print("test  console")
+
+    geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,config_path,data_repo_path)
 
     return(list(pic_name=pic_name))
   }

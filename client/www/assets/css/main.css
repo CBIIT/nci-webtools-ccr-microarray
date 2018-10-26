@@ -347,3 +347,8 @@ label{
 #help-btn{
   color:#ffffff !important;
 }
+
+
+.navbar-nav {
+    margin: 0px -15px;
+}
