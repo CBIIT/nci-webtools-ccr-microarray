@@ -170,20 +170,20 @@ class DataBox extends Component {
                 let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
                 group_name = "GSMGroup_" + index_number;
                 document.getElementById("input_group_name").value = group_name;
-            }else{
+            } else {
                 group_name = "GSMGroup_";
                 document.getElementById("input_group_name").value = group_name;
             }
 
-        }else{
+        } else {
             group_name = "GSMGroup_1";
         }
 
-          this.setState({
-                visible: true,
-                group_name: group_name,
-                used: false
-            });
+        this.setState({
+            visible: true,
+            group_name: group_name,
+            used: false
+        });
 
 
 
@@ -282,6 +282,7 @@ class DataBox extends Component {
                 /></TabPane>);
             degBox = (<TabPane tab="DEG-Enrichments Results"  key="DEG-Enrichments_Results">
                 <DEGBox  key="degBox" data={this.props.data} 
+                         changeLoadingStatus={this.props.changeLoadingStatus}
                          getDEG={this.props.getDEG}
                          getPathwayUp={this.props.getPathwayUp}
                          getPathwayDown={this.props.getPathwayDown}
