@@ -18,7 +18,7 @@ class Analysis extends Component {
                 token: "",
                 projectID: "",
                 analysisType: "0",
-                accessionCode: "",
+                accessionCode: "GSE37874",
                 fileList: [],
                 uploading: false,
                 progressing: false,

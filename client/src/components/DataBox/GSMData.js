@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Table, Select, Input, Tooltip } from 'antd';
-import { CustomCheckbox } from './CustomCheckbox';
 import ReactSVG from 'react-svg'
 
 const Search = Input.Search;
