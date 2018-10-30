@@ -347,3 +347,37 @@ label{
 #help-btn{
   color:#ffffff !important;
 }
+
+
+#header-navbar {
+  width: 100%;
+  overflow: auto;
+}
+#header-navbar li {
+  float: left;
+}
+
+#header-navbar li:last-child  {
+  float: right;;
+}
+
+.navbar-nav {
+  margin: 0px 0px; 
+}
+
+@media (max-width: 1440px){
+   #tab_about{
+      margin-left: 15px;
+  }
+
+  #tab_help{
+      margin-left: 15px;
+  }
+  #tab_analysis{
+      margin-left: 15px;
+  }
+}
+
+
+
+

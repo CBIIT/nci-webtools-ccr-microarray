@@ -170,34 +170,50 @@ class DataBox extends Component {
                 let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
                 group_name = "GSMGroup_" + index_number;
                 document.getElementById("input_group_name").value = group_name;
-            }else{
-                group_name = "GSMGroup_";
-                document.getElementById("input_group_name").value = group_name;
+            } else {
+                if(group_name.indexOf("GSMGroup_")>=0){
+                     document.getElementById("input_group_name").value = group_name;
+                 }else{
+                     document.getElementById("input_group_name").value = "GSMGroup_1";
+                 }
             }
 
-        }else{
+        } else {
             group_name = "GSMGroup_1";
         }
 
-          this.setState({
-                visible: true,
-                group_name: group_name,
-                used: false
-            });
+        this.setState({
+            visible: true,
+            group_name: group_name,
+            used: false
+        });
 
 
 
     }
 
     handleOk = () => {
-        this.setState({ loading: true });
+        
+         let workflow = Object.assign({}, this.state);
+         workflow.loading=true;
+        this.setState(workflow);
         setTimeout(() => {
-            this.setState({ loading: false, visible: false });
+            
+             let workflow = Object.assign({}, this.state);
+             workflow.loading=false;
+             workflow.visible=false;
+            this.setState(workflow);
         }, 3000);
     }
 
     handleCancel = () => {
-        this.setState({ group: "", selected: [], visible: false });
+         let workflow = Object.assign({}, this.state);
+         workflow.group="";
+         workflow.selected=[];
+         workflow.visible=false;
+
+         workflow.group_name=document.getElementById("input_group_name").value;
+        this.setState(workflow);
         // call child unselect function
         this.child.current.unselect();
 
@@ -282,6 +298,7 @@ class DataBox extends Component {
                 /></TabPane>);
             degBox = (<TabPane tab="DEG-Enrichments Results"  key="DEG-Enrichments_Results">
                 <DEGBox  key="degBox" data={this.props.data} 
+                         changeLoadingStatus={this.props.changeLoadingStatus}
                          getDEG={this.props.getDEG}
                          getPathwayUp={this.props.getPathwayUp}
                          getPathwayDown={this.props.getPathwayDown}

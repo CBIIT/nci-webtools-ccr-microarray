@@ -93,6 +93,7 @@ class PUGTable extends Component {
         }
 
         this.handleTableChange = this.handleTableChange.bind(this)
+        this.showHeatMap = this.showHeatMap.bind(this)
 
     }
 
@@ -159,7 +160,7 @@ class PUGTable extends Component {
     }
 
 
-    showHeapMap(row, idx, event) {
+    showHeatMap(row, idx, event) {
         // not reflected in interface 
         let reqBody = {};
         reqBody.projectId = this.props.data.projectID;
@@ -167,7 +168,7 @@ class PUGTable extends Component {
         reqBody.group2 = this.props.data.group_2;
         reqBody.upOrDown = "upregulated_pathways";
         reqBody.pathway_name = row.Description;
-
+        this.props.changeLoadingStatus(true,"loading heap Map")
         fetch('./api/analysis/pathwaysHeapMap', {
                 method: "POST",
                 body: JSON.stringify(reqBody),
@@ -179,7 +180,7 @@ class PUGTable extends Component {
                 res => res.json()
             )
             .then(result => {
-
+                this.props.changeLoadingStatus(false,"")
                 if (result.status == 200) {
                     if (Object.keys(result.data).length === 0 && result.data.constructor === Object) {
 
@@ -229,6 +230,7 @@ class PUGTable extends Component {
                         pagination={this.props.data.pathways_up.pagination}
                         loading={this.props.data.pathways_up.loading}
                         onChange={this.handleTableChange}
+                        onRowClick={this.showHeatMap}
                         />
                     {modal}
                     </div>

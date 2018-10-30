@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
 import About from '../About/About';
+import Help from '../Help/Help';
 import { Spin, message, Icon, Button } from 'antd';
 import Plot from 'react-plotly.js';
 
@@ -17,7 +18,7 @@ class Analysis extends Component {
                 token: "",
                 projectID: "",
                 analysisType: "0",
-                accessionCode: "",
+                accessionCode: "GSE37874",
                 fileList: [],
                 uploading: false,
                 progressing: false,
@@ -125,6 +126,7 @@ class Analysis extends Component {
         this.getPathwayDown = this.getPathwayDown.bind(this);
         this.getPathwayUp = this.getPathwayUp.bind(this);
         this.getssGSEA = this.getssGSEA.bind(this);
+        this.changeLoadingStatus = this.changeLoadingStatus.bind(this);
     }
 
 
@@ -1136,7 +1138,14 @@ resetWorkFlowProject = () => {
     window.location.reload(true);
 }
 
+changeLoadingStatus=(progressing,loading_info)=>{
 
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.progressing = progressing;
+    workflow.loading_info = loading_info;
+    this.setState({ workflow: workflow });
+
+}
 
 loadGSE = () => {
 
@@ -1714,16 +1723,32 @@ showWorkFlow = () => {
         if (tab == "about") {
             document.getElementById("li-about").className = "active"
             document.getElementById("li-analysis").className = ""
+            document.getElementById("li-help").className = ""
+
             document.getElementById("tab_about").className = ""
             document.getElementById("tab_analysis").className = "hide"
+            document.getElementById("tab_help").className = "hide"
         }
 
         if (tab == "analysis") {
             document.getElementById("li-about").className = ""
             document.getElementById("li-analysis").className = "active"
+            document.getElementById("li-help").className = ""
+
             document.getElementById("tab_about").className = "hide"
             document.getElementById("tab_analysis").className = ""
+            document.getElementById("tab_help").className = "hide"
         }
+
+         if (tab == "help") {
+            document.getElementById("tab_about").className = "hide"
+            document.getElementById("tab_analysis").className = "hide"
+            document.getElementById("tab_help").className = ""
+
+            document.getElementById("li-about").className = ""
+            document.getElementById("li-analysis").className = ""
+            document.getElementById("li-help").className = "active"
+         }
       }
         
     }
@@ -1736,16 +1761,18 @@ render() {
         <div>
           <div className="header-nav">
             <div className="div-container">
-                <ul className="nav navbar-nav">
-                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className=""> <a href="#about" className="nav-link" >About Microarray</a></li>
-                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className="active"> <a href="#analysis"  className="nav-link">Analysis</a></li>
+                <ul className="nav navbar-nav" id="header-navbar">
+                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className="active"> <a href="#about" className="nav-link" >About Microarray</a></li>
+                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className=""> <a href="#analysis"  className="nav-link">Analysis</a></li>
+                    <li  onClick={() => {this.changeTab('help')}}  id="li-help" className="" > <a href="#help"  className="nav-link">Help</a></li>
                 </ul>
-                <span className="nav-help"><a href="#help"  id="help-btn" >Help</a></span>
+            
             </div>
         </div>
         <div className="content">
-                <div id="tab_about" className="hide"> <About/></div>
-                <div id="tab_analysis">
+                <div id="tab_about"> <About/></div>
+                <div id="tab_help" className="hide"> <Help/></div>
+                <div id="tab_analysis" className="hide">
                 <div className="container container-board">
                   <Workflow data={this.state.workflow}
                         handleGeneChange={this.handleGeneChange} changeFoldSSGSEA={this.changeFoldSSGSEA} changePssGSEA={this.changePssGSEA}
@@ -1768,6 +1795,7 @@ render() {
                             changePathways_up={this.changePathways_up}
                             changePathways_down={this.changePathways_down}
                             changessGSEA={this.changessGSEA}
+                            changeLoadingStatus ={this.changeLoadingStatus}
 
                             getHistplotBN={this.getHistplotBN}
                             getMAplotsBN={this.getMAplotsBN}
