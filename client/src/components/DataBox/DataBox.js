@@ -171,8 +171,11 @@ class DataBox extends Component {
                 group_name = "GSMGroup_" + index_number;
                 document.getElementById("input_group_name").value = group_name;
             } else {
-                group_name = "GSMGroup_";
-                document.getElementById("input_group_name").value = group_name;
+                if(group_name.indexOf("GSMGroup_")>=0){
+                     document.getElementById("input_group_name").value = group_name;
+                 }else{
+                     document.getElementById("input_group_name").value = "GSMGroup_1";
+                 }
             }
 
         } else {
@@ -190,14 +193,27 @@ class DataBox extends Component {
     }
 
     handleOk = () => {
-        this.setState({ loading: true });
+        
+         let workflow = Object.assign({}, this.state);
+         workflow.loading=true;
+        this.setState(workflow);
         setTimeout(() => {
-            this.setState({ loading: false, visible: false });
+            
+             let workflow = Object.assign({}, this.state);
+             workflow.loading=false;
+             workflow.visible=false;
+            this.setState(workflow);
         }, 3000);
     }
 
     handleCancel = () => {
-        this.setState({ group: "", selected: [], visible: false });
+         let workflow = Object.assign({}, this.state);
+         workflow.group="";
+         workflow.selected=[];
+         workflow.visible=false;
+
+         workflow.group_name=document.getElementById("input_group_name").value;
+        this.setState(workflow);
         // call child unselect function
         this.child.current.unselect();
 
