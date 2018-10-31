@@ -18,7 +18,7 @@ class Analysis extends Component {
                 token: "",
                 projectID: "",
                 analysisType: "0",
-                accessionCode: "",
+                accessionCode: "GSE37874",
                 fileList: [],
                 uploading: false,
                 progressing: false,
@@ -172,7 +172,15 @@ class Analysis extends Component {
                 pssGSEA: workflow.pssGSEA,
                 foldssGSEA: workflow.foldssGSEA,
             }
+        }else{
+              // others
+               workflow.ssGSEA.pagination={
+                        current: params.page_number,
+                        pageSize: params.page_size,
+
+                    }
         }
+
 
         workflow.ssGSEA.loading = true;
         this.setState({ workflow: workflow });
@@ -221,7 +229,7 @@ class Analysis extends Component {
 
     getPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-
+        // initialize
         if (!params.hasOwnProperty("search_keyword")) {
             params = {
                 page_size: 10,
@@ -235,8 +243,8 @@ class Analysis extends Component {
             }
         }
 
-
         if (params.search_keyword != "") {
+            //search a key word
             let keyword = params.search_keyword;
             params = {
                 page_size: workflow.pathways_up.pagination.pageSize,
@@ -248,8 +256,18 @@ class Analysis extends Component {
                 pPathways: workflow.pPathways,
                 search_keyword: keyword
             }
+        }else{
+
+            // others
+               workflow.pathways_up.pagination={
+                        current: params.page_number,
+                        pageSize: params.page_size,
+
+                    }
         }
+     
         workflow.pathways_up.loading = true;
+
         this.setState({ workflow: workflow });
         fetch('./api/analysis/getUpPathWays', {
                 method: "POST",
@@ -317,6 +335,14 @@ class Analysis extends Component {
                 pPathways: workflow.pPathways,
                 search_keyword: keyword
             }
+        }else{
+
+              // others
+               workflow.pathways_down.pagination={
+                        current: params.page_number,
+                        pageSize: params.page_size,
+
+                    }
         }
         workflow.pathways_down.loading = true;
         this.setState({ workflow: workflow });
@@ -386,6 +412,13 @@ class Analysis extends Component {
                 P_Value: workflow.pDEGs,
                 search_keyword: keyword,
             }
+        }else{
+             // others
+               workflow.diff_expr_genes.pagination={
+                        current: params.page_number,
+                        pageSize: params.page_size,
+
+                    }
         }
         workflow.diff_expr_genes.loading = true;
         this.setState({ workflow: workflow });
@@ -994,7 +1027,9 @@ class Analysis extends Component {
             obj.pagination = workflow.pagination;
             workflow.pathways_up = obj;
         }
-        this.setState({ workflow: workflow });
+        this.setState({ workflow: workflow },() => {
+                    console.log(this.state.pathways_up);
+        });
     }
     changePathways_down(obj) {
         let workflow = Object.assign({}, this.state.workflow);
