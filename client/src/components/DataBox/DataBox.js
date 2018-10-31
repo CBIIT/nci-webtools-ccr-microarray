@@ -324,7 +324,7 @@ class DataBox extends Component {
         }
         // define group list in the modal
         const columns = [ // define table column names
-            { title: 'GROUP', dataIndex: 'name', key: 'name', width: 90 },
+            { title: 'GROUP', dataIndex: 'name', key: 'name', width: "30%" },
             { title: 'GMS(s)', dataIndex: 'gsms', key: 'gsms' },
             { title: 'ACTION', dataIndex: 'name', key: 'key', width: 90, render: (e) => (<a href="javascript:;" onClick={(e) => this.deleteTag(e)}>Delete</a>) }
         ];
@@ -352,7 +352,7 @@ class DataBox extends Component {
         let group_table = <Table columns={columns} dataSource={groups_data_list}  />
 
         // define group modal
-        let modal = <Modal key="group_define_modal" visible={visible}  title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
+        let modal = <Modal key="group_define_modal" visible={visible}  width="65%" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
         footer={[
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
@@ -361,7 +361,7 @@ class DataBox extends Component {
           
           <p>{selected_gsms}</p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
-          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'405px'}} defaultValue="GSMGroup_1"/>&nbsp;
+          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 62px)'}} defaultValue="GSMGroup_1"/>&nbsp;
               <Button  type="primary" onClick={this.createTag} >Add</Button>
           </p>
           <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>

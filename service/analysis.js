@@ -897,9 +897,9 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
         }
     } else {
 
-        result.sort(function(e1, e2) {
-            return (e1["P_Value"] < e2["P_Value"]) ? 1 : -1
-        })
+        // result.sort(function(e1, e2) {
+        //     return (e1["P_Value"] < e2["P_Value"]) ? 1 : -1
+        // })
 
     }
     // search
@@ -956,9 +956,9 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
         }
     } else {
 
-        result.sort(function(e1, e2) {
-            return (e1["P.Value"] < e2["P.Value"]) ? 1 : -1
-        })
+        // result.sort(function(e1, e2) {
+        //     return (e1["P.Value"] < e2["P.Value"]) ? 1 : -1
+        // })
 
     }
 
@@ -1013,9 +1013,9 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
         }
     } else {
 
-        result.sort(function(e1, e2) {
-            return (e1["P.Value"] < e2["P.Value"]) ? 1 : -1
-        })
+        // result.sort(function(e1, e2) {
+        //     return (e1["P.Value"] < e2["P.Value"]) ? 1 : -1
+        // })
 
     }
 
@@ -1057,17 +1057,6 @@ function toObject(returnValue) {
     workflow.listPlots = [];
 
     var list = "";
-
-
-    //// mock data
-    // if (config.env = "dev") {
-    //     list = JSON.parse(decodeURIComponent(returnValue));
-    // } else {
-    //     let d = returnValue.split("+++ssGSEA+++\"")[1];
-    //     // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-    //     let data_dir = d.substring(0, d.indexOf("{"));
-    //     list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
-    // }
 
 
     let d = returnValue.split("+++ssGSEA+++\"")[1];
