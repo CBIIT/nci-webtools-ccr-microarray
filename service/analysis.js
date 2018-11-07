@@ -246,10 +246,10 @@ router.post('/runContrast', function(req, res) {
         let return_data = "";
         let type = req.body.targetObject;
 
-        return_data ={
-                    mAplotBN:req.session.runContrastData.listPlots[1],
-                    mAplotAN:req.session.runContrastData.listPlots[6]
-                }
+        return_data = {
+            mAplotBN: req.session.runContrastData.listPlots[1],
+            mAplotAN: req.session.runContrastData.listPlots[6]
+        }
 
         if (type == "deg") {
             return_data = getDEG(req)
@@ -318,12 +318,12 @@ router.post('/runContrast', function(req, res) {
 
                 let return_data = "";
 
-                 return_data ={
-                    mAplotBN:req.session.runContrastData.listPlots[1],
-                    mAplotAN:req.session.runContrastData.listPlots[6]
+                return_data = {
+                    mAplotBN: req.session.runContrastData.listPlots[1],
+                    mAplotAN: req.session.runContrastData.listPlots[6]
                 }
 
-                
+
                 let type = req.body.targetObject;
 
 
@@ -353,7 +353,7 @@ router.post('/runContrast', function(req, res) {
                     return_data = "/geneHeatmap.jpg"
                 }
 
-               
+
 
                 logger.info("API:/runContrast ", "Contrast uses session ")
                 res.json({
@@ -433,7 +433,7 @@ function getPlots(req, type) {
             } else {
                 return_data = "";
             }
-             console.timeEnd("getMAplotAN")
+            console.timeEnd("getMAplotAN")
             break;
         case "getPCA":
             if (req.session && req.session.runContrastData) {
@@ -534,14 +534,14 @@ router.post('/getBoxplotAN', function(req, res) {
 });
 
 router.post('/getMAplotAN', function(req, res) {
-     console.time("API_getMAplotAN")
-     var dd = getPlots(req, "getMAplotAN");
-       console.time("API_getMAplotAN")
+    console.time("API_getMAplotAN")
+    var dd = getPlots(req, "getMAplotAN");
+    console.time("API_getMAplotAN")
     res.json({
         status: 200,
         data: dd
     });
-   
+
 
 });
 
@@ -1021,15 +1021,151 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
 
     // search
     if (search_keyword != "") {
-        search_keyword = search_keyword.toLowerCase();
+
         result = result.filter(function(r) {
-            if (r.ACCNUM.toLowerCase().indexOf(search_keyword) != -1 ||
-                r.DESC.toLowerCase().indexOf(search_keyword) != -1 ||
-                r.SYMBOL.toLowerCase().indexOf(search_keyword) != -1) {
-                return true;
-            } else {
-                return false;
+            var flag = false;
+            if (search_keyword.search_accnum != "") {
+                if (r.ACCNUM.toLowerCase().indexOf(search_keyword.search_accnum) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
             }
+            if (search_keyword.search_adj_p_value_min != "") {
+
+                if (r['adj.P.Val'] >= parseFloat(search_keyword.search_adj_p_value_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_adj_p_value_max != "") {
+                if (r['adj.P.Val']  <= parseFloat(search_keyword.search_adj_p_value_mx)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+
+            }
+            if (search_keyword.search_aveexpr_min != "") {
+                if (r.AveExpr >= parseFloat(search_keyword.search_aveexpr_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_aveexpr_max != "") {
+                if (r.AveExpr <= parseFloat(search_keyword.search_aveexpr_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_b_max != "") {
+                  if (r.B <=parseFloat(search_keyword.search_b_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+            }
+            if (search_keyword.search_b_min != "") {
+
+                if (r.B >=parseFloat(search_keyword.search_b_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+              if (search_keyword.search_p_value_min != "") {
+                  if (r["P.Value"]>=parseFloat(search_keyword.search_p_value_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+            }
+            if (search_keyword.search_p_value_max != "") {
+
+                if (r["P.Value"] <= parseFloat(search_keyword.search_p_value_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_desc != "") {
+                 if (r.DESC.toLowerCase().indexOf(search_keyword.search_desc) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_entrez != "") {
+                   if (r.ENTREZ.toLowerCase().indexOf(search_keyword.search_entrez) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+
+            }
+
+            if (search_keyword.search_fc_min != "") {
+                if (r.FC >=parseFloat(search_keyword.search_fc_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+            }
+            if (search_keyword.search_fc_max != "") {
+                 if (r.FC <=parseFloat(search_keyword.search_fc_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_probsetid != "") {
+                   if (r.probsetID.toLowerCase().indexOf(search_keyword.search_probsetid) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+            }
+            if (search_keyword.search_symbol != "") {
+                   if (r.SYMBOL.toLowerCase().indexOf(search_keyword.search_symbol) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_t_min != "") {
+                if (r.t >=parseFloat(search_keyword.search_t_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+              if (search_keyword.search_t_max != "") {
+                if (r.t<=parseFloat(search_keyword.search_t_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+
+            }
+
+            return flag;
         })
 
     }
