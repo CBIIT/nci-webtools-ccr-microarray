@@ -352,7 +352,7 @@ class DataBox extends Component {
         let group_table = <Table columns={columns} dataSource={groups_data_list}  />
 
         // define group modal
-        let modal = <Modal key="group_define_modal" visible={visible}  width="65%" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
+        let modal = <Modal key="group_define_modal" visible={visible}  className="custom_modal" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
         footer={[
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}

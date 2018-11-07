@@ -235,6 +235,8 @@ process = function(){
     if(grepl("human",celfiles@annotation)){
       species<-"human"
     }
+
+    
     l2p_pathways = l2pPathways(diff_expr_genes,species,data_repo_path,projectId,config_path)
 
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
