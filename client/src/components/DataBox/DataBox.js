@@ -311,6 +311,7 @@ class DataBox extends Component {
             prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots"  disabled key="Pre-normalization_QC_Plots" > </TabPane>);
             postPlotsBox = (<TabPane tab="Post-Normalization Plots" disabled key="Post-normalization_Plots" ></TabPane>);
             degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results" ></TabPane>);
+             ssGSEABox = (<TabPane tab="ssGSEA Results" disabled key="ssGSEA_Results"></TabPane>);
         }
         // control tab  SSGSEA
         if (this.props.data.done_gsea) {
