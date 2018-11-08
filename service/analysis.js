@@ -246,10 +246,10 @@ router.post('/runContrast', function(req, res) {
         let return_data = "";
         let type = req.body.targetObject;
 
-        return_data ={
-                    mAplotBN:req.session.runContrastData.listPlots[1],
-                    mAplotAN:req.session.runContrastData.listPlots[6]
-                }
+        return_data = {
+            mAplotBN: req.session.runContrastData.listPlots[1],
+            mAplotAN: req.session.runContrastData.listPlots[6]
+        }
 
         if (type == "deg") {
             return_data = getDEG(req)
@@ -318,12 +318,12 @@ router.post('/runContrast', function(req, res) {
 
                 let return_data = "";
 
-                 return_data ={
-                    mAplotBN:req.session.runContrastData.listPlots[1],
-                    mAplotAN:req.session.runContrastData.listPlots[6]
+                return_data = {
+                    mAplotBN: req.session.runContrastData.listPlots[1],
+                    mAplotAN: req.session.runContrastData.listPlots[6]
                 }
 
-                
+
                 let type = req.body.targetObject;
 
 
@@ -353,7 +353,7 @@ router.post('/runContrast', function(req, res) {
                     return_data = "/geneHeatmap.jpg"
                 }
 
-               
+
 
                 logger.info("API:/runContrast ", "Contrast uses session ")
                 res.json({
@@ -433,7 +433,7 @@ function getPlots(req, type) {
             } else {
                 return_data = "";
             }
-             console.timeEnd("getMAplotAN")
+            console.timeEnd("getMAplotAN")
             break;
         case "getPCA":
             if (req.session && req.session.runContrastData) {
@@ -534,14 +534,14 @@ router.post('/getBoxplotAN', function(req, res) {
 });
 
 router.post('/getMAplotAN', function(req, res) {
-     console.time("API_getMAplotAN")
-     var dd = getPlots(req, "getMAplotAN");
-       console.time("API_getMAplotAN")
+    console.time("API_getMAplotAN")
+    var dd = getPlots(req, "getMAplotAN");
+    console.time("API_getMAplotAN")
     res.json({
         status: 200,
         data: dd
     });
-   
+
 
 });
 
@@ -904,18 +904,238 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     }
     // search
     if (search_keyword != "") {
-        search_keyword = search_keyword.toLowerCase();
         result = result.filter(function(r) {
-            if (r.Pathway_ID.toLowerCase().indexOf(search_keyword) != -1 ||
-                r.Source.toLowerCase().indexOf(search_keyword) != -1 ||
-                r.Description.toLowerCase().indexOf(search_keyword) != -1 ||
-                r.Type.toLowerCase().indexOf(search_keyword) != -1 ||
-                r.Gene_List.toLowerCase().indexOf(search_keyword) != -1
-            ) {
-                return true;
-            } else {
-                return false;
+
+
+            var flag = false;
+
+
+            if (search_keyword.search_PATHWAY_ID != "") {
+                if (r.Pathway_ID.toLowerCase().indexOf(search_keyword.search_PATHWAY_ID.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
             }
+
+            if (search_keyword.search_SOURCE != "") {
+                if (r.Source.toLowerCase().indexOf(search_keyword.search_SOURCE.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+            if (search_keyword.search_TYPE != "") {
+                if (r.Description.toLowerCase().indexOf(search_keyword.search_TYPE.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+            if (search_keyword.search_DESCRIPTION != "") {
+                if (r.Type.toLowerCase().indexOf(search_keyword.search_DESCRIPTION.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+
+            if (search_keyword.search_p_value_min != "") {
+                if (r["P_Value"] >= parseFloat(search_keyword.search_p_value_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_p_value_max != "") {
+                if (r["P_Value"] <= parseFloat(search_keyword.search_p_value_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+
+            if (search_keyword.search_fdr_min != "") {
+                if (r["FDR"] >= parseFloat(search_keyword.search_fdr_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_fdr_max != "") {
+                if (r["FDR"] <= parseFloat(search_keyword.search_fdr_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+            if (search_keyword.search_fdr_min != "") {
+                if (r["FDR"] >= parseFloat(search_keyword.search_fdr_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_fdr_max != "") {
+                if (r["FDR"] <= parseFloat(search_keyword.search_fdr_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_RATIO_min != "") {
+                if (r["Ratio"] >= parseFloat(search_keyword.search_RATIO_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_RATIO_max != "") {
+                if (r["Ratio"] <= parseFloat(search_keyword.search_RATIO_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+               
+ if (search_keyword.search_NUMBER_HITS_min != "") {
+                if (r["Number_Hits"] >= parseFloat(search_keyword.search_NUMBER_HITS_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_NUMBER_HITS_max != "") {
+                if (r["Number_Hits"] <= parseFloat(search_keyword.search_NUMBER_HITS_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_GENE_LIST != "") {
+                if (r.Gene_List.toLowerCase().indexOf(search_keyword.search_GENE_LIST.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+        if (search_keyword.search_NUMBER_GENES_PATHWAY_min != "") {
+                if (r["Number_Genes_Pathway"] >= parseFloat(search_keyword.search_NUMBER_GENES_PATHWAY_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_NUMBER_GENES_PATHWAY_max != "") {
+                if (r["Number_Genes_Pathway"] <= parseFloat(search_keyword.search_NUMBER_GENES_PATHWAY_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+        if (search_keyword.search_NUMBER_USER_GENES_min != "") {
+                if (r["Number_User_Genes"] >= parseFloat(search_keyword.search_NUMBER_USER_GENES_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_NUMBER_USER_GENES_max != "") {
+                if (r["Number_User_Genes"] <= parseFloat(search_keyword.search_NUMBER_USER_GENES_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+             if (search_keyword.search_TOTAL_NUMBER_GENES_min != "") {
+                if (r["Total_Number_Genes"] >= parseFloat(search_keyword.search_TOTAL_NUMBER_GENES_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+            if (search_keyword.search_TOTAL_NUMBER_GENES_max != "") {
+                if (r["Total_Number_Genes"] <= parseFloat(search_keyword.search_TOTAL_NUMBER_GENES_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+            return flag;
+
+
+
         })
 
     }
@@ -964,13 +1184,149 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
     // search
     if (search_keyword != "") {
-        search_keyword = search_keyword.toLowerCase();
+
         result = result.filter(function(r) {
-            if (r._row.toLowerCase().indexOf(search_keyword) != -1) {
-                return true;
-            } else {
-                return false;
+            var flag = false;
+
+
+            if (search_keyword.name != "") {
+                if (r._row.toLowerCase().indexOf(search_keyword.name.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
             }
+
+            if (search_keyword.search_logFC_min != "") {
+                if (r["logFC"] >= parseFloat(search_keyword.search_logFC_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_logFC_max != "") {
+                if (r["logFC"] <= parseFloat(search_keyword.search_logFC_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+
+            if (search_keyword.search_t_min != "") {
+                if (r["t"] >= parseFloat(search_keyword.search_t_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+            if (search_keyword.search_t_max != "") {
+                if (r[""] <= parseFloat(search_keyword.search_t_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_p_value_max != "") {
+                if (r["P.Value"] <= parseFloat(search_keyword.search_p_value_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+            if (search_keyword.search_p_value_min != "") {
+                if (r["P.Value"] >= parseFloat(search_keyword.search_p_value_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+            if (search_keyword.search_Avg_Enrichment_Score_max != "") {
+                if (r["Avg.Enrichment.Score"] <= parseFloat(search_keyword.search_Avg_Enrichment_Score_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+            if (search_keyword.search_Avg_Enrichment_Score_min != "") {
+                if (r["Avg.Enrichment.Score"] >= parseFloat(search_keyword.search_Avg_Enrichment_Score_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+              if (search_keyword.search_adj_p_value_max != "") {
+                if (r["adj.P.Val"] <= parseFloat(search_keyword.search_adj_p_value_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+            if (search_keyword.search_adj_p_value_min != "") {
+                if (r["adj.P.Val"] >= parseFloat(search_keyword.search_adj_p_value_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+            if (search_keyword.search_b_max != "") {
+                if (r["B"] <= parseFloat(search_keyword.search_b_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+            if (search_keyword.search_b_min != "") {
+                if (r["B"] >= parseFloat(search_keyword.search_b_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+
+
+
+
+            return flag;
+
+
         })
 
     }
@@ -1021,15 +1377,150 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
 
     // search
     if (search_keyword != "") {
-        search_keyword = search_keyword.toLowerCase();
+
         result = result.filter(function(r) {
-            if (r.ACCNUM.toLowerCase().indexOf(search_keyword) != -1 ||
-                r.DESC.toLowerCase().indexOf(search_keyword) != -1 ||
-                r.SYMBOL.toLowerCase().indexOf(search_keyword) != -1) {
-                return true;
-            } else {
-                return false;
+            var flag = false;
+            if (search_keyword.search_accnum != "") {
+                if (r.ACCNUM.toLowerCase().indexOf(search_keyword.search_accnum.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
             }
+            if (search_keyword.search_adj_p_value_min != "") {
+
+                if (r['adj.P.Val'] >= parseFloat(search_keyword.search_adj_p_value_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_adj_p_value_max != "") {
+                if (r['adj.P.Val'] <= parseFloat(search_keyword.search_adj_p_value_mx)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+
+            }
+            if (search_keyword.search_aveexpr_min != "") {
+                if (r.AveExpr >= parseFloat(search_keyword.search_aveexpr_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_aveexpr_max != "") {
+                if (r.AveExpr <= parseFloat(search_keyword.search_aveexpr_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_b_max != "") {
+                if (r.B <= parseFloat(search_keyword.search_b_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+            }
+            if (search_keyword.search_b_min != "") {
+
+                if (r.B >= parseFloat(search_keyword.search_b_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+            if (search_keyword.search_p_value_min != "") {
+                if (r["P.Value"] >= parseFloat(search_keyword.search_p_value_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+            }
+            if (search_keyword.search_p_value_max != "") {
+
+                if (r["P.Value"] <= parseFloat(search_keyword.search_p_value_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_desc != "") {
+                if (r.DESC.toLowerCase().indexOf(search_keyword.search_desc.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_entrez != "") {
+                if (r.ENTREZ.toLowerCase().indexOf(search_keyword.search_entrez.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+
+            }
+
+            if (search_keyword.search_fc_min != "") {
+                if (r.FC >= parseFloat(search_keyword.search_fc_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+            }
+            if (search_keyword.search_fc_max != "") {
+                if (r.FC <= parseFloat(search_keyword.search_fc_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_probsetid != "") {
+                if (r.probsetID.toLowerCase().indexOf(search_keyword.search_probsetid.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+            }
+            if (search_keyword.search_symbol != "") {
+                if (r.SYMBOL.toLowerCase().indexOf(search_keyword.search_symbol.toLowerCase()) != -1) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_t_min != "") {
+                if (r.t >= parseFloat(search_keyword.search_t_min)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+            if (search_keyword.search_t_max != "") {
+                if (r.t <= parseFloat(search_keyword.search_t_max)) {
+                    flag = true;
+                } else {
+                    return false;
+                }
+
+            }
+
+            return flag;
         })
 
     }

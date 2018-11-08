@@ -407,3 +407,16 @@ label{
    background-color: #FFC90E;
 }
 
+
+.custom_modal{
+  width: 60% !important;
+  max-width: 800px !important;
+  min-width: 500px  !important;
+
+}
+.filter_col{
+      float: left;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}

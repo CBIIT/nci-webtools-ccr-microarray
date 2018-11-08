@@ -50,7 +50,7 @@ class Contrast extends Component {
 
         var content = "";
         if (options.length <= 1) {
-
+           // if the group have not be defined
             content = <div className="block ">
                 
                 <label className="title">Choose Contrast To Show:</label>
@@ -63,6 +63,7 @@ class Contrast extends Component {
                  <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled aria-label="Select Group 2">
                    <Option value="-1">---Select Group---</Option>
                 </Select>
+                <div style={{"display":"none"}} >
                 <label className="title">P-value Threshold For DEGs:</label>
                 <Input disabled onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs} aria-label="P-value Threshold For DEGs"/>
                 <label className="title">Fold Change Threshold For DEGs:</label>
@@ -100,7 +101,8 @@ class Contrast extends Component {
                
                          <label className="title">Fold Change Threshold For ssGSEA</label>
                         <Input disabled onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA} aria-label="Fold Change Threshold For ssGSEA"/>
-                        <br/><br/>
+                        </div>
+                         <br/><br/>
                 {button}
               </div>
         } else {
@@ -109,6 +111,7 @@ class Contrast extends Component {
                   {group_1_content}
                   <label className="title">VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_2_content}
+                   <div style={{"display":"none"}} >
                   <label className="title">P-value Threshold For DEGs:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   <Input onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs} aria-label="P-value Threshold For DEGs"/>
                   <label className="title">Fold Change Threshold For DEGs:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
@@ -146,6 +149,7 @@ class Contrast extends Component {
                
                          <label className="title">Fold Change Threshold For ssGSEA<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                         <Input onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA} aria-label="Fold Change Threshold For ssGSEA"/>
+                      </div>
                       <br/><br/>
                   {button}
                 </div>
