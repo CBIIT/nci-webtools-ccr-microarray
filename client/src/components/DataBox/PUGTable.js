@@ -104,8 +104,8 @@ class PUGTable extends Component {
                         message.success('no rows to aggregate');
 
                     } else {
-                        let pic_link = JSON.parse(result.data).
-                        pic_name
+                        let pic_link = JSON.parse(result.data).pic_name
+                        
                         var link = "./images/" + this.props.data.projectID + "/" + pic_link
                         this.setState({
                             heapMap: link,

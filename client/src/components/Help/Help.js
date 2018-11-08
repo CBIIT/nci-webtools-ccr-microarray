@@ -2,16 +2,15 @@ import React, { Component } from 'react';
 
 class Help extends Component {
 
-	constructor(props){
-		super(props);
-	}
+    constructor(props) {
+        super(props);
+    }
 
-	componentDidMount(){
-	}
+    componentDidMount() {}
 
-  render() {
-      return (
-        <div className="container container-board">
+    render() {
+        return (
+            <div className="container container-board">
                     <section >
                         <h2>Microarrays</h2>
                         <div>
@@ -69,12 +68,81 @@ class Help extends Component {
 
                             <h4>Array Probe Quality Control:</h4>
                             <p>Two plots, NUSE and RLE, display quality control metrics for the microarray probes.  Plots are created with the oligo package:</p>
+                            <ul>
+                              <li>
+                                <p>The Normalized Unscaled Standard Error (NUSE) plot shows standard error estimates for each sample.  These estimates are normalized to 1 across all samples, so a sample with a significantly higher value may be of lower quality (Carvalho & Irizarry, 2010).   </p>
+                                <p>PIC</p>
+                              </li>
+                              <li>
+                                <p>The Relative Log Expression (RLE) plot compares the expression level of one probeset to the median expression of that probeset across all samples.  </p>
+                                <p></p>
+                              </li>
+                            </ul>
+                          <p>
+                          Details regarding NUSE and RLE can be found in the oligo manual (Carvalho & Irizarry, 2010):
+                          <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/oligo/inst/doc/oug.pdf">https://www.bioconductor.org/packages/release/bioc/vignettes/oligo/inst/doc/oug.pdf</a>
+                          </p>
 
+                           <h3>Normalization:</h3>
+                           <p>Each sample is normalized to correct for technical artifacts using the Robust Multichip Averaging (RMA) method described in (Irizarry et al., 2003). Pre-normalization and post-normalization histograms, MA plots and box plots display relative expression (represented by probe intensity) before and after RMA.  Data for the plots are generated with the oligo package.</p>
+                           <p>Histogram: The histogram displays the density of probes at each log-intensity. Each sample is represented by a line.  After RMA, all samples lines should follow the same curve.</p>
+                           <p>PIC</p>
+                           <p>MA plot: Log-ratios (M) are plotted against the average log-intensities (A). Plots are generated that compare each sample to the median of all samples. After RMA, the red sample line should be relatively equal to the blue median line.</p>
+                           <p>PIC</p>
+                           <p>Boxplot: Displays the distribution of log-intensities for each sample. After RMA, distributions across all samples should be approximately the same.</p>
+
+                             <p>
+                         Details regarding plots described above can be found in the oligo manual (Carvalho & Irizarry, 2010): 
+                          <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/oligo/inst/doc/oug.pdf">https://www.bioconductor.org/packages/release/bioc/vignettes/oligo/inst/doc/oug.pdf</a>
+                          </p>
+
+
+                          <h3>Sample Quality Control:</h3>
+                           <p>Two plots, the sample similarity heatmap and 3D PCA, provide information about the quality of replicates in the groups.  In general, samples in the same group should cluster together, and groups of samples should cluster separately from other groups. </p>
+                            <p></p>
+
+
+                            <h3>Differential Gene Expression:</h3>
+                           <p>After normalization, determine differential gene expression between groups.  MAAPster runs analysis in the background with the limma package. Linear modeling is performed using limma’s lmFit function, and differential gene expression is determined using the contrasts.fit and eBayes functions (Ritchie et al, 2015).  Using the toptable function, false discovery rates are calculated to adjust p-values for multiple testing (Ritchie et al., 2015).  Detailed information regarding differential expression analysis can be found in the limma manual 
+                           <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf"> https://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf.</a></p>
+                            <p></p>
+
+                             <h3>Pathway Analysis:</h3>
+                           <p>The top 500 significantly upregulated and top 500 significantly downregulated genes are extracted for pathway analysis (significance is determined as unadjusted p-value  &lt; 0.05), Pathway analysis is performed with CCBR’s l2p software</p>
+                           
+
+                           <h3>Gene Heatmaps:</h3>
+                            <p>Click on a pathway to generate a heatmap for the genes in the pathway.  The heatmap will include groups selected in the contrast, and will display scaled normalized gene expression for samples in the groups.  </p>
+                            <p></p>
+
+                            <h3>Single-sample GSEA (ssGSEA):</h3>
+                            <p>
+                          
+                            ssGSEA is performed using the gsva package as described in (Hanzelmann et al., 2013).  Pathway enrichment scores are then analyzed to determine fold changes and p-values between groups of samples, similar to the differential gene expression analysis described above.  Differential pathway enrichment is ranked by p-value, and the top 50 pathways are displayed in a heatmap.  Human gene set modules were downloaded from the BROAD Institute’s MSigDB 
+                              <a href="http://software.broadinstitute.org/gsea/msigdb/collections.jsp">(http://software.broadinstitute.org/gsea/msigdb/collections.jsp)</a>, 
+                            and mouse gene set modules were adapted from the Walter+Eliza Hall Institute of Medical Research 
+                             <a href="http://bioinf.wehi.edu.au/software/MSigDB/">(http://bioinf.wehi.edu.au/software/MSigDB/)</a>. 
+
+                            </p>
+
+                            <h3>Download Results:</h3>
+                            <p>All tables and plots generated may be downloaded (explain how).</p>
+
+
+
+                               <h3>References:</h3>
+<ul>
+
+<li>Carvalho, B. S., & Irizarry, R. A. (2010). A framework for oligonucleotide microarray preprocessing. Bioinformatics, 26(19), 2363-2367. doi:10.1093/bioinformatics/btq431</li>
+<li>Hanzelmann, S., Castelo, R., & Guinney, J. (2013). GSVA: gene set variation analysis for microarray and RNA-seq data. BMC Bioinformatics, 14, 7. doi:10.1186/1471-2105-14-7</li>
+<li>Irizarry, R. A., Hobbs, B., Collin, F., Beazer-Barclay, Y. D., Antonellis, K. J., Scherf, U., & Speed, T. P. (2003). Exploration, normalization, and summaries of high density oligonucleotide array probe level data. Biostatistics, 4(2), 249-264. doi:10.1093/biostatistics/4.2.249</li>
+<li>Ritchie, M. E., Phipson, B., Wu, D., Hu, Y., Law, C. W., Shi, W., & Smyth, G. K. (2015). limma powers differential expression analyses for RNA-sequencing and microarray studies. Nucleic Acids Res, 43(7), e47. doi:10.1093/nar/gkv007</li>
+</ul>
 
                     </section>
         </div>
-      );
-  }
+        );
+    }
 }
 
 export default Help;
