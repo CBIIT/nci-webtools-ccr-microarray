@@ -66,140 +66,94 @@ class DEGTable extends Component {
 
 
     render() {
-            let content = "";
+        let content = "";
 
-            const columns = [{
-                        title: 'SYMBOL',
-                        dataIndex: 'SYMBOL',
-                        sorter: true,
-                        render: (value, row, index) => {
-                            if (index === 0) {
-                                return <div><Search  onSearch={value => search(value)} placeholder="SYMBOL" id="input_deg_search_symbol" /
-                            > </div>;
-                            }
-                            return value;
-                        }
+        const columns = [{
+                title: 'SYMBOL',
+                dataIndex: 'SYMBOL',
+                sorter: true,
+                width:90,
 
-                    }, {
-                        title: 'FC',
-                        dataIndex: 'FC',
-                        sorter: true,
-                        render: (value, row, index) => {
-                            if (index === 0) {
-                                return <div><Search  onSearch={value => search(value)} placeholder="min" value="-1.5" id="input_deg_search_fc_min" /><Search  value="1.5" onSearch={value => search(value)} placeholder="max"  id="input_deg_search_fc_max" /> </div>;
-                            }
-                            return value;
-                        }
-                    },{
-                        title: 'P VALUE',
-                        dataIndex: 'P.Value',
-                        sorter: true,
-                        render: (value, row, index) => {
-                            if (index === 0) {
-                                return <div><Search  onSearch={value => search(value)} placeholder="min"  id="input_dge_search_p_value_min" /> <Search value="0.05" onSearch={value => search(value)} placeholder="max" id="input_dge_search_p_value_max" /> </div>;
-                            }
-                            return value;
-                        }
-                    },
-                    {
-                        title: 'adj.P.Val',
-                        dataIndex: 'adj.P.Val',
-                        sorter: true,
-                        render: (value, row, index) => {
-                            if (index === 0) {
-                                return <div><Search  onSearch={value => search(value)} placeholder="min " id="input_deg_search_adj_p_value_min" /><Search  onSearch={value => search(value)} placeholder="max" id="input_deg_search_adj_p_value_max" /> </div>;
-                            }
-                            return value;
-                        }
-                    },
-                    {
-                        title: 'AveExpr',
-                        dataIndex: 'AveExpr',
-                        sorter: true,
-                        render: (value, row, index) => {
-                            if (index === 0) {
-                                return <div><Search  onSearch={value => search(value)} placeholder="min" id="input_deg_search_aveexpr_min" /><Search  onSearch={value => search(value)} placeholder="max" id="input_deg_search_aveexpr_max" /> </div>;
-                            }
-                            return value;
-                        }
-                    },{
-                        title: 'ACCNUM',
-                        dataIndex: 'ACCNUM',
-                        sorter: true,
-                        render: (value, row, index) => {
-                            if (index === 0) {
-                                return <div><Search  onSearch={value => search(value)} placeholder="ACCNUM" id="input_deg_search_accnum" /> </div>;
-                            }
-                            return value;
-                        }
-                    },
-                    {
-                        title: 'DESC',
-                        dataIndex: 'DESC',
-                        width: '150px',
-                        sorter: true,
-                        render: (text, record, index) => {
-                            if (index === 0) {
-                                return <div><Search  onSearch={value => search(value)} placeholder="DESC"  id="input_deg_search_desc" /> </div>;
-                            } else {
-
-                                return <div className="single-line" style={{"maxWidth":"100px"}}>
+            }, {
+                title: 'FC',
+                dataIndex: 'FC',
+                sorter: true,
+                  width:80,
+               
+            }, {
+                title: 'P VALUE',
+                dataIndex: 'P.Value',
+                sorter: true,
+                    width:120,
+               
+            },
+            {
+                title: 'adj.P.Val',
+                dataIndex: 'adj.P.Val',
+                sorter: true,
+                  width:90,
+               
+            },
+            {
+                title: 'AveExpr',
+                dataIndex: 'AveExpr',
+                sorter: true,
+                 width:90,
+               
+            }, {
+                title: 'ACCNUM',
+                dataIndex: 'ACCNUM',
+                sorter: true,
+                 width:120,
+              
+            },
+            {
+                title: 'DESC',
+                dataIndex: 'DESC',
+                width: '150px',
+                sorter: true,
+                render: (text, record, index) => {
+                  
+                        return <div className="single-line" style={{"maxWidth":"100px"}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
-                            }
 
-                        }
-                    },
-                    {
-                        title: 'ENTREZ',
-                        dataIndex: 'ENTREZ',
-                        sorter: true,
-                        render: (value, row, index) => {
-                            if (index === 0) {
-                                return <div><Search  onSearch={value => search(value)} placeholder="ENTREZ"  id="input_deg_search_entrez" /> </div>;
-                            }
-                            return value;
-                        },
-                        onCellClick: function(record, event) {
-                            //https://www.ncbi.nlm.nih.gov/gene/171281
-                            if (record.ENTREZ !== "" && record.ENTREZ !== "NA") {
-                                window.open("https://www.ncbi.nlm.nih.gov/gene/" + record.ENTREZ);
-                            }
-
-                        }
-                    },{
-                        title: 'probsetID',
-                        dataIndex: 'probsetID',
-                        sorter: true,
-                        render: (value, row, index) => {
-                            if (index === 0) {
-                                return <div><Search  onSearch={value => search(value)} placeholder="probsetID"  id="input_deg_search_probsetid" /> </div>;
-                            }
-                            return value;
-                        }
-                    }, {
-                        title: 't',
-                        dataIndex: 't',
-                        sorter: true,
-                        render: (value, row, index) => {
-                            if (index === 0) {
-                                return <div><Search  onSearch={value => search(value)} placeholder="min" id="input_deg_search_t_min" /><Search  onSearch={value => search(value)} placeholder="max" id="input_deg_search_t_max" /> </div>;
-                            }
-                            return value;
-                        }
-                    },
-                    {
-                        title: 'B',
-                        dataIndex: 'B',
-                        sorter: true,
-                        render: (value, row, index) => {
-                                if (index === 0) {
-                                    return <div><Search  onSearch={value => search(value)} placeholder="min" id="input_deg_search_b_min" /><Search  onSearch={value => search(value)} placeholder="max" id="input_deg_search_b_max" /> </div>;
-                                 }
-                                return value;
-                        }
+                }
+            },
+            {
+                title: 'ENTREZ',
+                dataIndex: 'ENTREZ',
+                sorter: true,
+                 width:90,
+               
+                onCellClick: function(record, event) {
+                    //https://www.ncbi.nlm.nih.gov/gene/171281
+                    if (record.ENTREZ !== "" && record.ENTREZ !== "NA") {
+                        window.open("https://www.ncbi.nlm.nih.gov/gene/" + record.ENTREZ);
                     }
-                 
+
+                }
+            }, {
+                title: 'probsetID',
+                dataIndex: 'probsetID',
+                sorter: true,
+                 width:110,
+               
+            }, {
+                title: 't',
+                dataIndex: 't',
+                sorter: true,
+                 width:80,
+               
+            },
+            {
+                title: 'B',
+                dataIndex: 'B',
+                sorter: true,
+                 width:80,
+              
+            }
+
         ];
 
 
@@ -221,7 +175,7 @@ class DEGTable extends Component {
 
             var search_aveexpr_min = document.getElementById("input_deg_search_aveexpr_min").value;
 
-             var search_aveexpr_max = document.getElementById("input_deg_search_aveexpr_max").value;
+            var search_aveexpr_max = document.getElementById("input_deg_search_aveexpr_max").value;
 
             var search_accnum = document.getElementById("input_deg_search_accnum").value;
 
@@ -232,18 +186,17 @@ class DEGTable extends Component {
             var search_probsetid = document.getElementById("input_deg_search_probsetid").value;
 
             var search_t_min = document.getElementById("input_deg_search_t_min").value;
-            
+
             var search_b_min = document.getElementById("input_deg_search_b_min").value;
 
 
             var search_t_max = document.getElementById("input_deg_search_t_max").value;
-            
+
             var search_b_max = document.getElementById("input_deg_search_b_max").value;
 
 
 
-            this.props.getDEG(
-            {
+            this.props.getDEG({
                 search_keyword: {
                     "search_symbol": search_symbol,
                     "search_fc_min": search_fc_min,
@@ -278,6 +231,25 @@ class DEGTable extends Component {
         }
 
         content = <div>
+                     <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
+                            <div className="filter_col"><Input onPressEnter={value=>search(value) }  style={{width:"80px"}} placeholder="SYMBOL"  id="input_deg_search_symbol"/></div>
+                           <div className="filter_col" style={{"paddingLeft": "5px"}}><Input onPressEnter={value=>search(value) }  style={{width:"40px"}} placeholder="min"  id="input_deg_search_fc_min"/></div>
+                           <div className="filter_col" style={{"paddingLeft": "5px"}}><Input onPressEnter={value=>search(value) }  style={{width:"40px"}} placeholder="max"  id="input_deg_search_fc_max"/></div>
+                           <div className="filter_col" style={{"paddingLeft": "5px"}}><Input onPressEnter={value=>search(value) }   style={{width:"40px"}} placeholder="min"  id="input_dge_search_p_value_min"/></div>
+                           <div className="filter_col"  ><Input onPressEnter={value=>search(value) }   style={{width:"40px"}} placeholder="max"  id="input_deg_search_adj_p_value_min"/></div>
+                           <div className="filter_col"  ><Input onPressEnter={value=>search(value) }   style={{width:"40px"}} placeholder="min"  id="input_dge_search_p_value_max"/></div>
+                           <div className="filter_col"><Input onPressEnter={value=>search(value) }   style={{width:"40px"}} placeholder="max"  id="input_deg_search_adj_p_value_max"/></div>
+                           <div className="filter_col"><Input onPressEnter={value=>search(value) }   style={{width:"40px"}} placeholder="min"  id="input_deg_search_aveexpr_min"/></div>
+                           <div className="filter_col"><Input onPressEnter={value=>search(value) }   style={{width:"40px"}} placeholder="max"  id="input_deg_search_aveexpr_max"/></div>
+                           <div className="filter_col" style={{"paddingLeft": "5px"}}><Input onPressEnter={value=>search(value) }   style={{width:"110px"}} placeholder="ACCNUM"  id="input_deg_search_accnum"/></div>
+                           <div className="filter_col" style={{"paddingLeft": "5px"}} ><Input onPressEnter={value=>search(value) }  style={{width:"145px"}} placeholder="Desc"  id="input_deg_search_desc"/></div>
+                           <div className="filter_col" style={{"paddingLeft": "5px"}}><Input onPressEnter={value=>search(value) }  style={{width:"80px"}} placeholder="ENTREZ"  id="input_deg_search_entrez"/></div>
+                           <div className="filter_col"><Input onPressEnter={value=>search(value) }  style={{width:"100px"}} placeholder="ID"  id="input_deg_search_probsetid"/></div>
+                           <div className="filter_col"><Input onPressEnter={value=>search(value) }  style={{width:"40px"}} placeholder="min"  id="input_deg_search_t_min"/></div>
+                           <div className="filter_col"><Input onPressEnter={value=>search(value) }  style={{width:"40px"}} placeholder="max"  id="input_deg_search_b_min"/></div>
+                           <div className="filter_col"><Input onPressEnter={value=>search(value) }  style={{width:"40px"}} placeholder="min"  id="input_deg_search_t_max"/></div>
+                           <div className="filter_col"><Input onPressEnter={value=>search(value) }  style={{width:"40px"}} placeholder="max"  id="input_deg_search_b_max"/></div>
+                     </div>
                     <div>
                         <Table 
                             columns={columns}
