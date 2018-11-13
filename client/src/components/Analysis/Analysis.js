@@ -18,7 +18,7 @@ class Analysis extends Component {
                 token: "",
                 projectID: "",
                 analysisType: "0",
-                accessionCode: "",
+                accessionCode: "GSE37874",
                 fileList: [],
                 uploading: false,
                 progressing: false,
@@ -47,7 +47,7 @@ class Analysis extends Component {
                     data: [],
                     pagination: {
                         current: 1,
-                        pageSize: 10,
+                        pageSize: 20,
 
                     },
                     loading: true,
@@ -56,7 +56,7 @@ class Analysis extends Component {
                     data: [],
                     pagination: {
                         current: 1,
-                        pageSize: 10,
+                        pageSize: 20,
 
                     },
                     loading: true,
@@ -66,7 +66,7 @@ class Analysis extends Component {
                     data: [],
                     pagination: {
                         current: 1,
-                        pageSize: 10,
+                        pageSize: 20,
 
                     },
                     loading: true,
@@ -75,7 +75,7 @@ class Analysis extends Component {
                     data: [],
                     pagination: {
                         current: 1,
-                        pageSize: 10,
+                        pageSize: 20,
 
                     },
                     loading: true,

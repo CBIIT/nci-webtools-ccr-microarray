@@ -948,20 +948,8 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
 
 
-
-            if (search_keyword.search_p_value_min != "") {
-                if (r["P_Value"] >= parseFloat(search_keyword.search_p_value_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-            if (search_keyword.search_p_value_max != "") {
-                if (r["P_Value"] <= parseFloat(search_keyword.search_p_value_max)) {
+            if (search_keyword.search_p_value != "") {
+                if (r["P_Value"] <= parseFloat(search_keyword.search_p_value)) {
                     flag = true;
                 } else {
                     return false;
@@ -972,8 +960,8 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
 
 
-            if (search_keyword.search_fdr_min != "") {
-                if (r["FDR"] >= parseFloat(search_keyword.search_fdr_min)) {
+            if (search_keyword.search_fdr != "") {
+                if (r["FDR"] <= parseFloat(search_keyword.search_fdr)) {
                     flag = true;
                 } else {
                     return false;
@@ -982,9 +970,8 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             }
 
 
-
-            if (search_keyword.search_fdr_max != "") {
-                if (r["FDR"] <= parseFloat(search_keyword.search_fdr_max)) {
+            if (search_keyword.search_RATIO != "") {
+                if (r["Ratio"] <= parseFloat(search_keyword.search_RATIO)) {
                     flag = true;
                 } else {
                     return false;
@@ -993,70 +980,14 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             }
 
 
-            if (search_keyword.search_fdr_min != "") {
-                if (r["FDR"] >= parseFloat(search_keyword.search_fdr_min)) {
+            if (search_keyword.search_NUMBER_HITS != "") {
+                if (r["Number_Hits"] <= parseFloat(search_keyword.search_NUMBER_HITS)) {
                     flag = true;
                 } else {
                     return false;
                 }
 
             }
-
-
-
-            if (search_keyword.search_fdr_max != "") {
-                if (r["FDR"] <= parseFloat(search_keyword.search_fdr_max)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-            if (search_keyword.search_RATIO_min != "") {
-                if (r["Ratio"] >= parseFloat(search_keyword.search_RATIO_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-            if (search_keyword.search_RATIO_max != "") {
-                if (r["Ratio"] <= parseFloat(search_keyword.search_RATIO_max)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-               
- if (search_keyword.search_NUMBER_HITS_min != "") {
-                if (r["Number_Hits"] >= parseFloat(search_keyword.search_NUMBER_HITS_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-            if (search_keyword.search_NUMBER_HITS_max != "") {
-                if (r["Number_Hits"] <= parseFloat(search_keyword.search_NUMBER_HITS_max)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
 
 
             if (search_keyword.search_GENE_LIST != "") {
@@ -1070,8 +1001,8 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
 
 
-        if (search_keyword.search_NUMBER_GENES_PATHWAY_min != "") {
-                if (r["Number_Genes_Pathway"] >= parseFloat(search_keyword.search_NUMBER_GENES_PATHWAY_min)) {
+            if (search_keyword.search_NUMBER_GENES_PATHWAY != "") {
+                if (r["Number_Genes_Pathway"] <= parseFloat(search_keyword.search_NUMBER_GENES_PATHWAY)) {
                     flag = true;
                 } else {
                     return false;
@@ -1081,8 +1012,8 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
 
 
-            if (search_keyword.search_NUMBER_GENES_PATHWAY_max != "") {
-                if (r["Number_Genes_Pathway"] <= parseFloat(search_keyword.search_NUMBER_GENES_PATHWAY_max)) {
+            if (search_keyword.search_NUMBER_USER_GENES != "") {
+                if (r["Number_User_Genes"] <= parseFloat(search_keyword.search_NUMBER_USER_GENES)) {
                     flag = true;
                 } else {
                     return false;
@@ -1091,46 +1022,29 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             }
 
 
-
-        if (search_keyword.search_NUMBER_USER_GENES_min != "") {
-                if (r["Number_User_Genes"] >= parseFloat(search_keyword.search_NUMBER_USER_GENES_min)) {
+            if (search_keyword.search_TOTAL_NUMBER_GENES != "") {
+                if (r["Total_Number_Genes"] <= parseFloat(search_keyword.search_TOTAL_NUMBER_GENES)) {
                     flag = true;
                 } else {
                     return false;
                 }
 
             }
-
-
-
-            if (search_keyword.search_NUMBER_USER_GENES_max != "") {
-                if (r["Number_User_Genes"] <= parseFloat(search_keyword.search_NUMBER_USER_GENES_max)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
+             // if search keywords is empty then return the
+            if (search_keyword.search_PATHWAY_ID == "" &&
+                search_keyword.search_SOURCE == "" &&
+                search_keyword.search_TYPE == "" &&
+                search_keyword.search_DESCRIPTION == "" &&
+                search_keyword.search_p_value == "" &&
+                search_keyword.search_fdr == "" &&
+                search_keyword.search_RATIO == "" &&
+                search_keyword.search_NUMBER_HITS == "" &&
+                search_keyword.search_GENE_LIST == "" &&
+                search_keyword.search_NUMBER_GENES_PATHWAY == "" &&
+                search_keyword.search_NUMBER_USER_GENES == "" &&
+                search_keyword.search_TOTAL_NUMBER_GENES == "") {
+                flag = true;
             }
-
-             if (search_keyword.search_TOTAL_NUMBER_GENES_min != "") {
-                if (r["Total_Number_Genes"] >= parseFloat(search_keyword.search_TOTAL_NUMBER_GENES_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-            if (search_keyword.search_TOTAL_NUMBER_GENES_max != "") {
-                if (r["Total_Number_Genes"] <= parseFloat(search_keyword.search_TOTAL_NUMBER_GENES_max)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
 
             return flag;
 
@@ -1198,19 +1112,8 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
             }
 
-            if (search_keyword.search_logFC_min != "") {
-                if (r["logFC"] >= parseFloat(search_keyword.search_logFC_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-            if (search_keyword.search_logFC_max != "") {
-                if (r["logFC"] <= parseFloat(search_keyword.search_logFC_max)) {
+            if (search_keyword.search_logFC != "") {
+                if (Math.abs(r["logFC"]) <= parseFloat(search_keyword.search_logFC)) {
                     flag = true;
                 } else {
                     return false;
@@ -1221,17 +1124,8 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
 
 
-            if (search_keyword.search_t_min != "") {
-                if (r["t"] >= parseFloat(search_keyword.search_t_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-            if (search_keyword.search_t_max != "") {
-                if (r[""] <= parseFloat(search_keyword.search_t_max)) {
+            if (search_keyword.search_t != "") {
+                if (r["t"] <= parseFloat(search_keyword.search_t)) {
                     flag = true;
                 } else {
                     return false;
@@ -1241,18 +1135,8 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
 
 
-            if (search_keyword.search_p_value_max != "") {
-                if (r["P.Value"] <= parseFloat(search_keyword.search_p_value_max)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-            if (search_keyword.search_p_value_min != "") {
-                if (r["P.Value"] >= parseFloat(search_keyword.search_p_value_min)) {
+            if (search_keyword.search_p_value != "") {
+                if (r["P.Value"] <= parseFloat(search_keyword.search_p_value)) {
                     flag = true;
                 } else {
                     return false;
@@ -1262,8 +1146,10 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
 
 
-            if (search_keyword.search_Avg_Enrichment_Score_max != "") {
-                if (r["Avg.Enrichment.Score"] <= parseFloat(search_keyword.search_Avg_Enrichment_Score_max)) {
+
+
+            if (search_keyword.search_Avg_Enrichment_Score != "") {
+                if (r["Avg.Enrichment.Score"] <= parseFloat(search_keyword.search_Avg_Enrichment_Score)) {
                     flag = true;
                 } else {
                     return false;
@@ -1272,8 +1158,10 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
             }
 
 
-            if (search_keyword.search_Avg_Enrichment_Score_min != "") {
-                if (r["Avg.Enrichment.Score"] >= parseFloat(search_keyword.search_Avg_Enrichment_Score_min)) {
+
+
+            if (search_keyword.search_adj_p_value != "") {
+                if (r["adj.P.Val"] <= parseFloat(search_keyword.search_adj_p_value)) {
                     flag = true;
                 } else {
                     return false;
@@ -1282,8 +1170,9 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
             }
 
 
-              if (search_keyword.search_adj_p_value_max != "") {
-                if (r["adj.P.Val"] <= parseFloat(search_keyword.search_adj_p_value_max)) {
+
+            if (search_keyword.search_b != "") {
+                if (r["B"] <= parseFloat(search_keyword.search_b)) {
                     flag = true;
                 } else {
                     return false;
@@ -1292,35 +1181,17 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
             }
 
 
-            if (search_keyword.search_adj_p_value_min != "") {
-                if (r["adj.P.Val"] >= parseFloat(search_keyword.search_adj_p_value_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
+            // if search keywords is empty then return the
+            if (search_keyword.name == "" &&
+                search_keyword.search_b == "" &&
+                search_keyword.search_adj_p_value == "" &&
+                search_keyword.search_Avg_Enrichment_Score == "" &&
+                search_keyword.search_p_value == "" &&
+                search_keyword.search_t == "" &&
+                search_keyword.search_logFC == ""
+            ) {
+                flag = true;
             }
-
-            if (search_keyword.search_b_max != "") {
-                if (r["B"] <= parseFloat(search_keyword.search_b_max)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-            if (search_keyword.search_b_min != "") {
-                if (r["B"] >= parseFloat(search_keyword.search_b_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
 
 
 

@@ -91,32 +91,32 @@ class SSGSEATable extends Component {
             title: 'logFC',
             dataIndex: 'logFC',
             sorter: true,
-            width: "11%"
+            width: "10%"
         }, {
             title: 'Avg.Enrichment.Score',
             dataIndex: 'Avg.Enrichment.Score',
             sorter: true,
-            width: "15%"
+            width: "20%"
         }, {
             title: 't',
             dataIndex: 't',
             sorter: true,
-            width: "11%"
+            width: "10%"
         }, {
             title: 'P VALUE',
             dataIndex: 'P.Value',
             sorter: true,
-            width: "11%"
+            width: "10%"
         }, {
             title: 'adj.P.Val',
             dataIndex: 'adj.P.Val',
             sorter: true,
-            width: "11%"
+            width: "10%"
         }, {
             title: 'B',
             dataIndex: 'B',
             sorter: true,
-            width: "11%"
+            width: "10%"
         }, ];
 
 
@@ -133,34 +133,22 @@ class SSGSEATable extends Component {
 
 
             var search_name = document.getElementById("input_ssg_name").value;
-            var search_logFC_min = document.getElementById("input_ssg_search_logFC_min").value;
-            var search_logFC_max = document.getElementById("input_ssg_search_logFC_max").value;
-            var search_Avg_Enrichment_Score_min = document.getElementById("input_ssg_search_Avg_Enrichment_Score_min").value;
-            var search_Avg_Enrichment_Score_max = document.getElementById("input_ssg_search_Avg_Enrichment_Score_max").value;
-            var search_t_min = document.getElementById("input_ssg_search_t_min").value;
-            var search_t_max = document.getElementById("input_ssg_search_t_max").value;
-            var search_p_value_min = document.getElementById("input_ssg_search_p_value_min").value;
-            var search_p_value_max = document.getElementById("input_ssg_search_p_value_max").value;
-            var search_adj_p_value_min = document.getElementById("input_ssg_search_adj_p_value_min").value;
-            var search_adj_p_value_max = document.getElementById("input_ssg_search_adj_p_value_max").value;
-            var search_b_min = document.getElementById("input_ssg_search_b_min").value;
-            var search_b_max = document.getElementById("input_ssg_search_b_max").value;
+            var search_logFC = document.getElementById("input_ssg_search_logFC").value;
+            var search_Avg_Enrichment_Score = document.getElementById("input_ssg_search_Avg_Enrichment_Score").value;
+            var search_t = document.getElementById("input_ssg_search_t").value;
+            var search_p_value = document.getElementById("input_ssg_search_p_value").value;
+            var search_adj_p_value = document.getElementById("input_ssg_search_adj_p_value").value;
+            var search_b = document.getElementById("input_ssg_search_b").value;
 
             this.props.getssGSEA({
                 search_keyword: {
                     "name": search_name,
-                    "search_logFC_min": search_logFC_min,
-                    "search_logFC_max": search_logFC_max,
-                    "search_Avg_Enrichment_Score_min": search_Avg_Enrichment_Score_min,
-                    "search_Avg_Enrichment_Score_max": search_Avg_Enrichment_Score_max,
-                    "search_t_min": search_t_min,
-                    "search_t_max": search_t_max,
-                    "search_p_value_min": search_p_value_min,
-                    "search_p_value_max": search_p_value_max,
-                    "search_adj_p_value_min": search_adj_p_value_min,
-                    "search_adj_p_value_max": search_adj_p_value_max,
-                    "search_b_min": search_b_min,
-                    "search_b_max": search_b_max,
+                    "search_logFC": search_logFC,
+                    "search_Avg_Enrichment_Score": search_Avg_Enrichment_Score,
+                    "search_t": search_t,
+                    "search_p_value": search_p_value,
+                    "search_adj_p_value": search_adj_p_value,
+                    "search_b": search_b,
                 }
             })
         }
@@ -174,22 +162,18 @@ class SSGSEATable extends Component {
                           <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
 
                             <div className="filter_col" style={{width:"30%"}} ><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_ssg_name"/></div>
-                            <div className="filter_col"  style={{width:"5%"}}><Input onPressEnter={value=>search(value) }    placeholder="min"  id="input_ssg_search_logFC_min"/></div>
-                            <div className="filter_col"  style={{width:"5%"}}><Input onPressEnter={value=>search(value) }    placeholder="max"  id="input_ssg_search_logFC_max"/></div>
-                            <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }    placeholder="min"  id="input_ssg_search_Avg_Enrichment_Score_min"/></div>
-                            <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }    placeholder="max"  id="input_ssg_search_Avg_Enrichment_Score_max"/></div>
+                            
+                            <div className="filter_col"  style={{width:"10%"}}><Input onPressEnter={value=>search(value) }    placeholder="max"  id="input_ssg_search_logFC"/></div>
+                            
+                            <div className="filter_col" style={{width:"20%"}}><Input onPressEnter={value=>search(value) }    placeholder="min"  id="input_ssg_search_Avg_Enrichment_Score"/></div>
 
-                            <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_t_min"/></div>
-                            <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="max"  id="input_ssg_search_t_max"/></div>
+                            <div className="filter_col" style={{width:"10%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_t"/></div>
 
-                            <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_p_value_min"/></div>
-                            <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="max"  id="input_ssg_search_p_value_max"/></div>
+                            <div className="filter_col" style={{width:"10%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_p_value"/></div>
 
-                             <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_adj_p_value_min"/></div>
-                            <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="max"  id="input_ssg_search_adj_p_value_max"/></div>
+                             <div className="filter_col" style={{width:"10%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_adj_p_value"/></div>
                  
-                            <div className="filter_col"  style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_b_min"/></div>
-                            <div className="filter_col"  style={{width:"5%"}}><Input onPressEnter={value=>search(value) }  placeholder="max"  id="input_ssg_search_b_max"/></div>
+                            <div className="filter_col"  style={{width:"10%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_b"/></div>
 
                     </div>
                             <Table 

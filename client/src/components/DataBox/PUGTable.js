@@ -204,13 +204,8 @@ class PUGTable extends Component {
 
 
         const search = (e) => {
-            this.props.changePathways_up({
-                loading: true,
-                data: []
-            })
 
-
-            var search_PATHWAY_ID = document.getElementById("input_pathway_up_search_PATHWAY_ID").value;
+             var search_PATHWAY_ID = document.getElementById("input_pathway_up_search_PATHWAY_ID").value;
 
             var search_SOURCE = document.getElementById("input_pathway_up_search_SOURCE").value;
 
@@ -218,35 +213,21 @@ class PUGTable extends Component {
 
             var search_TYPE = document.getElementById("input_pathway_up_search_TYPE").value;
 
-            var search_p_value_min = document.getElementById("input_pathway_up_search_p_value_min").value;
+            var search_p_value = document.getElementById("input_pathway_up_search_p_value").value;
 
-            var search_p_value_max = document.getElementById("input_pathway_up_search_p_value_max").value;
+            var search_fdr = document.getElementById("input_pathway_up_search_fdr").value;
 
-            var search_fdr_min = document.getElementById("input_pathway_up_search_fdr_min").value;
-
-            var search_fdr_max = document.getElementById("input_pathway_up_search_fdr_max").value;
-
-            var search_RATIO_min = document.getElementById("input_pathway_up_search_RATIO_min").value;
-
-            var search_RATIO_max = document.getElementById("input_pathway_up_search_RATIO_max").value;
+            var search_RATIO = document.getElementById("input_pathway_up_search_RATIO").value;
 
             var search_GENE_LIST = document.getElementById("input_pathway_up_search_GENE_LIST").value;
 
-            var search_NUMBER_HITS_min = document.getElementById("input_pathway_up_search_NUMBER_HITS_min").value;
+            var search_NUMBER_HITS = document.getElementById("input_pathway_up_search_NUMBER_HITS").value;
 
-            var search_NUMBER_HITS_max = document.getElementById("input_pathway_up_search_NUMBER_HITS_max").value;
+            var search_NUMBER_GENES_PATHWAY = document.getElementById("input_pathway_up_search_NUMBER_GENES_PATHWAY").value;
 
-            var search_NUMBER_GENES_PATHWAY_min = document.getElementById("input_pathway_up_search_NUMBER_GENES_PATHWAY_min").value;
+            var search_NUMBER_USER_GENES = document.getElementById("input_pathway_up_search_NUMBER_USER_GENES").value;
 
-            var search_NUMBER_GENES_PATHWAY_max = document.getElementById("input_pathway_up_search_NUMBER_GENES_PATHWAY_max").value;
-
-            var search_NUMBER_USER_GENES_min = document.getElementById("input_pathway_up_search_NUMBER_USER_GENES_min").value;
-
-            var search_NUMBER_USER_GENES_max = document.getElementById("input_pathway_up_search_NUMBER_USER_GENES_max").value;
-
-            var search_TOTAL_NUMBER_GENES_min = document.getElementById("input_pathway_up_search_TOTAL_NUMBER_GENES_min").value;
-
-            var search_TOTAL_NUMBER_GENES_max = document.getElementById("input_pathway_up_search_TOTAL_NUMBER_GENES_max").value;
+            var search_TOTAL_NUMBER_GENES = document.getElementById("input_pathway_up_search_TOTAL_NUMBER_GENES").value;
 
             this.props.changePathways_up({
                 loading: true,
@@ -255,26 +236,19 @@ class PUGTable extends Component {
 
 
             this.props.getPathwayUp({
-                search_keyword: {
+                 search_keyword: {
                     "search_PATHWAY_ID": search_PATHWAY_ID,
                     "search_SOURCE": search_SOURCE,
                     "search_DESCRIPTION": search_DESCRIPTION,
                     "search_TYPE": search_TYPE,
-                    "search_p_value_min": search_p_value_min,
-                    "search_p_value_max": search_p_value_max,
-                    "search_fdr_min": search_fdr_min,
-                    "search_fdr_max": search_fdr_max,
-                    "search_RATIO_min": search_RATIO_min,
-                    "search_RATIO_max": search_RATIO_max,
+                    "search_p_value": search_p_value,
+                    "search_fdr": search_fdr,
+                    "search_RATIO": search_RATIO,
                     "search_GENE_LIST": search_GENE_LIST,
-                    "search_NUMBER_HITS_min": search_NUMBER_HITS_min,
-                    "search_NUMBER_HITS_max": search_NUMBER_HITS_max,
-                    "search_NUMBER_GENES_PATHWAY_min": search_NUMBER_GENES_PATHWAY_min,
-                    "search_NUMBER_GENES_PATHWAY_max": search_NUMBER_GENES_PATHWAY_max,
-                    "search_NUMBER_USER_GENES_min": search_NUMBER_USER_GENES_min,
-                    "search_NUMBER_USER_GENES_max": search_NUMBER_USER_GENES_max,
-                    "search_TOTAL_NUMBER_GENES_min": search_TOTAL_NUMBER_GENES_min,
-                    "search_TOTAL_NUMBER_GENES_max": search_TOTAL_NUMBER_GENES_max,
+                    "search_NUMBER_HITS": search_NUMBER_HITS,
+                    "search_NUMBER_GENES_PATHWAY": search_NUMBER_GENES_PATHWAY,
+                    "search_NUMBER_USER_GENES": search_NUMBER_USER_GENES,
+                    "search_TOTAL_NUMBER_GENES": search_TOTAL_NUMBER_GENES,
                 }
             })
         }
@@ -291,33 +265,26 @@ class PUGTable extends Component {
 
         content = <div>
                      <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
-                            <div className="filter_col" style={{width:"9%"}} ><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_up_search_PATHWAY_ID"/></div>
-                           <div className="filter_col" style={{"paddingLeft": "5px","width":"7%"}}><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_up_search_SOURCE"/></div>
-                           <div className="filter_col" style={{"paddingLeft": "5px",width:"13%"}}><Input onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_up_search_DESCRIPTION"/></div>
-                           <div className="filter_col" style={{"paddingLeft": "5px",width:"6%"}} ><Input onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_up_search_TYPE"/></div>
-                           <div className="filter_col"  style={{width:"4%"}}><Input onPressEnter={value=>search(value) }    placeholder="min"  id="input_pathway_up_search_p_value_min"/></div>
-                           <div className="filter_col"  style={{width:"4%"}}><Input onPressEnter={value=>search(value) }    placeholder="max"  id="input_pathway_up_search_p_value_max"/></div>
-                           <div className="filter_col" style={{width:"4%"}}><Input onPressEnter={value=>search(value) }    placeholder="min"  id="input_pathway_up_search_fdr_min"/></div>
-                           <div className="filter_col" style={{width:"4%"}}><Input onPressEnter={value=>search(value) }    placeholder="max"  id="input_pathway_up_search_fdr_max"/></div>
+                            <div className="filter_col" style={{width:"10%"}} ><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_up_search_PATHWAY_ID"/></div>
+                           <div className="filter_col" style={{"paddingLeft": "5px","width":"8%"}}><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_up_search_SOURCE"/></div>
+                           <div className="filter_col" style={{"paddingLeft": "5px",width:"14%"}}><Input onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_up_search_DESCRIPTION"/></div>
+                           <div className="filter_col" style={{"paddingLeft": "5px",width:"8%"}} ><Input onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_up_search_TYPE"/></div>
+                           <div className="filter_col"  style={{width:"8%"}}><Input onPressEnter={value=>search(value) }    placeholder="P_Value"  id="input_pathway_up_search_p_value"/></div>
+                           <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }    placeholder="FDR"  id="input_pathway_up_search_fdr"/></div>
 
-                            <div className="filter_col" style={{width:"4%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_pathway_up_search_RATIO_min"/></div>
-                           <div className="filter_col" style={{width:"4%"}}><Input onPressEnter={value=>search(value) }   placeholder="max"  id="input_pathway_up_search_RATIO_max"/></div>
+                            <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_up_search_RATIO"/></div>
 
 
-                           <div className="filter_col" style={{"paddingLeft": "5px",width:"11%"}}><Input onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_up_search_GENE_LIST"/></div>
+                           <div className="filter_col" style={{"paddingLeft": "5px",width:"12%"}}><Input onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_up_search_GENE_LIST"/></div>
 
-                            <div className="filter_col" style={{width:"40px"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_pathway_up_search_NUMBER_HITS_min"/></div>
-                           <div className="filter_col" style={{width:"40px"}}><Input onPressEnter={value=>search(value) }   placeholder="max"  id="input_pathway_up_search_NUMBER_HITS_max"/></div>
+                            <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="NUMBER_HITS"  id="input_pathway_up_search_NUMBER_HITS"/></div>
                  
-                           <div className="filter_col"  style={{width:"40px"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_pathway_up_search_NUMBER_GENES_PATHWAY_min"/></div>
-                           <div className="filter_col"  style={{width:"40px"}}><Input onPressEnter={value=>search(value) }  placeholder="max"  id="input_pathway_up_search_NUMBER_GENES_PATHWAY_max"/></div>
+                           <div className="filter_col"  style={{width:"9%"}}><Input onPressEnter={value=>search(value) }   placeholder="NUMBER_GENES_PATHWAY"  id="input_pathway_up_search_NUMBER_GENES_PATHWAY"/></div>
 
 
-                           <div className="filter_col" style={{width:"40px"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_pathway_up_search_NUMBER_USER_GENES_min"/></div>
-                           <div className="filter_col" style={{width:"40px"}}><Input onPressEnter={value=>search(value) }   placeholder="max"  id="input_pathway_up_search_NUMBER_USER_GENES_max"/></div>
+                           <div className="filter_col" style={{width:"9%"}}><Input onPressEnter={value=>search(value) }   placeholder="NUMBER_USER_GENES"  id="input_pathway_up_search_NUMBER_USER_GENES"/></div>
 
-                           <div className="filter_col" style={{width:"40px"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_pathway_up_search_TOTAL_NUMBER_GENES_min"/></div>
-                           <div className="filter_col" style={{width:"40px"}}><Input onPressEnter={value=>search(value) }   placeholder="max"  id="input_pathway_up_search_TOTAL_NUMBER_GENES_max"/></div>
+                           <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="TOTAL_NUMBER_GENES"  id="input_pathway_up_search_TOTAL_NUMBER_GENES"/></div>
 
 
                     </div>
