@@ -181,24 +181,6 @@ router.post('/runContrast', function(req, res) {
     data.push(config.uploadPath);
     data.push(req.body.code);
     data.push(req.body.groups);
-    if (req.body.pDEGs) {
-        data.push(req.body.pDEGs);
-    } else {
-        data.push(1);
-    }
-
-    if (req.body.foldDEGs) {
-        data.push(req.body.foldDEGs);
-    } else {
-        data.push(1);
-    }
-
-    if (req.body.pPathways) {
-        data.push(req.body.pPathways);
-    } else {
-        data.push(1);
-    }
-
     data.push(req.body.group_1);
     data.push(req.body.group_2);
     data.push(req.body.species);
@@ -221,9 +203,6 @@ router.post('/runContrast', function(req, res) {
     logger.info("API:/runContrast ",
         "code:", req.body.code,
         "groups:", req.body.groups,
-        "pDEGs:", req.body.pDEGs,
-        "foldDEGs:", req.body.foldDEGs,
-        "pPathways:", req.body.pPathways,
         "group_1:", req.body.group_1,
         "group_2:", req.body.group_2,
         "species:", req.body.species,
@@ -236,135 +215,114 @@ router.post('/runContrast', function(req, res) {
 
 
 
-    // using session
-    //if it is action is runContrast , then 
-    if (req.session.groups &&
-        JSON.stringify(req.session.groups) == JSON.stringify(req.body.groups) &&
-        req.session.projectId == req.body.projectId &&
-        req.session.option == req.body.group_1 + req.body.group_2 + req.body.genSet
-    ) {
-        let return_data = "";
-        let type = req.body.targetObject;
+    // // using session
+    // //if it is action is runContrast , then 
+    // if (req.session.groups &&
+    //     JSON.stringify(req.session.groups) == JSON.stringify(req.body.groups) &&
+    //     req.session.projectId == req.body.projectId &&
+    //     req.session.option == req.body.group_1 + req.body.group_2 + req.body.genSet
+    // ) {
+    //     let return_data = "";
+    //     let type = req.body.targetObject;
 
-        return_data = {
-            mAplotBN: req.session.runContrastData.listPlots[1],
-            mAplotAN: req.session.runContrastData.listPlots[6]
-        }
+    //     return_data = {
+    //         mAplotBN: req.session.runContrastData.listPlots[1],
+    //         mAplotAN: req.session.runContrastData.listPlots[6]
+    //     }
 
-        if (type == "deg") {
-            return_data = getDEG(req)
-        }
+    //     if (type == "deg") {
+    //         return_data = getDEG(req)
+    //     }
 
-        if (type == "ssGSEA") {
-            return_data = getGSEA(req)
-        }
-
-
-        if (type == "pathways_up") {
-            return_data = getUpPathWays(req)
-        }
-
-        if (type == "pathways_down") {
-            return_data = getDownPathWays(req)
-        }
+    //     if (type == "ssGSEA") {
+    //         return_data = getGSEA(req)
+    //     }
 
 
-        if (type == "volcanoPlot") {
+    //     if (type == "pathways_up") {
+    //         return_data = getUpPathWays(req)
+    //     }
 
-            return_data = "/volcano.html"
-        }
-
-
-        if (type == "pathwayHeatMap") {
-
-            return_data = "/geneHeatmap.jpg"
-        }
-
-        logger.info("API:/runContrast ", "Contrast uses session ")
-        res.json({
-            status: 200,
-            data: return_data
-        });
-
-    } else {
-        logger.info("API:/runContrast ", "Session is not used, run R script; ")
-        R.execute("wrapper.R", data, function(err, returnValue) {
-            // returnValue :
-            //(list(
-            // norm_celfiles=return_plot_data,
-            // diff_expr_genes=diff_expr_genes[1],
-            // pathways=l2p_pathways,
-            // ssGSEA=ssGSEA_results,
-            // ssColumn=ssGSEA_results[["DEss"]][[cons]][0]
-            // ))
-
-            if (err) {
-                res.json({
-                    status: 404,
-                    msg: returnValue
-                });
-            } else {
-                // store return value in session (deep copy)
-                req.session.runContrastData = toObject(returnValue);
-                req.session.option = req.body.group_1 + req.body.group_2 + req.body.genSet;
-                req.session.groups = req.body.groups;
-                req.session.projectId = req.body.projectId;
-                logger.info("API:/runContrast ", "store data in req.session")
-                //  // filter out data based on the filter
-                // if(req.body.actions == "runContrast"){
-                //      returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
-                // }
+    //     if (type == "pathways_down") {
+    //         return_data = getDownPathWays(req)
+    //     }
 
 
-                let return_data = "";
+    //     if (type == "volcanoPlot") {
 
-                return_data = {
-                    mAplotBN: req.session.runContrastData.listPlots[1],
-                    mAplotAN: req.session.runContrastData.listPlots[6]
-                }
+    //         return_data = "/volcano.html"
+    //     }
 
 
-                let type = req.body.targetObject;
+    //     if (type == "pathwayHeatMap") {
+
+    //         return_data = "/geneHeatmap.jpg"
+    //     }
+
+    //     logger.info("API:/runContrast ", "Contrast uses session ")
+    //     res.json({
+    //         status: 200,
+    //         data: return_data
+    //     });
+
+    // } else {
+    //    logger.info("API:/runContrast ", "Session is not used, run R script; ")
+    R.execute("wrapper.R", data, function(err, returnValue) {
+        // returnValue :
+        //(list(
+        // norm_celfiles=return_plot_data,
+        // diff_expr_genes=diff_expr_genes[1],
+        // pathways=l2p_pathways,
+        // ssGSEA=ssGSEA_results,
+        // ssColumn=ssGSEA_results[["DEss"]][[cons]][0]
+        // ))
+
+        if (err) {
+            res.json({
+                status: 404,
+                msg: returnValue
+            });
+        } else {
+            // store return value in session (deep copy)
+            req.session.runContrastData = toObject(returnValue);
+            req.session.option = req.body.group_1 + req.body.group_2 + req.body.genSet;
+            req.session.groups = req.body.groups;
+            req.session.projectId = req.body.projectId;
+            logger.info("API:/runContrast ", "store data in req.session")
+            //  // filter out data based on the filter
+            // if(req.body.actions == "runContrast"){
+            //      returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
+            // }
 
 
-                if (type == "deg") {
-                    return_data = getDEG(req)
-                }
+            let return_data = "";
 
-                if (type == "ssGSEA") {
-                    return_data = getGSEA(req)
-                }
-
-
-                if (type == "pathways_up") {
-                    return_data = getUpPathWays(req)
-                }
-
-                if (type == "pathways_down") {
-                    return_data = getDownPathWays(req)
-                }
-
-                if (type == "volcanoPlot") {
-                    return_data = "/volcano.html"
-                }
-
-                if (type == "pathwayHeatMap") {
-
-                    return_data = "/geneHeatmap.jpg"
-                }
-
-
-
-                logger.info("API:/runContrast ", "Contrast uses session ")
-                res.json({
-                    status: 200,
-                    data: return_data
-                });
-
+            return_data = {
+                mAplotBN: req.session.runContrastData.listPlots[1],
+                mAplotAN: req.session.runContrastData.listPlots[6]
             }
-        });
+            let type = req.body.targetObject;
 
-    }
+            if (type == "volcanoPlot") {
+                return_data = "/volcano.html"
+            }
+
+            if (type == "pathwayHeatMap") {
+
+                return_data = "/geneHeatmap.jpg"
+            }
+
+
+            logger.info("API:/runContrast ", "Contrast uses session ")
+            res.json({
+                status: 200,
+                data: return_data
+            });
+
+        }
+    });
+
+    //}
 });
 
 
@@ -823,44 +781,18 @@ function getGSEA(req) {
 function getDEG(req) {
 
     let threadhold = {}
-    if (!req.body.p_value) {
-        threadhold = {
-            P_Value: 0.05,
-            foldDEGs: 1.5
-        }
-    } else {
-        threadhold = {
-            P_Value: req.body.p_value,
-            foldDEGs: req.body.foldDEGs
 
-        }
-    }
-
-    if (!req.body.sorting) {
-        req.body.sorting = {
-            field: "P.Value",
-            rder: "descend"
-        }
-    }
-
-    if (!req.body.search_keyword) {
-        req.body.search_keyword = ""
-    }
-
-    if (!req.body.page_size) {
-        req.body.page_size = 10
-    }
-
-    if (!req.body.page_number) {
-        req.body.page_number = 1
-    }
+    // add filter 
     return getDEG_filter(
         req.session.runContrastData.diff_expr_genes,
         threadhold,
         req.body.sorting,
         req.body.search_keyword,
         req.body.page_size,
-        req.body.page_number)
+        req.body.page_number,
+        req)
+
+
 
 }
 
@@ -1030,7 +962,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
                 }
 
             }
-             // if search keywords is empty then return the
+            // if search keywords is empty then return the
             if (search_keyword.search_PATHWAY_ID == "" &&
                 search_keyword.search_SOURCE == "" &&
                 search_keyword.search_TYPE == "" &&
@@ -1213,17 +1145,36 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
 
 
-function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, page_number) {
+function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, page_number, req) {
 
-    let result = []
+    let result = data;
+    // store
+    if (req.session.deg_tmp) {
+        // if only request a page's content do not need to filter out the data
+        if (req.session.deg_tmp.sorting_order == sorting.order &&
+            req.session.deg_tmp.sorting_name == sorting.name &&
+            req.session.deg_tmp.search_symbol == search_keyword.search_symbol &&
+            req.session.deg_tmp.search_fc == search_keyword.search_fc &&
+            req.session.deg_tmp.search_p_value == search_keyword.search_p_value &&
+            req.session.deg_tmp.search_adj_p_value == search_keyword.search_adj_p_value &&
+            req.session.deg_tmp.search_aveexpr == search_keyword.search_aveexpr &&
+            req.session.deg_tmp.search_accnum == search_keyword.search_accnum &&
+            req.session.deg_tmp.search_desc == search_keyword.search_desc &&
+            req.session.deg_tmp.search_entrez == search_keyword.search_entrez &&
+            req.session.deg_tmp.search_probsetid == search_keyword.search_probsetid &&
+            req.session.deg_tmp.search_t == search_keyword.search_t &&
+            req.session.deg_tmp.search_b == search_keyword.search_b) {
 
-
-    // filter data
-    for (let j in data) {
-        if (data[j]["P.Value"] < threadhold.P_Value && Math.abs(data[j].FC) < threadhold.foldDEGs) {
-            result.push(data[j])
+            // return index
+            let output = {
+                totalCount: req.session.deg_tmp.data.length,
+                records: req.session.deg_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+            }
+            return output;
         }
     }
+
+
 
     // sorting
     if (sorting != null) {
@@ -1248,152 +1199,139 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
 
     // search
     if (search_keyword != "") {
+        if (!(search_keyword.search_accnum == "" &&
+                search_keyword.search_adj_p_value == "" &&
+                search_keyword.search_aveexpr == "" &&
+                search_keyword.search_b == "" &&
+                search_keyword.search_p_value == "" &&
+                search_keyword.search_desc == "" &&
+                search_keyword.search_entrez == "" &&
+                search_keyword.search_fc == "" &&
+                search_keyword.search_probsetid == "" &&
+                search_keyword.search_symbol == "" &&
+                search_keyword.search_t == "")) {
 
-        result = result.filter(function(r) {
-            var flag = false;
-            if (search_keyword.search_accnum != "") {
-                if (r.ACCNUM.toLowerCase().indexOf(search_keyword.search_accnum.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
+            result = result.filter(function(r) {
+                var flag = false;
+                if (search_keyword.search_accnum != "") {
+                    if (r.ACCNUM.toLowerCase().indexOf(search_keyword.search_accnum.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
                 }
 
-            }
-            if (search_keyword.search_adj_p_value_min != "") {
+                if (search_keyword.search_adj_p_value != "") {
+                    if (r['adj.P.Val'] <= parseFloat(search_keyword.search_adj_p_value)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
 
-                if (r['adj.P.Val'] >= parseFloat(search_keyword.search_adj_p_value_min)) {
-                    flag = true;
-                } else {
-                    return false;
+
                 }
 
-            }
-            if (search_keyword.search_adj_p_value_max != "") {
-                if (r['adj.P.Val'] <= parseFloat(search_keyword.search_adj_p_value_mx)) {
-                    flag = true;
-                } else {
-                    return false;
+                if (search_keyword.search_aveexpr != "") {
+                    if (r.AveExpr <= parseFloat(search_keyword.search_aveexpr)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
                 }
-
-
-            }
-            if (search_keyword.search_aveexpr_min != "") {
-                if (r.AveExpr >= parseFloat(search_keyword.search_aveexpr_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-            if (search_keyword.search_aveexpr_max != "") {
-                if (r.AveExpr <= parseFloat(search_keyword.search_aveexpr_max)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-            if (search_keyword.search_b_max != "") {
-                if (r.B <= parseFloat(search_keyword.search_b_max)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-            }
-            if (search_keyword.search_b_min != "") {
-
-                if (r.B >= parseFloat(search_keyword.search_b_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-            if (search_keyword.search_p_value_min != "") {
-                if (r["P.Value"] >= parseFloat(search_keyword.search_p_value_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-            }
-            if (search_keyword.search_p_value_max != "") {
-
-                if (r["P.Value"] <= parseFloat(search_keyword.search_p_value_max)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-            if (search_keyword.search_desc != "") {
-                if (r.DESC.toLowerCase().indexOf(search_keyword.search_desc.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-            if (search_keyword.search_entrez != "") {
-                if (r.ENTREZ.toLowerCase().indexOf(search_keyword.search_entrez.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
+                if (search_keyword.search_b != "") {
+                    if (r.B <= parseFloat(search_keyword.search_b)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
                 }
 
 
-            }
 
-            if (search_keyword.search_fc_min != "") {
-                if (r.FC >= parseFloat(search_keyword.search_fc_min)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-            }
-            if (search_keyword.search_fc_max != "") {
-                if (r.FC <= parseFloat(search_keyword.search_fc_max)) {
-                    flag = true;
-                } else {
-                    return false;
+                if (search_keyword.search_p_value != "") {
+
+                    if (r["P.Value"] <= parseFloat(search_keyword.search_p_value)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
                 }
 
-            }
-            if (search_keyword.search_probsetid != "") {
-                if (r.probsetID.toLowerCase().indexOf(search_keyword.search_probsetid.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-            }
-            if (search_keyword.search_symbol != "") {
-                if (r.SYMBOL.toLowerCase().indexOf(search_keyword.search_symbol.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
-                }
+                if (search_keyword.search_desc != "") {
+                    if (r.DESC.toLowerCase().indexOf(search_keyword.search_desc.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
 
-            }
-            if (search_keyword.search_t_min != "") {
-                if (r.t >= parseFloat(search_keyword.search_t_min)) {
-                    flag = true;
-                } else {
-                    return false;
+                }
+                if (search_keyword.search_entrez != "") {
+                    if (r.ENTREZ.toLowerCase().indexOf(search_keyword.search_entrez.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+
                 }
 
-            }
-            if (search_keyword.search_t_max != "") {
-                if (r.t <= parseFloat(search_keyword.search_t_max)) {
-                    flag = true;
-                } else {
-                    return false;
+                if (search_keyword.search_fc != "") {
+                    if (Math.abs(r.FC) <= parseFloat(search_keyword.search_fc)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+                if (search_keyword.search_probsetid != "") {
+                    if (r.probsetID.toLowerCase().indexOf(search_keyword.search_probsetid.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+                }
+                if (search_keyword.search_symbol != "") {
+                    if (r.SYMBOL.toLowerCase().indexOf(search_keyword.search_symbol.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
                 }
 
-            }
+                if (search_keyword.search_t != "") {
+                    if (r.t <= parseFloat(search_keyword.search_t)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
 
-            return flag;
-        })
+                }
 
+                return flag;
+            })
+        }
+    }
+
+    // store current filter result into tmp 
+    req.session.deg_tmp = {
+        sorting_order: sorting.order,
+        sorting_name: sorting.name,
+        search_symbol: search_keyword.search_symbol,
+        search_fc: search_keyword.search_fc,
+        search_p_value: search_keyword.search_p_value,
+        search_adj_p_value: search_keyword.search_adj_p_value,
+        search_aveexpr: search_keyword.search_aveexpr,
+        search_accnum: search_keyword.search_accnum,
+        search_desc: search_keyword.search_desc,
+        search_entrez: search_keyword.search_entrez,
+        search_probsetid: search_keyword.search_probsetid,
+        search_t: search_keyword.search_t,
+        search_b: search_keyword.search_b,
+        data: result
     }
 
     // return index

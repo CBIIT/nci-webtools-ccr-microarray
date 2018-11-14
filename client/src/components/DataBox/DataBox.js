@@ -302,9 +302,7 @@ class DataBox extends Component {
                          getDEG={this.props.getDEG}
                          getPathwayUp={this.props.getPathwayUp}
                          getPathwayDown={this.props.getPathwayDown}
-                         changeDeg={this.props.changeDeg} 
-                         changePathways_up={this.props.changePathways_up}
-                         changePathways_down={this.props.changePathways_down}
+                        
                          upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
         } else {
             // controll display fo tags[preplot,postplot,DEG]
