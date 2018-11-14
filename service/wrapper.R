@@ -24,13 +24,7 @@ process = function(){
   # }
   
   # action<-toString(args[5])
-
-  # pDEGs<-toString(args[6])
-
-  # foldDEGs<-toString(args[7])
   
-  # pPathways<-toString(args[8])
-
   # cgroup1<-toString(args[9])
 
   # cgroup2<-toString(args[10])
@@ -118,12 +112,6 @@ process = function(){
     }else{
       listGroups<-toString(args[i])
     }
-    i<-i+1
-    pDEGs<-toString(args[i])
-    i<-i+1
-    foldDEGs<-toString(args[i])
-    i<-i+1
-    pPathways<-toString(args[i])
     i<-i+1
     cgroup1<-toString(args[i])
     i<-i+1

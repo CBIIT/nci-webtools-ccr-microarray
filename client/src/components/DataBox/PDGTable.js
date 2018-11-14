@@ -38,11 +38,7 @@ class PUGTable extends Component {
     }
 
     handleTableChange = (pagination, filters, sorter) => {
-        this.props.changePathways_down({
-            loading: true,
-            data: [],
-            pagination,
-        })
+
         if (!sorter) {
             sorter = {
                 field: "P_Value",
@@ -114,7 +110,7 @@ class PUGTable extends Component {
                         message.success('no rows to aggregate');
 
                     } else {
-                         let pic_link = JSON.parse(result.data).pic_name
+                        let pic_link = JSON.parse(result.data).pic_name
                         var link = "./images/" + this.props.data.projectID + "/" + pic_link
                         this.setState({
                             heapMap: link,
@@ -150,7 +146,7 @@ class PUGTable extends Component {
             {
                 title: 'SOURCE',
                 dataIndex: 'Source',
-              width: "8%",
+                width: "8%",
                 key: 'Source',
                 sorter: true,
             },
@@ -203,7 +199,7 @@ class PUGTable extends Component {
             }, {
                 title: 'NUMBER_HITS',
                 dataIndex: 'Number_Hits',
-               width: "8%",
+                width: "8%",
                 key: 'Number_Hits',
                 sorter: true,
             }, {
@@ -222,7 +218,7 @@ class PUGTable extends Component {
             }, {
                 title: 'TOTAL_NUMBER_GENES',
                 dataIndex: 'Total_Number_Genes',
-              width: "8%",
+                width: "8%",
                 key: 'Total_Number_Genes',
                 sorter: true,
             }
@@ -243,31 +239,16 @@ class PUGTable extends Component {
         const search = (e) => {
 
             var search_PATHWAY_ID = document.getElementById("input_pathway_down_search_PATHWAY_ID").value;
-
             var search_SOURCE = document.getElementById("input_pathway_down_search_SOURCE").value;
-
             var search_DESCRIPTION = document.getElementById("input_pathway_down_search_DESCRIPTION").value;
-
             var search_TYPE = document.getElementById("input_pathway_down_search_TYPE").value;
-
             var search_p_value = document.getElementById("input_pathway_down_search_p_value").value;
-
-
             var search_fdr = document.getElementById("input_pathway_down_search_fdr").value;
-
-
             var search_RATIO = document.getElementById("input_pathway_down_search_RATIO").value;
-
-
             var search_GENE_LIST = document.getElementById("input_pathway_down_search_GENE_LIST").value;
-
             var search_NUMBER_HITS = document.getElementById("input_pathway_down_search_NUMBER_HITS").value;
-
-
             var search_NUMBER_GENES_PATHWAY = document.getElementById("input_pathway_down_search_NUMBER_GENES_PATHWAY").value;
-
             var search_NUMBER_USER_GENES = document.getElementById("input_pathway_down_search_NUMBER_USER_GENES").value;
-
             var search_TOTAL_NUMBER_GENES = document.getElementById("input_pathway_down_search_TOTAL_NUMBER_GENES").value;
 
 
@@ -297,31 +278,21 @@ class PUGTable extends Component {
 
         content = <div>
                          <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
-                            <div className="filter_col" style={{width:"10%"}} ><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_down_search_PATHWAY_ID"/></div>
-                           <div className="filter_col" style={{"paddingLeft": "5px","width":"8%"}}><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_down_search_SOURCE"/></div>
-                           <div className="filter_col" style={{"paddingLeft": "5px",width:"14%"}}><Input onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_down_search_DESCRIPTION"/></div>
-                           <div className="filter_col" style={{"paddingLeft": "5px",width:"8%"}} ><Input onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_down_search_TYPE"/></div>
+                           <div className="filter_col" style={{width:"10%"}} ><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_down_search_PATHWAY_ID"/></div>
+                           <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_down_search_SOURCE"/></div>
+                           <div className="filter_col" style={{width:"14%"}}><Input onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_down_search_DESCRIPTION"/></div>
+                           <div className="filter_col" style={{width:"8%"}} ><Input onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_down_search_TYPE"/></div>
                            <div className="filter_col"  style={{width:"8%"}}><Input onPressEnter={value=>search(value) }    placeholder="P_Value"  id="input_pathway_down_search_p_value"/></div>
                            <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }    placeholder="FDR"  id="input_pathway_down_search_fdr"/></div>
-
-                            <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_down_search_RATIO"/></div>
-
-
-                           <div className="filter_col" style={{"paddingLeft": "5px",width:"12%"}}><Input onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_down_search_GENE_LIST"/></div>
-
-                            <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="NUMBER_HITS"  id="input_pathway_down_search_NUMBER_HITS"/></div>
-                 
+                           <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_down_search_RATIO"/></div>
+                           <div className="filter_col" style={{width:"12%"}}><Input onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_down_search_GENE_LIST"/></div>
+                           <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="NUMBER_HITS"  id="input_pathway_down_search_NUMBER_HITS"/></div>
                            <div className="filter_col"  style={{width:"9%"}}><Input onPressEnter={value=>search(value) }   placeholder="NUMBER_GENES_PATHWAY"  id="input_pathway_down_search_NUMBER_GENES_PATHWAY"/></div>
-
-
                            <div className="filter_col" style={{width:"9%"}}><Input onPressEnter={value=>search(value) }   placeholder="NUMBER_USER_GENES"  id="input_pathway_down_search_NUMBER_USER_GENES"/></div>
-
                            <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="TOTAL_NUMBER_GENES"  id="input_pathway_down_search_TOTAL_NUMBER_GENES"/></div>
-
-
-                    </div>
-                    <div>
-                     <Table 
+                        </div>
+                  <div>
+                  <Table 
                         columns={columns}
                         dataSource={this.props.data.pathways_down.data}
                         pagination={this.props.data.pathways_down.pagination}
