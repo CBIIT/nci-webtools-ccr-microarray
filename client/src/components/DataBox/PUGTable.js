@@ -25,20 +25,21 @@ class PUGTable extends Component {
 
     }
 
- 
+
     componentDidMount() {
         let obj = { ...this.props.data.pathways_up.search_keyword }
-        document.getElementById("input_deg_search_symbol").value = obj.search_symbol;
-        document.getElementById("input_deg_search_fc").value = obj.search_fc;
-        document.getElementById("input_dge_search_p_value").value = obj.search_p_value;
-        document.getElementById("input_deg_search_adj_p_value").value = obj.search_adj_p_value;
-        document.getElementById("input_deg_search_aveexpr").value = obj.search_aveexpr;
-        document.getElementById("input_deg_search_accnum").value = obj.search_accnum;
-        document.getElementById("input_deg_search_desc").value = obj.search_desc;
-        document.getElementById("input_deg_search_entrez").value = obj.search_entrez;
-        document.getElementById("input_deg_search_probsetid").value = obj.search_probsetid;
-        document.getElementById("input_deg_search_t").value = obj.search_t;
-        document.getElementById("input_deg_search_b").value = obj.search_b;
+        document.getElementById("input_pathway_up_search_PATHWAY_ID").value = obj.search_PATHWAY_ID;
+        document.getElementById("input_pathway_up_search_SOURCE").value = obj.search_SOURCE;
+        document.getElementById("input_pathway_up_search_DESCRIPTION").value = obj.search_DESCRIPTION;
+        document.getElementById("input_pathway_up_search_TYPE").value = obj.search_TYPE;
+        document.getElementById("input_pathway_up_search_p_value").value = obj.search_p_value;
+        document.getElementById("input_pathway_up_search_fdr").value = obj.search_fdr;
+        document.getElementById("input_pathway_up_search_RATIO").value = obj.search_RATIO;
+        document.getElementById("input_pathway_up_search_GENE_LIST").value = obj.search_GENE_LIST;
+        document.getElementById("input_pathway_up_search_NUMBER_HITS").value = obj.search_NUMBER_HITS;
+        document.getElementById("input_pathway_up_search_NUMBER_GENES_PATHWAY").value = obj.search_NUMBER_GENES_PATHWAY;
+        document.getElementById("input_pathway_up_search_NUMBER_USER_GENES").value = obj.search_NUMBER_USER_GENES;
+        document.getElementById("input_pathway_up_search_TOTAL_NUMBER_GENES").value = obj.search_TOTAL_NUMBER_GENES;
     }
 
 
@@ -113,7 +114,7 @@ class PUGTable extends Component {
 
                     } else {
                         let pic_link = JSON.parse(result.data).pic_name
-                        
+
                         var link = "./images/" + this.props.data.projectID + "/" + pic_link
                         this.setState({
                             heapMap: link,
@@ -233,7 +234,7 @@ class PUGTable extends Component {
                     name: "P_Value",
                     order: "ascend",
                 },
-                 search_keyword: {
+                search_keyword: {
                     "search_PATHWAY_ID": search_PATHWAY_ID,
                     "search_SOURCE": search_SOURCE,
                     "search_DESCRIPTION": search_DESCRIPTION,

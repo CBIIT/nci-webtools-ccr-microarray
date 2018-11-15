@@ -88,11 +88,16 @@ class Analysis extends Component {
                         pageSize: 20,
 
                     },
+                    sorting: {
+                        name: "P_Value",
+                        order: "ascend",
+
+                    },
                     loading: true,
                     search_keyword: {
                         "search_PATHWAY_ID": "",
                         "search_SOURCE": "",
-                        "search_DESCRIPTION":"",
+                        "search_DESCRIPTION": "",
                         "search_TYPE": "",
                         "search_p_value": "0.05",
                         "search_fdr": "",
@@ -112,6 +117,25 @@ class Analysis extends Component {
 
                     },
                     loading: true,
+                          sorting: {
+                        name: "P_Value",
+                        order: "ascend",
+
+                    },
+                    search_keyword: {
+                        "search_PATHWAY_ID": "",
+                        "search_SOURCE": "",
+                        "search_DESCRIPTION": "",
+                        "search_TYPE": "",
+                        "search_p_value": "0.05",
+                        "search_fdr": "",
+                        "search_RATIO": "",
+                        "search_GENE_LIST": "",
+                        "search_NUMBER_HITS": "",
+                        "search_NUMBER_GENES_PATHWAY": "",
+                        "search_NUMBER_USER_GENES": "",
+                        "search_TOTAL_NUMBER_GENES": "",
+                    }
                 },
                 preplots: {
                     histplotBN: "",
@@ -138,7 +162,7 @@ class Analysis extends Component {
 
 
         this.changessGSEA = this.changessGSEA.bind(this);
-       
+
         this.changeProject = this.changeProject.bind(this);
         this.changeCode = this.changeCode.bind(this);
         this.handleSelectType = this.handleSelectType.bind(this);
@@ -262,44 +286,57 @@ class Analysis extends Component {
     getPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
-        if (!params.hasOwnProperty("search_keyword")) {
+        if (params.search_keyword) {
             params = {
-                page_size: 10,
-                page_number: 1,
+                page_size: params.page_size,
+                page_number: params.page_number,
                 sorting: {
-                    name: "P_Value",
-                    order: "descend",
+                    name: params.sorting.name,
+                    order: params.sorting.order,
                 },
-                pPathways: workflow.pPathways,
-                search_keyword: "",
+                search_keyword: params.search_keyword
             }
-        }
 
-        if (params.search_keyword != "") {
-            //search a key word
-            let keyword = params.search_keyword;
-            params = {
-                page_size: workflow.pathways_up.pagination.pageSize,
-                page_number: workflow.pathways_up.pagination.current,
-                sorting: {
-                    name: "P_Value",
-                    order: "descend",
-                },
-                pPathways: workflow.pPathways,
-                search_keyword: keyword
-            }
-        } else {
-
-            // others
             workflow.pathways_up.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
 
             }
+            workflow.pathways_up.search_keyword = params.search_keyword;
+        } else {
+
+            params = {
+                page_number: workflow.pathways_up.pagination.current,
+                page_size: workflow.pathways_up.pagination.pageSize,
+                sorting: {
+                    name: "P_Value",
+                    order: "ascend",
+
+                },
+                search_keyword: {
+                    "search_PATHWAY_ID": "",
+                    "search_SOURCE": "",
+                    "search_DESCRIPTION": "",
+                    "search_TYPE": "",
+                    "search_p_value": "0.05",
+                    "search_fdr": "",
+                    "search_RATIO": "",
+                    "search_GENE_LIST": "",
+                    "search_NUMBER_HITS": "",
+                    "search_NUMBER_GENES_PATHWAY": "",
+                    "search_NUMBER_USER_GENES": "",
+                    "search_TOTAL_NUMBER_GENES": "",
+                }
+            }
+            workflow.pathways_up.pagination = {
+                current: workflow.pathways_up.pagination.current,
+                pageSize: workflow.pathways_up.pagination.pageSize,
+
+            }
+
         }
 
         workflow.pathways_up.loading = true;
-
         this.setState({ workflow: workflow });
         fetch('./api/analysis/getUpPathWays', {
                 method: "POST",
@@ -325,11 +362,10 @@ class Analysis extends Component {
                         result.data.records[i].key = "pathway_up" + i;
                     }
 
-                    workflow2.pathways_up = {
-                        loading: false,
-                        data: result.data.records,
-                        pagination,
-                    }
+                    workflow2.pathways_up.loading = false;
+                    workflow2.pathways_up.data = result.data.records;
+                    workflow2.pathways_up.pagination = pagination;
+
                     this.setState({ workflow: workflow2 });
 
                 } else {
@@ -339,43 +375,62 @@ class Analysis extends Component {
             }).catch(error => console.log(error));
     }
 
+
+
     getPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-        if (!params.hasOwnProperty("search_keyword")) {
+         // initialize
+        if (params.search_keyword) {
             params = {
-                page_size: 10,
-                page_number: 1,
+                page_size: params.page_size,
+                page_number: params.page_number,
                 sorting: {
-                    name: "P_Value",
-                    order: "descend",
+                    name: params.sorting.name,
+                    order: params.sorting.order,
                 },
-                pPathways: workflow.pPathways,
-                search_keyword: "",
+                search_keyword: params.search_keyword
             }
-        }
 
-
-        if (params.search_keyword != "") {
-            let keyword = params.search_keyword;
-            params = {
-                page_size: workflow.pathways_down.pagination.pageSize,
-                page_number: workflow.pathways_down.pagination.current,
-                sorting: {
-                    name: "P_Value",
-                    order: "descend",
-                },
-                pPathways: workflow.pPathways,
-                search_keyword: keyword
-            }
-        } else {
-
-            // others
             workflow.pathways_down.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
 
             }
+            workflow.pathways_down.search_keyword = params.search_keyword;
+        } else {
+
+            params = {
+                page_number: workflow.pathways_down.pagination.current,
+                page_size: workflow.pathways_down.pagination.pageSize,
+                sorting: {
+                    name: "P_Value",
+                    order: "ascend",
+
+                },
+                search_keyword: {
+                    "search_PATHWAY_ID": "",
+                    "search_SOURCE": "",
+                    "search_DESCRIPTION": "",
+                    "search_TYPE": "",
+                    "search_p_value": "0.05",
+                    "search_fdr": "",
+                    "search_RATIO": "",
+                    "search_GENE_LIST": "",
+                    "search_NUMBER_HITS": "",
+                    "search_NUMBER_GENES_PATHWAY": "",
+                    "search_NUMBER_USER_GENES": "",
+                    "search_TOTAL_NUMBER_GENES": "",
+                }
+            }
+            workflow.pathways_down.pagination = {
+                current: workflow.pathways_down.pagination.current,
+                pageSize: workflow.pathways_down.pagination.pageSize,
+
+            }
+
         }
+
+
         workflow.pathways_down.loading = true;
         this.setState({ workflow: workflow });
         fetch('./api/analysis/getDownPathWays', {
@@ -401,11 +456,10 @@ class Analysis extends Component {
                     for (let i = 0; i < result.data.records.length; i++) {
                         result.data.records[i].key = "pathway_down" + i;
                     }
-                    workflow2.pathways_down = {
-                        loading: false,
-                        data: result.data.records,
-                        pagination,
-                    }
+                    workflow2.pathways_down.loading=false;
+                    workflow2.pathways_down.data=result.data.records;
+                    workflow2.pathways_down.pagination=pagination;
+                    
                     this.setState({ workflow: workflow2 });
                 } else {
                     message.warning('no data');
@@ -1470,6 +1524,25 @@ class Analysis extends Component {
 
             },
             loading: true,
+            sorting: {
+                name: "P_Value",
+                order: "ascend",
+
+            },
+            search_keyword: {
+                "search_PATHWAY_ID": "",
+                "search_SOURCE": "",
+                "search_DESCRIPTION": "",
+                "search_TYPE": "",
+                "search_p_value": "0.05",
+                "search_fdr": "",
+                "search_RATIO": "",
+                "search_GENE_LIST": "",
+                "search_NUMBER_HITS": "",
+                "search_NUMBER_GENES_PATHWAY": "",
+                "search_NUMBER_USER_GENES": "",
+                "search_TOTAL_NUMBER_GENES": "",
+            }
         };
         reqBody.pathways_up = workflow.pathways_up;
         workflow.pathways_down = {
@@ -1480,6 +1553,25 @@ class Analysis extends Component {
 
             },
             loading: true,
+            sorting: {
+                name: "P_Value",
+                order: "ascend",
+
+            },
+            search_keyword: {
+                "search_PATHWAY_ID": "",
+                "search_SOURCE": "",
+                "search_DESCRIPTION": "",
+                "search_TYPE": "",
+                "search_p_value": "0.05",
+                "search_fdr": "",
+                "search_RATIO": "",
+                "search_GENE_LIST": "",
+                "search_NUMBER_HITS": "",
+                "search_NUMBER_GENES_PATHWAY": "",
+                "search_NUMBER_USER_GENES": "",
+                "search_TOTAL_NUMBER_GENES": "",
+            }
         };
         reqBody.pathways_down = workflow.pathways_down;
         workflow.preplots = {
