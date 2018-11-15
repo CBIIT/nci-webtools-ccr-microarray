@@ -644,87 +644,31 @@ router.post('/getDEG', function(req, res) {
 
 
 function getUpPathWays(req) {
-    let threadhold = {}
-    if (!req.body.pPathways) {
-        threadhold = {
-            P_Value: 0.05
-        }
-    } else {
-        threadhold = {
-            P_Value: req.body.pPathways
-        }
-    }
-
-    if (!req.body.sorting) {
-        req.body.sorting = {
-            field: "P_Value",
-            rder: "descend"
-        }
-    }
-
-    if (!req.body.search_keyword) {
-        req.body.search_keyword = ""
-    }
-
-    if (!req.body.page_size) {
-        req.body.page_size = 10
-    }
-
-    if (!req.body.page_number) {
-        req.body.page_number = 1
-    }
 
 
     return getPathWays(
-        req.session.runContrastData.pathways_up,
-        threadhold,
+        req.session.runContrastData.pathways_up, {},
         req.body.sorting,
         req.body.search_keyword,
         req.body.page_size,
-        req.body.page_number)
+        req.body.page_number,
+        req,
+        "pathways_up")
 
 }
 
 
 
 function getDownPathWays(req) {
-    let threadhold = {}
-    if (!req.body.pPathways) {
-        threadhold = {
-            P_Value: 0.05
-        }
-    } else {
-        threadhold = {
-            P_Value: req.body.pPathways
-        }
-    }
-
-    if (!req.body.sorting) {
-        req.body.sorting = {
-            field: "P_Value",
-            rder: "descend"
-        }
-    }
-
-    if (!req.body.search_keyword) {
-        req.body.search_keyword = ""
-    }
-
-    if (!req.body.page_size) {
-        req.body.page_size = 10
-    }
-
-    if (!req.body.page_number) {
-        req.body.page_number = 1
-    }
 
     return getPathWays(
-        req.session.runContrastData.pathways_down,
-        threadhold,
+        req.session.runContrastData.pathways_down, {},
         req.body.sorting,
         req.body.search_keyword,
         req.body.page_size,
-        req.body.page_number)
+        req.body.page_number,
+        req,
+        "pathways_down")
 }
 
 
@@ -800,19 +744,74 @@ function getDEG(req) {
 
 
 
-function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_number) {
-    let result = []
+function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_number, req, type) {
+    
+    let result = data;
+    if (type == "pathways_up") {
+        // store
+        if (req.session.pathway_up_tmp) {
 
-    console.log(sorting, search_keyword, page_size, page_number)
-    var pPathways = threadhold.P_Value;
+            if (req.session.pathway_up_tmp.sorting_order == sorting.order &&
+                req.session.pathway_up_tmp.sorting_name == sorting.name &&
+                req.session.pathway_up_tmp.search_PATHWAY_ID == search_keyword.search_PATHWAY_ID &&
+                req.session.pathway_up_tmp.search_SOURCE == search_keyword.search_SOURCE &&
+                req.session.pathway_up_tmp.search_TYPE == search_keyword.search_TYPE &&
+                req.session.pathway_up_tmp.search_DESCRIPTION == search_keyword.search_DESCRIPTION &&
+                req.session.pathway_up_tmp.search_p_value == search_keyword.search_p_value &&
+                req.session.pathway_up_tmp.search_fdr == search_keyword.search_fdr &&
+                req.session.pathway_up_tmp.search_RATIO == search_keyword.search_RATIO &&
+                req.session.pathway_up_tmp.search_NUMBER_HITS == search_keyword.search_NUMBER_HITS &&
+                req.session.pathway_up_tmp.search_GENE_LIST == search_keyword.search_GENE_LIST &&
+                req.session.pathway_up_tmp.search_NUMBER_GENES_PATHWAY == search_keyword.search_NUMBER_GENES_PATHWAY &&
+                req.session.pathway_up_tmp.search_NUMBER_USER_GENES == search_keyword.search_NUMBER_USER_GENES &&
+                req.session.pathway_up_tmp.search_TOTAL_NUMBER_GENES == search_keyword.search_TOTAL_NUMBER_GENES) {
+
+                // return index
+                let output = {
+                    totalCount: req.session.pathway_up_tmp.data.length,
+                    records: req.session.pathway_up_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+                }
+                return output;
+            }
 
 
-    // filter data
-    for (let j in data) {
-        if (data[j]["P_Value"] < pPathways) {
-            result.push(data[j])
         }
+
     }
+
+
+    if (type == "pathways_down") {
+          // store
+        if (req.session.pathway_down_tmp) {
+
+            if (req.session.pathway_down_tmp.sorting_order == sorting.order &&
+                req.session.pathway_down_tmp.sorting_name == sorting.name &&
+                req.session.pathway_down_tmp.search_PATHWAY_ID == search_keyword.search_PATHWAY_ID &&
+                req.session.pathway_down_tmp.search_SOURCE == search_keyword.search_SOURCE &&
+                req.session.pathway_down_tmp.search_TYPE == search_keyword.search_TYPE &&
+                req.session.pathway_down_tmp.search_DESCRIPTION == search_keyword.search_DESCRIPTION &&
+                req.session.pathway_down_tmp.search_p_value == search_keyword.search_p_value &&
+                req.session.pathway_down_tmp.search_fdr == search_keyword.search_fdr &&
+                req.session.pathway_down_tmp.search_RATIO == search_keyword.search_RATIO &&
+                req.session.pathway_down_tmp.search_NUMBER_HITS == search_keyword.search_NUMBER_HITS &&
+                req.session.pathway_down_tmp.search_GENE_LIST == search_keyword.search_GENE_LIST &&
+                req.session.pathway_down_tmp.search_NUMBER_GENES_PATHWAY == search_keyword.search_NUMBER_GENES_PATHWAY &&
+                req.session.pathway_down_tmp.search_NUMBER_USER_GENES == search_keyword.search_NUMBER_USER_GENES &&
+                req.session.pathway_down_tmp.search_TOTAL_NUMBER_GENES == search_keyword.search_TOTAL_NUMBER_GENES) {
+
+                // return index
+                let output = {
+                    totalCount: req.session.pathway_down_tmp.data.length,
+                    records: req.session.pathway_down_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+                }
+                return output;
+            }
+
+
+        }
+
+    }
+
 
     // sorting
     if (sorting != null) {
@@ -835,135 +834,9 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
     }
     // search
-    if (search_keyword != "") {
-        result = result.filter(function(r) {
+    if (search_keyword) {
 
-
-            var flag = false;
-
-
-            if (search_keyword.search_PATHWAY_ID != "") {
-                if (r.Pathway_ID.toLowerCase().indexOf(search_keyword.search_PATHWAY_ID.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-            if (search_keyword.search_SOURCE != "") {
-                if (r.Source.toLowerCase().indexOf(search_keyword.search_SOURCE.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-            if (search_keyword.search_TYPE != "") {
-                if (r.Description.toLowerCase().indexOf(search_keyword.search_TYPE.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-            if (search_keyword.search_DESCRIPTION != "") {
-                if (r.Type.toLowerCase().indexOf(search_keyword.search_DESCRIPTION.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-            if (search_keyword.search_p_value != "") {
-                if (r["P_Value"] <= parseFloat(search_keyword.search_p_value)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-
-            if (search_keyword.search_fdr != "") {
-                if (r["FDR"] <= parseFloat(search_keyword.search_fdr)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-            if (search_keyword.search_RATIO != "") {
-                if (r["Ratio"] <= parseFloat(search_keyword.search_RATIO)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-            if (search_keyword.search_NUMBER_HITS != "") {
-                if (r["Number_Hits"] <= parseFloat(search_keyword.search_NUMBER_HITS)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-            if (search_keyword.search_GENE_LIST != "") {
-                if (r.Gene_List.toLowerCase().indexOf(search_keyword.search_GENE_LIST.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-            if (search_keyword.search_NUMBER_GENES_PATHWAY != "") {
-                if (r["Number_Genes_Pathway"] <= parseFloat(search_keyword.search_NUMBER_GENES_PATHWAY)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-            if (search_keyword.search_NUMBER_USER_GENES != "") {
-                if (r["Number_User_Genes"] <= parseFloat(search_keyword.search_NUMBER_USER_GENES)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-            if (search_keyword.search_TOTAL_NUMBER_GENES != "") {
-                if (r["Total_Number_Genes"] <= parseFloat(search_keyword.search_TOTAL_NUMBER_GENES)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-            // if search keywords is empty then return the
-            if (search_keyword.search_PATHWAY_ID == "" &&
+        if (!(search_keyword.search_PATHWAY_ID == "" &&
                 search_keyword.search_SOURCE == "" &&
                 search_keyword.search_TYPE == "" &&
                 search_keyword.search_DESCRIPTION == "" &&
@@ -974,16 +847,181 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
                 search_keyword.search_GENE_LIST == "" &&
                 search_keyword.search_NUMBER_GENES_PATHWAY == "" &&
                 search_keyword.search_NUMBER_USER_GENES == "" &&
-                search_keyword.search_TOTAL_NUMBER_GENES == "") {
-                flag = true;
-            }
+                search_keyword.search_TOTAL_NUMBER_GENES == "")) {
 
-            return flag;
+            result = result.filter(function(r) {
 
 
+                var flag = false;
 
-        })
+                if (search_keyword.search_PATHWAY_ID != "") {
+                    if (r.Pathway_ID.toLowerCase().indexOf(search_keyword.search_PATHWAY_ID.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
 
+                }
+
+                if (search_keyword.search_SOURCE != "") {
+                    if (r.Source.toLowerCase().indexOf(search_keyword.search_SOURCE.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+                if (search_keyword.search_TYPE != "") {
+                    if (r.Description.toLowerCase().indexOf(search_keyword.search_TYPE.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+                if (search_keyword.search_DESCRIPTION != "") {
+                    if (r.Type.toLowerCase().indexOf(search_keyword.search_DESCRIPTION.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+
+
+                if (search_keyword.search_p_value != "") {
+                    if (r["P_Value"] <= parseFloat(search_keyword.search_p_value)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+
+
+
+                if (search_keyword.search_fdr != "") {
+                    if (r["FDR"] <= parseFloat(search_keyword.search_fdr)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+
+                if (search_keyword.search_RATIO != "") {
+                    if (r["Ratio"] <= parseFloat(search_keyword.search_RATIO)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+
+                if (search_keyword.search_NUMBER_HITS != "") {
+                    if (r["Number_Hits"] <= parseFloat(search_keyword.search_NUMBER_HITS)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+
+                if (search_keyword.search_GENE_LIST != "") {
+                    if (r.Gene_List.toLowerCase().indexOf(search_keyword.search_GENE_LIST.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+
+
+                if (search_keyword.search_NUMBER_GENES_PATHWAY != "") {
+                    if (r["Number_Genes_Pathway"] <= parseFloat(search_keyword.search_NUMBER_GENES_PATHWAY)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+
+
+                if (search_keyword.search_NUMBER_USER_GENES != "") {
+                    if (r["Number_User_Genes"] <= parseFloat(search_keyword.search_NUMBER_USER_GENES)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+
+                if (search_keyword.search_TOTAL_NUMBER_GENES != "") {
+                    if (r["Total_Number_Genes"] <= parseFloat(search_keyword.search_TOTAL_NUMBER_GENES)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+                return flag;
+            })
+
+        }
+
+    }
+
+     if (type == "pathways_up") {
+        // store current filter result into tmp 
+        req.session.pathway_up_tmp = {
+            sorting_order: sorting.order,
+            sorting_name: sorting.name,
+            search_PATHWAY_ID: search_keyword.search_PATHWAY_ID,
+            search_SOURCE: search_keyword.search_SOURCE,
+            search_TYPE: search_keyword.search_TYPE,
+            search_DESCRIPTION: search_keyword.search_DESCRIPTION,
+            search_p_value: search_keyword.search_p_value,
+            search_fdr: search_keyword.search_fdr,
+            search_RATIO: search_keyword.search_RATIO,
+            search_NUMBER_HITS: search_keyword.search_NUMBER_HITS,
+            search_GENE_LIST: search_keyword.search_GENE_LIST,
+            search_NUMBER_GENES_PATHWAY: search_keyword.search_NUMBER_GENES_PATHWAY,
+            search_NUMBER_USER_GENES: search_keyword.search_NUMBER_USER_GENES,
+            search_TOTAL_NUMBER_GENES: search_keyword.search_TOTAL_NUMBER_GENES,
+            data: result
+        }
+    }
+
+       if (type == "pathways_down") {
+        // store current filter result into tmp 
+        req.session.pathway_down_tmp = {
+            sorting_order: sorting.order,
+            sorting_name: sorting.name,
+            search_PATHWAY_ID: search_keyword.search_PATHWAY_ID,
+            search_SOURCE: search_keyword.search_SOURCE,
+            search_TYPE: search_keyword.search_TYPE,
+            search_DESCRIPTION: search_keyword.search_DESCRIPTION,
+            search_p_value: search_keyword.search_p_value,
+            search_fdr: search_keyword.search_fdr,
+            search_RATIO: search_keyword.search_RATIO,
+            search_NUMBER_HITS: search_keyword.search_NUMBER_HITS,
+            search_GENE_LIST: search_keyword.search_GENE_LIST,
+            search_NUMBER_GENES_PATHWAY: search_keyword.search_NUMBER_GENES_PATHWAY,
+            search_NUMBER_USER_GENES: search_keyword.search_NUMBER_USER_GENES,
+            search_TOTAL_NUMBER_GENES: search_keyword.search_TOTAL_NUMBER_GENES,
+            data: result
+        }
     }
 
     // return index

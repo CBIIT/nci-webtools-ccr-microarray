@@ -34,7 +34,19 @@ class PUGTable extends Component {
 
 
     componentDidMount() {
-        //this.props.getPathwayDown();
+        let obj = { ...this.props.data.pathways_down.search_keyword }
+        document.getElementById("input_pathway_down_search_PATHWAY_ID").value = obj.search_PATHWAY_ID;
+        document.getElementById("input_pathway_down_search_SOURCE").value = obj.search_SOURCE;
+        document.getElementById("input_pathway_down_search_DESCRIPTION").value = obj.search_DESCRIPTION;
+        document.getElementById("input_pathway_down_search_TYPE").value = obj.search_TYPE;
+        document.getElementById("input_pathway_down_search_p_value").value = obj.search_p_value;
+        document.getElementById("input_pathway_down_search_fdr").value = obj.search_fdr;
+        document.getElementById("input_pathway_down_search_RATIO").value = obj.search_RATIO;
+        document.getElementById("input_pathway_down_search_GENE_LIST").value = obj.search_GENE_LIST;
+        document.getElementById("input_pathway_down_search_NUMBER_HITS").value = obj.search_NUMBER_HITS;
+        document.getElementById("input_pathway_down_search_NUMBER_GENES_PATHWAY").value = obj.search_NUMBER_GENES_PATHWAY;
+        document.getElementById("input_pathway_down_search_NUMBER_USER_GENES").value = obj.search_NUMBER_USER_GENES;
+        document.getElementById("input_pathway_down_search_TOTAL_NUMBER_GENES").value = obj.search_TOTAL_NUMBER_GENES;
     }
 
     handleTableChange = (pagination, filters, sorter) => {
@@ -61,8 +73,7 @@ class PUGTable extends Component {
                 name: sorter.field,
                 order: sorter.order,
             },
-            pPathways: this.props.data.pPathways,
-            search_keyword: "",
+            search_keyword: this.props.data.pathways_down.search_keyword,
         });
     }
 
@@ -252,12 +263,13 @@ class PUGTable extends Component {
             var search_TOTAL_NUMBER_GENES = document.getElementById("input_pathway_down_search_TOTAL_NUMBER_GENES").value;
 
 
-            this.props.changePathways_down({
-                loading: true,
-                data: []
-            })
-
             this.props.getPathwayDown({
+                page_size: 20,
+                page_number: 1,
+                sorting: {
+                    name: "P_Value",
+                    order: "ascend",
+                },
                 search_keyword: {
                     "search_PATHWAY_ID": search_PATHWAY_ID,
                     "search_SOURCE": search_SOURCE,
