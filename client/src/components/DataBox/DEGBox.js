@@ -14,9 +14,7 @@ class DEGBox extends Component {
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.state = { content: "No Data" };
     }
-    componentDidMount() {
-        this.props.upateCurrentWorkingTabAndObject("deg")
-    }
+
 
     handleSelectionChange(value) {
         var list = document.getElementsByClassName("deg_plot");
