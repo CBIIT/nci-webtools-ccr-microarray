@@ -79,6 +79,21 @@ class Analysis extends Component {
 
                     },
                     loading: true,
+                    page_size: 20,
+                    page_number: 1,
+                    sorting: {
+                        name: "P.Value",
+                        order: "ascend",
+                    },
+                    search_keyword: {
+                        "name": "",
+                        "search_logFC": "1.5",
+                        "search_Avg_Enrichment_Score": "",
+                        "search_t": "",
+                        "search_p_value": "0.05",
+                        "search_adj_p_value": "",
+                        "search_b": "",
+                    }
                 },
                 pathways_up: {
 
@@ -117,7 +132,7 @@ class Analysis extends Component {
 
                     },
                     loading: true,
-                          sorting: {
+                    sorting: {
                         name: "P_Value",
                         order: "ascend",
 
@@ -200,43 +215,50 @@ class Analysis extends Component {
     getssGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
 
-        if (!params.hasOwnProperty("search_keyword")) {
+        if (params.search_keyword) {
             params = {
-                page_size: 10,
-                page_number: 1,
+                page_size: params.page_size,
+                page_number: params.page_number,
                 sorting: {
-                    name: "P.Value",
-                    order: "descend",
+                    name: params.sorting.name,
+                    order: params.sorting.order,
                 },
-                search_keyword: "",
-                pssGSEA: workflow.pssGSEA,
-                foldssGSEA: workflow.foldssGSEA,
+                search_keyword: params.search_keyword
             }
-        }
 
-
-        if (params.search_keyword != "") {
-            let keyword = params.search_keyword;
-            params = {
-                page_size: workflow.ssGSEA.pagination.pageSize,
-                page_number: workflow.ssGSEA.pagination.current,
-                sorting: {
-                    name: "P.Value",
-                    order: "descend",
-                },
-                search_keyword: keyword,
-                pssGSEA: workflow.pssGSEA,
-                foldssGSEA: workflow.foldssGSEA,
-            }
-        } else {
-            // others
             workflow.ssGSEA.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
 
             }
-        }
+            workflow.ssGSEA.search_keyword = params.search_keyword;
+        } else {
 
+            params = {
+                page_number: workflow.ssGSEA.pagination.current,
+                page_size: workflow.ssGSEA.pagination.pageSize,
+                sorting: {
+                    name: "P.Value",
+                    order: "descend",
+
+                },
+                search_keyword: {
+                    "name": "",
+                    "search_logFC": "1.5",
+                    "search_Avg_Enrichment_Score": "",
+                    "search_t": "",
+                    "search_p_value": "0.05",
+                    "search_adj_p_value": "",
+                    "search_b": "",
+                }
+            }
+            workflow.ssGSEA.pagination = {
+                current: workflow.ssGSEA.pagination.current,
+                pageSize: workflow.ssGSEA.pagination.pageSize,
+
+            }
+
+        }
 
         workflow.ssGSEA.loading = true;
         this.setState({ workflow: workflow });
@@ -265,14 +287,10 @@ class Analysis extends Component {
                         result.data.records[i].key = "GSEA" + i;
                     }
 
-                    workflow2.ssGSEA = {
-                        loading: false,
-                        data: result.data.records,
-                        pagination,
-                    }
+                    workflow2.ssGSEA.loading = false;
+                    workflow2.ssGSEA.data = result.data.records;
+                    workflow2.ssGSEA.pagination = pagination;
                     this.setState({ workflow: workflow2 });
-
-
                 } else {
                     message.warning('no data');
                 }
@@ -379,7 +397,7 @@ class Analysis extends Component {
 
     getPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-         // initialize
+        // initialize
         if (params.search_keyword) {
             params = {
                 page_size: params.page_size,
@@ -456,10 +474,10 @@ class Analysis extends Component {
                     for (let i = 0; i < result.data.records.length; i++) {
                         result.data.records[i].key = "pathway_down" + i;
                     }
-                    workflow2.pathways_down.loading=false;
-                    workflow2.pathways_down.data=result.data.records;
-                    workflow2.pathways_down.pagination=pagination;
-                    
+                    workflow2.pathways_down.loading = false;
+                    workflow2.pathways_down.data = result.data.records;
+                    workflow2.pathways_down.pagination = pagination;
+
                     this.setState({ workflow: workflow2 });
                 } else {
                     message.warning('no data');
@@ -1156,7 +1174,6 @@ class Analysis extends Component {
             workflow.tag_deg_plot_status = e;
         }
 
-
         this.setState({ workflow: workflow });
     }
 
@@ -1513,6 +1530,21 @@ class Analysis extends Component {
 
             },
             loading: true,
+            page_size: 20,
+            page_number: 1,
+            sorting: {
+                name: "P.Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "name": "",
+                "search_logFC": "1.5",
+                "search_Avg_Enrichment_Score": "",
+                "search_t": "",
+                "search_p_value": "0.05",
+                "search_adj_p_value": "",
+                "search_b": "",
+            }
         };
         reqBody.ssGSEA = workflow.ssGSEA;
         workflow.pathways_up = {

@@ -184,7 +184,7 @@ class PUGTable extends Component {
             width: "10%",
             sorter: true,
             render: (text, record, index) => (
-                <div className="single-line" style={{"maxWidth":"12%"}}>
+                <div className="single-line" style={{"maxWidth":"120px"}}>
                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
             ),

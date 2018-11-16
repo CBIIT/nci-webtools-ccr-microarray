@@ -301,7 +301,7 @@ class PUGTable extends Component {
                            <div className="filter_col" style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="HITS"  id="input_pathway_down_search_NUMBER_HITS"/></div>
                            <div className="filter_col"  style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="GENES_PATHWAY"  id="input_pathway_down_search_NUMBER_GENES_PATHWAY"/></div>
                            <div className="filter_col" style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="USER_GENES"  id="input_pathway_down_search_NUMBER_USER_GENES"/></div>
-                           <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder=""  id="input_pathway_down_search_TOTAL_NUMBER_GENES"/></div>
+                           <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="GENES"  id="input_pathway_down_search_TOTAL_NUMBER_GENES"/></div>
                         </div>
                   <div>
                   <Table 

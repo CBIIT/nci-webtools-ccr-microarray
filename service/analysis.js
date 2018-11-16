@@ -676,46 +676,14 @@ function getDownPathWays(req) {
 
 
 function getGSEA(req) {
-    let threadhold = {}
-    if (!req.body.p_value) {
-        threadhold = {
-            pssGSEA: 0.05,
-            foldssGSEA: 1.5
-        }
-    } else {
-        threadhold = {
-            pssGSEA: req.body.pssGSEA,
-            foldssGSEA: req.body.foldssGSEA
-
-        }
-    }
-
-    if (!req.body.sorting) {
-        req.body.sorting = {
-            field: "P.Value",
-            rder: "descend"
-        }
-    }
-
-    if (!req.body.search_keyword) {
-        req.body.search_keyword = ""
-    }
-
-    if (!req.body.page_size) {
-        req.body.page_size = 10
-    }
-
-    if (!req.body.page_number) {
-        req.body.page_number = 1
-    }
 
     return getGSEA_filter(
-        req.session.runContrastData.ssGSEA,
-        threadhold,
+        req.session.runContrastData.ssGSEA, {},
         req.body.sorting,
         req.body.search_keyword,
         req.body.page_size,
-        req.body.page_number)
+        req.body.page_number,
+        req)
 }
 
 
@@ -745,7 +713,7 @@ function getDEG(req) {
 
 
 function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_number, req, type) {
-    
+
     let result = data;
     if (type == "pathways_up") {
         // store
@@ -781,7 +749,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
 
     if (type == "pathways_down") {
-          // store
+        // store
         if (req.session.pathway_down_tmp) {
 
             if (req.session.pathway_down_tmp.sorting_order == sorting.order &&
@@ -982,7 +950,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
     }
 
-     if (type == "pathways_up") {
+    if (type == "pathways_up") {
         // store current filter result into tmp 
         req.session.pathway_up_tmp = {
             sorting_order: sorting.order,
@@ -1003,7 +971,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
         }
     }
 
-       if (type == "pathways_down") {
+    if (type == "pathways_down") {
         // store current filter result into tmp 
         req.session.pathway_down_tmp = {
             sorting_order: sorting.order,
@@ -1034,16 +1002,34 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
 
 
-function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, page_number) {
+function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, page_number,req) {
 
-    let result = []
+    let result = data;
 
-    // filter data
-    for (let j in data) {
-        if (Math.abs(data[j]["logFC"]) < threadhold.foldssGSEA && data[j]["P.Value"] < threadhold.pssGSEA) {
-            result.push(data[j])
+
+    if (req.session.ssGSEA_tmp) {
+
+        if (req.session.ssGSEA_tmp.sorting_order == sorting.order &&
+            req.session.ssGSEA_tmp.sorting_name == sorting.name &&
+            req.session.deg_tmp.name == search_keyword.name &&
+            req.session.deg_tmp.b == search_keyword.search_b &&
+            req.session.deg_tmp.adj_p_value == search_keyword.search_adj_p_value &&
+            req.session.deg_tmp.avg_enrichment_score == search_keyword.search_Avg_Enrichment_Score &&
+            req.session.deg_tmp.p_value ==search_keyword.search_p_value &&
+            req.session.deg_tmp.t == search_keyword.search_t &&
+            req.session.deg_tmp.logFC == search_keyword.search_logFC
+        ) {
+            // return index
+            let output = {
+                totalCount: req.session.ssGSEA_tmp.data.length,
+                records: req.session.ssGSEA_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+            }
+            return output;
         }
+
+
     }
+
 
     // sorting
     if (sorting != null) {
@@ -1067,109 +1053,107 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
     }
 
     // search
-    if (search_keyword != "") {
+    if (search_keyword) {
 
-        result = result.filter(function(r) {
-            var flag = false;
-
-
-            if (search_keyword.name != "") {
-                if (r._row.toLowerCase().indexOf(search_keyword.name.toLowerCase()) != -1) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-            if (search_keyword.search_logFC != "") {
-                if (Math.abs(r["logFC"]) <= parseFloat(search_keyword.search_logFC)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-
-            if (search_keyword.search_t != "") {
-                if (r["t"] <= parseFloat(search_keyword.search_t)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-            if (search_keyword.search_p_value != "") {
-                if (r["P.Value"] <= parseFloat(search_keyword.search_p_value)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-
-
-            if (search_keyword.search_Avg_Enrichment_Score != "") {
-                if (r["Avg.Enrichment.Score"] <= parseFloat(search_keyword.search_Avg_Enrichment_Score)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-
-            if (search_keyword.search_adj_p_value != "") {
-                if (r["adj.P.Val"] <= parseFloat(search_keyword.search_adj_p_value)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-
-            if (search_keyword.search_b != "") {
-                if (r["B"] <= parseFloat(search_keyword.search_b)) {
-                    flag = true;
-                } else {
-                    return false;
-                }
-
-            }
-
-
-            // if search keywords is empty then return the
-            if (search_keyword.name == "" &&
+        if (!(search_keyword.name == "" &&
                 search_keyword.search_b == "" &&
                 search_keyword.search_adj_p_value == "" &&
                 search_keyword.search_Avg_Enrichment_Score == "" &&
                 search_keyword.search_p_value == "" &&
                 search_keyword.search_t == "" &&
                 search_keyword.search_logFC == ""
-            ) {
-                flag = true;
-            }
+            )) {
+
+            result = result.filter(function(r) {
+                var flag = false;
+                if (search_keyword.name != "") {
+                    if (r._row.toLowerCase().indexOf(search_keyword.name.toLowerCase()) != -1) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+                if (search_keyword.search_logFC != "") {
+                    if (Math.abs(r["logFC"]) <= parseFloat(search_keyword.search_logFC)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+
+                if (search_keyword.search_t != "") {
+                    if (r["t"] <= parseFloat(search_keyword.search_t)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+                if (search_keyword.search_p_value != "") {
+                    if (r["P.Value"] <= parseFloat(search_keyword.search_p_value)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+                if (search_keyword.search_Avg_Enrichment_Score != "") {
+                    if (r["Avg.Enrichment.Score"] <= parseFloat(search_keyword.search_Avg_Enrichment_Score)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+                if (search_keyword.search_adj_p_value != "") {
+                    if (r["adj.P.Val"] <= parseFloat(search_keyword.search_adj_p_value)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+
+                if (search_keyword.search_b != "") {
+                    if (r["B"] <= parseFloat(search_keyword.search_b)) {
+                        flag = true;
+                    } else {
+                        return false;
+                    }
+
+                }
+                // if search keywords is empty then return the
+
+                return flag;
+
+
+            })
+
+        }
 
 
 
-            return flag;
 
+    }
 
-        })
-
+    req.session.ssGSEA_tmp = {
+        sorting_order: sorting.order,
+        sorting_name: sorting.name,
+        name: search_keyword.name,
+        b: search_keyword.search_b,
+        adj_p_value: search_keyword.search_adj_p_value,
+        avg_enrichment_score: search_keyword.search_Avg_Enrichment_Score,
+        p_value: search_keyword.search_p_value,
+        t: search_keyword.search_t,
+        logFC: search_keyword.search_logFC,
+        data: result
     }
 
     // return index
