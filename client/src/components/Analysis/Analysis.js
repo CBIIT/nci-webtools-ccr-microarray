@@ -176,9 +176,7 @@ class Analysis extends Component {
         };
 
 
-        this.changessGSEA = this.changessGSEA.bind(this);
 
-        this.changeProject = this.changeProject.bind(this);
         this.changeCode = this.changeCode.bind(this);
         this.handleSelectType = this.handleSelectType.bind(this);
         this.upateCurrentWorkingTabAndObject = this.upateCurrentWorkingTabAndObject.bind(this);
@@ -1162,70 +1160,75 @@ class Analysis extends Component {
     }
 
     upateCurrentWorkingTabAndObject = (e) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.current_working_on_object = e;
+        sessionStorage.setItem("current_working_on_object", e);
         if (e == "getHistplotBN" || e == "getMAplotsBN" || e == "getBoxplotBN" || e == "getRLE" || e == "getNUSE") {
-            workflow.tag_pre_plot_status = e;
+            sessionStorage.setItem("tag_pre_plot_status", e);
         }
         if (e == "getHistplotAN" || e == "getBoxplotAN" || e == "getPCA" || e == "getHistplotBN") {
-            workflow.tag_post_plot_status = e;
+            sessionStorage.setItem("tag_post_plot_status", e);
         }
         if (e == "pathways_up" || e == "pathways_down" || e == "deg") {
-            workflow.tag_deg_plot_status = e;
+            sessionStorage.setItem("tag_deg_plot_status", e);
         }
 
-        this.setState({ workflow: workflow });
     }
 
     upateCurrentWorkingTab = (e) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.current_working_on_tag = e;
-        this.setState({ workflow: workflow });
+        sessionStorage.setItem("current_working_on_tag", e);
     }
 
-    changeProject(event) {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.projectID = event.target.value;
-        this.setState({ workflow: workflow });
-    }
-
-    changePDEGs = (event) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.pDEGs = event.target.value;
-        this.setState({ workflow: workflow });
-    }
-
-    changeFoldDEGs = (event) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.foldDEGs = event.target.value;
-        this.setState({ workflow: workflow });
-    }
-
-    changePathways = (event) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.pPathways = event.target.value;
-        this.setState({ workflow: workflow });
-    }
 
     handleGeneChange = (value) => {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.species = value.split("$")[0];
-        workflow.genSet = value.split("$")[1];
-        this.setState({ workflow: workflow });
+        let reqBody = {};
+        reqBody.projectId = workflow.projectID;
+        reqBody.species = value.split("$")[0];
+        reqBody.genSet = value.split("$")[1];
+        //change button style
+        workflow.uploading = true;
+        workflow.progressing = true;
+        this.setState({
+            workflow: workflow
+        });
+        try {
+            fetch('./api/analysis/getssGSEAWithDiffGenSet', {
+                    method: "POST",
+                    body: JSON.stringify(reqBody),
+                    credentials: "same-origin",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(this.handleErrors)
+                .then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        this.getssGSEA();
+                    } else {
+                        //change button style
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+                        this.setState({
+                            workflow: workflow
+                        });
+
+                        message.error('load data fails.');
+                    }
+                })
+        } catch (err) {
+            //change button style
+            workflow.uploading = false;
+            workflow.progressing = false;
+            this.setState({
+                workflow: workflow
+            });
+
+            message.error('load data fails.');
+
+        }
     }
 
 
-    changeFoldSSGSEA = (event) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.foldssGSEA = event.target.value;
-        this.setState({ workflow: workflow });
-    }
-
-    changePssGSEA = (event) => {
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.pssGSEA = event.target.value;
-        this.setState({ workflow: workflow });
-    }
 
     changeCode(event) {
         let workflow = Object.assign({}, this.state.workflow);
@@ -1641,27 +1644,27 @@ class Analysis extends Component {
                     return response.json();
                 }).then(result => {
                     if (result.status == 200) {
-                        let type = workflow.current_working_on_object;
-                        if (workflow.current_working_on_tag == "" || workflow.current_working_on_tag == "GSM_1") {
+                        let type = sessionStorage.getItem("current_working_on_object");
+                        if (sessionStorage.getItem("current_working_on_tag") == "" || sessionStorage.getItem("current_working_on_tag") == "GSM_1") {
                             // means  I open the GSM
                         }
 
-                        if (workflow.current_working_on_tag == "Pre-normalization_QC_Plots") {
+                        if (sessionStorage.getItem("current_working_on_tag") == "Pre-normalization_QC_Plots") {
                             // means  I open the Pre-plot
-                            type = workflow.tag_pre_plot_status;
+                            type = sessionStorage.getItem("tag_pre_plot_status");
                         }
 
-                        if (workflow.current_working_on_tag == "Post-normalization_Plots") {
+                        if (sessionStorage.getItem("current_working_on_tag") == "Post-normalization_Plots") {
                             // means  I open the Post-plot
-                            type = workflow.tag_post_plot_status;
+                            type = sessionStorage.getItem("tag_post_plot_status");
                         }
 
-                        if (workflow.current_working_on_tag == "DEG-Enrichments_Results") {
+                        if (sessionStorage.getItem("current_working_on_tag") == "DEG-Enrichments_Results") {
                             // means  I open the DEG
-                            type = workflow.tag_deg_plot_status;
+                            type = sessionStorage.getItem("tag_deg_plot_status");
                         }
 
-                        if (workflow.current_working_on_tag == "ssGSEA_Results") {
+                        if (sessionStorage.getItem("current_working_on_tag") == "ssGSEA_Results") {
                             // means  I open the ssGSEA_Results
                             type = "ssGSEA_Results";
                         }
@@ -1986,12 +1989,18 @@ class Analysis extends Component {
                 <div id="tab_analysis" className="hide">
                 <div className="container container-board">
                   <Workflow data={this.state.workflow}
-                        handleGeneChange={this.handleGeneChange} changeFoldSSGSEA={this.changeFoldSSGSEA} changePssGSEA={this.changePssGSEA}
-                        resetWorkFlowProject={this.resetWorkFlowProject}  changeProject={this.changeProject} 
-                        changeCode={this.changeCode} handleSelectType={this.handleSelectType}  
-                        fileRemove={this.fileRemove} beforeUpload={this.beforeUpload} handleUpload={this.handleUpload} 
-                        loadGSE={this.loadGSE} handleGroup1Select={this.handleGroup1Select}  handleGroup2Select={this.handleGroup2Select} 
-                        changePDEGs={this.changePDEGs} changeFoldDEGs={this.changeFoldDEGs} changePathways={this.changePathways} runContrast={this.runContrast}/>
+                       
+                        resetWorkFlowProject={this.resetWorkFlowProject}  
+                        changeCode={this.changeCode} 
+                        handleSelectType={this.handleSelectType}  
+                        fileRemove={this.fileRemove} 
+                        beforeUpload={this.beforeUpload} 
+                        handleUpload={this.handleUpload} 
+                        loadGSE={this.loadGSE} 
+                        handleGroup1Select={this.handleGroup1Select}  
+                        handleGroup2Select={this.handleGroup2Select} 
+                        runContrast={this.runContrast}/>
+
                     <div style={{'paddingTop':'10px',"width":"16px","float":"left"}}>
                       <a  aria-label="panel display controller " id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
                       <a  aria-label="panel display controller" id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
@@ -2003,7 +2012,7 @@ class Analysis extends Component {
                             assignGroup={this.assignGroup} 
                             deleteGroup={this.deleteGroup}
                         
-                           
+                            handleGeneChange={this.handleGeneChange} 
                             changessGSEA={this.changessGSEA}
                             changeLoadingStatus ={this.changeLoadingStatus}
 
