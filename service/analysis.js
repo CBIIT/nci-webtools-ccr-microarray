@@ -171,6 +171,50 @@ router.post('/pathwaysHeapMap', function(req, res) {
 
 
 
+router.post('/getssGSEAWithDiffGenSet', function(req, res) {
+    let data = [];
+    //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
+    data.push("runSSGSEA"); // action
+    data.push(req.body.projectId);
+    //data path
+    data.push(config.uploadPath);
+    data.push(req.body.species);
+    data.push(req.body.genSet);
+    data.push(config.configPath);
+
+    R.execute("wrapper.R", data, function(err, returnValue) {
+        if (err) {
+            res.json({
+                status: 404,
+                msg: returnValue
+            });
+        } else {
+
+
+            let d = returnValue.split("+++ssGSEA+++\"")[1];
+            // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
+            let data_dir = d.substring(0, d.indexOf("{"));
+            list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
+            let ssGSEA = list.ssGSEA.DEss;
+            for (let key in ssGSEA) {
+                ssGSEA = ssGSEA[key];
+            }
+
+
+            // save result into session 
+            if (req.session.runContrastData.ssGSEA) {
+                req.session.runContrastData.ssGSEA = ssGSEA;
+            }
+            res.json({
+                status: 200,
+                data: ""
+            });
+        }
+
+    });
+
+});
+
 
 router.post('/runContrast', function(req, res) {
     let data = [];
@@ -185,20 +229,8 @@ router.post('/runContrast', function(req, res) {
     data.push(req.body.group_2);
     data.push(req.body.species);
     data.push(req.body.genSet);
-    data.push(req.body.pssGSEA);
-    data.push(req.body.foldssGSEA);
     data.push(req.body.source)
     data.push(config.configPath);
-
-    // mock data
-    // if (config.env = "dev") {
-    //     data.push("dev");
-    // } else {
-    //     data.push("prod");
-    // }
-
-
-
 
     logger.info("API:/runContrast ",
         "code:", req.body.code,
@@ -214,68 +246,8 @@ router.post('/runContrast', function(req, res) {
     );
 
 
-
-    // // using session
-    // //if it is action is runContrast , then 
-    // if (req.session.groups &&
-    //     JSON.stringify(req.session.groups) == JSON.stringify(req.body.groups) &&
-    //     req.session.projectId == req.body.projectId &&
-    //     req.session.option == req.body.group_1 + req.body.group_2 + req.body.genSet
-    // ) {
-    //     let return_data = "";
-    //     let type = req.body.targetObject;
-
-    //     return_data = {
-    //         mAplotBN: req.session.runContrastData.listPlots[1],
-    //         mAplotAN: req.session.runContrastData.listPlots[6]
-    //     }
-
-    //     if (type == "deg") {
-    //         return_data = getDEG(req)
-    //     }
-
-    //     if (type == "ssGSEA") {
-    //         return_data = getGSEA(req)
-    //     }
-
-
-    //     if (type == "pathways_up") {
-    //         return_data = getUpPathWays(req)
-    //     }
-
-    //     if (type == "pathways_down") {
-    //         return_data = getDownPathWays(req)
-    //     }
-
-
-    //     if (type == "volcanoPlot") {
-
-    //         return_data = "/volcano.html"
-    //     }
-
-
-    //     if (type == "pathwayHeatMap") {
-
-    //         return_data = "/geneHeatmap.jpg"
-    //     }
-
-    //     logger.info("API:/runContrast ", "Contrast uses session ")
-    //     res.json({
-    //         status: 200,
-    //         data: return_data
-    //     });
-
-    // } else {
-    //    logger.info("API:/runContrast ", "Session is not used, run R script; ")
     R.execute("wrapper.R", data, function(err, returnValue) {
-        // returnValue :
-        //(list(
-        // norm_celfiles=return_plot_data,
-        // diff_expr_genes=diff_expr_genes[1],
-        // pathways=l2p_pathways,
-        // ssGSEA=ssGSEA_results,
-        // ssColumn=ssGSEA_results[["DEss"]][[cons]][0]
-        // ))
+
 
         if (err) {
             res.json({
@@ -322,7 +294,6 @@ router.post('/runContrast', function(req, res) {
         }
     });
 
-    //}
 });
 
 
@@ -1002,7 +973,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
 
 
-function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, page_number,req) {
+function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, page_number, req) {
 
     let result = data;
 
@@ -1011,13 +982,13 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
         if (req.session.ssGSEA_tmp.sorting_order == sorting.order &&
             req.session.ssGSEA_tmp.sorting_name == sorting.name &&
-            req.session.deg_tmp.name == search_keyword.name &&
-            req.session.deg_tmp.b == search_keyword.search_b &&
-            req.session.deg_tmp.adj_p_value == search_keyword.search_adj_p_value &&
-            req.session.deg_tmp.avg_enrichment_score == search_keyword.search_Avg_Enrichment_Score &&
-            req.session.deg_tmp.p_value ==search_keyword.search_p_value &&
-            req.session.deg_tmp.t == search_keyword.search_t &&
-            req.session.deg_tmp.logFC == search_keyword.search_logFC
+            req.session.ssGSEA_tmp.name == search_keyword.name &&
+            req.session.ssGSEA_tmp.b == search_keyword.search_b &&
+            req.session.ssGSEA_tmp.adj_p_value == search_keyword.search_adj_p_value &&
+            req.session.ssGSEA_tmp.avg_enrichment_score == search_keyword.search_Avg_Enrichment_Score &&
+            req.session.ssGSEA_tmp.p_value == search_keyword.search_p_value &&
+            req.session.ssGSEA_tmp.t == search_keyword.search_t &&
+            req.session.ssGSEA_tmp.logFC == search_keyword.search_logFC
         ) {
             // return index
             let output = {

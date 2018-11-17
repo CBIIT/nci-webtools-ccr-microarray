@@ -8,11 +8,7 @@ class Contrast extends Component {
         super(props);
     }
 
-    componentDidMount() {}
 
-    handleGeneChange() {
-
-    }
 
     render() {
 
@@ -26,7 +22,6 @@ class Contrast extends Component {
                 tmp_options.push(v['groups']);
             }
         })
-
 
 
         let button = "";
@@ -63,46 +58,7 @@ class Contrast extends Component {
                  <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled aria-label="Select Group 2">
                    <Option value="-1">---Select Group---</Option>
                 </Select>
-                <div style={{"display":"none"}} >
-                <label className="title">P-value Threshold For DEGs:</label>
-                <Input disabled onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs} aria-label="P-value Threshold For DEGs"/>
-                <label className="title">Fold Change Threshold For DEGs:</label>
-                <Input disabled  onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs} aria-label="Fold Change Threshold For DEGs"/>
-                <label className="title">P-value Threshold For Pathways:</label>
-                <Input disabled onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways} aria-label="P-value Threshold For Pathways"/>
-                <label className="title">Choose Gene Set For ssGSEA:</label>
-                  <Select defaultValue="human$H: Hallmark Gene Sets"  disabled
-                        style={{ width: '100%' }}
-                        onChange={(e) => this.props.handleGeneChange(e)} 
-                        aria-label="Gene Set For ssGSEA"
-                      >
-                        <OptGroup label="Human">
-                          <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
-                          <Option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</Option>
-                          <Option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
-                          <Option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
-                          <Option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
-                          <Option value="human$C5: GO gene sets">C5: GO gene sets</Option>
-                          <Option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
-                          <Option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
-                        </OptGroup>
-                        <OptGroup label="Mouse">
-                          <Option value="mouse$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
-                          <Option value="mouse$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
-                          <Option value="mouse$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
-                          <Option value="mouse$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
-                          <Option value="mouse$C5: GO gene sets">C5: GO gene sets</Option>
-                          <Option value="mouse$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
-                          <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
-                        </OptGroup>
-                      </Select>
-                         <label className="title">P-value Threshold For ssGSEA</label>
-                        <Input disabled onChange={(e) => this.props.changePssGSEA(e)} value={this.props.data.pssGSEA} aria-label="P-value Threshold For ssGSEA"/>
-               
-                         <label className="title">Fold Change Threshold For ssGSEA</label>
-                        <Input disabled onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA} aria-label="Fold Change Threshold For ssGSEA"/>
-                        </div>
-                         <br/><br/>
+                <br/><br/>
                 {button}
               </div>
         } else {
@@ -111,46 +67,7 @@ class Contrast extends Component {
                   {group_1_content}
                   <label className="title">VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_2_content}
-                   <div style={{"display":"none"}} >
-                  <label className="title">P-value Threshold For DEGs:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                  <Input onChange={(e) => this.props.changePDEGs(e)} value={this.props.data.pDEGs} aria-label="P-value Threshold For DEGs"/>
-                  <label className="title">Fold Change Threshold For DEGs:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                  <Input onChange={(e) => this.props.changeFoldDEGs(e)} value={this.props.data.foldDEGs}  aria-label="Fold Change Threshold For DEGs"/>
-                  <label className="title">P-value Threshold For Pathways:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                  <Input onChange={(e) => this.props.changePathways(e)} value={this.props.data.pPathways} aria-label="P-value Threshold For Pathways"/>
-                   <label className="title">Choose Gene Set For ssGSEA:<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                   <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
-                        style={{ width: '100%' }}
-                        onChange={(e) => this.props.handleGeneChange(e)} 
-                        aria-label="Gene Set For ssGSEA"
-                      >
-                        <OptGroup label="Human">
-                          <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
-                          <Option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</Option>
-                          <Option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
-                          <Option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
-                          <Option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
-                          <Option value="human$C5: GO gene sets">C5: GO gene sets</Option>
-                          <Option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
-                          <Option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
-                        </OptGroup>
-                        <OptGroup label="Mouse">
-                          <Option value="mouse$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
-                          <Option value="mouse$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
-                          <Option value="mouse$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
-                          <Option value="mouse$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
-                          <Option value="mouse$C5: GO gene sets">C5: GO gene sets</Option>
-                          <Option value="mouse$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
-                          <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
-                        </OptGroup>
-                      </Select>
-                         <label className="title">P-value Threshold For ssGSEA<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                        <Input onChange={(e) => this.props.changePssGSEA(e)} value={this.props.data.pssGSEA}  aria-label="P-value Threshold For ssGSEA"/>
-               
-                         <label className="title">Fold Change Threshold For ssGSEA<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                        <Input onChange={(e) => this.props.changeFoldSSGSEA(e)} value={this.props.data.foldssGSEA} aria-label="Fold Change Threshold For ssGSEA"/>
-                      </div>
-                      <br/><br/>
+                  <br/><br/>
                   {button}
                 </div>
 
