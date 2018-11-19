@@ -25,10 +25,8 @@ class DataBox extends Component {
 
 
     handleTabChange = (key) => {
-
-
         if (key == "Pre-normalization_QC_Plots") {
-            let type = this.props.data.tag_pre_plot_status;
+            let type = sessionStorage.getItem("tag_pre_plot_status");
             switch (type) {
                 case "":
                     if (this.props.data.preplots.histplotBN == "") {
@@ -69,7 +67,7 @@ class DataBox extends Component {
         }
 
         if (key == "Post-normalization_Plots") {
-            let type = this.props.data.tag_post_plot_status;
+            let type = sessionStorage.getItem("tag_post_plot_status");
             switch (type) {
                 case "":
                     if (this.props.data.postplot.histplotAN == "") {
@@ -107,7 +105,7 @@ class DataBox extends Component {
 
         if (key == "DEG-Enrichments_Results") {
 
-            let type = this.props.data.tag_deg_plot_status;
+            let type = sessionStorage.getItem("tag_deg_plot_status");
             switch (type) {
                 case "":
                     if (this.props.data.diff_expr_genes.data.length == 0) {
@@ -302,21 +300,19 @@ class DataBox extends Component {
                          getDEG={this.props.getDEG}
                          getPathwayUp={this.props.getPathwayUp}
                          getPathwayDown={this.props.getPathwayDown}
-                         changeDeg={this.props.changeDeg} 
-                         changePathways_up={this.props.changePathways_up}
-                         changePathways_down={this.props.changePathways_down}
+                        
                          upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
         } else {
             // controll display fo tags[preplot,postplot,DEG]
             prePlotsBox = (<TabPane tab="Pre-Normalization QC Plots"  disabled key="Pre-normalization_QC_Plots" > </TabPane>);
             postPlotsBox = (<TabPane tab="Post-Normalization Plots" disabled key="Post-normalization_Plots" ></TabPane>);
             degBox = (<TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results" ></TabPane>);
-             ssGSEABox = (<TabPane tab="ssGSEA Results" disabled key="ssGSEA_Results"></TabPane>);
+            ssGSEABox = (<TabPane tab="ssGSEA Results" disabled key="ssGSEA_Results"></TabPane>);
         }
         // control tab  SSGSEA
         if (this.props.data.done_gsea) {
             ssGSEABox = (<TabPane tab="ssGSEA Results" key="ssGSEA_Results">
-                <SSGSEATable  getssGSEA={this.props.getssGSEA} changessGSEA={this.props.changessGSEA} key="ssgseaTable" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
+                <SSGSEATable  getssGSEA={this.props.getssGSEA} handleGeneChange={this.props.handleGeneChange} key="ssgseaTable" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
         }
 
         var selected_gsms = "";

@@ -1,5 +1,6 @@
 library(jsonlite)
 library(mpstr)
+library(limma)
 #source('./service/MAAPster_functions.R')
 
 
@@ -24,13 +25,7 @@ process = function(){
   # }
   
   # action<-toString(args[5])
-
-  # pDEGs<-toString(args[6])
-
-  # foldDEGs<-toString(args[7])
   
-  # pPathways<-toString(args[8])
-
   # cgroup1<-toString(args[9])
 
   # cgroup2<-toString(args[10])
@@ -119,12 +114,6 @@ process = function(){
       listGroups<-toString(args[i])
     }
     i<-i+1
-    pDEGs<-toString(args[i])
-    i<-i+1
-    foldDEGs<-toString(args[i])
-    i<-i+1
-    pPathways<-toString(args[i])
-    i<-i+1
     cgroup1<-toString(args[i])
     i<-i+1
     cgroup2<-toString(args[i])
@@ -133,35 +122,12 @@ process = function(){
     i<-i+1
     geneSet<-toString(args[i])
     i<-i+1
-    pSsGSEA<-toString(args[i])
-    i<-i+1
-    foldSsGSEA<-toString(args[i])
-    i<-i+1
     source<-toString(args[i])
      i<-i+1
     config_path<-toString(args[i])
-      i<-i+1
-    mode<-toString(args[i])
 
 
-    # store mock data
-    # if(mode=="dev"){
-    #   data_repo_path<-"/Users/cheny39/Documents/GitHub/apps/microarray/tmp/test"
-    #   return_plot_data<-readRDS(file = paste0(data_repo_path,"/return_plot_data.rds"))
-    #   l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
-    #   diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
-    #   ssGSEA_results<-readRDS(file = paste0(data_repo_path,"/ssGSEA_results.rds"))
-    #   ssColumn<-readRDS(file = paste0(data_repo_path,"/ssColumn.rds"))
-    #   return(list(
-    #     norm_celfiles=return_plot_data,
-    #     diff_expr_genes=diff_expr_genes,
-    #     pathways=l2p_pathways,
-    #     ssGSEA=ssGSEA_results,
-    #     ssColumn=ssColumn
-    #     ))
-    # }
 
-    #copy configuration files into data repo 
 
 
 
@@ -179,6 +145,8 @@ process = function(){
           celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
        }
     
+    saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
+
     norm_celfiles = QCnorm(celfiles,data_repo_path)
 
     col_name<-pData(celfiles)$title
@@ -226,7 +194,7 @@ process = function(){
     diff_expr_genes = diffExprGenes(norm_celfiles[[11]],cons,projectId,data_repo_path)       #Call function
     # # #### 4) l2p pathway analysis function, takes DEGs and species as input, returns list of up and downregulated pathways for each contrast ####
     # # # Output should dynamically respond to user-selected contrast
-
+    saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
     ## auto correct species
     if(grepl("mouse",celfiles@annotation)){
       species<-"mouse"
@@ -246,9 +214,7 @@ process = function(){
 
     saveRDS(return_plot_data, file = paste0(data_repo_path,"/return_plot_data.rds"))
     saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
-    saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
-    saveRDS(ssGSEA_results, file = paste0(data_repo_path,"/ssGSEA_results.rds"))
-    saveRDS(ssGSEA_results[["DEss"]][[cons]][0], file = paste0(data_repo_path,"/ssColumn.rds"))
+    
 
     return(list(norm_celfiles=return_plot_data,diff_expr_genes=diff_expr_genes[1],pathways=l2p_pathways,ssGSEA=ssGSEA_results,ssColumn=ssGSEA_results[["DEss"]][[cons]][0]))
 
@@ -261,21 +227,19 @@ process = function(){
     # # # Output should dynamically respond to user-selected contrast
     diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
 
-    species<-toString(args[4])
-    geneSet<-toString(args[5])
-    
-    ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId)
+    species<-toString(args[5])
+    geneSet<-toString(args[6])
+    config_path<-toString(args[7])
 
-    return(list(ssGSEA=ssGSEA_results[1]))
+
+    ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
+
+    return(list(ssGSEA=ssGSEA_results))
   }
 
 
   if(action=="pathwaysHeapMap"){
    
-   ##geneHeatmap = function(degs, paths, contrast, upOrDown, pathway_name,saveImageFileName) {
-   #geneHeatmap(diff_expr_genes, l2p_pathways, 'RNA_1-Ctl', 'upregulated_pathways','oxidation-reduction process')   #if GEO
-   #geneHeatmap(diff_expr_genes, l2p_pathways, 'KO_1-Ctl_1', 'upregulated_pathways','oxidation-reduction process')   #if CEL file upload
-
     diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
 
     l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
@@ -289,11 +253,23 @@ process = function(){
     contrast <-c(paste0(cgroup1,"-",cgroup2))
     
     pic_name<-paste0("pathwaysHeapMap",sample(1:99999,1,replace=T),".jpg")
-    saveImageFileName<-paste0(data_repo_path,"/",pic_name)
+    saveImageFileName<-pic_name
+
+    #write.table(saveImageFileName, "saveImageFileName.txt", sep="\t")
 
     #print("test  console")
+    celfiles<-readRDS(file = paste0(data_repo_path,"/celfiles.rds"))
 
-    geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,config_path,data_repo_path)
+    if(grepl("mouse",celfiles@annotation)){
+      species<-"mouse"
+    }
+
+    if(grepl("human",celfiles@annotation)){
+      species<-"human"
+    }
+    write.table(species, "species", sep="\t")
+
+    geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,config_path,data_repo_path,species)
 
     return(list(pic_name=pic_name))
   }

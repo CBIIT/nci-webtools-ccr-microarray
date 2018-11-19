@@ -51,7 +51,7 @@ class GSMData extends Component {
         // loop over them all
         for (var i = 0; i < checkboxes.length; i++) {
             // And stick the checked ones onto an array...
-            let key =parseInt(checkboxes[i].parentElement.parentElement.parentElement.getAttribute("data-row-key"));
+            let key = parseInt(checkboxes[i].parentElement.parentElement.parentElement.getAttribute("data-row-key"));
             if (checkboxes[i].checked) {
 
                 if (!Selections.includes(key)) {
@@ -146,7 +146,7 @@ class GSMData extends Component {
             className = "input-search-gsm"
             onSearch = { value => this.setState({ term: value }) }
             /></div>
-            <div> <Table rowSelection = { rowSelection } columns = { columns } dataSource = { data.filter(searchFilter, this) }
+            <div> <Table    pagination={{current: 1, pageSize: 20}}  rowSelection = { rowSelection } columns = { columns } dataSource = { data.filter(searchFilter, this) }
             /></div>
             </div>
 

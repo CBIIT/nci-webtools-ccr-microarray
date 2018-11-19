@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Select, message, Input } from 'antd';
-const Search = Input.Search;
-const Option = Select.Option;
-
+const { Option, OptGroup } = Select;
 
 
 class SSGSEATable extends Component {
@@ -14,21 +12,23 @@ class SSGSEATable extends Component {
 
     }
 
-
     componentDidMount() {
-        this.props.getssGSEA();
-        this.props.upateCurrentWorkingTabAndObject("ssGSEA")
+        let obj = { ...this.props.data.ssGSEA.search_keyword }
+        document.getElementById("input_ssg_name").value = obj.name;
+        document.getElementById("input_ssg_search_logFC").value = obj.search_logFC;
+        document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = obj.search_Avg_Enrichment_Score;
+        document.getElementById("input_ssg_search_t").value = obj.search_t;
+        document.getElementById("input_ssg_search_p_value").value = obj.search_p_value;
+        document.getElementById("input_ssg_search_adj_p_value").value = obj.search_adj_p_value;
+        document.getElementById("input_ssg_search_b").value = obj.search_b;
     }
 
 
 
 
+
     handleTableChange = (pagination, filters, sorter) => {
-        this.props.changessGSEA({
-            loading: true,
-            data: [],
-            pagination,
-        })
+
         if (!sorter) {
             sorter = {
                 field: "P.Value",
@@ -51,16 +51,12 @@ class SSGSEATable extends Component {
                 name: sorter.field,
                 order: sorter.order,
             },
-            pPathways: this.props.data.pPathways,
-            search_keyword: "",
-            pssGSEA: this.props.data.pssGSEA,
-            foldssGSEA: this.props.data.foldssGSEA,
+            search_keyword: this.props.data.ssGSEA.search_keyword,
         });
     }
 
 
     handleSelectionChange(value) {
-
         if (value == "ss_tag1") {
             this.props.upateCurrentWorkingTabAndObject("ssGSEA")
         }
@@ -91,76 +87,59 @@ class SSGSEATable extends Component {
             title: 'logFC',
             dataIndex: 'logFC',
             sorter: true,
-            width: "11%"
+            width: "10%"
         }, {
             title: 'Avg.Enrichment.Score',
             dataIndex: 'Avg.Enrichment.Score',
             sorter: true,
-            width: "15%"
+            width: "20%"
         }, {
             title: 't',
             dataIndex: 't',
             sorter: true,
-            width: "11%"
+            width: "10%"
         }, {
             title: 'P VALUE',
             dataIndex: 'P.Value',
             sorter: true,
-            width: "11%"
+            width: "10%"
         }, {
             title: 'adj.P.Val',
             dataIndex: 'adj.P.Val',
             sorter: true,
-            width: "11%"
+            width: "10%"
         }, {
             title: 'B',
             dataIndex: 'B',
             sorter: true,
-            width: "11%"
+            width: "10%"
         }, ];
 
 
-
-
-
         const search = (e) => {
-
-
-            this.props.changessGSEA({
-                loading: true,
-                data: []
-            })
-
-
             var search_name = document.getElementById("input_ssg_name").value;
-            var search_logFC_min = document.getElementById("input_ssg_search_logFC_min").value;
-            var search_logFC_max = document.getElementById("input_ssg_search_logFC_max").value;
-            var search_Avg_Enrichment_Score_min = document.getElementById("input_ssg_search_Avg_Enrichment_Score_min").value;
-            var search_Avg_Enrichment_Score_max = document.getElementById("input_ssg_search_Avg_Enrichment_Score_max").value;
-            var search_t_min = document.getElementById("input_ssg_search_t_min").value;
-            var search_t_max = document.getElementById("input_ssg_search_t_max").value;
-            var search_p_value_min = document.getElementById("input_ssg_search_p_value_min").value;
-            var search_p_value_max = document.getElementById("input_ssg_search_p_value_max").value;
-            var search_adj_p_value_min = document.getElementById("input_ssg_search_adj_p_value_min").value;
-            var search_adj_p_value_max = document.getElementById("input_ssg_search_adj_p_value_max").value;
-            var search_b_min = document.getElementById("input_ssg_search_b_min").value;
-            var search_b_max = document.getElementById("input_ssg_search_b_max").value;
+            var search_logFC = document.getElementById("input_ssg_search_logFC").value;
+            var search_Avg_Enrichment_Score = document.getElementById("input_ssg_search_Avg_Enrichment_Score").value;
+            var search_t = document.getElementById("input_ssg_search_t").value;
+            var search_p_value = document.getElementById("input_ssg_search_p_value").value;
+            var search_adj_p_value = document.getElementById("input_ssg_search_adj_p_value").value;
+            var search_b = document.getElementById("input_ssg_search_b").value;
 
             this.props.getssGSEA({
+                page_size: 20,
+                page_number: 1,
+                sorting: {
+                    name: "P.Value",
+                    order: "ascend",
+                },
                 search_keyword: {
                     "name": search_name,
-                    "search_logFC_min": search_logFC_min,
-                    "search_logFC_max": search_logFC_max,
-                    "search_Avg_Enrichment_Score_min": search_Avg_Enrichment_Score_min,
-                    "search_Avg_Enrichment_Score_max": search_Avg_Enrichment_Score_max,
-                    "search_t_min": search_t_min,
-                    "search_t_max": search_t_max,
-                    "search_p_value_min": search_p_value_min,
-                    "search_p_value_max": search_p_value_max,
-                    "search_adj_p_value_min": search_adj_p_value_min,
-                    "search_adj_p_value_max": search_adj_p_value_max,
-                    "search_b_min": search_b_min,
-                    "search_b_max": search_b_max,
+                    "search_logFC": search_logFC,
+                    "search_Avg_Enrichment_Score": search_Avg_Enrichment_Score,
+                    "search_t": search_t,
+                    "search_p_value": search_p_value,
+                    "search_adj_p_value": search_adj_p_value,
+                    "search_b": search_b,
                 }
             })
         }
@@ -169,27 +148,47 @@ class SSGSEATable extends Component {
         var link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
         let tabs = [<div id="ss_tag1" className="ss_plot">
-                        <div><Search  placeholder="input search text" className="input-search-for-ssgsea"  onSearch={value => this.search(value)} /></div>
+                        <div>     <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
+                        style={{ width: '100%' }}
+                        onChange={(e) => this.props.handleGeneChange(e)} 
+                        aria-label="Gene Set For ssGSEA"
+                      >
+                        <OptGroup label="Human">
+                          <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
+                          <Option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</Option>
+                          <Option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
+                          <Option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
+                          <Option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
+                          <Option value="human$C5: GO gene sets">C5: GO gene sets</Option>
+                          <Option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
+                          <Option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
+                        </OptGroup>
+                        <OptGroup label="Mouse">
+                          <Option value="mouse$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
+                          <Option value="mouse$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
+                          <Option value="mouse$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
+                          <Option value="mouse$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
+                          <Option value="mouse$C5: GO gene sets">C5: GO gene sets</Option>
+                          <Option value="mouse$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
+                          <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
+                        </OptGroup>
+                      </Select></div>
                          <div>
                           <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
 
-                            <div className="filter_col" style={{width:"30%"}} ><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_ssg_name"/></div>
-                            <div className="filter_col"  style={{width:"5%"}}><Input onPressEnter={value=>search(value) }    placeholder="min"  id="input_ssg_search_logFC_min"/></div>
-                            <div className="filter_col"  style={{width:"5%"}}><Input onPressEnter={value=>search(value) }    placeholder="max"  id="input_ssg_search_logFC_max"/></div>
-                            <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }    placeholder="min"  id="input_ssg_search_Avg_Enrichment_Score_min"/></div>
-                            <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }    placeholder="max"  id="input_ssg_search_Avg_Enrichment_Score_max"/></div>
+                            <div className="filter_col" style={{width:"29%"}} ><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></div>
+                            
+                            <div className="filter_col"  style={{width:"9%"}}><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></div>
+                            
+                            <div className="filter_col" style={{width:"19%"}}><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></div>
 
-                            <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_t_min"/></div>
-                            <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="max"  id="input_ssg_search_t_max"/></div>
+                            <div className="filter_col" style={{width:"10%"}}><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></div>
 
-                            <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_p_value_min"/></div>
-                            <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="max"  id="input_ssg_search_p_value_max"/></div>
+                            <div className="filter_col" style={{width:"10%"}}><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></div>
 
-                             <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_adj_p_value_min"/></div>
-                            <div className="filter_col" style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="max"  id="input_ssg_search_adj_p_value_max"/></div>
+                             <div className="filter_col" style={{width:"10%"}}><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></div>
                  
-                            <div className="filter_col"  style={{width:"5%"}}><Input onPressEnter={value=>search(value) }   placeholder="min"  id="input_ssg_search_b_min"/></div>
-                            <div className="filter_col"  style={{width:"5%"}}><Input onPressEnter={value=>search(value) }  placeholder="max"  id="input_ssg_search_b_max"/></div>
+                            <div className="filter_col"  style={{width:"10%"}}><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></div>
 
                     </div>
                             <Table 
