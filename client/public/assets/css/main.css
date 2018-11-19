@@ -106,9 +106,6 @@ label{
 }
 
 
-
-
-
 .nav-help{
   color:white;
   float:right;
@@ -120,11 +117,15 @@ label{
 }
 .content{
   background: #eee;
+   height:calc(100% - 365px);
+  min-height: 790px;
 }
 .container{
   max-width: 1440px;
   width:100%;
   padding-top: 10px;
+  height: 100%;
+ 
 }
 .container-board{
   background: rgb(255, 255, 255);
@@ -147,6 +148,7 @@ label{
   border:1px solid #eee;
   border-radius: 0px;
   min-height: 640px;
+  height: 100%;
 }
 .block{
   border:1px solid #eee;
@@ -372,21 +374,6 @@ label{
   margin: 0px 0px; 
 }
 
-@media (max-width: 1440px){
-   #tab_about{
-      margin-left: 15px;
-  }
-
-  #tab_help{
-      margin-left: 15px;
-  }
-  #tab_analysis{
-      margin-left: 15px;
-  }
-}
-
-
-
 .ant-modal-footer {
     padding: 10px 21px;
 
@@ -398,7 +385,6 @@ label{
 
 
 .ant-tabs:not(.ant-tabs-vertical) > .ant-tabs-content > .ant-tabs-tabpane {
-
       min-height: 716px;
 }
 
@@ -424,4 +410,11 @@ label{
 
 .ant-table-column-sorter {
     margin-left: 2px !important;
+  }
+
+
+  .ant-tabs:not(.ant-tabs-vertical) > .ant-tabs-content > .ant-tabs-tabpane {
+    height:calc(100% - 40px);
+    overflow-y: scroll;
+    overflow-x: hidden;
   }

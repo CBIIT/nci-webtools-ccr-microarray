@@ -47,12 +47,12 @@ class Analysis extends Component {
                     data: [],
                     pagination: {
                         current: 1,
-                        pageSize: 20,
+                        pageSize: 15,
 
                     },
                     loading: true,
                     page_number: 1,
-                    page_size: 20,
+                    page_size: 15,
                     sorting: {
                         name: "P.Value",
                         order: "ascend",
@@ -75,11 +75,11 @@ class Analysis extends Component {
                     data: [],
                     pagination: {
                         current: 1,
-                        pageSize: 20,
+                        pageSize: 15,
 
                     },
                     loading: true,
-                    page_size: 20,
+                    page_size: 15,
                     page_number: 1,
                     sorting: {
                         name: "P.Value",
@@ -100,7 +100,7 @@ class Analysis extends Component {
                     data: [],
                     pagination: {
                         current: 1,
-                        pageSize: 20,
+                        pageSize: 15,
 
                     },
                     sorting: {
@@ -128,7 +128,7 @@ class Analysis extends Component {
                     data: [],
                     pagination: {
                         current: 1,
-                        pageSize: 20,
+                        pageSize: 15,
 
                     },
                     loading: true,
@@ -555,7 +555,7 @@ class Analysis extends Component {
                 let workflow2 = Object.assign({}, this.state.workflow);
                 if (result.status == 200) {
 
-                    const pagination = { ...workflow.diff_expr_genes.pagination };
+                    const pagination = { ...workflow2.diff_expr_genes.pagination };
                     // Read total count from server 
                     // pagination.total = data.totalCount;
                     pagination.total = result.data.totalCount;
@@ -571,6 +571,19 @@ class Analysis extends Component {
                 } else {
                     message.warning('no data');
                 }
+
+
+                document.getElementById("input_deg_search_symbol").value = workflow2.diff_expr_genes.search_keyword.search_symbol;
+                document.getElementById("input_deg_search_fc").value = workflow2.diff_expr_genes.search_keyword.search_fc;
+                document.getElementById("input_dge_search_p_value").value = workflow2.diff_expr_genes.search_keyword.search_p_value;
+                document.getElementById("input_deg_search_adj_p_value").value = workflow2.diff_expr_genes.search_keyword.search_adj_p_value;
+                document.getElementById("input_deg_search_aveexpr").value = workflow2.diff_expr_genes.search_keyword.search_aveexpr;
+                document.getElementById("input_deg_search_accnum").value = workflow2.diff_expr_genes.search_keyword.search_accnum;
+                document.getElementById("input_deg_search_desc").value = workflow2.diff_expr_genes.search_keyword.search_desc;
+                document.getElementById("input_deg_search_entrez").value = workflow2.diff_expr_genes.search_keyword.search_entrez;
+                document.getElementById("input_deg_search_probsetid").value = workflow2.diff_expr_genes.search_keyword.search_probsetid;
+                document.getElementById("input_deg_search_t").value = workflow2.diff_expr_genes.search_keyword.search_t;
+                document.getElementById("input_deg_search_b").value = workflow2.diff_expr_genes.search_keyword.search_b;
 
             }).catch(error => console.log(error));
     }
@@ -1500,12 +1513,12 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 15,
 
             },
             loading: true,
             page_number: 1,
-            page_size: 20,
+            page_size: 15,
             sorting: {
                 name: "P.Value",
                 order: "ascend",
@@ -1529,11 +1542,11 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 15,
 
             },
             loading: true,
-            page_size: 20,
+            page_size: 15,
             page_number: 1,
             sorting: {
                 name: "P.Value",
@@ -1555,7 +1568,7 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 15,
 
             },
             loading: true,
@@ -1584,7 +1597,7 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 15,
 
             },
             loading: true,
