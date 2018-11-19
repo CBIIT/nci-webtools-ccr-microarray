@@ -117,14 +117,14 @@ label{
 }
 .content{
   background: #eee;
-   height:calc(100% - 365px);
+
   min-height: 790px;
 }
 .container{
   max-width: 1440px;
   width:100%;
   padding-top: 10px;
-  height: 100%;
+
  
 }
 .container-board{
@@ -148,7 +148,7 @@ label{
   border:1px solid #eee;
   border-radius: 0px;
   min-height: 640px;
-  height: 100%;
+
 }
 .block{
   border:1px solid #eee;
@@ -412,9 +412,21 @@ label{
     margin-left: 2px !important;
   }
 
+#tab_about .container{
+  min-height: 831px;
+    height:calc(100% - 365px);
+}
 
   .ant-tabs:not(.ant-tabs-vertical) > .ant-tabs-content > .ant-tabs-tabpane {
-    height:calc(100% - 40px);
-    overflow-y: scroll;
+    height:calc(100% - 430px);
+    min-height:763px;
+    overflow-y: auto;
     overflow-x: hidden;
+  }
+
+  #ssGSEA_genset{
+    position: absolute;
+    left: 260px;
+    top: 48px;
+    width: 380px;
   }
