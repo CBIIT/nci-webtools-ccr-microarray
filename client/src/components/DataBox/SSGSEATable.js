@@ -134,7 +134,7 @@ class SSGSEATable extends Component {
 
         let tabs = [<div id="ss_tag1" className="ss_plot">
                         <div>     <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
-                        style={{ width: '100%' }}
+                        id="ssGSEA_genset"
                         onChange={(e) => this.props.handleGeneChange(e)} 
                         aria-label="Gene Set For ssGSEA"
                       >
