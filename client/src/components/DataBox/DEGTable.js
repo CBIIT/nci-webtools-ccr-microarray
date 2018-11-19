@@ -12,20 +12,7 @@ class DEGTable extends Component {
         this.handleTableChange = this.handleTableChange.bind(this);
     }
 
-    componentDidMount() {
-        let obj = { ...this.props.data.diff_expr_genes.search_keyword }
-        document.getElementById("input_deg_search_symbol").value = obj.search_symbol;
-        document.getElementById("input_deg_search_fc").value = obj.search_fc;
-        document.getElementById("input_dge_search_p_value").value = obj.search_p_value;
-        document.getElementById("input_deg_search_adj_p_value").value = obj.search_adj_p_value;
-        document.getElementById("input_deg_search_aveexpr").value = obj.search_aveexpr;
-        document.getElementById("input_deg_search_accnum").value = obj.search_accnum;
-        document.getElementById("input_deg_search_desc").value = obj.search_desc;
-        document.getElementById("input_deg_search_entrez").value = obj.search_entrez;
-        document.getElementById("input_deg_search_probsetid").value = obj.search_probsetid;
-        document.getElementById("input_deg_search_t").value = obj.search_t;
-        document.getElementById("input_deg_search_b").value = obj.search_b;
-    }
+
 
     handleTableChange = (pagination, filters, sorter) => {
 
