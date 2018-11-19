@@ -293,6 +293,17 @@ class Analysis extends Component {
                     message.warning('no data');
                 }
 
+
+
+                document.getElementById("input_ssg_name").value = workflow2.ssGSEA.search_keyword.name;
+                document.getElementById("input_ssg_search_logFC").value = workflow2.ssGSEA.search_keyword.search_logFC;
+                document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = workflow2.ssGSEA.search_keyword.search_Avg_Enrichment_Score;
+                document.getElementById("input_ssg_search_t").value = workflow2.ssGSEA.search_keyword.search_t;
+                document.getElementById("input_ssg_search_p_value").value = workflow2.ssGSEA.search_keyword.search_p_value;
+                document.getElementById("input_ssg_search_adj_p_value").value = workflow2.ssGSEA.search_keyword.search_adj_p_value;
+                document.getElementById("input_ssg_search_b").value = workflow2.ssGSEA.search_keyword.search_b;
+
+
             }).catch(error => console.log(error));
     }
 
@@ -388,6 +399,22 @@ class Analysis extends Component {
                     message.warning('no data');
                 }
 
+
+
+                document.getElementById("input_pathway_up_search_PATHWAY_ID").value = workflow2.pathways_up.search_keyword.search_PATHWAY_ID;
+                document.getElementById("input_pathway_up_search_SOURCE").value = workflow2.pathways_up.search_keyword.search_SOURCE;
+                document.getElementById("input_pathway_up_search_DESCRIPTION").value = workflow2.pathways_up.search_keyword.search_DESCRIPTION;
+                document.getElementById("input_pathway_up_search_TYPE").value = workflow2.pathways_up.search_keyword.search_TYPE;
+                document.getElementById("input_pathway_up_search_p_value").value = workflow.pathways_up.search_keyword.search_p_value;
+                document.getElementById("input_pathway_up_search_fdr").value = workflow2.pathways_up.search_keyword.search_fdr;
+                document.getElementById("input_pathway_up_search_RATIO").value = workflow2.pathways_up.search_keyword.search_RATIO;
+                document.getElementById("input_pathway_up_search_GENE_LIST").value = workflow2.pathways_up.search_keyword.search_GENE_LIST;
+                document.getElementById("input_pathway_up_search_NUMBER_HITS").value = workflow2.pathways_up.search_keyword.search_NUMBER_HITS;
+                document.getElementById("input_pathway_up_search_NUMBER_GENES_PATHWAY").value = workflow2.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY;
+                document.getElementById("input_pathway_up_search_NUMBER_USER_GENES").value = workflow2.pathways_up.search_keyword.search_NUMBER_USER_GENES;
+                document.getElementById("input_pathway_up_search_TOTAL_NUMBER_GENES").value = workflow2.load.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES;
+
+
             }).catch(error => console.log(error));
     }
 
@@ -480,6 +507,20 @@ class Analysis extends Component {
                 } else {
                     message.warning('no data');
                 }
+
+                document.getElementById("input_pathway_down_search_PATHWAY_ID").value = workflow2.pathways_down.search_keyword.search_PATHWAY_ID;
+                document.getElementById("input_pathway_down_search_SOURCE").value = workflow2.pathways_down.search_keyword.search_SOURCE;
+                document.getElementById("input_pathway_down_search_DESCRIPTION").value = workflow2.pathways_down.search_keyword.search_DESCRIPTION;
+                document.getElementById("input_pathway_down_search_TYPE").value = workflow2.pathways_down.search_keyword.search_TYPE;
+                document.getElementById("input_pathway_down_search_p_value").value = workflow2.pathways_down.search_keyword.search_p_value;
+                document.getElementById("input_pathway_down_search_fdr").value = workflow2.pathways_down.search_keyword.search_fdr;
+                document.getElementById("input_pathway_down_search_RATIO").value = workflow2.pathways_down.search_keyword.search_RATIO;
+                document.getElementById("input_pathway_down_search_GENE_LIST").value = workflow2.pathways_down.search_keyword.search_GENE_LIST;
+                document.getElementById("input_pathway_down_search_NUMBER_HITS").value = workflow2.pathways_down.search_keyword.search_NUMBER_HITS;
+                document.getElementById("input_pathway_down_search_NUMBER_GENES_PATHWAY").value = workflow2.pathways_down.search_keyword.search_NUMBER_GENES_PATHWAY;
+                document.getElementById("input_pathway_down_search_NUMBER_USER_GENES").value = workflow2.pathways_down.search_keyword.search_NUMBER_USER_GENES;
+                document.getElementById("input_pathway_down_search_TOTAL_NUMBER_GENES").value = workflow2.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES;
+
 
             }).catch(error => console.log(error));
     }
@@ -801,7 +842,7 @@ class Analysis extends Component {
                                 let maplot_style = {
                                     'height': 'auto',
                                     'maxHeight': '100%',
-                                    'overflow': 'scroll'
+                                    'overflow': 'auto'
                                 };
 
 
@@ -1198,8 +1239,9 @@ class Analysis extends Component {
         reqBody.species = value.split("$")[0];
         reqBody.genSet = value.split("$")[1];
         //change button style
-        workflow.uploading = true;
+      
         workflow.progressing = true;
+        workflow.loading_info = "Running Analysis...";
         this.setState({
             workflow: workflow
         });
@@ -1215,22 +1257,22 @@ class Analysis extends Component {
                 .then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
-                    if (result.status == 200) {
-                        this.getssGSEA();
-                    } else {
-                        //change button style
-                        workflow.uploading = false;
                         workflow.progressing = false;
                         this.setState({
                             workflow: workflow
                         });
+
+                    if (result.status == 200) {
+                        this.getssGSEA();
+                    } else {
+                        //change button style
+                       
 
                         message.error('load data fails.');
                     }
                 })
         } catch (err) {
             //change button style
-            workflow.uploading = false;
             workflow.progressing = false;
             this.setState({
                 workflow: workflow
@@ -1657,6 +1699,8 @@ class Analysis extends Component {
                     return response.json();
                 }).then(result => {
                     if (result.status == 200) {
+
+
                         let type = sessionStorage.getItem("current_working_on_object");
                         if (sessionStorage.getItem("current_working_on_tag") == "" || sessionStorage.getItem("current_working_on_tag") == "GSM_1") {
                             // means  I open the GSM
@@ -1770,6 +1814,8 @@ class Analysis extends Component {
                             workflow: workflow
                         });
                         message.success('Plots loaded successfully.');
+
+                        this.hideWorkFlow();
                     } else {
 
                         workflow.progressing = false;

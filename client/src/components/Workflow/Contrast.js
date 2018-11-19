@@ -30,7 +30,7 @@ class Contrast extends Component {
               <span>Run Contrast</span>
             </Button>);
         } else {
-            button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} disabled >
+            button = (<Button className="ant-btn upload-start ant-btn-default" onClick={this.props.runContrast} disabled >
               <span>Run Contrast</span>
             </Button>);
         }
