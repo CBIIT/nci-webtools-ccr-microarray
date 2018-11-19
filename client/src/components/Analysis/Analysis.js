@@ -1239,8 +1239,9 @@ class Analysis extends Component {
         reqBody.species = value.split("$")[0];
         reqBody.genSet = value.split("$")[1];
         //change button style
-        workflow.uploading = true;
+      
         workflow.progressing = true;
+        workflow.loading_info = "Running Analysis...";
         this.setState({
             workflow: workflow
         });
@@ -1256,22 +1257,22 @@ class Analysis extends Component {
                 .then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
-                    if (result.status == 200) {
-                        this.getssGSEA();
-                    } else {
-                        //change button style
-                        workflow.uploading = false;
                         workflow.progressing = false;
                         this.setState({
                             workflow: workflow
                         });
+
+                    if (result.status == 200) {
+                        this.getssGSEA();
+                    } else {
+                        //change button style
+                       
 
                         message.error('load data fails.');
                     }
                 })
         } catch (err) {
             //change button style
-            workflow.uploading = false;
             workflow.progressing = false;
             this.setState({
                 workflow: workflow
