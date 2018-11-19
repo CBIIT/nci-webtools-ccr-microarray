@@ -12,21 +12,6 @@ class SSGSEATable extends Component {
 
     }
 
-    componentDidMount() {
-        let obj = { ...this.props.data.ssGSEA.search_keyword }
-        document.getElementById("input_ssg_name").value = obj.name;
-        document.getElementById("input_ssg_search_logFC").value = obj.search_logFC;
-        document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = obj.search_Avg_Enrichment_Score;
-        document.getElementById("input_ssg_search_t").value = obj.search_t;
-        document.getElementById("input_ssg_search_p_value").value = obj.search_p_value;
-        document.getElementById("input_ssg_search_adj_p_value").value = obj.search_adj_p_value;
-        document.getElementById("input_ssg_search_b").value = obj.search_b;
-    }
-
-
-
-
-
     handleTableChange = (pagination, filters, sorter) => {
 
         if (!sorter) {
