@@ -253,7 +253,9 @@ process = function(){
     contrast <-c(paste0(cgroup1,"-",cgroup2))
     
     pic_name<-paste0("pathwaysHeapMap",sample(1:99999,1,replace=T),".jpg")
-    saveImageFileName<-paste0(data_repo_path,"/",pic_name)
+    saveImageFileName<-pic_name
+
+    #write.table(saveImageFileName, "saveImageFileName.txt", sep="\t")
 
     #print("test  console")
     celfiles<-readRDS(file = paste0(data_repo_path,"/celfiles.rds"))
@@ -265,6 +267,7 @@ process = function(){
     if(grepl("human",celfiles@annotation)){
       species<-"human"
     }
+    write.table(species, "species", sep="\t")
 
     geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,config_path,data_repo_path,species)
 
