@@ -296,6 +296,7 @@ class PUGTable extends Component {
                         loading={this.props.data.pathways_down.loading}
                         onChange={this.handleTableChange}
                         onRowClick={this.showHeatMap}
+                        scroll={{ x: 960}}
                         />
                     {modal}
                     </div>

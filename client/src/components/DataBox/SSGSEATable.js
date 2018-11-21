@@ -182,6 +182,7 @@ class SSGSEATable extends Component {
                                 pagination={this.props.data.ssGSEA.pagination}
                                 loading={this.props.data.ssGSEA.loading}
                                 onChange={this.handleTableChange}
+                                scroll={{ x: 960}}
                                 />
                             </div>
                                 </div>,

@@ -9,16 +9,12 @@ import Plot from 'react-plotly.js';
 
 const ButtonGroup = Button.Group;
 
-class Analysis extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
+const defaultState ={
             workflow: {
                 token: "",
                 projectID: "",
                 analysisType: "0",
-                accessionCode: "GSE37874",
+                accessionCode: "",
                 fileList: [],
                 uploading: false,
                 progressing: false,
@@ -31,9 +27,6 @@ class Analysis extends Component {
                 foldDEGs: 1.5,
                 species: "human",
                 genSet: "H: Hallmark Gene Sets",
-                pPathways: 0.05,
-                pssGSEA: 0.05,
-                foldssGSEA: 1.5,
                 compared: false,
                 uploaded: false,
                 done_gsea: false,
@@ -177,6 +170,14 @@ class Analysis extends Component {
 
 
 
+class Analysis extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = Object.assign({}, defaultState);
+
+
+        this.resetWorkFlowProject = this.resetWorkFlowProject.bind(this);
         this.changeCode = this.changeCode.bind(this);
         this.handleSelectType = this.handleSelectType.bind(this);
         this.upateCurrentWorkingTabAndObject = this.upateCurrentWorkingTabAndObject.bind(this);
@@ -633,7 +634,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'90%'} height={'90%'} frameBorder={'0'}/></div>
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'80%'} height={'80%'} frameBorder={'0'}/></div>
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
 
@@ -808,7 +809,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.svg";
-        let histplotAN = <div><img src={ histplotANLink } style={{ width: "75%" }} alt="Histogram" /></div>;
+        let histplotAN = <div><img src={ histplotANLink } style={{ width: "55%" }} alt="Histogram" /></div>;
 
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
@@ -837,7 +838,7 @@ class Analysis extends Component {
                                 let list_mAplotBN = [];
                                 for (let i = result.data.length - 1; i >= 0; i--) {
                                     let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "55%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
                                     'height': 'auto',
@@ -1110,7 +1111,7 @@ class Analysis extends Component {
                                 let list_mAplotBN = [];
                                 for (let i = result.data.length - 1; i >= 0; i--) {
                                     let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "55%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
                                     'height': 'auto',
@@ -1169,7 +1170,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.svg";
-        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
+        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "55%" }} alt="Histogram" /></div>;
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
 
@@ -1333,7 +1334,10 @@ class Analysis extends Component {
     }
 
     resetWorkFlowProject = () => {
-        window.location.reload(true);
+       document.getElementById("input-access-code").disabled = false;
+       document.getElementById("btn-project-load-gse").disabled=false;
+       document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
+       this.setState({workflow:defaultState.workflow});
     }
 
     changeLoadingStatus = (progressing, loading_info) => {
