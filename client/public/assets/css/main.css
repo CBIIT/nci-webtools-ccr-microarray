@@ -275,9 +275,9 @@ label{
 
 
 .ant-btn:hover, .ant-btn:focus {
-  color: #ccc !important;
+  /*color: #ccc !important;
    background-color: #2971A5 !important;
-    border-color: #2971A5 !important;
+    border-color: #2971A5 !important;*/
 }
 
 .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active{
