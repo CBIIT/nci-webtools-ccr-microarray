@@ -198,6 +198,7 @@ class DEGTable extends Component {
                             pagination={this.props.data.diff_expr_genes.pagination}
                             loading={this.props.data.diff_expr_genes.loading}
                             onChange={this.handleTableChange}
+                            scroll={{ x: 960,y :650}}
                         />
                     </div>
                 </div>

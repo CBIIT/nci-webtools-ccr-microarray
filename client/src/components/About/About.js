@@ -6,7 +6,6 @@ class About extends Component {
         super(props);
     }
 
-    componentDidMount() {}
 
     render() {
         return (

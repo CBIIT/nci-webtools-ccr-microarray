@@ -36,18 +36,18 @@ label{
 }
 .info{
   color: rgb(255, 255, 255);
-  font-size: 1.2em;
+  font-size: 1.5em;
   font-weight: bold;
   margin-right:15px;
 }
 .info-affix{
   color: rgb(255, 255, 255);
-  font-size: 0.8em;
+  font-size: 1.2em;
   font-weight: bold;
   font-style:italic;
 }
 .header-nav{
-  line-height: 4.5em;
+  line-height: 64px;
   height: 4.5em;
   background: #2A303F;
 }
@@ -131,6 +131,7 @@ label{
   background: rgb(255, 255, 255);
   box-shadow: 0px 1px 1px 1px #ccc;
   padding-bottom:15px;
+  padding:20px;
 }
 .container-board-left{
   width:21%;
@@ -218,7 +219,7 @@ label{
 
 
 .ant-table-thead{
-  font-size:13px !important;
+  font-size:11px !important;
 }
 
 .input-search{
@@ -287,13 +288,7 @@ label{
    color: #3070a7 !important;
 }
 
-.nav-link{
-  color:#fff !important;
-}
 
-.nav-link:hover {
-   color: #000 !important;
-}
 
 
 ::selection {
@@ -389,10 +384,13 @@ label{
 }
 
 
-.nav > li > a:hover, .nav > li > a:focus{
+.nav > li > a:focus{
    background-color: #FFC90E;
 }
 
+.nav > li > a:{
+   background:transparent;
+}
 
 .custom_modal{
   width: 60% !important;
@@ -400,6 +398,7 @@ label{
   min-width: 500px  !important;
 
 }
+
 .filter_col{
       float: left;
     padding-left: 5px;
@@ -413,20 +412,54 @@ label{
   }
 
 #tab_about .container{
-  min-height: 831px;
-    height:calc(100% - 365px);
+    min-height: 950px;
+    height: calc(100% - 265px);
+    padding: 50px;
 }
 
-  .ant-tabs:not(.ant-tabs-vertical) > .ant-tabs-content > .ant-tabs-tabpane {
+#tab_about h2,
+#tab_about h1,
+#tab_about h3,
+#tab_help h2,
+#tab_help h1,
+#tab_help h3{
+  color:#2971A5 !important;
+}
+
+
+
+#tab_analysis .container{
+    min-height: 900px;
+    overflow-y: hidden;
+
+}
+
+
+#tab_help .container{
+      padding: 50px;
+}
+.ant-tabs:not(.ant-tabs-vertical) > .ant-tabs-content > .ant-tabs-tabpane {
     height:calc(100% - 430px);
-    min-height:763px;
-    overflow-y: auto;
+    min-height:860px;
+    overflow-y: hidden;
     overflow-x: hidden;
   }
 
-  #ssGSEA_genset{
+
+#ssGSEA_genset{
     position: absolute;
     left: 260px;
     top: 48px;
     width: 380px;
   }
+
+
+.nav > li > a {
+  font-size : 16px;
+  font-weight: bold;
+}
+
+
+.ant-tabs:not(.ant-tabs-vertical) > .ant-tabs-content > .ant-tabs-tabpane{
+  overflow: hidden;
+}

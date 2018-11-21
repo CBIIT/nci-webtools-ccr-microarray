@@ -146,7 +146,7 @@ class GSMData extends Component {
             className = "input-search-gsm"
             onSearch = { value => this.setState({ term: value }) }
             /></div>
-            <div> <Table    pagination={{current: 1, pageSize: 20}}  rowSelection = { rowSelection } columns = { columns } dataSource = { data.filter(searchFilter, this) }
+            <div> <Table    scroll={{ x: 960}} pagination={{current: 1, pageSize: 20}}  rowSelection = { rowSelection } columns = { columns } dataSource = { data.filter(searchFilter, this) }
             /></div>
             </div>
 
