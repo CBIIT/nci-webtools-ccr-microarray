@@ -8,7 +8,7 @@ var m_analysis = require('./service/analysis');
 var m_common = require('./service/common');
 var config = require('./config');
 var path = require('path');
-var fs = require('fs');
+
 
 var compression = require('compression');
 var bodyParser = require('body-parser');
@@ -45,19 +45,14 @@ module.exports = function(app){
         limit: '40mb' // 100kb default is too small
     }));
 
-    app.use(cookieParser());
+    //app.use(cookieParser());
     app.use(compression());
-    app.use(methodOverride());
+    //app.use(methodOverride());
 
 
     app.use('/api/analysis', m_analysis);
 
-
-
-    let logDirectory = config.logDir;
-
-    // ensure log directory exists
-    fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+ 
 
 	//allows CrossDomainAccess to API
 	app.use(function(req, res, next){
@@ -73,7 +68,7 @@ module.exports = function(app){
 
     // All other routes should redirect to error page
     app.get('/*', function (req, res) {
-      res.sendFile(path.join(config.root, 'client/www', 'error.html'));
+      // res.sendFile(path.join(config.root, 'client/www', 'error.html'));
     });
 
 

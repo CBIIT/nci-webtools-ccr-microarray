@@ -23,34 +23,40 @@ class Project extends Component {
             fileList: this.props.data.fileList
         };
 
-        let type_content = (<Select defaultValue={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
+        let type_content = (<div className="row"> <div className="col-sm-12"><Select defaultValue={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
             <Option value="0">GEO Data</Option>
             <Option value="1">Upload CEL files</Option>
-          </Select>);
+          </Select></div></div>);
         let source = "";
 
         if (this.props.data.analysisType == "0") {
             source = (
+                <div>
                 <div className="row">
-           <div className="col-sm-12">
-            <label className="title">Accession Code<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-            <Input  aria-label="input accessionCode"  id="input-access-code" onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
-            </div>
-             <div className="col-sm-6">
-            <button id="btn-project-load-gse" type="button" className="ant-btn upload-start ant-btn-primary" onClick={this.props.loadGSE}>
-              <span>{uploading ? 'Load' : 'Load' }</span>
-            </button>
-            </div>
-             <div className="col-sm-6">
-                         <Button
-                          className="upload-start"
-                          type="primary"
-                          onClick={this.props.resetWorkFlowProject}
-                        >
-                        Reset
-                        </Button>
-                    </div>
-          </div>
+                    <div className="col-sm-12">
+                      <label className="title">Accession Code<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+                      <Input  aria-label="input accessionCode"  id="input-access-code" onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
+                      </div>
+                </div>
+                <div className="row">
+                      <div className="col-sm-6">
+                    
+                        <button id="btn-project-load-gse" type="button" className="ant-btn upload-start ant-btn-primary" onClick={this.props.loadGSE}>
+                          <span>{uploading ? 'Load' : 'Load' }</span>
+                        </button>
+                      </div>
+                      <div className="col-sm-6">
+                   
+                          <Button
+                                  className="upload-start"
+                                  type="primary"
+                                  onClick={this.props.resetWorkFlowProject}
+                                >
+                                Reset
+                                </Button>
+                       </div>
+                </div>
+              </div>
             );
         } else if (this.props.data.analysisType == "1") {
             source = (<div className="upload-block row">
@@ -109,7 +115,11 @@ class Project extends Component {
         }
         return (
             <div className="block">
-          <label className="title">Choose type of analysis</label>
+              <div className="row">
+                <div className="col-sm-12">
+                  <label className="title">Choose type of analysis</label>
+                </div>
+              </div>
           {type_content}
           {source}
         </div>
