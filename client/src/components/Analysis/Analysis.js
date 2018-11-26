@@ -9,164 +9,164 @@ import Plot from 'react-plotly.js';
 
 const ButtonGroup = Button.Group;
 
-const defaultState ={
-            workflow: {
-                token: "",
-                projectID: "",
-                analysisType: "0",
-                accessionCode: "",
-                fileList: [],
-                uploading: false,
-                progressing: false,
-                loading_info: "loading",
-                dataList: [],
-                groups: [],
-                group_1: "-1",
-                group_2: "-1",
-                pDEGs: 0.05,
-                foldDEGs: 1.5,
-                species: "human",
-                genSet: "H: Hallmark Gene Sets",
-                compared: false,
-                uploaded: false,
-                done_gsea: false,
-                current_working_on_object: "",
-                current_working_on_tag: "",
-                tag_pre_plot_status: "",
-                tag_post_plot_status: "",
-                tag_deg_plot_status: "",
-                tag_ssgea_plot_status: "",
-                diff_expr_genes: {
-                    data: [],
-                    pagination: {
-                        current: 1,
-                        pageSize: 15,
+const defaultState = {
+    workflow: {
+        token: "",
+        projectID: "",
+        analysisType: "0",
+        accessionCode: "",
+        fileList: [],
+        uploading: false,
+        progressing: false,
+        loading_info: "loading",
+        dataList: [],
+        groups: [],
+        group_1: "-1",
+        group_2: "-1",
+        pDEGs: 0.05,
+        foldDEGs: 1.5,
+        species: "human",
+        genSet: "H: Hallmark Gene Sets",
+        compared: false,
+        uploaded: false,
+        done_gsea: false,
+        current_working_on_object: "",
+        current_working_on_tag: "",
+        tag_pre_plot_status: "",
+        tag_post_plot_status: "",
+        tag_deg_plot_status: "",
+        tag_ssgea_plot_status: "",
+        diff_expr_genes: {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 15,
 
-                    },
-                    loading: true,
-                    page_number: 1,
-                    page_size: 15,
-                    sorting: {
-                        name: "P.Value",
-                        order: "ascend",
-                    },
-                    search_keyword: {
-                        "search_symbol": "",
-                        "search_fc": "1.5",
-                        "search_p_value": "0.05",
-                        "search_adj_p_value": "",
-                        "search_aveexpr": "",
-                        "search_accnum": "",
-                        "search_desc": "",
-                        "search_entrez": "",
-                        "search_probsetid": "",
-                        "search_t": "",
-                        "search_b": ""
-                    }
-                },
-                ssGSEA: {
-                    data: [],
-                    pagination: {
-                        current: 1,
-                        pageSize: 15,
-
-                    },
-                    loading: true,
-                    page_size: 15,
-                    page_number: 1,
-                    sorting: {
-                        name: "P.Value",
-                        order: "ascend",
-                    },
-                    search_keyword: {
-                        "name": "",
-                        "search_logFC": "1.5",
-                        "search_Avg_Enrichment_Score": "",
-                        "search_t": "",
-                        "search_p_value": "0.05",
-                        "search_adj_p_value": "",
-                        "search_b": "",
-                    }
-                },
-                pathways_up: {
-
-                    data: [],
-                    pagination: {
-                        current: 1,
-                        pageSize: 15,
-
-                    },
-                    sorting: {
-                        name: "P_Value",
-                        order: "ascend",
-
-                    },
-                    loading: true,
-                    search_keyword: {
-                        "search_PATHWAY_ID": "",
-                        "search_SOURCE": "",
-                        "search_DESCRIPTION": "",
-                        "search_TYPE": "",
-                        "search_p_value": "0.05",
-                        "search_fdr": "",
-                        "search_RATIO": "",
-                        "search_GENE_LIST": "",
-                        "search_NUMBER_HITS": "",
-                        "search_NUMBER_GENES_PATHWAY": "",
-                        "search_NUMBER_USER_GENES": "",
-                        "search_TOTAL_NUMBER_GENES": "",
-                    }
-                },
-                pathways_down: {
-                    data: [],
-                    pagination: {
-                        current: 1,
-                        pageSize: 15,
-
-                    },
-                    loading: true,
-                    sorting: {
-                        name: "P_Value",
-                        order: "ascend",
-
-                    },
-                    search_keyword: {
-                        "search_PATHWAY_ID": "",
-                        "search_SOURCE": "",
-                        "search_DESCRIPTION": "",
-                        "search_TYPE": "",
-                        "search_p_value": "0.05",
-                        "search_fdr": "",
-                        "search_RATIO": "",
-                        "search_GENE_LIST": "",
-                        "search_NUMBER_HITS": "",
-                        "search_NUMBER_GENES_PATHWAY": "",
-                        "search_NUMBER_USER_GENES": "",
-                        "search_TOTAL_NUMBER_GENES": "",
-                    }
-                },
-                preplots: {
-                    histplotBN: "",
-                    list_mAplotBN: "",
-                    Boxplots: "",
-                    RLE: "",
-                    NUSE: "",
-                },
-                list_mAplotBN: "",
-                list_mAplotAN: "",
-                postplot: {
-                    histplotAN: "",
-                    list_mAplotAN: "",
-                    Boxplots: "",
-                    PCA: "",
-                    Heatmapolt: ""
-                },
-                geneHeatmap: "/ssgseaHeatmap1.jpg",
-                volcanoPlot: "/volcano.html",
-
-
+            },
+            loading: true,
+            page_number: 1,
+            page_size: 15,
+            sorting: {
+                name: "P.Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "search_symbol": "",
+                "search_fc": "1.5",
+                "search_p_value": "0.05",
+                "search_adj_p_value": "",
+                "search_aveexpr": "",
+                "search_accnum": "",
+                "search_desc": "",
+                "search_entrez": "",
+                "search_probsetid": "",
+                "search_t": "",
+                "search_b": ""
             }
-        };
+        },
+        ssGSEA: {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 15,
+
+            },
+            loading: true,
+            page_size: 15,
+            page_number: 1,
+            sorting: {
+                name: "P.Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "name": "",
+                "search_logFC": "1.5",
+                "search_Avg_Enrichment_Score": "",
+                "search_t": "",
+                "search_p_value": "0.05",
+                "search_adj_p_value": "",
+                "search_b": "",
+            }
+        },
+        pathways_up: {
+
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 15,
+
+            },
+            sorting: {
+                name: "P_Value",
+                order: "ascend",
+
+            },
+            loading: true,
+            search_keyword: {
+                "search_PATHWAY_ID": "",
+                "search_SOURCE": "",
+                "search_DESCRIPTION": "",
+                "search_TYPE": "",
+                "search_p_value": "0.05",
+                "search_fdr": "",
+                "search_RATIO": "",
+                "search_GENE_LIST": "",
+                "search_NUMBER_HITS": "",
+                "search_NUMBER_GENES_PATHWAY": "",
+                "search_NUMBER_USER_GENES": "",
+                "search_TOTAL_NUMBER_GENES": "",
+            }
+        },
+        pathways_down: {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 15,
+
+            },
+            loading: true,
+            sorting: {
+                name: "P_Value",
+                order: "ascend",
+
+            },
+            search_keyword: {
+                "search_PATHWAY_ID": "",
+                "search_SOURCE": "",
+                "search_DESCRIPTION": "",
+                "search_TYPE": "",
+                "search_p_value": "0.05",
+                "search_fdr": "",
+                "search_RATIO": "",
+                "search_GENE_LIST": "",
+                "search_NUMBER_HITS": "",
+                "search_NUMBER_GENES_PATHWAY": "",
+                "search_NUMBER_USER_GENES": "",
+                "search_TOTAL_NUMBER_GENES": "",
+            }
+        },
+        preplots: {
+            histplotBN: "",
+            list_mAplotBN: "",
+            Boxplots: "",
+            RLE: "",
+            NUSE: "",
+        },
+        list_mAplotBN: "",
+        list_mAplotAN: "",
+        postplot: {
+            histplotAN: "",
+            list_mAplotAN: "",
+            Boxplots: "",
+            PCA: "",
+            Heatmapolt: ""
+        },
+        geneHeatmap: "/ssgseaHeatmap1.jpg",
+        volcanoPlot: "/volcano.html",
+
+
+    }
+};
 
 
 
@@ -634,7 +634,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'80%'} height={'80%'} frameBorder={'0'}/></div>
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'80%'} height={'70%'} frameBorder={'0'}/></div>
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
 
@@ -673,12 +673,15 @@ class Analysis extends Component {
                                        
                                     }]} layout={{
                                         autosize:true,
-                                        margin: {
-                                            l: 0,
-                                            r: 0,
-                                            b: 0,
-                                            t: 0
+                                        margin:{
+                                            l:0,
+                                            r:0,
+                                            t:0,
+                                            b:0,
+                                            pd:2,
                                         },
+                                        width:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,
+                                        height:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,
                                         scene: {
                                             xaxis: {
                                                 title: pcaData.col[0],
@@ -707,7 +710,8 @@ class Analysis extends Component {
 
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.postplot.PCA = <div> {PCAIframe}</div>;
+                            let plot_style={ "display":"block","marginLeft":"auto","marginRight":"auto","width":"80%"}
+                            workflow.postplot.PCA = <div style={plot_style}> {PCAIframe}</div>;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
@@ -769,7 +773,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = {}
+                            let plot_style = {"width":"80%"}
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -809,7 +813,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.svg";
-        let histplotAN = <div><img src={ histplotANLink } style={{ width: "55%" }} alt="Histogram" /></div>;
+        let histplotAN = <div><img src={ histplotANLink } style={{ width: "70%" }} alt="Histogram" /></div>;
 
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
@@ -838,12 +842,10 @@ class Analysis extends Component {
                                 let list_mAplotBN = [];
                                 for (let i = result.data.length - 1; i >= 0; i--) {
                                     let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "55%" }} alt="MAplot"/> </div>)
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
-                                    'height': 'auto',
-                                    'maxHeight': '100%',
-                                    'overflow': 'auto'
+                                   
                                 };
 
 
@@ -878,12 +880,10 @@ class Analysis extends Component {
             let list_mAplotBN = [];
             for (let i = workflow2.list_mAplotAN.length - 1; i >= 0; i--) {
                 let link = "./images/" + workflow2.projectID + workflow2.list_mAplotAN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
             }
             let maplot_style = {
-                'height': 'auto',
-                'maxHeight': '100%',
-                'overflow': 'scroll'
+
             };
 
 
@@ -929,7 +929,7 @@ class Analysis extends Component {
                         }
 
                         let plot_layout = { showlegend: false, autosize: true }
-                        let plot_style = {}
+                         let plot_style = {"width":"80%"}
 
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -987,9 +987,9 @@ class Analysis extends Component {
 
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = {}
+                            let plot_style = {"width":"80%"}
 
-                            let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
+                            let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style}  useResizeHandler={true}/>
 
 
                             let workflow = Object.assign({}, this.state.workflow);
@@ -1054,7 +1054,8 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = {}
+                             let plot_style = {"width":"80%"}
+
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -1111,12 +1112,10 @@ class Analysis extends Component {
                                 let list_mAplotBN = [];
                                 for (let i = result.data.length - 1; i >= 0; i--) {
                                     let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "55%" }} alt="MAplot"/> </div>)
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
-                                    'height': 'auto',
-                                    'maxHeight': '100%',
-                                    'overflow': 'scroll'
+                                    
                                 };
                                 workflow.list_mAplotBN = result.data;
                                 workflow.preplots.list_mAplotBN = <div style={ maplot_style } > { list_mAplotBN } </div>;
@@ -1151,12 +1150,10 @@ class Analysis extends Component {
             let list_mAplotBN = [];
             for (let i = workflow2.list_mAplotBN.length - 1; i >= 0; i--) {
                 let link = "./images/" + workflow2.projectID + workflow2.list_mAplotBN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
             }
             let maplot_style = {
-                'height': 'auto',
-                'maxHeight': '100%',
-                'overflow': 'scroll'
+             
             };
             workflow2.preplots.list_mAplotBN = <div style={ maplot_style } > { list_mAplotBN } </div>;
             this.setState({ workflow: workflow2 });
@@ -1170,7 +1167,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.svg";
-        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "55%" }} alt="Histogram" /></div>;
+        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "70%" }} alt="Histogram" /></div>;
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
 
@@ -1240,7 +1237,7 @@ class Analysis extends Component {
         reqBody.species = value.split("$")[0];
         reqBody.genSet = value.split("$")[1];
         //change button style
-      
+
         workflow.progressing = true;
         workflow.loading_info = "Running Analysis...";
         this.setState({
@@ -1258,16 +1255,16 @@ class Analysis extends Component {
                 .then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
-                        workflow.progressing = false;
-                        this.setState({
-                            workflow: workflow
-                        });
+                    workflow.progressing = false;
+                    this.setState({
+                        workflow: workflow
+                    });
 
                     if (result.status == 200) {
                         this.getssGSEA();
                     } else {
                         //change button style
-                       
+
 
                         message.error('load data fails.');
                     }
@@ -1334,10 +1331,10 @@ class Analysis extends Component {
     }
 
     resetWorkFlowProject = () => {
-       document.getElementById("input-access-code").disabled = false;
-       document.getElementById("btn-project-load-gse").disabled=false;
-       document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
-       this.setState({workflow:defaultState.workflow});
+        document.getElementById("input-access-code").disabled = false;
+        document.getElementById("btn-project-load-gse").disabled = false;
+        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
+        this.setState({ workflow: defaultState.workflow });
     }
 
     changeLoadingStatus = (progressing, loading_info) => {
@@ -1982,7 +1979,7 @@ class Analysis extends Component {
 
     hideWorkFlow = () => {
         document.getElementsByClassName("container-board-left")[0].style.display = 'none';
-        document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 50;
+        document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 80;
         document.getElementById("panel-show").style.display = 'inherit';
         document.getElementById("panel-hide").style.display = 'none';
     }
@@ -2064,7 +2061,7 @@ class Analysis extends Component {
                         handleGroup2Select={this.handleGroup2Select} 
                         runContrast={this.runContrast}/>
 
-                    <div style={{'paddingTop':'10px',"width":"16px","float":"left"}}>
+                    <div id="btn-controll-data-table-display">
                       <a  aria-label="panel display controller " id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
                       <a  aria-label="panel display controller" id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
 

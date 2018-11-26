@@ -361,7 +361,7 @@ class DataBox extends Component {
           
           <p>{selected_gsms}</p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
-          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 62px)'}} defaultValue="GSMGroup_1"/>&nbsp;
+          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68 px)'}} defaultValue="GSMGroup_1"/>&nbsp;
               <Button  type="default" disabled onClick={this.createTag} >Add</Button>
           </p>
           <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
@@ -381,7 +381,7 @@ class DataBox extends Component {
           
           <p>{selected_gsms}</p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
-          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 62px)'}} defaultValue="GSMGroup_1"/>&nbsp;
+          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} defaultValue="GSMGroup_1"/>&nbsp;
               <Button  type="primary"  onClick={this.createTag} >Add</Button>
           </p>
           <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
