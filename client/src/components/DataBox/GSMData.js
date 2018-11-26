@@ -86,7 +86,7 @@ class GSMData extends Component {
                 width: '18%',
                 sorter: (a, b) => ('' + a.gsm).localeCompare(b.gsm),
                 render: (text, record, index) => (
-                    <div className="single-line" style={{"maxWidth":"150px"}}>
+                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.18}}>
                               <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                           </div>
                 ),
@@ -96,7 +96,7 @@ class GSMData extends Component {
                 width: '30%',
                 sorter: (a, b) => this.compareByAlph(a.title, b.title),
                 render: (text, record, index) => (
-                    <div className="single-line" style={{"maxWidth":"300px"}}>
+                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3}}>
                           <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
@@ -106,7 +106,7 @@ class GSMData extends Component {
                 width: '30%',
                 sorter: (a, b) => a.description.length - b.description.length,
                 render: (text, record, index) => (
-                    <div className="single-line" style={{"maxWidth":"300px"}}>
+                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3}}>
                           <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
