@@ -14,7 +14,7 @@ const defaultState = {
         token: "",
         projectID: "",
         analysisType: "0",
-        accessionCode: "",
+        accessionCode: "test",
         fileList: [],
         uploading: false,
         progressing: false,
@@ -710,7 +710,7 @@ class Analysis extends Component {
 
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            let plot_style={ "display":"block","marginLeft":"auto","marginRight":"auto","width":"80%"}
+                            let plot_style = { "display": "block", "marginLeft": "auto", "marginRight": "auto", "width": "80%" }
                             workflow.postplot.PCA = <div style={plot_style}> {PCAIframe}</div>;
                             this.setState({ workflow: workflow });
                         } else {
@@ -773,7 +773,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = {"width":"80%"}
+                            let plot_style = { "width": "80%" }
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -845,7 +845,7 @@ class Analysis extends Component {
                                     list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
-                                   
+
                                 };
 
 
@@ -929,7 +929,7 @@ class Analysis extends Component {
                         }
 
                         let plot_layout = { showlegend: false, autosize: true }
-                         let plot_style = {"width":"80%"}
+                        let plot_style = { "width": "80%" }
 
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -987,7 +987,7 @@ class Analysis extends Component {
 
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = {"width":"80%"}
+                            let plot_style = { "width": "80%" }
 
                             let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style}  useResizeHandler={true}/>
 
@@ -1054,7 +1054,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false, autosize: true }
-                             let plot_style = {"width":"80%"}
+                            let plot_style = { "width": "80%" }
 
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
@@ -1115,7 +1115,7 @@ class Analysis extends Component {
                                     list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
-                                    
+
                                 };
                                 workflow.list_mAplotBN = result.data;
                                 workflow.preplots.list_mAplotBN = <div style={ maplot_style } > { list_mAplotBN } </div>;
@@ -1153,7 +1153,7 @@ class Analysis extends Component {
                 list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
             }
             let maplot_style = {
-             
+
             };
             workflow2.preplots.list_mAplotBN = <div style={ maplot_style } > { list_mAplotBN } </div>;
             this.setState({ workflow: workflow2 });
@@ -1406,66 +1406,102 @@ class Analysis extends Component {
                 .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
-                        if (result.data === "undefined" || Object.keys(result.data).length === 0) {
-                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+
+                        let workflow = Object.assign({}, this.state.workflow);
+                        if (workflow.accessionCode == "test") {
+                            // for testing purpose
+
+                            let d = result.data;
+                            d = d.split("Reading in : /Users/cheny39/Documents/GitHub/apps/microarray/tmp/test/GSM929293_cn_APAP_17.CEL.gz")
+                            let a = JSON.parse(d[1])
+                            a.phenoData.data
+
+
 
                             workflow.uploading = false;
                             workflow.progressing = false;
-                            message.error('Load data fails');
-                            this.setState({
-                                workflow: workflow
-                            });
-                            return;
-                        }
 
-                        var data = result.data.split("+++loadGSE+++\"")[1]
+                            workflow.dataList = a.phenoData.data;
+                            // init group with default value
+                            workflow.group = new Array( a.phenoData.data.length).fill('Ctl');
 
-                        if (typeof(data) === "undefined" || data == "") {
-                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+                            // disable the input , prevent user to change the access code
+                            document.getElementById("input-access-code").disabled = true
 
-                            workflow.uploading = false;
-                            workflow.progressing = false;
-                            message.error('Load data fails');
-                            this.setState({
-                                workflow: workflow
-                            });
-                            return;
-                        }
+                            // change the word of load btn
+                            document.getElementById("btn-project-load-gse").disabled = true
 
-                        let list = JSON.parse(decodeURIComponent(data));
-                        //let list = result.data;
-
-                        if (typeof(list) == "undefined" || list == null || list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
-                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
-                            workflow.uploading = false;
-                            workflow.progressing = false;
-                            message.error('Load data fails');
                             this.setState({
                                 workflow: workflow
                             });
 
-                            return;
+                            message.success('load successfully.');
+
+                            // end testing data
+                        } else {
+
+                            if (result.data === "undefined" || Object.keys(result.data).length === 0) {
+                                document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+
+                                workflow.uploading = false;
+                                workflow.progressing = false;
+                                message.error('Load data fails');
+                                this.setState({
+                                    workflow: workflow
+                                });
+                                return;
+                            }
+
+                            var data = result.data.split("+++loadGSE+++\"")[1]
+
+                            if (typeof(data) === "undefined" || data == "") {
+                                document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+
+                                workflow.uploading = false;
+                                workflow.progressing = false;
+                                message.error('Load data fails');
+                                this.setState({
+                                    workflow: workflow
+                                });
+                                return;
+                            }
+
+                            let list = JSON.parse(decodeURIComponent(data));
+                            //let list = result.data;
+
+                            if (typeof(list) == "undefined" || list == null || list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
+                                document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+
+                                workflow.uploading = false;
+                                workflow.progressing = false;
+                                message.error('Load data fails');
+                                this.setState({
+                                    workflow: workflow
+                                });
+
+                                return;
+                            }
+
+                            workflow.uploading = false;
+                            workflow.progressing = false;
+
+                            workflow.dataList = list.files;
+                            // init group with default value
+                            workflow.group = new Array(list.files.length).fill('Ctl');
+
+                            // disable the input , prevent user to change the access code
+                            document.getElementById("input-access-code").disabled = true
+
+                            // change the word of load btn
+                            document.getElementById("btn-project-load-gse").disabled = true
+
+                            this.setState({
+                                workflow: workflow
+                            });
+
+                            message.success('load successfully.');
                         }
 
-                        workflow.uploading = false;
-                        workflow.progressing = false;
-
-                        workflow.dataList = list.files;
-                        // init group with default value
-                        workflow.group = new Array(list.files.length).fill('Ctl');
-
-                        // disable the input , prevent user to change the access code
-                        document.getElementById("input-access-code").disabled = true
-
-                        // change the word of load btn
-                        document.getElementById("btn-project-load-gse").disabled = true
-
-                        this.setState({
-                            workflow: workflow
-                        });
-
-                        message.success('load successfully.');
 
                     } else {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"

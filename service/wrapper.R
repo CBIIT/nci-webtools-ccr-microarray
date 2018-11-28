@@ -1,6 +1,9 @@
 library(jsonlite)
 library(mpstr)
 library(limma)
+  library(GEOquery)
+  library(oligo)
+  library(Biobase)
 #source('./service/MAAPster_functions.R')
 
 
@@ -63,8 +66,15 @@ process = function(){
      
       #### 1) Process GEO files function takes gseid and returns ExpressionFeatureSet object  ####
       #celfiles = processGEOfiles('pid','GSE37874', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
-      access_code<-toString(args[5])
+     access_code<-toString(args[5])
 
+     if(access_code=="test"){
+          data_repo_path<-paste0(toString(args[4]),"/","test",sep="")
+          celfiles = getLocalGEOfiles("test","GSE37874",c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'),data_repo_path) 
+          return(celfiles)
+      }
+
+   
       listGroups<-c()
       if(args[6]!=""){
         listGroups<-unlist((strsplit(args[6],",")))
@@ -127,6 +137,21 @@ process = function(){
     config_path<-toString(args[i])
 
 
+ if(access_code=="test"){
+      data_repo_path<-paste0(toString(args[4]),"/","test",sep="")
+      return_plot_data<-readRDS(file = paste0(data_repo_path,"/return_plot_data.rds"))
+      l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
+      diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
+      ssGSEA_results<-readRDS(file = paste0(data_repo_path,"/ssGSEA_results.rds"))
+      ssColumn<-readRDS(file = paste0(data_repo_path,"/ssColumn.rds"))
+      return(list(
+        norm_celfiles=return_plot_data,
+        diff_expr_genes=diff_expr_genes,
+        pathways=l2p_pathways,
+        ssGSEA=ssGSEA_results,
+        ssColumn=ssColumn
+        ))
+    }
 
 
 
