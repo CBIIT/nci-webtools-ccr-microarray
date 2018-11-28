@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Select, Input, Tooltip } from 'antd';
+import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'antd';
 import ReactSVG from 'react-svg'
 
 const Search = Input.Search;
@@ -8,41 +8,81 @@ const Selections = []
 
 class GSMData extends Component {
 
-
-
     state = {
-        selectedRowKeys: [], // Check here to configure the default column
-        loading: false,
-        term: "",
-        boxplot: ""
-    };
-
+            selectedRowKeys: [], // Check here to configure the default column
+            loading: false,
+            term: "",
+            boxplot: "",
+            pagination: {
+                current: 1,
+                pageSize: 20
+            },
+            data: { totalCount: 0, records: [] },
+            renderData: { totalCount: 0, records: [] }
+        };
     constructor(props) {
         super(props);
     }
 
 
+    componentWillReceiveProps(nextProps) {
+        let currentState = Object.assign({}, this.state);
+        currentState.data = nextProps.data.dataList;
+        currentState.renderData = nextProps.data.dataList;
+        currentState.pagination.total = nextProps.data.dataList.length;
+        this.setState(currentState)
+    }
+
     onSelectChange = (selectedRowKeys) => {
         this.props.selected(selectedRowKeys);
-        this.setState({ selectedRowKeys });
+         let currentState = Object.assign({}, this.state);
+         currentState.selectedRowKeys = selectedRowKeys;
+        this.setState(currentState);
     }
 
 
     unselect = () => {
-        this.setState({
-            selectedRowKeys: [],
-            loading: false,
-        });
+        let currentState = Object.assign({}, this.state);
+        currentState.selectedRowKeys = [];
+        currentState.loading = false;
+        this.setState(currentState)
+
     }
 
-    handleSelectAll = () => {
-        console.log("handle select all ")
-    }
+
     handleSelection = (key) => {
         console.log(key)
         let selectedRowKeys = this.getCheckedBoxes("select-GSM")
+    }
 
 
+    handleMenuClick = (e) => {
+        console.log('click', e);
+        let currentState = Object.assign({}, this.state);
+        currentState.pagination.pageSize = parseInt(e.key);
+        currentState.pagination.current = 1;
+
+        let renderData = currentState.data;
+
+        if (this.state.term != "") {
+            for (var i = currentState.data.length - 1; i >= 0; i--) {
+                let flag = false;
+                if (currentState.data[i]["gsm"].includes(this.state.term)) flag = true;
+                if (currentState.data[i]["title"].includes(this.state.term)) flag = true;
+                if (currentState.data[i]["description"].includes(this.state.term)) flag = true;
+                if (flag) {
+                    renderData.push(currentState.data[i])
+                }
+            }
+        }
+        let start_index = currentState.pagination.pageSize * (currentState.pagination.current - 1)
+        let end_index = currentState.pagination.pageSize * (currentState.pagination.current)
+        if (end_index > renderData.length) {
+            end_index = renderData.length;
+        }
+        currentState.renderData = renderData.slice(start_index, end_index);
+
+        this.setState(currentState);
     }
 
     // Pass the checkbox name to the function
@@ -71,6 +111,40 @@ class GSMData extends Component {
         // Return the array if it is non-empty, or null
         console.log(Selections)
     }
+
+
+
+
+    handlePageChange = (pagination, filters, sorter) => {
+        let set = Object.assign({}, this.state);
+
+        set.pagination = {
+            pageSize: pagination.pageSize,
+            current: pagination.current ? pagination.current : 1
+        }
+        let renderData = set.data;
+
+        if (this.state.term != "") {
+            for (var i = set.data.length - 1; i >= 0; i--) {
+                let flag = false;
+                if (set.data[i]["gsm"].includes(this.state.term)) flag = true;
+                if (set.data[i]["title"].includes(this.state.term)) flag = true;
+                if (set.data[i]["description"].includes(this.state.term)) flag = true;
+                if (flag) {
+                    renderData.push(set.data[i])
+                }
+            }
+        }
+
+        let start_index = pagination.pageSize * (pagination.current - 1)
+        let end_index = pagination.pageSize * (pagination.current)
+        if (end_index > renderData.length) {
+            end_index = renderData.length;
+        }
+        set.renderData = renderData.slice(start_index, end_index);
+        this.setState(set)
+    }
+
     render() {
 
         const { loading, selectedRowKeys } = this.state;
@@ -84,6 +158,7 @@ class GSMData extends Component {
                 title: 'GSM',
                 dataIndex: 'gsm',
                 width: '18%',
+                defaultSortOrder: 'descend',
                 sorter: (a, b) => ('' + a.gsm).localeCompare(b.gsm),
                 render: (text, record, index) => (
                     <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.18}}>
@@ -123,7 +198,6 @@ class GSMData extends Component {
             });
 
 
-            const data = [...this.props.data.dataList];
             //this.state.data;
 
             const searchFilter = (row) => {
@@ -136,19 +210,52 @@ class GSMData extends Component {
 
                 return false;
             }
+
+            const menu = (
+                <Menu onClick={this.handleMenuClick}>
+                    <Menu.Item key="10">10</Menu.Item>
+                    <Menu.Item key="15">15</Menu.Item>
+                    <Menu.Item key="20">20</Menu.Item>
+                    <Menu.Item key="25">25</Menu.Item>
+                    <Menu.Item key="30">30</Menu.Item>
+                    <Menu.Item key="35">35</Menu.Item>
+                </Menu>
+            );
+
             const rowSelection = {
                 selectedRowKeys,
                 onChange: this.onSelectChange,
             };
 
+
+
+
             content = <div>
-                <div> <Search aria-label="search" placeholder = "input search text"
-            className = "input-search-gsm"
-            onSearch = { value => this.setState({ term: value }) }
-            /></div>
-            <div> <Table    scroll={{ x: 960}} pagination={{current: 1, pageSize: 20}}  rowSelection = { rowSelection } columns = { columns } dataSource = { data.filter(searchFilter, this) }
-            /></div>
-            </div>
+                        <div>
+                            <Search aria-label="search" placeholder = "input search text"
+                                    className = "input-search-gsm"
+                                    onSearch = { value => this.setState({ term: value }) }
+                            />
+                        </div>
+                        <div id="gsm-select-">show 
+                            <Dropdown overlay={menu}>
+                                  <Button style={{ marginLeft: 8 }}>
+                                    Button <Icon type="down" />
+                                  </Button>
+                            </Dropdown>of total {this.state.data.length} records
+
+                        </div>
+                        <div> 
+                        <Table 
+                            scroll={{ x: 960}} 
+                            pagination={this.state.pagination}  
+                            rowSelection = { rowSelection } 
+                            columns = { columns } 
+                            dataSource = { this.state.renderData}
+                            onChange={this.handlePageChange}    
+                                />
+                        </div>
+                    </div>
 
         }
 
