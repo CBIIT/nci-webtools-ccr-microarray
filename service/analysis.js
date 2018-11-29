@@ -217,6 +217,7 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
 
 
 router.post('/runContrast', function(req, res) {
+    req.setTimeout(0) // no timeout
     let data = [];
     //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
     data.push("runContrast"); // action

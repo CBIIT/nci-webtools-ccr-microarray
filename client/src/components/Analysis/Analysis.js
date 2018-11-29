@@ -40,12 +40,12 @@ const defaultState = {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 15,
+                pageSize: 20,
 
             },
             loading: true,
             page_number: 1,
-            page_size: 15,
+            page_size: 20,
             sorting: {
                 name: "P.Value",
                 order: "ascend",
@@ -68,11 +68,11 @@ const defaultState = {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 15,
+                pageSize: 20,
 
             },
             loading: true,
-            page_size: 15,
+            page_size: 20,
             page_number: 1,
             sorting: {
                 name: "P.Value",
@@ -93,7 +93,7 @@ const defaultState = {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 15,
+                pageSize: 20,
 
             },
             sorting: {
@@ -121,7 +121,7 @@ const defaultState = {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 15,
+                pageSize: 20,
 
             },
             loading: true,
@@ -1499,7 +1499,8 @@ class Analysis extends Component {
                                 workflow: workflow
                             });
 
-                            message.success('load successfully.');
+                           
+                           
                         }
 
 
@@ -1511,8 +1512,8 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-
-                        message.error('load data fails.');
+                        document.getElementById("message-load-accession-code").innerHTML= result.data
+                        //message.error('load data fails.');
                     }
                 })
                 .catch(error => console.log(error));
@@ -1524,9 +1525,8 @@ class Analysis extends Component {
             this.setState({
                 workflow: workflow
             });
-
-            message.error('load data fails.');
-
+            document.getElementById("message-load-accession-code").innerHTML= err
+        
         }
     }
 
@@ -1592,12 +1592,12 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 15,
+                pageSize: 20,
 
             },
             loading: true,
             page_number: 1,
-            page_size: 15,
+            page_size: 20,
             sorting: {
                 name: "P.Value",
                 order: "ascend",
@@ -1621,11 +1621,11 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 15,
+                pageSize: 20,
 
             },
             loading: true,
-            page_size: 15,
+            page_size: 20,
             page_number: 1,
             sorting: {
                 name: "P.Value",
@@ -1647,7 +1647,7 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 15,
+                pageSize: 20,
 
             },
             loading: true,
@@ -1676,7 +1676,7 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 15,
+                pageSize: 20,
 
             },
             loading: true,

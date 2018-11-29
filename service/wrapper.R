@@ -54,7 +54,7 @@ process = function(){
 
 
 
-  # access_code <- "GSE37874"
+  # access_code <- "GSE37874/GSE20489"
   # projectId <- "TTT"
   # listGroups<-c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2')
   # action<-"runContrast"

@@ -21,7 +21,7 @@ const server = app.listen(config.port, function() {
     console.log('Project Microarray listening on port :' + config.port);
 });
 
-server.timeout = config.timeout;
+server.setTimeout(config.timeout);
 
 let logDirectory = config.logDir;
 // ensure log directory exists
