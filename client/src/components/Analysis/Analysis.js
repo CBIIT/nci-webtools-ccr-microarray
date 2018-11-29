@@ -14,7 +14,7 @@ const defaultState = {
         token: "",
         projectID: "",
         analysisType: "0",
-        accessionCode: "test",
+        accessionCode: "GSE37874",
         fileList: [],
         uploading: false,
         progressing: false,
