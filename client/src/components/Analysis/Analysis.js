@@ -1459,7 +1459,7 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                message.error('Load data fails');
+                                document.getElementById("message-load-accession-code").innerHTML= result.data
                                 this.setState({
                                     workflow: workflow
                                 });
@@ -1474,7 +1474,7 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                message.error('Load data fails');
+                                 document.getElementById("message-load-accession-code").innerHTML= result.data
                                 this.setState({
                                     workflow: workflow
                                 });

@@ -34,7 +34,7 @@ class Project extends Component {
                 <div>
                 <div className="row">
                     <div className="col-sm-12">
-                     <span class="err-message" id="message-load-accession-code"></span>
+                     <span className="err-message" id="message-load-accession-code"></span>
                       <label className="title">Accession Code<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                       <Input  aria-label="input accessionCode"  id="input-access-code" onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
                       </div>
