@@ -514,6 +514,25 @@ input {
     overflow: hidden;
 }
 
+@media (min-width: 365px) {
+
+    #btn-controll-data-table-display {
+        display: none;
+    }
+
+    .container-board-left {
+        width: 100%;
+        margin: 0 0 20 0;
+    }
+
+    .container-board-right {
+        width: 100%;
+    }
+
+    #tab_analysis .blocks {
+        min-height: 480px;
+    }
+}
 
 
 @media (min-width: 768px) {
@@ -600,7 +619,13 @@ input {
 
 
 
+#gsm-select{
+    padding-top: 12px;
+}
 
-
+#gsm-select button{
+    margin-left: 8px;
+    margin-right: 10px;
+}
 
 
