@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Input, Tooltip, message } from 'antd';
+import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'antd';
 const Search = Input.Search;
 
 
@@ -43,6 +43,19 @@ class DEGTable extends Component {
         });
     }
 
+   
+    handleMenuClick = (e) => {
+         document.getElementById("deg-drop-down").innerHTML=e.key
+         this.props.getDEG({
+            page_size: e.key,
+            page_number: 1,
+            sorting: {
+                name: this.props.data.diff_expr_genes.sorting.name,
+                order: this.props.data.diff_expr_genes.sorting.order,
+            },
+            search_keyword: this.props.data.diff_expr_genes.search_keyword
+        });
+    }
 
     render() {
         let content = "";
@@ -78,6 +91,7 @@ class DEGTable extends Component {
                 dataIndex: 'P.Value',
                 sorter: true,
                 width: "8%",
+                defaultSortOrder: 'descend',
                  render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
@@ -92,6 +106,7 @@ class DEGTable extends Component {
                 dataIndex: 'adj.P.Val',
                 sorter: true,
                 width: "8%",
+
                  render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
@@ -247,10 +262,28 @@ class DEGTable extends Component {
         }
 
 
-
+                const menu = (
+                <Menu onClick={this.handleMenuClick}>
+                    <Menu.Item key="10">10</Menu.Item>
+                    <Menu.Item key="15">15</Menu.Item>
+                    <Menu.Item key="20">20</Menu.Item>
+                    <Menu.Item key="25">25</Menu.Item>
+                    <Menu.Item key="30">30</Menu.Item>
+                    <Menu.Item key="35">35</Menu.Item>
+                </Menu>
+            );
 
 
         content = <div>
+                  <div id="deg-select">show 
+                            <Dropdown overlay={menu}>
+                                  <Button >
+                                    <span id="deg-drop-down">20</span> <Icon type="down" />
+                                  </Button>
+                            </Dropdown>of total {this.props.data.diff_expr_genes.pagination.total}records
+
+                        </div>
+                    <div>
                      <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
                            <div className="filter_col"  style={{width:"9%"}}><Input onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></div>
                            <div className="filter_col"  style={{width:"7%"}} ><Input onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></div>
@@ -264,14 +297,14 @@ class DEGTable extends Component {
                            <div className="filter_col"  style={{width:"8%"}}><Input onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></div>
                            <div className="filter_col"  style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></div>
                      </div>
-                    <div>
+            
                         <Table 
                             columns={columns}
                             dataSource={this.props.data.diff_expr_genes.data}
                             pagination={this.props.data.diff_expr_genes.pagination}
                             loading={this.props.data.diff_expr_genes.loading}
                             onChange={this.handleTableChange}
-                            scroll={{ x: 960,y :650}}
+                            scroll={{ x: 960}}
                         />
                     </div>
                 </div>

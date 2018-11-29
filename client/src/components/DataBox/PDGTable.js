@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Input, message, Modal, Button, Tooltip } from 'antd';
+import { Menu, Dropdown, Icon, Table, Select, Input, message, Modal, Button, Tooltip } from 'antd';
 const Search = Input.Search;
 
 
@@ -32,6 +32,19 @@ class PUGTable extends Component {
         });
     }
 
+
+    handleMenuClick = (e) => {
+         document.getElementById("pd-drop-down").innerHTML=e.key
+         this.props.getPathwayDown({
+            page_size: e.key,
+            page_number: 1,
+            sorting: {
+                name: this.props.data.pathways_down.sorting.name,
+                order: this.props.data.pathways_down.sorting.order,
+            },
+            search_keyword: this.props.data.pathways_down.search_keyword
+        });
+    }
 
 
     handleTableChange = (pagination, filters, sorter) => {
@@ -137,6 +150,13 @@ class PUGTable extends Component {
                 width: "10%",
                 key: 'Pathway_ID',
                 sorter: true,
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
             },
             {
@@ -145,6 +165,13 @@ class PUGTable extends Component {
                 width: "9%",
                 key: 'Source',
                 sorter: true,
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
             },
             {
                 title: 'DESCRIPTION',
@@ -153,7 +180,7 @@ class PUGTable extends Component {
                 key: 'Description',
                 sorter: true,
                 render: (text, record, index) => (
-                    <div className="single-line" style={{"maxWidth":"100px"}}>
+                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
                         <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
@@ -163,24 +190,53 @@ class PUGTable extends Component {
                 width: "10%",
                 key: 'Type',
                 sorter: true,
+                  render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
             }, {
                 title: 'P_VALUE',
                 dataIndex: 'P_Value',
                 width: "8%",
                 key: 'P_Value',
                 sorter: true,
+                defaultSortOrder: 'descend',
+                  render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
             }, {
                 title: 'FDR',
                 dataIndex: 'FDR',
                 width: "7%",
                 key: 'FDR',
                 sorter: true,
+                  render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
             }, {
                 title: 'RATIO',
                 dataIndex: 'Ratio',
                 width: "7%",
                 key: 'Ratio',
                 sorter: true,
+                  render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
             }, {
                 title: 'GENE_LIST',
                 dataIndex: 'Gene_List',
@@ -188,7 +244,7 @@ class PUGTable extends Component {
                 key: 'Gene_List',
                 sorter: true,
                 render: (text, record, index) => (
-                    <div className="single-line" style={{"maxWidth":"100px"}}>
+                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
@@ -198,12 +254,26 @@ class PUGTable extends Component {
                 width: "7%",
                 key: 'Number_Hits',
                 sorter: true,
+                  render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
             }, {
                 title: 'NUMBER_GENES_PATHWAY',
                 dataIndex: 'Number_Genes_Pathway',
                 width: "7%",
                 key: 'Number_Genes_Pathway',
                 sorter: true,
+                  render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
             }, {
                 title: 'NUMBER_USER_GENES',
@@ -211,12 +281,26 @@ class PUGTable extends Component {
                 width: "7%",
                 key: 'Number_User_Genes',
                 sorter: true,
+                render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
             }, {
                 title: 'TOTAL_NUMBER_GENES',
                 dataIndex: 'Total_Number_Genes',
                 width: "8%",
                 key: 'Total_Number_Genes',
                 sorter: true,
+              render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
             }
         ];
 
@@ -272,21 +356,43 @@ class PUGTable extends Component {
             })
         }
 
+                const menu = (
+                <Menu onClick={this.handleMenuClick}>
+                    <Menu.Item key="10">10</Menu.Item>
+                    <Menu.Item key="15">15</Menu.Item>
+                    <Menu.Item key="20">20</Menu.Item>
+                    <Menu.Item key="25">25</Menu.Item>
+                    <Menu.Item key="30">30</Menu.Item>
+                    <Menu.Item key="35">35</Menu.Item>
+                </Menu>
+            );
+
+
 
         content = <div>
-                         <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
-                           <div className="filter_col" style={{width:"10%"}} ><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_down_search_PATHWAY_ID"/></div>
-                           <div className="filter_col" style={{width:"9%"}}><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_down_search_SOURCE"/></div>
-                           <div className="filter_col" style={{width:"9%"}}><Input onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_down_search_DESCRIPTION"/></div>
-                           <div className="filter_col" style={{width:"9%"}} ><Input onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_down_search_TYPE"/></div>
-                           <div className="filter_col"  style={{width:"8%"}}><Input onPressEnter={value=>search(value) }    placeholder="P_Value"  id="input_pathway_down_search_p_value"/></div>
-                           <div className="filter_col" style={{width:"7%"}}><Input onPressEnter={value=>search(value) }    placeholder="FDR"  id="input_pathway_down_search_fdr"/></div>
-                           <div className="filter_col" style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_down_search_RATIO"/></div>
-                           <div className="filter_col" style={{width:"9%"}}><Input onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_down_search_GENE_LIST"/></div>
-                           <div className="filter_col" style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="HITS"  id="input_pathway_down_search_NUMBER_HITS"/></div>
-                           <div className="filter_col"  style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="GENES_PATHWAY"  id="input_pathway_down_search_NUMBER_GENES_PATHWAY"/></div>
-                           <div className="filter_col" style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="USER_GENES"  id="input_pathway_down_search_NUMBER_USER_GENES"/></div>
-                           <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="GENES"  id="input_pathway_down_search_TOTAL_NUMBER_GENES"/></div>
+                        <div>
+                             <div id="deg-select">show 
+                                <Dropdown overlay={menu}>
+                                      <Button >
+                                        <span id="pd-drop-down">20</span> <Icon type="down" />
+                                      </Button>
+                                </Dropdown>of total {this.props.data.pathways_down.pagination.total}records
+
+                            </div>
+                             <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
+                               <div className="filter_col" style={{width:"10%"}} ><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_down_search_PATHWAY_ID"/></div>
+                               <div className="filter_col" style={{width:"9%"}}><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_down_search_SOURCE"/></div>
+                               <div className="filter_col" style={{width:"9%"}}><Input onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_down_search_DESCRIPTION"/></div>
+                               <div className="filter_col" style={{width:"9%"}} ><Input onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_down_search_TYPE"/></div>
+                               <div className="filter_col"  style={{width:"8%"}}><Input onPressEnter={value=>search(value) }    placeholder="P_Value"  id="input_pathway_down_search_p_value"/></div>
+                               <div className="filter_col" style={{width:"7%"}}><Input onPressEnter={value=>search(value) }    placeholder="FDR"  id="input_pathway_down_search_fdr"/></div>
+                               <div className="filter_col" style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_down_search_RATIO"/></div>
+                               <div className="filter_col" style={{width:"9%"}}><Input onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_down_search_GENE_LIST"/></div>
+                               <div className="filter_col" style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="HITS"  id="input_pathway_down_search_NUMBER_HITS"/></div>
+                               <div className="filter_col"  style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="GENES_PATHWAY"  id="input_pathway_down_search_NUMBER_GENES_PATHWAY"/></div>
+                               <div className="filter_col" style={{width:"7%"}}><Input onPressEnter={value=>search(value) }   placeholder="USER_GENES"  id="input_pathway_down_search_NUMBER_USER_GENES"/></div>
+                               <div className="filter_col" style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="GENES"  id="input_pathway_down_search_TOTAL_NUMBER_GENES"/></div>
+                            </div>
                         </div>
                   <div>
                   <Table 
