@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Input, message, Modal, Button, Tooltip } from 'antd';
-import 'intro.js/introjs.css';
-import { Steps } from 'intro.js-react';
+import { Menu, Dropdown, Icon, Table, Select, Input, message, Modal, Button, Tooltip } from 'antd';
 const Search = Input.Search;
 
 
@@ -25,6 +23,20 @@ class PUGTable extends Component {
 
     }
 
+
+
+    handleMenuClick = (e) => {
+         document.getElementById("pu-drop-down").innerHTML=e.key
+         this.props.getPathwayDown({
+            page_size: e.key,
+            page_number: 1,
+            sorting: {
+                name: this.props.data.pathways_up.sorting.name,
+                order: this.props.data.pathways_up.sorting.order,
+            },
+            search_keyword: this.props.data.pathways_up.search_keyword
+        });
+    }
 
 
 
@@ -127,11 +139,25 @@ class PUGTable extends Component {
             dataIndex: 'Pathway_ID',
             width: "10%",
             sorter: true,
+              render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
         }, {
             title: 'SOURCE',
             dataIndex: 'Source',
             width: "9%",
             sorter: true,
+              render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
         }, {
             title: 'DESCRIPTION',
             dataIndex: 'Description',
@@ -147,28 +173,57 @@ class PUGTable extends Component {
             dataIndex: 'Type',
             width: "10%",
             sorter: true,
+              render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
         }, {
             title: 'P_VALUE',
             dataIndex: 'P_Value',
             width: "8%",
             sorter: true,
+            defaultSortOrder: 'descend',
+              render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
         }, {
             title: 'FDR',
             dataIndex: 'FDR',
             width: "7%",
             sorter: true,
+              render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
         }, {
             title: 'RATIO',
             dataIndex: 'Ratio',
             width: "7%",
             sorter: true,
+              render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
         }, {
             title: 'GENE_LIST',
             dataIndex: 'Gene_List',
             width: "10%",
             sorter: true,
             render: (text, record, index) => (
-                <div className="single-line" style={{"maxWidth":"120px"}}>
+                <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
             ),
@@ -177,22 +232,51 @@ class PUGTable extends Component {
             dataIndex: 'Number_Hits',
             width: "7%",
             sorter: true,
+            render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
+
         }, {
             title: 'NUMBER_GENES_PATHWAY',
             dataIndex: 'Number_Genes_Pathway',
             width: "7%",
             sorter: true,
+            render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
         }, {
             title: 'NUMBER_USER_GENES',
             dataIndex: 'Number_User_Genes',
             width: "7%",
             sorter: true,
+            render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
         }, {
             title: 'TOTAL_NUMBER_GENES',
             dataIndex: 'Total_Number_Genes',
             width: "8%",
             sorter: true,
+            render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
         }];
 
 
@@ -245,7 +329,29 @@ class PUGTable extends Component {
             </Modal>
         // end  group modal
 
+
+
+                const menu = (
+                <Menu onClick={this.handleMenuClick}>
+                    <Menu.Item key="10">10</Menu.Item>
+                    <Menu.Item key="15">15</Menu.Item>
+                    <Menu.Item key="20">20</Menu.Item>
+                    <Menu.Item key="25">25</Menu.Item>
+                    <Menu.Item key="30">30</Menu.Item>
+                    <Menu.Item key="35">35</Menu.Item>
+                </Menu>
+            );
+
         content = <div>
+
+                        <div id="deg-select">show 
+                                <Dropdown overlay={menu}>
+                                      <Button >
+                                        <span id="pu-drop-down">20</span> <Icon type="down" />
+                                      </Button>
+                                </Dropdown>of total {this.props.data.pathways_up.pagination.total}records
+
+                            </div>
                      <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
                            <div className="filter_col" style={{width:"10%"}} ><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_up_search_PATHWAY_ID"/></div>
                            <div className="filter_col" style={{width:"9%"}}><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_up_search_SOURCE"/></div>

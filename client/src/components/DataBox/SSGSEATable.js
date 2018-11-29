@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Select, message, Input } from 'antd';
+import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'antd';
 const { Option, OptGroup } = Select;
 
 
@@ -11,6 +11,22 @@ class SSGSEATable extends Component {
         this.handleSelectionChange = this.handleSelectionChange.bind(this)
 
     }
+
+
+        handleMenuClick = (e) => {
+         document.getElementById("ss-drop-down").innerHTML=e.key
+         this.props.getPathwayDown({
+            page_size: e.key,
+            page_number: 1,
+            sorting: {
+                name: this.props.data.ssGSEA.sorting.name,
+                order: this.props.data.ssGSEA.sorting.order,
+            },
+            search_keyword: this.props.data.ssGSEA.search_keyword
+        });
+    }
+
+
 
     handleTableChange = (pagination, filters, sorter) => {
 
@@ -87,7 +103,8 @@ class SSGSEATable extends Component {
             title: 'P VALUE',
             dataIndex: 'P.Value',
             sorter: true,
-            width: "10%"
+            width: "10%",
+            defaultSortOrder: 'descend'
         }, {
             title: 'adj.P.Val',
             dataIndex: 'adj.P.Val',
@@ -129,6 +146,17 @@ class SSGSEATable extends Component {
             })
         }
 
+             const menu = (
+                <Menu onClick={this.handleMenuClick}>
+                    <Menu.Item key="10">10</Menu.Item>
+                    <Menu.Item key="15">15</Menu.Item>
+                    <Menu.Item key="20">20</Menu.Item>
+                    <Menu.Item key="25">25</Menu.Item>
+                    <Menu.Item key="30">30</Menu.Item>
+                    <Menu.Item key="35">35</Menu.Item>
+                </Menu>
+            );
+
 
         var link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
@@ -158,6 +186,15 @@ class SSGSEATable extends Component {
                           <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
                         </OptGroup>
                       </Select></div>
+
+                          <div id="deg-select">show 
+                                <Dropdown overlay={menu}>
+                                      <Button >
+                                        <span id="pu-drop-down">20</span> <Icon type="down" />
+                                      </Button>
+                                </Dropdown>of total {this.props.data.ssGSEA.pagination.total}records
+
+                            </div>
                          <div>
                           <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
 
