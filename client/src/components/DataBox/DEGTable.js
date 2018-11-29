@@ -47,7 +47,7 @@ class DEGTable extends Component {
     handleMenuClick = (e) => {
          document.getElementById("deg-drop-down").innerHTML=e.key
          this.props.getDEG({
-            page_size: e.key,
+            page_size: parseInt(e.key),
             page_number: 1,
             sorting: {
                 name: this.props.data.diff_expr_genes.sorting.name,
@@ -91,7 +91,7 @@ class DEGTable extends Component {
                 dataIndex: 'P.Value',
                 sorter: true,
                 width: "8%",
-                defaultSortOrder: 'descend',
+                defaultSortOrder: 'ascend',
                  render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
@@ -163,9 +163,9 @@ class DEGTable extends Component {
                 width: "8%",
                 render: (text, record, index) => {
                     if(text!="" && text!="NA"){
-                        let link ="https://www.ncbi.nlm.nih.gov/gene/"+this.text;
+                        let link ="https://www.ncbi.nlm.nih.gov/gene/"+text;
                          return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}> <a href={link} >{text}</a></span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}> <a href={link} target="_blank">{text}</a></span>
                                     </div>
                         
                     }else{

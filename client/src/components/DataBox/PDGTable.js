@@ -36,7 +36,7 @@ class PUGTable extends Component {
     handleMenuClick = (e) => {
          document.getElementById("pd-drop-down").innerHTML=e.key
          this.props.getPathwayDown({
-            page_size: e.key,
+             page_size: parseInt(e.key),
             page_number: 1,
             sorting: {
                 name: this.props.data.pathways_down.sorting.name,
@@ -52,7 +52,7 @@ class PUGTable extends Component {
         if (!sorter) {
             sorter = {
                 field: "P_Value",
-                rder: "descend"
+                rder: "ascend"
             }
         }
         if (!sorter.field) {
@@ -60,7 +60,7 @@ class PUGTable extends Component {
         }
 
         if (!sorter.order) {
-            sorter.order = "descend"
+            sorter.order = "ascend"
         }
 
 
@@ -203,7 +203,7 @@ class PUGTable extends Component {
                 width: "8%",
                 key: 'P_Value',
                 sorter: true,
-                defaultSortOrder: 'descend',
+                defaultSortOrder: 'ascend',
                   render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>

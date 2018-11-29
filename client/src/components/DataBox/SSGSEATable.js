@@ -13,10 +13,10 @@ class SSGSEATable extends Component {
     }
 
 
-        handleMenuClick = (e) => {
-         document.getElementById("ss-drop-down").innerHTML=e.key
-         this.props.getPathwayDown({
-            page_size: e.key,
+    handleMenuClick = (e) => {
+        document.getElementById("ss-drop-down").innerHTML = e.key
+        this.props.getPathwayDown({
+            page_size: parseInt(e.key),
             page_number: 1,
             sorting: {
                 name: this.props.data.ssGSEA.sorting.name,
@@ -33,7 +33,7 @@ class SSGSEATable extends Component {
         if (!sorter) {
             sorter = {
                 field: "P.Value",
-                rder: "descend"
+                rder: "ascend"
             }
         }
         if (!sorter.field) {
@@ -41,7 +41,7 @@ class SSGSEATable extends Component {
         }
 
         if (!sorter.order) {
-            sorter.order = "descend"
+            sorter.order = "ascend"
         }
 
 
@@ -83,38 +83,86 @@ class SSGSEATable extends Component {
             title: 'NAME',
             dataIndex: '_row',
             sorter: true,
-            width: "30%"
+            render: (text, record, index) => {
+
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+            }
         }, {
             title: 'logFC',
             dataIndex: 'logFC',
             sorter: true,
-            width: "10%"
+            width: "10%",
+            render: (text, record, index) => {
+
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+            }
         }, {
             title: 'Avg.Enrichment.Score',
             dataIndex: 'Avg.Enrichment.Score',
             sorter: true,
-            width: "20%"
+            width: "20%",
+            render: (text, record, index) => {
+
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.2}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+            }
         }, {
             title: 't',
             dataIndex: 't',
             sorter: true,
-            width: "10%"
+            width: "10%",
+            render: (text, record, index) => {
+
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+            }
         }, {
             title: 'P VALUE',
             dataIndex: 'P.Value',
             sorter: true,
             width: "10%",
-            defaultSortOrder: 'descend'
+            defaultSortOrder: 'ascend',
+            render: (text, record, index) => {
+
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+            }
         }, {
             title: 'adj.P.Val',
             dataIndex: 'adj.P.Val',
             sorter: true,
-            width: "10%"
+            width: "10%",
+            render: (text, record, index) => {
+
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+            }
         }, {
             title: 'B',
             dataIndex: 'B',
             sorter: true,
-            width: "10%"
+            width: "10%",
+            render: (text, record, index) => {
+
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+            }
         }, ];
 
 
@@ -146,8 +194,8 @@ class SSGSEATable extends Component {
             })
         }
 
-             const menu = (
-                <Menu onClick={this.handleMenuClick}>
+        const menu = (
+            <Menu onClick={this.handleMenuClick}>
                     <Menu.Item key="10">10</Menu.Item>
                     <Menu.Item key="15">15</Menu.Item>
                     <Menu.Item key="20">20</Menu.Item>
@@ -155,7 +203,7 @@ class SSGSEATable extends Component {
                     <Menu.Item key="30">30</Menu.Item>
                     <Menu.Item key="35">35</Menu.Item>
                 </Menu>
-            );
+        );
 
 
         var link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap

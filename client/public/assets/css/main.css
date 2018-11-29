@@ -52,6 +52,10 @@ tr:nth-child(even) {
 .ant-select-selection__rendered {
     font-size: 18px;
 }
+
+.ant-input{
+    font-size: 18px;
+}
 /* HEADER-NCI -------------------------------------------------------- */
 .div-container {
     width: 100%;
