@@ -5,6 +5,7 @@ var config = require('./config');
 var app = express();
 var logger = require('./components/logger');
 var ncp = require('ncp').ncp;
+var fs = require('fs');
 
 require('./routes')(app);
 
@@ -20,7 +21,11 @@ const server = app.listen(config.port, function() {
     console.log('Project Microarray listening on port :' + config.port);
 });
 
-server.timeout = config.timeout;  
+server.timeout = config.timeout;
+
+let logDirectory = config.logDir;
+// ensure log directory exists
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 // when shutdown signal is received, do graceful shutdown
 process.on('SIGINT', function() {

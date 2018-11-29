@@ -169,11 +169,11 @@ class DataBox extends Component {
                 group_name = "GSMGroup_" + index_number;
                 document.getElementById("input_group_name").value = group_name;
             } else {
-                if(group_name.indexOf("GSMGroup_")>=0){
-                     document.getElementById("input_group_name").value = group_name;
-                 }else{
-                     document.getElementById("input_group_name").value = "GSMGroup_1";
-                 }
+                if (group_name.indexOf("GSMGroup_") >= 0) {
+                    document.getElementById("input_group_name").value = group_name;
+                } else {
+                    document.getElementById("input_group_name").value = "GSMGroup_1";
+                }
             }
 
         } else {
@@ -191,26 +191,26 @@ class DataBox extends Component {
     }
 
     handleOk = () => {
-        
-         let workflow = Object.assign({}, this.state);
-         workflow.loading=true;
+
+        let workflow = Object.assign({}, this.state);
+        workflow.loading = true;
         this.setState(workflow);
         setTimeout(() => {
-            
-             let workflow = Object.assign({}, this.state);
-             workflow.loading=false;
-             workflow.visible=false;
+
+            let workflow = Object.assign({}, this.state);
+            workflow.loading = false;
+            workflow.visible = false;
             this.setState(workflow);
         }, 3000);
     }
 
     handleCancel = () => {
-         let workflow = Object.assign({}, this.state);
-         workflow.group="";
-         workflow.selected=[];
-         workflow.visible=false;
+        let workflow = Object.assign({}, this.state);
+        workflow.group = "";
+        workflow.selected = [];
+        workflow.visible = false;
 
-         workflow.group_name=document.getElementById("input_group_name").value;
+        workflow.group_name = document.getElementById("input_group_name").value;
         this.setState(workflow);
         // call child unselect function
         this.child.current.unselect();
@@ -347,9 +347,12 @@ class DataBox extends Component {
             groups_data_list.push(d);
         })
         let group_table = <Table columns={columns} dataSource={groups_data_list}  />
+        let modal ="";
 
-        // define group modal
-        let modal = <Modal key="group_define_modal" visible={visible}  className="custom_modal" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
+        if (selected_gsms == "") {
+
+            // define group modal
+            modal = <Modal key="group_define_modal" visible={visible}  className="custom_modal" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
         footer={[
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
@@ -358,13 +361,36 @@ class DataBox extends Component {
           
           <p>{selected_gsms}</p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
-          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 62px)'}} defaultValue="GSMGroup_1"/>&nbsp;
-              <Button  type="primary" onClick={this.createTag} >Add</Button>
+          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68 px)'}} defaultValue="GSMGroup_1"/>&nbsp;
+              <Button  type="default" disabled onClick={this.createTag} >Add</Button>
+          </p>
+          <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
+          {group_table}
+        </Modal>
+            // end  group modal
+
+        }else {
+
+            // define group modal
+            modal = <Modal key="group_define_modal" visible={visible}  className="custom_modal" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
+        footer={[
+            <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
+          ]}
+        >
+          <p style={{color: "#215a82"}}><b>Selected GSM(s)</b></p>
+          
+          <p>{selected_gsms}</p>
+          <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
+          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} defaultValue="GSMGroup_1"/>&nbsp;
+              <Button  type="primary"  onClick={this.createTag} >Add</Button>
           </p>
           <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
           {group_table}
         </Modal>
         // end  group modal
+
+        }
+
 
         let content = (<Tabs onChange={this.handleTabChange} type="card" >
                       <TabPane tab="GSM Data" key="GSM_1">

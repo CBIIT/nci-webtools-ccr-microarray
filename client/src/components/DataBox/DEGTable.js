@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Table, Input, Tooltip, message } from 'antd';
+import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'antd';
 const Search = Input.Search;
+
 
 
 
@@ -42,6 +43,19 @@ class DEGTable extends Component {
         });
     }
 
+   
+    handleMenuClick = (e) => {
+         document.getElementById("deg-drop-down").innerHTML=e.key
+         this.props.getDEG({
+            page_size: e.key,
+            page_number: 1,
+            sorting: {
+                name: this.props.data.diff_expr_genes.sorting.name,
+                order: this.props.data.diff_expr_genes.sorting.order,
+            },
+            search_keyword: this.props.data.diff_expr_genes.search_keyword
+        });
+    }
 
     render() {
         let content = "";
@@ -51,18 +65,40 @@ class DEGTable extends Component {
                 dataIndex: 'SYMBOL',
                 sorter: true,
                 width: "9%",
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
             }, {
                 title: 'FC',
                 dataIndex: 'FC',
                 sorter: true,
                 width: "7%",
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
             }, {
                 title: 'P VALUE',
                 dataIndex: 'P.Value',
                 sorter: true,
                 width: "8%",
+                defaultSortOrder: 'descend',
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
             },
             {
@@ -71,18 +107,40 @@ class DEGTable extends Component {
                 sorter: true,
                 width: "8%",
 
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
+
             },
             {
                 title: 'AveExpr',
                 dataIndex: 'AveExpr',
                 sorter: true,
                 width: "8%",
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
             }, {
                 title: 'ACCNUM',
                 dataIndex: 'ACCNUM',
                 sorter: true,
                 width: "12%",
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
             },
             {
@@ -103,25 +161,48 @@ class DEGTable extends Component {
                 dataIndex: 'ENTREZ',
                 sorter: true,
                 width: "8%",
-
-                onCellClick: function(record, event) {
-                    //https://www.ncbi.nlm.nih.gov/gene/171281
-                    if (record.ENTREZ !== "" && record.ENTREZ !== "NA") {
-                        window.open("https://www.ncbi.nlm.nih.gov/gene/" + record.ENTREZ);
+                render: (text, record, index) => {
+                    if(text!="" && text!="NA"){
+                        let link ="https://www.ncbi.nlm.nih.gov/gene/"+this.text;
+                         return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}> <a href={link} >{text}</a></span>
+                                    </div>
+                        
+                    }else{
+                         return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
                     }
 
+                   
+
                 }
+
             }, {
                 title: 'probsetID',
                 dataIndex: 'probsetID',
                 sorter: true,
                 width: "12%",
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
             }, {
                 title: 't',
                 dataIndex: 't',
                 sorter: true,
                 width: "8%",
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
             },
             {
@@ -129,6 +210,13 @@ class DEGTable extends Component {
                 dataIndex: 'B',
                 sorter: true,
                 width: "8%",
+                 render: (text, record, index) => {
+
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+                }
 
             }
 
@@ -174,10 +262,28 @@ class DEGTable extends Component {
         }
 
 
-
+                const menu = (
+                <Menu onClick={this.handleMenuClick}>
+                    <Menu.Item key="10">10</Menu.Item>
+                    <Menu.Item key="15">15</Menu.Item>
+                    <Menu.Item key="20">20</Menu.Item>
+                    <Menu.Item key="25">25</Menu.Item>
+                    <Menu.Item key="30">30</Menu.Item>
+                    <Menu.Item key="35">35</Menu.Item>
+                </Menu>
+            );
 
 
         content = <div>
+                  <div id="deg-select">show 
+                            <Dropdown overlay={menu}>
+                                  <Button >
+                                    <span id="deg-drop-down">20</span> <Icon type="down" />
+                                  </Button>
+                            </Dropdown>of total {this.props.data.diff_expr_genes.pagination.total}records
+
+                        </div>
+                    <div>
                      <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
                            <div className="filter_col"  style={{width:"9%"}}><Input onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></div>
                            <div className="filter_col"  style={{width:"7%"}} ><Input onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></div>
@@ -191,13 +297,14 @@ class DEGTable extends Component {
                            <div className="filter_col"  style={{width:"8%"}}><Input onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></div>
                            <div className="filter_col"  style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></div>
                      </div>
-                    <div>
+            
                         <Table 
                             columns={columns}
                             dataSource={this.props.data.diff_expr_genes.data}
                             pagination={this.props.data.diff_expr_genes.pagination}
                             loading={this.props.data.diff_expr_genes.loading}
                             onChange={this.handleTableChange}
+                            scroll={{ x: 960}}
                         />
                     </div>
                 </div>
