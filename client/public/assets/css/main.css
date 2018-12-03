@@ -789,3 +789,8 @@ div#deg-select button {
 input#input-access-code {
     font-size: 18px;
 }
+
+
+input#input_group_name{
+       width: calc(100%-68px);
+}

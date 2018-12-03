@@ -258,7 +258,7 @@ class GSMData extends Component {
         const { loading, selectedRowKeys } = this.state;
 
         let content = <div>
-            <div ></div>
+            <div className="err-message" id="message-gsm"></div>
             <p>Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here. </p>
        </div>;
 
