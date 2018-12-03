@@ -14,7 +14,7 @@ const defaultState = {
         token: "",
         projectID: "",
         analysisType: "0",
-        accessionCode: "",
+        accessionCode: "GSE37874",
         fileList: [],
         uploading: false,
         progressing: false,
@@ -1354,16 +1354,18 @@ class Analysis extends Component {
         reqBody.projectId = "";
         reqBody.groups = "";
 
+        if (workflow.accessionCode == "") {
+            document.getElementById("message-load-accession-code").innerHTML= "Accession Code is required. "
+            return;
+        }
+
         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default"
 
         if (workflow.dataList != "") {
             // user click load after data already loaded.then it is a new transaction 
             window.location.reload(true);
         }
-        if (workflow.accessionCode == "") {
-            message.warning('Accession Code is required. ');
-            return;
-        }
+        
         reqBody.code = workflow.accessionCode;
 
 
@@ -1435,7 +1437,7 @@ class Analysis extends Component {
                                 workflow: workflow
                             });
 
-                            message.success('load successfully.');
+                           // message.success('load successfully.');
 
                             // end testing data
                         } else {
@@ -1459,7 +1461,7 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                document.getElementById("message-load-accession-code").innerHTML= result.data
+                                document.getElementById("message-gsm").innerHTML= result.data.replace("\\n","")
                                 this.setState({
                                     workflow: workflow
                                 });
@@ -1474,7 +1476,7 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                 document.getElementById("message-load-accession-code").innerHTML= result.data
+                                 document.getElementById("mmessage-gsm").innerHTML= result.data.replace("\\n","")
                                 this.setState({
                                     workflow: workflow
                                 });
@@ -1512,7 +1514,7 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                        document.getElementById("message-load-accession-code").innerHTML= result.data
+                        document.getElementById("message-gsm").innerHTML= result.data
                         //message.error('load data fails.');
                     }
                 })
@@ -1525,7 +1527,7 @@ class Analysis extends Component {
             this.setState({
                 workflow: workflow
             });
-            document.getElementById("message-load-accession-code").innerHTML= err
+            document.getElementById("message-gsm").innerHTML= err
         
         }
     }
@@ -1564,10 +1566,6 @@ class Analysis extends Component {
             }
         }
 
-        if (workflow.pDEGs == "" || workflow.foldDEGs == "" || workflow.pPathways == "" || workflow.foldssGSEA == "" || workflow.pssGSEA == "") {
-            message.warning('All the threshold is required!');
-            return;
-        }
 
         reqBody.genSet = workflow.genSet;
         reqBody.pssGSEA = workflow.pssGSEA;
@@ -1980,12 +1978,16 @@ class Analysis extends Component {
             for (var key in dataList_keys) {
                 workflow.dataList[dataList_keys[key] - 1].groups = group_name;
             }
+             document.getElementById("message-gsm-group").innerHTML = ""
+
             this.setState({
                 workflow: workflow
             });
-            message.success('Add group successfully.');
+
+            
         } else {
-            message.success('The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1');
+             document.getElementById("message-gsm-group").innerHTML = "The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 "
+
             return false;
         }
 
@@ -2002,7 +2004,6 @@ class Analysis extends Component {
         this.setState({
             workflow: workflow
         });
-        message.success('Delete  group successfully.');
 
     }
 
