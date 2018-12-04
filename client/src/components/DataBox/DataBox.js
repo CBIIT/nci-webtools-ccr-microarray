@@ -167,7 +167,7 @@ class DataBox extends Component {
     showModal = () => {
         let group_name = this.state.group_name;
         if (this.state.group_name != ""&& this.state.group_name!=="GSMGroup_1") {
-            document.getElementById("input_group_name").innerHTML = group_name;
+            document.getElementById("input_group_name").value = group_name;
 
         }
         let currentState = Object.assign({}, this.state);
@@ -360,7 +360,7 @@ class DataBox extends Component {
         >
           <p style={{color: "#215a82"}}><b>Selected GSM(s)</b></p>
           
-          <p className="err-message" id="message-unselect-gsm-group">Please select some gsm before add GSM(s) as a group </p>
+          <p className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
           <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} defaultValue={this.state.group_name}  onChange={this.handleInputOnChange}/>&nbsp;
               <Button  type="default" disabled onClick={this.createTag} >Add</Button>
