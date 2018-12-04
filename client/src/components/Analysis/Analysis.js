@@ -3,7 +3,7 @@ import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
 import About from '../About/About';
 import Help from '../Help/Help';
-import { Spin, message, Icon, Button } from 'antd';
+import { Spin, Icon, Button } from 'antd';
 import Plot from 'react-plotly.js';
 
 
@@ -14,7 +14,7 @@ const defaultState = {
         token: "",
         projectID: "",
         analysisType: "0",
-        accessionCode: "GSE37874",
+        accessionCode: "",
         fileList: [],
         uploading: false,
         progressing: false,
@@ -40,12 +40,12 @@ const defaultState = {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 25,
 
             },
             loading: true,
             page_number: 1,
-            page_size: 20,
+            page_size: 25,
             sorting: {
                 name: "P.Value",
                 order: "ascend",
@@ -68,11 +68,11 @@ const defaultState = {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 25,
 
             },
             loading: true,
-            page_size: 20,
+            page_size: 25,
             page_number: 1,
             sorting: {
                 name: "P.Value",
@@ -93,7 +93,7 @@ const defaultState = {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 25,
 
             },
             sorting: {
@@ -121,7 +121,7 @@ const defaultState = {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 25,
 
             },
             loading: true,
@@ -275,6 +275,7 @@ class Analysis extends Component {
                 res => res.json()
             )
             .then(result => {
+                document.getElementById("message-ssgsea").innerHTML = ""
                 let workflow2 = Object.assign({}, this.state.workflow);
                 if (result.status == 200) {
                     const pagination = { ...workflow2.ssGSEA.pagination };
@@ -290,8 +291,10 @@ class Analysis extends Component {
                     workflow2.ssGSEA.data = result.data.records;
                     workflow2.ssGSEA.pagination = pagination;
                     this.setState({ workflow: workflow2 });
+
                 } else {
-                    message.warning('no data');
+                   
+                    document.getElementById("message-ssgsea").innerHTML = result.msg
                 }
 
 
@@ -379,6 +382,7 @@ class Analysis extends Component {
                 res => res.json()
             )
             .then(result => {
+                document.getElementById("message-pug").innerHTML = "";
                 let workflow2 = Object.assign({}, this.state.workflow);
                 if (result.status == 200) {
                     const pagination = { ...workflow.pathways_up.pagination };
@@ -397,7 +401,8 @@ class Analysis extends Component {
                     this.setState({ workflow: workflow2 });
 
                 } else {
-                    message.warning('no data');
+
+                    document.getElementById("message-pug").innerHTML = result.msg;
                 }
 
 
@@ -490,6 +495,7 @@ class Analysis extends Component {
                 res => res.json()
             )
             .then(result => {
+                document.getElementById("message-pdg").innerHTML = "";
                 let workflow2 = Object.assign({}, this.state.workflow);
                 if (result.status == 200) {
                     const pagination = { ...workflow.pathways_down.pagination };
@@ -506,7 +512,7 @@ class Analysis extends Component {
 
                     this.setState({ workflow: workflow2 });
                 } else {
-                    message.warning('no data');
+                     document.getElementById("message-pdg").innerHTML = result.msg;
                 }
 
                 document.getElementById("input_pathway_down_search_PATHWAY_ID").value = workflow2.pathways_down.search_keyword.search_PATHWAY_ID;
@@ -594,6 +600,7 @@ class Analysis extends Component {
                 res => res.json()
             )
             .then(result => {
+                document.getElementById("message-deg").innerHTML = "";
                 let workflow2 = Object.assign({}, this.state.workflow);
                 if (result.status == 200) {
 
@@ -611,7 +618,7 @@ class Analysis extends Component {
 
                     this.setState({ workflow: workflow2 });
                 } else {
-                    message.warning('no data');
+                    document.getElementById("message-deg").innerHTML = result.msg;
                 }
 
 
@@ -631,7 +638,7 @@ class Analysis extends Component {
     }
 
     getHeatmapolt() {
-
+        document.getElementById("message-post-heatmap").innerHTML ="";
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
         let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'80%'} height={'70%'} frameBorder={'0'}/></div>
@@ -720,10 +727,10 @@ class Analysis extends Component {
                             this.setState({ workflow: workflow });
 
                         }
-
+                        document.getElementById("message-post-pca").innerHTML ="";
 
                     } else {
-                        message.error('Load histplot fails.');
+                        document.getElementById("message-post-pca").innerHTML =result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.progressing = false;
                         workflow.postplot.PCA = "No Data";
@@ -732,7 +739,7 @@ class Analysis extends Component {
 
                 }).catch(error => console.log(error));
         } catch (error) {
-            message.error('Load data fails.');
+            document.getElementById("message-post-pca").innerHTML =error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
             this.setState({ workflow: workflow });
@@ -789,9 +796,9 @@ class Analysis extends Component {
 
                         }
 
-
+                         document.getElementById("message-post-boxplot").innerHTML ="";
                     } else {
-                        message.error('Load histplot fails.');
+                        document.getElementById("message-post-boxplot").innerHTML =result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.progressing = false;
                         workflow.postplot.Boxplots = "No Data";
@@ -800,7 +807,7 @@ class Analysis extends Component {
 
                 }).catch(error => console.log(error));
         } catch (error) {
-            message.error('Load data fails.');
+            document.getElementById("message-post-boxplot").innerHTML =error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
             workflow.postplot.Boxplots = "No Data";
@@ -837,6 +844,7 @@ class Analysis extends Component {
                     .then(res => res.json())
                     .then(result => {
                         if (result.status == 200) {
+                            document.getElementById("message-post-maplot").innerHTML ="";
                             let workflow = Object.assign({}, this.state.workflow);
                             if (result.data != "") {
                                 let list_mAplotBN = [];
@@ -860,9 +868,10 @@ class Analysis extends Component {
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
                             }
-
+                            
                         } else {
-                            message.error('Load histplot fails.');
+                            
+                            document.getElementById("message-post-maplot").innerHTML =result.msg;
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
@@ -870,7 +879,7 @@ class Analysis extends Component {
 
                     }).catch(error => console.log(error));
             } catch (error) {
-                message.error('Load data fails.');
+                document.getElementById("message-post-maplot").innerHTML =error;
                 let workflow = Object.assign({}, this.state.workflow);
                 workflow.progressing = false;
                 this.setState({ workflow: workflow });
@@ -890,9 +899,6 @@ class Analysis extends Component {
             workflow2.postplot.list_mAplotAN = <div style={ maplot_style } > { list_mAplotBN } </div>;
             workflow2.progressing = false;
             this.setState({ workflow: workflow2 });
-
-
-
         }
 
     }
@@ -910,6 +916,7 @@ class Analysis extends Component {
                     contentType: false
                 }).then(res => res.json())
                 .then(result => {
+                    document.getElementById("message-pre-nuse").innerHTML ="";
                     let workflow = Object.assign({}, this.state.workflow);
                     if (result.status == 200) {
 
@@ -940,14 +947,16 @@ class Analysis extends Component {
 
 
                     } else {
-                        message.error('Load histplot fails.');
+
+                        document.getElementById("message-pre-nuse").innerHTML =result.msg;
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
+
                     }
 
                 }).catch(error => console.log(error));
         } catch (error) {
-            message.error('Load data fails.');
+            document.getElementById("message-pre-nuse").innerHTML =error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
             this.setState({ workflow: workflow });
@@ -969,6 +978,7 @@ class Analysis extends Component {
                 .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
+                         document.getElementById("message-pre-rle").innerHTML ="";
                         if (result.data != "") {
                             let RLERenderData = []
                             let RLEplotsData = result.data
@@ -997,6 +1007,7 @@ class Analysis extends Component {
                             workflow.preplots.RLE = <div> {RLE}</div>;
                             this.setState({ workflow: workflow });
                         } else {
+
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.preplots.RLE = "No Data";
                             workflow.progressing = false;
@@ -1005,12 +1016,18 @@ class Analysis extends Component {
 
 
                     } else {
-                        message.error('Load histplot fails.');
+                        document.getElementById("message-pre-rle").innerHTML =result.msg;
+                         let workflow = Object.assign({}, this.state.workflow);
+                            workflow.preplots.RLE = "";
+                            workflow.progressing = false;
+                            this.setState({ workflow: workflow });
+                        
                     }
 
                 }).catch(error => console.log(error));
         } catch (error) {
-            message.error('Load data fails.');
+            
+            document.getElementById("message-pre-rle").innerHTML =error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.preplots.RLE = "No Data";
             workflow.progressing = false;
@@ -1037,6 +1054,7 @@ class Analysis extends Component {
                 .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
+                        document.getElementById("message-pre-boxplot").innerHTML ="";
                         if (result.data != "") {
                             let BoxplotRenderData = []
                             let BoxplotsData = result.data
@@ -1064,7 +1082,7 @@ class Analysis extends Component {
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         } else {
-
+                            
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.preplots.Boxplots = "No Data";
                             workflow.progressing = false;
@@ -1073,7 +1091,7 @@ class Analysis extends Component {
 
 
                     } else {
-                        message.error('Load histplot fails.');
+                        document.getElementById("message-pre-boxplot").innerHTML =result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.preplots.Boxplots = "No Data";
                         workflow.progressing = false;
@@ -1082,7 +1100,8 @@ class Analysis extends Component {
 
                 }).catch(error => console.log(error));
         } catch (error) {
-            message.error('Load data fails.');
+
+            document.getElementById("message-pre-boxplot").innerHTML =error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.preplots.Boxplots = "No Data";
             workflow.progressing = false;
@@ -1107,6 +1126,7 @@ class Analysis extends Component {
                     .then(res => res.json())
                     .then(result => {
                         if (result.status == 200) {
+                            document.getElementById("message-pre-maplot").innerHTML ="";
                             if (result.data != "") {
                                 let workflow = Object.assign({}, this.state.workflow);
                                 let list_mAplotBN = [];
@@ -1130,7 +1150,7 @@ class Analysis extends Component {
                             }
 
                         } else {
-                            message.error('Load histplot fails.');
+                            document.getElementById("message-pre-maplot").innerHTML =result.msg;
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.preplots.list_mAplotBN = "No Data";
                             workflow.progressing = false;
@@ -1139,7 +1159,7 @@ class Analysis extends Component {
 
                     }).catch(error => console.log(error));
             } catch (error) {
-                message.error('Load data fails.');
+                document.getElementById("message-pre-maplot").innerHTML =error;
                 let workflow = Object.assign({}, this.state.workflow);
                 workflow.preplots.list_mAplotBN = "No Data";
                 workflow.progressing = false;
@@ -1184,7 +1204,7 @@ class Analysis extends Component {
             workflow.pathways_up = obj;
         }
         this.setState({ workflow: workflow }, () => {
-            console.log(this.state.pathways_up);
+            console.log("changePathways_up done");
         });
     }
     changePathways_down(obj) {
@@ -1264,20 +1284,16 @@ class Analysis extends Component {
                         this.getssGSEA();
                     } else {
                         //change button style
-
-
-                        message.error('load data fails.');
+                        document.getElementById("message-ssgsea").innerHTML =result.msg;
                     }
                 })
         } catch (err) {
+             document.getElementById("message-ssgsea").innerHTML =err;
             //change button style
             workflow.progressing = false;
             this.setState({
                 workflow: workflow
             });
-
-            message.error('load data fails.');
-
         }
     }
 
@@ -1437,8 +1453,6 @@ class Analysis extends Component {
                                 workflow: workflow
                             });
 
-                           // message.success('load successfully.');
-
                             // end testing data
                         } else {
 
@@ -1447,7 +1461,7 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                message.error('Load data fails');
+                                document.getElementById("message-gsm").innerHTML= result.data.replace("\\n","")
                                 this.setState({
                                     workflow: workflow
                                 });
@@ -1484,6 +1498,7 @@ class Analysis extends Component {
                                 return;
                             }
 
+                            document.getElementById("message-gsm").innerHTML=""
                             workflow.uploading = false;
                             workflow.progressing = false;
 
@@ -1590,12 +1605,12 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 25,
 
             },
             loading: true,
             page_number: 1,
-            page_size: 20,
+            page_size: 25,
             sorting: {
                 name: "P.Value",
                 order: "ascend",
@@ -1619,11 +1634,11 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 25,
 
             },
             loading: true,
-            page_size: 20,
+            page_size: 25,
             page_number: 1,
             sorting: {
                 name: "P.Value",
@@ -1645,7 +1660,7 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 25,
 
             },
             loading: true,
@@ -1674,7 +1689,7 @@ class Analysis extends Component {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 20,
+                pageSize: 25,
 
             },
             loading: true,
@@ -1848,8 +1863,7 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                        message.success('Plots loaded successfully.');
-
+                 
                         this.hideWorkFlow();
                     } else {
 
@@ -1857,7 +1871,7 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                        message.warning('Generate plots fails.');
+                       
                     }
 
                 }).catch(error => console.log(error));
@@ -1865,7 +1879,6 @@ class Analysis extends Component {
 
             workflow.uploading = false;
             workflow.progressing = false;
-            message.success('Run contrast fails');
             console.log(err);
             this.setState({
                 workflow: workflow
@@ -1914,7 +1927,7 @@ class Analysis extends Component {
 
                             workflow.uploading = false;
                             workflow.progressing = false;
-                            message.error('update data fails');
+                            document.getElementById("message-gsm").innerHTML= result.msg;
                             this.setState({
                                 workflow: workflow
                             });
@@ -1927,7 +1940,7 @@ class Analysis extends Component {
                         workflow.uploading = false;
                         workflow.progressing = false;
                         if (list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
-                            message.err('load data fails.');
+                            document.getElementById("message-gsm").innerHTML= "load data fails.";
                             return;
                         }
                         for (let i in list.files) {
@@ -1945,7 +1958,6 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                        message.success('load successfully.');
                     } else {
 
                         workflow.uploading = false;
@@ -1954,7 +1966,7 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                        message.error('load data fails.');
+                        document.getElementById("message-gsm").innerHTML= result.msg;
                     }
                 }).catch(error => console.log(error));
         } catch (error) {
@@ -1966,7 +1978,7 @@ class Analysis extends Component {
             this.setState({
                 workflow: workflow
             });
-            message.error('load data fails.');
+            document.getElementById("message-gsm").innerHTML= error;
         }
 
     }

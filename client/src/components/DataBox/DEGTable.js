@@ -239,7 +239,7 @@ class DEGTable extends Component {
 
 
             this.props.getDEG({
-                page_size: 20,
+                page_size: 25,
                 page_number: 1,
                 sorting: {
                     name: "P.Value",
@@ -264,21 +264,21 @@ class DEGTable extends Component {
 
                 const menu = (
                 <Menu onClick={this.handleMenuClick}>
-                    <Menu.Item key="10">10</Menu.Item>
                     <Menu.Item key="15">15</Menu.Item>
-                    <Menu.Item key="20">20</Menu.Item>
                     <Menu.Item key="25">25</Menu.Item>
-                    <Menu.Item key="30">30</Menu.Item>
-                    <Menu.Item key="35">35</Menu.Item>
+                    <Menu.Item key="50">50</Menu.Item>
+                    <Menu.Item key="100">100</Menu.Item>
+                    <Menu.Item key="200">200</Menu.Item>
                 </Menu>
             );
 
 
         content = <div>
+                  <div> <p className="err-message" id="message-deg"></p></div>  
                   <div id="deg-select">show 
                             <Dropdown overlay={menu}>
                                   <Button >
-                                    <span id="deg-drop-down">20</span> <Icon type="down" />
+                                    <span id="deg-drop-down">25</span> <Icon type="down" />
                                   </Button>
                             </Dropdown>of total {this.props.data.diff_expr_genes.pagination.total}records
 

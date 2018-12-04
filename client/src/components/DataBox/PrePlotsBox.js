@@ -69,11 +69,11 @@ class PrePlotsBox extends Component {
     render() {
 
 
-        let tabs = [<div id="preHistogram" key="pre_tag1" className="plot1" > { this.props.data.preplots.histplotBN } </div>,
-            <div id="preMAplots" key="pre_tag2"  className="plot1 hide"  > { this.props.data.preplots.list_mAplotBN } </div>,
-            <div id="preBoxplots" key="pre_tag3"  className="plot1 hide"> {this.props.data.preplots.Boxplots}</div>,
-            <div id="preRLE" key="pre_tag4"  className="plot1 hide"> {this.props.data.preplots.RLE} </div>,
-            <div id="preNUSE" key="pre_tag5"  className="plot1 hide"> {this.props.data.preplots.NUSE} </div>
+        let tabs = [<div id="preHistogram" key="pre_tag1" className="plot1" ><div> <p className="err-message" id="message-pre-histogram"></p></div>   { this.props.data.preplots.histplotBN } </div>,
+            <div id="preMAplots" key="pre_tag2"  className="plot1 hide"  > <div> <p className="err-message" id="message-pre-maplot"></p></div>  { this.props.data.preplots.list_mAplotBN } </div>,
+            <div id="preBoxplots" key="pre_tag3"  className="plot1 hide"> <div> <p className="err-message" id="message-pre-boxplot"></p></div>  {this.props.data.preplots.Boxplots}</div>,
+            <div id="preRLE" key="pre_tag4"  className="plot1 hide"> <div> <p className="err-message" id="message-pre-rle"></p></div>  {this.props.data.preplots.RLE} </div>,
+            <div id="preNUSE" key="pre_tag5"  className="plot1 hide"> <div> <p className="err-message" id="message-pre-nuse"></p></div>  {this.props.data.preplots.NUSE} </div>
         ]
 
 

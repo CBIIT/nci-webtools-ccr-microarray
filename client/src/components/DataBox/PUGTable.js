@@ -27,7 +27,7 @@ class PUGTable extends Component {
 
     handleMenuClick = (e) => {
          document.getElementById("pu-drop-down").innerHTML=e.key
-         this.props.getPathwayDown({
+         this.props.getPathwayUp({
              page_size: parseInt(e.key),
             page_number: 1,
             sorting: {
@@ -296,7 +296,7 @@ class PUGTable extends Component {
             var search_TOTAL_NUMBER_GENES = document.getElementById("input_pathway_up_search_TOTAL_NUMBER_GENES").value;
 
             this.props.getPathwayUp({
-                page_size: 20,
+                page_size: 25,
                 page_number: 1,
                 sorting: {
                     name: "P_Value",
@@ -333,21 +333,20 @@ class PUGTable extends Component {
 
                 const menu = (
                 <Menu onClick={this.handleMenuClick}>
-                    <Menu.Item key="10">10</Menu.Item>
                     <Menu.Item key="15">15</Menu.Item>
-                    <Menu.Item key="20">20</Menu.Item>
                     <Menu.Item key="25">25</Menu.Item>
-                    <Menu.Item key="30">30</Menu.Item>
-                    <Menu.Item key="35">35</Menu.Item>
+                    <Menu.Item key="50">50</Menu.Item>
+                    <Menu.Item key="100">100</Menu.Item>
+                    <Menu.Item key="200">200</Menu.Item>
                 </Menu>
             );
 
         content = <div>
-
+                  <div> <p className="err-message" id="message-pug"></p></div>  
                         <div id="deg-select">show 
                                 <Dropdown overlay={menu}>
                                       <Button >
-                                        <span id="pu-drop-down">20</span> <Icon type="down" />
+                                        <span id="pu-drop-down">25</span> <Icon type="down" />
                                       </Button>
                                 </Dropdown>of total {this.props.data.pathways_up.pagination.total}records
 
