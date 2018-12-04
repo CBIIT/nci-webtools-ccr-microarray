@@ -15,7 +15,7 @@ class GSMData extends Component {
         boxplot: "",
         pagination: {
             current: 1,
-            pageSize: 20
+            pageSize: 25
         },
         data: { totalCount: 0, records: [] },
         renderData: { totalCount: 0, records: [] },
@@ -258,6 +258,7 @@ class GSMData extends Component {
         const { loading, selectedRowKeys } = this.state;
 
         let content = <div>
+            <div className="err-message" id="message-gsm"></div>
             <p>Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here. </p>
        </div>;
 
@@ -311,7 +312,7 @@ class GSMData extends Component {
             });
 
 
-            //this.state.data;
+         
 
             const searchFilter = (row) => {
                 if (this.state.term === "") {
@@ -326,12 +327,11 @@ class GSMData extends Component {
 
             const menu = (
                 <Menu onClick={this.handleMenuClick}>
-                    <Menu.Item key="10">10</Menu.Item>
-                    <Menu.Item key="15">15</Menu.Item>
-                    <Menu.Item key="20">20</Menu.Item>
+                     <Menu.Item key="15">15</Menu.Item>
                     <Menu.Item key="25">25</Menu.Item>
-                    <Menu.Item key="30">30</Menu.Item>
-                    <Menu.Item key="35">35</Menu.Item>
+                    <Menu.Item key="50">50</Menu.Item>
+                    <Menu.Item key="100">100</Menu.Item>
+                    <Menu.Item key="200">200</Menu.Item>
                 </Menu>
             );
 
@@ -353,7 +353,7 @@ class GSMData extends Component {
                         <div id="gsm-select">show 
                             <Dropdown overlay={menu}>
                                   <Button >
-                                    <span id="gsm-drop-down">20</span> <Icon type="down" />
+                                    <span id="gsm-drop-down">25</span> <Icon type="down" />
                                   </Button>
                             </Dropdown>of total {this.state.data.length} records
 

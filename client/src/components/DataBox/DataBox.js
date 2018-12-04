@@ -17,12 +17,19 @@ class DataBox extends Component {
             loading: false,
             visible: false,
             selected: [],
-            group_name: "",
-            used: false
+            group_name: "GSMGroup_1",
+            added:false
         }
+
+        this.createTag = this.createTag.bind(this)
+        this.showModal = this.showModal.bind(this)
     }
 
 
+    handleInputOnChange=(e)=>{
+
+        console.log(e)
+    }
 
     handleTabChange = (key) => {
         if (key == "Pre-normalization_QC_Plots") {
@@ -158,33 +165,14 @@ class DataBox extends Component {
     }
 
     showModal = () => {
-
-
         let group_name = this.state.group_name;
-        if (this.state.group_name != "") {
+        if (this.state.group_name != ""&& this.state.group_name!=="GSMGroup_1") {
+            document.getElementById("input_group_name").value = group_name;
 
-            if (this.state.used) {
-                // match the group
-                let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
-                group_name = "GSMGroup_" + index_number;
-                document.getElementById("input_group_name").value = group_name;
-            } else {
-                if (group_name.indexOf("GSMGroup_") >= 0) {
-                    document.getElementById("input_group_name").value = group_name;
-                } else {
-                    document.getElementById("input_group_name").value = "GSMGroup_1";
-                }
-            }
-
-        } else {
-            group_name = "GSMGroup_1";
         }
-
-        this.setState({
-            visible: true,
-            group_name: group_name,
-            used: false
-        });
+        let currentState = Object.assign({}, this.state);
+        currentState.visible = true;
+        this.setState(currentState);
 
 
 
@@ -207,13 +195,21 @@ class DataBox extends Component {
     handleCancel = () => {
         let workflow = Object.assign({}, this.state);
         workflow.group = "";
-        workflow.selected = [];
+      
         workflow.visible = false;
+        let flag = workflow.added;
+        workflow.added = false;
+        if(flag){
+            workflow.selected = [];
+        }
 
-        workflow.group_name = document.getElementById("input_group_name").value;
-        this.setState(workflow);
+         this.setState(workflow);
         // call child unselect function
-        this.child.current.unselect();
+        if(flag){
+
+            this.child.current.unselect();
+        }
+        
 
     }
 
@@ -223,22 +219,27 @@ class DataBox extends Component {
 
     createTag = () => {
         if (document.getElementById("input_group_name").value == "") {
-            // alert 
-            message.warning('Please type the tag name. ');
+            document.getElementById("message-gsm-group").innerHTML = "tag name is required. "
         } else {
+
             if (this.state.selected.length > 0) {
                 // if user select records in table 
                 this.props.assignGroup(document.getElementById("input_group_name").value, this.state.selected)
                 this.child.current.unselect(); // after create tag, previous selected record will unselect. 
-
+                console.log(this.state.group_name)
+                console.log(document.getElementById("input_group_name").value)
                 if (document.getElementById("input_group_name").value == this.state.group_name) {
-                    this.setState({
-                        used: true
-                    });
+                    let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
+                    let currentState = Object.assign({}, this.state);
+                    currentState.group_name = "GSMGroup_" + index_number;
+                    currentState.added=true;
+                    this.setState(currentState);
+
                 }
 
             } else {
-                message.warning('Please select some gsm(s). ');
+                document.getElementById("message-gsm-group").innerHTML = "Please select some gsm(s). "
+
             }
         }
 
@@ -248,7 +249,7 @@ class DataBox extends Component {
         console.log("delete");
         var group_name = event.target.parentNode.parentNode.getElementsByTagName("td")[0].innerText;
         if (group_name == "" || typeof(group_name) == 'undefined') {
-            message.warning('No group selected for deleting.');
+            document.getElementById("message-gsm-group-table").innerHTML = 'No group selected for deleting.'
         } else {
             group_name.tr
             this.props.deleteGroup(group_name.trim())
@@ -347,7 +348,7 @@ class DataBox extends Component {
             groups_data_list.push(d);
         })
         let group_table = <Table columns={columns} dataSource={groups_data_list}  />
-        let modal ="";
+        let modal = "";
 
         if (selected_gsms == "") {
 
@@ -359,9 +360,9 @@ class DataBox extends Component {
         >
           <p style={{color: "#215a82"}}><b>Selected GSM(s)</b></p>
           
-          <p>{selected_gsms}</p>
+          <p className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
-          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68 px)'}} defaultValue="GSMGroup_1"/>&nbsp;
+          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} defaultValue={this.state.group_name}  onChange={this.handleInputOnChange}/>&nbsp;
               <Button  type="default" disabled onClick={this.createTag} >Add</Button>
           </p>
           <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
@@ -369,7 +370,7 @@ class DataBox extends Component {
         </Modal>
             // end  group modal
 
-        }else {
+        } else {
 
             // define group modal
             modal = <Modal key="group_define_modal" visible={visible}  className="custom_modal" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
@@ -381,13 +382,15 @@ class DataBox extends Component {
           
           <p>{selected_gsms}</p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
-          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} defaultValue="GSMGroup_1"/>&nbsp;
+           <p className="err-message" id="message-gsm-group"></p>
+          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} defaultValue={this.state.group_name} onChange={this.handleInputOnChange}/>&nbsp;
               <Button  type="primary"  onClick={this.createTag} >Add</Button>
           </p>
           <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
+           <p className="err-message" id="message-gsm-group-table"></p>
           {group_table}
         </Modal>
-        // end  group modal
+            // end  group modal
 
         }
 
