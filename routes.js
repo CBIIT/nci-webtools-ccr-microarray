@@ -37,16 +37,16 @@ module.exports = function(app){
     }));
 
 
-    app.use(bodyParser.urlencoded({
-        limit: '40mb', // 100kb default is too small
-        extended: false
-    }));
+    // app.use(bodyParser.urlencoded({
+    //     limit: '40mb', // 100kb default is too small
+    //     extended: false
+    // }));
     app.use(bodyParser.json({
         limit: '40mb' // 100kb default is too small
     }));
 
     //app.use(cookieParser());
-    app.use(compression());
+    //app.use(compression());
     //app.use(methodOverride());
 
 
