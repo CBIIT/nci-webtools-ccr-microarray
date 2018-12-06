@@ -137,25 +137,6 @@ process = function(){
     config_path<-toString(args[i])
 
 
- if(access_code=="test"){
-      data_repo_path<-paste0(toString(args[4]),"/","test",sep="")
-      return_plot_data<-readRDS(file = paste0(data_repo_path,"/return_plot_data.rds"))
-      l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
-      diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
-      ssGSEA_results<-readRDS(file = paste0(data_repo_path,"/ssGSEA_results.rds"))
-      ssColumn<-readRDS(file = paste0(data_repo_path,"/ssColumn.rds"))
-      return(list(
-        norm_celfiles=return_plot_data,
-        diff_expr_genes=diff_expr_genes,
-        pathways=l2p_pathways,
-        ssGSEA=ssGSEA_results,
-        ssColumn=ssColumn
-        ))
-    }
-
-
-
-
     #If user selects 'ANALYZE CEL FILES', call this function, input path of files (length of group assignments must match number of files for testing purposes):
     #celfiles = processCELfiles('/Users/valdezkm/Documents/2___Combined',c('Ctl_1','Ctl_1','Ctl_1','KO_1','KO_1','KO_1','Ctl_2','Ctl_2','Ctl_2','KO_2','KO_2','KO_2'))
 
@@ -237,7 +218,6 @@ process = function(){
     
     ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
 
-    saveRDS(return_plot_data, file = paste0(data_repo_path,"/return_plot_data.rds"))
     saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
     
 

@@ -14,7 +14,7 @@ const defaultState = {
         token: "",
         projectID: "",
         analysisType: "0",
-        accessionCode: "",
+        accessionCode: "GSE37874",
         fileList: [],
         uploading: false,
         progressing: false,
@@ -369,6 +369,7 @@ class Analysis extends Component {
 
         workflow.pathways_up.loading = true;
         this.setState({ workflow: workflow });
+        console.log()
         fetch('./api/analysis/getUpPathWays', {
                 method: "POST",
                 body: JSON.stringify(params),
