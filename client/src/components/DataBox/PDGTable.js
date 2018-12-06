@@ -99,7 +99,7 @@ class PUGTable extends Component {
         reqBody.group2 = this.props.data.group_2;
         reqBody.upOrDown = "downregulated_pathways";
         reqBody.pathway_name = row.Description;
-        this.props.changeLoadingStatus(true, "loading heap Map")
+        this.props.changeLoadingStatus(true, "loading HeatMap")
 
         fetch('./api/analysis/pathwaysHeapMap', {
                 method: "POST",
@@ -310,7 +310,7 @@ class PUGTable extends Component {
                 <Button key="back" onClick={this.handleCancel}>Close</Button>
               ]}
             >
-              <img src={this.state.heapMap} style={{width:"100%"}} alt="heapMap"/>
+              <img src={this.state.heapMap} style={{width:"100%"}} alt="heatMap"/>
             </Modal>
         // end  group modal
 
