@@ -2,6 +2,7 @@ body {
     width: 100%;
     margin: 0 auto 0 auto;
     padding: 0;
+    word-break: break-word;
 }
 
 a {
@@ -56,6 +57,9 @@ tr:nth-child(even) {
 .ant-input{
     font-size: 18px;
 }
+
+
+
 /* HEADER-NCI -------------------------------------------------------- */
 .div-container {
     width: 100%;
@@ -85,7 +89,7 @@ tr:nth-child(even) {
 
 .info {
     color: rgb(255, 255, 255);
-    font-size: 1.5em;
+    font-size: 1.4em;
     font-weight: bold;
     margin-right: 15px;
 }
@@ -454,9 +458,7 @@ tr:nth-child(even) {
 }
 
 .custom_modal {
-    width: 60% !important;
-    max-width: 800px !important;
-    min-width: 500px !important;
+    width: 80%;
 
 }
 
@@ -484,6 +486,8 @@ tr:nth-child(even) {
 #tab_help h1,
 #tab_help h3 {
     color: #2971A5 !important;
+        line-height: 45px;
+    border-bottom: #EEEEF1 2px solid;
 }
 
 
@@ -588,6 +592,14 @@ tr:nth-child(even) {
         margin-top: 0px;
         margin-left: 0px;
     }
+
+   .custom_modal {
+    width: 60% !important;
+    max-width: 800px !important;
+    min-width: 500px !important;
+
+}
+
 }
 
 @media (min-width: 1200px) {
@@ -793,4 +805,38 @@ input#input-access-code {
 
 input#input_group_name{
        width: calc(100%-68px);
+}
+
+.err-message {
+    font-size: 14px;
+    color: red;
+}
+
+#deg_tag3 tr {
+    cursor: pointer;
+}
+
+#deg_tag2 tr {
+    cursor: pointer;
+}
+
+#tab_help img {
+    max-width: 1250px;
+    width: 100%;
+}
+
+
+@media only screen and (max-width: 600px) {
+ #logo {
+        width: 90%;
+    }
+  .header-banner >.div-container{
+        line-height: 35px;
+    max-height: 35px;
+    overflow: hidden;
+  }
+
+  .ant-modal{
+    top:0px;
+  }
 }

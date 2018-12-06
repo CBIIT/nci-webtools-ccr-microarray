@@ -21,10 +21,13 @@ class Help extends Component {
                          <h3>Input</h3>
                          <p>There are 2 input options:</p>
                          <ul>
-                          <li>1)  Local: Analyze expression data by uploading CEL files from a local computer.  Data must be expression data in CEL file format, and all data must be from the same type of Affymetrix chip.</li>
+                          <li><p>1)  Local: Analyze expression data by uploading CEL files from a local computer.  Data must be expression data in CEL file format, and all data must be from the same type of Affymetrix chip.</p>
+                              <p><img src="./assets/img/loading-upload-file.gif" alt="National Cancer Institute" /></p>
+                            </li>
                           <li>
                             <p>2)  GEO: Analyze expression data from the Gene Expression Omnibus (GEO) https://www.ncbi.nlm.nih.gov/geo/ by providing the relevant series ID from the experiment, as noted below.  Enter the entire ID, starting with GSE. The experiment must include data in CEL file format from the same type of Affymetrix chip.
                           </p>
+                          <p><img src="./assets/img/loading-with-accession-data.gif" alt="National Cancer Institute" /></p>
                           <p>Currently, microRNA and single-cell analyses are not supported.</p></li>
                          </ul>
 
@@ -62,20 +65,22 @@ class Help extends Component {
 
                               <h3>Analysis</h3>
                               <p>Once the files are uploaded, choose groups for each sample.  At least 2 groups must be created.</p>
-                              <p>PIC</p>
-                                <p>Next, choose contrasts to compare.</p>
-                            <p>PIC</p>
+                               <p>Next, choose contrasts to compare.</p>
+                               <p><img src="./assets/img/group.gif" alt="National Cancer Institute" /></p>
+          
 
                             <h4>Array Probe Quality Control:</h4>
                             <p>Two plots, NUSE and RLE, display quality control metrics for the microarray probes.  Plots are created with the oligo package:</p>
                             <ul>
                               <li>
                                 <p>The Normalized Unscaled Standard Error (NUSE) plot shows standard error estimates for each sample.  These estimates are normalized to 1 across all samples, so a sample with a significantly higher value may be of lower quality (Carvalho & Irizarry, 2010).   </p>
-                                <p>PIC</p>
+                                 <p><img src="./assets/img/nuse.gif" alt="National Cancer Institute" /></p>
+          
                               </li>
                               <li>
                                 <p>The Relative Log Expression (RLE) plot compares the expression level of one probeset to the median expression of that probeset across all samples.  </p>
-                                <p></p>
+                                    <p><img src="./assets/img/RLE.gif" alt="National Cancer Institute" /></p>
+          
                               </li>
                             </ul>
                           <p>
@@ -86,11 +91,14 @@ class Help extends Component {
                            <h3>Normalization:</h3>
                            <p>Each sample is normalized to correct for technical artifacts using the Robust Multichip Averaging (RMA) method described in (Irizarry et al., 2003). Pre-normalization and post-normalization histograms, MA plots and box plots display relative expression (represented by probe intensity) before and after RMA.  Data for the plots are generated with the oligo package.</p>
                            <p>Histogram: The histogram displays the density of probes at each log-intensity. Each sample is represented by a line.  After RMA, all samples lines should follow the same curve.</p>
-                           <p>PIC</p>
+                            <p><img src="./assets/img/histogram.gif" alt="National Cancer Institute" /></p>
+          
                            <p>MA plot: Log-ratios (M) are plotted against the average log-intensities (A). Plots are generated that compare each sample to the median of all samples. After RMA, the red sample line should be relatively equal to the blue median line.</p>
-                           <p>PIC</p>
+                            <p><img src="./assets/img/MAplot.gif" alt="National Cancer Institute" /></p>
+          
                            <p>Boxplot: Displays the distribution of log-intensities for each sample. After RMA, distributions across all samples should be approximately the same.</p>
-
+                            <p><img src="./assets/img/boxplot.gif" alt="National Cancer Institute" /></p>
+          
                              <p>
                          Details regarding plots described above can be found in the oligo manual (Carvalho & Irizarry, 2010): 
                           <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/oligo/inst/doc/oug.pdf">https://www.bioconductor.org/packages/release/bioc/vignettes/oligo/inst/doc/oug.pdf</a>
@@ -99,21 +107,26 @@ class Help extends Component {
 
                           <h3>Sample Quality Control:</h3>
                            <p>Two plots, the sample similarity heatmap and 3D PCA, provide information about the quality of replicates in the groups.  In general, samples in the same group should cluster together, and groups of samples should cluster separately from other groups. </p>
-                            <p></p>
+                            <p><img src="./assets/img/PCA.gif" alt="National Cancer Institute" /></p>
+          
 
 
                             <h3>Differential Gene Expression:</h3>
                            <p>After normalization, determine differential gene expression between groups.  MAAPster runs analysis in the background with the limma package. Linear modeling is performed using limma’s lmFit function, and differential gene expression is determined using the contrasts.fit and eBayes functions (Ritchie et al, 2015).  Using the toptable function, false discovery rates are calculated to adjust p-values for multiple testing (Ritchie et al., 2015).  Detailed information regarding differential expression analysis can be found in the limma manual 
                            <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf"> https://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf.</a></p>
-                            <p></p>
+                            <p><img src="./assets/img/deg.gif" alt="National Cancer Institute" /></p>
+          
+
 
                              <h3>Pathway Analysis:</h3>
                            <p>The top 500 significantly upregulated and top 500 significantly downregulated genes are extracted for pathway analysis (significance is determined as unadjusted p-value  &lt; 0.05), Pathway analysis is performed with CCBR’s l2p software</p>
-                           
+                            <p><img src="./assets/img/pathway.gif" alt="National Cancer Institute" /></p>
+          
 
                            <h3>Gene Heatmaps:</h3>
                             <p>Click on a pathway to generate a heatmap for the genes in the pathway.  The heatmap will include groups selected in the contrast, and will display scaled normalized gene expression for samples in the groups.  </p>
-                            <p></p>
+                             <p><img src="./assets/img/heatmap.gif" alt="National Cancer Institute" /></p>
+          
 
                             <h3>Single-sample GSEA (ssGSEA):</h3>
                             <p>
@@ -124,9 +137,10 @@ class Help extends Component {
                              <a href="http://bioinf.wehi.edu.au/software/MSigDB/">(http://bioinf.wehi.edu.au/software/MSigDB/)</a>. 
 
                             </p>
-
+                              <p><img src="./assets/img/ssGSEA.gif" alt="National Cancer Institute" /></p>
+          
                             <h3>Download Results:</h3>
-                            <p>All tables and plots generated may be downloaded (explain how).</p>
+                            <p>All tables and plots generated may be downloaded.</p>
 
 
 
