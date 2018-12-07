@@ -808,10 +808,15 @@ input#input_group_name{
 }
 
 .err-message {
-    font-size: 14px;
+    font-size: 18px;
     color: red;
 }
 
+
+#message-load-accession-code{
+
+    font-size: 0.85em;
+}
 #deg_tag3 tr {
     cursor: pointer;
 }
