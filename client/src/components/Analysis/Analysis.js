@@ -369,6 +369,7 @@ class Analysis extends Component {
 
         workflow.pathways_up.loading = true;
         this.setState({ workflow: workflow });
+        console.log()
         fetch('./api/analysis/getUpPathWays', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -1232,21 +1233,26 @@ class Analysis extends Component {
     }
 
     upateCurrentWorkingTabAndObject = (e) => {
+        window.current_working_on_object =e;
         sessionStorage.setItem("current_working_on_object", e);
         if (e == "getHistplotBN" || e == "getMAplotsBN" || e == "getBoxplotBN" || e == "getRLE" || e == "getNUSE") {
             sessionStorage.setItem("tag_pre_plot_status", e);
+              window.tag_pre_plot_status =e;
         }
         if (e == "getHistplotAN" || e == "getBoxplotAN" || e == "getPCA" || e == "getHistplotBN") {
             sessionStorage.setItem("tag_post_plot_status", e);
+              window.tag_post_plot_status =e;
         }
         if (e == "pathways_up" || e == "pathways_down" || e == "deg") {
             sessionStorage.setItem("tag_deg_plot_status", e);
+              window.tag_deg_plot_status =e;
         }
 
     }
 
     upateCurrentWorkingTab = (e) => {
         sessionStorage.setItem("current_working_on_tag", e);
+        window.current_working_on_tag =e;
     }
 
 
@@ -1350,6 +1356,13 @@ class Analysis extends Component {
         document.getElementById("input-access-code").disabled = false;
         document.getElementById("btn-project-load-gse").disabled = false;
         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
+        let err_message =document.getElementsByClassName("err-message")
+
+        for(let i = 0; i < err_message.length; i++){
+            err_message[i].innerHTML= ""; // or
+        }
+
+        document.getElementById("message-gsm").nextSibling.innerHTML="Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here."
         this.setState({ workflow: defaultState.workflow });
     }
 
@@ -1373,6 +1386,8 @@ class Analysis extends Component {
         if (workflow.accessionCode == "") {
             document.getElementById("message-load-accession-code").innerHTML= "Accession Code is required. "
             return;
+        }else{
+             document.getElementById("message-load-accession-code").innerHTML= ""
         }
 
         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default"
@@ -1461,7 +1476,8 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                document.getElementById("message-gsm").innerHTML= result.data.replace("\\n","")
+                                document.getElementById("message-gsm").innerHTML= result.data.replace("\\n","").replace(/"/g,"")
+                                document.getElementById("message-gsm").nextSibling.innerHTML=""
                                 this.setState({
                                     workflow: workflow
                                 });
@@ -1475,7 +1491,8 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                document.getElementById("message-gsm").innerHTML= result.data.replace("\\n","")
+                                document.getElementById("message-gsm").innerHTML= result.data.replace("\\n","").replace(/"/g,"")
+                                document.getElementById("message-gsm").nextSibling.innerHTML=""
                                 this.setState({
                                     workflow: workflow
                                 });
@@ -1490,7 +1507,8 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                 document.getElementById("mmessage-gsm").innerHTML= result.data.replace("\\n","")
+                                 document.getElementById("message-gsm").innerHTML= result.data.replace("\\n","").replace(/"/g,"")
+                                 document.getElementById("message-gsm").nextSibling.innerHTML=""
                                 this.setState({
                                     workflow: workflow
                                 });
@@ -1530,6 +1548,7 @@ class Analysis extends Component {
                             workflow: workflow
                         });
                         document.getElementById("message-gsm").innerHTML= result.data
+                        document.getElementById("message-gsm").nextSibling.innerHTML=""
                         //message.error('load data fails.');
                     }
                 })
@@ -1543,6 +1562,7 @@ class Analysis extends Component {
                 workflow: workflow
             });
             document.getElementById("message-gsm").innerHTML= err
+            document.getElementById("message-gsm").nextSibling.innerHTML=""
         
         }
     }
@@ -1751,27 +1771,28 @@ class Analysis extends Component {
                     if (result.status == 200) {
 
 
-                        let type = sessionStorage.getItem("current_working_on_object");
-                        if (sessionStorage.getItem("current_working_on_tag") == "" || sessionStorage.getItem("current_working_on_tag") == "GSM_1") {
+                        let type = window.current_working_on_object;
+
+                        if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
                             // means  I open the GSM
                         }
 
-                        if (sessionStorage.getItem("current_working_on_tag") == "Pre-normalization_QC_Plots") {
+                        if (window.current_working_on_tag == "Pre-normalization_QC_Plots") {
                             // means  I open the Pre-plot
-                            type = sessionStorage.getItem("tag_pre_plot_status");
+                            type = window.tag_pre_plot_status;
                         }
 
-                        if (sessionStorage.getItem("current_working_on_tag") == "Post-normalization_Plots") {
+                        if (window.current_working_on_tag == "Post-normalization_Plots") {
                             // means  I open the Post-plot
-                            type = sessionStorage.getItem("tag_post_plot_status");
+                            type = window.tag_post_plot_status;
                         }
 
-                        if (sessionStorage.getItem("current_working_on_tag") == "DEG-Enrichments_Results") {
+                        if (window.current_working_on_tag == "DEG-Enrichments_Results") {
                             // means  I open the DEG
-                            type = sessionStorage.getItem("tag_deg_plot_status");
+                            type = window.tag_deg_plot_status;
                         }
 
-                        if (sessionStorage.getItem("current_working_on_tag") == "ssGSEA_Results") {
+                        if (window.current_working_on_tag == "ssGSEA_Results") {
                             // means  I open the ssGSEA_Results
                             type = "ssGSEA_Results";
                         }
@@ -1928,6 +1949,7 @@ class Analysis extends Component {
                             workflow.uploading = false;
                             workflow.progressing = false;
                             document.getElementById("message-gsm").innerHTML= result.msg;
+                            document.getElementById("message-gsm").nextSibling.innerHTML=""
                             this.setState({
                                 workflow: workflow
                             });
@@ -1941,6 +1963,7 @@ class Analysis extends Component {
                         workflow.progressing = false;
                         if (list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
                             document.getElementById("message-gsm").innerHTML= "load data fails.";
+                            document.getElementById("message-gsm").nextSibling.innerHTML=""
                             return;
                         }
                         for (let i in list.files) {
@@ -1967,6 +1990,7 @@ class Analysis extends Component {
                             workflow: workflow
                         });
                         document.getElementById("message-gsm").innerHTML= result.msg;
+                        document.getElementById("message-gsm").nextSibling.innerHTML=""
                     }
                 }).catch(error => console.log(error));
         } catch (error) {
@@ -1979,6 +2003,7 @@ class Analysis extends Component {
                 workflow: workflow
             });
             document.getElementById("message-gsm").innerHTML= error;
+            document.getElementById("message-gsm").nextSibling.innerHTML=""
         }
 
     }
@@ -2085,7 +2110,7 @@ class Analysis extends Component {
           <div className="header-nav">
             <div className="div-container">
                 <ul className="nav navbar-nav" id="header-navbar">
-                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className="active"> <a href="#about" className="nav-link" >About Microarray</a></li>
+                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className="active"> <a href="#about" className="nav-link" >About</a></li>
                     <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className=""> <a href="#analysis"  className="nav-link">Analysis</a></li>
                     <li  onClick={() => {this.changeTab('help')}}  id="li-help" className="" > <a href="#help"  className="nav-link">Help</a></li>
                 </ul>

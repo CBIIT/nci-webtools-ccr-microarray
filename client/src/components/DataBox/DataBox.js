@@ -33,7 +33,7 @@ class DataBox extends Component {
 
     handleTabChange = (key) => {
         if (key == "Pre-normalization_QC_Plots") {
-            let type = sessionStorage.getItem("tag_pre_plot_status");
+            let type = window.tag_pre_plot_status;
             switch (type) {
                 case "":
                     if (this.props.data.preplots.histplotBN == "") {
@@ -74,7 +74,7 @@ class DataBox extends Component {
         }
 
         if (key == "Post-normalization_Plots") {
-            let type = sessionStorage.getItem("tag_post_plot_status");
+            let type = window.tag_post_plot_status;
             switch (type) {
                 case "":
                     if (this.props.data.postplot.histplotAN == "") {
@@ -112,7 +112,7 @@ class DataBox extends Component {
 
         if (key == "DEG-Enrichments_Results") {
 
-            let type = sessionStorage.getItem("tag_deg_plot_status");
+            let type = window.tag_deg_plot_status;
             switch (type) {
                 case "":
                     if (this.props.data.diff_expr_genes.data.length == 0) {
@@ -317,7 +317,7 @@ class DataBox extends Component {
         }
 
         var selected_gsms = "";
-        for (var key in this.state.selected) {
+        for (var key in this.state.selected && this.props.data.dataList.length>0) {
             selected_gsms = selected_gsms + this.props.data.dataList[this.state.selected[key] - 1].gsm + ",";
         }
         // define group list in the modal
@@ -329,7 +329,7 @@ class DataBox extends Component {
 
         // get group and gsm(s)  [{grupa: gsm1,gsm2,gsm3}]
         var groups_data = new Map();
-        for (var key in this.props.data.dataList) {
+        for (var key in this.props.data.dataList ) {
             if (this.props.data.dataList[key].groups != "") {
                 if (groups_data.has(this.props.data.dataList[key].groups)) {
                     groups_data.set(this.props.data.dataList[key].groups, groups_data.get(this.props.data.dataList[key].groups) + this.props.data.dataList[key].gsm + ",")
