@@ -11,7 +11,6 @@ class About extends Component {
         return (
             <div className="container container-board">
                     <section >
-                        <h2>Microarrays</h2>
                         <div>
                             <p>
                                 MicroArray Analysis Pipeline (MAAPster) is a comprehensive web tool designed by the CCR Collaborative Bioinformatics Resource (CCBR) that performs transcriptome analysis of human or mouse Affymetrix gene expression data. Samples may be uploaded locally or accessed from published data by entering a GEO Series identification number. MAAPster can analyze data from a single experiment that includes multiple samples, and the user may investigate multiple contrasts between groups of samples. Raw CEL files are analyzed using several Bioconductor packages in ‘R’, including limma and oligo. Output includes array probe quality control plots, sample quality control plots such as 3D PCA, differential gene expression analysis, gene expression heatmaps, pathway analysis and single sample GSEA analysis. 

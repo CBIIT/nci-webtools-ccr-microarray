@@ -106,7 +106,7 @@ router.post('/loadGSE', function(req, res) {
     );
 
 
-    
+
 
     R.execute("wrapper.R", data, function(err, returnValue) {
         if (err) {
@@ -246,7 +246,7 @@ router.post('/runContrast', function(req, res) {
         "data_repo_path:", config.uploadPath
     );
 
-   
+
 
     R.execute("wrapper.R", data, function(err, returnValue) {
 
@@ -688,6 +688,7 @@ function getDEG(req) {
 function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_number, req, type) {
 
     let result = data;
+
     if (type == "pathways_up") {
         // store
         if (req.session.pathway_up_tmp) {
@@ -753,27 +754,24 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
     }
 
+    if((type=="pathways_up"&&!req.session.pathway_up_tmp)||(!req.session.pathway_down_tmp)&&type=="pathways_down"){
 
-    // sorting
-    if (sorting != null) {
-        if (sorting.order == "descend") {
-            result.sort(function(e1, e2) {
-                return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
-            })
+        // sorting
+        if (sorting != null) {
+            if (sorting.order == "descend") {
+                result.sort(function(e1, e2) {
+                    return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
+                })
+            }
+
+            if (sorting.order == "ascend") {
+                result.sort(function(e1, e2) {
+                    return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
+                })
+            }
         }
-
-        if (sorting.order == "ascend") {
-            result.sort(function(e1, e2) {
-                return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
-            })
-        }
-    } else {
-
-        // result.sort(function(e1, e2) {
-        //     return (e1["P_Value"] < e2["P_Value"]) ? 1 : -1
-        // })
-
     }
+    
     // search
     if (search_keyword) {
 
@@ -1004,24 +1002,21 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
     }
 
 
-    // sorting
-    if (sorting != null) {
-        if (sorting.order == "descend") {
-            result.sort(function(e1, e2) {
-                return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
-            })
-        }
+    if (!req.session.ssGSEA_tmp) {
+        // sorting
+        if (sorting != null) {
+            if (sorting.order == "descend") {
+                result.sort(function(e1, e2) {
+                    return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
+                })
+            }
 
-        if (sorting.order == "ascend") {
-            result.sort(function(e1, e2) {
-                return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
-            })
+            if (sorting.order == "ascend") {
+                result.sort(function(e1, e2) {
+                    return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
+                })
+            }
         }
-    } else {
-
-        // result.sort(function(e1, e2) {
-        //     return (e1["P.Value"] < e2["P.Value"]) ? 1 : -1
-        // })
 
     }
 
@@ -1170,26 +1165,21 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
     }
 
 
+    if (!req.session.deg_tmp) {
+        // sorting
+        if (sorting != null) {
+            if (sorting.order == "descend") {
+                result.sort(function(e1, e2) {
+                    return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
+                })
+            }
 
-    // sorting
-    if (sorting != null) {
-        if (sorting.order == "descend") {
-            result.sort(function(e1, e2) {
-                return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
-            })
+            if (sorting.order == "ascend") {
+                result.sort(function(e1, e2) {
+                    return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
+                })
+            }
         }
-
-        if (sorting.order == "ascend") {
-            result.sort(function(e1, e2) {
-                return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
-            })
-        }
-    } else {
-
-        // result.sort(function(e1, e2) {
-        //     return (e1["P.Value"] < e2["P.Value"]) ? 1 : -1
-        // })
-
     }
 
     // search
