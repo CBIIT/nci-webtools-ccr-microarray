@@ -18,7 +18,7 @@ class DataBox extends Component {
             visible: false,
             selected: [],
             group_name: "GSMGroup_1",
-            added:false
+            added: false
         }
 
         this.createTag = this.createTag.bind(this)
@@ -26,7 +26,7 @@ class DataBox extends Component {
     }
 
 
-    handleInputOnChange=(e)=>{
+    handleInputOnChange = (e) => {
 
         console.log(e)
     }
@@ -166,7 +166,7 @@ class DataBox extends Component {
 
     showModal = () => {
         let group_name = this.state.group_name;
-        if (this.state.group_name != ""&& this.state.group_name!=="GSMGroup_1") {
+        if (this.state.group_name != "" && this.state.group_name !== "GSMGroup_1") {
             document.getElementById("input_group_name").value = group_name;
 
         }
@@ -195,21 +195,21 @@ class DataBox extends Component {
     handleCancel = () => {
         let workflow = Object.assign({}, this.state);
         workflow.group = "";
-      
+
         workflow.visible = false;
         let flag = workflow.added;
         workflow.added = false;
-        if(flag){
+        if (flag) {
             workflow.selected = [];
         }
 
-         this.setState(workflow);
+        this.setState(workflow);
         // call child unselect function
-        if(flag){
+        if (flag) {
 
             this.child.current.unselect();
         }
-        
+
 
     }
 
@@ -232,7 +232,7 @@ class DataBox extends Component {
                     let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
                     let currentState = Object.assign({}, this.state);
                     currentState.group_name = "GSMGroup_" + index_number;
-                    currentState.added=true;
+                    currentState.added = true;
                     this.setState(currentState);
 
                 }
@@ -317,9 +317,12 @@ class DataBox extends Component {
         }
 
         var selected_gsms = "";
-        for (var key in this.state.selected && this.props.data.dataList.length>0) {
-            selected_gsms = selected_gsms + this.props.data.dataList[this.state.selected[key] - 1].gsm + ",";
+        if (this.props.data.dataList.length > 0) {
+            for (var key in this.state.selected) {
+                selected_gsms = selected_gsms + this.props.data.dataList[this.state.selected[key] - 1].gsm + ",";
+            }
         }
+
         // define group list in the modal
         const columns = [ // define table column names
             { title: 'GROUP', dataIndex: 'name', key: 'name', width: "30%" },
@@ -329,7 +332,7 @@ class DataBox extends Component {
 
         // get group and gsm(s)  [{grupa: gsm1,gsm2,gsm3}]
         var groups_data = new Map();
-        for (var key in this.props.data.dataList ) {
+        for (var key in this.props.data.dataList) {
             if (this.props.data.dataList[key].groups != "") {
                 if (groups_data.has(this.props.data.dataList[key].groups)) {
                     groups_data.set(this.props.data.dataList[key].groups, groups_data.get(this.props.data.dataList[key].groups) + this.props.data.dataList[key].gsm + ",")
