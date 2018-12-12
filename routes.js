@@ -5,6 +5,7 @@
 'use strict';
 var express = require('express');
 var m_analysis = require('./service/analysis');
+var m_ping = require('./service/ping');
 var m_common = require('./service/common');
 var config = require('./config');
 var path = require('path');
@@ -52,7 +53,7 @@ module.exports = function(app){
 
     app.use('/api/analysis', m_analysis);
 
- 
+     app.use('/ping', m_ping);
 
 	//allows CrossDomainAccess to API
 	app.use(function(req, res, next){
