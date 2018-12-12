@@ -781,7 +781,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = { "width": "80%" }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8 }
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -851,7 +851,7 @@ class Analysis extends Component {
                                 let list_mAplotBN = [];
                                 for (let i = result.data.length - 1; i >= 0; i--) {
                                     let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
 
@@ -890,7 +890,7 @@ class Analysis extends Component {
             let list_mAplotBN = [];
             for (let i = workflow2.list_mAplotAN.length - 1; i >= 0; i--) {
                 let link = "./images/" + workflow2.projectID + workflow2.list_mAplotAN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
+                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
             }
             let maplot_style = {
 
@@ -937,7 +937,7 @@ class Analysis extends Component {
                         }
 
                         let plot_layout = { showlegend: false, autosize: true }
-                        let plot_style = { "width": "80%" }
+                        let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,}
 
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -998,7 +998,7 @@ class Analysis extends Component {
 
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = { "width": "80%" }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8, }
 
                             let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style}  useResizeHandler={true}/>
 
@@ -1073,7 +1073,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = { "width": "80%" }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8, }
 
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
@@ -1133,7 +1133,7 @@ class Analysis extends Component {
                                 let list_mAplotBN = [];
                                 for (let i = result.data.length - 1; i >= 0; i--) {
                                     let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
 
@@ -1171,7 +1171,7 @@ class Analysis extends Component {
             let list_mAplotBN = [];
             for (let i = workflow2.list_mAplotBN.length - 1; i >= 0; i--) {
                 let link = "./images/" + workflow2.projectID + workflow2.list_mAplotBN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "70%" }} alt="MAplot"/> </div>)
+                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
             }
             let maplot_style = {
 
@@ -1188,7 +1188,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.svg";
-        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "70%" }} alt="Histogram" /></div>;
+        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
 
@@ -1456,7 +1456,7 @@ class Analysis extends Component {
 
                             workflow.dataList = a.phenoData.data;
                             // init group with default value
-                            workflow.group = new Array( a.phenoData.data.length).fill('Ctl');
+                            // workflow.group = new Array( a.phenoData.data.length).fill('Ctl');
 
                             // disable the input , prevent user to change the access code
                             document.getElementById("input-access-code").disabled = true
