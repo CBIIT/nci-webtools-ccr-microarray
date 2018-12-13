@@ -36,7 +36,26 @@ class GSMData extends Component {
             this.setState(currentState)
         }
 
+
     }
+
+componentDidMount(){
+    this.isDataTableRendered("componentDidMount")
+}
+componentDidUpdated(){
+    this.isDataTableRendered("componentDidUpdated")
+}
+
+
+isDataTableRendered(t){
+    let checkboxes = document.getElementsByClassName("ant-checkbox-wrapper")
+        if(checkboxes.length!=0){
+             console.log("rendered")
+             console.log(t)
+        }
+}
+
+
 
     onSelectChange = (selectedRowKeys) => {
         this.props.selected(selectedRowKeys);

@@ -156,11 +156,13 @@ router.post('/pathwaysHeapMap', function(req, res) {
 
     R.execute("wrapper.R", data, function(err, returnValue) {
         if (err) {
+             logger.info("API:/pathwaysHeapMap", "status 404 ");
             res.json({
                 status: 404,
                 msg: returnValue
             });
         } else {
+             logger.info("API:/pathwaysHeapMap", "status 200 ");
             res.json({
                 status: 200,
                 data: returnValue
@@ -183,8 +185,18 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
     data.push(req.body.genSet);
     data.push(config.configPath);
 
+
+    logger.info("API:/getssGSEAWithDiffGenSet ",
+        "projectId :", req.body.projectId,
+        "genSet :", req.body.genSet,
+        "species :", req.body.species,
+        "data_repo_path:", config.uploadPath,
+        "configPath:", config.configPath
+    );
+
     R.execute("wrapper.R", data, function(err, returnValue) {
         if (err) {
+            logger.info("API:/getssGSEAWithDiffGenSet", "status 404 ");
             res.json({
                 status: 404,
                 msg: returnValue
@@ -206,6 +218,7 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
             if (req.session.runContrastData.ssGSEA) {
                 req.session.runContrastData.ssGSEA = ssGSEA;
             }
+            logger.info("API:/getssGSEAWithDiffGenSet", "status 200 ");
             res.json({
                 status: 200,
                 data: ""
@@ -253,6 +266,7 @@ router.post('/runContrast', function(req, res) {
 
 
         if (err) {
+             logger.info("API:/runContrast", "status 404 ");
             res.json({
                 status: 404,
                 msg: returnValue
@@ -310,7 +324,7 @@ function sin_to_hex(i, phase, size) {
 }
 
 function getPlots(req, type) {
-
+      logger.info("getPlots ", type)
     console.time("getPlots")
     let return_data = "";
 
@@ -440,6 +454,7 @@ function getPlots(req, type) {
 
 
 router.post('/getHistplotBN', function(req, res) {
+    logger.info("API:getHistplotBN ")
     res.json({
         status: 200,
         data: getPlots(req, "getHistplotBN")
@@ -450,6 +465,7 @@ router.post('/getHistplotBN', function(req, res) {
 
 
 router.post('/getHistplotAN', function(req, res) {
+        logger.info("API:getHistplotAN ")
     res.json({
         status: 200,
         data: getPlots(req, "getHistplotAN")
@@ -459,6 +475,7 @@ router.post('/getHistplotAN', function(req, res) {
 
 
 router.post('/getBoxplotAN', function(req, res) {
+     logger.info("API:getBoxplotAN ")
     res.json({
         status: 200,
         data: getPlots(req, "getBoxplotAN")
@@ -466,6 +483,7 @@ router.post('/getBoxplotAN', function(req, res) {
 });
 
 router.post('/getMAplotAN', function(req, res) {
+     logger.info("API:getMAplotAN ")
     console.time("API_getMAplotAN")
     var dd = getPlots(req, "getMAplotAN");
     console.time("API_getMAplotAN")
@@ -479,6 +497,7 @@ router.post('/getMAplotAN', function(req, res) {
 
 
 router.post('/getPCA', function(req, res) {
+     logger.info("API:getPCA ")
     res.json({
         status: 200,
         data: getPlots(req, "getPCA")
@@ -487,6 +506,7 @@ router.post('/getPCA', function(req, res) {
 
 
 router.post('/getHeatmapolt', function(req, res) {
+     logger.info("API:getHeatmapolt ")
     res.json({
         status: 200,
         data: getPlots(req, "getHeatmapolt")
@@ -496,6 +516,7 @@ router.post('/getHeatmapolt', function(req, res) {
 
 
 router.post('/getBoxplotAN', function(req, res) {
+      logger.info("API:getBoxplotAN ")
     res.json({
         status: 200,
         data: getPlots(req, "getBoxplotAN")
@@ -506,6 +527,7 @@ router.post('/getBoxplotAN', function(req, res) {
 
 
 router.post('/getMAplotsBN', function(req, res) {
+     logger.info("API:getMAplotsBN ")
     res.json({
         status: 200,
         data: getPlots(req, "getMAplotsBN")
@@ -517,6 +539,7 @@ router.post('/getMAplotsBN', function(req, res) {
 
 
 router.post('/getBoxplotBN', function(req, res) {
+      logger.info("API:getBoxplotBN ")
     res.json({
         status: 200,
         data: getPlots(req, "getBoxplotBN")
@@ -524,6 +547,7 @@ router.post('/getBoxplotBN', function(req, res) {
 });
 
 router.post('/getRLE', function(req, res) {
+    logger.info("API:getRLE ")
     res.json({
         status: 200,
         data: getPlots(req, "getRLE")
@@ -533,6 +557,7 @@ router.post('/getRLE', function(req, res) {
 
 
 router.post('/getNUSE', function(req, res) {
+    logger.info("API:getNUSE ")
     res.json({
         status: 200,
         data: getPlots(req, "getNUSE")
@@ -543,6 +568,7 @@ router.post('/getNUSE', function(req, res) {
 
 
 router.post('/getUpPathWays', function(req, res) {
+ logger.info("API:/getUpPathWays " );
 
     if (req.session && req.session.runContrastData) {
         res.json({
@@ -561,6 +587,7 @@ router.post('/getUpPathWays', function(req, res) {
 
 
 router.post('/getDownPathWays', function(req, res) {
+    logger.info("API:/getDownPathWays " );
 
     if (req.session && req.session.runContrastData) {
         res.json({
@@ -581,6 +608,7 @@ router.post('/getDownPathWays', function(req, res) {
 
 
 router.post('/getGSEA', function(req, res) {
+     logger.info("API:/getGSEA " );
 
     if (req.session && req.session.runContrastData) {
 
@@ -601,7 +629,7 @@ router.post('/getGSEA', function(req, res) {
 });
 
 router.post('/getDEG', function(req, res) {
-
+  logger.info("API:/getDEG " );
     if (req.session && req.session.runContrastData) {
         res.json({
             status: 200,
@@ -620,6 +648,12 @@ router.post('/getDEG', function(req, res) {
 function getUpPathWays(req) {
 
 
+ logger.info("getUpPathWays ",
+    "sorting",req.body.sorting,
+    "search keyword",req.body.search_keyword,
+     "page_size",req.body.page_size,
+      "page_number",req.body.page_number,
+    );
     return getPathWays(
         req.session.runContrastData.pathways_up, {},
         req.body.sorting,
@@ -634,7 +668,12 @@ function getUpPathWays(req) {
 
 
 function getDownPathWays(req) {
-
+   logger.info("getDownPathWays ",
+    "sorting",req.body.sorting,
+    "search keyword",req.body.search_keyword,
+     "page_size",req.body.page_size,
+      "page_number",req.body.page_number,
+    );
     return getPathWays(
         req.session.runContrastData.pathways_down, {},
         req.body.sorting,
@@ -650,7 +689,12 @@ function getDownPathWays(req) {
 
 
 function getGSEA(req) {
-
+ logger.info("getGSEA ",
+    "sorting",req.body.sorting,
+    "search keyword",req.body.search_keyword,
+     "page_size",req.body.page_size,
+      "page_number",req.body.page_number,
+    );
     return getGSEA_filter(
         req.session.runContrastData.ssGSEA, {},
         req.body.sorting,
@@ -665,7 +709,12 @@ function getGSEA(req) {
 
 
 function getDEG(req) {
-
+ logger.info("getDEG ",
+    "sorting",req.body.sorting,
+    "search keyword",req.body.search_keyword,
+     "page_size",req.body.page_size,
+      "page_number",req.body.page_number,
+    );
     let threadhold = {}
 
     // add filter 
@@ -688,11 +737,14 @@ function getDEG(req) {
 
 function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_number, req, type) {
 
+ logger.info("getPathWays ");
+
     let result = data;
 
     if (type == "pathways_up") {
         // store
         if (req.session.pathway_up_tmp) {
+
 
             if (req.session.pathway_up_tmp.sorting_order == sorting.order &&
                 req.session.pathway_up_tmp.sorting_name == sorting.name &&
@@ -714,6 +766,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
                     totalCount: req.session.pathway_up_tmp.data.length,
                     records: req.session.pathway_up_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
                 }
+                 logger.info("getUpPathWays ","use data in sesion");
                 return output;
             }
 
@@ -747,6 +800,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
                     totalCount: req.session.pathway_down_tmp.data.length,
                     records: req.session.pathway_down_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
                 }
+                 logger.info("pathways_down ","use data in sesion");
                 return output;
             }
 
@@ -756,7 +810,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     }
 
     if((type=="pathways_up"&&!req.session.pathway_up_tmp)||(!req.session.pathway_down_tmp)&&type=="pathways_down"){
-
+        logger.info("pathways_sorting ","not use data in sesion");
         // sorting
         if (sorting != null) {
             if (sorting.order == "descend") {
@@ -775,7 +829,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     
     // search
     if (search_keyword) {
-
+          logger.info("pathways_search_keyword ","not use data in sesion");
         if (!(search_keyword.search_PATHWAY_ID == "" &&
                 search_keyword.search_SOURCE == "" &&
                 search_keyword.search_TYPE == "" &&
@@ -941,6 +995,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             search_TOTAL_NUMBER_GENES: search_keyword.search_TOTAL_NUMBER_GENES,
             data: result
         }
+         logger.info("pathways_up ","set data into tmp session");
     }
 
     if (type == "pathways_down") {
@@ -962,8 +1017,10 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             search_TOTAL_NUMBER_GENES: search_keyword.search_TOTAL_NUMBER_GENES,
             data: result
         }
+          logger.info("pathways_down ","set data into tmp session");
     }
 
+    logger.info("pathways_output ");
     // return index
     let output = {
         totalCount: result.length,
@@ -977,7 +1034,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, page_number, req) {
 
     let result = data;
-
+logger.info("getGSEA_filter ");
 
     if (req.session.ssGSEA_tmp) {
 
@@ -991,6 +1048,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
             req.session.ssGSEA_tmp.t == search_keyword.search_t &&
             req.session.ssGSEA_tmp.logFC == search_keyword.search_logFC
         ) {
+            logger.info("getGSEA_filter ","use data in session");
             // return index
             let output = {
                 totalCount: req.session.ssGSEA_tmp.data.length,
@@ -1005,6 +1063,8 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
     if (!req.session.ssGSEA_tmp) {
         // sorting
+
+        logger.info("getGSEA_filter_sorting ","not se data in session");
         if (sorting != null) {
             if (sorting.order == "descend") {
                 result.sort(function(e1, e2) {
@@ -1023,7 +1083,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
     // search
     if (search_keyword) {
-
+         logger.info("getGSEA_filter_search_keyword ","not se data in session");
         if (!(search_keyword.name == "" &&
                 search_keyword.search_b == "" &&
                 search_keyword.search_adj_p_value == "" &&
@@ -1111,7 +1171,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
 
     }
-
+     logger.info("getGSEA_filter ","set a data in session");
     req.session.ssGSEA_tmp = {
         sorting_order: sorting.order,
         sorting_name: sorting.name,
@@ -1137,7 +1197,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
 
 function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, page_number, req) {
-
+     logger.info("getDEG_filter ");
     let result = data;
     // store
     if (req.session.deg_tmp) {
@@ -1155,7 +1215,7 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
             req.session.deg_tmp.search_probsetid == search_keyword.search_probsetid &&
             req.session.deg_tmp.search_t == search_keyword.search_t &&
             req.session.deg_tmp.search_b == search_keyword.search_b) {
-
+             logger.info("getDEG_filter ","use data in session");
             // return index
             let output = {
                 totalCount: req.session.deg_tmp.data.length,
@@ -1168,6 +1228,7 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
 
     if (!req.session.deg_tmp) {
         // sorting
+        logger.info("getDEG_filter_sorting","not use data in session");
         if (sorting != null) {
             if (sorting.order == "descend") {
                 result.sort(function(e1, e2) {
@@ -1185,6 +1246,7 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
 
     // search
     if (search_keyword != "") {
+        logger.info("getDEG_filter_search_keyword","not use data in session");
         if (!(search_keyword.search_accnum == "" &&
                 search_keyword.search_adj_p_value == "" &&
                 search_keyword.search_aveexpr == "" &&
@@ -1302,6 +1364,7 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
         }
     }
 
+    logger.info("getDEG_filter_search_keyword","set data in session");
     // store current filter result into tmp 
     req.session.deg_tmp = {
         sorting_order: sorting.order,

@@ -1362,8 +1362,11 @@ class Analysis extends Component {
             err_message[i].innerHTML= ""; // or
         }
 
-        document.getElementById("message-gsm").nextSibling.innerHTML="Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here."
-        this.setState({ workflow: defaultState.workflow });
+        if(document.getElementById("message-gsm")!=null){
+             document.getElementById("message-gsm").nextSibling.innerHTML="Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here."
+      
+        }
+         this.setState({ workflow: defaultState.workflow });
     }
 
     changeLoadingStatus = (progressing, loading_info) => {
