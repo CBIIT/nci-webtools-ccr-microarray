@@ -11,9 +11,10 @@ router.get("/",function(req, res) {
 
 
 
+
 router.get("/post",function(req, res) {
-      res.json({"status":200,"data":{"totalCount":182}});
-  })
+      res.json({"status":200,"data":{"totalCount":184}});
+});
 
 
 module.exports = router;

@@ -48,7 +48,10 @@ var all = {
     port: argv.p || 9220,
 
     //cel file max count
-    uploadCount: 100
+    uploadCount: 100,
+
+    //local cache entry expire time
+    cache_ttl: 12 * 3600
 };
 
 

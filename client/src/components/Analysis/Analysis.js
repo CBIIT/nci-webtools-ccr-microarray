@@ -216,6 +216,7 @@ class Analysis extends Component {
 
         if (params.search_keyword) {
             params = {
+                projectId:workflow.projectId,
                 page_size: params.page_size,
                 page_number: params.page_number,
                 sorting: {
@@ -234,6 +235,7 @@ class Analysis extends Component {
         } else {
 
             params = {
+                projectId:workflow.projectId,
                 page_number: workflow.ssGSEA.pagination.current,
                 page_size: workflow.ssGSEA.pagination.pageSize,
                 sorting: {
@@ -319,6 +321,7 @@ class Analysis extends Component {
         // initialize
         if (params.search_keyword) {
             params = {
+                projectId:workflow.projectId,
                 page_size: params.page_size,
                 page_number: params.page_number,
                 sorting: {
@@ -337,6 +340,7 @@ class Analysis extends Component {
         } else {
 
             params = {
+                projectId:workflow.projectId,
                 page_number: workflow.pathways_up.pagination.current,
                 page_size: workflow.pathways_up.pagination.pageSize,
                 sorting: {
@@ -432,6 +436,7 @@ class Analysis extends Component {
         // initialize
         if (params.search_keyword) {
             params = {
+                projectId:workflow.projectId,
                 page_size: params.page_size,
                 page_number: params.page_number,
                 sorting: {
@@ -450,6 +455,7 @@ class Analysis extends Component {
         } else {
 
             params = {
+                projectId:workflow.projectId,
                 page_number: workflow.pathways_down.pagination.current,
                 page_size: workflow.pathways_down.pagination.pageSize,
                 sorting: {
@@ -539,6 +545,7 @@ class Analysis extends Component {
         if (params.search_keyword) {
 
             params = {
+                projectId:workflow.projectId,
                 page_size: params.page_size,
                 page_number: params.page_number,
                 sorting: {
@@ -557,6 +564,7 @@ class Analysis extends Component {
 
         } else {
             params = {
+                projectId:workflow.projectId,
                 page_number: workflow.diff_expr_genes.pagination.current,
                 page_size: workflow.diff_expr_genes.pagination.pageSize,
                 sorting: {
@@ -653,10 +661,11 @@ class Analysis extends Component {
         workflow2.progressing = true;
         workflow2.loading_info = "Loading PCA...";
         this.setState({ workflow: workflow2 });
+        let params ={projectId:workflow2.projectId};
         try {
             fetch('./api/analysis/getPCA', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify(params),
                     processData: false,
                     contentType: false
                 })
@@ -752,11 +761,11 @@ class Analysis extends Component {
         workflow2.progressing = true;
         workflow2.loading_info = "Loading Boxplot...";
         this.setState({ workflow: workflow2 });
-
+        let params ={projectId:workflow2.projectId};
         try {
             fetch('./api/analysis/getBoxplotAN', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify(params),
                     processData: false,
                     contentType: false
                 })
@@ -834,10 +843,11 @@ class Analysis extends Component {
             workflow2.progressing = true;
             workflow2.loading_info = "Loading Plots...";
             this.setState({ workflow: workflow2 });
+            let params ={projectId:workflow2.projectId};
             try {
                 fetch('./api/analysis/getMAplotAN', {
                         method: "POST",
-                        body: "",
+                        body: JSON.stringify(params),
                         processData: false,
                         contentType: false
                     })
@@ -908,11 +918,12 @@ class Analysis extends Component {
         workflow2.progressing = true;
         workflow2.loading_info = "Loading NUSE...";
         this.setState({ workflow: workflow2 });
+        let params ={projectId:workflow2.projectId};
 
         try {
             fetch('./api/analysis/getNUSE', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify(params),
                     processData: false,
                     contentType: false
                 }).then(res => res.json())
@@ -969,10 +980,12 @@ class Analysis extends Component {
         workflow2.progressing = true;
         workflow2.loading_info = "Loading RLE...";
         this.setState({ workflow: workflow2 });
+         let params ={projectId:workflow2.projectId};
+
         try {
             fetch('./api/analysis/getRLE', {
                     method: "POST",
-                    body: "",
+                      body: JSON.stringify(params),
                     processData: false,
                     contentType: false
                 }).then(this.handleErrors)
@@ -1044,11 +1057,12 @@ class Analysis extends Component {
         workflow2.progressing = true;
         workflow2.loading_info = "Loading Plots...";
         this.setState({ workflow: workflow2 });
-
+ let params ={projectId:workflow2.projectId};
+  
         try {
             fetch('./api/analysis/getBoxplotBN', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify(params),
                     processData: false,
                     contentType: false
                 }).then(this.handleErrors)
@@ -1116,11 +1130,12 @@ class Analysis extends Component {
         if (workflow2.list_mAplotBN == "") {
             workflow2.progressing = true;
             workflow2.loading_info = "Loading Plots...";
+            let params ={projectId:workflow2.projectId};
             this.setState({ workflow: workflow2 });
             try {
                 fetch('./api/analysis/getMAplotsBN', {
                         method: "POST",
-                        body: "",
+                        body: JSON.stringify(params),
                         processData: false,
                         contentType: false
                     }).then(this.handleErrors)
