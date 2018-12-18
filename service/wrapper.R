@@ -45,7 +45,7 @@ process = function(){
 
   # upOrDown<-toString(args[16])
 
-  # pathway_name<-toString(args[17])
+  # pathway_name<-toString(args[17]) 
 
   #return(args)
 
@@ -65,7 +65,7 @@ process = function(){
   if(action == "loadGSE"){
      
       #### 1) Process GEO files function takes gseid and returns ExpressionFeatureSet object  ####
-      #celfiles = processGEOfiles('pid','GSE37874', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
+      #celfiles = processGEOfiles('pid',' ', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
      access_code<-toString(args[5])
 
      if(access_code=="test"){
