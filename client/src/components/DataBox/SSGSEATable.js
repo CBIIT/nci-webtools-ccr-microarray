@@ -239,7 +239,7 @@ class SSGSEATable extends Component {
                                       <Button >
                                         <span id="ss-drop-down">25</span> <Icon type="down" />
                                       </Button>
-                                </Dropdown>of total {this.props.data.ssGSEA.pagination.total}records
+                                </Dropdown>of total {this.props.data.ssGSEA.pagination.total} records
 
                             </div>
                          <div>

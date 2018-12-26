@@ -280,7 +280,7 @@ class DEGTable extends Component {
                                   <Button >
                                     <span id="deg-drop-down">25</span> <Icon type="down" />
                                   </Button>
-                            </Dropdown>of total {this.props.data.diff_expr_genes.pagination.total}records
+                            </Dropdown>of total {this.props.data.diff_expr_genes.pagination.total}  records
 
                         </div>
                     <div>

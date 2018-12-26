@@ -117,7 +117,7 @@ class Help extends Component {
                            <p>Two plots, the sample similarity heatmap and 3D PCA, provide information about the quality of replicates in the groups.  In general, samples in the same group should cluster together, and groups of samples should cluster separately from other groups. </p>
                            <h4>3D PCA:</h4>
                             <p><img src="./assets/img/PCA.gif" alt="National Cancer Institute" /></p>
-                           <h4>Gene Heatmaps:</h4>
+                           <h4>Sample Similarity Heatmap:</h4>
 
                            <p><img src="./assets/img/heatmap.gif" alt="National Cancer Institute" /></p>
           
