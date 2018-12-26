@@ -376,7 +376,7 @@ class PUGTable extends Component {
                                       <Button >
                                         <span id="pd-drop-down">25</span> <Icon type="down" />
                                       </Button>
-                                </Dropdown>of total {this.props.data.pathways_down.pagination.total}records
+                                </Dropdown>of total {this.props.data.pathways_down.pagination.total} records
 
                             </div>
                              <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
