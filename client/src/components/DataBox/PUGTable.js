@@ -142,7 +142,7 @@ class PUGTable extends Component {
               render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span style={{"color":"#40a9ff"}} data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
                 }
