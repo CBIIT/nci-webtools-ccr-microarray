@@ -66,6 +66,14 @@ class Help extends Component {
                               <h3>Analysis</h3>
                               <p>Once the files are uploaded, choose groups for each sample.  At least 2 groups must be created.</p>
                                <p>Next, choose contrasts to compare.</p>
+                               <p>The control group should be entered last.</p>
+                               <p>For example:</p>
+                               <p><div style={{"paddingLeft":"26px"}}>
+                               Disease<br/>
+                               VS<br/>
+                               Control<br/>
+                               </div>
+                               </p>
                                <p><img src="./assets/img/group.gif" alt="National Cancer Institute" /></p>
           
 
@@ -107,7 +115,11 @@ class Help extends Component {
 
                           <h3>Sample Quality Control:</h3>
                            <p>Two plots, the sample similarity heatmap and 3D PCA, provide information about the quality of replicates in the groups.  In general, samples in the same group should cluster together, and groups of samples should cluster separately from other groups. </p>
+                           <h4>3D PCA:</h4>
                             <p><img src="./assets/img/PCA.gif" alt="National Cancer Institute" /></p>
+                           <h4>Gene Heatmaps:</h4>
+
+                           <p><img src="./assets/img/heatmap.gif" alt="National Cancer Institute" /></p>
           
 
 
@@ -120,13 +132,13 @@ class Help extends Component {
 
                              <h3>Pathway Analysis:</h3>
                            <p>The top 500 significantly upregulated and top 500 significantly downregulated genes are extracted for pathway analysis (significance is determined as unadjusted p-value  &lt; 0.05), Pathway analysis is performed with CCBR’s l2p software</p>
+                            <h4>Gene Heatmaps:</h4>
+                            <p>Click on a pathway to generate a heatmap for the genes in the pathway.  The heatmap will include groups selected in the contrast, and will display scaled normalized gene expression for samples in the groups.  </p>
+                            
                             <p><img src="./assets/img/pathway.gif" alt="National Cancer Institute" /></p>
           
 
-                           <h3>Gene Heatmaps:</h3>
-                            <p>Click on a pathway to generate a heatmap for the genes in the pathway.  The heatmap will include groups selected in the contrast, and will display scaled normalized gene expression for samples in the groups.  </p>
-                             <p><img src="./assets/img/heatmap.gif" alt="National Cancer Institute" /></p>
-          
+                      
 
                             <h3>Single-sample GSEA (ssGSEA):</h3>
                             <p>
