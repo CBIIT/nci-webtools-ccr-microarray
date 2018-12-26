@@ -10,18 +10,8 @@ var path = require('path');
 var rimraf = require('rimraf');
 
 
-var NodeCache = require("node-cache");
-var myCache = new NodeCache({ stdTTL: config.cache_ttl, checkperiod: 120 });
-
-
-router.post("/post", function(req, res) {
-    res.json({ "status": 200, "data": { "totalCount": 184, "records": [{ "SYMBOL": "Dhh", "FC": 1.3276, "logFC": 0.4088, "P.Value": 0.0136, "adj.P.Val": 1, "AveExpr": 4.6281, "ACCNUM": "AV367068", "DESC": "desert hedgehog", "ENTREZ": "13363", "probsetID": "1434959_at", "t": 2.8426, "B": -3.9015 }, { "SYMBOL": "Fgf3", "FC": 1.2868, "logFC": 0.3638, "P.Value": 0.0139, "adj.P.Val": 1, "AveExpr": 4.2223, "ACCNUM": "NM_008007", "DESC": "fibroblast growth factor 3", "ENTREZ": "14174", "probsetID": "1422923_at", "t": 2.8325, "B": -3.9056 }, { "SYMBOL": "Fuca2", "FC": 1.2575, "logFC": 0.3305, "P.Value": 0.0143, "adj.P.Val": 1, "AveExpr": 3.5675, "ACCNUM": "BM054266", "DESC": "fucosidase, alpha-L- 2, plasma", "ENTREZ": "66848", "probsetID": "1416047_at", "t": 2.8179, "B": -3.9116 }, { "SYMBOL": "NA", "FC": -1.2685, "logFC": -0.3431, "P.Value": 0.0156, "adj.P.Val": 1, "AveExpr": 4.576, "ACCNUM": "NM_007960", "DESC": "NA", "ENTREZ": "NA", "probsetID": "1422607_at", "t": -2.7724, "B": -3.9302 }, { "SYMBOL": "Wrn", "FC": -1.2734, "logFC": -0.3487, "P.Value": 0.0159, "adj.P.Val": 1, "AveExpr": 4.7337, "ACCNUM": "D86527", "DESC": "Werner syndrome RecQ like helicase", "ENTREZ": "22427", "probsetID": "1450163_a_at", "t": -2.7633, "B": -3.9339 }, { "SYMBOL": "Sys1", "FC": 1.2581, "logFC": 0.3312, "P.Value": 0.0162, "adj.P.Val": 1, "AveExpr": 4.0735, "ACCNUM": "NM_025575", "DESC": "SYS1 Golgi-localized integral membrane protein homolog (S. cerevisiae)", "ENTREZ": "66460", "probsetID": "1420958_at", "t": 2.7518, "B": -3.9387 }, { "SYMBOL": "4930453N24Rik", "FC": -1.364, "logFC": -0.4478, "P.Value": 0.0167, "adj.P.Val": 1, "AveExpr": 5.0802, "ACCNUM": "AI649104", "DESC": "RIKEN cDNA 4930453N24 gene", "ENTREZ": "67609", "probsetID": "1449718_s_at", "t": -2.7376, "B": -3.9445 }, { "SYMBOL": "Iqgap1", "FC": 1.3135, "logFC": 0.3935, "P.Value": 0.0168, "adj.P.Val": 1, "AveExpr": 4.1512, "ACCNUM": "BI645591", "DESC": "IQ motif containing GTPase activating protein 1", "ENTREZ": "29875", "probsetID": "1431396_at", "t": 2.7338, "B": -3.9461 }, { "SYMBOL": "Syt6", "FC": 1.3148, "logFC": 0.3948, "P.Value": 0.017, "adj.P.Val": 1, "AveExpr": 4.5116, "ACCNUM": "AB026810", "DESC": "synaptotagmin VI", "ENTREZ": "54524", "probsetID": "1426106_a_at", "t": 2.729, "B": -3.9481 }, { "SYMBOL": "Ubap2l", "FC": -1.2059, "logFC": -0.2701, "P.Value": 0.0172, "adj.P.Val": 1, "AveExpr": 6.4779, "ACCNUM": "BM200602", "DESC": "ubiquitin-associated protein 2-like", "ENTREZ": "74383", "probsetID": "1435882_at", "t": -2.7217, "B": -3.9511 }, { "SYMBOL": "Pik3r1", "FC": -1.4292, "logFC": -0.5152, "P.Value": 0.0177, "adj.P.Val": 1, "AveExpr": 5.5069, "ACCNUM": "M60651", "DESC": "phosphoinositide-3-kinase regulatory subunit 1", "ENTREZ": "18708", "probsetID": "1451737_at", "t": -2.7076, "B": -3.9569 }, { "SYMBOL": "NA", "FC": 1.2878, "logFC": 0.3649, "P.Value": 0.0178, "adj.P.Val": 1, "AveExpr": 3.6266, "ACCNUM": "BC027249", "DESC": "NA", "ENTREZ": "NA", "probsetID": "1427819_at", "t": 2.7029, "B": -3.9589 }, { "SYMBOL": "Zfpm2", "FC": -1.2574, "logFC": -0.3305, "P.Value": 0.0185, "adj.P.Val": 1, "AveExpr": 3.1595, "ACCNUM": "NM_011766", "DESC": "zinc finger protein, multitype 2", "ENTREZ": "22762", "probsetID": "1449314_at", "t": -2.6839, "B": -3.9667 }, { "SYMBOL": "Wfdc18", "FC": 1.3296, "logFC": 0.411, "P.Value": 0.0185, "adj.P.Val": 1, "AveExpr": 5.2727, "ACCNUM": "NM_007969", "DESC": "WAP four-disulfide core domain 18", "ENTREZ": "14038", "probsetID": "1417160_s_at", "t": 2.6827, "B": -3.9672 }, { "SYMBOL": "Cldn9", "FC": 1.1839, "logFC": 0.2435, "P.Value": 0.0189, "adj.P.Val": 1, "AveExpr": 5, "ACCNUM": "NM_020293", "DESC": "claudin 9", "ENTREZ": "56863", "probsetID": "1450524_at", "t": 2.673, "B": -3.9712 }, { "SYMBOL": "Baiap2", "FC": -1.2581, "logFC": -0.3313, "P.Value": 0.019, "adj.P.Val": 1, "AveExpr": 6.3181, "ACCNUM": "AA796998", "DESC": "brain-specific angiogenesis inhibitor 1-associated protein 2", "ENTREZ": "108100", "probsetID": "1451027_at", "t": -2.6697, "B": -3.9726 }, { "SYMBOL": "Gpalpp1", "FC": -1.2238, "logFC": -0.2914, "P.Value": 0.0191, "adj.P.Val": 1, "AveExpr": 6.543, "ACCNUM": "BM225303", "DESC": "GPALPP motifs containing 1", "ENTREZ": "67467", "probsetID": "1454998_at", "t": -2.668, "B": -3.9733 }, { "SYMBOL": "Ccl2", "FC": 1.2318, "logFC": 0.3008, "P.Value": 0.0192, "adj.P.Val": 1, "AveExpr": 4.4836, "ACCNUM": "AF065933", "DESC": "chemokine (C-C motif) ligand 2", "ENTREZ": "20296", "probsetID": "1420380_at", "t": 2.664, "B": -3.975 }, { "SYMBOL": "Ppih", "FC": 1.2791, "logFC": 0.3551, "P.Value": 0.0196, "adj.P.Val": 1, "AveExpr": 3.0658, "ACCNUM": "AK008394", "DESC": "peptidyl prolyl isomerase H", "ENTREZ": "66101", "probsetID": "1431505_at", "t": 2.6532, "B": -3.9795 }, { "SYMBOL": "Pja2", "FC": -1.4618, "logFC": -0.5477, "P.Value": 0.0198, "adj.P.Val": 1, "AveExpr": 4.6762, "ACCNUM": "BF160731", "DESC": "praja ring finger ubiquitin ligase 2", "ENTREZ": "224938", "probsetID": "1427148_at", "t": -2.6476, "B": -3.9818 }, { "SYMBOL": "Ints3", "FC": -1.3789, "logFC": -0.4635, "P.Value": 0.0202, "adj.P.Val": 1, "AveExpr": 4.2984, "ACCNUM": "BC003209", "DESC": "integrator complex subunit 3", "ENTREZ": "229543", "probsetID": "1423921_at", "t": -2.639, "B": -3.9854 }, { "SYMBOL": "Opa1", "FC": -1.2523, "logFC": -0.3246, "P.Value": 0.0209, "adj.P.Val": 1, "AveExpr": 5.133, "ACCNUM": "BC025160", "DESC": "OPA1, mitochondrial dynamin like GTPase", "ENTREZ": "74143", "probsetID": "1418768_at", "t": -2.6212, "B": -3.9928 }, { "SYMBOL": "Ak4", "FC": 1.3429, "logFC": 0.4253, "P.Value": 0.021, "adj.P.Val": 1, "AveExpr": 6.0279, "ACCNUM": "NM_009647", "DESC": "adenylate kinase 4", "ENTREZ": "11639", "probsetID": "1421831_at", "t": 2.6172, "B": -3.9945 }, { "SYMBOL": "Exoc4", "FC": 1.2284, "logFC": 0.2968, "P.Value": 0.0214, "adj.P.Val": 1, "AveExpr": 5.1332, "ACCNUM": "AK010695", "DESC": "exocyst complex component 4", "ENTREZ": "20336", "probsetID": "1431062_a_at", "t": 2.6074, "B": -3.9985 }, { "SYMBOL": "Plagl2", "FC": 1.2843, "logFC": 0.3609, "P.Value": 0.0214, "adj.P.Val": 1, "AveExpr": 4.5554, "ACCNUM": "NM_018807", "DESC": "pleiomorphic adenoma gene-like 2", "ENTREZ": "54711", "probsetID": "1417519_at", "t": 2.6069, "B": -3.9988 }] } });
-})
-
-
-
 router.post('/upload', function(req, res) {
-    logger.info("API:/upload ");
+    logger.info("[start] upload files");
 
 
     // create an incoming form object
@@ -166,13 +156,11 @@ router.post('/pathwaysHeapMap', function(req, res) {
 
     R.execute("wrapper.R", data, function(err, returnValue) {
         if (err) {
-            logger.info("API:/pathwaysHeapMap", "status 404 ");
             res.json({
                 status: 404,
                 msg: returnValue
             });
         } else {
-            logger.info("API:/pathwaysHeapMap", "status 200 ");
             res.json({
                 status: 200,
                 data: returnValue
@@ -195,18 +183,8 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
     data.push(req.body.genSet);
     data.push(config.configPath);
 
-
-    logger.info("API:/getssGSEAWithDiffGenSet ",
-        "projectId :", req.body.projectId,
-        "genSet :", req.body.genSet,
-        "species :", req.body.species,
-        "data_repo_path:", config.uploadPath,
-        "configPath:", config.configPath
-    );
-
     R.execute("wrapper.R", data, function(err, returnValue) {
         if (err) {
-            logger.info("API:/getssGSEAWithDiffGenSet", "status 404 ");
             res.json({
                 status: 404,
                 msg: returnValue
@@ -224,27 +202,10 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
             }
 
 
-            // save result into cache 
-
-            myCache.get(req.body.projectId, function(err, value) {
-                if (!err) {
-                    if (value == undefined) {
-
-
-                    } else {
-
-                        let obj = { ...value };
-                        obj.ssGSEA = ssGSEA;
-                        myCache.set(req.body.projectId, obj);
-
-                    }
-                }
-            });
-
-            // if (req.session.runContrastData.ssGSEA) {
-            //     req.session.runContrastData.ssGSEA = ssGSEA;
-            // }
-            logger.info("API:/getssGSEAWithDiffGenSet", "status 200 ");
+            // save result into session 
+            if (req.session.runContrastData.ssGSEA) {
+                req.session.runContrastData.ssGSEA = ssGSEA;
+            }
             res.json({
                 status: 200,
                 data: ""
@@ -292,25 +253,17 @@ router.post('/runContrast', function(req, res) {
 
 
         if (err) {
-            logger.info("API:/runContrast", "status 404 ");
             res.json({
                 status: 404,
                 msg: returnValue
             });
         } else {
             // store return value in session (deep copy)
-
-            let runContrastData = toObject(returnValue);
-
-            myCache.set(req.body.projectId, runContrastData);
-
-
-
-            // req.session.runContrastData = toObject(returnValue);
-            // req.session.option = req.body.group_1 + req.body.group_2 + req.body.genSet;
-            // req.session.groups = req.body.groups;
-            // req.session.projectId = req.body.projectId;
-            logger.info("API:/runContrast ", "store data in session")
+            req.session.runContrastData = toObject(returnValue);
+            req.session.option = req.body.group_1 + req.body.group_2 + req.body.genSet;
+            req.session.groups = req.body.groups;
+            req.session.projectId = req.body.projectId;
+            logger.info("API:/runContrast ", "store data in req.session")
             //  // filter out data based on the filter
             // if(req.body.actions == "runContrast"){
             //      returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
@@ -320,8 +273,8 @@ router.post('/runContrast', function(req, res) {
             let return_data = "";
 
             return_data = {
-                mAplotBN: runContrastData.listPlots[1],
-                mAplotAN: runContrastData.listPlots[6]
+                mAplotBN: req.session.runContrastData.listPlots[1],
+                mAplotAN: req.session.runContrastData.listPlots[6]
             }
             let type = req.body.targetObject;
 
@@ -357,7 +310,7 @@ function sin_to_hex(i, phase, size) {
 }
 
 function getPlots(req, type) {
-    logger.info("getPlots ", type)
+
     console.time("getPlots")
     let return_data = "";
 
@@ -386,208 +339,99 @@ function getPlots(req, type) {
         }
     }
 
-
-    myCache.get(req.body.projectId, function(err, value) {
-        if (!err) {
-            if (value == undefined) {
-
-                // do nothing
+    switch (type) {
+        case "getHistplotAN":
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[5]
+            } else {
+                return_data = "";
+            }
+            break;
+        case "getBoxplotAN":
+            if (req.session && req.session.runContrastData) {
+                if (typeof(req.session.runContrastData.listPlots[7].color[0]) == "number") {
+                    req.session.runContrastData.listPlots[7].color = req.session.runContrastData.listPlots[7].color.map(x => rainbow[x / 5 - 1]);
+                }
+                return_data = req.session.runContrastData.listPlots[7]
 
             } else {
-
-                let runContrastData = { ...value };
-
-                switch (type) {
-                    case "getHistplotAN":
-                        if (runContrastData) {
-                            return_data = runContrastData.listPlots[5]
-                        } else {
-                            return_data = "";
-                        }
-                        break;
-                    case "getBoxplotAN":
-                        if (runContrastData) {
-                            if (typeof(runContrastData.listPlots[7].color[0]) == "number") {
-                                runContrastData.listPlots[7].color = runContrastData.listPlots[7].color.map(x => rainbow[x / 5 - 1]);
-                            }
-                            return_data = runContrastData.listPlots[7]
-
-                        } else {
-                            return_data = "";
-                        }
-                        break;
-                    case "getMAplotAN":
-                        console.time("getMAplotAN")
-                        if (runContrastData) {
-                            return_data = runContrastData.listPlots[6]
-                        } else {
-                            return_data = "";
-                        }
-                        console.timeEnd("getMAplotAN")
-                        break;
-                    case "getPCA":
-                        if (runContrastData) {
-                            if (typeof(runContrastData.listPlots[8].color[0]) == "number") {
-                                runContrastData.listPlots[8].color = runContrastData.listPlots[8].color.map(x => rainbow[x / 5 - 1]);
-                            }
-                            return_data = runContrastData.listPlots[8]
-                        } else {
-                            return_data = "";
-                        }
-
-                        break;
-                    case "getHeatmapolt":
-                        if (runContrastData) {
-                            return_data = runContrastData.listPlots[9]
-                        } else {
-                            return_data = "";
-                        }
-                        break;
-                    case "getHistplotBN":
-                        if (runContrastData) {
-                            return_data = runContrastData.listPlots[0]
-                        } else {
-                            return_data = "";
-                        }
-                        break;
-                    case "getMAplotsBN":
-                        if (runContrastData) {
-                            return_data = runContrastData.listPlots[1]
-                        } else {
-                            return_data = "";
-                        }
-                        break;
-                    case "getBoxplotBN":
-                        if (runContrastData) {
-                            if (typeof(runContrastData.listPlots[2].color[0]) == "number") {
-                                runContrastData.listPlots[2].color = runContrastData.listPlots[2].color.map(x => rainbow[x / 5 - 1]);
-                            }
-                            return_data = runContrastData.listPlots[2]
-                        } else {
-                            return_data = "";
-                        }
-                        break;
-                    case "getRLE":
-                        if (runContrastData) {
-                            if (typeof(runContrastData.listPlots[3].color[0]) == "number") {
-                                runContrastData.listPlots[3].color = runContrastData.listPlots[3].color.map(x => rainbow[x / 5 - 1]);
-                            }
-                            return_data = runContrastData.listPlots[3]
-                        } else {
-                            return_data = "";
-                        }
-                        break;
-                    case "getNUSE":
-                        if (runContrastData) {
-                            if (typeof(runContrastData.listPlots[4].color[0]) == "number") {
-                                runContrastData.listPlots[4].color = runContrastData.listPlots[4].color.map(x => rainbow[x / 5 - 1]);
-                            }
-                            return_data = runContrastData.listPlots[4]
-                        } else {
-                            return_data = "";
-                        }
-                        break;
-                    default:
-                        return_data = "";
-                }
-
+                return_data = "";
             }
-        }
-    });
+            break;
+        case "getMAplotAN":
+            console.time("getMAplotAN")
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[6]
+            } else {
+                return_data = "";
+            }
+            console.timeEnd("getMAplotAN")
+            break;
+        case "getPCA":
+            if (req.session && req.session.runContrastData) {
+                if (typeof(req.session.runContrastData.listPlots[8].color[0]) == "number") {
+                    req.session.runContrastData.listPlots[8].color = req.session.runContrastData.listPlots[8].color.map(x => rainbow[x / 5 - 1]);
+                }
+                return_data = req.session.runContrastData.listPlots[8]
+            } else {
+                return_data = "";
+            }
 
-    // switch (type) {
-    //     case "getHistplotAN":
-    //         if (req.session && req.session.runContrastData) {
-    //             return_data = req.session.runContrastData.listPlots[5]
-    //         } else {
-    //             return_data = "";
-    //         }
-    //         break;
-    //     case "getBoxplotAN":
-    //         if (req.session && req.session.runContrastData) {
-    //             if (typeof(req.session.runContrastData.listPlots[7].color[0]) == "number") {
-    //                 req.session.runContrastData.listPlots[7].color = req.session.runContrastData.listPlots[7].color.map(x => rainbow[x / 5 - 1]);
-    //             }
-    //             return_data = req.session.runContrastData.listPlots[7]
-
-    //         } else {
-    //             return_data = "";
-    //         }
-    //         break;
-    //     case "getMAplotAN":
-    //         console.time("getMAplotAN")
-    //         if (req.session && req.session.runContrastData) {
-    //             return_data = req.session.runContrastData.listPlots[6]
-    //         } else {
-    //             return_data = "";
-    //         }
-    //         console.timeEnd("getMAplotAN")
-    //         break;
-    //     case "getPCA":
-    //         if (req.session && req.session.runContrastData) {
-    //             if (typeof(req.session.runContrastData.listPlots[8].color[0]) == "number") {
-    //                 req.session.runContrastData.listPlots[8].color = req.session.runContrastData.listPlots[8].color.map(x => rainbow[x / 5 - 1]);
-    //             }
-    //             return_data = req.session.runContrastData.listPlots[8]
-    //         } else {
-    //             return_data = "";
-    //         }
-
-    //         break;
-    //     case "getHeatmapolt":
-    //         if (req.session && req.session.runContrastData) {
-    //             return_data = req.session.runContrastData.listPlots[9]
-    //         } else {
-    //             return_data = "";
-    //         }
-    //         break;
-    //     case "getHistplotBN":
-    //         if (req.session && req.session.runContrastData) {
-    //             return_data = req.session.runContrastData.listPlots[0]
-    //         } else {
-    //             return_data = "";
-    //         }
-    //         break;
-    //     case "getMAplotsBN":
-    //         if (req.session && req.session.runContrastData) {
-    //             return_data = req.session.runContrastData.listPlots[1]
-    //         } else {
-    //             return_data = "";
-    //         }
-    //         break;
-    //     case "getBoxplotBN":
-    //         if (req.session && req.session.runContrastData) {
-    //             if (typeof(req.session.runContrastData.listPlots[2].color[0]) == "number") {
-    //                 req.session.runContrastData.listPlots[2].color = req.session.runContrastData.listPlots[2].color.map(x => rainbow[x / 5 - 1]);
-    //             }
-    //             return_data = req.session.runContrastData.listPlots[2]
-    //         } else {
-    //             return_data = "";
-    //         }
-    //         break;
-    //     case "getRLE":
-    //         if (req.session && req.session.runContrastData) {
-    //             if (typeof(req.session.runContrastData.listPlots[3].color[0]) == "number") {
-    //                 req.session.runContrastData.listPlots[3].color = req.session.runContrastData.listPlots[3].color.map(x => rainbow[x / 5 - 1]);
-    //             }
-    //             return_data = req.session.runContrastData.listPlots[3]
-    //         } else {
-    //             return_data = "";
-    //         }
-    //         break;
-    //     case "getNUSE":
-    //         if (req.session && req.session.runContrastData) {
-    //             if (typeof(req.session.runContrastData.listPlots[4].color[0]) == "number") {
-    //                 req.session.runContrastData.listPlots[4].color = req.session.runContrastData.listPlots[4].color.map(x => rainbow[x / 5 - 1]);
-    //             }
-    //             return_data = req.session.runContrastData.listPlots[4]
-    //         } else {
-    //             return_data = "";
-    //         }
-    //         break;
-    //     default:
-    //         return_data = "";
-    // }
+            break;
+        case "getHeatmapolt":
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[9]
+            } else {
+                return_data = "";
+            }
+            break;
+        case "getHistplotBN":
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[0]
+            } else {
+                return_data = "";
+            }
+            break;
+        case "getMAplotsBN":
+            if (req.session && req.session.runContrastData) {
+                return_data = req.session.runContrastData.listPlots[1]
+            } else {
+                return_data = "";
+            }
+            break;
+        case "getBoxplotBN":
+            if (req.session && req.session.runContrastData) {
+                if (typeof(req.session.runContrastData.listPlots[2].color[0]) == "number") {
+                    req.session.runContrastData.listPlots[2].color = req.session.runContrastData.listPlots[2].color.map(x => rainbow[x / 5 - 1]);
+                }
+                return_data = req.session.runContrastData.listPlots[2]
+            } else {
+                return_data = "";
+            }
+            break;
+        case "getRLE":
+            if (req.session && req.session.runContrastData) {
+                if (typeof(req.session.runContrastData.listPlots[3].color[0]) == "number") {
+                    req.session.runContrastData.listPlots[3].color = req.session.runContrastData.listPlots[3].color.map(x => rainbow[x / 5 - 1]);
+                }
+                return_data = req.session.runContrastData.listPlots[3]
+            } else {
+                return_data = "";
+            }
+            break;
+        case "getNUSE":
+            if (req.session && req.session.runContrastData) {
+                if (typeof(req.session.runContrastData.listPlots[4].color[0]) == "number") {
+                    req.session.runContrastData.listPlots[4].color = req.session.runContrastData.listPlots[4].color.map(x => rainbow[x / 5 - 1]);
+                }
+                return_data = req.session.runContrastData.listPlots[4]
+            } else {
+                return_data = "";
+            }
+            break;
+        default:
+            return_data = "";
+    }
 
     console.timeEnd('getPlots');
     return return_data
@@ -596,7 +440,6 @@ function getPlots(req, type) {
 
 
 router.post('/getHistplotBN', function(req, res) {
-    logger.info("API:getHistplotBN ")
     res.json({
         status: 200,
         data: getPlots(req, "getHistplotBN")
@@ -607,7 +450,6 @@ router.post('/getHistplotBN', function(req, res) {
 
 
 router.post('/getHistplotAN', function(req, res) {
-    logger.info("API:getHistplotAN ")
     res.json({
         status: 200,
         data: getPlots(req, "getHistplotAN")
@@ -617,7 +459,6 @@ router.post('/getHistplotAN', function(req, res) {
 
 
 router.post('/getBoxplotAN', function(req, res) {
-    logger.info("API:getBoxplotAN ")
     res.json({
         status: 200,
         data: getPlots(req, "getBoxplotAN")
@@ -625,7 +466,6 @@ router.post('/getBoxplotAN', function(req, res) {
 });
 
 router.post('/getMAplotAN', function(req, res) {
-    logger.info("API:getMAplotAN ")
     console.time("API_getMAplotAN")
     var dd = getPlots(req, "getMAplotAN");
     console.time("API_getMAplotAN")
@@ -639,7 +479,6 @@ router.post('/getMAplotAN', function(req, res) {
 
 
 router.post('/getPCA', function(req, res) {
-    logger.info("API:getPCA ")
     res.json({
         status: 200,
         data: getPlots(req, "getPCA")
@@ -648,7 +487,6 @@ router.post('/getPCA', function(req, res) {
 
 
 router.post('/getHeatmapolt', function(req, res) {
-    logger.info("API:getHeatmapolt ")
     res.json({
         status: 200,
         data: getPlots(req, "getHeatmapolt")
@@ -658,7 +496,6 @@ router.post('/getHeatmapolt', function(req, res) {
 
 
 router.post('/getBoxplotAN', function(req, res) {
-    logger.info("API:getBoxplotAN ")
     res.json({
         status: 200,
         data: getPlots(req, "getBoxplotAN")
@@ -669,7 +506,6 @@ router.post('/getBoxplotAN', function(req, res) {
 
 
 router.post('/getMAplotsBN', function(req, res) {
-    logger.info("API:getMAplotsBN ")
     res.json({
         status: 200,
         data: getPlots(req, "getMAplotsBN")
@@ -681,7 +517,6 @@ router.post('/getMAplotsBN', function(req, res) {
 
 
 router.post('/getBoxplotBN', function(req, res) {
-    logger.info("API:getBoxplotBN ")
     res.json({
         status: 200,
         data: getPlots(req, "getBoxplotBN")
@@ -689,7 +524,6 @@ router.post('/getBoxplotBN', function(req, res) {
 });
 
 router.post('/getRLE', function(req, res) {
-    logger.info("API:getRLE ")
     res.json({
         status: 200,
         data: getPlots(req, "getRLE")
@@ -699,7 +533,6 @@ router.post('/getRLE', function(req, res) {
 
 
 router.post('/getNUSE', function(req, res) {
-    logger.info("API:getNUSE ")
     res.json({
         status: 200,
         data: getPlots(req, "getNUSE")
@@ -710,55 +543,30 @@ router.post('/getNUSE', function(req, res) {
 
 
 router.post('/getUpPathWays', function(req, res) {
-    logger.info("API:/getUpPathWays ");
 
-    myCache.get(req.body.projectId, function(err, value) {
-        if (!err) {
-            if (value == undefined) {
+    if (req.session && req.session.runContrastData) {
+        res.json({
+            status: 200,
+            data: getUpPathWays(req)
+        });
 
-                res.json({
-                    status: 404,
-                    data: ""
-                });
-
-            } else {
-
-                res.json({
-                    status: 200,
-                    data: getUpPathWays(req)
-                });
-
-            }
-        }
-    });
-
-    // if (req.session && req.session.runContrastData) {
-    //     res.json({
-    //         status: 200,
-    //         data: getUpPathWays(req)
-    //     });
-
-    // } else {
-    //     res.json({
-    //         status: 404,
-    //         data: ""
-    //     });
-    // }
+    } else {
+        res.json({
+            status: 404,
+            data: ""
+        });
+    }
 
 });
 
 
 router.post('/getDownPathWays', function(req, res) {
-    logger.info("API:/getDownPathWays ");
 
     if (req.session && req.session.runContrastData) {
-        //let obj =getDownPathWays(req);
-        logger.info("API:/getDownPathWays --- get output data ready to send response");
-        // res.json({
-        //     status: 200,
-        //     data: obj
-        // });
-        res.json({ "status": 200, "data": { "totalCount": 184, "records": [{ "SYMBOL": "Dhh", "FC": 1.3276, "logFC": 0.4088, "P.Value": 0.0136, "adj.P.Val": 1, "AveExpr": 4.6281, "ACCNUM": "AV367068", "DESC": "desert hedgehog", "ENTREZ": "13363", "probsetID": "1434959_at", "t": 2.8426, "B": -3.9015 }, { "SYMBOL": "Fgf3", "FC": 1.2868, "logFC": 0.3638, "P.Value": 0.0139, "adj.P.Val": 1, "AveExpr": 4.2223, "ACCNUM": "NM_008007", "DESC": "fibroblast growth factor 3", "ENTREZ": "14174", "probsetID": "1422923_at", "t": 2.8325, "B": -3.9056 }, { "SYMBOL": "Fuca2", "FC": 1.2575, "logFC": 0.3305, "P.Value": 0.0143, "adj.P.Val": 1, "AveExpr": 3.5675, "ACCNUM": "BM054266", "DESC": "fucosidase, alpha-L- 2, plasma", "ENTREZ": "66848", "probsetID": "1416047_at", "t": 2.8179, "B": -3.9116 }, { "SYMBOL": "NA", "FC": -1.2685, "logFC": -0.3431, "P.Value": 0.0156, "adj.P.Val": 1, "AveExpr": 4.576, "ACCNUM": "NM_007960", "DESC": "NA", "ENTREZ": "NA", "probsetID": "1422607_at", "t": -2.7724, "B": -3.9302 }, { "SYMBOL": "Wrn", "FC": -1.2734, "logFC": -0.3487, "P.Value": 0.0159, "adj.P.Val": 1, "AveExpr": 4.7337, "ACCNUM": "D86527", "DESC": "Werner syndrome RecQ like helicase", "ENTREZ": "22427", "probsetID": "1450163_a_at", "t": -2.7633, "B": -3.9339 }, { "SYMBOL": "Sys1", "FC": 1.2581, "logFC": 0.3312, "P.Value": 0.0162, "adj.P.Val": 1, "AveExpr": 4.0735, "ACCNUM": "NM_025575", "DESC": "SYS1 Golgi-localized integral membrane protein homolog (S. cerevisiae)", "ENTREZ": "66460", "probsetID": "1420958_at", "t": 2.7518, "B": -3.9387 }, { "SYMBOL": "4930453N24Rik", "FC": -1.364, "logFC": -0.4478, "P.Value": 0.0167, "adj.P.Val": 1, "AveExpr": 5.0802, "ACCNUM": "AI649104", "DESC": "RIKEN cDNA 4930453N24 gene", "ENTREZ": "67609", "probsetID": "1449718_s_at", "t": -2.7376, "B": -3.9445 }, { "SYMBOL": "Iqgap1", "FC": 1.3135, "logFC": 0.3935, "P.Value": 0.0168, "adj.P.Val": 1, "AveExpr": 4.1512, "ACCNUM": "BI645591", "DESC": "IQ motif containing GTPase activating protein 1", "ENTREZ": "29875", "probsetID": "1431396_at", "t": 2.7338, "B": -3.9461 }, { "SYMBOL": "Syt6", "FC": 1.3148, "logFC": 0.3948, "P.Value": 0.017, "adj.P.Val": 1, "AveExpr": 4.5116, "ACCNUM": "AB026810", "DESC": "synaptotagmin VI", "ENTREZ": "54524", "probsetID": "1426106_a_at", "t": 2.729, "B": -3.9481 }, { "SYMBOL": "Ubap2l", "FC": -1.2059, "logFC": -0.2701, "P.Value": 0.0172, "adj.P.Val": 1, "AveExpr": 6.4779, "ACCNUM": "BM200602", "DESC": "ubiquitin-associated protein 2-like", "ENTREZ": "74383", "probsetID": "1435882_at", "t": -2.7217, "B": -3.9511 }, { "SYMBOL": "Pik3r1", "FC": -1.4292, "logFC": -0.5152, "P.Value": 0.0177, "adj.P.Val": 1, "AveExpr": 5.5069, "ACCNUM": "M60651", "DESC": "phosphoinositide-3-kinase regulatory subunit 1", "ENTREZ": "18708", "probsetID": "1451737_at", "t": -2.7076, "B": -3.9569 }, { "SYMBOL": "NA", "FC": 1.2878, "logFC": 0.3649, "P.Value": 0.0178, "adj.P.Val": 1, "AveExpr": 3.6266, "ACCNUM": "BC027249", "DESC": "NA", "ENTREZ": "NA", "probsetID": "1427819_at", "t": 2.7029, "B": -3.9589 }, { "SYMBOL": "Zfpm2", "FC": -1.2574, "logFC": -0.3305, "P.Value": 0.0185, "adj.P.Val": 1, "AveExpr": 3.1595, "ACCNUM": "NM_011766", "DESC": "zinc finger protein, multitype 2", "ENTREZ": "22762", "probsetID": "1449314_at", "t": -2.6839, "B": -3.9667 }, { "SYMBOL": "Wfdc18", "FC": 1.3296, "logFC": 0.411, "P.Value": 0.0185, "adj.P.Val": 1, "AveExpr": 5.2727, "ACCNUM": "NM_007969", "DESC": "WAP four-disulfide core domain 18", "ENTREZ": "14038", "probsetID": "1417160_s_at", "t": 2.6827, "B": -3.9672 }, { "SYMBOL": "Cldn9", "FC": 1.1839, "logFC": 0.2435, "P.Value": 0.0189, "adj.P.Val": 1, "AveExpr": 5, "ACCNUM": "NM_020293", "DESC": "claudin 9", "ENTREZ": "56863", "probsetID": "1450524_at", "t": 2.673, "B": -3.9712 }, { "SYMBOL": "Baiap2", "FC": -1.2581, "logFC": -0.3313, "P.Value": 0.019, "adj.P.Val": 1, "AveExpr": 6.3181, "ACCNUM": "AA796998", "DESC": "brain-specific angiogenesis inhibitor 1-associated protein 2", "ENTREZ": "108100", "probsetID": "1451027_at", "t": -2.6697, "B": -3.9726 }, { "SYMBOL": "Gpalpp1", "FC": -1.2238, "logFC": -0.2914, "P.Value": 0.0191, "adj.P.Val": 1, "AveExpr": 6.543, "ACCNUM": "BM225303", "DESC": "GPALPP motifs containing 1", "ENTREZ": "67467", "probsetID": "1454998_at", "t": -2.668, "B": -3.9733 }, { "SYMBOL": "Ccl2", "FC": 1.2318, "logFC": 0.3008, "P.Value": 0.0192, "adj.P.Val": 1, "AveExpr": 4.4836, "ACCNUM": "AF065933", "DESC": "chemokine (C-C motif) ligand 2", "ENTREZ": "20296", "probsetID": "1420380_at", "t": 2.664, "B": -3.975 }, { "SYMBOL": "Ppih", "FC": 1.2791, "logFC": 0.3551, "P.Value": 0.0196, "adj.P.Val": 1, "AveExpr": 3.0658, "ACCNUM": "AK008394", "DESC": "peptidyl prolyl isomerase H", "ENTREZ": "66101", "probsetID": "1431505_at", "t": 2.6532, "B": -3.9795 }, { "SYMBOL": "Pja2", "FC": -1.4618, "logFC": -0.5477, "P.Value": 0.0198, "adj.P.Val": 1, "AveExpr": 4.6762, "ACCNUM": "BF160731", "DESC": "praja ring finger ubiquitin ligase 2", "ENTREZ": "224938", "probsetID": "1427148_at", "t": -2.6476, "B": -3.9818 }, { "SYMBOL": "Ints3", "FC": -1.3789, "logFC": -0.4635, "P.Value": 0.0202, "adj.P.Val": 1, "AveExpr": 4.2984, "ACCNUM": "BC003209", "DESC": "integrator complex subunit 3", "ENTREZ": "229543", "probsetID": "1423921_at", "t": -2.639, "B": -3.9854 }, { "SYMBOL": "Opa1", "FC": -1.2523, "logFC": -0.3246, "P.Value": 0.0209, "adj.P.Val": 1, "AveExpr": 5.133, "ACCNUM": "BC025160", "DESC": "OPA1, mitochondrial dynamin like GTPase", "ENTREZ": "74143", "probsetID": "1418768_at", "t": -2.6212, "B": -3.9928 }, { "SYMBOL": "Ak4", "FC": 1.3429, "logFC": 0.4253, "P.Value": 0.021, "adj.P.Val": 1, "AveExpr": 6.0279, "ACCNUM": "NM_009647", "DESC": "adenylate kinase 4", "ENTREZ": "11639", "probsetID": "1421831_at", "t": 2.6172, "B": -3.9945 }, { "SYMBOL": "Exoc4", "FC": 1.2284, "logFC": 0.2968, "P.Value": 0.0214, "adj.P.Val": 1, "AveExpr": 5.1332, "ACCNUM": "AK010695", "DESC": "exocyst complex component 4", "ENTREZ": "20336", "probsetID": "1431062_a_at", "t": 2.6074, "B": -3.9985 }, { "SYMBOL": "Plagl2", "FC": 1.2843, "logFC": 0.3609, "P.Value": 0.0214, "adj.P.Val": 1, "AveExpr": 4.5554, "ACCNUM": "NM_018807", "DESC": "pleiomorphic adenoma gene-like 2", "ENTREZ": "54711", "probsetID": "1417519_at", "t": 2.6069, "B": -3.9988 }] } });
+        res.json({
+            status: 200,
+            data: getDownPathWays(req)
+        });
 
     } else {
         res.json({
@@ -773,7 +581,6 @@ router.post('/getDownPathWays', function(req, res) {
 
 
 router.post('/getGSEA', function(req, res) {
-    logger.info("API:/getGSEA ");
 
     if (req.session && req.session.runContrastData) {
 
@@ -794,41 +601,18 @@ router.post('/getGSEA', function(req, res) {
 });
 
 router.post('/getDEG', function(req, res) {
-    logger.info("API:/getDEG ");
 
-    myCache.get(req.body.projectId, function(err, value) {
-        if (!err) {
-            if (value == undefined) {
-
-                res.json({
-                    status: 404,
-                    data: ""
-                });
-
-            } else {
-
-                res.json({
-                    status: 200,
-                    data: getDEG(req)
-                });
-
-            }
-        }
-    });
-
-    // if (req.session && req.session.runContrastData) {
-    //     res.json({
-    //         status: 200,
-    //         data: getDEG(req)
-    //     });
-
-
-    // } else {
-    //     res.json({
-    //         status: 404,
-    //         data: ""
-    //     });
-    // }
+    if (req.session && req.session.runContrastData) {
+        res.json({
+            status: 200,
+            data: getDEG(req)
+        });
+    } else {
+        res.json({
+            status: 404,
+            data: ""
+        });
+    }
 
 });
 
@@ -836,12 +620,6 @@ router.post('/getDEG', function(req, res) {
 function getUpPathWays(req) {
 
 
-    logger.info("getUpPathWays ",
-        "sorting", req.body.sorting,
-        "search keyword", req.body.search_keyword,
-        "page_size", req.body.page_size,
-        "page_number", req.body.page_number,
-    );
     return getPathWays(
         req.session.runContrastData.pathways_up, {},
         req.body.sorting,
@@ -856,12 +634,7 @@ function getUpPathWays(req) {
 
 
 function getDownPathWays(req) {
-    logger.info("getDownPathWays ",
-        "sorting", req.body.sorting,
-        "search keyword", req.body.search_keyword,
-        "page_size", req.body.page_size,
-        "page_number", req.body.page_number,
-    );
+
     return getPathWays(
         req.session.runContrastData.pathways_down, {},
         req.body.sorting,
@@ -877,12 +650,7 @@ function getDownPathWays(req) {
 
 
 function getGSEA(req) {
-    logger.info("getGSEA ",
-        "sorting", req.body.sorting,
-        "search keyword", req.body.search_keyword,
-        "page_size", req.body.page_size,
-        "page_number", req.body.page_number,
-    );
+
     return getGSEA_filter(
         req.session.runContrastData.ssGSEA, {},
         req.body.sorting,
@@ -897,30 +665,19 @@ function getGSEA(req) {
 
 
 function getDEG(req) {
-    logger.info("getDEG ",
-        "sorting", req.body.sorting,
-        "search keyword", req.body.search_keyword,
-        "page_size", req.body.page_size,
-        "page_number", req.body.page_number,
-    );
+
     let threadhold = {}
-    let data = myCache.get(req.body.projectId);
-    if (data.diff_expr_genes) {
-        // add filter 
-        return getDEG_filter(
-            data,
-            threadhold,
-            req.body.sorting,
-            req.body.search_keyword,
-            req.body.page_size,
-            req.body.page_number,
-            req)
 
+    // add filter 
+    return getDEG_filter(
+        req.session.runContrastData.diff_expr_genes,
+        threadhold,
+        req.body.sorting,
+        req.body.search_keyword,
+        req.body.page_size,
+        req.body.page_number,
+        req)
 
-
-    } else {
-        return null;
-    }
 
 
 }
@@ -931,14 +688,11 @@ function getDEG(req) {
 
 function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_number, req, type) {
 
-    logger.info("getPathWays ");
-
     let result = data;
 
     if (type == "pathways_up") {
         // store
         if (req.session.pathway_up_tmp) {
-
 
             if (req.session.pathway_up_tmp.sorting_order == sorting.order &&
                 req.session.pathway_up_tmp.sorting_name == sorting.name &&
@@ -960,7 +714,6 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
                     totalCount: req.session.pathway_up_tmp.data.length,
                     records: req.session.pathway_up_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
                 }
-                logger.info("getUpPathWays ", "use data in sesion");
                 return output;
             }
 
@@ -994,7 +747,6 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
                     totalCount: req.session.pathway_down_tmp.data.length,
                     records: req.session.pathway_down_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
                 }
-                logger.info("pathways_down ", "use data in sesion");
                 return output;
             }
 
@@ -1003,8 +755,8 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
     }
 
-    if ((type == "pathways_up" && !req.session.pathway_up_tmp) || (!req.session.pathway_down_tmp) && type == "pathways_down") {
-        logger.info("pathways_sorting ", "not use data in sesion");
+    if((type=="pathways_up"&&!req.session.pathway_up_tmp)||(!req.session.pathway_down_tmp)&&type=="pathways_down"){
+
         // sorting
         if (sorting != null) {
             if (sorting.order == "descend") {
@@ -1020,10 +772,10 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             }
         }
     }
-
+    
     // search
     if (search_keyword) {
-        logger.info("pathways_search_keyword ", "not use data in sesion");
+
         if (!(search_keyword.search_PATHWAY_ID == "" &&
                 search_keyword.search_SOURCE == "" &&
                 search_keyword.search_TYPE == "" &&
@@ -1189,7 +941,6 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             search_TOTAL_NUMBER_GENES: search_keyword.search_TOTAL_NUMBER_GENES,
             data: result
         }
-        logger.info("pathways_up ", "set data into tmp session");
     }
 
     if (type == "pathways_down") {
@@ -1211,10 +962,8 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             search_TOTAL_NUMBER_GENES: search_keyword.search_TOTAL_NUMBER_GENES,
             data: result
         }
-        logger.info("pathways_down ", "set data into tmp session");
     }
 
-    logger.info("pathways_output ");
     // return index
     let output = {
         totalCount: result.length,
@@ -1228,7 +977,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, page_number, req) {
 
     let result = data;
-    logger.info("getGSEA_filter ");
+
 
     if (req.session.ssGSEA_tmp) {
 
@@ -1242,7 +991,6 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
             req.session.ssGSEA_tmp.t == search_keyword.search_t &&
             req.session.ssGSEA_tmp.logFC == search_keyword.search_logFC
         ) {
-            logger.info("getGSEA_filter ", "use data in session");
             // return index
             let output = {
                 totalCount: req.session.ssGSEA_tmp.data.length,
@@ -1257,8 +1005,6 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
     if (!req.session.ssGSEA_tmp) {
         // sorting
-
-        logger.info("getGSEA_filter_sorting ", "not se data in session");
         if (sorting != null) {
             if (sorting.order == "descend") {
                 result.sort(function(e1, e2) {
@@ -1277,7 +1023,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
     // search
     if (search_keyword) {
-        logger.info("getGSEA_filter_search_keyword ", "not se data in session");
+
         if (!(search_keyword.name == "" &&
                 search_keyword.search_b == "" &&
                 search_keyword.search_adj_p_value == "" &&
@@ -1365,7 +1111,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
 
     }
-    logger.info("getGSEA_filter ", "set a data in session");
+
     req.session.ssGSEA_tmp = {
         sorting_order: sorting.order,
         sorting_name: sorting.name,
@@ -1391,38 +1137,37 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
 
 function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, page_number, req) {
-    logger.info("getDEG_filter ");
-    let result = data.diff_expr_genes;
+
+    let result = data;
     // store
-    if (data.deg_tmp) {
+    if (req.session.deg_tmp) {
         // if only request a page's content do not need to filter out the data
-        if (data.deg_tmp.sorting_order == sorting.order &&
-            data.deg_tmp.sorting_name == sorting.name &&
-            data.deg_tmp.search_symbol == search_keyword.search_symbol &&
-            data.deg_tmp.search_fc == search_keyword.search_fc &&
-            data.deg_tmp.search_p_value == search_keyword.search_p_value &&
-            data.deg_tmp.search_adj_p_value == search_keyword.search_adj_p_value &&
-            data.deg_tmp.search_aveexpr == search_keyword.search_aveexpr &&
-            data.deg_tmp.search_accnum == search_keyword.search_accnum &&
-            data.deg_tmp.search_desc == search_keyword.search_desc &&
-            data.deg_tmp.search_entrez == search_keyword.search_entrez &&
-            data.deg_tmp.search_probsetid == search_keyword.search_probsetid &&
-            data.deg_tmp.search_t == search_keyword.search_t &&
-            data.deg_tmp.search_b == search_keyword.search_b) {
-            logger.info("getDEG_filter ", "use data in session");
+        if (req.session.deg_tmp.sorting_order == sorting.order &&
+            req.session.deg_tmp.sorting_name == sorting.name &&
+            req.session.deg_tmp.search_symbol == search_keyword.search_symbol &&
+            req.session.deg_tmp.search_fc == search_keyword.search_fc &&
+            req.session.deg_tmp.search_p_value == search_keyword.search_p_value &&
+            req.session.deg_tmp.search_adj_p_value == search_keyword.search_adj_p_value &&
+            req.session.deg_tmp.search_aveexpr == search_keyword.search_aveexpr &&
+            req.session.deg_tmp.search_accnum == search_keyword.search_accnum &&
+            req.session.deg_tmp.search_desc == search_keyword.search_desc &&
+            req.session.deg_tmp.search_entrez == search_keyword.search_entrez &&
+            req.session.deg_tmp.search_probsetid == search_keyword.search_probsetid &&
+            req.session.deg_tmp.search_t == search_keyword.search_t &&
+            req.session.deg_tmp.search_b == search_keyword.search_b) {
+
             // return index
             let output = {
-                totalCount: data.deg_tmp.data.length,
-                records: data.deg_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+                totalCount: req.session.deg_tmp.data.length,
+                records: req.session.deg_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
             }
             return output;
         }
     }
 
 
-    if (!data.deg_tmp) {
+    if (!req.session.deg_tmp) {
         // sorting
-        logger.info("getDEG_filter_sorting", "not use data in session");
         if (sorting != null) {
             if (sorting.order == "descend") {
                 result.sort(function(e1, e2) {
@@ -1440,7 +1185,6 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
 
     // search
     if (search_keyword != "") {
-        logger.info("getDEG_filter_search_keyword", "not use data in session");
         if (!(search_keyword.search_accnum == "" &&
                 search_keyword.search_adj_p_value == "" &&
                 search_keyword.search_aveexpr == "" &&
@@ -1558,9 +1302,8 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
         }
     }
 
-    logger.info("getDEG_filter_search_keyword", "set data in session");
     // store current filter result into tmp 
-    data.deg_tmp = {
+    req.session.deg_tmp = {
         sorting_order: sorting.order,
         sorting_name: sorting.name,
         search_symbol: search_keyword.search_symbol,

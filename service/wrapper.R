@@ -65,14 +65,14 @@ process = function(){
   if(action == "loadGSE"){
      
       #### 1) Process GEO files function takes gseid and returns ExpressionFeatureSet object  ####
-      #celfiles = processGEOfiles('pid',' ', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
+      #celfiles = processGEOfiles('pid','GSE37874 ', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
      access_code<-toString(args[5])
 
-     if(access_code=="test"){
-          data_repo_path<-paste0(toString(args[4]),"/","test",sep="")
-          celfiles = getLocalGEOfiles("test","GSE37874",c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'),data_repo_path) 
-          return(celfiles)
-      }
+     # if(access_code=="test"){
+     #      data_repo_path<-paste0(toString(args[4]),"/","test",sep="")
+     #      celfiles = getLocalGEOfiles("test","GSE37874",c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'),data_repo_path) 
+     #      return(celfiles)
+     #  }
 
    
       listGroups<-c()
