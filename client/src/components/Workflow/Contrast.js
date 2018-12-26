@@ -18,8 +18,8 @@ class Contrast extends Component {
         this.props.data.dataList.filter(function(v, i, self) {
             if (tmp_options.indexOf(v['groups']) == -1 && v['groups'] != "") {
                 var d = <Option key={v['groups']} value={v['groups']}>{v['groups']}</Option>
-                options.push(d);
-                tmp_options.push(v['groups']);
+                options.unshift(d);
+                tmp_options.unshift(v['groups']);
             }
         })
 
