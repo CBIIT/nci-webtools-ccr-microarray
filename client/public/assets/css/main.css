@@ -59,8 +59,9 @@ tr:nth-child(even) {
 }
 
 
-
-/* HEADER-NCI -------------------------------------------------------- */
+.ant-table-placeholder{
+    z-index: 0 !important;
+}
 .div-container {
     width: 100%;
     max-width: 1440px;

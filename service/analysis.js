@@ -755,7 +755,6 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
     }
 
-    if((type=="pathways_up"&&!req.session.pathway_up_tmp)||(!req.session.pathway_down_tmp)&&type=="pathways_down"){
 
         // sorting
         if (sorting != null) {
@@ -771,7 +770,6 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
                 })
             }
         }
-    }
     
     // search
     if (search_keyword) {
@@ -1003,7 +1001,6 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
     }
 
 
-    if (!req.session.ssGSEA_tmp) {
         // sorting
         if (sorting != null) {
             if (sorting.order == "descend") {
@@ -1019,7 +1016,6 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
             }
         }
 
-    }
 
     // search
     if (search_keyword) {
@@ -1166,8 +1162,6 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
     }
 
 
-    if (!req.session.deg_tmp) {
-        // sorting
         if (sorting != null) {
             if (sorting.order == "descend") {
                 result.sort(function(e1, e2) {
@@ -1181,8 +1175,6 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
                 })
             }
         }
-    }
-
     // search
     if (search_keyword != "") {
         if (!(search_keyword.search_accnum == "" &&
