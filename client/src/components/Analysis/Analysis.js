@@ -216,6 +216,7 @@ class Analysis extends Component {
 
         if (params.search_keyword) {
             params = {
+                projectId: workflow.projectID,
                 page_size: params.page_size,
                 page_number: params.page_number,
                 sorting: {
@@ -234,6 +235,7 @@ class Analysis extends Component {
         } else {
 
             params = {
+                projectId: workflow.projectID,
                 page_number: workflow.ssGSEA.pagination.current,
                 page_size: workflow.ssGSEA.pagination.pageSize,
                 sorting: {
@@ -293,7 +295,7 @@ class Analysis extends Component {
                     this.setState({ workflow: workflow2 });
 
                 } else {
-                   
+
                     document.getElementById("message-ssgsea").innerHTML = result.msg
                 }
 
@@ -319,6 +321,7 @@ class Analysis extends Component {
         // initialize
         if (params.search_keyword) {
             params = {
+                projectId: workflow.projectID,
                 page_size: params.page_size,
                 page_number: params.page_number,
                 sorting: {
@@ -337,6 +340,7 @@ class Analysis extends Component {
         } else {
 
             params = {
+                projectId: workflow.projectID,
                 page_number: workflow.pathways_up.pagination.current,
                 page_size: workflow.pathways_up.pagination.pageSize,
                 sorting: {
@@ -432,6 +436,7 @@ class Analysis extends Component {
         // initialize
         if (params.search_keyword) {
             params = {
+                projectId: workflow.projectID,
                 page_size: params.page_size,
                 page_number: params.page_number,
                 sorting: {
@@ -450,6 +455,7 @@ class Analysis extends Component {
         } else {
 
             params = {
+                projectId: workflow.projectID,
                 page_number: workflow.pathways_down.pagination.current,
                 page_size: workflow.pathways_down.pagination.pageSize,
                 sorting: {
@@ -513,7 +519,7 @@ class Analysis extends Component {
 
                     this.setState({ workflow: workflow2 });
                 } else {
-                     document.getElementById("message-pdg").innerHTML = result.msg;
+                    document.getElementById("message-pdg").innerHTML = result.msg;
                 }
 
                 document.getElementById("input_pathway_down_search_PATHWAY_ID").value = workflow2.pathways_down.search_keyword.search_PATHWAY_ID;
@@ -539,6 +545,7 @@ class Analysis extends Component {
         if (params.search_keyword) {
 
             params = {
+                projectId: workflow.projectID,
                 page_size: params.page_size,
                 page_number: params.page_number,
                 sorting: {
@@ -557,6 +564,7 @@ class Analysis extends Component {
 
         } else {
             params = {
+                projectId: workflow.projectID,
                 page_number: workflow.diff_expr_genes.pagination.current,
                 page_size: workflow.diff_expr_genes.pagination.pageSize,
                 sorting: {
@@ -639,7 +647,7 @@ class Analysis extends Component {
     }
 
     getHeatmapolt() {
-        document.getElementById("message-post-heatmap").innerHTML ="";
+        document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
         let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'80%'} height={'70%'} frameBorder={'0'}/></div>
@@ -653,10 +661,11 @@ class Analysis extends Component {
         workflow2.progressing = true;
         workflow2.loading_info = "Loading PCA...";
         this.setState({ workflow: workflow2 });
+        let params = { projectId: workflow2.projectID };
         try {
             fetch('./api/analysis/getPCA', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify(params),
                     processData: false,
                     contentType: false
                 })
@@ -728,10 +737,10 @@ class Analysis extends Component {
                             this.setState({ workflow: workflow });
 
                         }
-                        document.getElementById("message-post-pca").innerHTML ="";
+                        document.getElementById("message-post-pca").innerHTML = "";
 
                     } else {
-                        document.getElementById("message-post-pca").innerHTML =result.msg;
+                        document.getElementById("message-post-pca").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.progressing = false;
                         workflow.postplot.PCA = "No Data";
@@ -740,7 +749,7 @@ class Analysis extends Component {
 
                 }).catch(error => console.log(error));
         } catch (error) {
-            document.getElementById("message-post-pca").innerHTML =error;
+            document.getElementById("message-post-pca").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
             this.setState({ workflow: workflow });
@@ -752,11 +761,11 @@ class Analysis extends Component {
         workflow2.progressing = true;
         workflow2.loading_info = "Loading Boxplot...";
         this.setState({ workflow: workflow2 });
-
+        let params = { projectId: workflow2.projectID };
         try {
             fetch('./api/analysis/getBoxplotAN', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify(params),
                     processData: false,
                     contentType: false
                 })
@@ -781,7 +790,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8 }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8 }
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -797,9 +806,9 @@ class Analysis extends Component {
 
                         }
 
-                         document.getElementById("message-post-boxplot").innerHTML ="";
+                        document.getElementById("message-post-boxplot").innerHTML = "";
                     } else {
-                        document.getElementById("message-post-boxplot").innerHTML =result.msg;
+                        document.getElementById("message-post-boxplot").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.progressing = false;
                         workflow.postplot.Boxplots = "No Data";
@@ -808,7 +817,7 @@ class Analysis extends Component {
 
                 }).catch(error => console.log(error));
         } catch (error) {
-            document.getElementById("message-post-boxplot").innerHTML =error;
+            document.getElementById("message-post-boxplot").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
             workflow.postplot.Boxplots = "No Data";
@@ -834,10 +843,11 @@ class Analysis extends Component {
             workflow2.progressing = true;
             workflow2.loading_info = "Loading Plots...";
             this.setState({ workflow: workflow2 });
+            let params = { projectId: workflow2.projectID };
             try {
                 fetch('./api/analysis/getMAplotAN', {
                         method: "POST",
-                        body: "",
+                        body: JSON.stringify(params),
                         processData: false,
                         contentType: false
                     })
@@ -845,7 +855,7 @@ class Analysis extends Component {
                     .then(res => res.json())
                     .then(result => {
                         if (result.status == 200) {
-                            document.getElementById("message-post-maplot").innerHTML ="";
+                            document.getElementById("message-post-maplot").innerHTML = "";
                             let workflow = Object.assign({}, this.state.workflow);
                             if (result.data != "") {
                                 let list_mAplotBN = [];
@@ -869,10 +879,10 @@ class Analysis extends Component {
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
                             }
-                            
+
                         } else {
-                            
-                            document.getElementById("message-post-maplot").innerHTML =result.msg;
+
+                            document.getElementById("message-post-maplot").innerHTML = result.msg;
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
@@ -880,7 +890,7 @@ class Analysis extends Component {
 
                     }).catch(error => console.log(error));
             } catch (error) {
-                document.getElementById("message-post-maplot").innerHTML =error;
+                document.getElementById("message-post-maplot").innerHTML = error;
                 let workflow = Object.assign({}, this.state.workflow);
                 workflow.progressing = false;
                 this.setState({ workflow: workflow });
@@ -908,16 +918,17 @@ class Analysis extends Component {
         workflow2.progressing = true;
         workflow2.loading_info = "Loading NUSE...";
         this.setState({ workflow: workflow2 });
+        let params = { projectId: workflow2.projectID };
 
         try {
             fetch('./api/analysis/getNUSE', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify(params),
                     processData: false,
                     contentType: false
                 }).then(res => res.json())
                 .then(result => {
-                    document.getElementById("message-pre-nuse").innerHTML ="";
+                    document.getElementById("message-pre-nuse").innerHTML = "";
                     let workflow = Object.assign({}, this.state.workflow);
                     if (result.status == 200) {
 
@@ -937,7 +948,7 @@ class Analysis extends Component {
                         }
 
                         let plot_layout = { showlegend: false, autosize: true }
-                        let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,}
+                        let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8, }
 
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -949,7 +960,7 @@ class Analysis extends Component {
 
                     } else {
 
-                        document.getElementById("message-pre-nuse").innerHTML =result.msg;
+                        document.getElementById("message-pre-nuse").innerHTML = result.msg;
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
 
@@ -957,7 +968,7 @@ class Analysis extends Component {
 
                 }).catch(error => console.log(error));
         } catch (error) {
-            document.getElementById("message-pre-nuse").innerHTML =error;
+            document.getElementById("message-pre-nuse").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
             this.setState({ workflow: workflow });
@@ -969,17 +980,19 @@ class Analysis extends Component {
         workflow2.progressing = true;
         workflow2.loading_info = "Loading RLE...";
         this.setState({ workflow: workflow2 });
+        let params = { projectId: workflow2.projectID };
+
         try {
             fetch('./api/analysis/getRLE', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify(params),
                     processData: false,
                     contentType: false
                 }).then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
-                         document.getElementById("message-pre-rle").innerHTML ="";
+                        document.getElementById("message-pre-rle").innerHTML = "";
                         if (result.data != "") {
                             let RLERenderData = []
                             let RLEplotsData = result.data
@@ -998,7 +1011,7 @@ class Analysis extends Component {
 
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8, }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8, }
 
                             let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style}  useResizeHandler={true}/>
 
@@ -1017,18 +1030,18 @@ class Analysis extends Component {
 
 
                     } else {
-                        document.getElementById("message-pre-rle").innerHTML =result.msg;
-                         let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots.RLE = "";
-                            workflow.progressing = false;
-                            this.setState({ workflow: workflow });
-                        
+                        document.getElementById("message-pre-rle").innerHTML = result.msg;
+                        let workflow = Object.assign({}, this.state.workflow);
+                        workflow.preplots.RLE = "";
+                        workflow.progressing = false;
+                        this.setState({ workflow: workflow });
+
                     }
 
                 }).catch(error => console.log(error));
         } catch (error) {
-            
-            document.getElementById("message-pre-rle").innerHTML =error;
+
+            document.getElementById("message-pre-rle").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.preplots.RLE = "No Data";
             workflow.progressing = false;
@@ -1044,18 +1057,19 @@ class Analysis extends Component {
         workflow2.progressing = true;
         workflow2.loading_info = "Loading Plots...";
         this.setState({ workflow: workflow2 });
+        let params = { projectId: workflow2.projectID };
 
         try {
             fetch('./api/analysis/getBoxplotBN', {
                     method: "POST",
-                    body: "",
+                    body: JSON.stringify(params),
                     processData: false,
                     contentType: false
                 }).then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
-                        document.getElementById("message-pre-boxplot").innerHTML ="";
+                        document.getElementById("message-pre-boxplot").innerHTML = "";
                         if (result.data != "") {
                             let BoxplotRenderData = []
                             let BoxplotsData = result.data
@@ -1073,7 +1087,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false, autosize: true }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8, }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8, }
 
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
@@ -1083,7 +1097,7 @@ class Analysis extends Component {
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         } else {
-                            
+
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.preplots.Boxplots = "No Data";
                             workflow.progressing = false;
@@ -1092,7 +1106,7 @@ class Analysis extends Component {
 
 
                     } else {
-                        document.getElementById("message-pre-boxplot").innerHTML =result.msg;
+                        document.getElementById("message-pre-boxplot").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.preplots.Boxplots = "No Data";
                         workflow.progressing = false;
@@ -1102,7 +1116,7 @@ class Analysis extends Component {
                 }).catch(error => console.log(error));
         } catch (error) {
 
-            document.getElementById("message-pre-boxplot").innerHTML =error;
+            document.getElementById("message-pre-boxplot").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.preplots.Boxplots = "No Data";
             workflow.progressing = false;
@@ -1116,18 +1130,19 @@ class Analysis extends Component {
         if (workflow2.list_mAplotBN == "") {
             workflow2.progressing = true;
             workflow2.loading_info = "Loading Plots...";
+            let params = { projectId: workflow2.projectID};
             this.setState({ workflow: workflow2 });
             try {
                 fetch('./api/analysis/getMAplotsBN', {
                         method: "POST",
-                        body: "",
+                        body: JSON.stringify(params),
                         processData: false,
                         contentType: false
                     }).then(this.handleErrors)
                     .then(res => res.json())
                     .then(result => {
                         if (result.status == 200) {
-                            document.getElementById("message-pre-maplot").innerHTML ="";
+                            document.getElementById("message-pre-maplot").innerHTML = "";
                             if (result.data != "") {
                                 let workflow = Object.assign({}, this.state.workflow);
                                 let list_mAplotBN = [];
@@ -1151,7 +1166,7 @@ class Analysis extends Component {
                             }
 
                         } else {
-                            document.getElementById("message-pre-maplot").innerHTML =result.msg;
+                            document.getElementById("message-pre-maplot").innerHTML = result.msg;
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.preplots.list_mAplotBN = "No Data";
                             workflow.progressing = false;
@@ -1160,7 +1175,7 @@ class Analysis extends Component {
 
                     }).catch(error => console.log(error));
             } catch (error) {
-                document.getElementById("message-pre-maplot").innerHTML =error;
+                document.getElementById("message-pre-maplot").innerHTML = error;
                 let workflow = Object.assign({}, this.state.workflow);
                 workflow.preplots.list_mAplotBN = "No Data";
                 workflow.progressing = false;
@@ -1233,26 +1248,26 @@ class Analysis extends Component {
     }
 
     upateCurrentWorkingTabAndObject = (e) => {
-        window.current_working_on_object =e;
+        window.current_working_on_object = e;
         sessionStorage.setItem("current_working_on_object", e);
         if (e == "getHistplotBN" || e == "getMAplotsBN" || e == "getBoxplotBN" || e == "getRLE" || e == "getNUSE") {
             sessionStorage.setItem("tag_pre_plot_status", e);
-              window.tag_pre_plot_status =e;
+            window.tag_pre_plot_status = e;
         }
         if (e == "getHistplotAN" || e == "getBoxplotAN" || e == "getPCA" || e == "getHistplotBN") {
             sessionStorage.setItem("tag_post_plot_status", e);
-              window.tag_post_plot_status =e;
+            window.tag_post_plot_status = e;
         }
         if (e == "pathways_up" || e == "pathways_down" || e == "deg") {
             sessionStorage.setItem("tag_deg_plot_status", e);
-              window.tag_deg_plot_status =e;
+            window.tag_deg_plot_status = e;
         }
 
     }
 
     upateCurrentWorkingTab = (e) => {
         sessionStorage.setItem("current_working_on_tag", e);
-        window.current_working_on_tag =e;
+        window.current_working_on_tag = e;
     }
 
 
@@ -1290,11 +1305,11 @@ class Analysis extends Component {
                         this.getssGSEA();
                     } else {
                         //change button style
-                        document.getElementById("message-ssgsea").innerHTML =result.msg;
+                        document.getElementById("message-ssgsea").innerHTML = result.msg;
                     }
                 })
         } catch (err) {
-             document.getElementById("message-ssgsea").innerHTML =err;
+            document.getElementById("message-ssgsea").innerHTML = err;
             //change button style
             workflow.progressing = false;
             this.setState({
@@ -1356,13 +1371,16 @@ class Analysis extends Component {
         document.getElementById("input-access-code").disabled = false;
         document.getElementById("btn-project-load-gse").disabled = false;
         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
-        let err_message =document.getElementsByClassName("err-message")
+        let err_message = document.getElementsByClassName("err-message")
 
-        for(let i = 0; i < err_message.length; i++){
-            err_message[i].innerHTML= ""; // or
+        for (let i = 0; i < err_message.length; i++) {
+            err_message[i].innerHTML = ""; // or
         }
 
-        document.getElementById("message-gsm").nextSibling.innerHTML="Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here."
+        if (document.getElementById("message-gsm") != null) {
+            document.getElementById("message-gsm").nextSibling.innerHTML = "Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here."
+
+        }
         this.setState({ workflow: defaultState.workflow });
     }
 
@@ -1384,10 +1402,10 @@ class Analysis extends Component {
         reqBody.groups = "";
 
         if (workflow.accessionCode == "") {
-            document.getElementById("message-load-accession-code").innerHTML= "Accession Code is required. "
+            document.getElementById("message-load-accession-code").innerHTML = "Accession Code is required. "
             return;
-        }else{
-             document.getElementById("message-load-accession-code").innerHTML= ""
+        } else {
+            document.getElementById("message-load-accession-code").innerHTML = ""
         }
 
         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default"
@@ -1396,7 +1414,7 @@ class Analysis extends Component {
             // user click load after data already loaded.then it is a new transaction 
             window.location.reload(true);
         }
-        
+
         reqBody.code = workflow.accessionCode;
 
 
@@ -1476,8 +1494,8 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                document.getElementById("message-gsm").innerHTML= result.data.replace("\\n","").replace(/"/g,"")
-                                document.getElementById("message-gsm").nextSibling.innerHTML=""
+                                document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
+                                document.getElementById("message-gsm").nextSibling.innerHTML = ""
                                 this.setState({
                                     workflow: workflow
                                 });
@@ -1491,8 +1509,8 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                document.getElementById("message-gsm").innerHTML= result.data.replace("\\n","").replace(/"/g,"")
-                                document.getElementById("message-gsm").nextSibling.innerHTML=""
+                                document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
+                                document.getElementById("message-gsm").nextSibling.innerHTML = ""
                                 this.setState({
                                     workflow: workflow
                                 });
@@ -1507,8 +1525,8 @@ class Analysis extends Component {
 
                                 workflow.uploading = false;
                                 workflow.progressing = false;
-                                 document.getElementById("message-gsm").innerHTML= result.data.replace("\\n","").replace(/"/g,"")
-                                 document.getElementById("message-gsm").nextSibling.innerHTML=""
+                                document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
+                                document.getElementById("message-gsm").nextSibling.innerHTML = ""
                                 this.setState({
                                     workflow: workflow
                                 });
@@ -1516,7 +1534,7 @@ class Analysis extends Component {
                                 return;
                             }
 
-                            document.getElementById("message-gsm").innerHTML=""
+                            document.getElementById("message-gsm").innerHTML = ""
                             workflow.uploading = false;
                             workflow.progressing = false;
 
@@ -1534,8 +1552,8 @@ class Analysis extends Component {
                                 workflow: workflow
                             });
 
-                           
-                           
+
+
                         }
 
 
@@ -1547,8 +1565,8 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                        document.getElementById("message-gsm").innerHTML= result.data
-                        document.getElementById("message-gsm").nextSibling.innerHTML=""
+                        document.getElementById("message-gsm").innerHTML = result.data
+                        document.getElementById("message-gsm").nextSibling.innerHTML = ""
                         //message.error('load data fails.');
                     }
                 })
@@ -1561,9 +1579,9 @@ class Analysis extends Component {
             this.setState({
                 workflow: workflow
             });
-            document.getElementById("message-gsm").innerHTML= err
-            document.getElementById("message-gsm").nextSibling.innerHTML=""
-        
+            document.getElementById("message-gsm").innerHTML = err
+            document.getElementById("message-gsm").nextSibling.innerHTML = ""
+
         }
     }
 
@@ -1884,7 +1902,7 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                 
+
                         this.hideWorkFlow();
                     } else {
 
@@ -1892,7 +1910,7 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                       
+
                     }
 
                 }).catch(error => console.log(error));
@@ -1948,8 +1966,8 @@ class Analysis extends Component {
 
                             workflow.uploading = false;
                             workflow.progressing = false;
-                            document.getElementById("message-gsm").innerHTML= result.msg;
-                            document.getElementById("message-gsm").nextSibling.innerHTML=""
+                            document.getElementById("message-gsm").innerHTML = result.msg;
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
                             this.setState({
                                 workflow: workflow
                             });
@@ -1962,8 +1980,8 @@ class Analysis extends Component {
                         workflow.uploading = false;
                         workflow.progressing = false;
                         if (list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
-                            document.getElementById("message-gsm").innerHTML= "load data fails.";
-                            document.getElementById("message-gsm").nextSibling.innerHTML=""
+                            document.getElementById("message-gsm").innerHTML = "load data fails.";
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
                             return;
                         }
                         for (let i in list.files) {
@@ -1989,8 +2007,8 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                        document.getElementById("message-gsm").innerHTML= result.msg;
-                        document.getElementById("message-gsm").nextSibling.innerHTML=""
+                        document.getElementById("message-gsm").innerHTML = result.msg;
+                        document.getElementById("message-gsm").nextSibling.innerHTML = ""
                     }
                 }).catch(error => console.log(error));
         } catch (error) {
@@ -2002,8 +2020,8 @@ class Analysis extends Component {
             this.setState({
                 workflow: workflow
             });
-            document.getElementById("message-gsm").innerHTML= error;
-            document.getElementById("message-gsm").nextSibling.innerHTML=""
+            document.getElementById("message-gsm").innerHTML = error;
+            document.getElementById("message-gsm").nextSibling.innerHTML = ""
         }
 
     }
@@ -2015,15 +2033,15 @@ class Analysis extends Component {
             for (var key in dataList_keys) {
                 workflow.dataList[dataList_keys[key] - 1].groups = group_name;
             }
-             document.getElementById("message-gsm-group").innerHTML = ""
+            document.getElementById("message-gsm-group").innerHTML = ""
 
             this.setState({
                 workflow: workflow
             });
 
-            
+
         } else {
-             document.getElementById("message-gsm-group").innerHTML = "The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 "
+            document.getElementById("message-gsm-group").innerHTML = "The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 "
 
             return false;
         }

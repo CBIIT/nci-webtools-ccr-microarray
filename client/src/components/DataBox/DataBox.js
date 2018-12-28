@@ -251,7 +251,6 @@ class DataBox extends Component {
         if (group_name == "" || typeof(group_name) == 'undefined') {
             document.getElementById("message-gsm-group-table").innerHTML = 'No group selected for deleting.'
         } else {
-            group_name.tr
             this.props.deleteGroup(group_name.trim())
         }
     }

@@ -153,7 +153,7 @@ class PUGTable extends Component {
                  render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span style={{"color":"#40a9ff"}}  data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
                 }
@@ -376,7 +376,7 @@ class PUGTable extends Component {
                                       <Button >
                                         <span id="pd-drop-down">25</span> <Icon type="down" />
                                       </Button>
-                                </Dropdown>of total {this.props.data.pathways_down.pagination.total}records
+                                </Dropdown>of total {this.props.data.pathways_down.pagination.total} records
 
                             </div>
                              <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
