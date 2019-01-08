@@ -1,9 +1,9 @@
 library(jsonlite)
 library(mpstr)
 library(limma)
-  library(GEOquery)
-  library(oligo)
-  library(Biobase)
+library(GEOquery)
+library(oligo)
+library(Biobase)
 #source('./service/MAAPster_functions.R')
 
 
@@ -236,9 +236,8 @@ process = function(){
     geneSet<-toString(args[6])
     config_path<-toString(args[7])
 
-
+    write.table(c(species,geneSet,config_path), "saveImageFileName.txt", sep="\t")
     ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
-
     return(list(ssGSEA=ssGSEA_results))
   }
 
