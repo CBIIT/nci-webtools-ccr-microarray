@@ -976,31 +976,6 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
     let result = data;
 
-
-    if (req.session.ssGSEA_tmp) {
-
-        if (req.session.ssGSEA_tmp.sorting_order == sorting.order &&
-            req.session.ssGSEA_tmp.sorting_name == sorting.name &&
-            req.session.ssGSEA_tmp.name == search_keyword.name &&
-            req.session.ssGSEA_tmp.b == search_keyword.search_b &&
-            req.session.ssGSEA_tmp.adj_p_value == search_keyword.search_adj_p_value &&
-            req.session.ssGSEA_tmp.avg_enrichment_score == search_keyword.search_Avg_Enrichment_Score &&
-            req.session.ssGSEA_tmp.p_value == search_keyword.search_p_value &&
-            req.session.ssGSEA_tmp.t == search_keyword.search_t &&
-            req.session.ssGSEA_tmp.logFC == search_keyword.search_logFC
-        ) {
-            // return index
-            let output = {
-                totalCount: req.session.ssGSEA_tmp.data.length,
-                records: req.session.ssGSEA_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
-            }
-            return output;
-        }
-
-
-    }
-
-
         // sorting
         if (sorting != null) {
             if (sorting.order == "descend") {
@@ -1106,19 +1081,6 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
 
 
-    }
-
-    req.session.ssGSEA_tmp = {
-        sorting_order: sorting.order,
-        sorting_name: sorting.name,
-        name: search_keyword.name,
-        b: search_keyword.search_b,
-        adj_p_value: search_keyword.search_adj_p_value,
-        avg_enrichment_score: search_keyword.search_Avg_Enrichment_Score,
-        p_value: search_keyword.search_p_value,
-        t: search_keyword.search_t,
-        logFC: search_keyword.search_logFC,
-        data: result
     }
 
     // return index
