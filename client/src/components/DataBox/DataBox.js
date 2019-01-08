@@ -226,9 +226,7 @@ class DataBox extends Component {
                 // if user select records in table 
                 this.props.assignGroup(document.getElementById("input_group_name").value, this.state.selected)
                 this.child.current.unselect(); // after create tag, previous selected record will unselect. 
-                console.log(this.state.group_name)
-                console.log(document.getElementById("input_group_name").value)
-                if (document.getElementById("input_group_name").value == this.state.group_name) {
+                  if (document.getElementById("input_group_name").value == this.state.group_name) {
                     let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
                     let currentState = Object.assign({}, this.state);
                     currentState.group_name = "GSMGroup_" + index_number;

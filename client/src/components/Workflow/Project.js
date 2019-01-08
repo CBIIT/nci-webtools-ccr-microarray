@@ -57,6 +57,7 @@ class Project extends Component {
                                 Reset
                                 </Button>
                        </div>
+                 
                 </div>
               </div>
             );
@@ -113,6 +114,8 @@ class Project extends Component {
                         Reset
                         </Button>
                     </div>
+                    
+
                   </div>);;
         }
         return (

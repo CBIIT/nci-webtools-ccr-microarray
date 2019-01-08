@@ -19,7 +19,7 @@ class GSMData extends Component {
         },
         data: { totalCount: 0, records: [] },
         renderData: { totalCount: 0, records: [] },
-        sorter:{field:"gsm",order:"descend"}
+        sorter: { field: "gsm", order: "descend" }
 
     };
     constructor(props) {
@@ -35,25 +35,55 @@ class GSMData extends Component {
             currentState.pagination.total = nextProps.data.dataList.length;
             this.setState(currentState)
         }
-
+        this.isDataTableRendered("componentWillReceiveProps")
 
     }
 
-componentDidMount(){
-    this.isDataTableRendered("componentDidMount")
-}
-componentDidUpdated(){
-    this.isDataTableRendered("componentDidUpdated")
-}
+    componentDidMount() {
+        this.isDataTableRendered("componentDidMount")
+    }
+    componentDidUpdated() {
+        this.isDataTableRendered("componentDidUpdated")
+    }
 
 
-isDataTableRendered(t){
-    let checkboxes = document.getElementsByClassName("ant-checkbox-wrapper")
-        if(checkboxes.length!=0){
-             console.log("rendered")
-             console.log(t)
+    isDataTableRendered(t) {
+        console.log(t)
+        let iv = setInterval(clean508, 1000);
+
+        let checkboxes = document.getElementsByClassName("ant-checkbox-wrapper")
+        if (checkboxes.length != 0) {
+            console.log("rendered")
+            console.log(t)
         }
-}
+
+        function clean508() {
+            console.log(t)
+            let selectBox = document.getElementById("gsm-select")
+            if (selectBox) {
+                let checkboxes = document.getElementsByClassName("ant-checkbox-wrapper");
+                if (checkboxes.length != 0) {
+
+                    for (let i in checkboxes) {
+                        let node = document.createElement("span");
+                        node.style.cssText = "display:none";
+                        let textnode = document.createTextNode("select groups");
+                        node.appendChild(textnode);
+                        if (!isNaN(parseInt(i))) {
+                            document.getElementsByClassName("ant-checkbox-wrapper")[parseInt(i)].appendChild(node)
+                            console.log("508")
+                        }
+                    }
+                    clearInterval(iv);
+                }
+            } else {
+                clearInterval(iv);
+            }
+
+        }
+    }
+
+
 
 
 
@@ -85,56 +115,56 @@ isDataTableRendered(t){
         let currentState = Object.assign({}, this.state);
         currentState.pagination.pageSize = parseInt(e.key);
         currentState.pagination.current = 1;
-        document.getElementById("gsm-drop-down").innerHTML=e.key
+        document.getElementById("gsm-drop-down").innerHTML = e.key
         let renderData = currentState.data;
 
-          // sort data
-        if(currentState.sorter.field=="gsm"){
-            if(currentState.sorter.order=="descend"){
-                renderData.sort(function(a,b){
-                   return  ('' + b.gsm).localeCompare(a.gsm)
+        // sort data
+        if (currentState.sorter.field == "gsm") {
+            if (currentState.sorter.order == "descend") {
+                renderData.sort(function(a, b) {
+                    return ('' + b.gsm).localeCompare(a.gsm)
                 })
-            }else{
-                renderData.sort(function(a,b){
-                   return  ('' + a.gsm).localeCompare(b.gsm)
-                })
-            }
-        }
-
-         // sort data
-        if(currentState.sorter.field=="title"){
-            if(currentState.sorter.order=="descend"){
-                renderData.sort(function(a,b){
-                    return   ('' + b.title).localeCompare(a.title)
-                })
-            }else{
-                renderData.sort(function(a,b){
-                    return   ('' + a.title).localeCompare(b.title)
+            } else {
+                renderData.sort(function(a, b) {
+                    return ('' + a.gsm).localeCompare(b.gsm)
                 })
             }
         }
 
-         // sort data
-        if(currentState.sorter.field=="description"){
-            if(currentState.sorter.order=="descend"){
-                renderData.sort(function(a,b){
-                   return  a.description.length > b.description.length
+        // sort data
+        if (currentState.sorter.field == "title") {
+            if (currentState.sorter.order == "descend") {
+                renderData.sort(function(a, b) {
+                    return ('' + b.title).localeCompare(a.title)
                 })
-            }else{
-                renderData.sort(function(a,b){
-                   return  !a.description.length > b.description.length
+            } else {
+                renderData.sort(function(a, b) {
+                    return ('' + a.title).localeCompare(b.title)
                 })
             }
         }
 
-          if(currentState.sorter.field=="groups"){
-            if(currentState.sorter.order=="descend"){
-                renderData.sort(function(a,b){
-                   return  a.groups.length > b.groups.length
+        // sort data
+        if (currentState.sorter.field == "description") {
+            if (currentState.sorter.order == "descend") {
+                renderData.sort(function(a, b) {
+                    return a.description.length > b.description.length
                 })
-            }else{
-                renderData.sort(function(a,b){
-                   return  !a.groups.length > b.groups.length
+            } else {
+                renderData.sort(function(a, b) {
+                    return !a.description.length > b.description.length
+                })
+            }
+        }
+
+        if (currentState.sorter.field == "groups") {
+            if (currentState.sorter.order == "descend") {
+                renderData.sort(function(a, b) {
+                    return a.groups.length > b.groups.length
+                })
+            } else {
+                renderData.sort(function(a, b) {
+                    return !a.groups.length > b.groups.length
                 })
             }
         }
@@ -198,55 +228,55 @@ isDataTableRendered(t){
             current: pagination.current ? pagination.current : 1
         }
         let renderData = set.data;
-        set.sorter.field=sorter.field;
-        set.sorter.order=sorter.order;
+        set.sorter.field = sorter.field;
+        set.sorter.order = sorter.order;
         // sort data
-        if(sorter.field=="gsm"){
-            if(sorter.order=="descend"){
-                renderData.sort(function(a,b){
-                   return  ('' + b.gsm).localeCompare(a.gsm)
+        if (sorter.field == "gsm") {
+            if (sorter.order == "descend") {
+                renderData.sort(function(a, b) {
+                    return ('' + b.gsm).localeCompare(a.gsm)
                 })
-            }else{
-                renderData.sort(function(a,b){
-                   return  ('' + a.gsm).localeCompare(b.gsm)
-                })
-            }
-        }
-
-         // sort data
-        if(sorter.field=="title"){
-            if(sorter.order=="descend"){
-                renderData.sort(function(a,b){
-                   return   ('' + b.title).localeCompare(a.title)
-                })
-            }else{
-                renderData.sort(function(a,b){
-                   return   ('' + a.title).localeCompare(b.title)
+            } else {
+                renderData.sort(function(a, b) {
+                    return ('' + a.gsm).localeCompare(b.gsm)
                 })
             }
         }
 
-         // sort data
-        if(sorter.field=="description"){
-            if(sorter.order=="descend"){
-                renderData.sort(function(a,b){
-                   return  a.description.length > b.description.length
+        // sort data
+        if (sorter.field == "title") {
+            if (sorter.order == "descend") {
+                renderData.sort(function(a, b) {
+                    return ('' + b.title).localeCompare(a.title)
                 })
-            }else{
-                renderData.sort(function(a,b){
-                   return  !(a.description.length > b.description.length)
+            } else {
+                renderData.sort(function(a, b) {
+                    return ('' + a.title).localeCompare(b.title)
                 })
             }
         }
 
-          if(sorter.field=="groups"){
-            if(sorter.order=="descend"){
-                renderData.sort(function(a,b){
-                   return  a.groups.length > b.groups.length
+        // sort data
+        if (sorter.field == "description") {
+            if (sorter.order == "descend") {
+                renderData.sort(function(a, b) {
+                    return a.description.length > b.description.length
                 })
-            }else{
-                renderData.sort(function(a,b){
-                   return  !(a.groups.length > b.groups.length)
+            } else {
+                renderData.sort(function(a, b) {
+                    return !(a.description.length > b.description.length)
+                })
+            }
+        }
+
+        if (sorter.field == "groups") {
+            if (sorter.order == "descend") {
+                renderData.sort(function(a, b) {
+                    return a.groups.length > b.groups.length
+                })
+            } else {
+                renderData.sort(function(a, b) {
+                    return !(a.groups.length > b.groups.length)
                 })
             }
         }
@@ -331,7 +361,7 @@ isDataTableRendered(t){
             });
 
 
-         
+
 
             const searchFilter = (row) => {
                 if (this.state.term === "") {
