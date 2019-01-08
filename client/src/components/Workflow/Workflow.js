@@ -14,6 +14,7 @@ class Workflow extends Component {
                                 handleGroup1Select={this.props.handleGroup1Select}
                                 handleGroup2Select={this.props.handleGroup2Select}
                                 runContrast={this.props.runContrast}
+
                               />;
         return (
             <div className="container-board-left">
@@ -27,7 +28,9 @@ class Workflow extends Component {
             fileRemove={this.props.fileRemove} 
             beforeUpload={this.props.beforeUpload} 
             handleUpload={this.props.handleUpload} 
-            loadGSE={this.props.loadGSE}/>
+            loadGSE={this.props.loadGSE}
+            exportGSE={this.props.exportGSE}
+            />
             {contrastBox}
           </div>
     </div>

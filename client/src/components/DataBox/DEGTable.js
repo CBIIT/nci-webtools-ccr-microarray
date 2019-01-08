@@ -44,6 +44,7 @@ class DEGTable extends Component {
     }
 
    
+
     handleMenuClick = (e) => {
          document.getElementById("deg-drop-down").innerHTML=e.key
          this.props.getDEG({
@@ -55,6 +56,11 @@ class DEGTable extends Component {
             },
             search_keyword: this.props.data.diff_expr_genes.search_keyword
         });
+    }
+
+
+    export = () => {
+         this.props.exportDEG();
     }
 
     render() {
@@ -285,17 +291,17 @@ class DEGTable extends Component {
                         </div>
                     <div>
                      <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
-                           <div className="filter_col"  style={{width:"9%"}}><Input onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></div>
-                           <div className="filter_col"  style={{width:"7%"}} ><Input onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></div>
-                           <div className="filter_col"  style={{width:"7%"}}><Input onPressEnter={value=>search(value) }    placeholder="0.05"  id="input_dge_search_p_value"/></div>
-                           <div className="filter_col"  style={{width:"7%"}}><Input onPressEnter={value=>search(value) }    placeholder="adj.p.val"  id="input_deg_search_adj_p_value"/></div>
-                           <div className="filter_col"  style={{width:"8%"}} ><Input onPressEnter={value=>search(value) }   placeholder="AveExpr"  id="input_deg_search_aveexpr"/></div>
-                           <div className="filter_col"  style={{width:"12%"}} ><Input onPressEnter={value=>search(value) }   placeholder="ACCNUM"  id="input_deg_search_accnum"/></div>
-                           <div className="filter_col"  style={{width:"120px"}}><Input onPressEnter={value=>search(value) }  placeholder="Desc"  id="input_deg_search_desc"/></div>
-                           <div className="filter_col"  style={{width:"8%"}} ><Input onPressEnter={value=>search(value) } placeholder="ENTREZ"  id="input_deg_search_entrez"/></div>
-                           <div className="filter_col"  style={{width:"12%"}}><Input onPressEnter={value=>search(value) }   placeholder="probsetID"  id="input_deg_search_probsetid"/></div>
-                           <div className="filter_col"  style={{width:"8%"}}><Input onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></div>
-                           <div className="filter_col"  style={{width:"8%"}}><Input onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></div>
+                           <div className="filter_col"  style={{width:"9%"}}><label for="input_deg_search_symbol"><span style={{display:"none"}}>input_deg_search_symbol</span> <Input onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></label></div>
+                           <div className="filter_col"  style={{width:"7%"}} ><label for="input_deg_search_fc"><span style={{display:"none"}}>input_deg_search_fc</span> <Input onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></label></div>
+                           <div className="filter_col"  style={{width:"7%"}}><label for="input_dge_search_p_value"><span style={{display:"none"}}>input_dge_search_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="0.05"  id="input_dge_search_p_value"/></label></div>
+                           <div className="filter_col"  style={{width:"7%"}}><label for="input_deg_search_adj_p_value"><span style={{display:"none"}}>input_deg_search_adj_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="adj.p.val"  id="input_deg_search_adj_p_value"/></label></div>
+                           <div className="filter_col"  style={{width:"8%"}} ><label for="input_deg_search_aveexpr"><span style={{display:"none"}}>input_deg_search_aveexpr</span> <Input onPressEnter={value=>search(value) }   placeholder="AveExpr"  id="input_deg_search_aveexpr"/></label></div>
+                           <div className="filter_col"  style={{width:"12%"}} ><label for="input_deg_search_accnum"><span style={{display:"none"}}>input_deg_search_accnum</span> <Input onPressEnter={value=>search(value) }   placeholder="ACCNUM"  id="input_deg_search_accnum"/></label></div>
+                           <div className="filter_col"  style={{width:"120px"}}><label for="input_deg_search_desc"><span style={{display:"none"}}>input_deg_search_desc</span> <Input onPressEnter={value=>search(value) }  placeholder="Desc"  id="input_deg_search_desc"/></label></div>
+                           <div className="filter_col"  style={{width:"8%"}} ><label for="input_deg_search_entrez"><span style={{display:"none"}}>input_deg_search_entrez</span> <Input onPressEnter={value=>search(value) } placeholder="ENTREZ"  id="input_deg_search_entrez"/></label></div>
+                           <div className="filter_col"  style={{width:"12%"}}><label for="input_deg_search_probsetid"><span style={{display:"none"}}>input_deg_search_probsetid</span> <Input onPressEnter={value=>search(value) }   placeholder="probsetID"  id="input_deg_search_probsetid"/></label></div>
+                           <div className="filter_col"  style={{width:"8%"}}><label for="input_deg_search_t"><span style={{display:"none"}}>input_deg_search_t</span> <Input onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></label></div>
+                           <div className="filter_col"  style={{width:"8%"}}><label for="input_deg_search_b"><span style={{display:"none"}}>input_deg_search_b</span> <Input onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></label></div>
                      </div>
             
                         <Table 

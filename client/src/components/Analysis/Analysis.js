@@ -5,6 +5,7 @@ import About from '../About/About';
 import Help from '../Help/Help';
 import { Spin, Icon, Button } from 'antd';
 import Plot from 'react-plotly.js';
+import XLSX from 'xlsx';
 
 
 const ButtonGroup = Button.Group;
@@ -209,6 +210,87 @@ class Analysis extends Component {
         });
     }
 
+    exportGSEA = (params = {}) => {
+        let workflow = Object.assign({}, this.state.workflow);
+
+        if (params.search_keyword) {
+            params = {
+                projectId: workflow.projectID,
+                page_size: 99999999,
+                page_number: 1,
+                sorting: {
+                    name: params.sorting.name,
+                    order: params.sorting.order,
+                },
+                search_keyword: params.search_keyword
+            }
+
+            workflow.ssGSEA.pagination = {
+                current: params.page_number,
+                pageSize: params.page_size,
+
+            }
+            workflow.ssGSEA.search_keyword = params.search_keyword;
+        } else {
+
+            params = {
+                projectId: workflow.projectID,
+                page_size: 99999999,
+                page_number: 1,
+                sorting: {
+                    name: "P.Value",
+                    order: "descend",
+
+                },
+                search_keyword: {
+                    "name": "",
+                    "search_logFC": "1.5",
+                    "search_Avg_Enrichment_Score": "",
+                    "search_t": "",
+                    "search_p_value": "0.05",
+                    "search_adj_p_value": "",
+                    "search_b": "",
+                }
+            }
+            workflow.ssGSEA.pagination = {
+                current: workflow.ssGSEA.pagination.current,
+                pageSize: workflow.ssGSEA.pagination.pageSize,
+
+            }
+
+        }
+
+        workflow.ssGSEA.loading = true;
+        this.setState({ workflow: workflow });
+
+        fetch('./api/analysis/getGSEA', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(
+                res => res.json()
+            )
+            .then(result => {
+
+
+                if (result.status == 200) {
+                    // export data
+
+                } else {
+
+                    document.getElementById("message-ssgsea").innerHTML = result.msg
+                }
+
+
+            }).catch(error => console.log(error));
+    }
+
+
 
 
     getssGSEA = (params = {}) => {
@@ -292,6 +374,11 @@ class Analysis extends Component {
                     workflow2.ssGSEA.loading = false;
                     workflow2.ssGSEA.data = result.data.records;
                     workflow2.ssGSEA.pagination = pagination;
+
+                    let min = 0;
+                    let max = 99999;
+                    let random = Math.random() * (+max - +min) + +min;
+                    workflow2.geneHeatmap = "/ssgseaHeatmap1.jpg?" + random
                     this.setState({ workflow: workflow2 });
 
                 } else {
@@ -313,6 +400,90 @@ class Analysis extends Component {
             }).catch(error => console.log(error));
     }
 
+
+
+    exportPathwayUp = (params = {}) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        // initialize
+        if (params.search_keyword) {
+            params = {
+                projectId: workflow.projectID,
+                page_size: 99999999,
+                page_number: 1,
+                sorting: {
+                    name: params.sorting.name,
+                    order: params.sorting.order,
+                },
+                search_keyword: params.search_keyword
+            }
+
+            workflow.pathways_up.pagination = {
+                current: params.page_number,
+                pageSize: params.page_size,
+
+            }
+            workflow.pathways_up.search_keyword = params.search_keyword;
+        } else {
+
+            params = {
+                projectId: workflow.projectID,
+                page_size: 99999999,
+                page_number: 1,
+                sorting: {
+                    name: "P_Value",
+                    order: "ascend",
+
+                },
+                search_keyword: {
+                    "search_PATHWAY_ID": "",
+                    "search_SOURCE": "",
+                    "search_DESCRIPTION": "",
+                    "search_TYPE": "",
+                    "search_p_value": "0.05",
+                    "search_fdr": "",
+                    "search_RATIO": "",
+                    "search_GENE_LIST": "",
+                    "search_NUMBER_HITS": "",
+                    "search_NUMBER_GENES_PATHWAY": "",
+                    "search_NUMBER_USER_GENES": "",
+                    "search_TOTAL_NUMBER_GENES": "",
+                }
+            }
+            workflow.pathways_up.pagination = {
+                current: workflow.pathways_up.pagination.current,
+                pageSize: workflow.pathways_up.pagination.pageSize,
+
+            }
+
+        }
+
+        workflow.pathways_up.loading = true;
+        this.setState({ workflow: workflow });
+        console.log()
+        fetch('./api/analysis/getUpPathWays', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(
+                res => res.json()
+            )
+            .then(result => {
+                if (result.status == 200) {
+                    // export data
+
+                } else {
+
+                    document.getElementById("message-pug").innerHTML = result.msg;
+                }
+
+
+            }).catch(error => console.log(error));
+    }
 
 
 
@@ -539,6 +710,92 @@ class Analysis extends Component {
             }).catch(error => console.log(error));
     }
 
+
+
+    exportPathwayDown = (params = {}) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        // initialize
+        if (params.search_keyword) {
+            params = {
+                projectId: workflow.projectID,
+                page_size: 99999999,
+                page_number: 1,
+                sorting: {
+                    name: params.sorting.name,
+                    order: params.sorting.order,
+                },
+                search_keyword: params.search_keyword
+            }
+
+            workflow.pathways_down.pagination = {
+                current: params.page_number,
+                pageSize: params.page_size,
+
+            }
+            workflow.pathways_down.search_keyword = params.search_keyword;
+        } else {
+
+            params = {
+                projectId: workflow.projectID,
+                page_size: 99999999,
+                page_number: 1,
+                sorting: {
+                    name: "P_Value",
+                    order: "ascend",
+
+                },
+                search_keyword: {
+                    "search_PATHWAY_ID": "",
+                    "search_SOURCE": "",
+                    "search_DESCRIPTION": "",
+                    "search_TYPE": "",
+                    "search_p_value": "0.05",
+                    "search_fdr": "",
+                    "search_RATIO": "",
+                    "search_GENE_LIST": "",
+                    "search_NUMBER_HITS": "",
+                    "search_NUMBER_GENES_PATHWAY": "",
+                    "search_NUMBER_USER_GENES": "",
+                    "search_TOTAL_NUMBER_GENES": "",
+                }
+            }
+            workflow.pathways_down.pagination = {
+                current: workflow.pathways_down.pagination.current,
+                pageSize: workflow.pathways_down.pagination.pageSize,
+
+            }
+
+        }
+
+
+        workflow.pathways_down.loading = true;
+        this.setState({ workflow: workflow });
+        fetch('./api/analysis/getDownPathWays', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(
+                res => res.json()
+            )
+            .then(result => {
+                document.getElementById("message-pdg").innerHTML = "";
+                let workflow2 = Object.assign({}, this.state.workflow);
+                if (result.status == 200) {
+
+                } else {
+                    document.getElementById("message-pdg").innerHTML = result.msg;
+                }
+
+
+            }).catch(error => console.log(error));
+    }
+
+
     getDEG = (params = {}) => {
 
         let workflow = Object.assign({}, this.state.workflow);
@@ -560,6 +817,7 @@ class Analysis extends Component {
                 pageSize: params.page_size,
 
             }
+            workflow.sorting = params.sorting;
             workflow.diff_expr_genes.search_keyword = params.search_keyword;
 
         } else {
@@ -646,6 +904,45 @@ class Analysis extends Component {
             }).catch(error => console.log(error));
     }
 
+
+
+
+    exportDEG = (params = {}) => {
+
+        let workflow = Object.assign({}, this.state.workflow);
+        params = {
+            projectId: workflow.projectID,
+            page_size: 99999999,
+            page_number: 1,
+            sorting: workflow.diff_expr_genes.sorting,
+            search_keyword: workflow.diff_expr_genes.search_keyword
+        }
+        workflow.diff_expr_genes.loading = true;
+        this.setState({ workflow: workflow });
+        fetch('./api/analysis/getDEG', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(
+                res => res.json()
+            )
+            .then(result => {
+                if (result.status == 200) {
+
+                    // export data
+
+                } else {
+                    document.getElementById("message-deg").innerHTML = result.msg;
+                }
+
+            }).catch(error => console.log(error));
+    }
+
     getHeatmapolt() {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
@@ -689,7 +986,7 @@ class Analysis extends Component {
                                         type: 'scatter3d',
                                        
                                     }]} layout={{
-                                        autosize:true,
+            
                                         margin:{
                                             l:0,
                                             r:0,
@@ -789,7 +1086,7 @@ class Analysis extends Component {
                                 BoxplotRenderData.push(boxplotData)
                             }
 
-                            let plot_layout = { showlegend: false, autosize: true }
+                            let plot_layout = { showlegend: false }
                             let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8 }
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
@@ -947,7 +1244,7 @@ class Analysis extends Component {
                             NUSERenderData.push(boxplotData)
                         }
 
-                        let plot_layout = { showlegend: false, autosize: true }
+                        let plot_layout = { showlegend: false }
                         let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8, }
 
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
@@ -1010,7 +1307,7 @@ class Analysis extends Component {
                             }
 
 
-                            let plot_layout = { showlegend: false, autosize: true }
+                            let plot_layout = { showlegend: false }
                             let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8, }
 
                             let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style}  useResizeHandler={true}/>
@@ -1086,7 +1383,7 @@ class Analysis extends Component {
                                 BoxplotRenderData.push(boxplotData)
                             }
 
-                            let plot_layout = { showlegend: false, autosize: true }
+                            let plot_layout = { showlegend: false }
                             let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8, }
 
 
@@ -1130,7 +1427,7 @@ class Analysis extends Component {
         if (workflow2.list_mAplotBN == "") {
             workflow2.progressing = true;
             workflow2.loading_info = "Loading Plots...";
-            let params = { projectId: workflow2.projectID};
+            let params = { projectId: workflow2.projectID };
             this.setState({ workflow: workflow2 });
             try {
                 fetch('./api/analysis/getMAplotsBN', {
@@ -1393,6 +1690,17 @@ class Analysis extends Component {
 
     }
 
+    exportGSE = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        let exportData = workflow.dataList;
+        if (exportData.length != 0) {
+            let worksheet = XLSX.utils.aoa_to_sheet(exportData);
+            var new_workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(new_workbook, worksheet, "GSMData");
+            XLSX.writeFile(new_workbook, workflow.projectID + ".xlsx");
+        }
+    }
+
     loadGSE = () => {
 
         let workflow = Object.assign({}, this.state.workflow);
@@ -1459,103 +1767,70 @@ class Analysis extends Component {
                     if (result.status == 200) {
 
                         let workflow = Object.assign({}, this.state.workflow);
-                        if (workflow.accessionCode == "test") {
-                            // for testing purpose
-
-                            let d = result.data;
-                            d = d.split("Reading in : /Users/cheny39/Documents/GitHub/apps/microarray/tmp/test/GSM929293_cn_APAP_17.CEL.gz")
-                            let a = JSON.parse(d[1])
-                            a.phenoData.data
 
 
+                        if (result.data === "undefined" || Object.keys(result.data).length === 0) {
+                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
 
                             workflow.uploading = false;
                             workflow.progressing = false;
-
-                            workflow.dataList = a.phenoData.data;
-                            // init group with default value
-                            // workflow.group = new Array( a.phenoData.data.length).fill('Ctl');
-
-                            // disable the input , prevent user to change the access code
-                            document.getElementById("input-access-code").disabled = true
-
-                            // change the word of load btn
-                            document.getElementById("btn-project-load-gse").disabled = true
-
+                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
                             this.setState({
                                 workflow: workflow
                             });
-
-                            // end testing data
-                        } else {
-
-                            if (result.data === "undefined" || Object.keys(result.data).length === 0) {
-                                document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
-                                workflow.uploading = false;
-                                workflow.progressing = false;
-                                document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
-                                document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                                this.setState({
-                                    workflow: workflow
-                                });
-                                return;
-                            }
-
-                            var data = result.data.split("+++loadGSE+++\"")[1]
-
-                            if (typeof(data) === "undefined" || data == "") {
-                                document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
-                                workflow.uploading = false;
-                                workflow.progressing = false;
-                                document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
-                                document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                                this.setState({
-                                    workflow: workflow
-                                });
-                                return;
-                            }
-
-                            let list = JSON.parse(decodeURIComponent(data));
-                            //let list = result.data;
-
-                            if (typeof(list) == "undefined" || list == null || list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
-                                document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
-                                workflow.uploading = false;
-                                workflow.progressing = false;
-                                document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
-                                document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                                this.setState({
-                                    workflow: workflow
-                                });
-
-                                return;
-                            }
-
-                            document.getElementById("message-gsm").innerHTML = ""
-                            workflow.uploading = false;
-                            workflow.progressing = false;
-
-                            workflow.dataList = list.files;
-                            // init group with default value
-                            workflow.group = new Array(list.files.length).fill('Ctl');
-
-                            // disable the input , prevent user to change the access code
-                            document.getElementById("input-access-code").disabled = true
-
-                            // change the word of load btn
-                            document.getElementById("btn-project-load-gse").disabled = true
-
-                            this.setState({
-                                workflow: workflow
-                            });
-
-
-
+                            return;
                         }
 
+                        var data = result.data.split("+++loadGSE+++\"")[1]
+
+                        if (typeof(data) === "undefined" || data == "") {
+                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+
+                            workflow.uploading = false;
+                            workflow.progressing = false;
+                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                            this.setState({
+                                workflow: workflow
+                            });
+                            return;
+                        }
+
+                        let list = JSON.parse(decodeURIComponent(data));
+                        //let list = result.data;
+
+                        if (typeof(list) == "undefined" || list == null || list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
+                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+
+                            workflow.uploading = false;
+                            workflow.progressing = false;
+                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                            this.setState({
+                                workflow: workflow
+                            });
+
+                            return;
+                        }
+
+                        document.getElementById("message-gsm").innerHTML = ""
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+
+                        workflow.dataList = list.files;
+                        // init group with default value
+                        workflow.group = new Array(list.files.length).fill('Ctl');
+
+                        // disable the input , prevent user to change the access code
+                        document.getElementById("input-access-code").disabled = true
+
+                        // change the word of load btn
+                        document.getElementById("btn-project-load-gse").disabled = true
+
+                        this.setState({
+                            workflow: workflow
+                        });
 
                     } else {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
@@ -2151,7 +2426,8 @@ class Analysis extends Component {
                         loadGSE={this.loadGSE} 
                         handleGroup1Select={this.handleGroup1Select}  
                         handleGroup2Select={this.handleGroup2Select} 
-                        runContrast={this.runContrast}/>
+                        runContrast={this.runContrast}
+                        exportGSE={this.exportGSE}/>
 
                     <div id="btn-controll-data-table-display">
                       <a  aria-label="panel display controller " id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
