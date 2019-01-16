@@ -12,6 +12,7 @@ const ButtonGroup = Button.Group;
 
 const defaultState = {
     workflow: {
+        useQueue: false,
         token: "",
         projectID: "",
         analysisType: "0",
@@ -176,8 +177,6 @@ class Analysis extends Component {
     constructor(props) {
         super(props);
         this.state = Object.assign({}, defaultState);
-
-
         this.resetWorkFlowProject = this.resetWorkFlowProject.bind(this);
         this.changeCode = this.changeCode.bind(this);
         this.handleSelectType = this.handleSelectType.bind(this);
@@ -198,9 +197,22 @@ class Analysis extends Component {
         this.getPathwayUp = this.getPathwayUp.bind(this);
         this.getssGSEA = this.getssGSEA.bind(this);
         this.changeLoadingStatus = this.changeLoadingStatus.bind(this);
+        this.changeRUNContractModel = this.changeRUNContractModel.bind(this);
+        this.initWithCode = this.initWithCode.bind(this);
+        if (this.props.match.params.code) {
+            this.initWithCode(this.props.match.params.code);
+        }
     }
 
-
+    changeRUNContractModel = (params = false) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        if (params) {
+            workflow.useQueue = true;
+        } else {
+            workflow.useQueue = false;
+        }
+        this.setState({ workflow: workflow });
+    }
     //use for generate UUID
     uuidv4() {
         return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -474,11 +486,12 @@ class Analysis extends Component {
             )
             .then(result => {
                 if (result.status == 200) {
-                    // export data
+
+
 
                 } else {
 
-                    document.getElementById("message-pug").innerHTML = result.msg;
+                    document.getElementById("message-pug").innerHTML = "Contrast result no found";
                 }
 
 
@@ -1692,12 +1705,28 @@ class Analysis extends Component {
 
     exportGSE = () => {
         let workflow = Object.assign({}, this.state.workflow);
-        let exportData = workflow.dataList;
-        if (exportData.length != 0) {
-            let worksheet = XLSX.utils.aoa_to_sheet(exportData);
-            var new_workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(new_workbook, worksheet, "GSMData");
-            XLSX.writeFile(new_workbook, workflow.projectID + ".xlsx");
+        var wb = XLSX.utils.book_new();
+        wb.Props = {
+                Title: "Export GSM Data",
+                Subject: "GSM Data",
+                Author: "Microarray",
+                CreatedDate: new Date()
+        };
+        if (workflow.dataList.length != 0) {
+             wb.SheetNames.push("GSM Configuration");
+            var ws_data = [['No Configuration']];
+            var ws = XLSX.utils.aoa_to_sheet(ws_data);
+            wb.Sheets["GSM Configuration"] = ws;
+             wb.SheetNames.push("GSM Data");
+             let gsm =[['id','gsm','title','description','group']]
+             let rawData =workflow.dataList;
+             for(var i in rawData){
+                gsm.push([rawData[i].index,rawData[i].gsm,rawData[i].title,rawData[i].description,rawData[i].groups,])
+             }
+            var ws2 = XLSX.utils.aoa_to_sheet(gsm);
+            wb.Sheets["GSM Data"] = ws2;
+            var wbout = XLSX.writeFile(wb, "test.xlsx", {bookType:'xlsx',type: 'binary'});
+            
         }
     }
 
@@ -1862,6 +1891,7 @@ class Analysis extends Component {
 
     runContrast = () => {
         let workflow = Object.assign({}, this.state.workflow);
+        document.getElementById("message-use-queue").innerHTML = "";
         let reqBody = {};
         reqBody.code = "";
         reqBody.projectId = "";
@@ -2046,158 +2076,213 @@ class Analysis extends Component {
             workflow: workflow
         });
 
-        try {
-            fetch('./api/analysis/runContrast', {
-                    method: "POST",
-                    body: JSON.stringify(reqBody),
-                    credentials: "same-origin",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(this.handleErrors)
-                .then(function(response) {
-                    if (!response.ok) {
-                        throw Error(response.statusText);
-                    }
-                    return response.json();
-                }).then(result => {
-                    if (result.status == 200) {
-
-
-                        let type = window.current_working_on_object;
-
-                        if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
-                            // means  I open the GSM
+        if (workflow.useQueue) {
+            if (document.getElementById("input-email").value == "") {
+                document.getElementById("message-use-queue").innerHTML = "Email is required"
+                workflow.uploading = false;
+                workflow.progressing = false;
+                this.setState({
+                    workflow: workflow
+                });
+                return
+            } else {
+                reqBody.email = document.getElementById("input-email").value
+            }
+            try {
+                fetch('./api/analysis/qAnalysis', {
+                        method: "POST",
+                        body: JSON.stringify(reqBody),
+                        credentials: "same-origin",
+                        headers: {
+                            'Content-Type': 'application/json'
                         }
-
-                        if (window.current_working_on_tag == "Pre-normalization_QC_Plots") {
-                            // means  I open the Pre-plot
-                            type = window.tag_pre_plot_status;
+                    }).then(this.handleErrors)
+                    .then(function(response) {
+                        if (!response.ok) {
+                            throw Error(response.statusText);
                         }
+                        return response.json();
+                    }).then(result => {
+                        if (result.status == 200) {
 
-                        if (window.current_working_on_tag == "Post-normalization_Plots") {
-                            // means  I open the Post-plot
-                            type = window.tag_post_plot_status;
                         }
-
-                        if (window.current_working_on_tag == "DEG-Enrichments_Results") {
-                            // means  I open the DEG
-                            type = window.tag_deg_plot_status;
-                        }
-
-                        if (window.current_working_on_tag == "ssGSEA_Results") {
-                            // means  I open the ssGSEA_Results
-                            type = "ssGSEA_Results";
-                        }
-
-                        if (result.data.mAplotBN != "") {
-                            workflow.list_mAplotBN = result.data.mAplotBN;
-                        }
-
-                        if (result.data.mAplotAN != "") {
-                            workflow.list_mAplotAN = result.data.mAplotAN;
-                        }
-
-                        switch (type) {
-                            case "getHistplotAN":
-                                this.getHistplotAN();
-                                break;
-
-                            case "getBoxplotAN":
-                                this.getBoxplotAN();
-                                break;
-
-                            case "getMAplotAN":
-                                this.getMAplotAN();
-                                break;
-
-                            case "getPCA":
-                                this.getPCA();
-                                break;
-
-                            case "getHeatmapolt":
-                                this.getHeatmapolt();
-                                break;
-
-                            case "getHistplotBN":
-                                this.getHistplotBN();
-                                break;
-
-                            case "getMAplotsBN":
-                                this.getMAplotsBN();
-                                break;
-
-                            case "getBoxplotBN":
-                                this.getBoxplotBN();
-                                break;
-                            case "getRLE":
-                                this.getRLE();
-                                break;
-                            case "getNUSE":
-                                this.getNUSE();
-                                break;
-
-                            case "pathwayHeatMap":
-                                workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
-                                break;
-                            case "pathways_up":
-                                this.getPathwayUp()
-                                break;
-                            case "pathways_down":
-                                this.getPathwayDown();
-                                break;
-                            case "ssGSEA":
-                                this.getssGSEA();
-                                break;
-                            case "deg":
-                                this.getDEG();
-                                break;
-                            case "Pre-normalization_QC_Plots":
-                                this.getHistplotBN();
-                                break;
-                            case "Post-normalization_Plots":
-                                this.getHistplotAN();
-                                break;
-                            case "DEG-Enrichments_Results":
-                                this.getDEG();
-                                break;
-                            case "GSM_1":
-                                // do nothing
-                                break;
-                            case "ssGSEA_Results":
-                                this.getssGSEA();
-                                break;
-                        }
-
-                        workflow.volcanoPlot = "/volcano.html";
-                        workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
-                        workflow.compared = true;
-                        workflow.done_gsea = true;
+                        workflow.uploading = false;
                         workflow.progressing = false;
+                        document.getElementById("message-use-queue").innerHTML = "Have send the message to Queue"
                         this.setState({
                             workflow: workflow
                         });
+                    })
 
-                        this.hideWorkFlow();
-                    } else {
 
-                        workflow.progressing = false;
-                        this.setState({
-                            workflow: workflow
-                        });
+            } catch (err) {
 
-                    }
+                workflow.uploading = false;
+                workflow.progressing = false;
+                console.log(err);
+                document.getElementById("message-use-queue").innerHTML = err
 
-                }).catch(error => console.log(error));
-        } catch (err) {
+                this.setState({
+                    workflow: workflow
+                });
+            }
 
-            workflow.uploading = false;
-            workflow.progressing = false;
-            console.log(err);
-            this.setState({
-                workflow: workflow
-            });
+        } else {
+            try {
+                fetch('./api/analysis/runContrast', {
+                        method: "POST",
+                        body: JSON.stringify(reqBody),
+                        credentials: "same-origin",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(this.handleErrors)
+                    .then(function(response) {
+                        if (!response.ok) {
+                            throw Error(response.statusText);
+                        }
+                        return response.json();
+                    }).then(result => {
+                        if (result.status == 200) {
+
+                            let type = window.current_working_on_object;
+
+                            if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
+                                // means  I open the GSM
+                            }
+
+                            if (window.current_working_on_tag == "Pre-normalization_QC_Plots") {
+                                // means  I open the Pre-plot
+                                type = window.tag_pre_plot_status;
+                            }
+
+                            if (window.current_working_on_tag == "Post-normalization_Plots") {
+                                // means  I open the Post-plot
+                                type = window.tag_post_plot_status;
+                            }
+
+                            if (window.current_working_on_tag == "DEG-Enrichments_Results") {
+                                // means  I open the DEG
+                                type = window.tag_deg_plot_status;
+                            }
+
+                            if (window.current_working_on_tag == "ssGSEA_Results") {
+                                // means  I open the ssGSEA_Results
+                                type = "ssGSEA_Results";
+                            }
+
+                            if (result.data.mAplotBN != "") {
+                                workflow.list_mAplotBN = result.data.mAplotBN;
+                            }
+
+                            if (result.data.mAplotAN != "") {
+                                workflow.list_mAplotAN = result.data.mAplotAN;
+                            }
+
+                            switch (type) {
+                                case "getHistplotAN":
+                                    this.getHistplotAN();
+                                    break;
+
+                                case "getBoxplotAN":
+                                    this.getBoxplotAN();
+                                    break;
+
+                                case "getMAplotAN":
+                                    this.getMAplotAN();
+                                    break;
+
+                                case "getPCA":
+                                    this.getPCA();
+                                    break;
+
+                                case "getHeatmapolt":
+                                    this.getHeatmapolt();
+                                    break;
+
+                                case "getHistplotBN":
+                                    this.getHistplotBN();
+                                    break;
+
+                                case "getMAplotsBN":
+                                    this.getMAplotsBN();
+                                    break;
+
+                                case "getBoxplotBN":
+                                    this.getBoxplotBN();
+                                    break;
+                                case "getRLE":
+                                    this.getRLE();
+                                    break;
+                                case "getNUSE":
+                                    this.getNUSE();
+                                    break;
+
+                                case "pathwayHeatMap":
+                                    workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
+                                    break;
+                                case "pathways_up":
+                                    this.getPathwayUp()
+                                    break;
+                                case "pathways_down":
+                                    this.getPathwayDown();
+                                    break;
+                                case "ssGSEA":
+                                    this.getssGSEA();
+                                    break;
+                                case "deg":
+                                    this.getDEG();
+                                    break;
+                                case "Pre-normalization_QC_Plots":
+                                    this.getHistplotBN();
+                                    break;
+                                case "Post-normalization_Plots":
+                                    this.getHistplotAN();
+                                    break;
+                                case "DEG-Enrichments_Results":
+                                    this.getDEG();
+                                    break;
+                                case "GSM_1":
+                                    // do nothing
+                                    break;
+                                case "ssGSEA_Results":
+                                    this.getssGSEA();
+                                    break;
+                            }
+
+                            workflow.volcanoPlot = "/volcano.html";
+                            workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
+                            workflow.compared = true;
+                            workflow.done_gsea = true;
+                            workflow.progressing = false;
+                            this.setState({
+                                workflow: workflow
+                            });
+
+                            this.hideWorkFlow();
+                        } else {
+
+                            workflow.progressing = false;
+                            this.setState({
+                                workflow: workflow
+                            });
+
+                        }
+
+                    }).catch(error => console.log(error));
+            } catch (err) {
+
+                workflow.uploading = false;
+                workflow.progressing = false;
+                console.log(err);
+                this.setState({
+                    workflow: workflow
+                });
+            }
+
+
         }
+
     }
 
 
@@ -2394,13 +2479,224 @@ class Analysis extends Component {
 
     }
 
+    initWithCode(code) {
+
+        let workflow = Object.assign({}, this.state.workflow);
+        let reqBody = {};
+
+        reqBody.projectId = code;
+
+
+        workflow.progressing = true;
+        workflow.loading_info = "Running Contrast...";
+
+        workflow.diff_expr_genes = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25,
+
+            },
+            loading: true,
+            page_number: 1,
+            page_size: 25,
+            sorting: {
+                name: "P.Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "search_symbol": "",
+                "search_fc": "1.5",
+                "search_p_value": "0.05",
+                "search_adj_p_value": "",
+                "search_aveexpr": "",
+                "search_accnum": "",
+                "search_desc": "",
+                "search_entrez": "",
+                "search_probsetid": "",
+                "search_t": "",
+                "search_b": ""
+            }
+        };
+
+        workflow.ssGSEA = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25,
+
+            },
+            loading: true,
+            page_size: 25,
+            page_number: 1,
+            sorting: {
+                name: "P.Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "name": "",
+                "search_logFC": "1.5",
+                "search_Avg_Enrichment_Score": "",
+                "search_t": "",
+                "search_p_value": "0.05",
+                "search_adj_p_value": "",
+                "search_b": "",
+            }
+        };
+
+        workflow.pathways_up = {
+
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25,
+
+            },
+            loading: true,
+            sorting: {
+                name: "P_Value",
+                order: "ascend",
+
+            },
+            search_keyword: {
+                "search_PATHWAY_ID": "",
+                "search_SOURCE": "",
+                "search_DESCRIPTION": "",
+                "search_TYPE": "",
+                "search_p_value": "0.05",
+                "search_fdr": "",
+                "search_RATIO": "",
+                "search_GENE_LIST": "",
+                "search_NUMBER_HITS": "",
+                "search_NUMBER_GENES_PATHWAY": "",
+                "search_NUMBER_USER_GENES": "",
+                "search_TOTAL_NUMBER_GENES": "",
+            }
+        };
+
+        workflow.pathways_down = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25,
+
+            },
+            loading: true,
+            sorting: {
+                name: "P_Value",
+                order: "ascend",
+
+            },
+            search_keyword: {
+                "search_PATHWAY_ID": "",
+                "search_SOURCE": "",
+                "search_DESCRIPTION": "",
+                "search_TYPE": "",
+                "search_p_value": "0.05",
+                "search_fdr": "",
+                "search_RATIO": "",
+                "search_GENE_LIST": "",
+                "search_NUMBER_HITS": "",
+                "search_NUMBER_GENES_PATHWAY": "",
+                "search_NUMBER_USER_GENES": "",
+                "search_TOTAL_NUMBER_GENES": "",
+            }
+        };
+
+        workflow.preplots = {
+            histplotBN: "",
+            list_mAplotBN: "",
+            Boxplots: "",
+            RLE: "",
+            NUSE: ""
+        };
+        workflow.postplot = {
+            histplotAN: "",
+            list_mAplotAN: "",
+            Boxplots: "",
+            PCA: "",
+            Heatmapolt: ""
+        };
+        workflow.volcanoPlot = "";
+        this.setState({
+            workflow: workflow
+        });
+
+        try {
+            fetch('./api/analysis/getResultByProjectId', {
+                    method: "POST",
+                    body: JSON.stringify(reqBody),
+                    credentials: "same-origin",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(this.handleErrors)
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw Error(response.statusText);
+                    }
+                    return response.json();
+                }).then(result => {
+                    if (result.status == 200) {
+                        result = result.data;
+                        let workflow2 = Object.assign({}, this.state.workflow);
+                        workflow2.dataList = result.gsm;
+                        workflow2.accessionCode = result.accessionCode;
+                        workflow2.projectID = result.projectId;
+                        workflow2.group_1 = result.group_1;
+                        workflow2.group_2 = result.group_2;
+                        workflow2.groups = result.groups;
+
+                        for (let i in workflow2.dataList) {
+                            if (result.groups[i] == "Ctl") {
+                                workflow2.dataList[i].groups = "";
+                            } else {
+                                workflow2.dataList[i].groups = result.groups[i];
+                            }
+
+                        }
+
+                        if (result.mAplotBN) {
+                            workflow2.list_mAplotBN = result.mAplotBN;
+                        }
+
+                        if (result.mAplotAN) {
+                            workflow2.list_mAplotAN = result.mAplotAN;
+                        }
+                        workflow2.init = true;
+                        workflow2.volcanoPlot = "/volcano.html";
+                        workflow2.geneHeatmap = "/ssgseaHeatmap1.jpg";
+                        workflow2.compared = true;
+                        workflow2.done_gsea = true;
+                        workflow2.progressing = false;
+
+                        this.setState({
+                            workflow: workflow2
+                        });
+                        this.hideWorkFlow();
+                    } else {
+                        workflow.progressing = false;
+                        this.setState({
+                            workflow: workflow
+                        });
+                    }
+                }).catch(error => console.log(error));
+        } catch (err) {
+            workflow.uploading = false;
+            workflow.progressing = false;
+            console.log(err);
+            this.setState({
+                workflow: workflow
+            });
+        }
+    }
+
+
 
     render() {
         let modal = this.state.workflow.progressing ? "progress" : "progress-hidden";
         const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin  />;
-        return (
-            <div>
-          <div className="header-nav">
+        let tabs = <div> <div className="header-nav">
             <div className="div-container">
                 <ul className="nav navbar-nav" id="header-navbar">
                     <li  onClick={() => {this.changeTab('about')}}  id="li-about" className="active"> <a href="#about" className="nav-link" >About</a></li>
@@ -2411,15 +2707,16 @@ class Analysis extends Component {
             </div>
         </div>
         <div className="content">
-                <div id="tab_about"> <About/></div>
-                <div id="tab_help" className="hide"> <Help/></div>
+                <div id="tab_about" > <About/></div>
+                <div id="tab_help" className="hide" > <Help/></div>
                 <div id="tab_analysis" className="hide">
                 <div className="container container-board">
                   <Workflow data={this.state.workflow}
                        
                         resetWorkFlowProject={this.resetWorkFlowProject}  
                         changeCode={this.changeCode} 
-                        handleSelectType={this.handleSelectType}  
+                        handleSelectType={this.handleSelectType} 
+                         changeRUNContractModel={this.changeRUNContractModel} 
                         fileRemove={this.fileRemove} 
                         beforeUpload={this.beforeUpload} 
                         handleUpload={this.handleUpload} 
@@ -2478,6 +2775,92 @@ class Analysis extends Component {
                 </div>
             </div>
             </div>
+             </div>
+        if (this.props.match.params.code) {
+            tabs = <div><div className="header-nav">
+            <div className="div-container">
+                <ul className="nav navbar-nav" id="header-navbar">
+                    <li  onClick={() => {this.changeTab('about')}}  id="li-about"> <a href="#about" className="nav-link" >About</a></li>
+                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className="active"> <a href="#analysis"  className="nav-link">Analysis</a></li>
+                    <li  onClick={() => {this.changeTab('help')}}  id="li-help" className="" > <a href="#help"  className="nav-link">Help</a></li>
+                </ul>
+            
+            </div>
+        </div>
+        <div className="content">
+                <div id="tab_about" className="hide"> <About/></div>
+                <div id="tab_help" className="hide"> <Help/></div>
+                <div id="tab_analysis">
+                <div className="container container-board">
+                  <Workflow data={this.state.workflow}
+                       
+                        resetWorkFlowProject={this.resetWorkFlowProject}  
+                        changeCode={this.changeCode} 
+                        handleSelectType={this.handleSelectType}  
+                        fileRemove={this.fileRemove} 
+                        beforeUpload={this.beforeUpload} 
+                        handleUpload={this.handleUpload} 
+                        loadGSE={this.loadGSE} 
+                        changeRUNContractModel={this.changeRUNContractModel}
+                        handleGroup1Select={this.handleGroup1Select}  
+                        handleGroup2Select={this.handleGroup2Select} 
+                        runContrast={this.runContrast}
+                        exportGSE={this.exportGSE}/>
+
+                    <div id="btn-controll-data-table-display">
+                      <a  aria-label="panel display controller " id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
+                      <a  aria-label="panel display controller" id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
+
+                  </div>
+                  <DataBox  data={this.state.workflow} 
+                            upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} 
+                            upateCurrentWorkingTab={this.upateCurrentWorkingTab}
+                            assignGroup={this.assignGroup} 
+                            deleteGroup={this.deleteGroup}
+                        
+                            handleGeneChange={this.handleGeneChange} 
+                            changessGSEA={this.changessGSEA}
+                            changeLoadingStatus ={this.changeLoadingStatus}
+
+                            getHistplotBN={this.getHistplotBN}
+                            getMAplotsBN={this.getMAplotsBN}
+                            getBoxplotBN={this.getBoxplotBN}
+                            getRLE={this.getRLE}
+                            getNUSE={this.getNUSE}
+
+                             getBoxplotAN={this.getBoxplotAN}
+                             getMAplotAN={this.getMAplotAN}
+                             getHistplotAN={this.getHistplotAN}
+                             getPCA={this.getPCA}
+                             getHeatmapolt={this.getHeatmapolt}
+
+                             getDEG={this.getDEG}
+                             getPathwayUp={this.getPathwayUp}
+                             getPathwayDown={this.getPathwayDown}
+                             getssGSEA={this.getssGSEA}
+                             
+                            />
+                </div>
+                <div className={modal}>
+                    <div style={{
+                        "width": "180px",
+                        "height": "175px",
+                        "background": "#efefef",
+                        "position": "absolute",
+                        "left": "calc(50% - 80px)",
+                        "padding": "2%",
+                        "borderRadius": "50%"}}>
+                    <Spin indicator={antIcon} style={{color:"black"}} aria-label="loading"/>
+                    <label className="loading-info" aria-label="loading-info">{this.state.workflow.loading_info}</label>
+                    </div>
+                </div>
+            </div>
+            </div>
+             </div>
+        }
+        return (
+            <div>
+          {tabs}
     </div>
         );
     }

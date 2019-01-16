@@ -46,6 +46,15 @@ class Project extends Component {
                         <button id="btn-project-load-gse" type="button" className="ant-btn upload-start ant-btn-primary" onClick={this.props.loadGSE}>
                           <span>{uploading ? 'Load' : 'Load' }</span>
                         </button>
+
+                          <Button
+                      id="btn-project-export"
+                      className="upload-start"
+                      type="primary"
+                      onClick={this.props.exportGSE}
+                    >
+                    export
+                    </Button>
                       </div>
                       <div className="col-sm-6">
                    
@@ -81,6 +90,7 @@ class Project extends Component {
                     >
                     {uploading ? 'Load' : 'Load' }
                     </Button>
+                  
                    </div>
 
                      <div className="col-sm-6">

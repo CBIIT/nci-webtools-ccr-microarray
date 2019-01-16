@@ -9,15 +9,12 @@ class MainContent extends Component {
 
     render() {
         let match = window.location.pathname;
-        if (match.startsWith('/microarray')) {
-            match = "/microarray";
-        } else {
-            match = "";
-        }
+        
 
         return (
-            <Switch>
-        <Route exact path={match+'/'} component={Analysis}/>
+        <Switch>
+        <Route path='/:code' component={Analysis}/>
+        <Route path='/' component={Analysis}/>
       </Switch>
         );
     }

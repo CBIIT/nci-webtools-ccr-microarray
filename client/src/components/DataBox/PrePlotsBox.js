@@ -15,7 +15,9 @@ class PrePlotsBox extends Component {
     }
 
     componentDidMount() {
-        this.handleSelectionChange("preHistogram")
+        if(this.props.data.dataList.length>0){
+             this.handleSelectionChange("preHistogram")
+        }
     }
 
     handleSelectionChange(value) {

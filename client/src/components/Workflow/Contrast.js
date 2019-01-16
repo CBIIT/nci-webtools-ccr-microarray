@@ -1,14 +1,29 @@
 import React, { Component } from 'react';
-import { Input, Select, Button } from 'antd';
+import {Switch, Input, Select, Button } from 'antd';
 const { Option, OptGroup } = Select;
 
 class Contrast extends Component {
 
+  state = {
+       showInput:"none"
+    };
     constructor(props) {
+
         super(props);
+        this.handleSwitchChange =this.handleSwitchChange.bind(this);
+
     }
 
+    handleSwitchChange  = (params = {}) => {
 
+        if(params){
+          this.props.changeRUNContractModel(true);
+           this.setState({ showInput: "block" });
+        }else{
+          this.props.changeRUNContractModel(false);
+          this.setState({ showInput: "none" });
+        }
+    }
 
     render() {
 
@@ -26,13 +41,25 @@ class Contrast extends Component {
 
         let button = "";
         if (this.props.data.group_1 != "-1" && this.props.data.group_2 != "-1" && this.props.data.group_1 != this.props.data.group_2) {
-            button = (<Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
-              <span>Run Contrast</span>
-            </Button>);
+            button = (<div>
+              <Switch checkedChildren="Submit this job to Queue" unCheckedChildren="Not using Queue"  onChange={this.handleSwitchChange} />
+             <label className="email" style={{display: this.state.showInput }}>Type Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+             <Input  id="email"  aria-label="input email"  id="input-email" placeholder="email" style={{display: this.state.showInput }}/>
+             <div><span className="err-message" id="message-use-queue"></span></div>
+             <Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
+              <span>Run Contrast Now</span>
+            </Button></div>
+            );
         } else {
-            button = (<Button className="ant-btn upload-start ant-btn-default" onClick={this.props.runContrast} disabled >
+            button = (<div>
+              <Switch checkedChildren="Submit this job to Queue" unCheckedChildren="Not using Queue"  onChange={this.handleSwitchChange} />
+              
+               <label className="email" id="email" style={{display: this.state.showInput }}>Type Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+              <Input  aria-label="input email"  id="input-email" placeholder="email" style={{display: this.state.showInput }}/>
+              <div><span className="err-message" id="message-use-queue"></span></div>
+              <Button className="ant-btn upload-start ant-btn-default" onClick={this.props.runContrast} disabled >
               <span>Run Contrast</span>
-            </Button>);
+            </Button></div>);
         }
         let group_1_content = (<Select defaultValue={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
             <Option value="-1">---Select Group---</Option>
