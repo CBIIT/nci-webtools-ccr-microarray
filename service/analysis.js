@@ -8,7 +8,8 @@ var formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
 var rimraf = require('rimraf');
-
+var queue = require('../components/queue');
+const AWS = require('aws-sdk');
 
 router.post('/upload', function(req, res) {
     logger.info("[start] upload files");
@@ -129,6 +130,9 @@ router.post('/loadGSE', function(req, res) {
 
 
 
+
+
+
 router.post('/pathwaysHeapMap', function(req, res) {
 
     let data = [];
@@ -215,6 +219,124 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
     });
 
 });
+
+
+router.post("/qAnalysis", function(req, res) {
+
+    let data = {};
+    data.projectId = req.body.projectId;
+    data.code = req.body.code;
+    data.groups = req.body.groups;
+    data.group_1 = req.body.group_1;
+    data.group_2 = req.body.group_2;
+    data.species = req.body.species;
+    data.genSet = req.body.genSet;
+    data.source = req.body.source;
+    data.email = req.body.email;
+
+
+    if (!req.body.projectId) {
+        data.projectId = "testABCD";
+        data.code = "GSE37874";
+        data.groups = ["Ctl", "Ctl", "Ctl", "GSMGroup_2", "Ctl", "Ctl", "Ctl", "Ctl", "Ctl", "Ctl", "GSMGroup_1", "GSMGroup_1"];
+        data.group_1 = "GSMGroup_1";
+        data.group_2 = "GSMGroup_2";
+        data.species = "human";
+        data.genSet = "H: Hallmark Gene Sets";
+        data.source = "fetch";
+        data.email = "jonkiky@gmail.com";
+    }
+
+    logger.info("-----------------------------------------------")
+    logger.info("[Queue] Start Using Queue for Analysis")
+    logger.info("Input:")
+    logger.info(JSON.stringify(data))
+
+
+    function send(d) {
+        logger.info("[Queue] Send Message to Queue", JSON.stringify(d));
+        queue.awsHander.sender(JSON.stringify(d), d.email);
+    }
+
+    logger.info("[upload file to S3]")
+    logger.info("File Path:")
+    logger.info(config.uploadPath + "/" + data.projectId)
+    // // upload data
+    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, data.projectId+"/", ".gz")
+    // //upload configure
+    //queue.awsHander.upload(config.configPath, data.projectId + "/config/",null)
+
+    setTimeout(function() {
+        send(data)
+    }, 10000);
+
+    res.json({
+        status: 200,
+        data: ""
+    });
+
+})
+
+
+
+
+router.post('/getResultByProjectId', function(req, res) {
+
+    req.setTimeout(0) // no timeout
+
+
+
+    logger.info("[Get contrast result from file]",
+        "projectId:", req.body.projectId
+    );
+
+
+    queue.awsHander.download(req.body.projectId, config.uploadPath, getResultFromFile, res, function(){ console.log("download")});
+
+    function getResultFromFile(res,callback) {
+        fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
+            if (err) {
+                res.json({
+                    status: 404,
+                    msg: returnValue
+                });
+            } else {
+                let re = JSON.parse(returnValue)
+                // store return value in session (deep copy)
+                req.session.runContrastData = JsonToObject(re);
+                req.session.option = req.session.runContrastData.group_1 + req.session.runContrastData.group_2 + req.session.runContrastData.genSet;
+                req.session.groups = req.session.runContrastData.groups;
+                req.session.projectId = req.session.runContrastData.projectId;
+                logger.info("store data in req.session")
+
+                let return_data = "";
+
+                return_data = {
+                    mAplotBN: req.session.runContrastData.maplotBN,
+                    mAplotAN: req.session.runContrastData.maplotAfter,
+                    group_1: req.session.runContrastData.group_1,
+                    group_2: req.session.runContrastData.group_2,
+                    groups: req.session.runContrastData.groups,
+                    projectId: req.session.runContrastData.projectId,
+                    accessionCode: req.session.runContrastData.accessionCode,
+                    gsm: re.GSM,
+                    mAplotBN: re.maplotBN,
+                    mAplotAN: re.maplotAfter
+                }
+
+
+                logger.info("Get Contrast result success")
+                res.json({
+                    status: 200,
+                    data: return_data
+                });
+
+            }
+        });
+    }
+
+});
+
 
 
 router.post('/runContrast', function(req, res) {
@@ -756,21 +878,21 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     }
 
 
-        // sorting
-        if (sorting != null) {
-            if (sorting.order == "descend") {
-                result.sort(function(e1, e2) {
-                    return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
-                })
-            }
-
-            if (sorting.order == "ascend") {
-                result.sort(function(e1, e2) {
-                    return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
-                })
-            }
+    // sorting
+    if (sorting != null) {
+        if (sorting.order == "descend") {
+            result.sort(function(e1, e2) {
+                return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
+            })
         }
-    
+
+        if (sorting.order == "ascend") {
+            result.sort(function(e1, e2) {
+                return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
+            })
+        }
+    }
+
     // search
     if (search_keyword) {
 
@@ -976,20 +1098,20 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
     let result = data;
 
-        // sorting
-        if (sorting != null) {
-            if (sorting.order == "descend") {
-                result.sort(function(e1, e2) {
-                    return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
-                })
-            }
-
-            if (sorting.order == "ascend") {
-                result.sort(function(e1, e2) {
-                    return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
-                })
-            }
+    // sorting
+    if (sorting != null) {
+        if (sorting.order == "descend") {
+            result.sort(function(e1, e2) {
+                return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
+            })
         }
+
+        if (sorting.order == "ascend") {
+            result.sort(function(e1, e2) {
+                return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
+            })
+        }
+    }
 
 
     // search
@@ -1115,30 +1237,37 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
             req.session.deg_tmp.search_b == search_keyword.search_b) {
 
             // return index
+
+            logger.info("Get Deg data from session success")
+
             let output = {
                 totalCount: req.session.deg_tmp.data.length,
                 records: req.session.deg_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
             }
             return output;
+        } else {
+            logger.info("Get Deg data from session fails")
         }
     }
 
 
-        if (sorting != null) {
-            if (sorting.order == "descend") {
-                result.sort(function(e1, e2) {
-                    return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
-                })
-            }
-
-            if (sorting.order == "ascend") {
-                result.sort(function(e1, e2) {
-                    return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
-                })
-            }
+    if (sorting != null) {
+        logger.info("Sort Deg data ")
+        if (sorting.order == "descend") {
+            result.sort(function(e1, e2) {
+                return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
+            })
         }
+
+        if (sorting.order == "ascend") {
+            result.sort(function(e1, e2) {
+                return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
+            })
+        }
+    }
     // search
     if (search_keyword != "") {
+        logger.info("Filter Deg data ")
         if (!(search_keyword.search_accnum == "" &&
                 search_keyword.search_adj_p_value == "" &&
                 search_keyword.search_aveexpr == "" &&
@@ -1255,7 +1384,7 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
             })
         }
     }
-
+    logger.info("Put Deg data into session ")
     // store current filter result into tmp 
     req.session.deg_tmp = {
         sorting_order: sorting.order,
@@ -1327,15 +1456,45 @@ function toObject(returnValue) {
         }
     }
 
-
-
-
     logger.info("API: function filter result :",
         "workflow.diff_expr_genes.length: ", workflow.diff_expr_genes.length,
         "workflow.ssGSEA.length: ", workflow.ssGSEA.length,
         "workflow.pathways_up.length: ", workflow.pathways_up.length,
         "workflow.pathways_down.length: ", workflow.pathways_down.length
     )
+
+    return workflow;
+}
+
+
+function JsonToObject(returnValue) {
+
+
+    var workflow = {};
+    workflow.diff_expr_genes = returnValue.deg;
+    workflow.ssGSEA = returnValue.ss_data;
+    workflow.pathways_up = returnValue.uppath;
+    workflow.pathways_down = returnValue.downpath;
+
+    workflow.projectId = returnValue.projectId;
+    workflow.groups = returnValue.groups;
+    workflow.accessionCode = returnValue.accessionCode[0];
+    workflow.group_1 = returnValue.group_1[0];
+    workflow.group_2 = returnValue.group_2[0];
+
+    workflow.listPlots = [returnValue.hisBefore,
+        returnValue.maplotBN,
+        returnValue.boxplotDataBN,
+        returnValue.RLE,
+        returnValue.NUSE,
+        returnValue.hisAfter,
+        returnValue.maplotAfter,
+        returnValue.boxplotDataAN,
+        returnValue.pcaData,
+        returnValue.heatmapAfterNorm
+    ]
+
+
 
     return workflow;
 }

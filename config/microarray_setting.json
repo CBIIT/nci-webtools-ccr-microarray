@@ -1,6 +1,10 @@
  {
      "timeout":300000,
      "env": "test",
+     "queue_request_interval":3,
+      "bucketName":"node-sdk-sample12312312",
+      "queue_url":"https://sqs.us-east-1.amazonaws.com/742451734402/jonkiky_microarray.fifo",
+      "microarray_link":"http://localhost:3000/",
      "development":
      {
          "log_dir": "log",
@@ -11,7 +15,7 @@
      {
          "host": "mailfwd.nih.gov",
          "port": 25,
-         "from": "cedcdWebAdmin@nih.gov",
-         "to": "cheny39@nih.gov"
+         "from": "NCIMicroArrayWebAdmin@mail.nih.gov",
+         "to": "yizhen.chen@nih.gov"
      }
  }

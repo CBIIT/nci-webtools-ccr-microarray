@@ -17,7 +17,9 @@ class PostPlotsBox extends Component {
     }
 
     componentDidMount() {
-        this.handleSelectionChange("postHistogram")
+        if(this.props.data.dataList.length>0){
+            this.handleSelectionChange("postHistogram")
+        }
     }
     handleSelectionChange(value) {
         var list = document.getElementsByClassName("plot2");

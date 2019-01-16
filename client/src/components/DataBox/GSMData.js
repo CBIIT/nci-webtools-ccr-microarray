@@ -39,13 +39,6 @@ class GSMData extends Component {
 
     }
 
-    componentDidMount() {
-        this.isDataTableRendered("componentDidMount")
-    }
-    componentDidUpdated() {
-        this.isDataTableRendered("componentDidUpdated")
-    }
-
 
     isDataTableRendered(t) {
         console.log(t)
