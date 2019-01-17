@@ -872,6 +872,17 @@ input#input_group_name {
     margin-top: -45px;
 }
 
+.div-export-gsm{
+        float: right;
+    padding-right: 10px;
+
+}
+
+.div-group-gsm{
+        float: left;
+    padding-left: 10px;
+
+}
 @media only screen and (max-width: 600px) {
     .container-board-left .blocks {
 
