@@ -202,6 +202,13 @@ class Analysis extends Component {
         if (this.props.match.params.code) {
             this.initWithCode(this.props.match.params.code);
         }
+
+        this.exportGSE = this.exportGSE.bind(this);
+        this.exportGSEA = this.exportGSEA.bind(this);
+        this.exportPathwayUp = this.exportPathwayUp.bind(this);
+        this.exportPathwayDown = this.exportPathwayDown.bind(this);
+        this.exportDEG = this.exportDEG.bind(this);
+
     }
 
     changeRUNContractModel = (params = false) => {
@@ -224,56 +231,16 @@ class Analysis extends Component {
 
     exportGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-
-        if (params.search_keyword) {
             params = {
                 projectId: workflow.projectID,
                 page_size: 99999999,
                 page_number: 1,
                 sorting: {
-                    name: params.sorting.name,
-                    order: params.sorting.order,
+                    name: workflow.ssGSEA.sorting.name,
+                    order: workflow.ssGSEA.sorting.order,
                 },
-                search_keyword: params.search_keyword
+                search_keyword: workflow.ssGSEA.search_keyword
             }
-
-            workflow.ssGSEA.pagination = {
-                current: params.page_number,
-                pageSize: params.page_size,
-
-            }
-            workflow.ssGSEA.search_keyword = params.search_keyword;
-        } else {
-
-            params = {
-                projectId: workflow.projectID,
-                page_size: 99999999,
-                page_number: 1,
-                sorting: {
-                    name: "P.Value",
-                    order: "descend",
-
-                },
-                search_keyword: {
-                    "name": "",
-                    "search_logFC": "1.5",
-                    "search_Avg_Enrichment_Score": "",
-                    "search_t": "",
-                    "search_p_value": "0.05",
-                    "search_adj_p_value": "",
-                    "search_b": "",
-                }
-            }
-            workflow.ssGSEA.pagination = {
-                current: workflow.ssGSEA.pagination.current,
-                pageSize: workflow.ssGSEA.pagination.pageSize,
-
-            }
-
-        }
-
-        workflow.ssGSEA.loading = true;
-        this.setState({ workflow: workflow });
 
         fetch('./api/analysis/getGSEA', {
                 method: "POST",
@@ -291,7 +258,53 @@ class Analysis extends Component {
 
 
                 if (result.status == 200) {
-                    // export data
+                    let workflow = Object.assign({}, this.state.workflow);
+                    var wb = XLSX.utils.book_new();
+                    wb.Props = {
+                        Title: "Export ssGSEA Data",
+                        Subject: "ssGSEA Data",
+                        Author: "Microarray",
+                        CreatedDate: new Date()
+                    };
+                    if (workflow.dataList.length != 0) {
+                        wb.SheetNames.push("ssGSEA Configuration");
+                        var ws_data = [
+                            ["sorting.field", workflow.ssGSEA.sorting.name],
+                            ["sorting.order", workflow.ssGSEA.sorting.order],
+                            ["search_keyword", ""],
+                            ["name", workflow.ssGSEA.search_keyword.name],
+                            ["logFC", workflow.ssGSEA.search_keyword.search_logFC],
+                            ["P.Value", workflow.ssGSEA.search_keyword.search_p_value],
+                            ["adj.P.value", workflow.ssGSEA.search_keyword.search_adj_p_value],
+                            ["Avg.Enrichment.Score", workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score],
+                            ["B", workflow.ssGSEA.search_keyword.search_b],
+                            ["t", workflow.ssGSEA.search_keyword.search_t]
+                        ];
+                        var ws = XLSX.utils.aoa_to_sheet(ws_data);
+                        wb.Sheets["ssGSEA Configuration"] = ws;
+                        wb.SheetNames.push("ssGSEA Data");
+
+                        // export data
+                        let degData = result.data.records;
+                        let exportData = [
+                            ["NAME", "logFC", "Avg.Enrichment.Score", "t", "P.Value", "adj.P.Val", "B"]
+                        ]
+                        for (let i in degData) {
+                            exportData.push([
+                                degData[i]["_row"],
+                                degData[i]["logFC"],
+                                degData[i]["Avg.Enrichment.Score"],
+                                degData[i]["t"],
+                                degData[i]["P.Value"],
+                                degData[i]["adj.P.Val"],
+                                degData[i]["B"]
+                            ])
+                        }
+
+                        var ws2 = XLSX.utils.aoa_to_sheet(exportData);
+                        wb.Sheets["ssGSEA Data"] = ws2;
+                        var wbout = XLSX.writeFile(wb, workflow.projectID + "_ssGSEA.xlsx", { bookType: 'xlsx', type: 'binary' });
+                    }
 
                 } else {
 
@@ -417,61 +430,16 @@ class Analysis extends Component {
     exportPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
-        if (params.search_keyword) {
             params = {
                 projectId: workflow.projectID,
                 page_size: 99999999,
                 page_number: 1,
                 sorting: {
-                    name: params.sorting.name,
-                    order: params.sorting.order,
+                    name: workflow.pathways_up.sorting.name,
+                    order: workflow.pathways_up.sorting.order,
                 },
-                search_keyword: params.search_keyword
+                search_keyword: workflow.pathways_up.search_keyword
             }
-
-            workflow.pathways_up.pagination = {
-                current: params.page_number,
-                pageSize: params.page_size,
-
-            }
-            workflow.pathways_up.search_keyword = params.search_keyword;
-        } else {
-
-            params = {
-                projectId: workflow.projectID,
-                page_size: 99999999,
-                page_number: 1,
-                sorting: {
-                    name: "P_Value",
-                    order: "ascend",
-
-                },
-                search_keyword: {
-                    "search_PATHWAY_ID": "",
-                    "search_SOURCE": "",
-                    "search_DESCRIPTION": "",
-                    "search_TYPE": "",
-                    "search_p_value": "0.05",
-                    "search_fdr": "",
-                    "search_RATIO": "",
-                    "search_GENE_LIST": "",
-                    "search_NUMBER_HITS": "",
-                    "search_NUMBER_GENES_PATHWAY": "",
-                    "search_NUMBER_USER_GENES": "",
-                    "search_TOTAL_NUMBER_GENES": "",
-                }
-            }
-            workflow.pathways_up.pagination = {
-                current: workflow.pathways_up.pagination.current,
-                pageSize: workflow.pathways_up.pagination.pageSize,
-
-            }
-
-        }
-
-        workflow.pathways_up.loading = true;
-        this.setState({ workflow: workflow });
-        console.log()
         fetch('./api/analysis/getUpPathWays', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -487,8 +455,63 @@ class Analysis extends Component {
             .then(result => {
                 if (result.status == 200) {
 
+                    let workflow = Object.assign({}, this.state.workflow);
+                    var wb = XLSX.utils.book_new();
+                    wb.Props = {
+                        Title: "Export Pathways For Upregulated Genes Data",
+                        Subject: "Pathways For Upregulated Genes Data",
+                        Author: "Microarray",
+                        CreatedDate: new Date()
+                    };
+                    if (workflow.dataList.length != 0) {
+                        wb.SheetNames.push("Configuration");
+                        var ws_data = [
+                            ["sorting.field", workflow.pathways_up.sorting.name],
+                            ["sorting.order", workflow.pathways_up.sorting.order],
+                            ["search_keyword", ""],
+                            ["Pathway_ID", workflow.pathways_up.search_keyword.search_PATHWAY_ID],
+                            ["Source", workflow.pathways_up.search_keyword.search_SOURCE],
+                            ["Description", workflow.pathways_up.search_keyword.search_DESCRIPTION],
+                            ["Type", workflow.pathways_up.search_keyword.search_TYPE],
+                            ["P.value", workflow.pathways_up.search_keyword.search_p_value],
+                            ["FDR", workflow.pathways_up.search_keyword.search_fdr],
+                            ["Ratio", workflow.pathways_up.search_keyword.search_RATIO],
+                            ["Number_Hits", workflow.pathways_up.search_keyword.search_NUMBER_HITS],
+                            ["Number_Genes_Pathway", workflow.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY],
+                            ["Number_User_Genes", workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES],
+                            ["Total_Number_Genes", workflow.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES],
+                            ["Gene_List", workflow.pathways_up.search_keyword.search_GENE_LIST]
+                        ];
+                        var ws = XLSX.utils.aoa_to_sheet(ws_data);
+                        wb.Sheets["Configuration"] = ws;
+                        wb.SheetNames.push("Data");
 
+                        // export data
+                        let degData = result.data.records;
+                        let exportData = [
+                            ["Pathway_ID", "Source", "Description", "Type", "P.Value", "FDR", "Ratio", "Gene_List", "Number_Hits", "Number_Genes_Pathway", "Number_User_Genes", "Total_Number_Genes"]
+                        ]
+                        for (let i in degData) {
+                            exportData.push([
+                                degData[i]["Pathway_ID"],
+                                degData[i]["Source"],
+                                degData[i]["Description"],
+                                degData[i]["Type"],
+                                degData[i]["P_Value"],
+                                degData[i]["FDR"],
+                                degData[i]["Ratio"],
+                                degData[i]["Gene_List"],
+                                degData[i]["Number_Hits"],
+                                degData[i]["Number_Genes_Pathway"],
+                                degData[i]["Number_User_Genes"],
+                                degData[i]["Total_Number_Genes"]
+                            ])
+                        }
 
+                        var ws2 = XLSX.utils.aoa_to_sheet(exportData);
+                        wb.Sheets["Data"] = ws2;
+                        var wbout = XLSX.writeFile(wb, workflow.projectID + "_pathwaysUp.xlsx", { bookType: 'xlsx', type: 'binary' });
+                    }
                 } else {
 
                     document.getElementById("message-pug").innerHTML = "Contrast result no found";
@@ -728,61 +751,17 @@ class Analysis extends Component {
     exportPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
-        if (params.search_keyword) {
             params = {
                 projectId: workflow.projectID,
                 page_size: 99999999,
                 page_number: 1,
                 sorting: {
-                    name: params.sorting.name,
-                    order: params.sorting.order,
+                    name: workflow.pathways_down.sorting.name,
+                    order: workflow.pathways_down.sorting.order,
                 },
-                search_keyword: params.search_keyword
+                search_keyword: workflow.pathways_down.search_keyword
             }
 
-            workflow.pathways_down.pagination = {
-                current: params.page_number,
-                pageSize: params.page_size,
-
-            }
-            workflow.pathways_down.search_keyword = params.search_keyword;
-        } else {
-
-            params = {
-                projectId: workflow.projectID,
-                page_size: 99999999,
-                page_number: 1,
-                sorting: {
-                    name: "P_Value",
-                    order: "ascend",
-
-                },
-                search_keyword: {
-                    "search_PATHWAY_ID": "",
-                    "search_SOURCE": "",
-                    "search_DESCRIPTION": "",
-                    "search_TYPE": "",
-                    "search_p_value": "0.05",
-                    "search_fdr": "",
-                    "search_RATIO": "",
-                    "search_GENE_LIST": "",
-                    "search_NUMBER_HITS": "",
-                    "search_NUMBER_GENES_PATHWAY": "",
-                    "search_NUMBER_USER_GENES": "",
-                    "search_TOTAL_NUMBER_GENES": "",
-                }
-            }
-            workflow.pathways_down.pagination = {
-                current: workflow.pathways_down.pagination.current,
-                pageSize: workflow.pathways_down.pagination.pageSize,
-
-            }
-
-        }
-
-
-        workflow.pathways_down.loading = true;
-        this.setState({ workflow: workflow });
         fetch('./api/analysis/getDownPathWays', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -797,8 +776,66 @@ class Analysis extends Component {
             )
             .then(result => {
                 document.getElementById("message-pdg").innerHTML = "";
-                let workflow2 = Object.assign({}, this.state.workflow);
+                let workflow = Object.assign({}, this.state.workflow);
                 if (result.status == 200) {
+
+                    let workflow = Object.assign({}, this.state.workflow);
+                    var wb = XLSX.utils.book_new();
+                    wb.Props = {
+                        Title: "Export Pathways For Upregulated Genes Data",
+                        Subject: "Pathways For Upregulated Genes Data",
+                        Author: "Microarray",
+                        CreatedDate: new Date()
+                    };
+                    if (workflow.dataList.length != 0) {
+                        wb.SheetNames.push("Configuration");
+                        var ws_data = [
+                            ["sorting.field", workflow.pathways_down.sorting.name],
+                            ["sorting.order", workflow.pathways_down.sorting.order],
+                            ["search_keyword", ""],
+                            ["Pathway_ID", workflow.pathways_down.search_keyword.search_PATHWAY_ID],
+                            ["Source", workflow.pathways_down.search_keyword.search_SOURCE],
+                            ["Description", workflow.pathways_down.search_keyword.search_DESCRIPTION],
+                            ["Type", workflow.pathways_down.search_keyword.search_TYPE],
+                            ["P.value", workflow.pathways_down.search_keyword.search_p_value],
+                            ["FDR", workflow.pathways_down.search_keyword.search_fdr],
+                            ["Ratio", workflow.pathways_down.search_keyword.search_RATIO],
+                            ["Number_Hits", workflow.pathways_down.search_keyword.search_NUMBER_HITS],
+                            ["Number_Genes_Pathway", workflow.pathways_down.search_keyword.search_NUMBER_GENES_PATHWAY],
+                            ["Number_User_Genes", workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES],
+                            ["Total_Number_Genes", workflow.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES],
+                            ["Gene_List", workflow.pathways_down.search_keyword.search_GENE_LIST]
+                        ];
+                        var ws = XLSX.utils.aoa_to_sheet(ws_data);
+                        wb.Sheets["Configuration"] = ws;
+                        wb.SheetNames.push("Data");
+
+                        // export data
+                        let degData = result.data.records;
+                        let exportData = [
+                            ["Pathway_ID", "Source", "Description", "Type", "P.Value", "FDR", "Ratio", "Gene_List", "Number_Hits", "Number_Genes_Pathway", "Number_User_Genes", "Total_Number_Genes"]
+                        ]
+                        for (let i in degData) {
+                            exportData.push([
+                                degData[i]["Pathway_ID"],
+                                degData[i]["Source"],
+                                degData[i]["Description"],
+                                degData[i]["Type"],
+                                degData[i]["P_Value"],
+                                degData[i]["FDR"],
+                                degData[i]["Ratio"],
+                                degData[i]["Gene_List"],
+                                degData[i]["Number_Hits"],
+                                degData[i]["Number_Genes_Pathway"],
+                                degData[i]["Number_User_Genes"],
+                                degData[i]["Total_Number_Genes"]
+                            ])
+                        }
+
+                        var ws2 = XLSX.utils.aoa_to_sheet(exportData);
+                        wb.Sheets["Data"] = ws2;
+                        var wbout = XLSX.writeFile(wb, workflow.projectID + "_pathwaysDown.xlsx", { bookType: 'xlsx', type: 'binary' });
+                    }
 
                 } else {
                     document.getElementById("message-pdg").innerHTML = result.msg;
@@ -930,8 +967,6 @@ class Analysis extends Component {
             sorting: workflow.diff_expr_genes.sorting,
             search_keyword: workflow.diff_expr_genes.search_keyword
         }
-        workflow.diff_expr_genes.loading = true;
-        this.setState({ workflow: workflow });
         fetch('./api/analysis/getDEG', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -946,8 +981,62 @@ class Analysis extends Component {
             )
             .then(result => {
                 if (result.status == 200) {
+                    let workflow = Object.assign({}, this.state.workflow);
+                    var wb = XLSX.utils.book_new();
+                    wb.Props = {
+                        Title: "Export Deg Data",
+                        Subject: "Deg Data",
+                        Author: "Microarray",
+                        CreatedDate: new Date()
+                    };
+                    if (workflow.dataList.length != 0) {
+                        wb.SheetNames.push("Deg Configuration");
+                        var ws_data = [
+                            ["sorting.field", workflow.diff_expr_genes.sorting.name],
+                            ["sorting.order", workflow.diff_expr_genes.sorting.order],
+                            ["search_keyword", ""],
+                            ["SYMBOL", workflow.diff_expr_genes.search_keyword.search_symbol],
+                            ["fc", workflow.diff_expr_genes.search_keyword.search_fc],
+                            ["P.Value", workflow.diff_expr_genes.search_keyword.search_p_value],
+                            ["adj.P.value", workflow.diff_expr_genes.search_keyword.search_adj_p_value],
+                            ["AveExpr", workflow.diff_expr_genes.search_keyword.search_aveexpr],
+                            ["ACCNUM", workflow.diff_expr_genes.search_keyword.search_accnum],
+                            ["DESC", workflow.diff_expr_genes.search_keyword.search_desc],
+                            ["ENTREZ", workflow.diff_expr_genes.search_keyword.search_entrez],
+                            ["probsetID", workflow.diff_expr_genes.search_keyword.search_probsetid],
+                            ["t", workflow.diff_expr_genes.search_keyword.search_t],
+                            ["b", workflow.diff_expr_genes.search_keyword.search_b],
+                        ];
+                        var ws = XLSX.utils.aoa_to_sheet(ws_data);
+                        wb.Sheets["Deg Configuration"] = ws;
+                        wb.SheetNames.push("Deg Data");
 
-                    // export data
+                        // export data
+                        let degData = result.data.records;
+                        let exportData = [
+                            ["ACCNUM", "AveExpr", "B", "DESC", "ENTREZ", "FC", "P.Value", "SYMBOL", "adj.P.value", "logFC", "probsetID", "t"]
+                        ]
+                        for (let i in degData) {
+                            exportData.push([
+                                degData[i]["ACCNUM"],
+                                degData[i]["AveExpr"],
+                                degData[i]["B"],
+                                degData[i]["DESC"],
+                                degData[i]["ENTREZ"],
+                                degData[i]["FC"],
+                                degData[i]["P.Value"],
+                                degData[i]["adj.P.Val"],
+                                degData[i]["logFC"],
+                                degData[i]["probsetID"],
+                                degData[i]["t"]
+                            ])
+                        }
+
+                        var ws2 = XLSX.utils.aoa_to_sheet(exportData);
+                        wb.Sheets["Deg Data"] = ws2;
+                        var wbout = XLSX.writeFile(wb, workflow.projectID + "_deg.xlsx", { bookType: 'xlsx', type: 'binary' });
+
+                    }
 
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
@@ -1707,26 +1796,30 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         var wb = XLSX.utils.book_new();
         wb.Props = {
-                Title: "Export GSM Data",
-                Subject: "GSM Data",
-                Author: "Microarray",
-                CreatedDate: new Date()
+            Title: "Export GSM Data",
+            Subject: "GSM Data",
+            Author: "Microarray",
+            CreatedDate: new Date()
         };
         if (workflow.dataList.length != 0) {
-             wb.SheetNames.push("GSM Configuration");
-            var ws_data = [['No Configuration']];
+            wb.SheetNames.push("GSM Configuration");
+            var ws_data = [
+                ['No Configuration']
+            ];
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets["GSM Configuration"] = ws;
-             wb.SheetNames.push("GSM Data");
-             let gsm =[['id','gsm','title','description','group']]
-             let rawData =workflow.dataList;
-             for(var i in rawData){
-                gsm.push([rawData[i].index,rawData[i].gsm,rawData[i].title,rawData[i].description,rawData[i].groups,])
-             }
+            wb.SheetNames.push("GSM Data");
+            let gsm = [
+                ['id', 'gsm', 'title', 'description', 'group']
+            ]
+            let rawData = workflow.dataList;
+            for (var i in rawData) {
+                gsm.push([rawData[i].index, rawData[i].gsm, rawData[i].title, rawData[i].description, rawData[i].groups, ])
+            }
             var ws2 = XLSX.utils.aoa_to_sheet(gsm);
             wb.Sheets["GSM Data"] = ws2;
-            var wbout = XLSX.writeFile(wb, "test.xlsx", {bookType:'xlsx',type: 'binary'});
-            
+            var wbout = XLSX.writeFile(wb, workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+
         }
     }
 
@@ -2757,6 +2850,11 @@ class Analysis extends Component {
                              getPathwayUp={this.getPathwayUp}
                              getPathwayDown={this.getPathwayDown}
                              getssGSEA={this.getssGSEA}
+                               exportGSE={this.exportGSE}
+                              exportGSEA={this.exportGSEA}
+                              exportPathwayUp={this.exportPathwayUp}
+                              exportPathwayDown={this.exportPathwayDown}
+                              exportDEG={this.exportDEG}
                              
                             />
                 </div>
@@ -2838,7 +2936,13 @@ class Analysis extends Component {
                              getPathwayUp={this.getPathwayUp}
                              getPathwayDown={this.getPathwayDown}
                              getssGSEA={this.getssGSEA}
-                             
+
+                              exportGSE={this.exportGSE}
+                              exportGSEA={this.exportGSEA}
+                              exportPathwayUp={this.exportPathwayUp}
+                              exportPathwayDown={this.exportPathwayDown}
+                              exportDEG={this.exportDEG}
+                                                         
                             />
                 </div>
                 <div className={modal}>

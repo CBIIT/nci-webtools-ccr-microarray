@@ -226,7 +226,7 @@ class DataBox extends Component {
                 // if user select records in table 
                 this.props.assignGroup(document.getElementById("input_group_name").value, this.state.selected)
                 this.child.current.unselect(); // after create tag, previous selected record will unselect. 
-                  if (document.getElementById("input_group_name").value == this.state.group_name) {
+                if (document.getElementById("input_group_name").value == this.state.group_name) {
                     let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
                     let currentState = Object.assign({}, this.state);
                     currentState.group_name = "GSMGroup_" + index_number;
@@ -266,7 +266,11 @@ class DataBox extends Component {
 
         // define group btn
         if (this.props.data.dataList.length > 0) {
-            define_group_click_btn = <div><Button  type="primary" onClick={this.showModal} >Manage Group</Button></div>;
+            define_group_click_btn = <div className="row">
+            <div className="col col-lg-1"><Button  type="primary" onClick={this.showModal} >Manage Group</Button> </div>
+             <div  className="col col-lg-10"></div>
+             <div  className="col col-lg-1"><Button   id="btn-project-export" className="upload-start"  type="primary" onClick={this.props.exportGSE}> export</Button> </div>
+           </div>;
         }
 
         if (this.props.data.compared) {
@@ -298,7 +302,9 @@ class DataBox extends Component {
                          getDEG={this.props.getDEG}
                          getPathwayUp={this.props.getPathwayUp}
                          getPathwayDown={this.props.getPathwayDown}
-                        
+                        exportPathwayUp={this.props.exportPathwayUp}
+                        exportPathwayDown={this.props.exportPathwayDown}
+                        exportDEG={this.props.exportDEG}
                          upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
         } else {
             // controll display fo tags[preplot,postplot,DEG]
@@ -310,7 +316,7 @@ class DataBox extends Component {
         // control tab  SSGSEA
         if (this.props.data.done_gsea) {
             ssGSEABox = (<TabPane tab="ssGSEA Results" key="ssGSEA_Results">
-                <SSGSEATable  getssGSEA={this.props.getssGSEA} handleGeneChange={this.props.handleGeneChange} key="ssgseaTable" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
+                <SSGSEATable exportGSEA={this.props.exportGSEA}  getssGSEA={this.props.getssGSEA} handleGeneChange={this.props.handleGeneChange} key="ssgseaTable" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
         }
 
         var selected_gsms = "";
