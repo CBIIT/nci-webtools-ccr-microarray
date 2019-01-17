@@ -47,14 +47,7 @@ class Project extends Component {
                           <span>{uploading ? 'Load' : 'Load' }</span>
                         </button>
 
-                          <Button
-                      id="btn-project-export"
-                      className="upload-start"
-                      type="primary"
-                      onClick={this.props.exportGSE}
-                    >
-                    export
-                    </Button>
+                      
                       </div>
                       <div className="col-sm-6">
                    

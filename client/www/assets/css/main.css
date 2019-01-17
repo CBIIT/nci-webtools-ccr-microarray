@@ -59,9 +59,10 @@ tr:nth-child(even) {
 }
 
 
-.ant-table-placeholder{
+.ant-table-placeholder {
     z-index: 0 !important;
 }
+
 .div-container {
     width: 100%;
     max-width: 1440px;
@@ -300,7 +301,7 @@ tr:nth-child(even) {
 
 .input-search-gsm {
     position: absolute !important;
-    top: 48px;
+    top: 54px;
     left: 150px;
     width: 200px !important;
     min-height: 15px;
@@ -796,20 +797,20 @@ tr:nth-child(even) {
 
 
 div#deg_tag1 {
-    padding-top: 15px;
+    /* padding-top: 15px;*/
 }
 
 div#deg_tag2 {
-    padding-top: 15px;
+    /*padding-top: 15px;*/
 }
 
 div#deg_tag3 {
-    padding-top: 15px;
+    /*padding-top: 15px;*/
 }
 
 
 div#ss_tag1 {
-    padding-top: 15px;
+    /*padding-top: 15px;*/
 }
 
 div#deg-select button {
@@ -850,6 +851,26 @@ input#input_group_name {
     width: 100%;
 }
 
+.div-export-deg {
+    float: right;
+    margin-top: -45px;
+}
+
+.div-export-pathwayUp {
+    float: right;
+    margin-top: -45px;
+
+}
+
+.div-export-pathwayDown {
+    float: right;
+    margin-top: -45px;
+}
+
+.div-export-ss {
+    float: right;
+    margin-top: -45px;
+}
 
 @media only screen and (max-width: 600px) {
     .container-board-left .blocks {
@@ -861,31 +882,31 @@ input#input_group_name {
     #tab_analysis .ant-table-pagination {
         position: relative;
         right: 0px;
-        top:0px;
+        top: 0px;
     }
 
     #deg_tag1 .ant-table-pagination {
         position: relative;
         right: 0px;
-        top:0px;
+        top: 0px;
     }
 
     #deg_tag2 .ant-table-pagination {
         position: relative;
         right: 0px;
-        top:0px;
+        top: 0px;
     }
 
     #deg_tag3 .ant-table-pagination {
         position: relative;
         right: 0px;
-        top:0px;
+        top: 0px;
     }
 
     #ss_tag1 .ant-table-pagination {
         position: relative;
         right: 0px;
-        top:0px;
+        top: 0px;
     }
 
 
