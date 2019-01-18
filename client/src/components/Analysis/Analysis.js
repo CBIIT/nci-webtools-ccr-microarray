@@ -430,7 +430,7 @@ class Analysis extends Component {
                         CreatedDate: new Date()
                     };
                     if (workflow.dataList.length != 0) {
-                        wb.SheetNames.push("ssGSEA Configuration");
+                        wb.SheetNames.push("Configuration");
                         var ws_data = [
                             ["sorting.field", workflow.ssGSEA.sorting.name],
                             ["sorting.order", workflow.ssGSEA.sorting.order],
@@ -444,8 +444,8 @@ class Analysis extends Component {
                             ["t", workflow.ssGSEA.search_keyword.search_t]
                         ];
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
-                        wb.Sheets["ssGSEA Configuration"] = ws;
-                        wb.SheetNames.push("ssGSEA Data");
+                        wb.Sheets["Configuration"] = ws;
+                        wb.SheetNames.push("Data");
 
                         // export data
                         let degData = result.data.records;
@@ -465,8 +465,8 @@ class Analysis extends Component {
                         }
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
-                        wb.Sheets["ssGSEA Data"] = ws2;
-                        var wbout = XLSX.writeFile(wb, workflow.projectID + "_ssGSEA.xlsx", { bookType: 'xlsx', type: 'binary' });
+                        wb.Sheets["Data"] = ws2;
+                        var wbout = XLSX.writeFile(wb, "Single_Sample_GSEA_Export_"+workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
 
                 } else {
@@ -673,7 +673,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Data"] = ws2;
-                        var wbout = XLSX.writeFile(wb, workflow.projectID + "_pathwaysUp.xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "Pathways_For_Upregulated_Genes_Export_"+workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
                 } else {
 
@@ -997,7 +997,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Data"] = ws2;
-                        var wbout = XLSX.writeFile(wb, workflow.projectID + "_pathwaysDown.xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "Pathways_For_Upregulated_Genes_Export_"+workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
 
                 } else {
@@ -1153,7 +1153,7 @@ class Analysis extends Component {
                         CreatedDate: new Date()
                     };
                     if (workflow.dataList.length != 0) {
-                        wb.SheetNames.push("Deg Configuration");
+                        wb.SheetNames.push("Configuration");
                         var ws_data = [
                             ["sorting.field", workflow.diff_expr_genes.sorting.name],
                             ["sorting.order", workflow.diff_expr_genes.sorting.order],
@@ -1171,8 +1171,8 @@ class Analysis extends Component {
                             ["b", workflow.diff_expr_genes.search_keyword.search_b],
                         ];
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
-                        wb.Sheets["Deg Configuration"] = ws;
-                        wb.SheetNames.push("Deg Data");
+                        wb.Sheets["Configuration"] = ws;
+                        wb.SheetNames.push("Data");
 
                         // export data
                         let degData = result.data.records;
@@ -1196,8 +1196,8 @@ class Analysis extends Component {
                         }
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
-                        wb.Sheets["Deg Data"] = ws2;
-                        var wbout = XLSX.writeFile(wb, workflow.projectID + "_deg.xlsx", { bookType: 'xlsx', type: 'binary' });
+                        wb.Sheets["Data"] = ws2;
+                        var wbout = XLSX.writeFile(wb, "Differentially_Expressed_Genes_Export_"+workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
 
                     }
 
@@ -1965,13 +1965,13 @@ class Analysis extends Component {
             CreatedDate: new Date()
         };
         if (workflow.dataList.length != 0) {
-            wb.SheetNames.push("GSM Configuration");
+            wb.SheetNames.push("Configuration");
             var ws_data = [
                 ['No Configuration']
             ];
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
-            wb.Sheets["GSM Configuration"] = ws;
-            wb.SheetNames.push("GSM Data");
+            wb.Sheets["Configuration"] = ws;
+            wb.SheetNames.push("Data");
             let gsm = [
                 ['id', 'gsm', 'title', 'description', 'group']
             ]
@@ -1980,8 +1980,8 @@ class Analysis extends Component {
                 gsm.push([rawData[i].index, rawData[i].gsm, rawData[i].title, rawData[i].description, rawData[i].groups, ])
             }
             var ws2 = XLSX.utils.aoa_to_sheet(gsm);
-            wb.Sheets["GSM Data"] = ws2;
-            var wbout = XLSX.writeFile(wb, workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+            wb.Sheets["Data"] = ws2;
+            var wbout = XLSX.writeFile(wb, "GSM_Export_"+workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
 
         }
     }

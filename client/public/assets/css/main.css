@@ -883,6 +883,12 @@ input#input_group_name {
     padding-left: 10px;
 
 }
+
+#queueMessage {
+    color: darkgray;
+    font-style: italic;
+    font-size: 0.8em;
+}
 @media only screen and (max-width: 600px) {
     .container-board-left .blocks {
 
