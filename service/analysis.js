@@ -250,7 +250,7 @@ router.post("/qAnalysis", function(req, res) {
     logger.info("File Path:")
     logger.info(config.uploadPath + "/" + data.projectId)
     // // upload data
-    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, data.projectId+"/", ".gz")
+    queue.awsHander.upload(config.uploadPath + "/" + data.projectId,"microarray/"+data.projectId+"/")
     // //upload configure
     //queue.awsHander.upload(config.configPath, data.projectId + "/config/",null)
 
