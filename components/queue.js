@@ -4,7 +4,6 @@ const fs = require('fs');
 var emailer = require('./mail');
 var config = require('../config');
 var lib_path = require('path');
-var zlib = require('zlib');
 var logger = require('../components/logger');
 var bucketName = config.bucketName;
 
@@ -16,7 +15,7 @@ var awsHander = {};
 
 var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
-awsHander.upload = function(path, prex, fileExtname = ".gz") {
+awsHander.upload = function(path, prex) {
     // Handle promise fulfilled/rejected states
 
     bucketPromise.then(
@@ -200,15 +199,15 @@ download = (projectId, key, filePath) => {
             }
             logger.info("[Queue] Download file from S3")
             logger.info("file")
-            logger.info(filePath + "/" + key)
+            logger.info(filePath + "/" + projectId)
 
             //let fileStream =fs.createReadStream(path + "/" + items[i])
-            fs.writeFile(filePath + "/" + key, data.Body, function(err) {
+            fs.writeFile(filePath + "/" + projectId, data.Body, function(err) {
                 if (err) {
                     return console.log(err);
                 }
             })
-            logger.info(filePath + "/" + key + "has been created!")
+            logger.info(filePath + "/" + projectId + "has been created!")
         }
     })
 }
