@@ -1,9 +1,9 @@
  {
      "timeout":300000,
      "env": "test",
-     "queue_request_interval":3,
-      "bucketName":"node-sdk-sample12312312",
-      "queue_url":"https://sqs.us-east-1.amazonaws.com/742451734402/jonkiky_microarray.fifo",
+     "queue_request_interval":30,
+      "bucketName":"cbiit-tools-data/microarray",
+      "queue_url":"nci-cbiit-ss-microarray-dev.fifo",
       "microarray_link":"http://localhost:3000/",
      "development":
      {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Switch, Input, Select, Button } from 'antd';
+import {Checkbox, Input, Select, Button } from 'antd';
 const { Option, OptGroup } = Select;
 
 class Contrast extends Component {
@@ -14,14 +14,12 @@ class Contrast extends Component {
 
     }
 
-    handleSwitchChange  = (params = {}) => {
+    handleSwitchChange  = (e) => {
 
-        if(params){
+        if(e.target.checked){
           this.props.changeRUNContractModel(true);
-           this.setState({ showInput: "block" });
         }else{
           this.props.changeRUNContractModel(false);
-          this.setState({ showInput: "none" });
         }
     }
 
@@ -38,26 +36,23 @@ class Contrast extends Component {
             }
         })
 
-
+        let queueBlock = <div className="block ">
+                <Checkbox  onChange={this.handleSwitchChange} >Submit this job to a Queue</Checkbox>
+             <label className="email" > Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+             <Input  id="email"  aria-label="input email"  id="input-email" placeholder="email"/>
+             <span id="queueMessage">Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</span>
+             <div><span className="err-message" id="message-use-queue"></span></div>
+          </div>
         let button = "";
         if (this.props.data.group_1 != "-1" && this.props.data.group_2 != "-1" && this.props.data.group_1 != this.props.data.group_2) {
-            button = (<div>
-              <Switch checkedChildren="Submit this job to Queue" unCheckedChildren="Not using Queue"  onChange={this.handleSwitchChange} />
-             <label className="email" style={{display: this.state.showInput }}>Type Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-             <Input  id="email"  aria-label="input email"  id="input-email" placeholder="email" style={{display: this.state.showInput }}/>
-             <div><span className="err-message" id="message-use-queue"></span></div>
-             <Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
-              <span>Run Contrast Now</span>
+            button = (<div style={{"padding":"8px 5px 10px 5px","margin":"10px"}}>
+                 <Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
+              <span>Run Contrast </span>
             </Button></div>
             );
         } else {
-            button = (<div>
-              <Switch checkedChildren="Submit this job to Queue" unCheckedChildren="Not using Queue"  onChange={this.handleSwitchChange} />
-              
-               <label className="email" id="email" style={{display: this.state.showInput }}>Type Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-              <Input  aria-label="input email"  id="input-email" placeholder="email" style={{display: this.state.showInput }}/>
-              <div><span className="err-message" id="message-use-queue"></span></div>
-              <Button className="ant-btn upload-start ant-btn-default" onClick={this.props.runContrast} disabled >
+            button = (<div style={{"padding":"8px 5px 10px 5px","margin":"10px"}}>
+                <Button className="ant-btn upload-start ant-btn-default" onClick={this.props.runContrast} disabled >
               <span>Run Contrast</span>
             </Button></div>);
         }
@@ -73,7 +68,9 @@ class Contrast extends Component {
         var content = "";
         if (options.length <= 1) {
            // if the group have not be defined
-            content = <div className="block ">
+            content =
+              <div>
+                <div className="block ">
                 
                 <label className="title">Choose Contrast To Show:</label>
                 
@@ -85,18 +82,27 @@ class Contrast extends Component {
                  <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled aria-label="Select Group 2">
                    <Option value="-1">---Select Group---</Option>
                 </Select>
-                <br/><br/>
+                
+              </div>
+              {queueBlock}
+
                 {button}
+                <br/>
               </div>
         } else {
-            content = <div className="block">
+            content =
+               <div>
+               <div className="block">
                   <label className="title">Choose Contrast To Show: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_1_content}
                   <label className="title">VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_2_content}
-                  <br/><br/>
-                  {button}
+                 
                 </div>
+               {queueBlock}
+                  {button}
+                  <br/>
+               </div>
 
         }
         return (

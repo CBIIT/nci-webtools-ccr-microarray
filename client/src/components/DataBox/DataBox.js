@@ -268,7 +268,7 @@ class DataBox extends Component {
         if (this.props.data.dataList.length > 0) {
             define_group_click_btn = <div className="row">
             <div className="div-group-gsm"><Button  type="primary" onClick={this.showModal} >Manage Group</Button> </div>
-             <div  className="div-export-gsm"><Button   id="btn-project-export" className="upload-start"  type="primary" onClick={this.props.exportGSE}> export</Button> </div>
+             <div  className="div-export-gsm"><Button   id="btn-project-export" className="upload-start"  type="primary" onClick={this.props.exportGSE}> Export</Button> </div>
            </div>;
         }
 

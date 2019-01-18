@@ -234,7 +234,7 @@ class SSGSEATable extends Component {
                         </OptGroup>
                       </Select></div>
                           <div> <p className="err-message" id="message-ssgsea"></p></div>  
-                          <div  className="div-export-ss"><Button   id="btn-ss-export"   type="primary" onClick={this.props.exportGSEA}> export</Button> </div>
+                          <div  className="div-export-ss"><Button   id="btn-ss-export"   type="primary" onClick={this.props.exportGSEA}> Export</Button> </div>
                           <div id="deg-select">show 
                                 <Dropdown overlay={menu}>
                                       <Button >

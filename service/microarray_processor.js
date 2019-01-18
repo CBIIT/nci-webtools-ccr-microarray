@@ -72,7 +72,7 @@ function r(data, endCallback) {
             logger.info("[Queue] Execution time: %dms", end)
             logger.info("[Queue] sendMail to  ", data.email)
             // send email to user 
-            let html = emailer.emailTemplate(d[3], end / 1000, config.microarray_link + "?" + d[1])
+            let html = emailer.emailTemplate(d[3], end / 1000, config.microarray_link+ d[1])
             let subject = "Microarray Contrast Results - Job: Run Contrast";
 
             // emailer.sendMail(config.mail.from,data.email,subject, "", html)
