@@ -8,13 +8,17 @@ import Help from '../Help/Help';
 class MainContent extends Component {
 
     render() {
-        let match = window.location.pathname;
-        
+      let match = window.location.pathname;
+        if (match.startsWith('/microarray')) {
+            match = "/microarray";
+        } else {
+            match = "";
+        }
 
         return (
         <Switch>
-        <Route path='/:code' component={Analysis}/>
-        <Route path='/' component={Analysis}/>
+        <Route path={match+'/:code'} component={Analysis}/>
+        <Route path={match+'/'} component={Analysis}/>
       </Switch>
         );
     }
