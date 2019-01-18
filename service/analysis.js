@@ -235,18 +235,6 @@ router.post("/qAnalysis", function(req, res) {
     data.email = req.body.email;
 
 
-    if (!req.body.projectId) {
-        data.projectId = "testABCD";
-        data.code = "GSE37874";
-        data.groups = ["Ctl", "Ctl", "Ctl", "GSMGroup_2", "Ctl", "Ctl", "Ctl", "Ctl", "Ctl", "Ctl", "GSMGroup_1", "GSMGroup_1"];
-        data.group_1 = "GSMGroup_1";
-        data.group_2 = "GSMGroup_2";
-        data.species = "human";
-        data.genSet = "H: Hallmark Gene Sets";
-        data.source = "fetch";
-        data.email = "jonkiky@gmail.com";
-    }
-
     logger.info("-----------------------------------------------")
     logger.info("[Queue] Start Using Queue for Analysis")
     logger.info("Input:")

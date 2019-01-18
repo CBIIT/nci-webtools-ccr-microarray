@@ -2,7 +2,7 @@
      "timeout":300000,
      "env": "test",
      "queue_request_interval":30,
-      "bucketName":"cbiit-tools-data/microarray",
+      "bucketName":"cbiit-tools-data",
       "queue_url":"nci-cbiit-ss-microarray-dev.fifo",
       "microarray_link":"http://localhost:3000/",
      "development":
