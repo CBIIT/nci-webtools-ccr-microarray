@@ -176,10 +176,10 @@ class Analysis extends Component {
 
     constructor(props) {
         super(props);
-         if (this.props.match.params.code) {
+         if (this.props.location.search&&this.props.location.search!="") {
             defaultState.workflow.progressing = true;
             this.state = Object.assign({}, defaultState);
-            this.initWithCode(this.props.match.params.code);
+            this.initWithCode(this.props.location.search.substring(1,this.props.location.search.length));
            
         }else{  
             defaultState.workflow.progressing = false;
@@ -2882,7 +2882,7 @@ class Analysis extends Component {
             </div>
             </div>
              </div>
-        if (this.props.match.params.code) {
+        if (this.props.location.search&&this.props.location.search!="") {
             tabs = <div><div className="header-nav">
             <div className="div-container">
                 <ul className="nav navbar-nav" id="header-navbar">
