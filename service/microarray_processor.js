@@ -13,17 +13,49 @@ var uuid = require('uuid');
 var AsyncPolling = require('async-polling');
 
 
-AsyncPolling(function(end) {
-    try {
 
-        queue.awsHander.receiver(qAnalysis, end);
+var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
-    } catch (err) {
-        end()
+var params = {
+    QueueName: config.queue_name
+};
+sqs.getQueueUrl(params, function(err, data) {
+    if (err) {
+        console.log(err, err.stack); // an error occurred
+    } else {
+        console.log(data)
+        // change configuration file, set queue URLs
+        let obj = JSON.parse(fs.readFileSync("../config/microarray_setting.json", 'utf8'));
+        console.log(obj)
+        obj.queue_url = data.QueueUrl;
+        JSON.stringify(obj);
+        fs.writeFile("../config/microarray_setting.json", JSON.stringify(obj), function(err) {
+            if (err) {
+                return console.log(err);
+            }
+            console.log("The file was saved!");
+        });
+
+       setTimeout(function(){ polling(); }, 3000);
     }
+});
 
-    // Then notify the polling when your job is done:
-}, config.queue_request_interval * 1000).run();
+
+function polling() {
+    AsyncPolling(function(end) {
+        try {
+
+            queue.awsHander.receiver(qAnalysis, end);
+
+        } catch (err) {
+            end()
+        }
+
+        // Then notify the polling when your job is done:
+    }, config.queue_request_interval * 1000).run();
+
+}
+
 
 
 
@@ -59,7 +91,7 @@ function r(data, endCallback) {
     logger.info(JSON.stringify(d))
 
     R.execute("wrapper.R", d, function(err, returnValue) {
-    	endCallback()
+        endCallback()
         if (err) {
             logger.info("[Queue] Run Contrast fails ", err)
             logger.info("[Queue] sendMail to  ", data.email)
@@ -72,7 +104,7 @@ function r(data, endCallback) {
             logger.info("[Queue] Execution time: %dms", end)
             logger.info("[Queue] sendMail to  ", data.email)
             // send email to user 
-            let html = emailer.emailTemplate(d[3], end / 1000, config.microarray_link+ d[1])
+            let html = emailer.emailTemplate(d[3], end / 1000, config.microarray_link + d[1])
             let subject = "Microarray Contrast Results - Job: Run Contrast";
 
             // emailer.sendMail(config.mail.from,data.email,subject, "", html)
@@ -80,12 +112,12 @@ function r(data, endCallback) {
             uploadResultToS3(config.uploadPath + "/" + data.projectId, data.projectId)
         }
         console.log("end()")
-        
+
     });
 }
 
 function uploadResultToS3(path, pid) {
     logger.info("[Queue] Upload Results to S3", path)
-    queue.awsHander.upload(path, pid + "/", "");
+    queue.awsHander.upload(path, "microarray/"+pid + "/", "");
 
 }
