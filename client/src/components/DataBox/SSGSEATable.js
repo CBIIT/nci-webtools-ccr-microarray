@@ -235,7 +235,7 @@ class SSGSEATable extends Component {
                       </Select></div>
                           <div> <p className="err-message" id="message-ssgsea"></p></div>  
                           <div  className="div-export-ss"><Button   id="btn-ss-export"   type="primary" onClick={this.props.exportGSEA}> Export</Button> </div>
-                          <div id="deg-select">show 
+                          <div id="deg-select">Display 
                                 <Dropdown overlay={menu}>
                                       <Button >
                                         <span id="ss-drop-down">25</span> <Icon type="down" />
@@ -271,7 +271,34 @@ class SSGSEATable extends Component {
                                 />
                             </div>
                                 </div>,
-            <div id="ss_tag2" className="ss_plot hide" >
+                             <div id="ss_tag2" className="ss_plot hide" >
+                              <div>     <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
+                        id="ssGSEA_genset"
+                        onChange={(e) => this.props.handleGeneChange(e)} 
+                        aria-label="Gene Set For ssGSEA"
+                      >
+                        <OptGroup label="Human">
+                          <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
+                          <Option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</Option>
+                          <Option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
+                          <Option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
+                          <Option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
+                          <Option value="human$C5: GO gene sets">C5: GO gene sets</Option>
+                          <Option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
+                          <Option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
+                        </OptGroup>
+                        <OptGroup label="Mouse">
+                          <Option value="mouse$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
+                          <Option value="mouse$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
+                          <Option value="mouse$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
+                          <Option value="mouse$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
+                          <Option value="mouse$C5: GO gene sets">C5: GO gene sets</Option>
+                          <Option value="mouse$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
+                          <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
+                        </OptGroup>
+                      </Select></div>
+                         <br/><br/>
+                   
                                  <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
                                 </div>
         ]

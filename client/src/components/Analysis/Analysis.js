@@ -10,9 +10,9 @@ import XLSX from 'xlsx';
 
 const ButtonGroup = Button.Group;
 
-const defaultState = {
+let defaultState = {
     workflow: {
-        useQueue: false,
+        useQueue: true,
         token: "",
         projectID: "",
         analysisType: "0",
@@ -171,176 +171,19 @@ const defaultState = {
 };
 
 
-const defaultState2 = {
-    workflow: {
-        useQueue: false,
-        token: "",
-        projectID: "",
-        analysisType: "0",
-        accessionCode: "",
-        fileList: [],
-        uploading: false,
-        progressing: false,
-        loading_info: "loading",
-        dataList: [],
-        groups: [],
-        group_1: "-1",
-        group_2: "-1",
-        pDEGs: 0.05,
-        foldDEGs: 1.5,
-        species: "human",
-        genSet: "H: Hallmark Gene Sets",
-        compared: false,
-        uploaded: false,
-        done_gsea: false,
-        current_working_on_object: "",
-        current_working_on_tag: "",
-        tag_pre_plot_status: "",
-        tag_post_plot_status: "",
-        tag_deg_plot_status: "",
-        tag_ssgea_plot_status: "",
-        diff_expr_genes: {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            page_number: 1,
-            page_size: 25,
-            sorting: {
-                name: "P.Value",
-                order: "ascend",
-            },
-            search_keyword: {
-                "search_symbol": "",
-                "search_fc": "1.5",
-                "search_p_value": "0.05",
-                "search_adj_p_value": "",
-                "search_aveexpr": "",
-                "search_accnum": "",
-                "search_desc": "",
-                "search_entrez": "",
-                "search_probsetid": "",
-                "search_t": "",
-                "search_b": ""
-            }
-        },
-        ssGSEA: {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            page_size: 25,
-            page_number: 1,
-            sorting: {
-                name: "P.Value",
-                order: "ascend",
-            },
-            search_keyword: {
-                "name": "",
-                "search_logFC": "1.5",
-                "search_Avg_Enrichment_Score": "",
-                "search_t": "",
-                "search_p_value": "0.05",
-                "search_adj_p_value": "",
-                "search_b": "",
-            }
-        },
-        pathways_up: {
-
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            sorting: {
-                name: "P_Value",
-                order: "ascend",
-
-            },
-            loading: true,
-            search_keyword: {
-                "search_PATHWAY_ID": "",
-                "search_SOURCE": "",
-                "search_DESCRIPTION": "",
-                "search_TYPE": "",
-                "search_p_value": "0.05",
-                "search_fdr": "",
-                "search_RATIO": "",
-                "search_GENE_LIST": "",
-                "search_NUMBER_HITS": "",
-                "search_NUMBER_GENES_PATHWAY": "",
-                "search_NUMBER_USER_GENES": "",
-                "search_TOTAL_NUMBER_GENES": "",
-            }
-        },
-        pathways_down: {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            sorting: {
-                name: "P_Value",
-                order: "ascend",
-
-            },
-            search_keyword: {
-                "search_PATHWAY_ID": "",
-                "search_SOURCE": "",
-                "search_DESCRIPTION": "",
-                "search_TYPE": "",
-                "search_p_value": "0.05",
-                "search_fdr": "",
-                "search_RATIO": "",
-                "search_GENE_LIST": "",
-                "search_NUMBER_HITS": "",
-                "search_NUMBER_GENES_PATHWAY": "",
-                "search_NUMBER_USER_GENES": "",
-                "search_TOTAL_NUMBER_GENES": "",
-            }
-        },
-        preplots: {
-            histplotBN: "",
-            list_mAplotBN: "",
-            Boxplots: "",
-            RLE: "",
-            NUSE: "",
-        },
-        list_mAplotBN: "",
-        list_mAplotAN: "",
-        postplot: {
-            histplotAN: "",
-            list_mAplotAN: "",
-            Boxplots: "",
-            PCA: "",
-            Heatmapolt: ""
-        },
-        geneHeatmap: "/ssgseaHeatmap1.jpg",
-        volcanoPlot: "/volcano.html",
-
-
-    }
-};
 
 class Analysis extends Component {
 
     constructor(props) {
         super(props);
          if (this.props.match.params.code) {
+            defaultState.workflow.progressing = true;
             this.state = Object.assign({}, defaultState);
             this.initWithCode(this.props.match.params.code);
            
-        }else{
-             this.state = Object.assign({}, defaultState2);
+        }else{  
+            defaultState.workflow.progressing = false;
+            this.state = Object.assign({}, defaultState);
         }
         this.resetWorkFlowProject = this.resetWorkFlowProject.bind(this);
         this.changeCode = this.changeCode.bind(this);

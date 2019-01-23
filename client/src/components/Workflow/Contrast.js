@@ -1,32 +1,34 @@
 import React, { Component } from 'react';
-import {Checkbox, Input, Select, Button } from 'antd';
+import { Checkbox, Input, Select, Button } from 'antd';
 const { Option, OptGroup } = Select;
 
 class Contrast extends Component {
-
-  state = {
-       showInput:"none"
+    state = {
+        checked: true
     };
+
     constructor(props) {
 
         super(props);
-        this.handleSwitchChange =this.handleSwitchChange.bind(this);
+        this.handleSwitchChange = this.handleSwitchChange.bind(this);
 
     }
 
-    handleSwitchChange  = (e) => {
+    handleSwitchChange = (e) => {
 
-        if(e.target.checked){
-          this.props.changeRUNContractModel(true);
-        }else{
-          this.props.changeRUNContractModel(false);
+        this.setState({ checked: !this.state.checked });
+
+        if (e.target.checked) {
+            this.props.changeRUNContractModel(true);
+        } else {
+            this.props.changeRUNContractModel(false);
         }
     }
 
     render() {
 
         let options = [];
-        let tmp_options = []
+        let tmp_options = [];
         // find the unique value in grups 
         this.props.data.dataList.filter(function(v, i, self) {
             if (tmp_options.indexOf(v['groups']) == -1 && v['groups'] != "") {
@@ -37,7 +39,7 @@ class Contrast extends Component {
         })
 
         let queueBlock = <div className="block ">
-                <Checkbox  onChange={this.handleSwitchChange} >Submit this job to a Queue</Checkbox>
+                <Checkbox  checked={this.state.checked} onChange={this.handleSwitchChange} >Submit this job to a Queue</Checkbox>
              <label className="email" > Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
              <Input  id="email"  aria-label="input email"  id="input-email" placeholder="email"/>
              <span id="queueMessage">Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</span>
@@ -48,8 +50,7 @@ class Contrast extends Component {
             button = (<div style={{"padding":"8px 5px 10px 5px","margin":"10px"}}>
                  <Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
               <span>Run Contrast </span>
-            </Button></div>
-            );
+            </Button></div>);
         } else {
             button = (<div style={{"padding":"8px 5px 10px 5px","margin":"10px"}}>
                 <Button className="ant-btn upload-start ant-btn-default" onClick={this.props.runContrast} disabled >
@@ -67,9 +68,9 @@ class Contrast extends Component {
 
         var content = "";
         if (options.length <= 1) {
-           // if the group have not be defined
+            // if the group have not be defined
             content =
-              <div>
+                <div>
                 <div className="block ">
                 
                 <label className="title">Choose Contrast To Show:</label>
@@ -91,7 +92,7 @@ class Contrast extends Component {
               </div>
         } else {
             content =
-               <div>
+                <div>
                <div className="block">
                   <label className="title">Choose Contrast To Show: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_1_content}
