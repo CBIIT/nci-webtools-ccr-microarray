@@ -387,12 +387,12 @@ class GSMData extends Component {
 
             content = <div>
                         <div>
-                            <Search aria-label="search" placeholder = "input search text"
+                            <Search aria-label="search" placeholder = "Search text"
                                     className = "input-search-gsm"
                                     onSearch = { value => this.setState({ term: value }) }
                             />
                         </div>
-                        <div id="gsm-select">show 
+                        <div id="gsm-select">Display  
                             <Dropdown overlay={menu}>
                                   <Button >
                                     <span id="gsm-drop-down">25</span> <Icon type="down" />
