@@ -17,9 +17,8 @@ class MainContent extends Component {
 
         return (
         <Switch>
-          <Route exact path={match+'/'} component={Analysis}/>
-          <Route path={match+'/:code'} component={Analysis}/>
-      
+        <Route path={match+'/:code'} component={Analysis}/>
+        <Route path={match+'/'} component={Analysis}/>
       </Switch>
         );
     }
