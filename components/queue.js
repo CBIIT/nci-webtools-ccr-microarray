@@ -15,6 +15,11 @@ var awsHander = {};
 
 var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
+var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
+
+
+
+
 awsHander.upload = function(path, prex) {
     // Handle promise fulfilled/rejected states
 
@@ -38,9 +43,11 @@ awsHander.upload = function(path, prex) {
                             Key: prex + fname,
                             Body: fileStream,
                             CacheControl: 'no-cache',
-                        }, function(resp) {
-                          //logger.info(arguments);
-                           // console.log('Successfully uploaded package.');
+                        }, function(err,data) {
+                            //logger.info(arguments);
+                            // console.log('Successfully uploaded package.');
+                            console.log("AWS S3 Upload err message",err);
+                            console.log(data);
                         });
                     }
 
@@ -65,7 +72,7 @@ awsHander.upload = function(path, prex) {
 
 
 
-var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
+
 
 //sent message to queue.
 
@@ -109,14 +116,18 @@ awsHander.receiver = function(next, endCallback) {
             logger.info("[Queue] Receive Messages from S3 fails")
             logger.info("Err")
             logger.info(err.stack)
-            if(endCallback!=null){endCallback()};
-        }else {
+            if (endCallback != null) { endCallback() };
+        } else {
             if (data.Messages) {
-                awsHander.del(data.Messages[0].ReceiptHandle)
-                next(data, data.email, endCallback)
+                console.log(data)
+                let message = JSON.parse(data.Messages[0].Body)
+                if (message.domain&&message.domain == "microarray") {
+                    awsHander.del(data.Messages[0].ReceiptHandle)
+                    next(data, data.email, endCallback)
+                }
             } else {
                 console.log(data)
-               if(endCallback!=null){endCallback()};
+                if (endCallback != null) { endCallback() };
             }
 
         }
@@ -146,18 +157,18 @@ awsHander.download = (projectId, filePath, next, configData, endCallback) => {
     let params2 = {
         Bucket: config.bucketName,
         MaxKeys: 100,
-        Prefix: projectId
+        Prefix: "microarray/"+projectId
     };
     s3.listObjects(params2, (err, data) => {
         if (err) {
             logger.info("[Queue] Download file from S3 fails")
             logger.info(params2)
             logger.info(err.stack)
-            if(endCallback!=null){endCallback();}
+            if (endCallback != null) { endCallback(); }
         } else {
 
             let files = data.Contents;
-            //console.log(files)
+            console.log(files)
             for (var i in files) {
                 // download all files 
                 download(projectId, files[i].Key, filePath)
@@ -176,7 +187,8 @@ download = (projectId, key, filePath) => {
         Bucket: config.bucketName,
         Key: key
     }
-
+     logger.info("[Queue] Download file from S3 ")
+            logger.info("Key:",key)
     s3.getObject(params, (err, data) => {
         if (err) {
             console.error(err);
@@ -186,12 +198,12 @@ download = (projectId, key, filePath) => {
             logger.info(params)
             logger.info(err.stack)
         } else {
-
+           
             if (!fs.existsSync(filePath + "/" + projectId)) {
                 fs.mkdir(filePath + "/" + projectId,
                     function() {
                         fs.mkdir(filePath + "/" + projectId + "/config", function() {
-                            fs.mkdir(filePath + "/" + projectId +"/input", function() {
+                            fs.mkdir(filePath + "/" + projectId + "/input", function() {
                                 fs.mkdir(filePath + "/" + projectId + "/output");
                             });
                         });
@@ -199,10 +211,10 @@ download = (projectId, key, filePath) => {
             }
             logger.info("[Queue] Download file from S3")
             logger.info("file")
-            logger.info(filePath + "/" + projectId)
+            logger.info(filePath + "/" + projectId+"/"+key.replace("microarray/"+projectId+"/",""))
 
             //let fileStream =fs.createReadStream(path + "/" + items[i])
-            fs.writeFile(filePath + "/" + projectId, data.Body, function(err) {
+            fs.writeFile(filePath + "/" + projectId+"/"+key.replace("microarray/"+projectId+"/",""), data.Body, function(err) {
                 if (err) {
                     return console.log(err);
                 }

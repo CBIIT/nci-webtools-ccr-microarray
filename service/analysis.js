@@ -233,6 +233,7 @@ router.post("/qAnalysis", function(req, res) {
     data.genSet = req.body.genSet;
     data.source = req.body.source;
     data.email = req.body.email;
+    data.domain = "microarray";
 
 
     logger.info("-----------------------------------------------")
@@ -240,6 +241,18 @@ router.post("/qAnalysis", function(req, res) {
     logger.info("Input:")
     logger.info(JSON.stringify(data))
 
+    if (!req.body.projectId) {
+        data.projectId = "testABCD";
+        data.code = "GSE37874";
+        data.groups = ["Ctl", "Ctl", "Ctl", "GSMGroup_2", "Ctl", "Ctl", "Ctl", "Ctl", "Ctl", "Ctl", "GSMGroup_1", "GSMGroup_1"];
+        data.group_1 = "GSMGroup_1";
+        data.group_2 = "GSMGroup_2";
+        data.species = "human";
+        data.genSet = "H: Hallmark Gene Sets";
+        data.source = "fetch";
+        data.email = "jonkiky@gmail.com";
+        data.domain = "microarray";
+    }
 
     function send(d) {
         logger.info("[Queue] Send Message to Queue", JSON.stringify(d));
@@ -250,7 +263,7 @@ router.post("/qAnalysis", function(req, res) {
     logger.info("File Path:")
     logger.info(config.uploadPath + "/" + data.projectId)
     // // upload data
-    queue.awsHander.upload(config.uploadPath + "/" + data.projectId,"microarray/"+data.projectId+"/")
+    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, "microarray/" + data.projectId + "/")
     // //upload configure
     //queue.awsHander.upload(config.configPath, data.projectId + "/config/",null)
 
@@ -279,9 +292,9 @@ router.post('/getResultByProjectId', function(req, res) {
     );
 
 
-    queue.awsHander.download(req.body.projectId, config.uploadPath, getResultFromFile, res, function(){ console.log("download")});
+    queue.awsHander.download(req.body.projectId, config.uploadPath, getResultFromFile, res, function() { console.log("download") });
 
-    function getResultFromFile(res,callback) {
+    function getResultFromFile(res, callback) {
         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
             if (err) {
                 res.json({
