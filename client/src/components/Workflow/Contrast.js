@@ -40,10 +40,11 @@ class Contrast extends Component {
 
         let queueBlock = <div className="block ">
                 <Checkbox  checked={this.state.checked} onChange={this.handleSwitchChange} >Submit this job to a Queue</Checkbox>
-             <label className="email" > Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+             <label className="title" > Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
              <Input  id="email"  aria-label="input email"  id="input-email" placeholder="email"/>
              <span id="queueMessage">Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</span>
              <div><span className="err-message" id="message-use-queue"></span></div>
+              <div><span className="success-message" id="message-success-use-queue"></span></div>
           </div>
         let button = "";
         if (this.props.data.group_1 != "-1" && this.props.data.group_2 != "-1" && this.props.data.group_1 != this.props.data.group_2) {
@@ -63,6 +64,7 @@ class Contrast extends Component {
           </Select>);
         let group_2_content = (<Select defaultValue={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
             <Option value="-1">---Select Group---</Option>
+
             {options}
           </Select>);
 
@@ -75,12 +77,12 @@ class Contrast extends Component {
                 
                 <label className="title">Choose Contrast To Show:</label>
                 
-                <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled   aria-label="Select Group 1">
+                <Select defaultValue={this.props.data.group_1} style={{ width: "100%" }}  disabled   aria-label="Select Group 1">
                   <Option value="-1">---Select Group---</Option>
                 </Select>
                 
                 <label className="title">VS:</label>
-                 <Select defaultValue={'-1'} style={{ width: "100%" }}  disabled aria-label="Select Group 2">
+                 <Select defaultValue={this.props.data.group_2} style={{ width: "100%" }}  disabled aria-label="Select Group 2">
                    <Option value="-1">---Select Group---</Option>
                 </Select>
                 

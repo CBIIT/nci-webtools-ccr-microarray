@@ -1139,7 +1139,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
                 }
 
                 if (search_keyword.search_logFC != "") {
-                    if (Math.abs(r["logFC"]) <= parseFloat(search_keyword.search_logFC)) {
+                    if (Math.abs(r["logFC"]) >= parseFloat(search_keyword.search_logFC)) {
                         flag = true;
                     } else {
                         return false;
@@ -1349,7 +1349,7 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
                 }
 
                 if (search_keyword.search_fc != "") {
-                    if (Math.abs(r.FC) <= parseFloat(search_keyword.search_fc)) {
+                    if (Math.abs(r.FC) >= parseFloat(search_keyword.search_fc)) {
                         flag = true;
                     } else {
                         return false;

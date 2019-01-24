@@ -20,7 +20,7 @@ let defaultState = {
         fileList: [],
         uploading: false,
         progressing: true,
-        loading_info: "loading",
+        loading_info: "Loading Result",
         dataList: [],
         groups: [],
         group_1: "-1",
@@ -176,12 +176,12 @@ class Analysis extends Component {
 
     constructor(props) {
         super(props);
-         if (this.props.location.search&&this.props.location.search!="") {
+        if (this.props.location.search && this.props.location.search != "") {
             defaultState.workflow.progressing = true;
             this.state = Object.assign({}, defaultState);
-            this.initWithCode(this.props.location.search.substring(1,this.props.location.search.length));
-           
-        }else{  
+            this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
+
+        } else {
             defaultState.workflow.progressing = false;
             this.state = Object.assign({}, defaultState);
         }
@@ -237,16 +237,16 @@ class Analysis extends Component {
 
     exportGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-            params = {
-                projectId: workflow.projectID,
-                page_size: 99999999,
-                page_number: 1,
-                sorting: {
-                    name: workflow.ssGSEA.sorting.name,
-                    order: workflow.ssGSEA.sorting.order,
-                },
-                search_keyword: workflow.ssGSEA.search_keyword
-            }
+        params = {
+            projectId: workflow.projectID,
+            page_size: 99999999,
+            page_number: 1,
+            sorting: {
+                name: workflow.ssGSEA.sorting.name,
+                order: workflow.ssGSEA.sorting.order,
+            },
+            search_keyword: workflow.ssGSEA.search_keyword
+        }
 
         fetch('./api/analysis/getGSEA', {
                 method: "POST",
@@ -309,7 +309,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Data"] = ws2;
-                        var wbout = XLSX.writeFile(wb, "Single_Sample_GSEA_Export_"+workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "Single_Sample_GSEA_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
 
                 } else {
@@ -436,16 +436,16 @@ class Analysis extends Component {
     exportPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
-            params = {
-                projectId: workflow.projectID,
-                page_size: 99999999,
-                page_number: 1,
-                sorting: {
-                    name: workflow.pathways_up.sorting.name,
-                    order: workflow.pathways_up.sorting.order,
-                },
-                search_keyword: workflow.pathways_up.search_keyword
-            }
+        params = {
+            projectId: workflow.projectID,
+            page_size: 99999999,
+            page_number: 1,
+            sorting: {
+                name: workflow.pathways_up.sorting.name,
+                order: workflow.pathways_up.sorting.order,
+            },
+            search_keyword: workflow.pathways_up.search_keyword
+        }
         fetch('./api/analysis/getUpPathWays', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -516,7 +516,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Data"] = ws2;
-                        var wbout = XLSX.writeFile(wb, "Pathways_For_Upregulated_Genes_Export_"+workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "Pathways_For_Upregulated_Genes_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
                 } else {
 
@@ -757,16 +757,16 @@ class Analysis extends Component {
     exportPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
-            params = {
-                projectId: workflow.projectID,
-                page_size: 99999999,
-                page_number: 1,
-                sorting: {
-                    name: workflow.pathways_down.sorting.name,
-                    order: workflow.pathways_down.sorting.order,
-                },
-                search_keyword: workflow.pathways_down.search_keyword
-            }
+        params = {
+            projectId: workflow.projectID,
+            page_size: 99999999,
+            page_number: 1,
+            sorting: {
+                name: workflow.pathways_down.sorting.name,
+                order: workflow.pathways_down.sorting.order,
+            },
+            search_keyword: workflow.pathways_down.search_keyword
+        }
 
         fetch('./api/analysis/getDownPathWays', {
                 method: "POST",
@@ -840,7 +840,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Data"] = ws2;
-                        var wbout = XLSX.writeFile(wb, "Pathways_For_Upregulated_Genes_Export_"+workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "Pathways_For_Upregulated_Genes_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
 
                 } else {
@@ -1040,7 +1040,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Data"] = ws2;
-                        var wbout = XLSX.writeFile(wb, "Differentially_Expressed_Genes_Export_"+workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "Differentially_Expressed_Genes_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
 
                     }
 
@@ -1824,7 +1824,7 @@ class Analysis extends Component {
             }
             var ws2 = XLSX.utils.aoa_to_sheet(gsm);
             wb.Sheets["Data"] = ws2;
-            var wbout = XLSX.writeFile(wb, "GSM_Export_"+workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+            var wbout = XLSX.writeFile(wb, "GSM_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
 
         }
     }
@@ -2207,7 +2207,7 @@ class Analysis extends Component {
                         }
                         workflow.uploading = false;
                         workflow.progressing = false;
-                        document.getElementById("message-use-queue").innerHTML = "Have send the message to Queue"
+                        document.getElementById("message-success-use-queue").innerHTML = "The job has been added to queue successfully!";
                         this.setState({
                             workflow: workflow
                         });
@@ -2451,7 +2451,6 @@ class Analysis extends Component {
 
                         // change the word of load btn
                         document.getElementById("btn-project-upload").disabled = true
-
                         // init group with default value
                         workflow.group = new Array(list.files.length).fill('Ctl');
                         workflow.uploaded = true;
@@ -2744,8 +2743,8 @@ class Analysis extends Component {
                         workflow2.dataList = result.gsm;
                         workflow2.accessionCode = result.accessionCode;
                         workflow2.projectID = result.projectId;
-                        workflow2.group_1 = result.group_1;
-                        workflow2.group_2 = result.group_2;
+                        workflow2.group_1 =result.group_1;
+                        workflow2.group_2 =result.group_2;
                         workflow2.groups = result.groups;
 
                         for (let i in workflow2.dataList) {
@@ -2774,7 +2773,8 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow2
                         });
-                        this.hideWorkFlow();
+
+                        //this.hideWorkFlow();
                     } else {
                         workflow.progressing = false;
                         this.setState({
@@ -2882,7 +2882,7 @@ class Analysis extends Component {
             </div>
             </div>
              </div>
-        if (this.props.location.search&&this.props.location.search!="") {
+        if (this.props.location.search && this.props.location.search != "") {
             tabs = <div><div className="header-nav">
             <div className="div-container">
                 <ul className="nav navbar-nav" id="header-navbar">
