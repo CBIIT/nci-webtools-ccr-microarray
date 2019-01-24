@@ -1960,6 +1960,10 @@ class Analysis extends Component {
                             workflow: workflow
                         });
 
+                        setTimeout(() => {
+                            this.resetDisplay();
+                        }, 3000);
+
                     } else {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
 
@@ -2520,6 +2524,12 @@ class Analysis extends Component {
 
     }
 
+
+    resetDisplay = () => {
+        let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        document.getElementById("gsm-select").style.right = width;
+    }
+
     handleErrors = (response) => {
         if (!response.ok) {
             throw Error(response.statusText);
@@ -2743,8 +2753,8 @@ class Analysis extends Component {
                         workflow2.dataList = result.gsm;
                         workflow2.accessionCode = result.accessionCode;
                         workflow2.projectID = result.projectId;
-                        workflow2.group_1 =result.group_1;
-                        workflow2.group_2 =result.group_2;
+                        workflow2.group_1 = result.group_1;
+                        workflow2.group_2 = result.group_2;
                         workflow2.groups = result.groups;
 
                         for (let i in workflow2.dataList) {
@@ -2775,6 +2785,10 @@ class Analysis extends Component {
                         });
 
                         //this.hideWorkFlow();
+                        setTimeout(() => {
+                            this.resetDisplay();
+                        }, 3000);
+
                     } else {
                         workflow.progressing = false;
                         this.setState({
@@ -2791,7 +2805,6 @@ class Analysis extends Component {
             });
         }
     }
-
 
 
     render() {
