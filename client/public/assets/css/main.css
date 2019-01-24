@@ -834,6 +834,9 @@ input#input_group_name {
     color: red;
 }
 
+.success-message{
+    color: green;
+}
 
 #message-load-accession-code {
 
@@ -889,7 +892,7 @@ input#input_group_name {
 #queueMessage {
     color: darkgray;
     font-style: italic;
-    font-size: 0.8em;
+    font-size: 0.65em;
 }
 @media only screen and (max-width: 600px) {
     .container-board-left .blocks {
