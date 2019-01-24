@@ -156,7 +156,7 @@ awsHander.download = (projectId, filePath, next, configData, endCallback) => {
     logger.info("[Queue] Download files from S3 ")
     let params2 = {
         Bucket: config.bucketName,
-        MaxKeys: 100,
+        MaxKeys: 9000,
         Prefix: "microarray/"+projectId
     };
     s3.listObjects(params2, (err, data) => {
