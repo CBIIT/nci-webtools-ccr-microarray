@@ -30,7 +30,7 @@ var execute = function(file, data, callback){
 
 	child.stderr.on('data', (e) => {
 		err_message += e.toString('utf8');
-		logger.info("stderr:"+err_message);
+		//logger.info("stderr:"+err_message);
 	});
 
 	child.on('disconnect',()=>{
@@ -40,18 +40,19 @@ var execute = function(file, data, callback){
 
 	child.on('error',(Error)=>{
 		logger.info(Error.prototype.message)
-		logger.info(Error.prototype.name)
+		//logger.info(Error.prototype.name)
 
 	})
 
-	child.on('exit',(code)=>{
+	child.on('exit',(code, signal)=>{
 		logger.info("exit code:"+code);
-
+		logger.info("exit signal:"+signal);
 	})
 
 
-	child.on('close', (code) => {
-		logger.info("code:"+code);
+	child.on('close', (code, signal) => {
+		logger.info("close code:"+code);
+		logger.info("close signal:"+signal);
 		if(code>0){
 			callback(true, err_message);
 		}
