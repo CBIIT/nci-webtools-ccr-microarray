@@ -24,7 +24,7 @@ var execute = function(file, data, callback){
 
 	child.stdout.on('data', (d) => {
 		body += d.toString('utf8');
-		logger.info("stdout:"+body);
+		//logger.info("stdout:"+body);
 	});
 
 
@@ -53,7 +53,7 @@ var execute = function(file, data, callback){
 	child.on('close', (code, signal) => {
 		logger.info("close code:"+code);
 		logger.info("close signal:"+signal);
-		if(code>0){
+		if(code!=0){
 			callback(true, err_message);
 		}
 		else{

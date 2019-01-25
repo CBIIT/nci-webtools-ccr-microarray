@@ -33,7 +33,6 @@ sqs.getQueueUrl(params, function(err, data) {
             if (err) {
                 return console.log(err);
             }
-            console.log("The file was saved!");
         });
 
        setTimeout(function(){ polling(); }, 3000);
@@ -50,7 +49,6 @@ function polling() {
         } catch (err) {
             end()
         }
-
         // Then notify the polling when your job is done:
     }, config.queue_request_interval * 1000).run();
 
