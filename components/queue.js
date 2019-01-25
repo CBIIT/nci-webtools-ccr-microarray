@@ -31,12 +31,7 @@ awsHander.upload = function(path, prex) {
                     let fname = items[i];
                     let stat = fs.lstatSync(path + "/" + items[i]);
                     if (stat.isFile()) {
-                        logger.info("[Queue] upload file to S3")
-                        logger.info("FileName")
-                        logger.info(path + "/" + items[i])
-                        logger.info("Key Name")
-                        logger.info(prex + fname)
-
+                     
                         let fileStream = fs.createReadStream(path + "/" + items[i])
                         s3.putObject({
                             Bucket: bucketName,
@@ -46,8 +41,7 @@ awsHander.upload = function(path, prex) {
                         }, function(err,data) {
                             //logger.info(arguments);
                             // console.log('Successfully uploaded package.');
-                            console.log("AWS S3 Upload err message",err);
-                            console.log(data);
+                      
                         });
                     }
 
@@ -119,14 +113,12 @@ awsHander.receiver = function(next, endCallback) {
             if (endCallback != null) { endCallback() };
         } else {
             if (data.Messages) {
-                console.log(data)
                 let message = JSON.parse(data.Messages[0].Body)
                 if (message.domain&&message.domain == "microarray") {
                     awsHander.del(data.Messages[0].ReceiptHandle)
                     next(data, data.email, endCallback)
                 }
             } else {
-                console.log(data)
                 if (endCallback != null) { endCallback() };
             }
 
@@ -147,13 +139,11 @@ awsHander.del = function(rec) {
             logger.info(err.stack)
         } else {
             logger.info("[Queue] Delete Messages from S3 Successfully")
-            console.log(data);
         }
     });
 }
 
 awsHander.download = (projectId, filePath, next, configData, endCallback) => {
-    logger.info("[Queue] Download files from S3 ")
     let params2 = {
         Bucket: config.bucketName,
         MaxKeys: 9000,
