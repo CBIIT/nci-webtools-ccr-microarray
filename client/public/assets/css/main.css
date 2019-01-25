@@ -426,11 +426,6 @@ tr:nth-child(even) {
     float: left;
 }
 
-#header-navbar li:last-child {
-    float: right;
-    ;
-}
-
 .navbar-nav {
     margin: 0px 0px;
 }
