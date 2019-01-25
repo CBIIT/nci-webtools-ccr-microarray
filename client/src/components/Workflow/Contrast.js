@@ -58,11 +58,11 @@ class Contrast extends Component {
               <span>Run Contrast</span>
             </Button></div>);
         }
-        let group_1_content = (<Select defaultValue={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
+        let group_1_content = (<Select value={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
             <Option value="-1">---Select Group---</Option>
             {options}
           </Select>);
-        let group_2_content = (<Select defaultValue={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
+        let group_2_content = (<Select value={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
             <Option value="-1">---Select Group---</Option>
 
             {options}
@@ -77,12 +77,12 @@ class Contrast extends Component {
                 
                 <label className="title">Choose Contrast To Show:</label>
                 
-                <Select defaultValue={this.props.data.group_1} style={{ width: "100%" }}  disabled   aria-label="Select Group 1">
+                <Select value={this.props.data.group_1} style={{ width: "100%" }}  disabled   aria-label="Select Group 1">
                   <Option value="-1">---Select Group---</Option>
                 </Select>
                 
                 <label className="title">VS:</label>
-                 <Select defaultValue={this.props.data.group_2} style={{ width: "100%" }}  disabled aria-label="Select Group 2">
+                 <Select value={this.props.data.group_2} style={{ width: "100%" }}  disabled aria-label="Select Group 2">
                    <Option value="-1">---Select Group---</Option>
                 </Select>
                 
