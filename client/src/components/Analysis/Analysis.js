@@ -323,9 +323,6 @@ class Analysis extends Component {
             }).catch(error => console.log(error));
     }
 
-
-
-
     getssGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
 
@@ -433,8 +430,6 @@ class Analysis extends Component {
             }).catch(error => console.log(error));
     }
 
-
-
     exportPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
@@ -528,8 +523,6 @@ class Analysis extends Component {
 
             }).catch(error => console.log(error));
     }
-
-
 
     getPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
@@ -644,8 +637,6 @@ class Analysis extends Component {
             }).catch(error => console.log(error));
     }
 
-
-
     getPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
@@ -755,7 +746,6 @@ class Analysis extends Component {
     }
 
 
-
     exportPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
@@ -852,7 +842,6 @@ class Analysis extends Component {
 
             }).catch(error => console.log(error));
     }
-
 
     getDEG = (params = {}) => {
 
@@ -963,8 +952,6 @@ class Analysis extends Component {
     }
 
 
-
-
     exportDEG = (params = {}) => {
 
         let workflow = Object.assign({}, this.state.workflow);
@@ -1060,9 +1047,8 @@ class Analysis extends Component {
         let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'80%'} height={'70%'} frameBorder={'0'}/></div>
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
-
-
     }
+
     getPCA() {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
@@ -1183,7 +1169,7 @@ class Analysis extends Component {
                         if (result.data != "") {
                             let BoxplotRenderData = []
                             let BoxplotsData = result.data
-                            for (let i = 0; i < result.data.col.length - 1; i++) {
+                            for (let i = 0; i < result.data.col.length; i++) {
 
                                 let boxplotData = {
                                     y: BoxplotsData.data[i],
@@ -1341,7 +1327,7 @@ class Analysis extends Component {
 
                         let NUSERenderData = []
                         let NUSEplotsData = result.data
-                        for (let i = 0; i < result.data.col.length - 1; i++) {
+                        for (let i = 0; i < result.data.col.length; i++) {
 
                             let boxplotData = {
                                 y: NUSEplotsData.data[i],
@@ -1403,7 +1389,7 @@ class Analysis extends Component {
                         if (result.data != "") {
                             let RLERenderData = []
                             let RLEplotsData = result.data
-                            for (let i = 0; i < result.data.col.length - 1; i++) {
+                            for (let i = 0; i < result.data.col.length; i++) {
 
                                 let boxplotData = {
                                     y: RLEplotsData.data[i],
@@ -1454,8 +1440,6 @@ class Analysis extends Component {
             workflow.progressing = false;
             this.setState({ workflow: workflow });
         }
-
-
     }
 
     getBoxplotBN() {
@@ -1480,7 +1464,7 @@ class Analysis extends Component {
                         if (result.data != "") {
                             let BoxplotRenderData = []
                             let BoxplotsData = result.data
-                            for (let i = 0; i < result.data.col.length - 1; i++) {
+                            for (let i = 0; i < result.data.col.length; i++) {
 
                                 let boxplotData = {
                                     y: BoxplotsData.data[i],
@@ -1529,7 +1513,6 @@ class Analysis extends Component {
             workflow.progressing = false;
             this.setState({ workflow: workflow });
         }
-
     }
 
     getMAplotsBN() {
@@ -1602,9 +1585,7 @@ class Analysis extends Component {
             this.setState({ workflow: workflow2 });
 
         }
-
     }
-
 
     getHistplotBN() {
 
@@ -1613,10 +1594,7 @@ class Analysis extends Component {
         let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
-
     }
-
-
 
     changePathways_up(obj) {
         let workflow = Object.assign({}, this.state.workflow);
@@ -1630,6 +1608,7 @@ class Analysis extends Component {
             console.log("changePathways_up done");
         });
     }
+
     changePathways_down(obj) {
         let workflow = Object.assign({}, this.state.workflow);
         if (obj.pagination) {
@@ -1677,7 +1656,6 @@ class Analysis extends Component {
         window.current_working_on_tag = e;
     }
 
-
     handleGeneChange = (value) => {
         let workflow = Object.assign({}, this.state.workflow);
         let reqBody = {};
@@ -1724,8 +1702,6 @@ class Analysis extends Component {
             });
         }
     }
-
-
 
     changeCode(event) {
         let workflow = Object.assign({}, this.state.workflow);
@@ -1796,6 +1772,10 @@ class Analysis extends Component {
             document.getElementById("message-gsm").nextSibling.innerHTML = "Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here."
 
         }
+
+        document.getElementById("input-email").value="";
+
+         document.getElementById("message-success-use-queue").innerHTML="";
         defaultState.workflow .progressing =false;
         this.setState({ workflow: defaultState.workflow });
     }
@@ -2467,7 +2447,7 @@ class Analysis extends Component {
                         // change the word of load btn
                         document.getElementById("btn-project-upload").disabled = true
                         // init group with default value
-                        workflow.group = new Array(list.files.length).fill('Ctl');
+                        //workflow.group = new Array(list.files.length).fill('Ctl');
                         workflow.uploaded = true;
                         this.setState({
                             workflow: workflow
@@ -2534,7 +2514,6 @@ class Analysis extends Component {
         });
 
     }
-
 
     resetDisplay = () => {
         let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
@@ -2995,9 +2974,7 @@ class Analysis extends Component {
              </div>
         }
         return (
-            <div>
-          {tabs}
-    </div>
+            <div>{tabs}</div>
         );
     }
 }
