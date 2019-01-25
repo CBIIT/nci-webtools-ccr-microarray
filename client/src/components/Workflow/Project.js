@@ -76,7 +76,7 @@ class Project extends Component {
                     <Button
                       id="btn-project-upload"
                       className="upload-start"
-                      type="primary"
+                      type={this.props.data.fileList.length === 0? "default":"primary"}
                       onClick={this.props.handleUpload}
                       disabled={this.props.data.fileList.length === 0}
                       loading={uploading}

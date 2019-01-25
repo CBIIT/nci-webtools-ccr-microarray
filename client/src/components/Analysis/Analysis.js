@@ -19,7 +19,7 @@ let defaultState = {
         accessionCode: "",
         fileList: [],
         uploading: false,
-        progressing: true,
+        progressing: false,
         loading_info: "Loading Result",
         dataList: [],
         groups: [],
@@ -177,12 +177,14 @@ class Analysis extends Component {
     constructor(props) {
         super(props);
         if (this.props.location.search && this.props.location.search != "") {
-            defaultState.workflow.progressing = true;
-            this.state = Object.assign({}, defaultState);
+            
+           
+             defaultState.workflow.progressing = true;
+             this.state = Object.assign({}, defaultState);
             this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
 
         } else {
-            defaultState.workflow.progressing = false;
+            
             this.state = Object.assign({}, defaultState);
         }
         this.resetWorkFlowProject = this.resetWorkFlowProject.bind(this);
@@ -1773,9 +1775,17 @@ class Analysis extends Component {
     }
 
     resetWorkFlowProject = () => {
-        document.getElementById("input-access-code").disabled = false;
-        document.getElementById("btn-project-load-gse").disabled = false;
-        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
+         let workflow = Object.assign({}, this.state.workflow);
+        if (workflow.analysisType == "0") {
+            defaultState.workflow.analysisType=0;
+            document.getElementById("input-access-code").disabled = false;
+            document.getElementById("btn-project-load-gse").disabled = false;
+            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
+        } 
+        if (workflow.analysisType == "1") {
+            defaultState.workflow.analysisType=1;
+        }
+
         let err_message = document.getElementsByClassName("err-message")
 
         for (let i = 0; i < err_message.length; i++) {
@@ -1786,6 +1796,7 @@ class Analysis extends Component {
             document.getElementById("message-gsm").nextSibling.innerHTML = "Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here."
 
         }
+        defaultState.workflow .progressing =false;
         this.setState({ workflow: defaultState.workflow });
     }
 
@@ -2784,7 +2795,7 @@ class Analysis extends Component {
                             workflow: workflow2
                         });
 
-                        //this.hideWorkFlow();
+                        this.hideWorkFlow();
                         setTimeout(() => {
                             this.resetDisplay();
                         }, 3000);
