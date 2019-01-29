@@ -207,8 +207,7 @@ class SSGSEATable extends Component {
 
         let link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
-        let tabs = [<div id="ss_tag1" className="ss_plot">
-                        <div>     <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
+        let selection = [<div id={"ss_genset_select"}>     <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
                         id="ssGSEA_genset"
                         onChange={(e) => this.props.handleGeneChange(e)} 
                         aria-label="Gene Set For ssGSEA"
@@ -232,9 +231,17 @@ class SSGSEATable extends Component {
                           <Option value="mouse$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
                           <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
                         </OptGroup>
-                      </Select></div>
-                          <div> <p className="err-message" id="message-ssgsea"></p></div>  
-                          <div  className="div-export-ss"><Button   id="btn-ss-export"   type="primary" onClick={this.props.exportGSEA}> Export</Button> </div>
+                      </Select></div>]
+
+        let tabs = [
+            <div id="ss_tag1" className="ss_plot">
+                 
+                          <div>
+                                <p className="err-message" id="message-ssgsea"></p>
+                          </div>  
+                          <div  className="div-export-ss">
+                                <Button   id="btn-ss-export"   type="primary" onClick={this.props.exportGSEA}> Export</Button>
+                          </div>
                           <div id="deg-select">Display 
                                 <Dropdown overlay={menu}>
                                       <Button >
@@ -242,26 +249,26 @@ class SSGSEATable extends Component {
                                       </Button>
                                 </Dropdown>of total {this.props.data.ssGSEA.pagination.total} records
 
-                            </div>
+                         </div>
                          <div>
-                          <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
+                            <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
 
-                            <div className="filter_col" style={{width:"29%"}} ><label for="input_ssg_name"><span style={{display:"none"}}>input_ssg_name</span></label><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></div>
-                            
-                            <div className="filter_col"  style={{width:"9%"}}><label for="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label></div>
-                            
-                            <div className="filter_col" style={{width:"19%"}}><label for="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label></div>
+                                    <div className="filter_col" style={{width:"29%"}} ><label for="input_ssg_name"><span style={{display:"none"}}>input_ssg_name</span></label><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></div>
+                                    
+                                    <div className="filter_col"  style={{width:"9%"}}><label for="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label></div>
+                                    
+                                    <div className="filter_col" style={{width:"19%"}}><label for="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label></div>
 
-                            <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label></div>
+                                    <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label></div>
 
-                            <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label></div>
+                                    <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label></div>
 
-                             <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label></div>
-                 
-                            <div className="filter_col"  style={{width:"10%"}}><label for="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label></div>
+                                     <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label></div>
+                         
+                                    <div className="filter_col"  style={{width:"10%"}}><label for="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label></div>
 
-                    </div>
-                            <Table 
+                            </div>
+                          <Table 
                                 columns={columns}
                                 dataSource={this.props.data.ssGSEA.data}
                                 pagination={this.props.data.ssGSEA.pagination}
@@ -269,43 +276,17 @@ class SSGSEATable extends Component {
                                 onChange={this.handleTableChange}
                                 scroll={{ x: 960}}
                                 />
-                            </div>
-                                </div>,
-                             <div id="ss_tag2" className="ss_plot hide" >
-                              <div>     <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
-                        id="ssGSEA_genset"
-                        onChange={(e) => this.props.handleGeneChange(e)} 
-                        aria-label="Gene Set For ssGSEA"
-                      >
-                        <OptGroup label="Human">
-                          <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
-                          <Option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</Option>
-                          <Option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
-                          <Option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
-                          <Option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
-                          <Option value="human$C5: GO gene sets">C5: GO gene sets</Option>
-                          <Option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
-                          <Option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
-                        </OptGroup>
-                        <OptGroup label="Mouse">
-                          <Option value="mouse$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
-                          <Option value="mouse$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
-                          <Option value="mouse$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
-                          <Option value="mouse$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
-                          <Option value="mouse$C5: GO gene sets">C5: GO gene sets</Option>
-                          <Option value="mouse$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
-                          <Option value="mouse$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
-                        </OptGroup>
-                      </Select></div>
-                         <br/><br/>
-                   
+                     </div>
+            </div>,
+            <div id="ss_tag2" className="ss_plot hide" >
+                                  <br/><br/>
                                  <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
-                                </div>
+                            </div>
         ]
         content = [<Select defaultValue="ss_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
                                   <Option value="ss_tag1">Single Sample GSEA</Option>
                                   <Option value="ss_tag2">Pathway Heatmap</Option>
-                                </Select>, tabs]
+                                </Select>, selection, tabs]
 
 
         return content;
