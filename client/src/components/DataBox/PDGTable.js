@@ -370,8 +370,10 @@ class PUGTable extends Component {
 
         content = <div>
                  <div> <p className="err-message" id="message-pdg"></p></div>  
+                 <div  className="div-export-pathwayDown"><Button   id="btn-pathwayDown-export"   type="primary" onClick={this.props.exportPathwayDown}> Export</Button> </div>
+
                         <div>
-                             <div id="deg-select">show 
+                             <div id="pathways-down-select">Display 
                                 <Dropdown overlay={menu}>
                                       <Button >
                                         <span id="pd-drop-down">25</span> <Icon type="down" />

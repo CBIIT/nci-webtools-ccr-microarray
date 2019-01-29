@@ -40,19 +40,20 @@ var execute = function(file, data, callback){
 
 	child.on('error',(Error)=>{
 		logger.info(Error.prototype.message)
-		logger.info(Error.prototype.name)
+		//logger.info(Error.prototype.name)
 
 	})
 
-	child.on('exit',(code)=>{
+	child.on('exit',(code, signal)=>{
 		logger.info("exit code:"+code);
-
+		logger.info("exit signal:"+signal);
 	})
 
 
-	child.on('close', (code) => {
-		logger.info("code:"+code);
-		if(code>0){
+	child.on('close', (code, signal) => {
+		logger.info("close code:"+code);
+		logger.info("close signal:"+signal);
+		if(code!=0){
 			callback(true, err_message);
 		}
 		else{

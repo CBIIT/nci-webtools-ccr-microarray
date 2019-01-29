@@ -1,9 +1,9 @@
 library(jsonlite)
 library(mpstr)
 library(limma)
-  library(GEOquery)
-  library(oligo)
-  library(Biobase)
+library(GEOquery)
+library(oligo)
+library(Biobase)
 #source('./service/MAAPster_functions.R')
 
 
@@ -174,6 +174,7 @@ process = function(){
       z=norm_celfiles[[9]][,3],
       color=pData(norm_celfiles[[11]])$colors
       )
+
     return_plot_data <- List(
         norm_celfiles[[1]],
         norm_celfiles[[2]]@listData,
@@ -221,6 +222,38 @@ process = function(){
     saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
     
 
+    saveRDS(return_plot_data,file = paste0(data_repo_path,"/return_plot_data.rds"))
+
+    saveRDS(ssGSEA_results,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
+
+
+    ss_result<-ssGSEA_results$DEss
+    re<-list(
+      ss_name=names(ss_result),
+      ss_data=ss_result[[1]],
+      uppath=l2p_pathways[[1]][[1]],
+      downpath=l2p_pathways[[1]][[2]],
+      deg=diff_expr_genes$listDEGs[[1]],
+      maplotBN=return_plot_data[[2]],
+      hisBefore=return_plot_data[[1]],
+      boxplotDataBN=return_plot_data[[3]],
+      RLE=return_plot_data[[4]],
+      NUSE=return_plot_data[[5]],
+      hisAfter=return_plot_data[[6]],
+      maplotAfter=return_plot_data[[7]],
+      boxplotDataAN=return_plot_data[[8]],
+      pcaData=return_plot_data[[9]],
+      heatmapAfterNorm=return_plot_data[[10]],
+      accessionCode=access_code,
+      groups=listGroups,
+      group_1=cgroup1,
+      group_2=cgroup2,
+      genSet=geneSet,
+      projectId=projectId,
+      GSM=celfiles@phenoData@data
+      )
+
+    write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))
     return(list(norm_celfiles=return_plot_data,diff_expr_genes=diff_expr_genes[1],pathways=l2p_pathways,ssGSEA=ssGSEA_results,ssColumn=ssGSEA_results[["DEss"]][[cons]][0]))
 
   }
@@ -232,13 +265,13 @@ process = function(){
     # # # Output should dynamically respond to user-selected contrast
     diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
 
+
     species<-toString(args[5])
     geneSet<-toString(args[6])
     config_path<-toString(args[7])
 
-
+    write(c(species,geneSet,config_path), "saveImageFileName.txt", sep="\t")
     ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
-
     return(list(ssGSEA=ssGSEA_results))
   }
 
@@ -260,7 +293,7 @@ process = function(){
     pic_name<-paste0("pathwaysHeapMap",sample(1:99999,1,replace=T),".jpg")
     saveImageFileName<-pic_name
 
-    #write.table(saveImageFileName, "saveImageFileName.txt", sep="\t")
+    #write(saveImageFileName, "saveImageFileName.txt", sep="\t")
 
     #print("test  console")
     celfiles<-readRDS(file = paste0(data_repo_path,"/celfiles.rds"))
@@ -272,7 +305,7 @@ process = function(){
     if(grepl("human",celfiles@annotation)){
       species<-"human"
     }
-    write.table(species, "species", sep="\t")
+    write(species, "species", sep="\t")
 
     geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,config_path,data_repo_path,species)
 

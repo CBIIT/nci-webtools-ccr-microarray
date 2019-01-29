@@ -14,6 +14,7 @@ class Workflow extends Component {
                                 handleGroup1Select={this.props.handleGroup1Select}
                                 handleGroup2Select={this.props.handleGroup2Select}
                                 runContrast={this.props.runContrast}
+                                changeRUNContractModel={this.props.changeRUNContractModel}
 
                               />;
         return (
@@ -22,6 +23,7 @@ class Workflow extends Component {
           <div className="blocks">
             <Project 
             data={this.props.data}  
+
             resetWorkFlowProject={this.props.resetWorkFlowProject} 
             changeCode={this.props.changeCode} 
             handleSelectType={this.props.handleSelectType} 

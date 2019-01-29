@@ -46,6 +46,8 @@ class Project extends Component {
                         <button id="btn-project-load-gse" type="button" className="ant-btn upload-start ant-btn-primary" onClick={this.props.loadGSE}>
                           <span>{uploading ? 'Load' : 'Load' }</span>
                         </button>
+
+                      
                       </div>
                       <div className="col-sm-6">
                    
@@ -74,13 +76,14 @@ class Project extends Component {
                     <Button
                       id="btn-project-upload"
                       className="upload-start"
-                      type="primary"
+                      type={this.props.data.fileList.length === 0? "default":"primary"}
                       onClick={this.props.handleUpload}
                       disabled={this.props.data.fileList.length === 0}
                       loading={uploading}
                     >
                     {uploading ? 'Load' : 'Load' }
                     </Button>
+                  
                    </div>
 
                      <div className="col-sm-6">

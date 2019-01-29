@@ -59,9 +59,10 @@ tr:nth-child(even) {
 }
 
 
-.ant-table-placeholder{
+.ant-table-placeholder {
     z-index: 0 !important;
 }
+
 .div-container {
     width: 100%;
     max-width: 1440px;
@@ -300,7 +301,7 @@ tr:nth-child(even) {
 
 .input-search-gsm {
     position: absolute !important;
-    top: 48px;
+    top: 54px;
     left: 150px;
     width: 200px !important;
     min-height: 15px;
@@ -423,11 +424,6 @@ tr:nth-child(even) {
 
 #header-navbar li {
     float: left;
-}
-
-#header-navbar li:last-child {
-    float: right;
-    ;
 }
 
 .navbar-nav {
@@ -636,15 +632,17 @@ tr:nth-child(even) {
 
 
 #tab_analysis .ant-table-pagination {
-    position: absolute;
-    top: -44px;
-    right: 0px;
+       position: absolute;
+    top: -52px;
+    right: 100px;
 }
 
 
 
 #gsm-select {
-    padding-top: 12px;
+    position: absolute;
+    right: 237px;
+    top: 61px;
 }
 
 #gsm-select button {
@@ -769,22 +767,22 @@ tr:nth-child(even) {
 
 
 #deg_tag1 .ant-table-pagination {
-    position: absolute;
-    top: -100px;
-    right: 0px;
+       position: absolute;
+    top: -118px;
+    right: 88px;
 }
 
 #deg_tag2 .ant-table-pagination {
     position: absolute;
-    top: -100px;
-    right: 0px;
+    top: -118px;
+    right: 95px;
 }
 
 
 #deg_tag3 .ant-table-pagination {
     position: absolute;
-    top: -100px;
-    right: 0px;
+     top: -118px;
+    right: 95px;
 }
 
 
@@ -796,20 +794,34 @@ tr:nth-child(even) {
 
 
 div#deg_tag1 {
-    padding-top: 15px;
+    /* padding-top: 15px;*/
 }
 
 div#deg_tag2 {
-    padding-top: 15px;
+    /*padding-top: 15px;*/
 }
 
 div#deg_tag3 {
-    padding-top: 15px;
+    /*padding-top: 15px;*/
 }
 
 
 div#ss_tag1 {
-    padding-top: 15px;
+    /*padding-top: 15px;*/
+}
+div#deg-select{
+    position: absolute;
+    top: 54px;
+}
+
+div#pathways-down-select{
+ position: absolute;
+    top: 54px;
+}
+
+div#pathways-up-select{
+ position: absolute;
+    top: 54px;
 }
 
 div#deg-select button {
@@ -831,6 +843,9 @@ input#input_group_name {
     color: red;
 }
 
+.success-message{
+    color: green;
+}
 
 #message-load-accession-code {
 
@@ -850,7 +865,44 @@ input#input_group_name {
     width: 100%;
 }
 
+.div-export-deg {
+    float: right;
+    margin-top: -45px;
+}
 
+.div-export-pathwayUp {
+    float: right;
+    margin-top: -45px;
+
+}
+
+.div-export-pathwayDown {
+    float: right;
+    margin-top: -45px;
+}
+
+.div-export-ss {
+    float: right;
+    margin-top: -45px;
+}
+
+.div-export-gsm{
+        float: right;
+    padding-right: 10px;
+
+}
+
+.div-group-gsm{
+        float: left;
+    padding-left: 10px;
+
+}
+
+#queueMessage {
+    color: darkgray;
+    font-style: italic;
+    font-size: 0.65em;
+}
 @media only screen and (max-width: 600px) {
     .container-board-left .blocks {
 
@@ -861,31 +913,31 @@ input#input_group_name {
     #tab_analysis .ant-table-pagination {
         position: relative;
         right: 0px;
-        top:0px;
+        top: 0px;
     }
 
     #deg_tag1 .ant-table-pagination {
         position: relative;
         right: 0px;
-        top:0px;
+        top: 0px;
     }
 
     #deg_tag2 .ant-table-pagination {
         position: relative;
         right: 0px;
-        top:0px;
+        top: 0px;
     }
 
     #deg_tag3 .ant-table-pagination {
         position: relative;
         right: 0px;
-        top:0px;
+        top: 0px;
     }
 
     #ss_tag1 .ant-table-pagination {
         position: relative;
         right: 0px;
-        top:0px;
+        top: 0px;
     }
 
 

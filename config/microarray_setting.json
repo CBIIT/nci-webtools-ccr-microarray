@@ -1,17 +1,22 @@
- {
-     "timeout":300000,
-     "env": "test",
-     "development":
-     {
-         "log_dir": "log",
-         "upload_path": "tmp",
-         "config_path": "data"
-     },
-     "mail":
-     {
-         "host": "mailfwd.nih.gov",
-         "port": 25,
-         "from": "cedcdWebAdmin@nih.gov",
-         "to": "cheny39@nih.gov"
-     }
- }
+{
+    "timeout": 300000,
+    "env": "test",
+    "queue_request_interval": 3,
+    "bucketName": "cbiit-tools-data",
+    "queue_name": "nci-cbiit-ss-microarray-dev.fifo",
+    "queue_url": "https://sqs.us-east-1.amazonaws.com/924184629216/nci-cbiit-ss-microarray-dev.fifo",
+    "microarray_link": "https://analysistools-qa.nci.nih.gov/microarray/",
+    "development":
+    {
+        "log_dir": "log",
+        "upload_path": "tmp",
+        "config_path": "data"
+    },
+    "mail":
+    {
+        "host": "mailfwd.nih.gov",
+        "port": 25,
+        "from": "NCIMicroArrayWebAdmin@mail.nih.gov",
+        "to": "yizhen.chen@nih.gov"
+    }
+}

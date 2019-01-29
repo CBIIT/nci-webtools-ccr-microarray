@@ -281,7 +281,9 @@ class DEGTable extends Component {
 
         content = <div>
                   <div> <p className="err-message" id="message-deg"></p></div>  
-                  <div id="deg-select">show 
+                 <div  className="div-export-deg"><Button   id="btn-deg-export"   type="primary" onClick={this.props.exportDEG}> Export</Button> </div>
+
+                  <div id="deg-select">Display
                             <Dropdown overlay={menu}>
                                   <Button >
                                     <span id="deg-drop-down">25</span> <Icon type="down" />
