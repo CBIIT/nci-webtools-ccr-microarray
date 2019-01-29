@@ -17,7 +17,7 @@ class DataBox extends Component {
             loading: false,
             visible: false,
             selected: [],
-            group_name: "GSMGroup_1",
+            group_name: "",
             added: false
         }
 
@@ -28,7 +28,7 @@ class DataBox extends Component {
 
     handleInputOnChange = (e) => {
 
-        console.log(e)
+        this.setState({ group_name: e.target.value });
     }
 
     handleTabChange = (key) => {
@@ -165,17 +165,9 @@ class DataBox extends Component {
     }
 
     showModal = () => {
-        let group_name = this.state.group_name;
-        if (this.state.group_name != "" && this.state.group_name !== "GSMGroup_1") {
-            document.getElementById("input_group_name").value = group_name;
-
-        }
         let currentState = Object.assign({}, this.state);
         currentState.visible = true;
         this.setState(currentState);
-
-
-
     }
 
     handleOk = () => {
@@ -195,6 +187,8 @@ class DataBox extends Component {
     handleCancel = () => {
         let workflow = Object.assign({}, this.state);
         workflow.group = "";
+        document.getElementById("input_group_name").value = "";
+
 
         workflow.visible = false;
         let flag = workflow.added;
@@ -202,7 +196,6 @@ class DataBox extends Component {
         if (flag) {
             workflow.selected = [];
         }
-
         this.setState(workflow);
         // call child unselect function
         if (flag) {
@@ -226,14 +219,9 @@ class DataBox extends Component {
                 // if user select records in table 
                 this.props.assignGroup(document.getElementById("input_group_name").value, this.state.selected)
                 this.child.current.unselect(); // after create tag, previous selected record will unselect. 
-                if (document.getElementById("input_group_name").value == this.state.group_name) {
-                    let index_number = parseInt(this.state.group_name.split("_")[1]) + 1
-                    let currentState = Object.assign({}, this.state);
-                    currentState.group_name = "GSMGroup_" + index_number;
-                    currentState.added = true;
-                    this.setState(currentState);
-
-                }
+                let currentState = Object.assign({}, this.state);
+                currentState.added = true;
+                this.setState(currentState);
 
             } else {
                 document.getElementById("message-gsm-group").innerHTML = "Please select some gsm(s). "
@@ -267,8 +255,8 @@ class DataBox extends Component {
         // define group btn
         if (this.props.data.dataList.length > 0) {
             define_group_click_btn =
-           
-             <div className="row">
+
+                <div className="row">
             <div className="div-group-gsm"><Button  type="primary" onClick={this.showModal} >Manage Group</Button> </div>
              <div  className="div-export-gsm"><Button   id="btn-project-export" className="upload-start"  type="primary" onClick={this.props.exportGSE}> Export</Button> </div>
            </div>;
@@ -357,49 +345,27 @@ class DataBox extends Component {
         let group_table = <Table columns={columns} dataSource={groups_data_list}  />
         let modal = "";
 
-        if (selected_gsms == "") {
 
-            // define group modal
-            modal = <Modal key="group_define_modal" visible={visible}  className="custom_modal" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
+        // define group modal
+        modal = <Modal key="group_define_modal" visible={visible}  className="custom_modal" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
         footer={[
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
         >
           <p style={{color: "#215a82"}}><b>Selected GSM(s)</b></p>
-          
-          <p className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
-          <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
-          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} defaultValue={this.state.group_name}  onChange={this.handleInputOnChange}/>&nbsp;
-              <Button  type="default" disabled onClick={this.createTag} >Add</Button>
-          </p>
-          <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
-          {group_table}
-        </Modal>
-            // end  group modal
-
-        } else {
-
-            // define group modal
-            modal = <Modal key="group_define_modal" visible={visible}  className="custom_modal" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
-        footer={[
-            <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
-          ]}
-        >
-          <p style={{color: "#215a82"}}><b>Selected GSM(s)</b></p>
-          
+           <p style={{display: this.state.selected==""?"block":"none"}} className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
           <p>{selected_gsms}</p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
            <p className="err-message" id="message-gsm-group"></p>
-          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} defaultValue={this.state.group_name} onChange={this.handleInputOnChange}/>&nbsp;
-              <Button  type="primary"  onClick={this.createTag} >Add</Button>
+          <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} onChange={this.handleInputOnChange}/>&nbsp;
+              <Button  type={this.state.selected==""||this.state.group_name==""?"default":"primary"}  disabled={this.state.selected==""||this.state.group_name==""?true:false}   onClick={this.createTag} >Add</Button>
           </p>
           <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
            <p className="err-message" id="message-gsm-group-table"></p>
           {group_table}
         </Modal>
-            // end  group modal
+        // end  group modal
 
-        }
 
 
         let content = (<Tabs onChange={this.handleTabChange} type="card" >
