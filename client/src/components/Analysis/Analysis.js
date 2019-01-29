@@ -177,14 +177,14 @@ class Analysis extends Component {
     constructor(props) {
         super(props);
         if (this.props.location.search && this.props.location.search != "") {
-            
-           
-             defaultState.workflow.progressing = true;
-             this.state = Object.assign({}, defaultState);
+
+
+            defaultState.workflow.progressing = true;
+            this.state = Object.assign({}, defaultState);
             this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
 
         } else {
-            
+
             this.state = Object.assign({}, defaultState);
         }
         this.resetWorkFlowProject = this.resetWorkFlowProject.bind(this);
@@ -411,6 +411,12 @@ class Analysis extends Component {
                     workflow2.geneHeatmap = "/ssgseaHeatmap1.jpg?" + random
                     this.setState({ workflow: workflow2 });
 
+                    setTimeout(() => {
+                        this.resetSSGSEADisplay();
+                    }, 2000);
+
+
+
                 } else {
 
                     document.getElementById("message-ssgsea").innerHTML = result.msg
@@ -613,6 +619,10 @@ class Analysis extends Component {
 
                     this.setState({ workflow: workflow2 });
 
+                    setTimeout(() => {
+                        this.resetPathWayUPDisplay();
+                    }, 2000);
+
                 } else {
 
                     document.getElementById("message-pug").innerHTML = result.msg;
@@ -724,6 +734,9 @@ class Analysis extends Component {
                     workflow2.pathways_down.pagination = pagination;
 
                     this.setState({ workflow: workflow2 });
+                    setTimeout(() => {
+                        this.resetPathWayDownDisplay();
+                    }, 2000);
                 } else {
                     document.getElementById("message-pdg").innerHTML = result.msg;
                 }
@@ -931,6 +944,10 @@ class Analysis extends Component {
                     workflow2.diff_expr_genes.pagination = pagination;
 
                     this.setState({ workflow: workflow2 });
+                    setTimeout(() => {
+                        this.resetDEGDisplay();
+                    }, 2000);
+
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
                 }
@@ -1751,15 +1768,15 @@ class Analysis extends Component {
     }
 
     resetWorkFlowProject = () => {
-         let workflow = Object.assign({}, this.state.workflow);
+        let workflow = Object.assign({}, this.state.workflow);
         if (workflow.analysisType == "0") {
-            defaultState.workflow.analysisType=0;
+            defaultState.workflow.analysisType = 0;
             document.getElementById("input-access-code").disabled = false;
             document.getElementById("btn-project-load-gse").disabled = false;
             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
-        } 
+        }
         if (workflow.analysisType == "1") {
-            defaultState.workflow.analysisType=1;
+            defaultState.workflow.analysisType = 1;
         }
 
         let err_message = document.getElementsByClassName("err-message")
@@ -1773,10 +1790,10 @@ class Analysis extends Component {
 
         }
 
-        document.getElementById("input-email").value="";
+        document.getElementById("input-email").value = "";
 
-         document.getElementById("message-success-use-queue").innerHTML="";
-        defaultState.workflow .progressing =false;
+        document.getElementById("message-success-use-queue").innerHTML = "";
+        defaultState.workflow.progressing = false;
         this.setState({ workflow: defaultState.workflow });
     }
 
@@ -1952,7 +1969,7 @@ class Analysis extends Component {
                         });
 
                         setTimeout(() => {
-                            this.resetDisplay();
+                            this.resetGSMDisplay();
                         }, 3000);
 
                     } else {
@@ -2515,10 +2532,43 @@ class Analysis extends Component {
 
     }
 
-    resetDisplay = () => {
-        let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("gsm-select").style.right = width;
+    resetGSMDisplay = () => {
+        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[0]) {
+            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+            document.getElementById("gsm-select").style.right = width;
+        }
+
     }
+
+    resetDEGDisplay = () => {
+        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[1]) {
+            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[1].offsetWidth + 125;
+            document.getElementById("deg-select").style.right = width;
+        }
+    }
+
+    resetPathWayUPDisplay = () => {
+        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[2]) {
+            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[2].offsetWidth + 125;
+            document.getElementById("pathways-up-select").style.right = width;
+        }
+    }
+
+    resetPathWayDownDisplay = () => {
+        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[3]) {
+            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[3].offsetWidth + 125;
+            document.getElementById("pathways-down-select").style.right = width;
+        }
+    }
+
+
+    resetSSGSEADisplay = () => {
+        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[4]) {
+            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[4].offsetWidth + 125;
+            document.getElementById("ss-select").style.right = width;
+        }
+    }
+
 
     handleErrors = (response) => {
         if (!response.ok) {
@@ -2776,7 +2826,7 @@ class Analysis extends Component {
 
                         this.hideWorkFlow();
                         setTimeout(() => {
-                            this.resetDisplay();
+                            this.resetGSMDisplay();
                         }, 3000);
 
                     } else {

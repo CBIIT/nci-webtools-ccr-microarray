@@ -242,7 +242,7 @@ class SSGSEATable extends Component {
                           <div  className="div-export-ss">
                                 <Button   id="btn-ss-export"   type="primary" onClick={this.props.exportGSEA}> Export</Button>
                           </div>
-                          <div id="deg-select">Display 
+                          <div id="ss-select">Display 
                                 <Dropdown overlay={menu}>
                                       <Button >
                                         <span id="ss-drop-down">25</span> <Icon type="down" />

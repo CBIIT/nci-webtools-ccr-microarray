@@ -426,11 +426,6 @@ tr:nth-child(even) {
     float: left;
 }
 
-#header-navbar li:last-child {
-    float: right;
-    ;
-}
-
 .navbar-nav {
     margin: 0px 0px;
 }
@@ -772,22 +767,22 @@ tr:nth-child(even) {
 
 
 #deg_tag1 .ant-table-pagination {
-    position: absolute;
-    top: -100px;
-    right: 0px;
+       position: absolute;
+    top: -118px;
+    right: 88px;
 }
 
 #deg_tag2 .ant-table-pagination {
     position: absolute;
-    top: -100px;
-    right: 0px;
+    top: -118px;
+    right: 95px;
 }
 
 
 #deg_tag3 .ant-table-pagination {
     position: absolute;
-    top: -100px;
-    right: 0px;
+     top: -118px;
+    right: 95px;
 }
 
 
@@ -813,6 +808,20 @@ div#deg_tag3 {
 
 div#ss_tag1 {
     /*padding-top: 15px;*/
+}
+div#deg-select{
+    position: absolute;
+    top: 54px;
+}
+
+div#pathways-down-select{
+ position: absolute;
+    top: 54px;
+}
+
+div#pathways-up-select{
+ position: absolute;
+    top: 54px;
 }
 
 div#deg-select button {
