@@ -413,7 +413,7 @@ class Analysis extends Component {
 
                     setTimeout(() => {
                         this.resetSSGSEADisplay();
-                    }, 1500);
+                    }, 1800);
 
 
 
@@ -621,7 +621,7 @@ class Analysis extends Component {
 
                     setTimeout(() => {
                         this.resetPathWayUPDisplay();
-                    }, 1500);
+                    }, 1800);
 
                 } else {
 
@@ -736,7 +736,7 @@ class Analysis extends Component {
                     this.setState({ workflow: workflow2 });
                     setTimeout(() => {
                         this.resetPathWayDownDisplay();
-                    }, 1500);
+                    }, 1800);
                 } else {
                     document.getElementById("message-pdg").innerHTML = result.msg;
                 }
@@ -946,7 +946,7 @@ class Analysis extends Component {
                     this.setState({ workflow: workflow2 });
                     setTimeout(() => {
                         this.resetDEGDisplay();
-                    }, 1500);
+                    }, 1800);
 
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
@@ -1970,7 +1970,7 @@ class Analysis extends Component {
 
                         setTimeout(() => {
                             this.resetGSMDisplay();
-                        }, 1500);
+                        }, 1800);
 
                     } else {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
@@ -2827,7 +2827,7 @@ class Analysis extends Component {
                         this.hideWorkFlow();
                         setTimeout(() => {
                             this.resetGSMDisplay();
-                        }, 1500);
+                        }, 1800);
 
                     } else {
                         workflow.progressing = false;
