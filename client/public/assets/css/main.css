@@ -449,7 +449,22 @@ tr:nth-child(even) {
 
 .custom_modal {
     width: 80%;
+}
 
+#message-deg{
+    display: none;
+}
+
+#message-ssgsea{
+    display: none;
+}
+
+#message-pug{
+    display: none;
+}
+
+#message-pdg{
+    display: none;
 }
 
 .filter_col {
