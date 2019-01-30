@@ -776,7 +776,7 @@ tr:nth-child(even) {
 
 #deg_tag1 .ant-table-pagination {
        position: absolute;
-    top: -98px;
+    top: -104px;
     right: 88px;
 }
 
@@ -819,7 +819,7 @@ div#ss_tag1 {
 }
 div#deg-select{
     position: absolute;
-    top: 52px;
+    top: 50px;
     right: 125px;
 }
 
