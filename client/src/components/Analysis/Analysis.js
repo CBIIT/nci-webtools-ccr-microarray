@@ -2533,38 +2533,38 @@ class Analysis extends Component {
     }
 
     resetGSMDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[0]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        if (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0]) {
+            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
             document.getElementById("gsm-select").style.right = width;
         }
 
     }
 
     resetDEGDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[1]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[1].offsetWidth + 125;
+        if (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0]) {
+            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
             document.getElementById("deg-select").style.right = width;
         }
     }
 
     resetPathWayUPDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[2]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[2].offsetWidth + 125;
+        if (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0]) {
+            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
             document.getElementById("pathways-up-select").style.right = width;
         }
     }
 
     resetPathWayDownDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[3]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[3].offsetWidth + 125;
+        if (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0]) {
+            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
             document.getElementById("pathways-down-select").style.right = width;
         }
     }
 
 
     resetSSGSEADisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[4]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[4].offsetWidth + 125;
+        if (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0]) {
+            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
             document.getElementById("ss-select").style.right = width;
         }
     }
