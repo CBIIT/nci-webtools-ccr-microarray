@@ -776,27 +776,27 @@ tr:nth-child(even) {
 
 #deg_tag1 .ant-table-pagination {
        position: absolute;
-    top: -118px;
+    top: -103px;
     right: 88px;
 }
 
 #deg_tag2 .ant-table-pagination {
     position: absolute;
-    top: -118px;
+    top: -103px;
     right: 95px;
 }
 
 
 #deg_tag3 .ant-table-pagination {
     position: absolute;
-     top: -118px;
+     top: -103px;
     right: 95px;
 }
 
 
 #ss_tag1 .ant-table-pagination {
     position: absolute;
-    top: -100px;
+    top: -103px;
     right: 95px;
 }
 
