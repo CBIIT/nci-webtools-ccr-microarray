@@ -353,7 +353,7 @@ class PUGTable extends Component {
                                 </Dropdown>of total {this.props.data.pathways_up.pagination.total}  records
 
                             </div>
-                     <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
+                     <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px","paddingBottom": "0px"}}>
                            <div className="filter_col" style={{width:"10%"}} ><label for="input_pathway_up_search_PATHWAY_ID"><span style={{display:"none"}}>input_pathway_up_search_PATHWAY_ID</span><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_up_search_PATHWAY_ID"/></label></div>
                            <div className="filter_col" style={{width:"9%"}}><label for="input_pathway_up_search_SOURCE"><span style={{display:"none"}}>input_pathway_up_search_SOURCE</span><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_up_search_SOURCE"/></label></div>
                            <div className="filter_col" style={{width:"9%"}}><label for="input_pathway_up_search_TYPE"><span style={{display:"none"}}>input_pathway_up_search_TYPE</span><Input onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_up_search_DESCRIPTION"/></label></div>
