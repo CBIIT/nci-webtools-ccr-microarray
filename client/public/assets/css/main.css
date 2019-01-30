@@ -819,7 +819,7 @@ div#ss_tag1 {
 }
 div#deg-select{
     position: absolute;
-    top: 54px;
+    top: 52px;
     right: 125px;
 }
 
@@ -885,7 +885,7 @@ input#input_group_name {
 
 .div-export-deg {
     float: right;
-    margin-top: -45px;
+    margin-top: -31px;
 }
 
 .div-export-pathwayUp {
