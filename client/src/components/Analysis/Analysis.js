@@ -82,7 +82,7 @@ let defaultState = {
             },
             search_keyword: {
                 "name": "",
-                "search_logFC": "1.5",
+                "search_logFC": "1",
                 "search_Avg_Enrichment_Score": "",
                 "search_t": "",
                 "search_p_value": "0.05",
@@ -357,7 +357,7 @@ class Analysis extends Component {
                 },
                 search_keyword: {
                     "name": "",
-                    "search_logFC": "1.5",
+                    "search_logFC": "1",
                     "search_Avg_Enrichment_Score": "",
                     "search_t": "",
                     "search_p_value": "0.05",
@@ -2100,7 +2100,7 @@ class Analysis extends Component {
             },
             search_keyword: {
                 "name": "",
-                "search_logFC": "1.5",
+                "search_logFC": "1",
                 "search_Avg_Enrichment_Score": "",
                 "search_t": "",
                 "search_p_value": "0.05",
@@ -2683,7 +2683,7 @@ class Analysis extends Component {
             },
             search_keyword: {
                 "name": "",
-                "search_logFC": "1.5",
+                "search_logFC": "1",
                 "search_Avg_Enrichment_Score": "",
                 "search_t": "",
                 "search_p_value": "0.05",
