@@ -242,12 +242,12 @@ class SSGSEATable extends Component {
                           <div  className="div-export-ss">
                                 <Button   id="btn-ss-export"   type="primary" onClick={this.props.exportGSEA}> Export</Button>
                           </div>
-                          <div id="ss-select">Display 
+                          <div id="ss-select">Display  &nbsp;&nbsp;  
                                 <Dropdown overlay={menu}>
                                       <Button >
                                         <span id="ss-drop-down">25</span> <Icon type="down" />
                                       </Button>
-                                </Dropdown>of total {this.props.data.ssGSEA.pagination.total} records
+                                </Dropdown> &nbsp;  of total {this.props.data.ssGSEA.pagination.total} records
 
                          </div>
                          <div>
