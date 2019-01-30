@@ -2853,9 +2853,9 @@ class Analysis extends Component {
         let tabs = <div> <div className="header-nav">
             <div className="div-container">
                 <ul className="nav navbar-nav" id="header-navbar">
-                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className="active"> <a href="#about" className="nav-link" >About</a></li>
-                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className=""> <a href="#analysis"  className="nav-link">Analysis</a></li>
-                    <li  onClick={() => {this.changeTab('help')}}  id="li-help" className="" > <a href="#help"  className="nav-link">Help</a></li>
+                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className="active"> <a href="#about" className="nav-link" >ABOUT</a></li>
+                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className=""> <a href="#analysis"  className="nav-link">ANALYSIS</a></li>
+                    <li  onClick={() => {this.changeTab('help')}}  id="li-help" className="" > <a href="#help"  className="nav-link">HELP</a></li>
                 </ul>
             
             </div>
