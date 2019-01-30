@@ -782,7 +782,7 @@ tr:nth-child(even) {
 
 #deg_tag2 .ant-table-pagination {
     position: absolute;
-    top: -103px;
+    top: -100px;
     right: 95px;
 }
 
@@ -831,7 +831,7 @@ div#pathways-down-select{
 
 div#pathways-up-select{
  position: absolute;
-    top: 50px;
+    top: 49px;
     right: 125px;
 }
 
