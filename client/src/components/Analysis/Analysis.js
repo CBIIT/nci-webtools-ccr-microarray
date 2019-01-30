@@ -413,7 +413,7 @@ class Analysis extends Component {
 
                     setTimeout(() => {
                         this.resetSSGSEADisplay();
-                    }, 2000);
+                    }, 1500);
 
 
 
@@ -621,7 +621,7 @@ class Analysis extends Component {
 
                     setTimeout(() => {
                         this.resetPathWayUPDisplay();
-                    }, 2000);
+                    }, 1500);
 
                 } else {
 
@@ -736,7 +736,7 @@ class Analysis extends Component {
                     this.setState({ workflow: workflow2 });
                     setTimeout(() => {
                         this.resetPathWayDownDisplay();
-                    }, 2000);
+                    }, 1500);
                 } else {
                     document.getElementById("message-pdg").innerHTML = result.msg;
                 }
@@ -946,7 +946,7 @@ class Analysis extends Component {
                     this.setState({ workflow: workflow2 });
                     setTimeout(() => {
                         this.resetDEGDisplay();
-                    }, 2000);
+                    }, 1500);
 
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
@@ -1970,7 +1970,7 @@ class Analysis extends Component {
 
                         setTimeout(() => {
                             this.resetGSMDisplay();
-                        }, 3000);
+                        }, 1500);
 
                     } else {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
@@ -2541,22 +2541,22 @@ class Analysis extends Component {
     }
 
     resetDEGDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        if (document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0]) {
+            let width = document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
             document.getElementById("deg-select").style.right = width;
         }
     }
 
     resetPathWayUPDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        if (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0]) {
+            let width = document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
             document.getElementById("pathways-up-select").style.right = width;
         }
     }
 
     resetPathWayDownDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[3].getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        if (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0]) {
+            let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
             document.getElementById("pathways-down-select").style.right = width;
         }
     }
@@ -2827,7 +2827,7 @@ class Analysis extends Component {
                         this.hideWorkFlow();
                         setTimeout(() => {
                             this.resetGSMDisplay();
-                        }, 3000);
+                        }, 1500);
 
                     } else {
                         workflow.progressing = false;
