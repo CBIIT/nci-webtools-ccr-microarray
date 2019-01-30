@@ -283,12 +283,12 @@ class DEGTable extends Component {
                   <div> <p className="err-message" id="message-deg"></p></div>  
                  <div  className="div-export-deg"><Button   id="btn-deg-export"   type="primary" onClick={this.props.exportDEG}> Export</Button> </div>
 
-                  <div id="deg-select">Display
+                  <div id="deg-select">Display &nbsp;
                             <Dropdown overlay={menu}>
                                   <Button >
                                     <span id="deg-drop-down">25</span> <Icon type="down" />
                                   </Button>
-                            </Dropdown>of total {this.props.data.diff_expr_genes.pagination.total}  records
+                            </Dropdown>&nbsp;of total {this.props.data.diff_expr_genes.pagination.total}  records
 
                         </div>
                     <div>

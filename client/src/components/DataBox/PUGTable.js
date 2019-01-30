@@ -345,12 +345,12 @@ class PUGTable extends Component {
                   <div> <p className="err-message" id="message-pug"></p></div>  
                    <div  className="div-export-pathwayUp"><Button   id="btn-pathwayUp-export"   type="primary" onClick={this.props.exportPathwayUp}> Export</Button> </div>
 
-                        <div id="pathways-up-select">Display 
+                        <div id="pathways-up-select">Display &nbsp;
                                 <Dropdown overlay={menu}>
                                       <Button >
                                         <span id="pu-drop-down">25</span> <Icon type="down" />
                                       </Button>
-                                </Dropdown>of total {this.props.data.pathways_up.pagination.total}  records
+                                </Dropdown>&nbsp;of total {this.props.data.pathways_up.pagination.total}  records
 
                             </div>
                      <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px","paddingBottom": "0px"}}>
