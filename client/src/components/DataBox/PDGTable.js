@@ -373,12 +373,12 @@ class PUGTable extends Component {
                  <div  className="div-export-pathwayDown"><Button   id="btn-pathwayDown-export"   type="primary" onClick={this.props.exportPathwayDown}> Export</Button> </div>
 
                         <div>
-                             <div id="pathways-down-select">Display 
+                             <div id="pathways-down-select">Display &nbsp;
                                 <Dropdown overlay={menu}>
                                       <Button >
                                         <span id="pd-drop-down">25</span> <Icon type="down" />
                                       </Button>
-                                </Dropdown>of total {this.props.data.pathways_down.pagination.total} records
+                                </Dropdown>&nbsp;of total {this.props.data.pathways_down.pagination.total} records
 
                             </div>
                              <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
