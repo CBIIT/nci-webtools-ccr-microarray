@@ -253,20 +253,20 @@ class SSGSEATable extends Component {
                          <div>
                             <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
 
-                                    <div className="filter_col" style={{width:"31%"}} ><label for="input_ssg_name"><span style={{display:"none"}}>input_ssg_name</span><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label></div>
+                                    <div className="filter_col" style={{width:"31%"}} ><label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label></div>
                                     
-                                    <div className="filter_col"  style={{width:"9%"}}><label for="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label></div>
+                                    <div className="filter_col"  style={{width:"9%"}}><label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label></div>
                                     
-                                      <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label></div>
+                                      <div className="filter_col" style={{width:"10%"}}><label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label></div>
 
-                                     <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label></div>
+                                     <div className="filter_col" style={{width:"10%"}}><label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label></div>
                 
-                                    <div className="filter_col" style={{width:"19%"}}><label for="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label></div>
+                                    <div className="filter_col" style={{width:"19%"}}><label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label></div>
 
-                                    <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label></div>
+                                    <div className="filter_col" style={{width:"10%"}}><label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label></div>
 
                                          
-                                    <div className="filter_col"  style={{width:"10%"}}><label for="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label></div>
+                                    <div className="filter_col"  style={{width:"10%"}}><label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label></div>
 
                             </div>
                           <Table 
