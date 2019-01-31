@@ -147,7 +147,7 @@ class PUGTable extends Component {
         const columns = [{
                 title: 'PATHWAY_ID',
                 dataIndex: 'Pathway_ID',
-                width: "10%",
+                width: "12%",
                 key: 'Pathway_ID',
                 sorter: true,
                  render: (text, record, index) => {
@@ -187,7 +187,7 @@ class PUGTable extends Component {
             }, {
                 title: 'TYPE',
                 dataIndex: 'Type',
-                width: "10%",
+                width: "8%",
                 key: 'Type',
                 sorter: true,
                   render: (text, record, index) => {
@@ -382,10 +382,10 @@ class PUGTable extends Component {
 
                             </div>
                              <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
-                               <div className="filter_col" style={{width:"10%"}} ><label for="input_pathway_down_search_PATHWAY_ID"><span style={{display:"none"}}>input_pathway_down_search_PATHWAY_ID</span><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_down_search_PATHWAY_ID"/></label></div>
+                               <div className="filter_col" style={{width:"12%"}} ><label for="input_pathway_down_search_PATHWAY_ID"><span style={{display:"none"}}>input_pathway_down_search_PATHWAY_ID</span><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_down_search_PATHWAY_ID"/></label></div>
                                <div className="filter_col" style={{width:"9%"}}><label for="input_pathway_down_search_SOURCE"><span style={{display:"none"}}>input_pathway_down_search_SOURCE</span><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_down_search_SOURCE"/></label></div>
                                <div className="filter_col" style={{width:"9%"}}><label for="input_pathway_down_search_DESCRIPTION"><span style={{display:"none"}}>input_pathway_down_search_DESCRIPTION</span><Input onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_down_search_DESCRIPTION"/></label></div>
-                               <div className="filter_col" style={{width:"9%"}} ><label for="input_pathway_down_search_TYPE"><span style={{display:"none"}}>input_pathway_down_search_TYPE</span><Input onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_down_search_TYPE"/></label></div>
+                               <div className="filter_col" style={{width:"8%"}} ><label for="input_pathway_down_search_TYPE"><span style={{display:"none"}}>input_pathway_down_search_TYPE</span><Input onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_down_search_TYPE"/></label></div>
                                <div className="filter_col"  style={{width:"8%"}}><label for="input_pathway_down_search_p_value"><span style={{display:"none"}}>input_pathway_down_search_p_value</span><Input onPressEnter={value=>search(value) }    placeholder="P_Value"  id="input_pathway_down_search_p_value"/></label></div>
                                <div className="filter_col" style={{width:"7%"}}><label for="input_pathway_down_search_fdr"><span style={{display:"none"}}>input_pathway_down_search_fdr</span><Input onPressEnter={value=>search(value) }    placeholder="FDR"  id="input_pathway_down_search_fdr"/></label></div>
                                <div className="filter_col" style={{width:"7%"}}><label for="input_pathway_down_search_RATIO"><span style={{display:"none"}}>input_pathway_down_search_RATIO</span><Input onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_down_search_RATIO"/></label></div>
