@@ -1759,15 +1759,15 @@ class Analysis extends Component {
     resetWorkFlowProject = () => {
         let workflow = Object.assign({}, this.state.workflow);
         if (workflow.analysisType == "0") {
-            defaultState.workflow.analysisType = 0;
+            //defaultState.workflow.analysisType = 0;
             document.getElementById("input-access-code").disabled = false;
             document.getElementById("btn-project-load-gse").disabled = false;
             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
         }
         if (workflow.analysisType == "1") {
-            defaultState.workflow.analysisType = 1;
+            // defaultState.workflow.analysisType = 1;
         }
-
+        defaultState.workflow.analysisType = "0";
         let err_message = document.getElementsByClassName("err-message")
 
         for (let i = 0; i < err_message.length; i++) {
