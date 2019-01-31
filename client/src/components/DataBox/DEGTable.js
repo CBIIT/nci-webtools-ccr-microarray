@@ -83,10 +83,10 @@ class DEGTable extends Component {
                 title: 'FC',
                 dataIndex: 'FC',
                 sorter: true,
-                width: "7%",
+                width: "8%",
                  render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -96,11 +96,11 @@ class DEGTable extends Component {
                 title: 'P VALUE',
                 dataIndex: 'P.Value',
                 sorter: true,
-                width: "8%",
+                width: "9%",
                 defaultSortOrder: 'ascend',
                  render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -111,11 +111,11 @@ class DEGTable extends Component {
                 title: 'adj.P.Val',
                 dataIndex: 'adj.P.Val',
                 sorter: true,
-                width: "8%",
+                width: "9%",
 
                  render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -126,10 +126,10 @@ class DEGTable extends Component {
                 title: 'AveExpr',
                 dataIndex: 'AveExpr',
                 sorter: true,
-                width: "8%",
+                width: "9%",
                  render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -139,10 +139,10 @@ class DEGTable extends Component {
                 title: 'ACCNUM',
                 dataIndex: 'ACCNUM',
                 sorter: true,
-                width: "12%",
+                width: "10%",
                  render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -153,10 +153,10 @@ class DEGTable extends Component {
                 title: 'DESC',
                 dataIndex: 'DESC',
                 sorter: true,
-                width: "120px",
+                width: "13%",
                 render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":"120px"}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.13}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -166,16 +166,16 @@ class DEGTable extends Component {
                 title: 'ENTREZ',
                 dataIndex: 'ENTREZ',
                 sorter: true,
-                width: "8%",
+                width: "9%",
                 render: (text, record, index) => {
                     if(text!="" && text!="NA"){
                         let link ="https://www.ncbi.nlm.nih.gov/gene/"+text;
-                         return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8}}>
+                         return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.9}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}> <a href={link} target="_blank">{text}</a></span>
                                     </div>
                         
                     }else{
-                         return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8}}>
+                         return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.9}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
                     }
@@ -188,10 +188,10 @@ class DEGTable extends Component {
                 title: 'probsetID',
                 dataIndex: 'probsetID',
                 sorter: true,
-                width: "12%",
+                width: "8%",
                  render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -201,10 +201,10 @@ class DEGTable extends Component {
                 title: 't',
                 dataIndex: 't',
                 sorter: true,
-                width: "8%",
+                width: "9%",
                  render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -283,25 +283,25 @@ class DEGTable extends Component {
                   <div> <p className="err-message" id="message-deg"></p></div>  
                  <div  className="div-export-deg"><Button   id="btn-deg-export"   type="primary" onClick={this.props.exportDEG}> Export</Button> </div>
 
-                  <div id="deg-select">Display
+                  <div id="deg-select">Display &nbsp;
                             <Dropdown overlay={menu}>
                                   <Button >
                                     <span id="deg-drop-down">25</span> <Icon type="down" />
                                   </Button>
-                            </Dropdown>of total {this.props.data.diff_expr_genes.pagination.total}  records
+                            </Dropdown>&nbsp;of total {this.props.data.diff_expr_genes.pagination.total}  records
 
                         </div>
                     <div>
                      <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
-                           <div className="filter_col"  style={{width:"9%"}}><label for="input_deg_search_symbol"><span style={{display:"none"}}>input_deg_search_symbol</span> <Input onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></label></div>
+                           <div className="filter_col"  style={{width:"10%"}}><label for="input_deg_search_symbol"><span style={{display:"none"}}>input_deg_search_symbol</span> <Input onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></label></div>
                            <div className="filter_col"  style={{width:"7%"}} ><label for="input_deg_search_fc"><span style={{display:"none"}}>input_deg_search_fc</span> <Input onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></label></div>
-                           <div className="filter_col"  style={{width:"7%"}}><label for="input_dge_search_p_value"><span style={{display:"none"}}>input_dge_search_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="0.05"  id="input_dge_search_p_value"/></label></div>
-                           <div className="filter_col"  style={{width:"7%"}}><label for="input_deg_search_adj_p_value"><span style={{display:"none"}}>input_deg_search_adj_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="adj.p.val"  id="input_deg_search_adj_p_value"/></label></div>
+                           <div className="filter_col"  style={{width:"8%"}}><label for="input_dge_search_p_value"><span style={{display:"none"}}>input_dge_search_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="0.05"  id="input_dge_search_p_value"/></label></div>
+                           <div className="filter_col"  style={{width:"8%"}}><label for="input_deg_search_adj_p_value"><span style={{display:"none"}}>input_deg_search_adj_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="adj.p.val"  id="input_deg_search_adj_p_value"/></label></div>
                            <div className="filter_col"  style={{width:"8%"}} ><label for="input_deg_search_aveexpr"><span style={{display:"none"}}>input_deg_search_aveexpr</span> <Input onPressEnter={value=>search(value) }   placeholder="AveExpr"  id="input_deg_search_aveexpr"/></label></div>
-                           <div className="filter_col"  style={{width:"12%"}} ><label for="input_deg_search_accnum"><span style={{display:"none"}}>input_deg_search_accnum</span> <Input onPressEnter={value=>search(value) }   placeholder="ACCNUM"  id="input_deg_search_accnum"/></label></div>
-                           <div className="filter_col"  style={{width:"120px"}}><label for="input_deg_search_desc"><span style={{display:"none"}}>input_deg_search_desc</span> <Input onPressEnter={value=>search(value) }  placeholder="Desc"  id="input_deg_search_desc"/></label></div>
+                           <div className="filter_col"  style={{width:"10%"}} ><label for="input_deg_search_accnum"><span style={{display:"none"}}>input_deg_search_accnum</span> <Input onPressEnter={value=>search(value) }   placeholder="ACCNUM"  id="input_deg_search_accnum"/></label></div>
+                           <div className="filter_col"  style={{width:"16%"}}><label for="input_deg_search_desc"><span style={{display:"none"}}>input_deg_search_desc</span> <Input onPressEnter={value=>search(value) }  placeholder="Desc"  id="input_deg_search_desc"/></label></div>
                            <div className="filter_col"  style={{width:"8%"}} ><label for="input_deg_search_entrez"><span style={{display:"none"}}>input_deg_search_entrez</span> <Input onPressEnter={value=>search(value) } placeholder="ENTREZ"  id="input_deg_search_entrez"/></label></div>
-                           <div className="filter_col"  style={{width:"12%"}}><label for="input_deg_search_probsetid"><span style={{display:"none"}}>input_deg_search_probsetid</span> <Input onPressEnter={value=>search(value) }   placeholder="probsetID"  id="input_deg_search_probsetid"/></label></div>
+                           <div className="filter_col"  style={{width:"8%"}}><label for="input_deg_search_probsetid"><span style={{display:"none"}}>input_deg_search_probsetid</span> <Input onPressEnter={value=>search(value) }   placeholder="probsetID"  id="input_deg_search_probsetid"/></label></div>
                            <div className="filter_col"  style={{width:"8%"}}><label for="input_deg_search_t"><span style={{display:"none"}}>input_deg_search_t</span> <Input onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></label></div>
                            <div className="filter_col"  style={{width:"8%"}}><label for="input_deg_search_b"><span style={{display:"none"}}>input_deg_search_b</span> <Input onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></label></div>
                      </div>

@@ -102,7 +102,32 @@ class SSGSEATable extends Component {
                                     </div>
 
             }
-        }, {
+        },{
+            title: 'P VALUE',
+            dataIndex: 'P.Value',
+            sorter: true,
+            width: "10%",
+            defaultSortOrder: 'ascend',
+            render: (text, record, index) => {
+
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+            }
+        },{
+            title: 'adj.P.Val',
+            dataIndex: 'adj.P.Val',
+            sorter: true,
+            width: "10%",
+            render: (text, record, index) => {
+
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    </div>
+
+            }
+        },  {
             title: 'Avg.Enrichment.Score',
             dataIndex: 'Avg.Enrichment.Score',
             sorter: true,
@@ -126,32 +151,7 @@ class SSGSEATable extends Component {
                                     </div>
 
             }
-        }, {
-            title: 'P VALUE',
-            dataIndex: 'P.Value',
-            sorter: true,
-            width: "10%",
-            defaultSortOrder: 'ascend',
-            render: (text, record, index) => {
-
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
-                                    </div>
-
-            }
-        }, {
-            title: 'adj.P.Val',
-            dataIndex: 'adj.P.Val',
-            sorter: true,
-            width: "10%",
-            render: (text, record, index) => {
-
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
-                                    </div>
-
-            }
-        }, {
+        },  {
             title: 'B',
             dataIndex: 'B',
             sorter: true,
@@ -207,7 +207,7 @@ class SSGSEATable extends Component {
 
         let link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
-        let selection = [<div id={"ss_genset_select"}>     <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
+        let selection = [<div id={"ss_genset_select"}>     <Select defaultValue="human$H: Hallmark Gene Sets" 
                         id="ssGSEA_genset"
                         onChange={(e) => this.props.handleGeneChange(e)} 
                         aria-label="Gene Set For ssGSEA"
@@ -242,30 +242,31 @@ class SSGSEATable extends Component {
                           <div  className="div-export-ss">
                                 <Button   id="btn-ss-export"   type="primary" onClick={this.props.exportGSEA}> Export</Button>
                           </div>
-                          <div id="ss-select">Display 
+                          <div id="ss-select">Display  &nbsp;&nbsp;  
                                 <Dropdown overlay={menu}>
                                       <Button >
                                         <span id="ss-drop-down">25</span> <Icon type="down" />
                                       </Button>
-                                </Dropdown>of total {this.props.data.ssGSEA.pagination.total} records
+                                </Dropdown> &nbsp;  of total {this.props.data.ssGSEA.pagination.total} records
 
                          </div>
                          <div>
                             <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
 
-                                    <div className="filter_col" style={{width:"29%"}} ><label for="input_ssg_name"><span style={{display:"none"}}>input_ssg_name</span></label><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></div>
+                                    <div className="filter_col" style={{width:"31%"}} ><label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label></div>
                                     
-                                    <div className="filter_col"  style={{width:"9%"}}><label for="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label></div>
+                                    <div className="filter_col"  style={{width:"9%"}}><label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label></div>
                                     
-                                    <div className="filter_col" style={{width:"19%"}}><label for="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label></div>
+                                      <div className="filter_col" style={{width:"10%"}}><label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label></div>
 
-                                    <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label></div>
+                                     <div className="filter_col" style={{width:"10%"}}><label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label></div>
+                
+                                    <div className="filter_col" style={{width:"19%"}}><label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label></div>
 
-                                    <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label></div>
+                                    <div className="filter_col" style={{width:"10%"}}><label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label></div>
 
-                                     <div className="filter_col" style={{width:"10%"}}><label for="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label></div>
-                         
-                                    <div className="filter_col"  style={{width:"10%"}}><label for="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label></div>
+                                         
+                                    <div className="filter_col"  style={{width:"10%"}}><label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label></div>
 
                             </div>
                           <Table 

@@ -82,7 +82,7 @@ let defaultState = {
             },
             search_keyword: {
                 "name": "",
-                "search_logFC": "1.5",
+                "search_logFC": "1",
                 "search_Avg_Enrichment_Score": "",
                 "search_t": "",
                 "search_p_value": "0.05",
@@ -165,8 +165,6 @@ let defaultState = {
         },
         geneHeatmap: "/ssgseaHeatmap1.jpg",
         volcanoPlot: "/volcano.html",
-
-
     }
 };
 
@@ -357,7 +355,7 @@ class Analysis extends Component {
                 },
                 search_keyword: {
                     "name": "",
-                    "search_logFC": "1.5",
+                    "search_logFC": "1",
                     "search_Avg_Enrichment_Score": "",
                     "search_t": "",
                     "search_p_value": "0.05",
@@ -376,6 +374,8 @@ class Analysis extends Component {
         workflow.ssGSEA.loading = true;
         this.setState({ workflow: workflow });
 
+
+
         fetch('./api/analysis/getGSEA', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -391,6 +391,16 @@ class Analysis extends Component {
             .then(result => {
                 document.getElementById("message-ssgsea").innerHTML = ""
                 let workflow2 = Object.assign({}, this.state.workflow);
+                
+                document.getElementById("input_ssg_name").value = workflow2.ssGSEA.search_keyword.name;
+                document.getElementById("input_ssg_search_logFC").value = workflow2.ssGSEA.search_keyword.search_logFC;
+                document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = workflow2.ssGSEA.search_keyword.search_Avg_Enrichment_Score;
+                document.getElementById("input_ssg_search_t").value = workflow2.ssGSEA.search_keyword.search_t;
+                document.getElementById("input_ssg_search_p_value").value = workflow2.ssGSEA.search_keyword.search_p_value;
+                document.getElementById("input_ssg_search_adj_p_value").value = workflow2.ssGSEA.search_keyword.search_adj_p_value;
+                document.getElementById("input_ssg_search_b").value = workflow2.ssGSEA.search_keyword.search_b;
+
+
                 if (result.status == 200) {
                     const pagination = { ...workflow2.ssGSEA.pagination };
                     // Read total count from server
@@ -411,26 +421,13 @@ class Analysis extends Component {
                     workflow2.geneHeatmap = "/ssgseaHeatmap1.jpg?" + random
                     this.setState({ workflow: workflow2 });
 
-                    setTimeout(() => {
-                        this.resetSSGSEADisplay();
-                    }, 2000);
-
-
+                    this.resetSSGSEADisplay();
 
                 } else {
 
                     document.getElementById("message-ssgsea").innerHTML = result.msg
                 }
 
-
-
-                document.getElementById("input_ssg_name").value = workflow2.ssGSEA.search_keyword.name;
-                document.getElementById("input_ssg_search_logFC").value = workflow2.ssGSEA.search_keyword.search_logFC;
-                document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = workflow2.ssGSEA.search_keyword.search_Avg_Enrichment_Score;
-                document.getElementById("input_ssg_search_t").value = workflow2.ssGSEA.search_keyword.search_t;
-                document.getElementById("input_ssg_search_p_value").value = workflow2.ssGSEA.search_keyword.search_p_value;
-                document.getElementById("input_ssg_search_adj_p_value").value = workflow2.ssGSEA.search_keyword.search_adj_p_value;
-                document.getElementById("input_ssg_search_b").value = workflow2.ssGSEA.search_keyword.search_b;
 
 
             }).catch(error => console.log(error));
@@ -580,9 +577,7 @@ class Analysis extends Component {
             workflow.pathways_up.pagination = {
                 current: workflow.pathways_up.pagination.current,
                 pageSize: workflow.pathways_up.pagination.pageSize,
-
             }
-
         }
 
         workflow.pathways_up.loading = true;
@@ -619,9 +614,7 @@ class Analysis extends Component {
 
                     this.setState({ workflow: workflow2 });
 
-                    setTimeout(() => {
-                        this.resetPathWayUPDisplay();
-                    }, 2000);
+                    this.resetPathWayUPDisplay();
 
                 } else {
 
@@ -734,9 +727,7 @@ class Analysis extends Component {
                     workflow2.pathways_down.pagination = pagination;
 
                     this.setState({ workflow: workflow2 });
-                    setTimeout(() => {
-                        this.resetPathWayDownDisplay();
-                    }, 2000);
+                    this.resetPathWayDownDisplay();
                 } else {
                     document.getElementById("message-pdg").innerHTML = result.msg;
                 }
@@ -944,9 +935,7 @@ class Analysis extends Component {
                     workflow2.diff_expr_genes.pagination = pagination;
 
                     this.setState({ workflow: workflow2 });
-                    setTimeout(() => {
-                        this.resetDEGDisplay();
-                    }, 2000);
+                    this.resetDEGDisplay();
 
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
@@ -1968,9 +1957,7 @@ class Analysis extends Component {
                             workflow: workflow
                         });
 
-                        setTimeout(() => {
-                            this.resetGSMDisplay();
-                        }, 3000);
+                        this.resetGSMDisplay();
 
                     } else {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
@@ -2100,7 +2087,7 @@ class Analysis extends Component {
             },
             search_keyword: {
                 "name": "",
-                "search_logFC": "1.5",
+                "search_logFC": "1",
                 "search_Avg_Enrichment_Score": "",
                 "search_t": "",
                 "search_p_value": "0.05",
@@ -2533,40 +2520,47 @@ class Analysis extends Component {
     }
 
     resetGSMDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[0]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("gsm-select").style.right = width;
+        while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0] == "undefined") {
+            console.log("watch gsm display")
         }
+        let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        document.getElementById("gsm-select").style.right = width;
 
     }
 
     resetDEGDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[1]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[1].offsetWidth + 125;
-            document.getElementById("deg-select").style.right = width;
+        while (document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
+            console.log("watch deg display")
         }
+        let width = document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        document.getElementById("deg-select").style.right = width;
     }
 
     resetPathWayUPDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[2]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[2].offsetWidth + 125;
-            document.getElementById("pathways-up-select").style.right = width;
+          while (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0]== "undefined") {
+             console.log("watch pathways_up display")
         }
+        let width = document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+            document.getElementById("pathways-up-select").style.right = width;
     }
 
     resetPathWayDownDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[3]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[3].offsetWidth + 125;
+       while (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0]== "undefined") {
+            console.log("watch pathways_down display")
+            }
+
+             let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
             document.getElementById("pathways-down-select").style.right = width;
-        }
+       
     }
 
 
     resetSSGSEADisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[4]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-table-pagination")[4].offsetWidth + 125;
-            document.getElementById("ss-select").style.right = width;
+         while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0]== "undefined") {
+             console.log("watch SSGSEA display")
         }
+        let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+            document.getElementById("ss-select").style.right = width;
     }
 
 
@@ -2683,7 +2677,7 @@ class Analysis extends Component {
             },
             search_keyword: {
                 "name": "",
-                "search_logFC": "1.5",
+                "search_logFC": "1",
                 "search_Avg_Enrichment_Score": "",
                 "search_t": "",
                 "search_p_value": "0.05",
@@ -2825,9 +2819,8 @@ class Analysis extends Component {
                         });
 
                         this.hideWorkFlow();
-                        setTimeout(() => {
-                            this.resetGSMDisplay();
-                        }, 3000);
+
+                        this.resetGSMDisplay();
 
                     } else {
                         workflow.progressing = false;
@@ -2853,9 +2846,9 @@ class Analysis extends Component {
         let tabs = <div> <div className="header-nav">
             <div className="div-container">
                 <ul className="nav navbar-nav" id="header-navbar">
-                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className="active"> <a href="#about" className="nav-link" >About</a></li>
-                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className=""> <a href="#analysis"  className="nav-link">Analysis</a></li>
-                    <li  onClick={() => {this.changeTab('help')}}  id="li-help" className="" > <a href="#help"  className="nav-link">Help</a></li>
+                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className="active"> <a href="#about" className="nav-link" >ABOUT</a></li>
+                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className=""> <a href="#analysis"  className="nav-link">ANALYSIS</a></li>
+                    <li  onClick={() => {this.changeTab('help')}}  id="li-help" className="" > <a href="#help"  className="nav-link">HELP</a></li>
                 </ul>
             
             </div>

@@ -56,7 +56,7 @@ class DEGBox extends Component {
         ]
 
 
-        let content = [<Select defaultValue="deg_tag1" onChange={this.handleSelectionChange}>
+        let content = [<Select id="deg_select_option" defaultValue="deg_tag1" onChange={this.handleSelectionChange}>
                     <Option value="deg_tag1">Differentially Expressed Genes</Option>
                     <Option value="deg_tag2">Pathways for Upregulated Genes</Option>
                     <Option value="deg_tag3">Pathways for Downregulated Genes</Option>
