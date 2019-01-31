@@ -111,11 +111,15 @@ class PUGTable extends Component {
                     } else {
                         let pic_link = JSON.parse(result.data).pic_name
 
-                        var link = "./images/" + this.props.data.projectID + "/" + pic_link
-                        this.setState({
-                            heapMap: link,
-                            visible: true
-                        });
+                        //var link = "./images/" + this.props.data.projectID + "/" + pic_link
+                        // this.setState({
+                        //     heapMap: link,
+                        //     visible: true
+                        // });
+                        var link = "images/" + this.props.data.projectID + "/" + pic_link
+                        window.open(window.location.host+"/microarray/"+link);
+
+
                     }
 
                 } else {
