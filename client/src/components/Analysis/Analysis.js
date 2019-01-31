@@ -374,6 +374,8 @@ class Analysis extends Component {
         workflow.ssGSEA.loading = true;
         this.setState({ workflow: workflow });
 
+
+
         fetch('./api/analysis/getGSEA', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -389,6 +391,16 @@ class Analysis extends Component {
             .then(result => {
                 document.getElementById("message-ssgsea").innerHTML = ""
                 let workflow2 = Object.assign({}, this.state.workflow);
+                
+                document.getElementById("input_ssg_name").value = workflow2.ssGSEA.search_keyword.name;
+                document.getElementById("input_ssg_search_logFC").value = workflow2.ssGSEA.search_keyword.search_logFC;
+                document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = workflow2.ssGSEA.search_keyword.search_Avg_Enrichment_Score;
+                document.getElementById("input_ssg_search_t").value = workflow2.ssGSEA.search_keyword.search_t;
+                document.getElementById("input_ssg_search_p_value").value = workflow2.ssGSEA.search_keyword.search_p_value;
+                document.getElementById("input_ssg_search_adj_p_value").value = workflow2.ssGSEA.search_keyword.search_adj_p_value;
+                document.getElementById("input_ssg_search_b").value = workflow2.ssGSEA.search_keyword.search_b;
+
+
                 if (result.status == 200) {
                     const pagination = { ...workflow2.ssGSEA.pagination };
                     // Read total count from server
@@ -416,15 +428,6 @@ class Analysis extends Component {
                     document.getElementById("message-ssgsea").innerHTML = result.msg
                 }
 
-
-
-                document.getElementById("input_ssg_name").value = workflow2.ssGSEA.search_keyword.name;
-                document.getElementById("input_ssg_search_logFC").value = workflow2.ssGSEA.search_keyword.search_logFC;
-                document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = workflow2.ssGSEA.search_keyword.search_Avg_Enrichment_Score;
-                document.getElementById("input_ssg_search_t").value = workflow2.ssGSEA.search_keyword.search_t;
-                document.getElementById("input_ssg_search_p_value").value = workflow2.ssGSEA.search_keyword.search_p_value;
-                document.getElementById("input_ssg_search_adj_p_value").value = workflow2.ssGSEA.search_keyword.search_adj_p_value;
-                document.getElementById("input_ssg_search_b").value = workflow2.ssGSEA.search_keyword.search_b;
 
 
             }).catch(error => console.log(error));
