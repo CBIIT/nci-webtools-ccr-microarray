@@ -19,7 +19,7 @@ class GSMData extends Component {
         },
         data: { totalCount: 0, records: [] },
         renderData: { totalCount: 0, records: [] },
-        sorter: { field: "gsm", order: "descend" }
+        sorter: { field: "gsm", order: "ascend" }
 
     };
     constructor(props) {
