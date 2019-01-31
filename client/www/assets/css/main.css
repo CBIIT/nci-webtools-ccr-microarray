@@ -275,18 +275,11 @@ tr:nth-child(even) {
 
 .ant-table {
     font-size: 12px !important;
-    padding-top: 15px !important;
+
 }
-
-.ant-table {
-    font-size: 12px !important;
-    padding-top: 15px !important;
-}
-
-
 
 .ant-table-thead {
-    font-size: 11px !important;
+    /*font-size: 11px !important;*/
 }
 
 .input-search {
@@ -456,7 +449,22 @@ tr:nth-child(even) {
 
 .custom_modal {
     width: 80%;
+}
 
+#message-deg{
+    display: none;
+}
+
+#message-ssgsea{
+    display: none;
+}
+
+#message-pug{
+    display: none;
+}
+
+#message-pdg{
+    display: none;
 }
 
 .filter_col {
@@ -511,10 +519,13 @@ tr:nth-child(even) {
 #ssGSEA_genset {
     position: absolute;
     left: 260px;
-    top: 48px;
+    top: 50px;
     width: 380px;
 }
 
+#deg_select_option{
+    width: 330px;
+}
 
 .nav>li>a {
     font-size: 16px;
@@ -768,28 +779,28 @@ tr:nth-child(even) {
 
 #deg_tag1 .ant-table-pagination {
        position: absolute;
-    top: -118px;
+    top: -104px;
     right: 88px;
 }
 
 #deg_tag2 .ant-table-pagination {
     position: absolute;
-    top: -118px;
+    top: -100px;
     right: 95px;
 }
 
 
 #deg_tag3 .ant-table-pagination {
     position: absolute;
-     top: -118px;
+     top: -104px;
     right: 95px;
 }
 
 
 #ss_tag1 .ant-table-pagination {
     position: absolute;
-    top: -100px;
-    right: 0px;
+    top: -103px;
+    right: 95px;
 }
 
 
@@ -811,22 +822,32 @@ div#ss_tag1 {
 }
 div#deg-select{
     position: absolute;
-    top: 54px;
+    top: 50px;
+    right: 125px;
 }
 
 div#pathways-down-select{
  position: absolute;
-    top: 54px;
+    top: 50px;
+    right: 125px;
 }
 
 div#pathways-up-select{
  position: absolute;
-    top: 54px;
+    top: 49px;
+    right: 125px;
 }
 
 div#deg-select button {
     margin-left: 10px;
     margin-right: 10px;
+
+}
+
+div#ss-select{
+    position: absolute;
+    top: 51px;
+    right: 125;
 }
 
 input#input-access-code {
@@ -867,23 +888,23 @@ input#input_group_name {
 
 .div-export-deg {
     float: right;
-    margin-top: -45px;
+    margin-top: -31px;
 }
 
 .div-export-pathwayUp {
     float: right;
-    margin-top: -45px;
+    margin-top: -31px;
 
 }
 
 .div-export-pathwayDown {
     float: right;
-    margin-top: -45px;
+    margin-top: -31px;
 }
 
 .div-export-ss {
     float: right;
-    margin-top: -45px;
+    margin-top: -30px;
 }
 
 .div-export-gsm{
