@@ -253,7 +253,7 @@ class SSGSEATable extends Component {
                          <div>
                             <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
 
-                                    <div className="filter_col" style={{width:"29%"}} ><label for="input_ssg_name"><span style={{display:"none"}}>input_ssg_name</span><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label></div>
+                                    <div className="filter_col" style={{width:"31%"}} ><label for="input_ssg_name"><span style={{display:"none"}}>input_ssg_name</span><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label></div>
                                     
                                     <div className="filter_col"  style={{width:"9%"}}><label for="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label></div>
                                     
