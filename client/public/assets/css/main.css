@@ -519,10 +519,13 @@ tr:nth-child(even) {
 #ssGSEA_genset {
     position: absolute;
     left: 260px;
-    top: 48px;
+    top: 50px;
     width: 380px;
 }
 
+#deg_select_option{
+    width: 330px;
+}
 
 .nav>li>a {
     font-size: 16px;
