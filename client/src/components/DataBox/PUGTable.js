@@ -137,7 +137,7 @@ class PUGTable extends Component {
         const columns = [{
             title: 'PATHWAY_ID',
             dataIndex: 'Pathway_ID',
-            width: "12%",
+            width: "13%",
             sorter: true,
               render: (text, record, index) => {
 
