@@ -165,8 +165,6 @@ let defaultState = {
         },
         geneHeatmap: "/ssgseaHeatmap1.jpg",
         volcanoPlot: "/volcano.html",
-
-
     }
 };
 
@@ -411,11 +409,7 @@ class Analysis extends Component {
                     workflow2.geneHeatmap = "/ssgseaHeatmap1.jpg?" + random
                     this.setState({ workflow: workflow2 });
 
-                    setTimeout(() => {
-                        this.resetSSGSEADisplay();
-                    }, 1800);
-
-
+                    this.resetSSGSEADisplay();
 
                 } else {
 
@@ -580,9 +574,7 @@ class Analysis extends Component {
             workflow.pathways_up.pagination = {
                 current: workflow.pathways_up.pagination.current,
                 pageSize: workflow.pathways_up.pagination.pageSize,
-
             }
-
         }
 
         workflow.pathways_up.loading = true;
@@ -619,9 +611,7 @@ class Analysis extends Component {
 
                     this.setState({ workflow: workflow2 });
 
-                    setTimeout(() => {
-                        this.resetPathWayUPDisplay();
-                    }, 1800);
+                    this.resetPathWayUPDisplay();
 
                 } else {
 
@@ -734,9 +724,7 @@ class Analysis extends Component {
                     workflow2.pathways_down.pagination = pagination;
 
                     this.setState({ workflow: workflow2 });
-                    setTimeout(() => {
-                        this.resetPathWayDownDisplay();
-                    }, 1800);
+                    this.resetPathWayDownDisplay();
                 } else {
                     document.getElementById("message-pdg").innerHTML = result.msg;
                 }
@@ -944,9 +932,7 @@ class Analysis extends Component {
                     workflow2.diff_expr_genes.pagination = pagination;
 
                     this.setState({ workflow: workflow2 });
-                    setTimeout(() => {
-                        this.resetDEGDisplay();
-                    }, 1800);
+                    this.resetDEGDisplay();
 
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
@@ -1968,9 +1954,7 @@ class Analysis extends Component {
                             workflow: workflow
                         });
 
-                        setTimeout(() => {
-                            this.resetGSMDisplay();
-                        }, 1800);
+                        this.resetGSMDisplay();
 
                     } else {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
@@ -2533,40 +2517,47 @@ class Analysis extends Component {
     }
 
     resetGSMDisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("gsm-select").style.right = width;
+        while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0] == "undefined") {
+            console.log("watch gsm display")
         }
+        let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        document.getElementById("gsm-select").style.right = width;
 
     }
 
     resetDEGDisplay = () => {
-        if (document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0]) {
-            let width = document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("deg-select").style.right = width;
+        while (document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
+            console.log("watch deg display")
         }
+        let width = document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        document.getElementById("deg-select").style.right = width;
     }
 
     resetPathWayUPDisplay = () => {
-        if (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0]) {
-            let width = document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("pathways-up-select").style.right = width;
+          while (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0]== "undefined") {
+             console.log("watch pathways_up display")
         }
+        let width = document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+            document.getElementById("pathways-up-select").style.right = width;
     }
 
     resetPathWayDownDisplay = () => {
-        if (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0]) {
-            let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+       while (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0]== "undefined") {
+            console.log("watch pathways_down display")
+            }
+
+             let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
             document.getElementById("pathways-down-select").style.right = width;
-        }
+       
     }
 
 
     resetSSGSEADisplay = () => {
-        if (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0]) {
-            let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("ss-select").style.right = width;
+         while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0]== "undefined") {
+             console.log("watch SSGSEA display")
         }
+        let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+            document.getElementById("ss-select").style.right = width;
     }
 
 
@@ -2825,9 +2816,8 @@ class Analysis extends Component {
                         });
 
                         this.hideWorkFlow();
-                        setTimeout(() => {
-                            this.resetGSMDisplay();
-                        }, 1800);
+
+                        this.resetGSMDisplay();
 
                     } else {
                         workflow.progressing = false;

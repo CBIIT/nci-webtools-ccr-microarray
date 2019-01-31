@@ -207,7 +207,7 @@ class SSGSEATable extends Component {
 
         let link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
-        let selection = [<div id={"ss_genset_select"}>     <Select defaultValue="human$h.all.v6.1.symbols.gmt" 
+        let selection = [<div id={"ss_genset_select"}>     <Select defaultValue="human$H: Hallmark Gene Sets" 
                         id="ssGSEA_genset"
                         onChange={(e) => this.props.handleGeneChange(e)} 
                         aria-label="Gene Set For ssGSEA"
