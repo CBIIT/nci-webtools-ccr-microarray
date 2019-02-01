@@ -1035,8 +1035,8 @@ class Analysis extends Component {
                                             b:0,
                                             pd:2,
                                         },
-                                        width:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.9,
-                                        height:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.9,
+                                        width:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,
+                                        height:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,
                                         scene: {
                                             xaxis: {
                                                 title: pcaData.col[0],
@@ -1423,7 +1423,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8, }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9, }
 
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
