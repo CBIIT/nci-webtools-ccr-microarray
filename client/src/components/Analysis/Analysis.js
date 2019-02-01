@@ -1168,7 +1168,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.svg";
-        let histplotAN = <div><img src={ histplotANLink } style={{ width: "70%" }} alt="Histogram" /></div>;
+        let histplotAN = <div><img src={ histplotANLink } style={{ width: "60%" }} alt="Histogram" /></div>;
 
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
@@ -1199,7 +1199,7 @@ class Analysis extends Component {
                                 let list_mAplotBN = [];
                                 for (let i = result.data.length - 1; i >= 0; i--) {
                                     let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "60%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
 
@@ -1238,7 +1238,7 @@ class Analysis extends Component {
             let list_mAplotBN = [];
             for (let i = workflow2.list_mAplotAN.length - 1; i >= 0; i--) {
                 let link = "./images/" + workflow2.projectID + workflow2.list_mAplotAN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "60%" }} alt="MAplot"/> </div>)
             }
             let maplot_style = {
 
