@@ -545,14 +545,9 @@ class Analysis extends Component {
             params = {
                 projectId: workflow.projectID,
                 page_number: workflow.pathways_up.pagination.current,
-                page_size: workflow.pathways_up.pagination.pageSize,
-                sorting: {
-                    name: "P_Value",
-                    order: "ascend",
-
-                }
+                page_size: workflow.pathways_up.pagination.pageSize
             }
-
+            params.sorting = workflow.pathways_up.sorting;
             params.search_keyword = workflow.pathways_up.search_keyword
             workflow.pathways_up.pagination = {
                 current: workflow.pathways_up.pagination.current,
