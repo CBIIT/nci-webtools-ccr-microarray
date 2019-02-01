@@ -1521,7 +1521,7 @@ class Analysis extends Component {
             let list_mAplotBN = [];
             for (let i = workflow2.list_mAplotBN.length - 1; i >= 0; i--) {
                 let link = "./images/" + workflow2.projectID + workflow2.list_mAplotBN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "50%" }} alt="MAplot"/> </div>)
             }
             let maplot_style = {
 
