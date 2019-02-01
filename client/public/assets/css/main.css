@@ -498,7 +498,7 @@ tr:nth-child(even) {
 
 
 #tab_analysis .container {
-    min-height: 1150px;
+    min-height: 800px;
     overflow-y: hidden;
 
 }
@@ -510,7 +510,6 @@ tr:nth-child(even) {
 }
 
 .ant-tabs:not(.ant-tabs-vertical)>.ant-tabs-content>.ant-tabs-tabpane {
-    min-height: 1150px;
     overflow-y: hidden;
     overflow-x: hidden;
 }
