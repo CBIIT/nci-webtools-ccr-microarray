@@ -22,12 +22,15 @@ p {
     font-size: 18px;
 
 }
+button, input, optgroup, select, textarea{
+        font-weight: 300;
+}
 
 li {
     font-size: 18px;
 }
 .ant-pagination li{
-    font-size: 12px;
+    font-size: 14px;
 }
 .row {
     padding: 5px;
