@@ -829,25 +829,10 @@ class Analysis extends Component {
             params = {
                 projectId: workflow.projectID,
                 page_number: workflow.diff_expr_genes.pagination.current,
-                page_size: workflow.diff_expr_genes.pagination.pageSize,
-                sorting: {
-                    name: "P.Value",
-                    order: "ascend",
-                },
-                search_keyword: {
-                    "search_symbol": "",
-                    "search_fc": "1.5",
-                    "search_p_value": "0.05",
-                    "search_adj_p_value": "",
-                    "search_aveexpr": "",
-                    "search_accnum": "",
-                    "search_desc": "",
-                    "search_entrez": "",
-                    "search_probsetid": "",
-                    "search_t": "",
-                    "search_b": ""
-                }
+                page_size: workflow.diff_expr_genes.pagination.pageSize
             }
+             params.sorting = workflow.diff_expr_genes.sorting;
+            params.search_keyword = workflow.diff_expr_genes.search_keyword
             workflow.diff_expr_genes.pagination = {
                 current: workflow.diff_expr_genes.pagination.current,
                 pageSize: workflow.diff_expr_genes.pagination.pageSize,
