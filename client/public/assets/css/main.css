@@ -58,7 +58,9 @@ tr:nth-child(even) {
     font-size: 18px;
 }
 
-
+.ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+    font-weight: bolder;
+}
 .ant-table-placeholder {
     z-index: 0 !important;
 }
