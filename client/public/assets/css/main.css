@@ -15,6 +15,9 @@ label {
     width: 100%;
 }
 
+canvas {
+    top: -120px !important;
+}
 p {
     font-size: 18px;
 

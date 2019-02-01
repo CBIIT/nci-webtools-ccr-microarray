@@ -1014,7 +1014,7 @@ class Analysis extends Component {
                         if (result.data != "") {
                             let pcaData = result.data;
                             var PCAIframe = <Plot  data={[{
-
+                                        autosize: true,
                                         x: pcaData.x,
                                         y: pcaData.y,
                                         z: pcaData.z,
@@ -1029,14 +1029,14 @@ class Analysis extends Component {
                                     }]} layout={{
             
                                         margin:{
-                                            l:0,
-                                            r:0,
-                                            t:0,
-                                            b:0,
+                                            l:25,
+                                            r:25,
+                                            t:-50,
+                                            b:0 ,
                                             pd:2,
                                         },
                                         width:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,
-                                        height:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,
+                                        height:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.6,
                                         scene: {
                                             xaxis: {
                                                 title: pcaData.col[0],
