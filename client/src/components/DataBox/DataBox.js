@@ -345,7 +345,7 @@ class DataBox extends Component {
             var d = { 'key': key, 'name': key, 'gsms': value };
             groups_data_list.push(d);
         })
-        let group_table = <Table columns={columns} dataSource={groups_data_list}  />
+        let group_table = <Table columns={columns} dataSource={groups_data_list} pagination={false}/>
         let modal = "";
 
 
@@ -354,15 +354,16 @@ class DataBox extends Component {
         footer={[
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
-        >
+        > <div  style={{display:this.state.added?"none":"block"}}>
           <p style={{color: "#215a82"}}><b>{number_select} Selected GSM(s)</b></p>
            <p style={{display: selected_gsms==""&&this.state.visible==true?"block":"none"}} className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
           <p><TextArea  disabled style={{width:'100%'}} value={selected_gsms}/></p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
            <p className="err-message" id="message-gsm-group"></p>
-          <p> <Input  disabled={this.state.selected==""||this.state.group_name==""?true:false} aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} onChange={this.handleInputOnChange}/>&nbsp;
+          <p> <Input  disabled={this.state.selected==""?true:false} aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} onChange={this.handleInputOnChange}/>&nbsp;
               <Button  type={this.state.selected==""||this.state.group_name==""?"default":"primary"}  disabled={this.state.selected==""||this.state.group_name==""?true:false}   onClick={this.createTag} >Add</Button>
           </p>
+          </div>
           <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
            <p className="err-message" id="message-gsm-group-table"></p>
           {group_table}
