@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tabs, Table, Button, Input, Modal, message } from 'antd';
+import { Tabs, Table, Button, Input, Modal, message,TextArea } from 'antd';
 import DEGBox from './DEGBox'
 import GSMData from './GSMData'
 import PrePlotsBox from './PrePlotsBox'
@@ -309,8 +309,10 @@ class DataBox extends Component {
         }
 
         var selected_gsms = "";
+        let number_select =0 ;
         if (this.props.data.dataList.length > 0) {
             for (var key in this.state.selected) {
+                number_select=number_select+1;
                 selected_gsms = selected_gsms + this.props.data.dataList[this.state.selected[key] - 1].gsm + ",";
             }
         }
@@ -352,9 +354,9 @@ class DataBox extends Component {
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
         >
-          <p style={{color: "#215a82"}}><b>Selected GSM(s)</b></p>
+          <p style={{color: "#215a82"}}><b>{number_select} Selected GSM(s)</b></p>
            <p style={{display: selected_gsms==""&&this.state.visible==true?"block":"none"}} className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
-          <p>{selected_gsms}</p>
+          <p><Input style={{width:'100%'}>{selected_gsms}</p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
            <p className="err-message" id="message-gsm-group"></p>
           <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} onChange={this.handleInputOnChange}/>&nbsp;
