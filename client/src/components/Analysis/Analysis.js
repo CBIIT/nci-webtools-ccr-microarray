@@ -1536,7 +1536,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.svg";
-        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
+        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "50%" }} alt="Histogram" /></div>;
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
     }
