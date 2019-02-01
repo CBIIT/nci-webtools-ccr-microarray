@@ -16,6 +16,7 @@ class GSMData extends Component {
         pagination: {
             current: 1,
             pageSize: 25
+
         },
         data: { totalCount: 0, records: [] },
         renderData: { totalCount: 0, records: [] },
@@ -409,6 +410,7 @@ class GSMData extends Component {
                             columns = { columns } 
                             dataSource = { this.state.renderData}
                             onChange={this.handlePageChange}    
+            
                                 />
                         </div>
                     </div>
