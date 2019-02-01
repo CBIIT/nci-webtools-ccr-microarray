@@ -864,6 +864,10 @@ input#input_group_name {
     color: red;
 }
 
+#checkbox_queue span {
+    font-weight: normal !important;
+}
+
 .success-message{
     color: green;
 }

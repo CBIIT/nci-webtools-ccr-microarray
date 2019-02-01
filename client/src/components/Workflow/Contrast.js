@@ -3,10 +3,7 @@ import { Checkbox, Input, Select, Button } from 'antd';
 const { Option, OptGroup } = Select;
 
 class Contrast extends Component {
-    state = {
-        checked: true
-    };
-
+  
     constructor(props) {
 
         super(props);
@@ -16,7 +13,6 @@ class Contrast extends Component {
 
     handleSwitchChange = (e) => {
 
-        this.setState({ checked: !this.state.checked });
 
         if (e.target.checked) {
             this.props.changeRUNContractModel(true);
@@ -39,7 +35,7 @@ class Contrast extends Component {
         })
 
         let queueBlock = <div className="block ">
-                <Checkbox  checked={this.state.checked} onChange={this.handleSwitchChange} >Submit this job to a Queue</Checkbox>
+              <div  id="checkbox_queue">  <Checkbox checked={this.props.data.useQueue} onChange={this.handleSwitchChange} >Submit this job to a Queue</Checkbox></div>
              <label className="title" > Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
              <Input  id="email"  aria-label="input email"  id="input-email" placeholder="email"/>
              <span id="queueMessage">Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</span>
