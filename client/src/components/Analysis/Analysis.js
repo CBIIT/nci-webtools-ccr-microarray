@@ -347,13 +347,9 @@ class Analysis extends Component {
             params = {
                 projectId: workflow.projectID,
                 page_number: workflow.ssGSEA.pagination.current,
-                page_size: workflow.ssGSEA.pagination.pageSize,
-                sorting: {
-                    name: "P.Value",
-                    order: "descend",
-
-                }
+                page_size: workflow.ssGSEA.pagination.pageSize
             }
+             params.sorting=workflow.ssGSEA.sorting
             params.search_keyword=workflow.ssGSEA.search_keyword
             workflow.ssGSEA.pagination = {
                 current: workflow.ssGSEA.pagination.current,
