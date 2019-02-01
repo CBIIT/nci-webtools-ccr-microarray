@@ -309,7 +309,7 @@ class GSMData extends Component {
                 title: 'GSM',
                 dataIndex: 'gsm',
                 width: '18%',
-                defaultSortOrder: 'descend',
+                defaultSortOrder: 'ascend',
                 sorter: (a, b) => ('' + a.gsm).localeCompare(b.gsm),
                 render: (text, record, index) => (
                     <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.18}}>
