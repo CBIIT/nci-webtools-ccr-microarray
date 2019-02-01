@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Tabs, Table, Button, Input, Modal, message,TextArea } from 'antd';
+import { Tabs, Table, Button, Input, Modal, message } from 'antd';
 import DEGBox from './DEGBox'
 import GSMData from './GSMData'
 import PrePlotsBox from './PrePlotsBox'
 import PostPlotsBox from './PostPlotsBox'
 import SSGSEATable from './SSGSEATable'
 const TabPane = Tabs.TabPane;
+const { TextArea } = Input;
 
 class DataBox extends Component {
 
@@ -356,7 +357,7 @@ class DataBox extends Component {
         >
           <p style={{color: "#215a82"}}><b>{number_select} Selected GSM(s)</b></p>
            <p style={{display: selected_gsms==""&&this.state.visible==true?"block":"none"}} className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
-          <p><Input style={{width:'100%'}>{selected_gsms}</p>
+          <p><TextArea  style={{width:'100%'}} value={selected_gsms}/></p>
           <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
            <p className="err-message" id="message-gsm-group"></p>
           <p> <Input  aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} onChange={this.handleInputOnChange}/>&nbsp;
