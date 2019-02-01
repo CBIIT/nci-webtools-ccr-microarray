@@ -1128,7 +1128,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8 }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
