@@ -352,17 +352,9 @@ class Analysis extends Component {
                     name: "P.Value",
                     order: "descend",
 
-                },
-                search_keyword: {
-                    "name": "",
-                    "search_logFC": "1",
-                    "search_Avg_Enrichment_Score": "",
-                    "search_t": "",
-                    "search_p_value": "0.05",
-                    "search_adj_p_value": "",
-                    "search_b": "",
                 }
             }
+            params.search_keyword=workflow.ssGSEA.search_keyword
             workflow.ssGSEA.pagination = {
                 current: workflow.ssGSEA.pagination.current,
                 pageSize: workflow.ssGSEA.pagination.pageSize,
@@ -558,22 +550,10 @@ class Analysis extends Component {
                     name: "P_Value",
                     order: "ascend",
 
-                },
-                search_keyword: {
-                    "search_PATHWAY_ID": "",
-                    "search_SOURCE": "",
-                    "search_DESCRIPTION": "",
-                    "search_TYPE": "",
-                    "search_p_value": "0.05",
-                    "search_fdr": "",
-                    "search_RATIO": "",
-                    "search_GENE_LIST": "",
-                    "search_NUMBER_HITS": "",
-                    "search_NUMBER_GENES_PATHWAY": "",
-                    "search_NUMBER_USER_GENES": "",
-                    "search_TOTAL_NUMBER_GENES": "",
                 }
             }
+
+            params.search_keyword = workflow.pathways_up.search_keyword
             workflow.pathways_up.pagination = {
                 current: workflow.pathways_up.pagination.current,
                 pageSize: workflow.pathways_up.pagination.pageSize,
