@@ -646,27 +646,10 @@ class Analysis extends Component {
             params = {
                 projectId: workflow.projectID,
                 page_number: workflow.pathways_down.pagination.current,
-                page_size: workflow.pathways_down.pagination.pageSize,
-                sorting: {
-                    name: "P_Value",
-                    order: "ascend",
-
-                },
-                search_keyword: {
-                    "search_PATHWAY_ID": "",
-                    "search_SOURCE": "",
-                    "search_DESCRIPTION": "",
-                    "search_TYPE": "",
-                    "search_p_value": "0.05",
-                    "search_fdr": "",
-                    "search_RATIO": "",
-                    "search_GENE_LIST": "",
-                    "search_NUMBER_HITS": "",
-                    "search_NUMBER_GENES_PATHWAY": "",
-                    "search_NUMBER_USER_GENES": "",
-                    "search_TOTAL_NUMBER_GENES": "",
-                }
+                page_size: workflow.pathways_down.pagination.pageSize
             }
+            params.sorting = workflow.pathways_down.sorting;
+            params.search_keyword=workflow.pathways_down.search_keyword;
             workflow.pathways_down.pagination = {
                 current: workflow.pathways_down.pagination.current,
                 pageSize: workflow.pathways_down.pagination.pageSize,
