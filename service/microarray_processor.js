@@ -68,7 +68,7 @@ function qAnalysis(data, emailto, endCallback) {
             var h = Math.floor(result / 3600);
             var m = Math.floor((result / 60 % 60));
             var s = Math.floor((result % 60));
-            return result = h + " hours " + m + " minutes " + s + "seconds";
+            return result = h + " hours " + m + " minutes " + s + " seconds";
         }
 
 
