@@ -10,6 +10,7 @@ var path = require('path');
 var rimraf = require('rimraf');
 var queue = require('../components/queue');
 const AWS = require('aws-sdk');
+var dateFormat = require('dateformat');
 
 router.post('/upload', function(req, res) {
     logger.info("[start] upload files");
@@ -222,6 +223,7 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
 
 
 router.post("/qAnalysis", function(req, res) {
+    var now = new Date();
 
     let data = {};
     data.projectId = req.body.projectId;
@@ -234,6 +236,7 @@ router.post("/qAnalysis", function(req, res) {
     data.source = req.body.source;
     data.email = req.body.email;
     data.domain = "microarray";
+    data.submit=dateFormat(now, "dd-mm-yyyy, h:MM:ss TT");
 
 
     logger.info("-----------------------------------------------")
@@ -252,6 +255,8 @@ router.post("/qAnalysis", function(req, res) {
         data.source = "fetch";
         data.email = "jonkiky@gmail.com";
         data.domain = "microarray";
+        data.submit=dateFormat(now, "dd-mm-yyyy, h:MM:ss TT");
+
     }
 
     function send(d) {
