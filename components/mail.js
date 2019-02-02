@@ -33,6 +33,24 @@ let emailTemplate = function (code,time,link,submit_time,project_id){
     }
 
 
+let emailFailedTemplate = function (code,time,link,submit_time,project_id){ 
+
+    return "<b>Dear User:</b><br/>" +
+        "<p>&nbsp;&nbsp;The job you submitted to the MicroArray processor failed to be processed using the MicroArrayPipeline R Package. Please correct and resubmit your data set.</p>" +
+        "<p><b>&nbsp;&nbsp;Job Information</b></p>" +
+        "<p>&nbsp;&nbsp;Job Name: Microarray Run Contrast</p>" +
+        "<p>&nbsp;&nbsp;Accession Code: <b>" + code+ "</b></p>"+
+        "<p>&nbsp;&nbsp;Submitted Time: <b>" +submit_time+ "</b> seconds</p>"+
+        "<p>&nbsp;&nbsp;Execution Time: <b>" +time+ "</b> seconds</p>"+
+        "<br/>" +
+        "<br/>" +
+        "<p>Please contact us at <a href=\"NCIPIMixtureWebAdmin@mail.nih.gov\" target=\"_top\">NCIPIMixtureWebAdmin@mail.nih.gov </a>for more information or if you have any questions.</p>"
+        "<br/>"+
+        "<br/>"+
+        "<p>Respectfully,</p>" +
+        "<p>Microarray</p>";
+    }
+
 var sendMail = function(from, to, subject, text, html) {
     let mailOptions = {
         from: from, // sender address

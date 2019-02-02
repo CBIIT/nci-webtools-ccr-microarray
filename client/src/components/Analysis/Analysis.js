@@ -12,6 +12,7 @@ const ButtonGroup = Button.Group;
 
 let defaultState = {
     workflow: {
+        QueueModalvisible:false,
         useQueue: true,
         token: "",
         projectID: "",
@@ -1937,6 +1938,20 @@ class Analysis extends Component {
         }
     }
 
+
+    showModal = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.QueueModalvisible = true;
+        this.setState(workflow);
+    }
+
+     handleCancel = () => {
+        let workflow = Object.assign({}, this.state);
+        workflow.QueueModalvisible = false;
+        this.setState(workflow);
+    }
+
+
     runContrast = () => {
         let workflow = Object.assign({}, this.state.workflow);
         document.getElementById("message-use-queue").innerHTML = "";
@@ -2156,7 +2171,7 @@ class Analysis extends Component {
                         }
                         workflow.uploading = false;
                         workflow.progressing = false;
-                        document.getElementById("message-success-use-queue").innerHTML = "The job has been added to queue successfully!";
+                        workflow.QueueMessageStatus=true;
                         this.setState({
                             workflow: workflow
                         });
@@ -2791,6 +2806,23 @@ class Analysis extends Component {
 
 
     render() {
+
+
+        // define group modal
+       let queueModal = <Modal key="queue_modal" visible={this.state.workflow.QueueModalvisible}  className="custom_modal" title="MicroArray Queue" onCancel={this.handleCancel}
+        footer={[
+            <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
+          ]}
+        > <div  style={{display:this.state.added?"none":"block"}}>
+          <p> Your job will be sent to the queuing system for processing. Results will be sent to you via email when all model runs are completed </p>
+          <p>Please note: Depending on model complexity and queue length it could be up to a day before you receive your results.</p>
+          </div>
+
+        </Modal>
+        // end  group modal
+
+
+
         let modal = this.state.workflow.progressing ? "progress" : "progress-hidden";
         const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin  />;
         let tabs = <div> <div className="header-nav">
@@ -2964,7 +2996,9 @@ class Analysis extends Component {
                 </div>
             </div>
             </div>
+            {queueModal}
              </div>
+            }
         }
         return (
             <div>{tabs}</div>
