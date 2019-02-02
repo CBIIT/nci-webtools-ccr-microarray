@@ -1753,7 +1753,8 @@ class Analysis extends Component {
         if (workflow.dataList.length != 0) {
             wb.SheetNames.push("Configuration");
             var ws_data = [
-                ['No Configuration']
+                 ["Accession Code", workflow.accessionCode],
+                ["Contrast Group", workflow.group_1+" vs "+workflow.group_2]
             ];
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets["Configuration"] = ws;
