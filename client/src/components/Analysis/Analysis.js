@@ -748,6 +748,8 @@ class Analysis extends Component {
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Configuration");
                         var ws_data = [
+                         ["Accession Code", workflow.accessionCode],
+                            ["Contrast Group", workflow.group_1+" vs "+workflow.group_2],
                             ["sorting.field", workflow.pathways_down.sorting.name],
                             ["sorting.order", workflow.pathways_down.sorting.order],
                             ["search_keyword", ""],
