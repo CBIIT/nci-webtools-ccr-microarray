@@ -65,7 +65,7 @@ class Help extends Component {
 
                               <h3>Analysis</h3>
                               <p>Once the files are uploaded, choose groups for each sample.  At least 2 groups must be created.</p>
-                               <p>Next, choose contrasts to compare.</p>
+                               <p>Next, choose contrasts to compare,for example: </p>
                                <p>The control group should be entered last.</p>
                                <p>For example:</p>
                                <p><div style={{"paddingLeft":"26px"}}>
