@@ -965,6 +965,7 @@ class Analysis extends Component {
                                 degData[i]["ENTREZ"],
                                 degData[i]["FC"],
                                 degData[i]["P.Value"],
+                                degData[i]["SYMBOL"],
                                 degData[i]["adj.P.Val"],
                                 degData[i]["logFC"],
                                 degData[i]["probsetID"],
