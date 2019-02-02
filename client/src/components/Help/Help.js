@@ -31,7 +31,7 @@ class Help extends Component {
                           <p>Currently, microRNA and single-cell analyses are not supported.</p></li>
                          </ul>
 
-                          <h3>Human:</h3>
+                          <h3>Human</h3>
                             <ul>
                                 <li>Human Genome U133 Plus 2.0 Array</li>
                                 <li>GeneChip™ Human Genome U133A Array</li>
@@ -48,7 +48,7 @@ class Help extends Component {
                                 <li>Human Exon 1.0 ST Array</li>
                             </ul>
 
-                            <h3>Mouse:</h3>
+                            <h3>Mouse</h3>
                             <ul>
                                 <li>GeneChip™ Mouse Gene 1.0 ST Array</li>
                                 <li>GeneChip™ Mouse Gene 1.1 ST Array</li>
@@ -96,7 +96,7 @@ class Help extends Component {
                           <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/oligo/inst/doc/oug.pdf">https://www.bioconductor.org/packages/release/bioc/vignettes/oligo/inst/doc/oug.pdf</a>
                           </p>
 
-                           <h3>Normalization:</h3>
+                           <h3>Normalization</h3>
                            <p>Each sample is normalized to correct for technical artifacts using the Robust Multichip Averaging (RMA) method described in (Irizarry et al., 2003). Pre-normalization and post-normalization histograms, MA plots and box plots display relative expression (represented by probe intensity) before and after RMA.  Data for the plots are generated with the oligo package.</p>
                            <p>Histogram: The histogram displays the density of probes at each log-intensity. Each sample is represented by a line.  After RMA, all samples lines should follow the same curve.</p>
                             <p><img src="./assets/img/histogram.gif" alt="National Cancer Institute" /></p>
@@ -113,7 +113,7 @@ class Help extends Component {
                           </p>
 
 
-                          <h3>Sample Quality Control:</h3>
+                          <h3>Sample Quality Control</h3>
                            <p>Two plots, the sample similarity heatmap and 3D PCA, provide information about the quality of replicates in the groups.  In general, samples in the same group should cluster together, and groups of samples should cluster separately from other groups. </p>
                            <h4>3D PCA:</h4>
                             <p><img src="./assets/img/PCA.gif" alt="National Cancer Institute" /></p>
@@ -123,14 +123,14 @@ class Help extends Component {
           
 
 
-                            <h3>Differential Gene Expression:</h3>
+                            <h3>Differential Gene Expression</h3>
                            <p>After normalization, determine differential gene expression between groups.  MAAPster runs analysis in the background with the limma package. Linear modeling is performed using limma’s lmFit function, and differential gene expression is determined using the contrasts.fit and eBayes functions (Ritchie et al, 2015).  Using the toptable function, false discovery rates are calculated to adjust p-values for multiple testing (Ritchie et al., 2015).  Detailed information regarding differential expression analysis can be found in the limma manual 
                            <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf"> https://www.bioconductor.org/packages/release/bioc/vignettes/limma/inst/doc/usersguide.pdf.</a></p>
                             <p><img src="./assets/img/deg.gif" alt="National Cancer Institute" /></p>
           
 
 
-                             <h3>Pathway Analysis:</h3>
+                             <h3>Pathway Analysis</h3>
                            <p>The top 500 significantly upregulated and top 500 significantly downregulated genes are extracted for pathway analysis (significance is determined as unadjusted p-value  &lt; 0.05), Pathway analysis is performed with CCBR’s l2p software</p>
                             <h4>Gene Heatmaps:</h4>
                             <p>Click on a pathway to generate a heatmap for the genes in the pathway.  The heatmap will include groups selected in the contrast, and will display scaled normalized gene expression for samples in the groups.  </p>
@@ -140,7 +140,7 @@ class Help extends Component {
 
                       
 
-                            <h3>Single-sample GSEA (ssGSEA):</h3>
+                            <h3>Single-sample GSEA (ssGSEA)</h3>
                             <p>
                           
                             ssGSEA is performed using the gsva package as described in (Hanzelmann et al., 2013).  Pathway enrichment scores are then analyzed to determine fold changes and p-values between groups of samples, similar to the differential gene expression analysis described above.  Differential pathway enrichment is ranked by p-value, and the top 50 pathways are displayed in a heatmap.  Human gene set modules were downloaded from the BROAD Institute’s MSigDB 
@@ -151,12 +151,12 @@ class Help extends Component {
                             </p>
                               <p><img src="./assets/img/ssGSEA.gif" alt="National Cancer Institute" /></p>
           
-                            <h3>Download Results:</h3>
+                            <h3>Download Results</h3>
                             <p>All tables and plots generated may be downloaded.</p>
 
 
 
-                               <h3>References:</h3>
+                               <h3>References</h3>
 <ul>
 
 <li>Carvalho, B. S., & Irizarry, R. A. (2010). A framework for oligonucleotide microarray preprocessing. Bioinformatics, 26(19), 2363-2367. doi:10.1093/bioinformatics/btq431</li>
