@@ -275,8 +275,8 @@ class Analysis extends Component {
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Configuration");
                         var ws_data = [
-                        ["Accession Code", workflow.accessionCode],
-                            ["Contrast Group",workflow.group_1+" vs "+workflow.group_2],
+                            ["Accession Code", workflow.accessionCode],
+                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
                             ["sorting.field", workflow.ssGSEA.sorting.name],
                             ["sorting.order", workflow.ssGSEA.sorting.order],
                             ["search_keyword", ""],
@@ -351,8 +351,8 @@ class Analysis extends Component {
                 page_number: workflow.ssGSEA.pagination.current,
                 page_size: workflow.ssGSEA.pagination.pageSize
             }
-             params.sorting=workflow.ssGSEA.sorting
-            params.search_keyword=workflow.ssGSEA.search_keyword
+            params.sorting = workflow.ssGSEA.sorting
+            params.search_keyword = workflow.ssGSEA.search_keyword
             workflow.ssGSEA.pagination = {
                 current: workflow.ssGSEA.pagination.current,
                 pageSize: workflow.ssGSEA.pagination.pageSize,
@@ -381,7 +381,7 @@ class Analysis extends Component {
             .then(result => {
                 document.getElementById("message-ssgsea").innerHTML = ""
                 let workflow2 = Object.assign({}, this.state.workflow);
-                
+
                 document.getElementById("input_ssg_name").value = workflow2.ssGSEA.search_keyword.name;
                 document.getElementById("input_ssg_search_logFC").value = workflow2.ssGSEA.search_keyword.search_logFC;
                 document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = workflow2.ssGSEA.search_keyword.search_Avg_Enrichment_Score;
@@ -462,8 +462,8 @@ class Analysis extends Component {
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Configuration");
                         var ws_data = [
-                           ["Accession Code", workflow.accessionCode],
-                            ["Contrast Group", workflow.group_1+" vs "+workflow.group_2],
+                            ["Accession Code", workflow.accessionCode],
+                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
                             ["sorting.field", workflow.pathways_up.sorting.name],
                             ["sorting.order", workflow.pathways_up.sorting.order],
                             ["search_keyword", ""],
@@ -644,7 +644,7 @@ class Analysis extends Component {
                 page_size: workflow.pathways_down.pagination.pageSize
             }
             params.sorting = workflow.pathways_down.sorting;
-            params.search_keyword=workflow.pathways_down.search_keyword;
+            params.search_keyword = workflow.pathways_down.search_keyword;
             workflow.pathways_down.pagination = {
                 current: workflow.pathways_down.pagination.current,
                 pageSize: workflow.pathways_down.pagination.pageSize,
@@ -750,8 +750,8 @@ class Analysis extends Component {
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Configuration");
                         var ws_data = [
-                         ["Accession Code", workflow.accessionCode],
-                            ["Contrast Group", workflow.group_1+" vs "+workflow.group_2],
+                            ["Accession Code", workflow.accessionCode],
+                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
                             ["sorting.field", workflow.pathways_down.sorting.name],
                             ["sorting.order", workflow.pathways_down.sorting.order],
                             ["search_keyword", ""],
@@ -837,7 +837,7 @@ class Analysis extends Component {
                 page_number: workflow.diff_expr_genes.pagination.current,
                 page_size: workflow.diff_expr_genes.pagination.pageSize
             }
-             params.sorting = workflow.diff_expr_genes.sorting;
+            params.sorting = workflow.diff_expr_genes.sorting;
             params.search_keyword = workflow.diff_expr_genes.search_keyword
             workflow.diff_expr_genes.pagination = {
                 current: workflow.diff_expr_genes.pagination.current,
@@ -939,7 +939,7 @@ class Analysis extends Component {
                         wb.SheetNames.push("Configuration");
                         var ws_data = [
                             ["Accession Code", workflow.accessionCode],
-                            ["Contrast Group", workflow.group_1+" vs "+workflow.group_2],
+                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
                             ["sorting.field", workflow.diff_expr_genes.sorting.name],
                             ["sorting.order", workflow.diff_expr_genes.sorting.order],
                             ["search_keyword", ""],
@@ -962,22 +962,23 @@ class Analysis extends Component {
                         // export data
                         let degData = result.data.records;
                         let exportData = [
-                            ["ACCNUM", "AveExpr", "B", "DESC", "ENTREZ", "FC", "P.Value", "SYMBOL", "adj.P.value", "logFC", "probsetID", "t"]
+                            ["SYMBOL", "FC", "logFC", "P.Value", "adj.P.value", "AveExpr", "ACCNUM", "DESC", "ENTREZ", "probsetID", "t", "B"]
+
                         ]
                         for (let i in degData) {
                             exportData.push([
-                                degData[i]["ACCNUM"],
+                                degData[i]["SYMBOL"],
+                                degData[i]["FC"],
+                                degData[i]["logFC"],
+                                degData[i]["P.Value"],
+                                degData[i]["adj.P.Val"],
                                 degData[i]["AveExpr"],
-                                degData[i]["B"],
+                                degData[i]["ACCNUM"],
                                 degData[i]["DESC"],
                                 degData[i]["ENTREZ"],
-                                degData[i]["FC"],
-                                degData[i]["P.Value"],
-                                degData[i]["SYMBOL"],
-                                degData[i]["adj.P.Val"],
-                                degData[i]["logFC"],
                                 degData[i]["probsetID"],
-                                degData[i]["t"]
+                                degData[i]["t"],
+                                degData[i]["B"]
                             ])
                         }
 
@@ -1755,8 +1756,8 @@ class Analysis extends Component {
         if (workflow.dataList.length != 0) {
             wb.SheetNames.push("Configuration");
             var ws_data = [
-                 ["Accession Code", workflow.accessionCode],
-                ["Contrast Group", workflow.group_1+" vs "+workflow.group_2]
+                ["Accession Code", workflow.accessionCode],
+                ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2]
             ];
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets["Configuration"] = ws;
@@ -2486,30 +2487,30 @@ class Analysis extends Component {
     }
 
     resetPathWayUPDisplay = () => {
-          while (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0]== "undefined") {
-             console.log("watch pathways_up display")
+        while (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
+            console.log("watch pathways_up display")
         }
         let width = document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("pathways-up-select").style.right = width;
+        document.getElementById("pathways-up-select").style.right = width;
     }
 
     resetPathWayDownDisplay = () => {
-       while (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0]== "undefined") {
+        while (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch pathways_down display")
-            }
+        }
 
-             let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("pathways-down-select").style.right = width;
-       
+        let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        document.getElementById("pathways-down-select").style.right = width;
+
     }
 
 
     resetSSGSEADisplay = () => {
-         while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0]== "undefined") {
-             console.log("watch SSGSEA display")
+        while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0] == "undefined") {
+            console.log("watch SSGSEA display")
         }
         let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("ss-select").style.right = width;
+        document.getElementById("ss-select").style.right = width;
     }
 
 
