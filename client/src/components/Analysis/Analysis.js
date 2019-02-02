@@ -275,6 +275,8 @@ class Analysis extends Component {
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Configuration");
                         var ws_data = [
+                            ["Accession Code", workflow.accessionCode],
+                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
                             ["sorting.field", workflow.ssGSEA.sorting.name],
                             ["sorting.order", workflow.ssGSEA.sorting.order],
                             ["search_keyword", ""],
@@ -347,22 +349,10 @@ class Analysis extends Component {
             params = {
                 projectId: workflow.projectID,
                 page_number: workflow.ssGSEA.pagination.current,
-                page_size: workflow.ssGSEA.pagination.pageSize,
-                sorting: {
-                    name: "P.Value",
-                    order: "descend",
-
-                },
-                search_keyword: {
-                    "name": "",
-                    "search_logFC": "1",
-                    "search_Avg_Enrichment_Score": "",
-                    "search_t": "",
-                    "search_p_value": "0.05",
-                    "search_adj_p_value": "",
-                    "search_b": "",
-                }
+                page_size: workflow.ssGSEA.pagination.pageSize
             }
+            params.sorting = workflow.ssGSEA.sorting
+            params.search_keyword = workflow.ssGSEA.search_keyword
             workflow.ssGSEA.pagination = {
                 current: workflow.ssGSEA.pagination.current,
                 pageSize: workflow.ssGSEA.pagination.pageSize,
@@ -391,7 +381,7 @@ class Analysis extends Component {
             .then(result => {
                 document.getElementById("message-ssgsea").innerHTML = ""
                 let workflow2 = Object.assign({}, this.state.workflow);
-                
+
                 document.getElementById("input_ssg_name").value = workflow2.ssGSEA.search_keyword.name;
                 document.getElementById("input_ssg_search_logFC").value = workflow2.ssGSEA.search_keyword.search_logFC;
                 document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = workflow2.ssGSEA.search_keyword.search_Avg_Enrichment_Score;
@@ -472,6 +462,8 @@ class Analysis extends Component {
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Configuration");
                         var ws_data = [
+                            ["Accession Code", workflow.accessionCode],
+                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
                             ["sorting.field", workflow.pathways_up.sorting.name],
                             ["sorting.order", workflow.pathways_up.sorting.order],
                             ["search_keyword", ""],
@@ -553,27 +545,10 @@ class Analysis extends Component {
             params = {
                 projectId: workflow.projectID,
                 page_number: workflow.pathways_up.pagination.current,
-                page_size: workflow.pathways_up.pagination.pageSize,
-                sorting: {
-                    name: "P_Value",
-                    order: "ascend",
-
-                },
-                search_keyword: {
-                    "search_PATHWAY_ID": "",
-                    "search_SOURCE": "",
-                    "search_DESCRIPTION": "",
-                    "search_TYPE": "",
-                    "search_p_value": "0.05",
-                    "search_fdr": "",
-                    "search_RATIO": "",
-                    "search_GENE_LIST": "",
-                    "search_NUMBER_HITS": "",
-                    "search_NUMBER_GENES_PATHWAY": "",
-                    "search_NUMBER_USER_GENES": "",
-                    "search_TOTAL_NUMBER_GENES": "",
-                }
+                page_size: workflow.pathways_up.pagination.pageSize
             }
+            params.sorting = workflow.pathways_up.sorting;
+            params.search_keyword = workflow.pathways_up.search_keyword
             workflow.pathways_up.pagination = {
                 current: workflow.pathways_up.pagination.current,
                 pageSize: workflow.pathways_up.pagination.pageSize,
@@ -666,27 +641,10 @@ class Analysis extends Component {
             params = {
                 projectId: workflow.projectID,
                 page_number: workflow.pathways_down.pagination.current,
-                page_size: workflow.pathways_down.pagination.pageSize,
-                sorting: {
-                    name: "P_Value",
-                    order: "ascend",
-
-                },
-                search_keyword: {
-                    "search_PATHWAY_ID": "",
-                    "search_SOURCE": "",
-                    "search_DESCRIPTION": "",
-                    "search_TYPE": "",
-                    "search_p_value": "0.05",
-                    "search_fdr": "",
-                    "search_RATIO": "",
-                    "search_GENE_LIST": "",
-                    "search_NUMBER_HITS": "",
-                    "search_NUMBER_GENES_PATHWAY": "",
-                    "search_NUMBER_USER_GENES": "",
-                    "search_TOTAL_NUMBER_GENES": "",
-                }
+                page_size: workflow.pathways_down.pagination.pageSize
             }
+            params.sorting = workflow.pathways_down.sorting;
+            params.search_keyword = workflow.pathways_down.search_keyword;
             workflow.pathways_down.pagination = {
                 current: workflow.pathways_down.pagination.current,
                 pageSize: workflow.pathways_down.pagination.pageSize,
@@ -792,6 +750,8 @@ class Analysis extends Component {
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Configuration");
                         var ws_data = [
+                            ["Accession Code", workflow.accessionCode],
+                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
                             ["sorting.field", workflow.pathways_down.sorting.name],
                             ["sorting.order", workflow.pathways_down.sorting.order],
                             ["search_keyword", ""],
@@ -875,25 +835,10 @@ class Analysis extends Component {
             params = {
                 projectId: workflow.projectID,
                 page_number: workflow.diff_expr_genes.pagination.current,
-                page_size: workflow.diff_expr_genes.pagination.pageSize,
-                sorting: {
-                    name: "P.Value",
-                    order: "ascend",
-                },
-                search_keyword: {
-                    "search_symbol": "",
-                    "search_fc": "1.5",
-                    "search_p_value": "0.05",
-                    "search_adj_p_value": "",
-                    "search_aveexpr": "",
-                    "search_accnum": "",
-                    "search_desc": "",
-                    "search_entrez": "",
-                    "search_probsetid": "",
-                    "search_t": "",
-                    "search_b": ""
-                }
+                page_size: workflow.diff_expr_genes.pagination.pageSize
             }
+            params.sorting = workflow.diff_expr_genes.sorting;
+            params.search_keyword = workflow.diff_expr_genes.search_keyword
             workflow.diff_expr_genes.pagination = {
                 current: workflow.diff_expr_genes.pagination.current,
                 pageSize: workflow.diff_expr_genes.pagination.pageSize,
@@ -993,6 +938,8 @@ class Analysis extends Component {
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Configuration");
                         var ws_data = [
+                            ["Accession Code", workflow.accessionCode],
+                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
                             ["sorting.field", workflow.diff_expr_genes.sorting.name],
                             ["sorting.order", workflow.diff_expr_genes.sorting.order],
                             ["search_keyword", ""],
@@ -1015,21 +962,23 @@ class Analysis extends Component {
                         // export data
                         let degData = result.data.records;
                         let exportData = [
-                            ["ACCNUM", "AveExpr", "B", "DESC", "ENTREZ", "FC", "P.Value", "SYMBOL", "adj.P.value", "logFC", "probsetID", "t"]
+                            ["SYMBOL", "FC", "logFC", "P.Value", "adj.P.value", "AveExpr", "ACCNUM", "DESC", "ENTREZ", "probsetID", "t", "B"]
+
                         ]
                         for (let i in degData) {
                             exportData.push([
-                                degData[i]["ACCNUM"],
-                                degData[i]["AveExpr"],
-                                degData[i]["B"],
-                                degData[i]["DESC"],
-                                degData[i]["ENTREZ"],
+                                degData[i]["SYMBOL"],
                                 degData[i]["FC"],
+                                degData[i]["logFC"],
                                 degData[i]["P.Value"],
                                 degData[i]["adj.P.Val"],
-                                degData[i]["logFC"],
+                                degData[i]["AveExpr"],
+                                degData[i]["ACCNUM"],
+                                degData[i]["DESC"],
+                                degData[i]["ENTREZ"],
                                 degData[i]["probsetID"],
-                                degData[i]["t"]
+                                degData[i]["t"],
+                                degData[i]["B"]
                             ])
                         }
 
@@ -1050,7 +999,7 @@ class Analysis extends Component {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'80%'} height={'70%'} frameBorder={'0'}/></div>
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'70%'} height={'60%'} frameBorder={'0'}/></div>
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
     }
@@ -1075,7 +1024,7 @@ class Analysis extends Component {
                         if (result.data != "") {
                             let pcaData = result.data;
                             var PCAIframe = <Plot  data={[{
-
+                                        autosize: true,
                                         x: pcaData.x,
                                         y: pcaData.y,
                                         z: pcaData.z,
@@ -1090,14 +1039,14 @@ class Analysis extends Component {
                                     }]} layout={{
             
                                         margin:{
-                                            l:0,
-                                            r:0,
-                                            t:0,
-                                            b:0,
+                                            l:25,
+                                            r:25,
+                                            t:-50,
+                                            b:0 ,
                                             pd:2,
                                         },
                                         width:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,
-                                        height:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,
+                                        height:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.6,
                                         scene: {
                                             xaxis: {
                                                 title: pcaData.col[0],
@@ -1189,7 +1138,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8 }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -1229,7 +1178,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.svg";
-        let histplotAN = <div><img src={ histplotANLink } style={{ width: "70%" }} alt="Histogram" /></div>;
+        let histplotAN = <div><img src={ histplotANLink } style={{ width: "50%" }} alt="Histogram" /></div>;
 
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
@@ -1260,7 +1209,7 @@ class Analysis extends Component {
                                 let list_mAplotBN = [];
                                 for (let i = result.data.length - 1; i >= 0; i--) {
                                     let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "50%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
 
@@ -1299,7 +1248,7 @@ class Analysis extends Component {
             let list_mAplotBN = [];
             for (let i = workflow2.list_mAplotAN.length - 1; i >= 0; i--) {
                 let link = "./images/" + workflow2.projectID + workflow2.list_mAplotAN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "50%" }} alt="MAplot"/> </div>)
             }
             let maplot_style = {
 
@@ -1347,7 +1296,7 @@ class Analysis extends Component {
                         }
 
                         let plot_layout = { showlegend: false }
-                        let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8, }
+                        let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9, }
 
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
@@ -1410,7 +1359,7 @@ class Analysis extends Component {
 
 
                             let plot_layout = { showlegend: false }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8, }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9, }
 
                             let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style}  useResizeHandler={true}/>
 
@@ -1484,7 +1433,7 @@ class Analysis extends Component {
                             }
 
                             let plot_layout = { showlegend: false }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8, }
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9, }
 
 
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
@@ -1544,7 +1493,7 @@ class Analysis extends Component {
                                 let list_mAplotBN = [];
                                 for (let i = result.data.length - 1; i >= 0; i--) {
                                     let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "50%" }} alt="MAplot"/> </div>)
                                 }
                                 let maplot_style = {
 
@@ -1582,7 +1531,7 @@ class Analysis extends Component {
             let list_mAplotBN = [];
             for (let i = workflow2.list_mAplotBN.length - 1; i >= 0; i--) {
                 let link = "./images/" + workflow2.projectID + workflow2.list_mAplotBN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "75%" }} alt="MAplot"/> </div>)
+                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } style ={{ width: "50%" }} alt="MAplot"/> </div>)
             }
             let maplot_style = {
 
@@ -1597,7 +1546,7 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.svg";
-        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "75%" }} alt="Histogram" /></div>;
+        let histplotBN = <div><img src={ histplotBNLink } style={{ width: "50%" }} alt="Histogram" /></div>;
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
     }
@@ -1807,7 +1756,8 @@ class Analysis extends Component {
         if (workflow.dataList.length != 0) {
             wb.SheetNames.push("Configuration");
             var ws_data = [
-                ['No Configuration']
+                ["Accession Code", workflow.accessionCode],
+                ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2]
             ];
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets["Configuration"] = ws;
@@ -2537,30 +2487,30 @@ class Analysis extends Component {
     }
 
     resetPathWayUPDisplay = () => {
-          while (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0]== "undefined") {
-             console.log("watch pathways_up display")
+        while (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
+            console.log("watch pathways_up display")
         }
         let width = document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("pathways-up-select").style.right = width;
+        document.getElementById("pathways-up-select").style.right = width;
     }
 
     resetPathWayDownDisplay = () => {
-       while (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0]== "undefined") {
+        while (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch pathways_down display")
-            }
+        }
 
-             let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("pathways-down-select").style.right = width;
-       
+        let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+        document.getElementById("pathways-down-select").style.right = width;
+
     }
 
 
     resetSSGSEADisplay = () => {
-         while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0]== "undefined") {
-             console.log("watch SSGSEA display")
+        while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0] == "undefined") {
+            console.log("watch SSGSEA display")
         }
         let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-            document.getElementById("ss-select").style.right = width;
+        document.getElementById("ss-select").style.right = width;
     }
 
 

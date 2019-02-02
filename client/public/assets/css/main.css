@@ -15,15 +15,23 @@ label {
     width: 100%;
 }
 
+canvas {
+    top: -120px !important;
+}
 p {
     font-size: 18px;
 
+}
+button, input, optgroup, select, textarea{
+        font-weight: 300;
 }
 
 li {
     font-size: 18px;
 }
-
+.ant-pagination li{
+    font-size: 14px;
+}
 .row {
     padding: 5px;
 }
@@ -58,7 +66,9 @@ tr:nth-child(even) {
     font-size: 18px;
 }
 
-
+.ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+    font-weight: bolder;
+}
 .ant-table-placeholder {
     z-index: 0 !important;
 }
@@ -498,7 +508,7 @@ tr:nth-child(even) {
 
 
 #tab_analysis .container {
-    min-height: 1150px;
+    min-height: 800px;
     overflow-y: hidden;
 
 }
@@ -506,11 +516,10 @@ tr:nth-child(even) {
 
 #tab_help .container {
     min-height: 1150px;
-    padding: 50px;
+    padding: 20px 50px;
 }
 
 .ant-tabs:not(.ant-tabs-vertical)>.ant-tabs-content>.ant-tabs-tabpane {
-    min-height: 1150px;
     overflow-y: hidden;
     overflow-x: hidden;
 }
