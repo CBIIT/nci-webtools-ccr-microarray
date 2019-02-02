@@ -516,7 +516,7 @@ tr:nth-child(even) {
 
 #tab_help .container {
     min-height: 1150px;
-    padding: 50px;
+    padding: 20px 50px;
 }
 
 .ant-tabs:not(.ant-tabs-vertical)>.ant-tabs-content>.ant-tabs-tabpane {
