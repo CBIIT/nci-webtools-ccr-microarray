@@ -3,7 +3,7 @@ import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
 import About from '../About/About';
 import Help from '../Help/Help';
-import { Spin, Icon, Button ,Modal} from 'antd';
+import { Spin, Icon, Button, Modal } from 'antd';
 import Plot from 'react-plotly.js';
 import XLSX from 'xlsx';
 
@@ -12,7 +12,8 @@ const ButtonGroup = Button.Group;
 
 let defaultState = {
     workflow: {
-        QueueModalvisible:false,
+        numberOfTasksInQueue: 0,
+        QueueModalvisible: false,
         useQueue: true,
         token: "",
         projectID: "",
@@ -215,6 +216,9 @@ class Analysis extends Component {
         this.exportPathwayUp = this.exportPathwayUp.bind(this);
         this.exportPathwayDown = this.exportPathwayDown.bind(this);
         this.exportDEG = this.exportDEG.bind(this);
+        this.getCurrentNumberOfJobsinQueue = this.getCurrentNumberOfJobsinQueue.bind(this);
+
+        this.getCurrentNumberOfJobsinQueue();
 
     }
 
@@ -1945,7 +1949,7 @@ class Analysis extends Component {
         this.setState(workflow);
     }
 
-     handleCancel = () => {
+    handleCancel = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.QueueModalvisible = false;
         this.setState(workflow);
@@ -2171,7 +2175,7 @@ class Analysis extends Component {
                         }
                         workflow.uploading = false;
                         workflow.progressing = false;
-                        workflow.QueueModalvisible=true;
+                        workflow.QueueModalvisible = true;
                         this.setState({
                             workflow: workflow
                         });
@@ -2805,11 +2809,40 @@ class Analysis extends Component {
     }
 
 
+    getCurrentNumberOfJobsinQueue = () => {
+
+        fetch('./api/analysis/getCurrentNumberOfJobsinQueue', {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(this.handleErrors)
+            .then(function(response) {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            }).then(result => {
+                if (result.status == 200) {
+                    result = result.data;
+                    let workflow = Object.assign({}, this.state.workflow);
+                    workflow.numberOfTasksInQueue = result;
+                    this.setState({
+                        workflow: workflow
+                    });
+                } else {
+                    // do nothing
+                }
+            }).catch(error => console.log(error));
+
+    }
+
     render() {
 
 
         // define group modal
-       let queueModal = <Modal key="queue_modal" visible={this.state.workflow.QueueModalvisible}  className="custom_modal" title="MicroArray Queue" onCancel={this.handleCancel}
+        let queueModal = <Modal key="queue_modal" visible={this.state.workflow.QueueModalvisible}  className="custom_modal" title="MicroArray Queue" onCancel={this.handleCancel}
         footer={[
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
@@ -2940,7 +2973,8 @@ class Analysis extends Component {
                         handleGroup1Select={this.handleGroup1Select}  
                         handleGroup2Select={this.handleGroup2Select} 
                         runContrast={this.runContrast}
-                        exportGSE={this.exportGSE}/>
+                        exportGSE={this.exportGSE}
+                        />
 
                     <div id="btn-controll-data-table-display">
                       <a  aria-label="panel display controller " id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
@@ -2999,7 +3033,7 @@ class Analysis extends Component {
             </div>
            
              </div>
-            
+
         }
         return (<div>{tabs}{queueModal}</div>);
     }

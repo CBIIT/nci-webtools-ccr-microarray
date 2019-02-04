@@ -117,7 +117,7 @@ class PUGTable extends Component {
                         //     visible: true
                         // });
                         var link = "images/" + this.props.data.projectID + "/" + pic_link
-                        window.open(window.location.host+"/microarray/"+link);
+                        window.open("https://"+window.location.host+"/microarray/"+link);
 
 
                     }
