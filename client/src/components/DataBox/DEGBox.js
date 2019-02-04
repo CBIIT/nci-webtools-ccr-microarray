@@ -44,7 +44,7 @@ class DEGBox extends Component {
     }
 
     render() {
-        let volcanoPlotIframe = <iframe title="volcanoPlot" src={"./images/"+this.props.data.projectID+this.props.data.volcanoPlot}  width={'100%'} height={'100%'} frameBorder={'0'}/>
+        let volcanoPlotIframe = <iframe title="volcanoPlot" src={"./images/"+this.props.data.projectID+this.props.data.volcanoPlot}  width={'100%'} height={'60%'} frameBorder={'0'}/>
 
 
         let tabs = [<div key="deg_tag1" id="deg_tag1" className="deg_plot">
