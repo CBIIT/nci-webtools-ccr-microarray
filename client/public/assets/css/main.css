@@ -932,7 +932,7 @@ input#input_group_name {
 
 }
 
-#queueMessage {
+.queueMessage {
     color: darkgray;
     font-style: italic;
     font-size: 0.65em;

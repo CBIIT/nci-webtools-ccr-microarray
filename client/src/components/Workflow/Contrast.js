@@ -36,9 +36,10 @@ class Contrast extends Component {
 
         let queueBlock = <div className="block ">
               <div  id="checkbox_queue">  <Checkbox checked={this.props.data.useQueue} onChange={this.handleSwitchChange} >Submit this job to a Queue</Checkbox></div>
+               <div class="queueMessage"> (Jobs currently enquued: {this.props.data.numberOfTasksInQueue})</div>
              <label className="title" > Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
              <Input  disabled={!this.props.data.useQueue} id="email"  aria-label="input email"  id="input-email" placeholder="email"/>
-             <span id="queueMessage">Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</span>
+             <span class="queueMessage">Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</span>
              <div><span className="err-message" id="message-use-queue"></span></div>
               <div><span className="success-message" id="message-success-use-queue"></span></div>
           </div>
