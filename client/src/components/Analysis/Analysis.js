@@ -1710,7 +1710,6 @@ class Analysis extends Component {
         });
         fl.forEach(function(file) {
             if (names.indexOf(file.name) == -1) {
-
                         workflow.fileList = [...workflow.fileList, file];
             }
         });

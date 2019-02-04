@@ -236,28 +236,13 @@ router.post("/qAnalysis", function(req, res) {
     data.source = req.body.source;
     data.email = req.body.email;
     data.domain = "microarray";
-    data.submit = dateFormat(now, "dd-mm-yyyy, h:MM:ss TT");
+    data.submit = dateFormat(now, "yyyy-mm-dd, h:MM:ss TT");
 
 
     logger.info("-----------------------------------------------")
     logger.info("[Queue] Start Using Queue for Analysis")
     logger.info("Input:")
     logger.info(JSON.stringify(data))
-
-    if (!req.body.projectId) {
-        data.projectId = "testABCD";
-        data.code = "GSE37874";
-        data.groups = ["Ctl", "Ctl", "Ctl", "GSMGroup_2", "Ctl", "Ctl", "Ctl", "Ctl", "Ctl", "Ctl", "GSMGroup_1", "GSMGroup_1"];
-        data.group_1 = "GSMGroup_1";
-        data.group_2 = "GSMGroup_2";
-        data.species = "human";
-        data.genSet = "H: Hallmark Gene Sets";
-        data.source = "fetch";
-        data.email = "jonkiky@gmail.com";
-        data.domain = "microarray";
-        data.submit = dateFormat(now, "dd-mm-yyyy, h:MM:ss TT");
-
-    }
 
     function send(d) {
         logger.info("[Queue] Send Message to Queue", JSON.stringify(d));
