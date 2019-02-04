@@ -2806,7 +2806,7 @@ class Analysis extends Component {
                 workflow: workflow
             });
         }
-    }
+    }   
 
 
     getCurrentNumberOfJobsinQueue = () => {
