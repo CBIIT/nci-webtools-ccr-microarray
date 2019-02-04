@@ -2171,7 +2171,7 @@ class Analysis extends Component {
                         }
                         workflow.uploading = false;
                         workflow.progressing = false;
-                        workflow.QueueMessageStatus=true;
+                        workflow.QueueModalvisible=true;
                         this.setState({
                             workflow: workflow
                         });
@@ -2817,7 +2817,6 @@ class Analysis extends Component {
           <p> Your job will be sent to the queuing system for processing. Results will be sent to you via email when all model runs are completed </p>
           <p>Please note: Depending on model complexity and queue length it could be up to a day before you receive your results.</p>
           </div>
-
         </Modal>
         // end  group modal
 
@@ -2996,13 +2995,11 @@ class Analysis extends Component {
                 </div>
             </div>
             </div>
-            {queueModal}
+           
              </div>
             }
         }
-        return (
-            <div>{tabs}</div>
-        );
+        return (<div>{tabs}{queueModal}</div>);
     }
 }
 
