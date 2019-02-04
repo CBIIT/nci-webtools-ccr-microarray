@@ -3,7 +3,7 @@ import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
 import About from '../About/About';
 import Help from '../Help/Help';
-import { Spin, Icon, Button } from 'antd';
+import { Spin, Icon, Button ,Modal} from 'antd';
 import Plot from 'react-plotly.js';
 import XLSX from 'xlsx';
 
@@ -1946,7 +1946,7 @@ class Analysis extends Component {
     }
 
      handleCancel = () => {
-        let workflow = Object.assign({}, this.state);
+        let workflow = Object.assign({}, this.state.workflow);
         workflow.QueueModalvisible = false;
         this.setState(workflow);
     }
@@ -2908,7 +2908,9 @@ class Analysis extends Component {
                 </div>
             </div>
             </div>
-             </div>
+        </div>
+
+
         if (this.props.location.search && this.props.location.search != "") {
             tabs = <div><div className="header-nav">
             <div className="div-container">
@@ -2997,7 +2999,7 @@ class Analysis extends Component {
             </div>
            
              </div>
-            }
+            
         }
         return (<div>{tabs}{queueModal}</div>);
     }
