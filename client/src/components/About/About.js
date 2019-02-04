@@ -19,7 +19,7 @@ class About extends Component {
                             <p>
                                 The pipeline supports the following commonly used Affymetrix chips. More may be added upon request.
                             </p>
-                            <h3>Human:</h3>
+                            <h3>Human</h3>
                             <ul>
                                 <li>Human Genome U133 Plus 2.0 Array</li>
                                 <li>GeneChip™ Human Genome U133A Array</li>
@@ -36,7 +36,7 @@ class About extends Component {
                                 <li>Human Exon 1.0 ST Array</li>
                             </ul>
 
-                            <h3>Mouse:</h3>
+                            <h3>Mouse</h3>
                             <ul>
                                 <li>GeneChip™ Mouse Gene 1.0 ST Array</li>
                                 <li>GeneChip™ Mouse Gene 1.1 ST Array</li>
