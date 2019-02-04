@@ -31,17 +31,17 @@ awsHander.upload = function(path, prex) {
                     let fname = items[i];
                     let stat = fs.lstatSync(path + "/" + items[i]);
                     if (stat.isFile()) {
-                     
+
                         let fileStream = fs.createReadStream(path + "/" + items[i])
                         s3.putObject({
                             Bucket: bucketName,
                             Key: prex + fname,
                             Body: fileStream,
                             CacheControl: 'no-cache',
-                        }, function(err,data) {
+                        }, function(err, data) {
                             //logger.info(arguments);
                             // console.log('Successfully uploaded package.');
-                      
+
                         });
                     }
 
@@ -66,7 +66,22 @@ awsHander.upload = function(path, prex) {
 
 
 
+awsHander.getQueueAttributes = function(attr, callback) {
+    var params = {
+        QueueUrl: config.queue_url,
+        AttributeNames: attr
+    };
+    sqs.getQueueAttributes(params, function(err, data) {
+        if (err) {
+            console.log(err, err.stack);
+            callback(-1)
+        } else {
+            msg = data;
+            callback(data)
+        }
+    });
 
+}
 
 //sent message to queue.
 
@@ -114,7 +129,7 @@ awsHander.receiver = function(next, endCallback) {
         } else {
             if (data.Messages) {
                 let message = JSON.parse(data.Messages[0].Body)
-                if (message.domain&&message.domain == "microarray") {
+                if (message.domain && message.domain == "microarray") {
                     awsHander.del(data.Messages[0].ReceiptHandle)
                     next(data, data.email, endCallback)
                 }
@@ -147,7 +162,7 @@ awsHander.download = (projectId, filePath, next, configData, endCallback) => {
     let params2 = {
         Bucket: config.bucketName,
         MaxKeys: 9000,
-        Prefix: "microarray/"+projectId
+        Prefix: "microarray/" + projectId
     };
     s3.listObjects(params2, (err, data) => {
         if (err) {
@@ -177,8 +192,8 @@ download = (projectId, key, filePath) => {
         Bucket: config.bucketName,
         Key: key
     }
-     logger.info("[Queue] Download file from S3 ")
-            logger.info("Key:",key)
+    logger.info("[Queue] Download file from S3 ")
+    logger.info("Key:", key)
     s3.getObject(params, (err, data) => {
         if (err) {
             console.error(err);
@@ -188,7 +203,7 @@ download = (projectId, key, filePath) => {
             logger.info(params)
             logger.info(err.stack)
         } else {
-           
+
             if (!fs.existsSync(filePath + "/" + projectId)) {
                 fs.mkdir(filePath + "/" + projectId,
                     function() {
@@ -201,10 +216,10 @@ download = (projectId, key, filePath) => {
             }
             logger.info("[Queue] Download file from S3")
             logger.info("file")
-            logger.info(filePath + "/" + projectId+"/"+key.replace("microarray/"+projectId+"/",""))
+            logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
 
             //let fileStream =fs.createReadStream(path + "/" + items[i])
-            fs.writeFile(filePath + "/" + projectId+"/"+key.replace("microarray/"+projectId+"/",""), data.Body, function(err) {
+            fs.writeFile(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""), data.Body, function(err) {
                 if (err) {
                     return console.log(err);
                 }
