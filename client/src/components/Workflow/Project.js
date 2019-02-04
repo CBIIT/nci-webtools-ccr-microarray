@@ -11,6 +11,7 @@ class Project extends Component {
     render() {
         const { uploading } = this.props.data;
         const properties = {
+            accept:'.gz,.cel,.CEL,.gz',
             action: '-',
             onRemove: (file) => {
                 this.props.fileRemove(file);

@@ -3,7 +3,7 @@ import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
 import About from '../About/About';
 import Help from '../Help/Help';
-import { Spin, Icon, Button } from 'antd';
+import { Spin, Icon, Button, Modal } from 'antd';
 import Plot from 'react-plotly.js';
 import XLSX from 'xlsx';
 
@@ -12,6 +12,8 @@ const ButtonGroup = Button.Group;
 
 let defaultState = {
     workflow: {
+        numberOfTasksInQueue: 0,
+        QueueModalvisible: false,
         useQueue: true,
         token: "",
         projectID: "",
@@ -214,6 +216,9 @@ class Analysis extends Component {
         this.exportPathwayUp = this.exportPathwayUp.bind(this);
         this.exportPathwayDown = this.exportPathwayDown.bind(this);
         this.exportDEG = this.exportDEG.bind(this);
+        this.getCurrentNumberOfJobsinQueue = this.getCurrentNumberOfJobsinQueue.bind(this);
+
+        this.getCurrentNumberOfJobsinQueue();
 
     }
 
@@ -273,7 +278,7 @@ class Analysis extends Component {
                         CreatedDate: new Date()
                     };
                     if (workflow.dataList.length != 0) {
-                        wb.SheetNames.push("Configuration");
+                        wb.SheetNames.push("Settings");
                         var ws_data = [
                             ["Accession Code", workflow.accessionCode],
                             ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
@@ -289,8 +294,8 @@ class Analysis extends Component {
                             ["t", workflow.ssGSEA.search_keyword.search_t]
                         ];
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
-                        wb.Sheets["Configuration"] = ws;
-                        wb.SheetNames.push("Data");
+                        wb.Sheets["Settings"] = ws;
+                        wb.SheetNames.push("Results");
 
                         // export data
                         let degData = result.data.records;
@@ -310,7 +315,7 @@ class Analysis extends Component {
                         }
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
-                        wb.Sheets["Data"] = ws2;
+                        wb.Sheets["Results"] = ws2;
                         var wbout = XLSX.writeFile(wb, "Single_Sample_GSEA_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
 
@@ -460,7 +465,7 @@ class Analysis extends Component {
                         CreatedDate: new Date()
                     };
                     if (workflow.dataList.length != 0) {
-                        wb.SheetNames.push("Configuration");
+                        wb.SheetNames.push("Settings");
                         var ws_data = [
                             ["Accession Code", workflow.accessionCode],
                             ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
@@ -481,8 +486,8 @@ class Analysis extends Component {
                             ["Gene_List", workflow.pathways_up.search_keyword.search_GENE_LIST]
                         ];
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
-                        wb.Sheets["Configuration"] = ws;
-                        wb.SheetNames.push("Data");
+                        wb.Sheets["Settings"] = ws;
+                        wb.SheetNames.push("Results");
 
                         // export data
                         let degData = result.data.records;
@@ -507,7 +512,7 @@ class Analysis extends Component {
                         }
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
-                        wb.Sheets["Data"] = ws2;
+                        wb.Sheets["Results"] = ws2;
                         var wbout = XLSX.writeFile(wb, "Pathways_For_Upregulated_Genes_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
                 } else {
@@ -748,7 +753,7 @@ class Analysis extends Component {
                         CreatedDate: new Date()
                     };
                     if (workflow.dataList.length != 0) {
-                        wb.SheetNames.push("Configuration");
+                        wb.SheetNames.push("Settings");
                         var ws_data = [
                             ["Accession Code", workflow.accessionCode],
                             ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
@@ -769,8 +774,8 @@ class Analysis extends Component {
                             ["Gene_List", workflow.pathways_down.search_keyword.search_GENE_LIST]
                         ];
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
-                        wb.Sheets["Configuration"] = ws;
-                        wb.SheetNames.push("Data");
+                        wb.Sheets["Settings"] = ws;
+                        wb.SheetNames.push("Results");
 
                         // export data
                         let degData = result.data.records;
@@ -795,7 +800,7 @@ class Analysis extends Component {
                         }
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
-                        wb.Sheets["Data"] = ws2;
+                        wb.Sheets["Results"] = ws2;
                         var wbout = XLSX.writeFile(wb, "Pathways_For_Upregulated_Genes_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
 
@@ -936,7 +941,7 @@ class Analysis extends Component {
                         CreatedDate: new Date()
                     };
                     if (workflow.dataList.length != 0) {
-                        wb.SheetNames.push("Configuration");
+                        wb.SheetNames.push("Settings");
                         var ws_data = [
                             ["Accession Code", workflow.accessionCode],
                             ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
@@ -956,8 +961,8 @@ class Analysis extends Component {
                             ["b", workflow.diff_expr_genes.search_keyword.search_b],
                         ];
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
-                        wb.Sheets["Configuration"] = ws;
-                        wb.SheetNames.push("Data");
+                        wb.Sheets["Settings"] = ws;
+                        wb.SheetNames.push("Results");
 
                         // export data
                         let degData = result.data.records;
@@ -983,7 +988,7 @@ class Analysis extends Component {
                         }
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
-                        wb.Sheets["Data"] = ws2;
+                        wb.Sheets["Results"] = ws2;
                         var wbout = XLSX.writeFile(wb, "Differentially_Expressed_Genes_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
 
                     }
@@ -999,7 +1004,7 @@ class Analysis extends Component {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'70%'} height={'60%'} frameBorder={'0'}/></div>
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
     }
@@ -1695,11 +1700,25 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         let names = [];
         workflow.fileList.forEach(function(f) {
-            names.push(f.name);
+
+            if (f.name.endsWith(".CEL") || f.name.endsWith(".CEL.gz")) {
+                // accept these files
+                names.push(f.name);
+            } else {
+                // not accept
+            }
         });
         fl.forEach(function(file) {
             if (names.indexOf(file.name) == -1) {
-                workflow.fileList = [...workflow.fileList, file];
+
+                if (file.name.endsWith(".CEL") || file.name.endsWith(".CEL.gz")) {
+                    // accept these files
+                     workflow.fileList = [...workflow.fileList, file];
+                } else {
+                    // not accept
+                }
+
+               
             }
         });
         this.setState({ workflow: workflow });
@@ -1754,14 +1773,14 @@ class Analysis extends Component {
             CreatedDate: new Date()
         };
         if (workflow.dataList.length != 0) {
-            wb.SheetNames.push("Configuration");
+            wb.SheetNames.push("Settings");
             var ws_data = [
                 ["Accession Code", workflow.accessionCode],
                 ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2]
             ];
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
-            wb.Sheets["Configuration"] = ws;
-            wb.SheetNames.push("Data");
+            wb.Sheets["Settings"] = ws;
+            wb.SheetNames.push("Results");
             let gsm = [
                 ['id', 'gsm', 'title', 'description', 'group']
             ]
@@ -1770,7 +1789,7 @@ class Analysis extends Component {
                 gsm.push([rawData[i].index, rawData[i].gsm, rawData[i].title, rawData[i].description, rawData[i].groups, ])
             }
             var ws2 = XLSX.utils.aoa_to_sheet(gsm);
-            wb.Sheets["Data"] = ws2;
+            wb.Sheets["Results"] = ws2;
             var wbout = XLSX.writeFile(wb, "GSM_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
 
         }
@@ -1936,6 +1955,20 @@ class Analysis extends Component {
 
         }
     }
+
+
+    showModal = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.QueueModalvisible = true;
+        this.setState(workflow);
+    }
+
+    handleCancel = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.QueueModalvisible = false;
+        this.setState(workflow);
+    }
+
 
     runContrast = () => {
         let workflow = Object.assign({}, this.state.workflow);
@@ -2156,7 +2189,7 @@ class Analysis extends Component {
                         }
                         workflow.uploading = false;
                         workflow.progressing = false;
-                        document.getElementById("message-success-use-queue").innerHTML = "The job has been added to queue successfully!";
+                        workflow.QueueModalvisible = true;
                         this.setState({
                             workflow: workflow
                         });
@@ -2790,7 +2823,52 @@ class Analysis extends Component {
     }
 
 
+    getCurrentNumberOfJobsinQueue = () => {
+
+        fetch('./api/analysis/getCurrentNumberOfJobsinQueue', {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(this.handleErrors)
+            .then(function(response) {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            }).then(result => {
+                if (result.status == 200) {
+                    result = result.data;
+                    let workflow = Object.assign({}, this.state.workflow);
+                    workflow.numberOfTasksInQueue = result;
+                    this.setState({
+                        workflow: workflow
+                    });
+                } else {
+                    // do nothing
+                }
+            }).catch(error => console.log(error));
+
+    }
+
     render() {
+
+
+        // define group modal
+        let queueModal = <Modal key="queue_modal" visible={this.state.workflow.QueueModalvisible}  className="custom_modal" title="MicroArray Queue" onCancel={this.handleCancel}
+        footer={[
+            <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
+          ]}
+        > <div  style={{display:this.state.added?"none":"block"}}>
+          <p> Your job will be sent to the queuing system for processing. Results will be sent to you via email when all model runs are completed </p>
+          <p>Please note: Depending on model complexity and queue length it could be up to a day before you receive your results.</p>
+          </div>
+        </Modal>
+        // end  group modal
+
+
+
         let modal = this.state.workflow.progressing ? "progress" : "progress-hidden";
         const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin  />;
         let tabs = <div> <div className="header-nav">
@@ -2877,7 +2955,9 @@ class Analysis extends Component {
                 </div>
             </div>
             </div>
-             </div>
+        </div>
+
+
         if (this.props.location.search && this.props.location.search != "") {
             tabs = <div><div className="header-nav">
             <div className="div-container">
@@ -2907,7 +2987,8 @@ class Analysis extends Component {
                         handleGroup1Select={this.handleGroup1Select}  
                         handleGroup2Select={this.handleGroup2Select} 
                         runContrast={this.runContrast}
-                        exportGSE={this.exportGSE}/>
+                        exportGSE={this.exportGSE}
+                        />
 
                     <div id="btn-controll-data-table-display">
                       <a  aria-label="panel display controller " id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
@@ -2964,11 +3045,11 @@ class Analysis extends Component {
                 </div>
             </div>
             </div>
+           
              </div>
+
         }
-        return (
-            <div>{tabs}</div>
-        );
+        return (<div>{tabs}{queueModal}</div>);
     }
 }
 

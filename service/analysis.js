@@ -236,7 +236,7 @@ router.post("/qAnalysis", function(req, res) {
     data.source = req.body.source;
     data.email = req.body.email;
     data.domain = "microarray";
-    data.submit=dateFormat(now, "dd-mm-yyyy, h:MM:ss TT");
+    data.submit = dateFormat(now, "dd-mm-yyyy, h:MM:ss TT");
 
 
     logger.info("-----------------------------------------------")
@@ -255,7 +255,7 @@ router.post("/qAnalysis", function(req, res) {
         data.source = "fetch";
         data.email = "jonkiky@gmail.com";
         data.domain = "microarray";
-        data.submit=dateFormat(now, "dd-mm-yyyy, h:MM:ss TT");
+        data.submit = dateFormat(now, "dd-mm-yyyy, h:MM:ss TT");
 
     }
 
@@ -279,6 +279,27 @@ router.post("/qAnalysis", function(req, res) {
     res.json({
         status: 200,
         data: ""
+    });
+
+})
+
+
+
+
+router.post("/getCurrentNumberOfJobsinQueue", function(req, res) {
+
+    let d = queue.awsHander.getQueueAttributes(["ApproximateNumberOfMessages"], function(result) {
+        if (result != -1) {
+            res.json({
+                status: 200,
+                data: result.Attributes.ApproximateNumberOfMessages
+            });
+        }else{
+             res.json({
+                status: 200,
+                data: -1
+            });
+        }
     });
 
 })
