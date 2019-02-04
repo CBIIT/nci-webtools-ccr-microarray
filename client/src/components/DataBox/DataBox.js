@@ -372,7 +372,7 @@ class DataBox extends Component {
 
 
 
-        let content = (<Tabs onChange={this.handleTabChange} type="card" >
+        let content = (<Tabs onChange={this.handleTabChange} type="card" activeKey={this.props.data.tab_activeKey} >
                       <TabPane tab="GSM Data" key="GSM_1">
                           {define_group_click_btn}
                           <GSMData ref={this.child}  data={this.props.data} selected={this.selection}/>
