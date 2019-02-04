@@ -1700,11 +1700,25 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         let names = [];
         workflow.fileList.forEach(function(f) {
-            names.push(f.name);
+
+            if (f.name.endsWith(".CEL") || f.name.endsWith(".CEL.gz")) {
+                // accept these files
+                names.push(f.name);
+            } else {
+                // not accept
+            }
         });
         fl.forEach(function(file) {
             if (names.indexOf(file.name) == -1) {
-                workflow.fileList = [...workflow.fileList, file];
+
+                if (file.name.endsWith(".CEL") || file.name.endsWith(".CEL.gz")) {
+                    // accept these files
+                     workflow.fileList = [...workflow.fileList, file];
+                } else {
+                    // not accept
+                }
+
+               
             }
         });
         this.setState({ workflow: workflow });
@@ -2806,7 +2820,7 @@ class Analysis extends Component {
                 workflow: workflow
             });
         }
-    }   
+    }
 
 
     getCurrentNumberOfJobsinQueue = () => {
