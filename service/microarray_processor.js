@@ -113,7 +113,7 @@ function r(data, endCallback) {
             logger.info("[Queue] sendMail to  ", data.email)
 
             let html = emailer.emailTemplate(d[3], secondToDate(end / 1000), config.microarray_link + "?" + d[1], data.submit, d[1])
-            let subject = "MicroArray Contrast Results -" + dateFormat(now, "dd_mm_yyyy_h_MM");
+            let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM");
 
 
             // emailer.sendMail(config.mail.from,data.email,subject, "", html)
