@@ -1053,24 +1053,57 @@ class Analysis extends Component {
                     };
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Settings");
-                        var ws_data = [
-                            ["Accession Code", workflow.accessionCode],
-                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
-                            ["sorting.field", workflow.diff_expr_genes.sorting.name],
-                            ["sorting.order", workflow.diff_expr_genes.sorting.order],
-                            ["search_keyword", ""],
-                            ["SYMBOL", workflow.diff_expr_genes.search_keyword.search_symbol],
-                            ["fc", workflow.diff_expr_genes.search_keyword.search_fc],
-                            ["P.Value", workflow.diff_expr_genes.search_keyword.search_p_value],
-                            ["adj.P.value", workflow.diff_expr_genes.search_keyword.search_adj_p_value],
-                            ["AveExpr", workflow.diff_expr_genes.search_keyword.search_aveexpr],
-                            ["ACCNUM", workflow.diff_expr_genes.search_keyword.search_accnum],
-                            ["DESC", workflow.diff_expr_genes.search_keyword.search_desc],
-                            ["ENTREZ", workflow.diff_expr_genes.search_keyword.search_entrez],
-                            ["probsetID", workflow.diff_expr_genes.search_keyword.search_probsetid],
-                            ["t", workflow.diff_expr_genes.search_keyword.search_t],
-                            ["b", workflow.diff_expr_genes.search_keyword.search_b],
-                        ];
+                         var ws_data = [];
+                        if (workflow.analysisType == "1") {
+                            // Upload
+                            ws_data.push(["Analysis Type", "CEL Files"]);
+                            let uploadD = ""
+                            for (var i in workflow.dataList) {
+                                uploadD = workflow.dataList[i].title + "," + uploadD;
+                            }
+                            ws_data.push(["Upload Data", uploadD]);
+                        }
+                        ws_data.push(["Accession Code", workflow.accessionCode])
+                        ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
+                        ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
+                        ws_data.push(["search_keyword", ""])
+
+                        if (workflow.diff_expr_genes.search_keyword.search_symbol!= "") {
+                            ws_data.push(["SYMBOL", workflow.diff_expr_genes.search_keyword.search_symbol])
+                        }
+
+                        if (workflow.diff_expr_genes.search_keyword.search_fc!= "") {
+                            ws_data.push(["fc", workflow.diff_expr_genes.search_keyword.search_fc])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_p_value!= "") {
+                            ws_data.push(["P.Value", workflow.diff_expr_genes.search_keyword.search_p_value])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_adj_p_value!= "") {
+                            ws_data.push(["adj.P.value", workflow.diff_expr_genes.search_keyword.search_adj_p_value])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_aveexpr!= "") {
+                            ws_data.push(["AveExpr", workflow.diff_expr_genes.search_keyword.search_aveexpr])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_fdr != "") {
+                            ws_data.push(["ACCNUM", workflow.diff_expr_genes.search_keyword.search_accnum])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_desc!= "") {
+                            ws_data.push(["DESC", workflow.diff_expr_genes.search_keyword.search_desc])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_entrez!= "") {
+                            ws_data.push(["ENTREZ", workflow.diff_expr_genes.search_keyword.search_entrez])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_probsetid!= "") {
+                            ws_data.push(["probsetID", workflow.diff_expr_genes.search_keyword.search_probsetid])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_t!= "") {
+                            ws_data.push(["t", workflow.diff_expr_genes.search_keyword.search_t])
+                        }
+                       if (workflow.diff_expr_genes.search_keyword.search_b!= "") {
+                            ws_data.push(["b", workflow.diff_expr_genes.search_keyword.search_b])
+                        }
+
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
                         wb.Sheets["Settings"] = ws;
                         wb.SheetNames.push("Results");
