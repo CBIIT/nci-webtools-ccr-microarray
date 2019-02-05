@@ -304,11 +304,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                                group_1_gsm = workflow.dataList[i].gsm + ","+group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                                group_2_gsm = workflow.dataList[i].gsm + ","+group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -534,11 +534,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                                group_1_gsm = workflow.dataList[i].gsm + ","+group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                                group_2_gsm = workflow.dataList[i].gsm + ","+group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -871,11 +871,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                                group_1_gsm = workflow.dataList[i].gsm + ","+group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                                group_2_gsm = workflow.dataList[i].gsm + ","+group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -1108,11 +1108,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                                group_1_gsm = workflow.dataList[i].gsm + ","+group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                                group_2_gsm = workflow.dataList[i].gsm + ","+group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
