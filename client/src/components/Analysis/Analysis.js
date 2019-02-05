@@ -1768,11 +1768,27 @@ class Analysis extends Component {
         };
         if (workflow.dataList.length != 0) {
             wb.SheetNames.push("Settings");
-            let ws_data = [
-                ["Accession Code", workflow.accessionCode],
-            ];
-         
-          
+            let ws_data = [];
+            if (workflow.analysisType == "0") {
+                // GSM 
+                ws_data.push(["Analysis Type", "GEO Data"]);
+                ws_data.push(["Accession Code", workflow.accessionCode]);
+
+            }
+
+            if (workflow.analysisType == "1") {
+                // Upload
+                ws_data.push(["Analysis Type", "CEL Files"]);
+
+                let uploadD = ""
+
+                for (var i in rawData) {
+                    uploadD=rawData[i].title+","+uploadD;
+                }
+
+                ws_data.push(["Upload Data", uploadD);
+            }
+
             let ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets["Settings"] = ws;
             wb.SheetNames.push("Results");
