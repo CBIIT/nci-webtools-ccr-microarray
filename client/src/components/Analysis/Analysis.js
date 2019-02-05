@@ -1782,11 +1782,11 @@ class Analysis extends Component {
 
                 let uploadD = ""
 
-                for (var i in rawData) {
-                    uploadD=rawData[i].title+","+uploadD;
+                for (var i in workflow.dataList) {
+                    uploadD=workflow.dataList[i].title+","+uploadD;
                 }
 
-                ws_data.push(["Upload Data", uploadD);
+                ws_data.push(["Upload Data", uploadD]);
             }
 
             let ws = XLSX.utils.aoa_to_sheet(ws_data);
@@ -2442,6 +2442,7 @@ class Analysis extends Component {
                         }
                         for (let i in list.files) {
                             list.files[i]["gsm"] = list.files[i]["_row"];
+                            list.files[i]["groups"] = "";
                             //list.files[i]["gsm"]=list.files[i].title.split("_")[0];
                         }
                         workflow.dataList = list.files;
