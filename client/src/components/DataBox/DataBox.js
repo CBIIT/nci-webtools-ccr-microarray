@@ -357,14 +357,14 @@ class DataBox extends Component {
         > <div  style={{display:this.state.added?"none":"block"}}>
           <p style={{color: "#215a82"}}><b>{number_select} Selected GSM(s)</b></p>
            <p style={{display: selected_gsms==""&&this.state.visible==true?"block":"none"}} className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
-          <p><TextArea  autosize={false}  disabled style={{width:'100%'}} value={selected_gsms}/></p>
-          <p style={{color: "#215a82"}}><b>Group Name:</b> <span style={{color:"red","paddingLeft":"5px"}}> *</span><span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
+          <p><TextArea  autosize={false}  disabled style={{width:'100%',"color": "black"}} value={selected_gsms}/></p>
+          <p style={{color: "#215a82"}}><b>Group Name<span style={{color:"red","paddingLeft":"5px"}}> *</span></b> <span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
            <p className="err-message" id="message-gsm-group"></p>
-          <p> <Input  disabled={this.state.selected==""?true:false} aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)'}} onChange={this.handleInputOnChange}/>&nbsp;
+          <p> <Input  disabled={this.state.selected==""?true:false} aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)',"color":"black","font-size":"16px"}} onChange={this.handleInputOnChange}/>&nbsp;
               <Button  type={this.state.selected==""||this.state.group_name==""?"default":"primary"}  disabled={this.state.selected==""||this.state.group_name==""?true:false}   onClick={this.createTag} >Add</Button>
           </p>
           </div>
-          <p><b style={{color: "#215a82"}}>Saved Group(s) List:</b> </p>
+          <p><b style={{color: "#215a82"}}>Saved Group(s) List</b> </p>
            <p className="err-message" id="message-gsm-group-table"></p>
           {group_table}
         </Modal>
@@ -372,7 +372,7 @@ class DataBox extends Component {
 
 
 
-        let content = (<Tabs onChange={this.handleTabChange} type="card" >
+        let content = (<Tabs onChange={this.handleTabChange} type="card" activeKey={this.props.data.tab_activeKey} >
                       <TabPane tab="GSM Data" key="GSM_1">
                           {define_group_click_btn}
                           <GSMData ref={this.child}  data={this.props.data} selected={this.selection}/>

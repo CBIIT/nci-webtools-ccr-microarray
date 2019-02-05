@@ -12,6 +12,7 @@ const ButtonGroup = Button.Group;
 
 let defaultState = {
     workflow: {
+        tab_activeKey: "GSM_1",
         numberOfTasksInQueue: 0,
         QueueModalvisible: false,
         useQueue: true,
@@ -22,7 +23,7 @@ let defaultState = {
         fileList: [],
         uploading: false,
         progressing: false,
-        loading_info: "Loading Result",
+        loading_info: "Loading",
         dataList: [],
         groups: [],
         group_1: "-1",
@@ -217,8 +218,10 @@ class Analysis extends Component {
         this.exportPathwayDown = this.exportPathwayDown.bind(this);
         this.exportDEG = this.exportDEG.bind(this);
         this.getCurrentNumberOfJobsinQueue = this.getCurrentNumberOfJobsinQueue.bind(this);
-
+        this.showModal = this.showModal.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
         this.getCurrentNumberOfJobsinQueue();
+
 
     }
 
@@ -1614,6 +1617,11 @@ class Analysis extends Component {
     upateCurrentWorkingTab = (e) => {
         sessionStorage.setItem("current_working_on_tag", e);
         window.current_working_on_tag = e;
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.tab_activeKey = e;
+        this.setState({
+            workflow: workflow
+        });
     }
 
     handleGeneChange = (value) => {
@@ -1700,25 +1708,11 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         let names = [];
         workflow.fileList.forEach(function(f) {
-
-            if (f.name.endsWith(".CEL") || f.name.endsWith(".CEL.gz")) {
-                // accept these files
-                names.push(f.name);
-            } else {
-                // not accept
-            }
+            names.push(f.name);
         });
         fl.forEach(function(file) {
             if (names.indexOf(file.name) == -1) {
-
-                if (file.name.endsWith(".CEL") || file.name.endsWith(".CEL.gz")) {
-                    // accept these files
-                     workflow.fileList = [...workflow.fileList, file];
-                } else {
-                    // not accept
-                }
-
-               
+                workflow.fileList = [...workflow.fileList, file];
             }
         });
         this.setState({ workflow: workflow });
@@ -1960,13 +1954,17 @@ class Analysis extends Component {
     showModal = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.QueueModalvisible = true;
-        this.setState(workflow);
+        this.setState({
+            workflow: workflow
+        });
     }
 
     handleCancel = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.QueueModalvisible = false;
-        this.setState(workflow);
+        this.setState({
+            workflow: workflow
+        });
     }
 
 
@@ -2860,7 +2858,7 @@ class Analysis extends Component {
         footer={[
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
-        > <div  style={{display:this.state.added?"none":"block"}}>
+        > <div >
           <p> Your job will be sent to the queuing system for processing. Results will be sent to you via email when all model runs are completed </p>
           <p>Please note: Depending on model complexity and queue length it could be up to a day before you receive your results.</p>
           </div>
