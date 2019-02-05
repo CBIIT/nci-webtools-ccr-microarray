@@ -64,6 +64,8 @@ tr:nth-child(even) {
 
 .ant-input {
     font-size: 18px;
+    font-weight: 400;
+    color:black;
 }
 
 .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {

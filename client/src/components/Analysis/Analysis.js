@@ -282,20 +282,64 @@ class Analysis extends Component {
                     };
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Settings");
-                        var ws_data = [
-                            ["Accession Code", workflow.accessionCode],
-                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
-                            ["sorting.field", workflow.ssGSEA.sorting.name],
-                            ["sorting.order", workflow.ssGSEA.sorting.order],
-                            ["search_keyword", ""],
-                            ["name", workflow.ssGSEA.search_keyword.name],
-                            ["logFC", workflow.ssGSEA.search_keyword.search_logFC],
-                            ["P.Value", workflow.ssGSEA.search_keyword.search_p_value],
-                            ["adj.P.value", workflow.ssGSEA.search_keyword.search_adj_p_value],
-                            ["Avg.Enrichment.Score", workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score],
-                            ["B", workflow.ssGSEA.search_keyword.search_b],
-                            ["t", workflow.ssGSEA.search_keyword.search_t]
-                        ];
+
+                        var ws_data = [];
+
+                        if (workflow.analysisType == "1") {
+                            // Upload
+                            ws_data.push(["Analysis Type", "CEL Files"]);
+
+                            let uploadD = ""
+
+                            for (var i in workflow.dataList) {
+                                uploadD = workflow.dataList[i].title + "," + uploadD;
+                            }
+
+                            ws_data.push(["Upload Data", uploadD]);
+                        }
+
+                        ws_data.push(["Accession Code", workflow.accessionCode])
+                        ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        let group_1_gsm = "";
+                        let group_2_gsm = "";
+                        for (var i in workflow.dataList) {
+                            if (workflow.dataList[i].groups == workflow.group_1) {
+                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                            }
+
+                            if (workflow.dataList[i].groups == workflow.group_2) {
+                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                            }
+                        }
+                        ws_data.push([workflow.group_1, group_1_gsm])
+                        ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
+                        ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
+                        ws_data.push(["search_keyword", ""])
+
+                        if (workflow.ssGSEA.search_keyword.name != "") {
+                            ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
+                        }
+
+                        if (workflow.ssGSEA.search_keyword.search_logFC != "") {
+                            ws_data.push(["logFC", workflow.ssGSEA.search_keyword.search_logFC])
+                        }
+                        if (workflow.ssGSEA.search_keyword.search_p_value != "") {
+                            ws_data.push(["P.Value", workflow.ssGSEA.search_keyword.search_p_value])
+                        }
+                        if (workflow.ssGSEA.search_keyword.search_adj_p_value != "") {
+                            ws_data.push(["adj.P.value", workflow.ssGSEA.search_keyword.search_adj_p_value])
+                        }
+                        if (workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score != "") {
+                            ws_data.push(["Avg.Enrichment.Score", workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score])
+                        }
+                        if (workflow.ssGSEA.search_keyword.search_b != "") {
+                            ws_data.push(["B", workflow.ssGSEA.search_keyword.search_b])
+                        }
+                        if (workflow.ssGSEA.search_keyword.search_t != "") {
+                            ws_data.push(["t", workflow.ssGSEA.search_keyword.search_t])
+                        }
+
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
                         wb.Sheets["Settings"] = ws;
                         wb.SheetNames.push("Results");
@@ -319,7 +363,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Results"] = ws2;
-                        var wbout = XLSX.writeFile(wb, "Single_Sample_GSEA_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "ssGSEA_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
 
                 } else {
@@ -469,25 +513,79 @@ class Analysis extends Component {
                     };
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Settings");
-                        var ws_data = [
-                            ["Accession Code", workflow.accessionCode],
-                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
-                            ["sorting.field", workflow.pathways_up.sorting.name],
-                            ["sorting.order", workflow.pathways_up.sorting.order],
-                            ["search_keyword", ""],
-                            ["Pathway_ID", workflow.pathways_up.search_keyword.search_PATHWAY_ID],
-                            ["Source", workflow.pathways_up.search_keyword.search_SOURCE],
-                            ["Description", workflow.pathways_up.search_keyword.search_DESCRIPTION],
-                            ["Type", workflow.pathways_up.search_keyword.search_TYPE],
-                            ["P.value", workflow.pathways_up.search_keyword.search_p_value],
-                            ["FDR", workflow.pathways_up.search_keyword.search_fdr],
-                            ["Ratio", workflow.pathways_up.search_keyword.search_RATIO],
-                            ["Number_Hits", workflow.pathways_up.search_keyword.search_NUMBER_HITS],
-                            ["Number_Genes_Pathway", workflow.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY],
-                            ["Number_User_Genes", workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES],
-                            ["Total_Number_Genes", workflow.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES],
-                            ["Gene_List", workflow.pathways_up.search_keyword.search_GENE_LIST]
-                        ];
+                        var ws_data = [];
+
+                        if (workflow.analysisType == "1") {
+                            // Upload
+                            ws_data.push(["Analysis Type", "CEL Files"]);
+
+                            let uploadD = ""
+
+                            for (var i in workflow.dataList) {
+                                uploadD = workflow.dataList[i].title + "," + uploadD;
+                            }
+
+                            ws_data.push(["Upload Data", uploadD]);
+                        }
+
+                        ws_data.push(["Accession Code", workflow.accessionCode])
+                        ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        let group_1_gsm = "";
+                        let group_2_gsm = "";
+                        for (var i in workflow.dataList) {
+                            if (workflow.dataList[i].groups == workflow.group_1) {
+                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                            }
+
+                            if (workflow.dataList[i].groups == workflow.group_2) {
+                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                            }
+                        }
+                        ws_data.push([workflow.group_1, group_1_gsm])
+                        ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
+                        ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
+                        ws_data.push(["search_keyword", ""])
+
+                        if (workflow.pathways_up.search_keyword.search_PATHWAY_ID != "") {
+                            ws_data.push(["Pathway_ID", workflow.pathways_up.search_keyword.search_PATHWAY_ID])
+                        }
+
+                        if (workflow.pathways_up.search_keyword.search_SOURCE != "") {
+                            ws_data.push(["Source", workflow.pathways_up.search_keyword.search_SOURCE])
+                        }
+                        if (workflow.pathways_up.search_keyword.search_DESCRIPTION != "") {
+                            ws_data.push(["Description", workflow.pathways_up.search_keyword.search_DESCRIPTION])
+                        }
+                        if (workflow.pathways_up.search_keyword.search_TYPE != "") {
+                            ws_data.push(["Type", workflow.pathways_up.search_keyword.search_TYPE])
+                        }
+                        if (workflow.pathways_up.search_keyword.search_p_value != "") {
+                            ws_data.push(["P.value", workflow.pathways_up.search_keyword.search_p_value])
+                        }
+                        if (workflow.pathways_up.search_keyword.search_fdr != "") {
+                            ws_data.push(["FDR", workflow.pathways_up.search_keyword.search_fdr])
+                        }
+                        if (workflow.pathways_up.search_keyword.search_RATIO != "") {
+                            ws_data.push(["Ratio", workflow.pathways_up.search_keyword.search_RATIO])
+                        }
+                        if (workflow.pathways_up.search_keyword.search_NUMBER_HITS != "") {
+                            ws_data.push(["Number_Hits", workflow.pathways_up.search_keyword.search_NUMBER_HITS])
+                        }
+                        if (workflow.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY != "") {
+                            ws_data.push(["Number_Genes_Pathway", workflow.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY])
+                        }
+                        if (workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES != "") {
+                            ws_data.push(["Number_User_Genes", workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES])
+                        }
+                        if (workflow.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES != "") {
+                            ws_data.push(["Total_Number_Genes", workflow.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES])
+                        }
+                        if (workflow.pathways_up.search_keyword.search_GENE_LIST != "") {
+                            ws_data.push(["Gene_List", workflow.pathways_up.search_keyword.search_GENE_LIST])
+                        }
+
+
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
                         wb.Sheets["Settings"] = ws;
                         wb.SheetNames.push("Results");
@@ -757,25 +855,74 @@ class Analysis extends Component {
                     };
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Settings");
-                        var ws_data = [
-                            ["Accession Code", workflow.accessionCode],
-                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
-                            ["sorting.field", workflow.pathways_down.sorting.name],
-                            ["sorting.order", workflow.pathways_down.sorting.order],
-                            ["search_keyword", ""],
-                            ["Pathway_ID", workflow.pathways_down.search_keyword.search_PATHWAY_ID],
-                            ["Source", workflow.pathways_down.search_keyword.search_SOURCE],
-                            ["Description", workflow.pathways_down.search_keyword.search_DESCRIPTION],
-                            ["Type", workflow.pathways_down.search_keyword.search_TYPE],
-                            ["P.value", workflow.pathways_down.search_keyword.search_p_value],
-                            ["FDR", workflow.pathways_down.search_keyword.search_fdr],
-                            ["Ratio", workflow.pathways_down.search_keyword.search_RATIO],
-                            ["Number_Hits", workflow.pathways_down.search_keyword.search_NUMBER_HITS],
-                            ["Number_Genes_Pathway", workflow.pathways_down.search_keyword.search_NUMBER_GENES_PATHWAY],
-                            ["Number_User_Genes", workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES],
-                            ["Total_Number_Genes", workflow.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES],
-                            ["Gene_List", workflow.pathways_down.search_keyword.search_GENE_LIST]
-                        ];
+                        var ws_data = [];
+                        if (workflow.analysisType == "1") {
+                            // Upload
+                            ws_data.push(["Analysis Type", "CEL Files"]);
+                            let uploadD = ""
+                            for (var i in workflow.dataList) {
+                                uploadD = workflow.dataList[i].title + "," + uploadD;
+                            }
+                            ws_data.push(["Upload Data", uploadD]);
+                        }
+                        ws_data.push(["Accession Code", workflow.accessionCode])
+                        ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        let group_1_gsm = "";
+                        let group_2_gsm = "";
+                        for (var i in workflow.dataList) {
+                            if (workflow.dataList[i].groups == workflow.group_1) {
+                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                            }
+
+                            if (workflow.dataList[i].groups == workflow.group_2) {
+                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                            }
+                        }
+                        ws_data.push([workflow.group_1, group_1_gsm])
+                        ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
+                        ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
+                        ws_data.push(["search_keyword", ""])
+
+                        if (workflow.pathways_down.search_keyword.search_PATHWAY_ID != "") {
+                            ws_data.push(["Pathway_ID", workflow.pathways_down.search_keyword.search_PATHWAY_ID])
+                        }
+
+                        if (workflow.pathways_down.search_keyword.search_SOURCE != "") {
+                            ws_data.push(["Source", workflow.pathways_down.search_keyword.search_SOURCE])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_DESCRIPTION != "") {
+                            ws_data.push(["Description", workflow.pathways_down.search_keyword.search_DESCRIPTION])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_TYPE != "") {
+                            ws_data.push(["Type", workflow.pathways_down.search_keyword.search_TYPE])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_p_value != "") {
+                            ws_data.push(["P.value", workflow.pathways_down.search_keyword.search_p_value])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_fdr != "") {
+                            ws_data.push(["FDR", workflow.pathways_down.search_keyword.search_fdr])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_RATIO != "") {
+                            ws_data.push(["Ratio", workflow.pathways_down.search_keyword.search_RATIO])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_NUMBER_HITS != "") {
+                            ws_data.push(["Number_Hits", workflow.pathways_down.search_keyword.search_NUMBER_HITS])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_NUMBER_GENES_PATHWAY != "") {
+                            ws_data.push(["Number_Genes_Pathway", workflow.pathways_down.search_keyword.search_NUMBER_GENES_PATHWAY])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES != "") {
+                            ws_data.push(["Number_User_Genes", workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES != "") {
+                            ws_data.push(["Total_Number_Genes", workflow.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_GENE_LIST != "") {
+                            ws_data.push(["Gene_List", workflow.pathways_down.search_keyword.search_GENE_LIST])
+                        }
+
+
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
                         wb.Sheets["Settings"] = ws;
                         wb.SheetNames.push("Results");
@@ -945,24 +1092,70 @@ class Analysis extends Component {
                     };
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Settings");
-                        var ws_data = [
-                            ["Accession Code", workflow.accessionCode],
-                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
-                            ["sorting.field", workflow.diff_expr_genes.sorting.name],
-                            ["sorting.order", workflow.diff_expr_genes.sorting.order],
-                            ["search_keyword", ""],
-                            ["SYMBOL", workflow.diff_expr_genes.search_keyword.search_symbol],
-                            ["fc", workflow.diff_expr_genes.search_keyword.search_fc],
-                            ["P.Value", workflow.diff_expr_genes.search_keyword.search_p_value],
-                            ["adj.P.value", workflow.diff_expr_genes.search_keyword.search_adj_p_value],
-                            ["AveExpr", workflow.diff_expr_genes.search_keyword.search_aveexpr],
-                            ["ACCNUM", workflow.diff_expr_genes.search_keyword.search_accnum],
-                            ["DESC", workflow.diff_expr_genes.search_keyword.search_desc],
-                            ["ENTREZ", workflow.diff_expr_genes.search_keyword.search_entrez],
-                            ["probsetID", workflow.diff_expr_genes.search_keyword.search_probsetid],
-                            ["t", workflow.diff_expr_genes.search_keyword.search_t],
-                            ["b", workflow.diff_expr_genes.search_keyword.search_b],
-                        ];
+                        var ws_data = [];
+                        if (workflow.analysisType == "1") {
+                            // Upload
+                            ws_data.push(["Analysis Type", "CEL Files"]);
+                            let uploadD = ""
+                            for (var i in workflow.dataList) {
+                                uploadD = workflow.dataList[i].title + "," + uploadD;
+                            }
+                            ws_data.push(["Upload Data", uploadD]);
+                        }
+                        ws_data.push(["Accession Code", workflow.accessionCode])
+                        ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        let group_1_gsm = "";
+                        let group_2_gsm = "";
+                        for (var i in workflow.dataList) {
+                            if (workflow.dataList[i].groups == workflow.group_1) {
+                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                            }
+
+                            if (workflow.dataList[i].groups == workflow.group_2) {
+                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                            }
+                        }
+                        ws_data.push([workflow.group_1, group_1_gsm])
+                        ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
+                        ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
+                        ws_data.push(["search_keyword", ""])
+
+                        if (workflow.diff_expr_genes.search_keyword.search_symbol != "") {
+                            ws_data.push(["SYMBOL", workflow.diff_expr_genes.search_keyword.search_symbol])
+                        }
+
+                        if (workflow.diff_expr_genes.search_keyword.search_fc != "") {
+                            ws_data.push(["fc", workflow.diff_expr_genes.search_keyword.search_fc])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_p_value != "") {
+                            ws_data.push(["P.Value", workflow.diff_expr_genes.search_keyword.search_p_value])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_adj_p_value != "") {
+                            ws_data.push(["adj.P.value", workflow.diff_expr_genes.search_keyword.search_adj_p_value])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_aveexpr != "") {
+                            ws_data.push(["AveExpr", workflow.diff_expr_genes.search_keyword.search_aveexpr])
+                        }
+                        if (workflow.pathways_down.search_keyword.search_fdr != "") {
+                            ws_data.push(["ACCNUM", workflow.diff_expr_genes.search_keyword.search_accnum])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_desc != "") {
+                            ws_data.push(["DESC", workflow.diff_expr_genes.search_keyword.search_desc])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_entrez != "") {
+                            ws_data.push(["ENTREZ", workflow.diff_expr_genes.search_keyword.search_entrez])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_probsetid != "") {
+                            ws_data.push(["probsetID", workflow.diff_expr_genes.search_keyword.search_probsetid])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_t != "") {
+                            ws_data.push(["t", workflow.diff_expr_genes.search_keyword.search_t])
+                        }
+                        if (workflow.diff_expr_genes.search_keyword.search_b != "") {
+                            ws_data.push(["b", workflow.diff_expr_genes.search_keyword.search_b])
+                        }
+
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
                         wb.Sheets["Settings"] = ws;
                         wb.SheetNames.push("Results");
@@ -1768,11 +1961,27 @@ class Analysis extends Component {
         };
         if (workflow.dataList.length != 0) {
             wb.SheetNames.push("Settings");
-            let ws_data = [
-                ["Accession Code", workflow.accessionCode],
-            ];
-         
-          
+            let ws_data = [];
+            if (workflow.analysisType == "0") {
+                // GSM 
+                ws_data.push(["Analysis Type", "GEO Data"]);
+                ws_data.push(["Accession Code", workflow.accessionCode]);
+
+            }
+
+            if (workflow.analysisType == "1") {
+                // Upload
+                ws_data.push(["Analysis Type", "CEL Files"]);
+
+                let uploadD = ""
+
+                for (var i in workflow.dataList) {
+                    uploadD = workflow.dataList[i].title + "," + uploadD;
+                }
+
+                ws_data.push(["Upload Data", uploadD]);
+            }
+
             let ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets["Settings"] = ws;
             wb.SheetNames.push("Results");
@@ -1785,7 +1994,7 @@ class Analysis extends Component {
             }
             var ws2 = XLSX.utils.aoa_to_sheet(gsm);
             wb.Sheets["Results"] = ws2;
-            var wbout = XLSX.writeFile(wb, "GSM_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+            var wbout = XLSX.writeFile(wb, "GSM_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
 
         }
     }
@@ -2426,12 +2635,12 @@ class Analysis extends Component {
                         }
                         for (let i in list.files) {
                             list.files[i]["gsm"] = list.files[i]["_row"];
+                            list.files[i]["groups"] = "";
                             //list.files[i]["gsm"]=list.files[i].title.split("_")[0];
                         }
                         workflow.dataList = list.files;
 
-                        // change the word of load btn
-                        document.getElementById("btn-project-upload").disabled = true
+
                         // init group with default value
                         //workflow.group = new Array(list.files.length).fill('Ctl');
                         workflow.uploaded = true;
