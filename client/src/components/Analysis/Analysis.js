@@ -1801,7 +1801,7 @@ class Analysis extends Component {
             }
             var ws2 = XLSX.utils.aoa_to_sheet(gsm);
             wb.Sheets["Results"] = ws2;
-            var wbout = XLSX.writeFile(wb, "GSM_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+            var wbout = XLSX.writeFile(wb, "GSM_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
 
         }
     }
