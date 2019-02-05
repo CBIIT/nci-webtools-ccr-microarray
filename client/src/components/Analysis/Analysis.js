@@ -2447,8 +2447,7 @@ class Analysis extends Component {
                         }
                         workflow.dataList = list.files;
 
-                        // change the word of load btn
-                        document.getElementById("btn-project-upload").disabled = true
+                    
                         // init group with default value
                         //workflow.group = new Array(list.files.length).fill('Ctl');
                         workflow.uploaded = true;
