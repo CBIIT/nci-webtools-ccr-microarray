@@ -1768,11 +1768,12 @@ class Analysis extends Component {
         };
         if (workflow.dataList.length != 0) {
             wb.SheetNames.push("Settings");
-            var ws_data = [
+            let ws_data = [
                 ["Accession Code", workflow.accessionCode],
-                ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2]
             ];
-            var ws = XLSX.utils.aoa_to_sheet(ws_data);
+         
+          
+            let ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets["Settings"] = ws;
             wb.SheetNames.push("Results");
             let gsm = [
