@@ -300,6 +300,19 @@ class Analysis extends Component {
 
                         ws_data.push(["Accession Code", workflow.accessionCode])
                         ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        let group_1_gsm = "";
+                        let group_2_gsm = "";
+                        for (var i in workflow.dataList) {
+                            if (workflow.dataList[i].groups == workflow.group_1) {
+                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                            }
+
+                            if (workflow.dataList[i].groups == workflow.group_2) {
+                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                            }
+                        }
+                        ws_data.push([workflow.group_1, group_1_gsm])
+                        ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
                         ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
                         ws_data.push(["search_keyword", ""])
@@ -549,13 +562,13 @@ class Analysis extends Component {
                         if (workflow.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY != "") {
                             ws_data.push(["Number_Genes_Pathway", workflow.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY])
                         }
-                        if (workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES!= "") {
-                            ws_data.push( ["Number_User_Genes", workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES])
+                        if (workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES != "") {
+                            ws_data.push(["Number_User_Genes", workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES])
                         }
-                       if (workflow.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES!= "") {
+                        if (workflow.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES != "") {
                             ws_data.push(["Total_Number_Genes", workflow.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES])
                         }
-                        if (workflow.pathways_up.search_keyword.search_GENE_LIST!= "") {
+                        if (workflow.pathways_up.search_keyword.search_GENE_LIST != "") {
                             ws_data.push(["Gene_List", workflow.pathways_up.search_keyword.search_GENE_LIST])
                         }
 
@@ -873,13 +886,13 @@ class Analysis extends Component {
                         if (workflow.pathways_down.search_keyword.search_NUMBER_GENES_PATHWAY != "") {
                             ws_data.push(["Number_Genes_Pathway", workflow.pathways_down.search_keyword.search_NUMBER_GENES_PATHWAY])
                         }
-                        if (workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES!= "") {
-                            ws_data.push( ["Number_User_Genes", workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES])
+                        if (workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES != "") {
+                            ws_data.push(["Number_User_Genes", workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES])
                         }
-                       if (workflow.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES!= "") {
+                        if (workflow.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES != "") {
                             ws_data.push(["Total_Number_Genes", workflow.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES])
                         }
-                        if (workflow.pathways_down.search_keyword.search_GENE_LIST!= "") {
+                        if (workflow.pathways_down.search_keyword.search_GENE_LIST != "") {
                             ws_data.push(["Gene_List", workflow.pathways_down.search_keyword.search_GENE_LIST])
                         }
 
@@ -1053,7 +1066,7 @@ class Analysis extends Component {
                     };
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Settings");
-                         var ws_data = [];
+                        var ws_data = [];
                         if (workflow.analysisType == "1") {
                             // Upload
                             ws_data.push(["Analysis Type", "CEL Files"]);
@@ -1065,55 +1078,55 @@ class Analysis extends Component {
                         }
                         ws_data.push(["Accession Code", workflow.accessionCode])
                         ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
-                        let group_1_gsm="";
-                        let group_2_gsm="";
-                        for(var i in workflow.dataList){
-                            if(workflow.dataList[i].groups==workflow.group_1){
-                                group_1_gsm=workflow.dataList[i].gsm+",";
+                        let group_1_gsm = "";
+                        let group_2_gsm = "";
+                        for (var i in workflow.dataList) {
+                            if (workflow.dataList[i].groups == workflow.group_1) {
+                                group_1_gsm = workflow.dataList[i].gsm + ",";
                             }
 
-                             if(workflow.dataList[i].groups==workflow.group_2){
-                                group_2_gsm=workflow.dataList[i].gsm+",";
+                            if (workflow.dataList[i].groups == workflow.group_2) {
+                                group_2_gsm = workflow.dataList[i].gsm + ",";
                             }
                         }
-                           ws_data.push([workflow.group_1, group_1_gsm])
-                           ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push([workflow.group_1, group_1_gsm])
+                        ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
                         ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
                         ws_data.push(["search_keyword", ""])
 
-                        if (workflow.diff_expr_genes.search_keyword.search_symbol!= "") {
+                        if (workflow.diff_expr_genes.search_keyword.search_symbol != "") {
                             ws_data.push(["SYMBOL", workflow.diff_expr_genes.search_keyword.search_symbol])
                         }
 
-                        if (workflow.diff_expr_genes.search_keyword.search_fc!= "") {
+                        if (workflow.diff_expr_genes.search_keyword.search_fc != "") {
                             ws_data.push(["fc", workflow.diff_expr_genes.search_keyword.search_fc])
                         }
-                        if (workflow.diff_expr_genes.search_keyword.search_p_value!= "") {
+                        if (workflow.diff_expr_genes.search_keyword.search_p_value != "") {
                             ws_data.push(["P.Value", workflow.diff_expr_genes.search_keyword.search_p_value])
                         }
-                        if (workflow.diff_expr_genes.search_keyword.search_adj_p_value!= "") {
+                        if (workflow.diff_expr_genes.search_keyword.search_adj_p_value != "") {
                             ws_data.push(["adj.P.value", workflow.diff_expr_genes.search_keyword.search_adj_p_value])
                         }
-                        if (workflow.diff_expr_genes.search_keyword.search_aveexpr!= "") {
+                        if (workflow.diff_expr_genes.search_keyword.search_aveexpr != "") {
                             ws_data.push(["AveExpr", workflow.diff_expr_genes.search_keyword.search_aveexpr])
                         }
                         if (workflow.pathways_down.search_keyword.search_fdr != "") {
                             ws_data.push(["ACCNUM", workflow.diff_expr_genes.search_keyword.search_accnum])
                         }
-                        if (workflow.diff_expr_genes.search_keyword.search_desc!= "") {
+                        if (workflow.diff_expr_genes.search_keyword.search_desc != "") {
                             ws_data.push(["DESC", workflow.diff_expr_genes.search_keyword.search_desc])
                         }
-                        if (workflow.diff_expr_genes.search_keyword.search_entrez!= "") {
+                        if (workflow.diff_expr_genes.search_keyword.search_entrez != "") {
                             ws_data.push(["ENTREZ", workflow.diff_expr_genes.search_keyword.search_entrez])
                         }
-                        if (workflow.diff_expr_genes.search_keyword.search_probsetid!= "") {
+                        if (workflow.diff_expr_genes.search_keyword.search_probsetid != "") {
                             ws_data.push(["probsetID", workflow.diff_expr_genes.search_keyword.search_probsetid])
                         }
-                        if (workflow.diff_expr_genes.search_keyword.search_t!= "") {
+                        if (workflow.diff_expr_genes.search_keyword.search_t != "") {
                             ws_data.push(["t", workflow.diff_expr_genes.search_keyword.search_t])
                         }
-                       if (workflow.diff_expr_genes.search_keyword.search_b!= "") {
+                        if (workflow.diff_expr_genes.search_keyword.search_b != "") {
                             ws_data.push(["b", workflow.diff_expr_genes.search_keyword.search_b])
                         }
 
