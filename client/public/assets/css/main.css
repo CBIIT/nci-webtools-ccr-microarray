@@ -450,6 +450,11 @@ tr:nth-child(even) {
     min-height: 716px;
 }
 
+#postHeatmap{
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+}
 
 .nav>li>a:focus {
     background-color: #FFC90E;
