@@ -282,20 +282,51 @@ class Analysis extends Component {
                     };
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Settings");
-                        var ws_data = [
-                            ["Accession Code", workflow.accessionCode],
-                            ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2],
-                            ["sorting.field", workflow.ssGSEA.sorting.name],
-                            ["sorting.order", workflow.ssGSEA.sorting.order],
-                            ["search_keyword", ""],
-                            ["name", workflow.ssGSEA.search_keyword.name],
-                            ["logFC", workflow.ssGSEA.search_keyword.search_logFC],
-                            ["P.Value", workflow.ssGSEA.search_keyword.search_p_value],
-                            ["adj.P.value", workflow.ssGSEA.search_keyword.search_adj_p_value],
-                            ["Avg.Enrichment.Score", workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score],
-                            ["B", workflow.ssGSEA.search_keyword.search_b],
-                            ["t", workflow.ssGSEA.search_keyword.search_t]
-                        ];
+
+                        var ws_data = [];
+
+                        if (workflow.analysisType == "1") {
+                            // Upload
+                            ws_data.push(["Analysis Type", "CEL Files"]);
+
+                            let uploadD = ""
+
+                            for (var i in workflow.dataList) {
+                                uploadD = workflow.dataList[i].title + "," + uploadD;
+                            }
+
+                            ws_data.push(["Upload Data", uploadD]);
+                        }
+
+                          ws_data.push(["Accession Code", workflow.accessionCode])
+                          ws_data.push( ["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                          ws_data.push( ["sorting.field", workflow.ssGSEA.sorting.name])
+                          ws_data.push( ["sorting.order", workflow.ssGSEA.sorting.order])
+                          ws_data.push(["search_keyword", ""])
+                        
+                        if(workflow.ssGSEA.search_keyword.name!=""){
+                            ws_data.push( ["sorting.order", workflow.ssGSEA.sorting.order])
+                        }
+
+                          if(workflow.ssGSEA.search_keyword.search_logFC!=""){
+                            ws_data.push(  ["logFC", workflow.ssGSEA.search_keyword.search_logFC])
+                        }
+                          if(workflow.ssGSEA.search_keyword.search_p_value!=""){
+                            ws_data.push( ["P.Value", workflow.ssGSEA.search_keyword.search_p_value])
+                        }
+                          if(workflow.ssGSEA.search_keyword.search_adj_p_value!=""){
+                            ws_data.push(["adj.P.value", workflow.ssGSEA.search_keyword.search_adj_p_value])
+                        }
+                          if(workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score!=""){
+                            ws_data.push(["Avg.Enrichment.Score", workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score])
+                        }
+                          if(workflow.ssGSEA.search_keyword.search_b!=""){
+                            ws_data.push( ["B", workflow.ssGSEA.search_keyword.search_b])
+                        }
+                         if(workflow.ssGSEA.search_keyword.search_t!=""){
+                            ws_data.push(["t", workflow.ssGSEA.search_keyword.search_t])
+                        }
+
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
                         wb.Sheets["Settings"] = ws;
                         wb.SheetNames.push("Results");
@@ -319,7 +350,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Results"] = ws2;
-                        var wbout = XLSX.writeFile(wb, "Single_Sample_GSEA_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "ssGSEA_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
 
                 } else {
@@ -1783,7 +1814,7 @@ class Analysis extends Component {
                 let uploadD = ""
 
                 for (var i in workflow.dataList) {
-                    uploadD=workflow.dataList[i].title+","+uploadD;
+                    uploadD = workflow.dataList[i].title + "," + uploadD;
                 }
 
                 ws_data.push(["Upload Data", uploadD]);
@@ -2447,7 +2478,7 @@ class Analysis extends Component {
                         }
                         workflow.dataList = list.files;
 
-                    
+
                         // init group with default value
                         //workflow.group = new Array(list.files.length).fill('Ctl');
                         workflow.uploaded = true;
