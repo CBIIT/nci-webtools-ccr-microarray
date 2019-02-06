@@ -200,10 +200,17 @@ let defaultState = {
                 autosize: true,
             },
         },
+        PCA: {
+            data: "",
+            plot: "",
+            style: {
+            },
+            layout: {
+            },
+        },
         postplot: {
             histplotAN: "",
             list_mAplotAN: "",
-            PCA: "",
             Heatmapolt: "",
         },
         geneHeatmap: "/ssgseaHeatmap1.jpg",
@@ -1266,7 +1273,7 @@ class Analysis extends Component {
                     if (result.status == 200) {
                         if (result.data != "") {
                             let pcaData = result.data;
-                            var PCAIframe = <Plot  data={[{
+                            let pcaPlotData={[{
                                         autosize: true,
                                         x: pcaData.x,
                                         y: pcaData.y,
@@ -1279,7 +1286,8 @@ class Analysis extends Component {
                                         },
                                         type: 'scatter3d',
                                        
-                                    }]} layout={{
+                                    }]} 
+                             let pcaPlotLayout={
             
                                         margin:{
                                             l:25,
@@ -1314,17 +1322,20 @@ class Analysis extends Component {
                                                 zerolinecolor: "rgb(255, 255, 255)"
                                             }
                                         }}
-                                    }  useResizeHandler={true} />
+                                    
+                            var PCAIframe = <Plot data={pcaPlotData} layout={pcaPlotLayout} useResizeHandler={true} />
 
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             let plot_style = { "display": "block", "marginLeft": "auto", "marginRight": "auto", "width": "80%" }
-                            workflow.postplot.PCA = <div style={plot_style}> {PCAIframe}</div>;
+                            workflow.PCA.plot = <div style={plot_style}> {PCAIframe}</div>;
+                            workflow.PCA.data =pcaPlotData;
+                            workflow.PCA.layout =pcaPlotLayout;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.postplot.PCA = "No Data";
+                            workflow.PCA = "No Data";
                             this.setState({ workflow: workflow });
 
                         }
@@ -1334,7 +1345,7 @@ class Analysis extends Component {
                         document.getElementById("message-post-pca").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.progressing = false;
-                        workflow.postplot.PCA = "No Data";
+                        workflow.PCA = "No Data";
                         this.setState({ workflow: workflow });
                     }
 
@@ -2836,7 +2847,7 @@ class Analysis extends Component {
         this.resetBoxPlotAN();
         this.resetRLE();
         this.resetNUSE();
-        //this.resetBoxPlotBN();
+        this.resetBoxPlotBN();
 
     }
 
