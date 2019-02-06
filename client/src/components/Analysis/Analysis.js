@@ -150,26 +150,56 @@ let defaultState = {
                 "search_TOTAL_NUMBER_GENES": "",
             }
         },
+        BoxplotBN: {
+            data: "",
+            plot: "",
+            style: {
+                width: "800",
+            },
+            layout: {
+                showlegend: false,
+                autosize: true,
+            },
+        },
+        RLE: {
+            data: "",
+            plot: "",
+            style: {
+                width: "800",
+            },
+            layout: {
+                showlegend: false,
+                autosize: true,
+            },
+        },
+        NUSE: {
+            data: "",
+            plot: "",
+            style: {
+                width: "800",
+            },
+            layout: {
+                showlegend: false,
+                autosize: true,
+            },
+        },
         preplots: {
             histplotBN: "",
             list_mAplotBN: "",
-            Boxplots: "",
-            RLE: "",
-            NUSE: "",
         },
         list_mAplotBN: "",
         list_mAplotAN: "",
-        BoxplotAN:{
-                data:"",
-                plot:"",
-                style:{
-                    width:"800",
-                },
-                layout:{
-                    showlegend: false,
-                    autosize: true ,
-                },
+        BoxplotAN: {
+            data: "",
+            plot: "",
+            style: {
+                width: "800",
             },
+            layout: {
+                showlegend: false,
+                autosize: true,
+            },
+        },
         postplot: {
             histplotAN: "",
             list_mAplotAN: "",
@@ -221,20 +251,20 @@ class Analysis extends Component {
         this.showModal = this.showModal.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.getCurrentNumberOfJobsinQueue();
-        this.showWorkFlow= this.showWorkFlow.bind(this);
-        this.hideWorkFlow=this.hideWorkFlow.bind(this);
+        this.showWorkFlow = this.showWorkFlow.bind(this);
+        this.hideWorkFlow = this.hideWorkFlow.bind(this);
 
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
         if (this.props.location.search && this.props.location.search != "") {
 
             defaultState.workflow.progressing = true;
             this.state = Object.assign({}, defaultState);
             this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
 
-        } 
+        }
     }
 
     changeRUNContractModel = (params = false) => {
@@ -1362,7 +1392,7 @@ class Analysis extends Component {
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             workflow.BoxplotAN.plot = <div> {Boxplots}</div>;
-                            workflow.BoxplotAN.data=BoxplotRenderData;
+                            workflow.BoxplotAN.data = BoxplotRenderData;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
@@ -1520,7 +1550,10 @@ class Analysis extends Component {
 
 
                         workflow.progressing = false;
-                        workflow.preplots.NUSE = <div> {NUSE}</div>;
+                        workflow.NUSE.data = NUSERenderData;
+                        workflow.NUSE.plot = <div> {NUSE}</div>;
+                        workflow.NUSE.layout = plot_layout;
+                        workflow.NUSE.style = plot_style;
                         this.setState({ workflow: workflow });
 
 
@@ -1581,15 +1614,17 @@ class Analysis extends Component {
 
                             let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style}  useResizeHandler={true}/>
 
-
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.preplots.RLE = <div> {RLE}</div>;
+                            workflow.RLE.data = RLERenderData;
+                            workflow.RLE.plot = <div> {RLE}</div>;
+                            workflow.RLE.layout = plot_layout;
+                            workflow.RLE.style = plot_style;
                             this.setState({ workflow: workflow });
                         } else {
 
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots.RLE = "No Data";
+                            workflow.RLE.plot = "No Data";
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         }
@@ -1598,7 +1633,7 @@ class Analysis extends Component {
                     } else {
                         document.getElementById("message-pre-rle").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
-                        workflow.preplots.RLE = "";
+                        workflow.RLE.plot = "No Data";
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
 
@@ -1609,7 +1644,7 @@ class Analysis extends Component {
 
             document.getElementById("message-pre-rle").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
-            workflow.preplots.RLE = "No Data";
+            workflow.RLE.plot = "No Data";
             workflow.progressing = false;
             this.setState({ workflow: workflow });
         }
@@ -1657,8 +1692,11 @@ class Analysis extends Component {
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots.Boxplots = <div> {Boxplots}</div>;
                             workflow.progressing = false;
+                            workflow.BoxplotBN.data = BoxplotRenderData;
+                            workflow.BoxplotBN.plot = <div> {Boxplots}</div>;
+                            workflow.BoxplotBN.layout = plot_layout;
+                            workflow.BoxplotBN.style = plot_style;
                             this.setState({ workflow: workflow });
                         } else {
 
@@ -2784,7 +2822,10 @@ class Analysis extends Component {
         document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 80;
         document.getElementById("panel-show").style.display = 'inherit';
         document.getElementById("panel-hide").style.display = 'none';
-         this.resetBoxPlotAN();
+        this.resetBoxPlotAN();
+        this.resetRLE();
+        this.resetNUSE();
+        this.resetBoxPlotBN();
     }
 
     showWorkFlow = () => {
@@ -2793,16 +2834,20 @@ class Analysis extends Component {
         document.getElementById("panel-show").style.display = 'none';
         document.getElementById("panel-hide").style.display = 'inherit';
         this.resetBoxPlotAN();
-       
+        this.resetRLE();
+        this.resetNUSE();
+        this.resetBoxPlotBN();
+
     }
 
-    resetBoxPlotAN=()=>{
-         let workflow = Object.assign({}, this.state.workflow);
-        workflow.BoxplotAN.style={width : document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9};
-        workflow.BoxplotAN.layout={
-                    showlegend: false,
-                    autosize:true};
-        workflow.BoxplotAN.plot=<Plot 
+    resetBoxPlotAN = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.BoxplotAN.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.BoxplotAN.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        workflow.BoxplotAN.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.BoxplotAN.data} 
                              layout={workflow.BoxplotAN.layout}  
@@ -2814,6 +2859,61 @@ class Analysis extends Component {
         });
     }
 
+
+    resetBoxPlotBN = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.BoxplotBN.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.BoxplotBN.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        workflow.BoxplotBN.plot = <Plot 
+                             id="BoxplotAN" 
+                             data={workflow.BoxplotBN.data} 
+                             layout={workflow.BoxplotBN.layout}  
+                             style={workflow.BoxplotBN.style} 
+                             useResizeHandler={true}
+                             />
+        this.setState({
+            workflow: workflow
+        });
+    }
+    resetRLE= () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.RLE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.RLE.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        workflow.RLE.plot = <Plot 
+                             id="BoxplotAN" 
+                             data={workflow.RLE.data} 
+                             layout={workflow.RLE.layout}  
+                             style={workflow.RLE.style} 
+                             useResizeHandler={true}
+                             />
+        this.setState({
+            workflow: workflow
+        });
+    }
+    resetNUSE= () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.NUSE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.NUSE.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        workflow.NUSE.plot = <Plot 
+                             id="BoxplotAN" 
+                             data={workflow.NUSE.data} 
+                             layout={workflow.NUSE.layout}  
+                             style={workflow.NUSE.style} 
+                             useResizeHandler={true}
+                             />
+        this.setState({
+            workflow: workflow
+        });
+    }
     changeTab(tab) {
         console.log(tab)
         if (document.getElementById("li-about") != null) {
