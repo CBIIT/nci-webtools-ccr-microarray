@@ -1308,7 +1308,7 @@ class Analysis extends Component {
     getBoxplotAN() {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
-        workflow2.loading_info = "Loading Boxplot...";
+        workflow2.loading_info = "Loading...";
         this.setState({ workflow: workflow2 });
         let params = { projectId: workflow2.projectID };
         try {
@@ -1338,10 +1338,10 @@ class Analysis extends Component {
                                 BoxplotRenderData.push(boxplotData)
                             }
 
-                            let plot_layout = { showlegend: false }
+                            let plot_layout = { showlegend: false,autosize:true}
                             let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
 
-                            let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
+                            let Boxplots = <Plot id="BoxplotAN" data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true} />
 
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
@@ -2767,6 +2767,10 @@ class Analysis extends Component {
         document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 80;
         document.getElementById("panel-show").style.display = 'inherit';
         document.getElementById("panel-hide").style.display = 'none';
+        let update={
+            
+        }
+        Plot.restyle("postBoxplots",)
     }
 
     showWorkFlow = () => {
