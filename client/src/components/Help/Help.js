@@ -68,11 +68,11 @@ class Help extends Component {
                                <p>Next, choose contrasts to compare,for example: </p>
                                <p>The control group should be entered last.</p>
                                <p>For example:</p>
-                               <p><div style={{"paddingLeft":"26px"}}>
+                               <p><span style={{"paddingLeft":"26px"}}>
                                Disease<br/>
                                VS<br/>
                                Control<br/>
-                               </div>
+                               </span>
                                </p>
                                <p><img src="./assets/img/group.gif" alt="National Cancer Institute" /></p>
           
