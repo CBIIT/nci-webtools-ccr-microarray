@@ -21,6 +21,7 @@ queue.awsHander.getQueueUrl(function(flag){
     if(flag){
         logger.info("[Queue] Start queue");
         
+        setTimeout(function() { polling(); }, 1000);
 
     }else{
         logger.info("[Queue] Start queue fails");
@@ -31,7 +32,6 @@ queue.awsHander.getQueueUrl(function(flag){
 function polling() {
     AsyncPolling(function(end) {
         try {
-
             queue.awsHander.receiver(qAnalysis, end);
 
         } catch (err) {
