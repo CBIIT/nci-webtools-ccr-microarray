@@ -2834,9 +2834,9 @@ class Analysis extends Component {
         document.getElementById("panel-show").style.display = 'none';
         document.getElementById("panel-hide").style.display = 'inherit';
         this.resetBoxPlotAN();
-        //this.resetRLE();
+        this.resetRLE();
         this.resetNUSE();
-        this.resetBoxPlotBN();
+        //this.resetBoxPlotBN();
 
     }
 
