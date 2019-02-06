@@ -159,19 +159,20 @@ let defaultState = {
         },
         list_mAplotBN: "",
         list_mAplotAN: "",
-        postplot: {
-            histplotAN: "",
-            list_mAplotAN: "",
-             Boxplots:{
+        BoxplotAN:{
+                data:"",
                 plot:"",
                 style:{
-                    width:"400px",
+                    width:"800",
                 },
                 layout:{
                     showlegend: false,
                     autosize: true ,
                 },
             },
+        postplot: {
+            histplotAN: "",
+            list_mAplotAN: "",
             PCA: "",
             Heatmapolt: "",
         },
@@ -220,6 +221,8 @@ class Analysis extends Component {
         this.showModal = this.showModal.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.getCurrentNumberOfJobsinQueue();
+        this.showWorkFlow= this.showWorkFlow.bind(this);
+        this.hideWorkFlow=this.hideWorkFlow.bind(this);
 
 
     }
@@ -1351,19 +1354,20 @@ class Analysis extends Component {
                             let Boxplots = <Plot 
                              id="BoxplotAN" 
                              data={BoxplotRenderData} 
-                             layout={this.state.workflow.postplot.Boxplots.layout}  
-                             style={this.state.workflow.postplot.Boxplots.style} 
+                             layout={this.state.workflow.BoxplotAN.layout}  
+                             style={this.state.workflow.BoxplotAN.style} 
                              useResizeHandler={true}
                              />
 
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.postplot.Boxplots.plot = <div> {Boxplots}</div>;
+                            workflow.BoxplotAN.plot = <div> {Boxplots}</div>;
+                            workflow.BoxplotAN.data=BoxplotRenderData;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.postplot.Boxplots.plot = "No Data";
+                            workflow.BoxplotAN.plot = "No Data";
                             this.setState({ workflow: workflow });
 
                         }
@@ -1373,7 +1377,7 @@ class Analysis extends Component {
                         document.getElementById("message-post-boxplot").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.progressing = false;
-                        workflow.postplot.Boxplots.plot = "No Data";
+                        workflow.BoxplotAN.plot = "No Data";
                         this.setState({ workflow: workflow });
                     }
 
@@ -1382,7 +1386,7 @@ class Analysis extends Component {
             document.getElementById("message-post-boxplot").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
-            workflow.postplot.Boxplots.plot = "No Data";
+            workflow.BoxplotAN.plot = "No Data";
             this.setState({ workflow: workflow });
         }
 
@@ -2780,11 +2784,7 @@ class Analysis extends Component {
         document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 80;
         document.getElementById("panel-show").style.display = 'inherit';
         document.getElementById("panel-hide").style.display = 'none';
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.BoxplotAN_width.width = document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9;
-        this.setState({
-            workflow: workflow
-        });
+         this.resetBoxPlotAN();
     }
 
     showWorkFlow = () => {
@@ -2792,8 +2792,23 @@ class Analysis extends Component {
         document.getElementsByClassName("container-board-right")[0].removeAttribute("style");
         document.getElementById("panel-show").style.display = 'none';
         document.getElementById("panel-hide").style.display = 'inherit';
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.BoxplotAN_width.width = document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9;
+        this.resetBoxPlotAN();
+       
+    }
+
+    resetBoxPlotAN=()=>{
+         let workflow = Object.assign({}, this.state.workflow);
+        workflow.BoxplotAN.style={width : document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9};
+        workflow.BoxplotAN.layout={
+                    showlegend: false,
+                    autosize:true};
+        workflow.BoxplotAN.plot=<Plot 
+                             id="BoxplotAN" 
+                             data={workflow.BoxplotAN.data} 
+                             layout={workflow.BoxplotAN.layout}  
+                             style={workflow.BoxplotAN.style} 
+                             useResizeHandler={true}
+                             />
         this.setState({
             workflow: workflow
         });
