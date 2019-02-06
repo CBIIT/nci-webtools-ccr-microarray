@@ -203,10 +203,8 @@ let defaultState = {
         PCA: {
             data: "",
             plot: "",
-            style: {
-            },
-            layout: {
-            },
+            style: {},
+            layout: {},
         },
         postplot: {
             histplotAN: "",
@@ -1273,64 +1271,64 @@ class Analysis extends Component {
                     if (result.status == 200) {
                         if (result.data != "") {
                             let pcaData = result.data;
-                            let pcaPlotData={[{
-                                        autosize: true,
-                                        x: pcaData.x,
-                                        y: pcaData.y,
-                                        z: pcaData.z,
-                                        text: pcaData.row,
-                                        mode: 'markers',
-                                        marker: {
-                                            size: 10,
-                                            color: pcaData.color
-                                        },
-                                        type: 'scatter3d',
-                                       
-                                    }]} 
-                             let pcaPlotLayout={
-            
-                                        margin:{
-                                            l:25,
-                                            r:25,
-                                            t:-50,
-                                            b:0 ,
-                                            pd:2,
-                                        },
-                                        width:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,
-                                        height:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.6,
-                                        scene: {
-                                            xaxis: {
-                                                title: pcaData.col[0],
-                                                backgroundcolor: "#DDDDDD",
-                                                gridcolor: "rgb(255, 255, 255)",
-                                                showbackground: true,
-                                                zerolinecolor: "rgb(255, 255, 255)"
+                            let pcaPlotData = [{
+                                autosize: true,
+                                x: pcaData.x,
+                                y: pcaData.y,
+                                z: pcaData.z,
+                                text: pcaData.row,
+                                mode: 'markers',
+                                marker: {
+                                    size: 10,
+                                    color: pcaData.color
+                                },
+                                type: 'scatter3d'
+                            }];
+                            let pcaPlotLayout = {
+                                margin: {
+                                    l: 25,
+                                    r: 25,
+                                    t: -50,
+                                    b: 0,
+                                    pd: 2,
+                                },
+                                width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
+                                height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
+                                scene: {
+                                    xaxis: {
+                                        title: pcaData.col[0],
+                                        backgroundcolor: "#DDDDDD",
+                                        gridcolor: "rgb(255, 255, 255)",
+                                        showbackground: true,
+                                        zerolinecolor: "rgb(255, 255, 255)"
 
-                                            },
-                                            yaxis: {
-                                                title:  pcaData.col[1],
-                                                backgroundcolor: "#EEEEEE",
-                                                gridcolor: "rgb(255, 255, 255)",
-                                                showbackground: true,
-                                                zerolinecolor: "rgb(255, 255, 255)"
-                                            },
-                                            zaxis: {
-                                                title:  pcaData.col[2],
-                                                backgroundcolor: "#cccccc",
-                                                gridcolor: "rgb(255, 255, 255)",
-                                                showbackground: true,
-                                                zerolinecolor: "rgb(255, 255, 255)"
-                                            }
-                                        }}
-                                    
+                                    },
+                                    yaxis: {
+                                        title: pcaData.col[1],
+                                        backgroundcolor: "#EEEEEE",
+                                        gridcolor: "rgb(255, 255, 255)",
+                                        showbackground: true,
+                                        zerolinecolor: "rgb(255, 255, 255)"
+                                    },
+                                    zaxis: {
+                                        title: pcaData.col[2],
+                                        backgroundcolor: "#cccccc",
+                                        gridcolor: "rgb(255, 255, 255)",
+                                        showbackground: true,
+                                        zerolinecolor: "rgb(255, 255, 255)"
+                                    }
+                                }
+                            }
+
                             var PCAIframe = <Plot data={pcaPlotData} layout={pcaPlotLayout} useResizeHandler={true} />
 
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             let plot_style = { "display": "block", "marginLeft": "auto", "marginRight": "auto", "width": "80%" }
                             workflow.PCA.plot = <div style={plot_style}> {PCAIframe}</div>;
-                            workflow.PCA.data =pcaPlotData;
-                            workflow.PCA.layout =pcaPlotLayout;
+                            workflow.PCA.data = pcaPlotData;
+                            workflow.PCA.layout = pcaPlotLayout;
+                            workflow.PCA.style = plot_style;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
@@ -2836,6 +2834,7 @@ class Analysis extends Component {
         this.resetBoxPlotAN();
         this.resetRLE();
         this.resetNUSE();
+        this.resetPCA();
         this.resetBoxPlotBN();
     }
 
@@ -2847,8 +2846,27 @@ class Analysis extends Component {
         this.resetBoxPlotAN();
         this.resetRLE();
         this.resetNUSE();
+        this.resetPCA();
         this.resetBoxPlotBN();
 
+    }
+
+    resetPCA = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.PCA.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.BoxplotAN.layout = {
+            showlegend: false,
+            autosize: true
+        };
+
+        workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
+                             data={workflow.PCA.data} 
+                             layout={workflow.PCA.layout}  
+                             /></div>;
+        workflow.PCA.plot =
+            this.setState({
+                workflow: workflow
+            });
     }
 
     resetBoxPlotAN = () => {
@@ -2889,7 +2907,7 @@ class Analysis extends Component {
             workflow: workflow
         });
     }
-    resetRLE= () => {
+    resetRLE = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.RLE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
         workflow.RLE.layout = {
@@ -2907,7 +2925,7 @@ class Analysis extends Component {
             workflow: workflow
         });
     }
-    resetNUSE= () => {
+    resetNUSE = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.NUSE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
         workflow.NUSE.layout = {
