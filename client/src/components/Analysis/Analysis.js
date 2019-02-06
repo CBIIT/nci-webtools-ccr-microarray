@@ -2853,18 +2853,17 @@ class Analysis extends Component {
 
     resetPCA = () => {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.PCA.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
-        workflow.BoxplotAN.layout = {
-            showlegend: false,
-            autosize: true
-        };
-
+        let pcaPlotLayout = {
+                                margin:workflow.PCA.layout.margin,
+                                width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
+                                height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
+                                scene: workflow.PCA.layout.scene
+                            }
         workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
                              data={workflow.PCA.data} 
-                             layout={workflow.PCA.layout}  
+                             layout={pcaPlotLayout}  
                              /></div>;
-        workflow.PCA.plot =
-            this.setState({
+        this.setState({
                 workflow: workflow
             });
     }
