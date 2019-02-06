@@ -16,29 +16,17 @@ var dateFormat = require('dateformat');
 
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
-var params = {
-    QueueName: config.queue_name
-};
-sqs.getQueueUrl(params, function(err, data) {
-    if (err) {
-        console.log(err, err.stack); // an error occurred
-    } else {
-        console.log(data)
-        // change configuration file, set queue URLs
-        let obj = JSON.parse(fs.readFileSync("../config/microarray_setting.json", 'utf8'));
-        console.log(obj)
-        obj.queue_url = data.QueueUrl;
-        JSON.stringify(obj);
-        fs.writeFile("../config/microarray_setting.json", JSON.stringify(obj), function(err) {
-            if (err) {
-                return console.log(err);
-            }
-        });
 
-        setTimeout(function() { polling(); }, 3000);
+queue.awsHander.getQueueUrl(function(flag){
+    if(flag){
+        logger.info("[Queue] Start queue");
+        
+
+    }else{
+        logger.info("[Queue] Start queue fails");
+        logger.info("[Queue] Fail to get queue url by queue name");
     }
-});
-
+})
 
 function polling() {
     AsyncPolling(function(end) {
@@ -59,7 +47,7 @@ function polling() {
 
 function qAnalysis(data, emailto, endCallback) {
     let message = JSON.parse(data.Messages[0].Body)
-    console.log("projectId:" + message.projectId)
+    //console.log("projectId:" + message.projectId)
     queue.awsHander.download(message.projectId, config.uploadPath, r, message, endCallback);
 
 }
