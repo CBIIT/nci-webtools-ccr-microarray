@@ -162,9 +162,18 @@ let defaultState = {
         postplot: {
             histplotAN: "",
             list_mAplotAN: "",
-            Boxplots: "",
+             Boxplots:{
+                plot:"",
+                style:{
+                    width:"400px",
+                },
+                layout:{
+                    showlegend: false,
+                    autosize: true ,
+                },
+            },
             PCA: "",
-            Heatmapolt: ""
+            Heatmapolt: "",
         },
         geneHeatmap: "/ssgseaHeatmap1.jpg",
         volcanoPlot: "/volcano.html",
@@ -177,17 +186,7 @@ class Analysis extends Component {
 
     constructor(props) {
         super(props);
-        if (this.props.location.search && this.props.location.search != "") {
-
-
-            defaultState.workflow.progressing = true;
-            this.state = Object.assign({}, defaultState);
-            this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
-
-        } else {
-
-            this.state = Object.assign({}, defaultState);
-        }
+        this.state = Object.assign({}, defaultState);
         this.resetWorkFlowProject = this.resetWorkFlowProject.bind(this);
         this.changeCode = this.changeCode.bind(this);
         this.handleSelectType = this.handleSelectType.bind(this);
@@ -223,6 +222,16 @@ class Analysis extends Component {
         this.getCurrentNumberOfJobsinQueue();
 
 
+    }
+
+    componentDidMount(){
+        if (this.props.location.search && this.props.location.search != "") {
+
+            defaultState.workflow.progressing = true;
+            this.state = Object.assign({}, defaultState);
+            this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
+
+        } 
     }
 
     changeRUNContractModel = (params = false) => {
@@ -304,11 +313,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ","+group_1_gsm;
+                                group_1_gsm = workflow.dataList[i].gsm + "," + group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ","+group_2_gsm;
+                                group_2_gsm = workflow.dataList[i].gsm + "," + group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -534,11 +543,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ","+group_1_gsm;
+                                group_1_gsm = workflow.dataList[i].gsm + "," + group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ","+group_2_gsm;
+                                group_2_gsm = workflow.dataList[i].gsm + "," + group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -871,11 +880,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ","+group_1_gsm;
+                                group_1_gsm = workflow.dataList[i].gsm + "," + group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ","+group_2_gsm;
+                                group_2_gsm = workflow.dataList[i].gsm + "," + group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -1108,11 +1117,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ","+group_1_gsm;
+                                group_1_gsm = workflow.dataList[i].gsm + "," + group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ","+group_2_gsm;
+                                group_2_gsm = workflow.dataList[i].gsm + "," + group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -1338,19 +1347,23 @@ class Analysis extends Component {
                                 BoxplotRenderData.push(boxplotData)
                             }
 
-                            let plot_layout = { showlegend: false,autosize:true}
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
-
-                            let Boxplots = <Plot id="BoxplotAN" data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true} />
+                            let plot_layout = { showlegend: false, autosize: true }
+                            let Boxplots = <Plot 
+                             id="BoxplotAN" 
+                             data={BoxplotRenderData} 
+                             layout={this.state.workflow.postplot.Boxplots.layout}  
+                             style={this.state.workflow.postplot.Boxplots.style} 
+                             useResizeHandler={true}
+                             />
 
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.postplot.Boxplots = <div> {Boxplots}</div>;
+                            workflow.postplot.Boxplots.plot = <div> {Boxplots}</div>;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.postplot.Boxplots = "No Data";
+                            workflow.postplot.Boxplots.plot = "No Data";
                             this.setState({ workflow: workflow });
 
                         }
@@ -1360,7 +1373,7 @@ class Analysis extends Component {
                         document.getElementById("message-post-boxplot").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.progressing = false;
-                        workflow.postplot.Boxplots = "No Data";
+                        workflow.postplot.Boxplots.plot = "No Data";
                         this.setState({ workflow: workflow });
                     }
 
@@ -1369,7 +1382,7 @@ class Analysis extends Component {
             document.getElementById("message-post-boxplot").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
-            workflow.postplot.Boxplots = "No Data";
+            workflow.postplot.Boxplots.plot = "No Data";
             this.setState({ workflow: workflow });
         }
 
@@ -2767,10 +2780,11 @@ class Analysis extends Component {
         document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 80;
         document.getElementById("panel-show").style.display = 'inherit';
         document.getElementById("panel-hide").style.display = 'none';
-        let update={
-            
-        }
-        Plot.restyle("postBoxplots",)
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.BoxplotAN_width.width = document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9;
+        this.setState({
+            workflow: workflow
+        });
     }
 
     showWorkFlow = () => {
@@ -2778,6 +2792,11 @@ class Analysis extends Component {
         document.getElementsByClassName("container-board-right")[0].removeAttribute("style");
         document.getElementById("panel-show").style.display = 'none';
         document.getElementById("panel-hide").style.display = 'inherit';
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.BoxplotAN_width.width = document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9;
+        this.setState({
+            workflow: workflow
+        });
     }
 
     changeTab(tab) {
