@@ -33,7 +33,7 @@ awsHander.getQueueUrl = function(next) {
             global.queue_url = "none";
             next(false);
         } else {
-        
+            logger.info("[Queue] Queue URL is "+data.QueueUrl)
             global.queue_url = data.QueueUrl;
             next(true);
         }
