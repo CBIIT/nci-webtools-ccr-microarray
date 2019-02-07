@@ -43,11 +43,11 @@ class DEGTable extends Component {
         });
     }
 
-   
+
 
     handleMenuClick = (e) => {
-         document.getElementById("deg-drop-down").innerHTML=e.key
-         this.props.getDEG({
+        document.getElementById("deg-drop-down").innerHTML = e.key
+        this.props.getDEG({
             page_size: parseInt(e.key),
             page_number: 1,
             sorting: {
@@ -60,18 +60,24 @@ class DEGTable extends Component {
 
 
     export = () => {
-         this.props.exportDEG();
+        this.props.exportDEG();
     }
 
     render() {
         let content = "";
 
         const columns = [{
-                title: 'SYMBOL',
+
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                    <label for="input_deg_search_symbol"><span style={{display:"none"}}>input_deg_search_symbol</span> <Input onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></label>
+                    <div>SYMBOL</div>
+                </div>
+                ),
                 dataIndex: 'SYMBOL',
                 sorter: true,
-                width: "9%",
-                 render: (text, record, index) => {
+                width: "15%",
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -80,11 +86,16 @@ class DEGTable extends Component {
                 }
 
             }, {
-                title: 'FC',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                      <label for="input_deg_search_fc"><span style={{display:"none"}}>input_deg_search_fc</span> <Input onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></label>
+                    <div>FC</div>
+                </div>
+                ),
                 dataIndex: 'FC',
                 sorter: true,
                 width: "8%",
-                 render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -93,12 +104,17 @@ class DEGTable extends Component {
                 }
 
             }, {
-                title: 'P VALUE',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                          <label for="input_dge_search_p_value"><span style={{display:"none"}}>input_dge_search_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="0.05"  id="input_dge_search_p_value"/></label>
+                           <div>P.Value</div>
+                </div>
+                ),
                 dataIndex: 'P.Value',
                 sorter: true,
                 width: "9%",
                 defaultSortOrder: 'ascend',
-                 render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -108,12 +124,17 @@ class DEGTable extends Component {
 
             },
             {
-                title: 'adj.P.Val',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                        <label for="input_deg_search_adj_p_value"><span style={{display:"none"}}>input_deg_search_adj_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="adj.p.val"  id="input_deg_search_adj_p_value"/></label>
+                        <div>adj.P.Val</div>
+                </div>
+                ),
                 dataIndex: 'adj.P.Val',
                 sorter: true,
                 width: "9%",
 
-                 render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -123,11 +144,16 @@ class DEGTable extends Component {
 
             },
             {
-                title: 'AveExpr',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                         <label for="input_deg_search_aveexpr"><span style={{display:"none"}}>input_deg_search_aveexpr</span> <Input onPressEnter={value=>search(value) }   placeholder="AveExpr"  id="input_deg_search_aveexpr"/></label>
+                         <div>AveExpr</div>
+                </div>
+                ),
                 dataIndex: 'AveExpr',
                 sorter: true,
                 width: "9%",
-                 render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -136,11 +162,16 @@ class DEGTable extends Component {
                 }
 
             }, {
-                title: 'ACCNUM',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                             <label for="input_deg_search_accnum"><span style={{display:"none"}}>input_deg_search_accnum</span> <Input onPressEnter={value=>search(value) }   placeholder="ACCNUM"  id="input_deg_search_accnum"/></label>
+                         <div>ACCNUM</div>
+                </div>
+                ),
                 dataIndex: 'ACCNUM',
                 sorter: true,
                 width: "10%",
-                 render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -150,7 +181,12 @@ class DEGTable extends Component {
 
             },
             {
-                title: 'DESC',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                            <label for="input_deg_search_desc"><span style={{display:"none"}}>input_deg_search_desc</span> <Input onPressEnter={value=>search(value) }  placeholder="Desc"  id="input_deg_search_desc"/></label>
+                       <div>DESC</div>
+                </div>
+                ),
                 dataIndex: 'DESC',
                 sorter: true,
                 width: "13%",
@@ -163,33 +199,43 @@ class DEGTable extends Component {
                 }
             },
             {
-                title: 'ENTREZ',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                     <label for="input_deg_search_entrez"><span style={{display:"none"}}>input_deg_search_entrez</span> <Input onPressEnter={value=>search(value) } placeholder="ENTREZ"  id="input_deg_search_entrez"/></label>
+                          <div>ENTREZ</div>
+                </div>
+                ),
                 dataIndex: 'ENTREZ',
                 sorter: true,
                 width: "9%",
                 render: (text, record, index) => {
-                    if(text!="" && text!="NA"){
-                        let link ="https://www.ncbi.nlm.nih.gov/gene/"+text;
-                         return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.9}}>
+                    if (text != "" && text != "NA") {
+                        let link = "https://www.ncbi.nlm.nih.gov/gene/" + text;
+                        return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.9}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}> <a href={link} target="_blank">{text}</a></span>
                                     </div>
-                        
-                    }else{
-                         return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.9}}>
+
+                    } else {
+                        return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.9}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
                     }
 
-                   
+
 
                 }
 
             }, {
-                title: 'probsetID',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                       <label for="input_deg_search_probsetid"><span style={{display:"none"}}>input_deg_search_probsetid</span> <Input onPressEnter={value=>search(value) }   placeholder="probsetID"  id="input_deg_search_probsetid"/></label>
+                        <div>probsetID</div>
+                </div>
+                ),
                 dataIndex: 'probsetID',
                 sorter: true,
                 width: "8%",
-                 render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -198,11 +244,16 @@ class DEGTable extends Component {
                 }
 
             }, {
-                title: 't',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                      <label for="input_deg_search_t"><span style={{display:"none"}}>input_deg_search_t</span> <Input onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></label>
+                      <div>t</div>
+                </div>
+                ),
                 dataIndex: 't',
                 sorter: true,
-                width: "9%",
-                 render: (text, record, index) => {
+                width: "5%",
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -212,11 +263,16 @@ class DEGTable extends Component {
 
             },
             {
-                title: 'B',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                       <label for="input_deg_search_b"><span style={{display:"none"}}>input_deg_search_b</span> <Input onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></label>
+                       <div>b</div>
+                </div>
+                ),
                 dataIndex: 'B',
                 sorter: true,
-                width: "8%",
-                 render: (text, record, index) => {
+                width: "5%",
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -268,15 +324,15 @@ class DEGTable extends Component {
         }
 
 
-                const menu = (
-                <Menu onClick={this.handleMenuClick}>
+        const menu = (
+            <Menu onClick={this.handleMenuClick}>
                     <Menu.Item key="15">15</Menu.Item>
                     <Menu.Item key="25">25</Menu.Item>
                     <Menu.Item key="50">50</Menu.Item>
                     <Menu.Item key="100">100</Menu.Item>
                     <Menu.Item key="200">200</Menu.Item>
                 </Menu>
-            );
+        );
 
 
         content = <div>
@@ -292,21 +348,7 @@ class DEGTable extends Component {
 
                         </div>
                     <div>
-                     <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
-                           <div className="filter_col"  style={{width:"10%"}}><label for="input_deg_search_symbol"><span style={{display:"none"}}>input_deg_search_symbol</span> <Input onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></label></div>
-                           <div className="filter_col"  style={{width:"7%"}} ><label for="input_deg_search_fc"><span style={{display:"none"}}>input_deg_search_fc</span> <Input onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></label></div>
-                           <div className="filter_col"  style={{width:"8%"}}><label for="input_dge_search_p_value"><span style={{display:"none"}}>input_dge_search_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="0.05"  id="input_dge_search_p_value"/></label></div>
-                           <div className="filter_col"  style={{width:"8%"}}><label for="input_deg_search_adj_p_value"><span style={{display:"none"}}>input_deg_search_adj_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="adj.p.val"  id="input_deg_search_adj_p_value"/></label></div>
-                           <div className="filter_col"  style={{width:"8%"}} ><label for="input_deg_search_aveexpr"><span style={{display:"none"}}>input_deg_search_aveexpr</span> <Input onPressEnter={value=>search(value) }   placeholder="AveExpr"  id="input_deg_search_aveexpr"/></label></div>
-                           <div className="filter_col"  style={{width:"10%"}} ><label for="input_deg_search_accnum"><span style={{display:"none"}}>input_deg_search_accnum</span> <Input onPressEnter={value=>search(value) }   placeholder="ACCNUM"  id="input_deg_search_accnum"/></label></div>
-                           <div className="filter_col"  style={{width:"16%"}}><label for="input_deg_search_desc"><span style={{display:"none"}}>input_deg_search_desc</span> <Input onPressEnter={value=>search(value) }  placeholder="Desc"  id="input_deg_search_desc"/></label></div>
-                           <div className="filter_col"  style={{width:"8%"}} ><label for="input_deg_search_entrez"><span style={{display:"none"}}>input_deg_search_entrez</span> <Input onPressEnter={value=>search(value) } placeholder="ENTREZ"  id="input_deg_search_entrez"/></label></div>
-                           <div className="filter_col"  style={{width:"8%"}}><label for="input_deg_search_probsetid"><span style={{display:"none"}}>input_deg_search_probsetid</span> <Input onPressEnter={value=>search(value) }   placeholder="probsetID"  id="input_deg_search_probsetid"/></label></div>
-                           <div className="filter_col"  style={{width:"8%"}}><label for="input_deg_search_t"><span style={{display:"none"}}>input_deg_search_t</span> <Input onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></label></div>
-                           <div className="filter_col"  style={{width:"8%"}}><label for="input_deg_search_b"><span style={{display:"none"}}>input_deg_search_b</span> <Input onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></label></div>
-                     </div>
-            
-                        <Table 
+                    <Table 
                             columns={columns}
                             dataSource={this.props.data.diff_expr_genes.data}
                             pagination={this.props.data.diff_expr_genes.pagination}
