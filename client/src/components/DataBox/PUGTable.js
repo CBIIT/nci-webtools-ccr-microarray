@@ -91,6 +91,9 @@ class PUGTable extends Component {
         reqBody.upOrDown = "upregulated_pathways";
         reqBody.pathway_name = row.Description;
         this.props.changeLoadingStatus(true, "loading HeatMap")
+
+        var importantStuff = window.open(window.location.protocol+"//"+window.location.host+"/microarray/assets/loading.html", '_blank');
+        
         fetch('./api/analysis/pathwaysHeapMap', {
                 method: "POST",
                 body: JSON.stringify(reqBody),
@@ -117,8 +120,8 @@ class PUGTable extends Component {
                         //     visible: true
                         // });
                         var link = "images/" + this.props.data.projectID + "/" + pic_link
-                        window.open("https://"+window.location.host+"/microarray/"+link);
-
+                        //window.open("https://"+window.location.host+"/microarray/"+link);
+                        importantStuff.location.href = "https://"+window.location.host+"/microarray/"+link;
 
                     }
 
@@ -127,6 +130,8 @@ class PUGTable extends Component {
                 }
 
             })
+
+       
     }
 
 

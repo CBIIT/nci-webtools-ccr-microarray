@@ -19,6 +19,7 @@ class MainContent extends Component {
         <Switch>
         <Route path={match+'/:code'} component={Analysis}/>
         <Route path={match+'/'} component={Analysis}/>
+
       </Switch>
         );
     }
