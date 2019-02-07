@@ -113,7 +113,7 @@ class SSGSEATable extends Component {
 
             }
         },{
-            title: : (
+            title: (
                     <div style={{ textAlign: 'center' }}>
                         <label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label>
                         <div>P.Value</div>

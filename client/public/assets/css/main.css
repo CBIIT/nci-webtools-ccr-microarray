@@ -962,7 +962,19 @@ input#input_group_name {
     padding-left: 9px;
 }
 
+#ss_tag1 .ant-table-column-sorter {
+    float: right;
+    position: relative;
+    margin-top: -14px;
+    padding-left: 9px;
+}
+
 #deg_tag1 .ant-input {
+    width: calc(100% + 12px) !important;
+    padding: 0px 10px;
+    margin-left: -6px;
+}
+#ss_tag1 .ant-input {
     width: calc(100% + 12px) !important;
     padding: 0px 10px;
     margin-left: -6px;
