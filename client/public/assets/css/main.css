@@ -980,6 +980,33 @@ input#input_group_name {
     margin-left: -6px;
 }
 
+
+
+#deg_tag2 .ant-table-column-sorter {
+    float: right;
+    position: relative;
+    margin-top: -14px;
+    padding-left: 9px;
+}
+
+#deg_tag3 .ant-table-column-sorter {
+    float: right;
+    position: relative;
+    margin-top: -14px;
+    padding-left: 9px;
+}
+
+#deg_tag2 .ant-input {
+    width: calc(100% + 12px) !important;
+    padding: 0px 10px;
+    margin-left: -6px;
+}
+#deg_tag3 .ant-input {
+    width: calc(100% + 12px) !important;
+    padding: 0px 10px;
+    margin-left: -6px;
+}
+
 .ant-table-wrapper{
     padding-top: 7px;
 }
