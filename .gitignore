@@ -9,4 +9,4 @@ package-lock.json
 /mpstr_pathworks_mac/
 /mpstr_pathworks_linux/
 *.log
-config/microarray_setting.json
+
