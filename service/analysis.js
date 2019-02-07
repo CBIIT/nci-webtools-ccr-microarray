@@ -293,18 +293,12 @@ router.post("/getCurrentNumberOfJobsinQueue", function(req, res) {
 
 router.post('/getResultByProjectId', function(req, res) {
 
-    req.setTimeout(0) // no timeout
-
-
-
     logger.info("[Get contrast result from file]",
         "projectId:", req.body.projectId
     );
 
 
-    queue.awsHander.download(req.body.projectId, config.uploadPath, getResultFromFile, res, function() { console.log("download") });
-
-    function getResultFromFile(res, callback) {
+    queue.awsHander.download(req.body.projectId, config.uploadPath, function(){
         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
             if (err) {
                 res.json({
@@ -344,7 +338,8 @@ router.post('/getResultByProjectId', function(req, res) {
 
             }
         });
-    }
+    });
+
 
 });
 
