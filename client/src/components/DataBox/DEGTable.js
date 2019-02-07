@@ -76,10 +76,10 @@ class DEGTable extends Component {
                 ),
                 dataIndex: 'SYMBOL',
                 sorter: true,
-                width: "15%",
+                width: "10%",
                 render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -94,10 +94,10 @@ class DEGTable extends Component {
                 ),
                 dataIndex: 'FC',
                 sorter: true,
-                width: "8%",
+                width: "7%",
                 render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -112,11 +112,11 @@ class DEGTable extends Component {
                 ),
                 dataIndex: 'P.Value',
                 sorter: true,
-                width: "9%",
+                width: "10%",
                 defaultSortOrder: 'ascend',
                 render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -132,11 +132,11 @@ class DEGTable extends Component {
                 ),
                 dataIndex: 'adj.P.Val',
                 sorter: true,
-                width: "9%",
+                width: "10%",
 
                 render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -152,10 +152,10 @@ class DEGTable extends Component {
                 ),
                 dataIndex: 'AveExpr',
                 sorter: true,
-                width: "9%",
+                width: "8%",
                 render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -170,10 +170,10 @@ class DEGTable extends Component {
                 ),
                 dataIndex: 'ACCNUM',
                 sorter: true,
-                width: "10%",
+                width: "12%",
                 render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -189,10 +189,10 @@ class DEGTable extends Component {
                 ),
                 dataIndex: 'DESC',
                 sorter: true,
-                width: "13%",
+                width: "15%",
                 render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.13}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.15}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -207,16 +207,16 @@ class DEGTable extends Component {
                 ),
                 dataIndex: 'ENTREZ',
                 sorter: true,
-                width: "9%",
+                width: "11%",
                 render: (text, record, index) => {
                     if (text != "" && text != "NA") {
                         let link = "https://www.ncbi.nlm.nih.gov/gene/" + text;
-                        return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.9}}>
+                        return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.11}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}> <a href={link} target="_blank">{text}</a></span>
                                     </div>
 
                     } else {
-                        return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.9}}>
+                        return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.11}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
                     }
@@ -255,7 +255,7 @@ class DEGTable extends Component {
                 width: "5%",
                 render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -274,7 +274,7 @@ class DEGTable extends Component {
                 width: "5%",
                 render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
