@@ -168,6 +168,7 @@ class DataBox extends Component {
     showModal = () => {
         let currentState = Object.assign({}, this.state);
         currentState.visible = true;
+        currentState.group_name="";
         this.setState(currentState);
     }
 
