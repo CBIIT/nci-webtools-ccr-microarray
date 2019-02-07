@@ -968,6 +968,9 @@ input#input_group_name {
     margin-left: -6px;
 }
 
+.ant-table-wrapper{
+    padding-top: 7px;
+}
 @media only screen and (max-width: 600px) {
     .container-board-left .blocks {
 
