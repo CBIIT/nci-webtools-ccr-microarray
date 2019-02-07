@@ -181,7 +181,7 @@ awsHander.del = function(rec) {
 awsHander.changeMessageVisibility = function(receiptHandle,timeout){
 
     var visibilityParams = {
-      QueueUrl: config.queue_url,,
+      QueueUrl: config.queue_url,
       ReceiptHandle: receiptHandle,
       VisibilityTimeout: timeout
     };
