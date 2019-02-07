@@ -150,21 +150,66 @@ let defaultState = {
                 "search_TOTAL_NUMBER_GENES": "",
             }
         },
+        BoxplotBN: {
+            data: "",
+            plot: "",
+            style: {
+                width: "800",
+            },
+            layout: {
+                showlegend: false,
+                autosize: true,
+            },
+        },
+        RLE: {
+            data: "",
+            plot: "",
+            style: {
+                width: "800",
+            },
+            layout: {
+                showlegend: false,
+                autosize: true,
+            },
+        },
+        NUSE: {
+            data: "",
+            plot: "",
+            style: {
+                width: "800",
+            },
+            layout: {
+                showlegend: false,
+                autosize: true,
+            },
+        },
         preplots: {
             histplotBN: "",
             list_mAplotBN: "",
-            Boxplots: "",
-            RLE: "",
-            NUSE: "",
         },
         list_mAplotBN: "",
         list_mAplotAN: "",
+        BoxplotAN: {
+            data: "",
+            plot: "",
+            style: {
+                width: "800",
+            },
+            layout: {
+                showlegend: false,
+                autosize: true,
+            },
+        },
+        PCA: {
+            data: "",
+            plot: "",
+            style: {},
+            layout: {},
+        },
         postplot: {
             histplotAN: "",
             list_mAplotAN: "",
-            Boxplots: "",
-            PCA: "",
-            Heatmapolt: ""
+            Heatmapolt: "",
         },
         geneHeatmap: "/ssgseaHeatmap1.jpg",
         volcanoPlot: "/volcano.html",
@@ -177,17 +222,7 @@ class Analysis extends Component {
 
     constructor(props) {
         super(props);
-        if (this.props.location.search && this.props.location.search != "") {
-
-
-            defaultState.workflow.progressing = true;
-            this.state = Object.assign({}, defaultState);
-            this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
-
-        } else {
-
-            this.state = Object.assign({}, defaultState);
-        }
+        this.state = Object.assign({}, defaultState);
         this.resetWorkFlowProject = this.resetWorkFlowProject.bind(this);
         this.changeCode = this.changeCode.bind(this);
         this.handleSelectType = this.handleSelectType.bind(this);
@@ -221,8 +256,20 @@ class Analysis extends Component {
         this.showModal = this.showModal.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.getCurrentNumberOfJobsinQueue();
+        this.showWorkFlow = this.showWorkFlow.bind(this);
+        this.hideWorkFlow = this.hideWorkFlow.bind(this);
 
 
+    }
+
+    componentDidMount() {
+        if (this.props.location.search && this.props.location.search != "") {
+
+            defaultState.workflow.progressing = true;
+            this.state = Object.assign({}, defaultState);
+            this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
+
+        }
     }
 
     changeRUNContractModel = (params = false) => {
@@ -304,11 +351,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                                group_1_gsm = workflow.dataList[i].gsm + "," + group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                                group_2_gsm = workflow.dataList[i].gsm + "," + group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -534,11 +581,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                                group_1_gsm = workflow.dataList[i].gsm + "," + group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                                group_2_gsm = workflow.dataList[i].gsm + "," + group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -871,11 +918,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                                group_1_gsm = workflow.dataList[i].gsm + "," + group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                                group_2_gsm = workflow.dataList[i].gsm + "," + group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -1108,11 +1155,11 @@ class Analysis extends Component {
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
                             if (workflow.dataList[i].groups == workflow.group_1) {
-                                group_1_gsm = workflow.dataList[i].gsm + ",";
+                                group_1_gsm = workflow.dataList[i].gsm + "," + group_1_gsm;
                             }
 
                             if (workflow.dataList[i].groups == workflow.group_2) {
-                                group_2_gsm = workflow.dataList[i].gsm + ",";
+                                group_2_gsm = workflow.dataList[i].gsm + "," + group_2_gsm;
                             }
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
@@ -1224,65 +1271,69 @@ class Analysis extends Component {
                     if (result.status == 200) {
                         if (result.data != "") {
                             let pcaData = result.data;
-                            var PCAIframe = <Plot  data={[{
-                                        autosize: true,
-                                        x: pcaData.x,
-                                        y: pcaData.y,
-                                        z: pcaData.z,
-                                        text: pcaData.row,
-                                        mode: 'markers',
-                                        marker: {
-                                            size: 10,
-                                            color: pcaData.color
-                                        },
-                                        type: 'scatter3d',
-                                       
-                                    }]} layout={{
-            
-                                        margin:{
-                                            l:25,
-                                            r:25,
-                                            t:-50,
-                                            b:0 ,
-                                            pd:2,
-                                        },
-                                        width:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.8,
-                                        height:document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.6,
-                                        scene: {
-                                            xaxis: {
-                                                title: pcaData.col[0],
-                                                backgroundcolor: "#DDDDDD",
-                                                gridcolor: "rgb(255, 255, 255)",
-                                                showbackground: true,
-                                                zerolinecolor: "rgb(255, 255, 255)"
+                            let pcaPlotData = [{
+                                autosize: true,
+                                x: pcaData.x,
+                                y: pcaData.y,
+                                z: pcaData.z,
+                                text: pcaData.row,
+                                mode: 'markers',
+                                marker: {
+                                    size: 10,
+                                    color: pcaData.color
+                                },
+                                type: 'scatter3d'
+                            }];
+                            let pcaPlotLayout = {
+                                margin: {
+                                    l: 25,
+                                    r: 25,
+                                    t: -50,
+                                    b: 0,
+                                    pd: 2,
+                                },
+                                width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
+                                height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
+                                scene: {
+                                    xaxis: {
+                                        title: pcaData.col[0],
+                                        backgroundcolor: "#DDDDDD",
+                                        gridcolor: "rgb(255, 255, 255)",
+                                        showbackground: true,
+                                        zerolinecolor: "rgb(255, 255, 255)"
 
-                                            },
-                                            yaxis: {
-                                                title:  pcaData.col[1],
-                                                backgroundcolor: "#EEEEEE",
-                                                gridcolor: "rgb(255, 255, 255)",
-                                                showbackground: true,
-                                                zerolinecolor: "rgb(255, 255, 255)"
-                                            },
-                                            zaxis: {
-                                                title:  pcaData.col[2],
-                                                backgroundcolor: "#cccccc",
-                                                gridcolor: "rgb(255, 255, 255)",
-                                                showbackground: true,
-                                                zerolinecolor: "rgb(255, 255, 255)"
-                                            }
-                                        }}
-                                    }  useResizeHandler={true} />
+                                    },
+                                    yaxis: {
+                                        title: pcaData.col[1],
+                                        backgroundcolor: "#EEEEEE",
+                                        gridcolor: "rgb(255, 255, 255)",
+                                        showbackground: true,
+                                        zerolinecolor: "rgb(255, 255, 255)"
+                                    },
+                                    zaxis: {
+                                        title: pcaData.col[2],
+                                        backgroundcolor: "#cccccc",
+                                        gridcolor: "rgb(255, 255, 255)",
+                                        showbackground: true,
+                                        zerolinecolor: "rgb(255, 255, 255)"
+                                    }
+                                }
+                            }
+
+                            var PCAIframe = <Plot data={pcaPlotData} layout={pcaPlotLayout} useResizeHandler={true} />
 
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             let plot_style = { "display": "block", "marginLeft": "auto", "marginRight": "auto", "width": "80%" }
-                            workflow.postplot.PCA = <div style={plot_style}> {PCAIframe}</div>;
+                            workflow.PCA.plot = <div style={plot_style}> {PCAIframe}</div>;
+                            workflow.PCA.data = pcaPlotData;
+                            workflow.PCA.layout = pcaPlotLayout;
+                            workflow.PCA.style = plot_style;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.postplot.PCA = "No Data";
+                            workflow.PCA = "No Data";
                             this.setState({ workflow: workflow });
 
                         }
@@ -1292,7 +1343,7 @@ class Analysis extends Component {
                         document.getElementById("message-post-pca").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.progressing = false;
-                        workflow.postplot.PCA = "No Data";
+                        workflow.PCA = "No Data";
                         this.setState({ workflow: workflow });
                     }
 
@@ -1308,7 +1359,7 @@ class Analysis extends Component {
     getBoxplotAN() {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
-        workflow2.loading_info = "Loading Boxplot...";
+        workflow2.loading_info = "Loading...";
         this.setState({ workflow: workflow2 });
         let params = { projectId: workflow2.projectID };
         try {
@@ -1338,19 +1389,24 @@ class Analysis extends Component {
                                 BoxplotRenderData.push(boxplotData)
                             }
 
-                            let plot_layout = { showlegend: false }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
-
-                            let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
+                            let plot_layout = { showlegend: false, autosize: true }
+                            let Boxplots = <Plot 
+                             id="BoxplotAN" 
+                             data={BoxplotRenderData} 
+                             layout={this.state.workflow.BoxplotAN.layout}  
+                             style={this.state.workflow.BoxplotAN.style} 
+                             useResizeHandler={true}
+                             />
 
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.postplot.Boxplots = <div> {Boxplots}</div>;
+                            workflow.BoxplotAN.plot = <div> {Boxplots}</div>;
+                            workflow.BoxplotAN.data = BoxplotRenderData;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.postplot.Boxplots = "No Data";
+                            workflow.BoxplotAN.plot = "No Data";
                             this.setState({ workflow: workflow });
 
                         }
@@ -1360,7 +1416,7 @@ class Analysis extends Component {
                         document.getElementById("message-post-boxplot").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.progressing = false;
-                        workflow.postplot.Boxplots = "No Data";
+                        workflow.BoxplotAN.plot = "No Data";
                         this.setState({ workflow: workflow });
                     }
 
@@ -1369,7 +1425,7 @@ class Analysis extends Component {
             document.getElementById("message-post-boxplot").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
-            workflow.postplot.Boxplots = "No Data";
+            workflow.BoxplotAN.plot = "No Data";
             this.setState({ workflow: workflow });
         }
 
@@ -1503,7 +1559,10 @@ class Analysis extends Component {
 
 
                         workflow.progressing = false;
-                        workflow.preplots.NUSE = <div> {NUSE}</div>;
+                        workflow.NUSE.data = NUSERenderData;
+                        workflow.NUSE.plot = <div> {NUSE}</div>;
+                        workflow.NUSE.layout = plot_layout;
+                        workflow.NUSE.style = plot_style;
                         this.setState({ workflow: workflow });
 
 
@@ -1564,15 +1623,17 @@ class Analysis extends Component {
 
                             let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style}  useResizeHandler={true}/>
 
-
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.preplots.RLE = <div> {RLE}</div>;
+                            workflow.RLE.data = RLERenderData;
+                            workflow.RLE.plot = <div> {RLE}</div>;
+                            workflow.RLE.layout = plot_layout;
+                            workflow.RLE.style = plot_style;
                             this.setState({ workflow: workflow });
                         } else {
 
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots.RLE = "No Data";
+                            workflow.RLE.plot = "No Data";
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         }
@@ -1581,7 +1642,7 @@ class Analysis extends Component {
                     } else {
                         document.getElementById("message-pre-rle").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
-                        workflow.preplots.RLE = "";
+                        workflow.RLE.plot = "No Data";
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
 
@@ -1592,7 +1653,7 @@ class Analysis extends Component {
 
             document.getElementById("message-pre-rle").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
-            workflow.preplots.RLE = "No Data";
+            workflow.RLE.plot = "No Data";
             workflow.progressing = false;
             this.setState({ workflow: workflow });
         }
@@ -1640,8 +1701,11 @@ class Analysis extends Component {
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
                             let workflow = Object.assign({}, this.state.workflow);
-                            workflow.preplots.Boxplots = <div> {Boxplots}</div>;
                             workflow.progressing = false;
+                            workflow.BoxplotBN.data = BoxplotRenderData;
+                            workflow.BoxplotBN.plot = <div> {Boxplots}</div>;
+                            workflow.BoxplotBN.layout = plot_layout;
+                            workflow.BoxplotBN.style = plot_style;
                             this.setState({ workflow: workflow });
                         } else {
 
@@ -2767,6 +2831,11 @@ class Analysis extends Component {
         document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 80;
         document.getElementById("panel-show").style.display = 'inherit';
         document.getElementById("panel-hide").style.display = 'none';
+        this.resetBoxPlotAN();
+        this.resetRLE();
+        this.resetNUSE();
+        this.resetPCA();
+        this.resetBoxPlotBN();
     }
 
     showWorkFlow = () => {
@@ -2774,8 +2843,105 @@ class Analysis extends Component {
         document.getElementsByClassName("container-board-right")[0].removeAttribute("style");
         document.getElementById("panel-show").style.display = 'none';
         document.getElementById("panel-hide").style.display = 'inherit';
+        this.resetBoxPlotAN();
+        this.resetRLE();
+        this.resetNUSE();
+        this.resetPCA();
+        this.resetBoxPlotBN();
+
     }
 
+    resetPCA = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        let pcaPlotLayout = {
+                                margin:workflow.PCA.layout.margin,
+                                width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
+                                height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
+                                scene: workflow.PCA.layout.scene
+                            }
+        workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
+                             data={workflow.PCA.data} 
+                             layout={pcaPlotLayout}  
+                             /></div>;
+        this.setState({
+                workflow: workflow
+            });
+    }
+
+    resetBoxPlotAN = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.BoxplotAN.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.BoxplotAN.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        workflow.BoxplotAN.plot = <Plot 
+                             id="BoxplotAN" 
+                             data={workflow.BoxplotAN.data} 
+                             layout={workflow.BoxplotAN.layout}  
+                             style={workflow.BoxplotAN.style} 
+                             useResizeHandler={true}
+                             />
+        this.setState({
+            workflow: workflow
+        });
+    }
+
+
+    resetBoxPlotBN = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.BoxplotBN.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.BoxplotBN.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        workflow.BoxplotBN.plot = <Plot 
+                             id="BoxplotAN" 
+                             data={workflow.BoxplotBN.data} 
+                             layout={workflow.BoxplotBN.layout}  
+                             style={workflow.BoxplotBN.style} 
+                             useResizeHandler={true}
+                             />
+        this.setState({
+            workflow: workflow
+        });
+    }
+    resetRLE = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.RLE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.RLE.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        workflow.RLE.plot = <Plot 
+                             id="BoxplotAN" 
+                             data={workflow.RLE.data} 
+                             layout={workflow.RLE.layout}  
+                             style={workflow.RLE.style} 
+                             useResizeHandler={true}
+                             />
+        this.setState({
+            workflow: workflow
+        });
+    }
+    resetNUSE = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.NUSE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.NUSE.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        workflow.NUSE.plot = <Plot 
+                             id="BoxplotAN" 
+                             data={workflow.NUSE.data} 
+                             layout={workflow.NUSE.layout}  
+                             style={workflow.NUSE.style} 
+                             useResizeHandler={true}
+                             />
+        this.setState({
+            workflow: workflow
+        });
+    }
     changeTab(tab) {
         console.log(tab)
         if (document.getElementById("li-about") != null) {

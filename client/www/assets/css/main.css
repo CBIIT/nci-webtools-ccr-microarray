@@ -64,6 +64,8 @@ tr:nth-child(even) {
 
 .ant-input {
     font-size: 18px;
+    font-weight: 400;
+    color:black;
 }
 
 .ant-tabs.ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
@@ -448,6 +450,11 @@ tr:nth-child(even) {
     min-height: 716px;
 }
 
+#postHeatmap{
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+}
 
 .nav>li>a:focus {
     background-color: #FFC90E;

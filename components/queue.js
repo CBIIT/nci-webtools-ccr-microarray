@@ -20,6 +20,26 @@ var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
 
 
+
+awsHander.getQueueUrl = function(next) {
+    var params = {
+        QueueName: config.queue_name
+    };
+
+    sqs.getQueueUrl(params, function(err, data) {
+        if (err) {
+
+            console.log(err, err.stack); // an error occurred
+            global.queue_url = "none";
+            next(false);
+        } else {
+            logger.info("[Queue] Queue URL is "+data.QueueUrl)
+            global.queue_url = data.QueueUrl;
+            next(true);
+        }
+    });
+}
+
 awsHander.upload = function(path, prex) {
     // Handle promise fulfilled/rejected states
 
@@ -153,7 +173,7 @@ awsHander.del = function(rec) {
             logger.info("Err")
             logger.info(err.stack)
         } else {
-            logger.info("[Queue] Delete Messages from S3 Successfully")
+            // logger.info("[Queue] Delete Messages from S3 Successfully")
         }
     });
 }
@@ -192,14 +212,13 @@ download = (projectId, key, filePath) => {
         Bucket: config.bucketName,
         Key: key
     }
-    logger.info("[Queue] Download file from S3 ")
-    logger.info("Key:", key)
+    // logger.info("[Queue] Download file from S3 ")
+    // logger.info("Key:", key)
     s3.getObject(params, (err, data) => {
         if (err) {
             console.error(err);
 
             logger.info("[Queue] Download file from S3 fails")
-            logger.info("Err")
             logger.info(params)
             logger.info(err.stack)
         } else {
@@ -214,9 +233,9 @@ download = (projectId, key, filePath) => {
                         });
                     });
             }
-            logger.info("[Queue] Download file from S3")
-            logger.info("file")
-            logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
+            // logger.info("[Queue] Download file from S3")
+            // logger.info("file")
+            // logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
 
             //let fileStream =fs.createReadStream(path + "/" + items[i])
             fs.writeFile(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""), data.Body, function(err) {
@@ -224,7 +243,7 @@ download = (projectId, key, filePath) => {
                     return console.log(err);
                 }
             })
-            logger.info(filePath + "/" + projectId + "has been created!")
+            // logger.info(filePath + "/" + projectId + "has been created!")
         }
     })
 }
