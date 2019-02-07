@@ -178,7 +178,21 @@ awsHander.del = function(rec) {
     });
 }
 
-awsHander.download = (projectId, filePath, next, configData, endCallback) => {
+awsHander.changeMessageVisibility = function(receiptHandle,timeout){
+
+    var visibilityParams = {
+      QueueUrl: config.queue_url,,
+      ReceiptHandle: receiptHandle,
+      VisibilityTimeout: timeout
+    };
+    sqs.changeMessageVisibility(visibilityParams, function(err, data) {
+      if (err) {
+        logger.info("queue visibility change fails: " + err)
+      }
+    });
+}
+
+awsHander.download = (projectId, filePath, next) => {
     let params2 = {
         Bucket: config.bucketName,
         MaxKeys: 9000,
@@ -199,7 +213,7 @@ awsHander.download = (projectId, filePath, next, configData, endCallback) => {
                 download(projectId, files[i].Key, filePath)
             }
             setTimeout(function() {
-                next(configData, endCallback)
+                next()
             }, 200 * i);
 
         }
