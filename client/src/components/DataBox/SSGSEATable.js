@@ -80,7 +80,12 @@ class SSGSEATable extends Component {
 
 
         const columns = [{
-            title: 'NAME',
+            title: (
+                    <div style={{ textAlign: 'center' }}>
+                       <label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label>
+                      <div>NAME</div>
+                </div>
+                ),
             dataIndex: '_row',
             sorter: true,
             render: (text, record, index) => {
@@ -91,7 +96,12 @@ class SSGSEATable extends Component {
 
             }
         }, {
-            title: 'logFC',
+            title: (
+                    <div style={{ textAlign: 'center' }}>
+                       <label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label>
+                       <div>logFC</div>
+                </div>
+                ),
             dataIndex: 'logFC',
             sorter: true,
             width: "10%",
@@ -103,7 +113,12 @@ class SSGSEATable extends Component {
 
             }
         },{
-            title: 'P VALUE',
+            title: : (
+                    <div style={{ textAlign: 'center' }}>
+                        <label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label>
+                        <div>P.Value</div>
+                </div>
+                ),
             dataIndex: 'P.Value',
             sorter: true,
             width: "10%",
@@ -116,7 +131,12 @@ class SSGSEATable extends Component {
 
             }
         },{
-            title: 'adj.P.Val',
+            title:  (
+                    <div style={{ textAlign: 'center' }}>
+                          <label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label>
+                     <div>adj.P.Vale</div>
+                </div>
+                ),
             dataIndex: 'adj.P.Val',
             sorter: true,
             width: "10%",
@@ -128,7 +148,12 @@ class SSGSEATable extends Component {
 
             }
         },  {
-            title: 'Avg.Enrichment.Score',
+            title:  (
+                    <div style={{ textAlign: 'center' }}>
+                        <label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label>
+                        <div>Avg.Enrichment.Score</div>
+                </div>
+                ),
             dataIndex: 'Avg.Enrichment.Score',
             sorter: true,
             width: "20%",
@@ -140,7 +165,12 @@ class SSGSEATable extends Component {
 
             }
         }, {
-            title: 't',
+            title:  (
+                    <div style={{ textAlign: 'center' }}>
+                       <label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label>
+                        <div>t</div>
+                </div>
+                ),
             dataIndex: 't',
             sorter: true,
             width: "10%",
@@ -152,7 +182,12 @@ class SSGSEATable extends Component {
 
             }
         },  {
-            title: 'B',
+            title:  (
+                    <div style={{ textAlign: 'center' }}>
+                         <label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label>
+                         <div>B</div>
+                </div>
+                ),
             dataIndex: 'B',
             sorter: true,
             width: "10%",
@@ -251,24 +286,7 @@ class SSGSEATable extends Component {
 
                          </div>
                          <div>
-                            <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
-
-                                    <div className="filter_col" style={{width:"31%"}} ><label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label></div>
-                                    
-                                    <div className="filter_col"  style={{width:"9%"}}><label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label></div>
-                                    
-                                      <div className="filter_col" style={{width:"10%"}}><label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label></div>
-
-                                     <div className="filter_col" style={{width:"10%"}}><label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label></div>
-                
-                                    <div className="filter_col" style={{width:"19%"}}><label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label></div>
-
-                                    <div className="filter_col" style={{width:"10%"}}><label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label></div>
-
-                                         
-                                    <div className="filter_col"  style={{width:"10%"}}><label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label></div>
-
-                            </div>
+                  
                           <Table 
                                 columns={columns}
                                 dataSource={this.props.data.ssGSEA.data}
