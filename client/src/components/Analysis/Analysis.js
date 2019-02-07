@@ -1164,9 +1164,11 @@ class Analysis extends Component {
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push(["Type", "Differentially Expressed Genes"])
+                        ws_data.push(["sorting", ""])
                         ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
                         ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
-                        ws_data.push(["search_keyword", ""])
+                        ws_data.push(["Filters", ""])
 
                         if (workflow.diff_expr_genes.search_keyword.search_symbol != "") {
                             ws_data.push(["SYMBOL", workflow.diff_expr_genes.search_keyword.search_symbol])
@@ -1232,7 +1234,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Results"] = ws2;
-                        var wbout = XLSX.writeFile(wb, "Differentially_Expressed_Genes_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "DEG_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
 
                     }
 
