@@ -119,7 +119,7 @@ awsHander.sender = function(message, to) {
             logger.info("[Queue] Send Messages to S3 fails")
             logger.info("Err")
             logger.info(err.stack)
-            logger.info("[Queue] Send EMail To Client")
+            logger.info("[Queue] Send Email To Client")
             logger.info(to)
             let subject = "sent message to queue fails";
             let text = err.stack
@@ -252,7 +252,7 @@ download = (projectId, key, filePath) => {
             // logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
 
             //let fileStream =fs.createReadStream(path + "/" + items[i])
-            fs.writeFile(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""), data.Body, function(err) {
+            fs.writeFile(filePath + "/" + projectId + "/" + key.replace(config.bucket_folder +"/" + projectId + "/", ""), data.Body, function(err) {
                 if (err) {
                     return console.log(err);
                 }

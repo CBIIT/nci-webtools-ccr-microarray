@@ -332,7 +332,8 @@ class PUGTable extends Component {
         }, {
             title:  (
                     <div style={{ textAlign: 'center' }}>
-                   <label for="input_pathway_up_search_TOTAL_NUMBER_GENES"><span style={{display:"none"}}>input_pathway_up_search_TOTAL_NUMBER_GENES</span><Input onPressEnter={value=>search(value) }   placeholder="GENES"  id="input_pathway_up_search_TOTAL_NUMBER_GENES"/></label>               <div>TOTAL_NUMBER_GENES</div>
+                     <label for="input_pathway_up_search_TOTAL_NUMBER_GENES"><span style={{display:"none"}}>input_pathway_up_search_TOTAL_NUMBER_GENES</span><Input onPressEnter={value=>search(value) }   placeholder="GENES"  id="input_pathway_up_search_TOTAL_NUMBER_GENES"/></label>           
+                        <div>TOTAL_NUMBER_GENES</div>
                 </div>
                 ),
             dataIndex: 'Total_Number_Genes',
