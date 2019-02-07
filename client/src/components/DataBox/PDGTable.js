@@ -34,9 +34,9 @@ class PUGTable extends Component {
 
 
     handleMenuClick = (e) => {
-         document.getElementById("pd-drop-down").innerHTML=e.key
-         this.props.getPathwayDown({
-             page_size: parseInt(e.key),
+        document.getElementById("pd-drop-down").innerHTML = e.key
+        this.props.getPathwayDown({
+            page_size: parseInt(e.key),
             page_number: 1,
             sorting: {
                 name: this.props.data.pathways_down.sorting.name,
@@ -100,6 +100,7 @@ class PUGTable extends Component {
         reqBody.upOrDown = "downregulated_pathways";
         reqBody.pathway_name = row.Description;
         this.props.changeLoadingStatus(true, "loading HeatMap")
+        var importantStuff = window.open(window.location.protocol + "//" + window.location.host + "/microarray/assets/loading.html", '_blank');
 
         fetch('./api/analysis/pathwaysHeapMap', {
                 method: "POST",
@@ -126,7 +127,9 @@ class PUGTable extends Component {
                         //     visible: true
                         // });
                         var link = "images/" + this.props.data.projectID + "/" + pic_link
-                        window.open("https://"+window.location.host+"/microarray/"+link);
+                        //window.open("https://"+window.location.host+"/microarray/"+link);
+                        importantStuff.location.href = "https://"+window.location.host+"/microarray/"+link;
+
                     }
 
 
@@ -152,7 +155,7 @@ class PUGTable extends Component {
                 width: "12%",
                 key: 'Pathway_ID',
                 sorter: true,
-                 render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
                                     <span style={{"color":"#40a9ff"}}  data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -167,7 +170,7 @@ class PUGTable extends Component {
                 width: "9%",
                 key: 'Source',
                 sorter: true,
-                 render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -192,7 +195,7 @@ class PUGTable extends Component {
                 width: "8%",
                 key: 'Type',
                 sorter: true,
-                  render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -206,7 +209,7 @@ class PUGTable extends Component {
                 key: 'P_Value',
                 sorter: true,
                 defaultSortOrder: 'ascend',
-                  render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -219,7 +222,7 @@ class PUGTable extends Component {
                 width: "7%",
                 key: 'FDR',
                 sorter: true,
-                  render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -232,7 +235,7 @@ class PUGTable extends Component {
                 width: "7%",
                 key: 'Ratio',
                 sorter: true,
-                  render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -256,7 +259,7 @@ class PUGTable extends Component {
                 width: "7%",
                 key: 'Number_Hits',
                 sorter: true,
-                  render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -269,7 +272,7 @@ class PUGTable extends Component {
                 width: "7%",
                 key: 'Number_Genes_Pathway',
                 sorter: true,
-                  render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -296,7 +299,7 @@ class PUGTable extends Component {
                 width: "8%",
                 key: 'Total_Number_Genes',
                 sorter: true,
-              render: (text, record, index) => {
+                render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -358,15 +361,15 @@ class PUGTable extends Component {
             })
         }
 
-                const menu = (
-                <Menu onClick={this.handleMenuClick}>
+        const menu = (
+            <Menu onClick={this.handleMenuClick}>
                     <Menu.Item key="15">15</Menu.Item>
                     <Menu.Item key="25">25</Menu.Item>
                     <Menu.Item key="50">50</Menu.Item>
                     <Menu.Item key="100">100</Menu.Item>
                     <Menu.Item key="200">200</Menu.Item>
                 </Menu>
-            );
+        );
 
 
 

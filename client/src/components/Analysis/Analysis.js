@@ -346,7 +346,7 @@ class Analysis extends Component {
                         }
 
                         ws_data.push(["Accession Code", workflow.accessionCode])
-                        ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
@@ -360,9 +360,11 @@ class Analysis extends Component {
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push(["Type", "Single Sample GSEA"])
+                        ws_data.push(["Sorting", ""])
                         ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
                         ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
-                        ws_data.push(["search_keyword", ""])
+                        ws_data.push(["Filters", ""])
 
                         if (workflow.ssGSEA.search_keyword.name != "") {
                             ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
@@ -576,7 +578,7 @@ class Analysis extends Component {
                         }
 
                         ws_data.push(["Accession Code", workflow.accessionCode])
-                        ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
@@ -590,9 +592,11 @@ class Analysis extends Component {
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push(["Type", "Pathways_For_Upregulated_Genes"])
+                        ws_data.push(["sorting", ""])
                         ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
                         ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
-                        ws_data.push(["search_keyword", ""])
+                        ws_data.push(["Filters", ""])
 
                         if (workflow.pathways_up.search_keyword.search_PATHWAY_ID != "") {
                             ws_data.push(["Pathway_ID", workflow.pathways_up.search_keyword.search_PATHWAY_ID])
@@ -661,7 +665,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Results"] = ws2;
-                        var wbout = XLSX.writeFile(wb, "Pathways_For_Upregulated_Genes_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "DEG_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
                 } else {
 
@@ -913,7 +917,7 @@ class Analysis extends Component {
                             ws_data.push(["Upload Data", uploadD]);
                         }
                         ws_data.push(["Accession Code", workflow.accessionCode])
-                        ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
@@ -927,9 +931,11 @@ class Analysis extends Component {
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push(["Type", "Pathways_For_Upregulated_Genes"])
+                        ws_data.push(["sorting", ""])
                         ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
                         ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
-                        ws_data.push(["search_keyword", ""])
+                        ws_data.push(["Filters", ""])
 
                         if (workflow.pathways_down.search_keyword.search_PATHWAY_ID != "") {
                             ws_data.push(["Pathway_ID", workflow.pathways_down.search_keyword.search_PATHWAY_ID])
@@ -998,7 +1004,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Results"] = ws2;
-                        var wbout = XLSX.writeFile(wb, "Pathways_For_Upregulated_Genes_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "DEG_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
 
                 } else {
@@ -1150,7 +1156,7 @@ class Analysis extends Component {
                             ws_data.push(["Upload Data", uploadD]);
                         }
                         ws_data.push(["Accession Code", workflow.accessionCode])
-                        ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
@@ -1164,9 +1170,11 @@ class Analysis extends Component {
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push(["Type", "Differentially Expressed Genes"])
+                        ws_data.push(["sorting", ""])
                         ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
                         ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
-                        ws_data.push(["search_keyword", ""])
+                        ws_data.push(["Filters", ""])
 
                         if (workflow.diff_expr_genes.search_keyword.search_symbol != "") {
                             ws_data.push(["SYMBOL", workflow.diff_expr_genes.search_keyword.search_symbol])
@@ -1232,7 +1240,7 @@ class Analysis extends Component {
 
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Results"] = ws2;
-                        var wbout = XLSX.writeFile(wb, "Differentially_Expressed_Genes_Export_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+                        var wbout = XLSX.writeFile(wb, "DEG_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
 
                     }
 
