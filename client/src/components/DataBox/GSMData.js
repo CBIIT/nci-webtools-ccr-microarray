@@ -408,9 +408,8 @@ class GSMData extends Component {
                             pagination={this.state.pagination}  
                             rowSelection = { rowSelection } 
                             columns = { columns } 
-                            dataSource = { this.state.renderData}
                             onChange={this.handlePageChange}    
-            
+                            dataSource = { this.state.renderData.filter(searchFilter, this) }
                                 />
                         </div>
                     </div>
