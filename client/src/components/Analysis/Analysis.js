@@ -85,10 +85,10 @@ let defaultState = {
             },
             search_keyword: {
                 "name": "",
-                "search_logFC": "1",
+                "search_logFC": "",
                 "search_Avg_Enrichment_Score": "",
                 "search_t": "",
-                "search_p_value": "0.05",
+                "search_p_value": "",
                 "search_adj_p_value": "",
                 "search_b": "",
             }
@@ -2350,10 +2350,10 @@ class Analysis extends Component {
             },
             search_keyword: {
                 "name": "",
-                "search_logFC": "1",
+                "search_logFC": "",
                 "search_Avg_Enrichment_Score": "",
                 "search_t": "",
-                "search_p_value": "0.05",
+                "search_p_value": "",
                 "search_adj_p_value": "",
                 "search_b": "",
             }
