@@ -346,7 +346,7 @@ class Analysis extends Component {
                         }
 
                         ws_data.push(["Accession Code", workflow.accessionCode])
-                        ws_data.push(["Contrast Group", workflow.group_1 + " vs " + workflow.group_2])
+                        ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
                         for (var i in workflow.dataList) {
@@ -360,9 +360,11 @@ class Analysis extends Component {
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
+                        ws_data.push(["Type", "Single Sample GSEA"])
+                        ws_data.push(["Sorting", ""])
                         ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
                         ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
-                        ws_data.push(["search_keyword", ""])
+                        ws_data.push(["Filters", ""])
 
                         if (workflow.ssGSEA.search_keyword.name != "") {
                             ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
