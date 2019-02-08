@@ -126,7 +126,7 @@ class Project extends Component {
             <div className="block">
               <div className="row">
                 <div className="col-sm-12">
-                  <label className="title">Choose type of analysis</label>
+                  <label className="title">Choose analysis type</label>
                 </div>
               </div>
           {type_content}
