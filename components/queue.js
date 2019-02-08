@@ -270,7 +270,7 @@ download = (projectId, key, filePath) => {
             // logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
 
             //let fileStream =fs.createReadStream(path + "/" + items[i])
-            fs.writeFile(filePath + "/" + projectId + "/" + key.replace(config.bucket_folder + "/" + projectId + "/", ""), data.Body, function(err) {
+            fs.writeFile(filePath + "/" + projectId + "/" + key.replace(config.queue_input_path + "/" + projectId + "/", ""), data.Body, function(err) {
                 if (err) {
                     return console.log(err);
                 }

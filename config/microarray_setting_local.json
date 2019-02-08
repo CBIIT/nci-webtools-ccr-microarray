@@ -3,7 +3,8 @@
     "env": "test",
     "queue_request_interval": 3,
     "bucketName": "cbiit-tools-data",
-    "bucket_folder": "microarray",
+    "queue_input_path": "microarray",
+    "queue_output_path": "microarray",
     "queue_name": "nci-cbiit-ss-microarray-dev.fifo",
     "microarray_link": "https://analysistools-qa.nci.nih.gov/microarray/",
     "development":
