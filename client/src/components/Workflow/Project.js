@@ -67,7 +67,7 @@ class Project extends Component {
         } else if (this.props.data.analysisType == "1") {
             source = (<div className="upload-block row">
                    <div className="col-sm-12">
-                    <Upload {...properties}>
+                    <Upload {...properties}   disabled={this.props.data.uploaded}>
                       <Button>
                         <Icon type="upload" /> Select File
                       </Button>
