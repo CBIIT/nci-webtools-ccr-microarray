@@ -3005,7 +3005,7 @@ class Analysis extends Component {
         let reqBody = {};
 
         reqBody.projectId = code;
-
+        workflow.uploaded = false;
 
         workflow.progressing = true;
         workflow.loading_info = "Running Contrast...";
