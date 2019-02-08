@@ -660,12 +660,12 @@ tr:nth-child(even) {
 }
 
 
-#deg_tag2 .ant-table-column-has-filters >span{
+#deg_tag2 th.ant-table-column-has-filters >span{
     display: inline-block;
     vertical-align: top;
     height: 110px;
 }
-#deg_tag3 .ant-table-column-has-filters >span{
+#deg_tag3  th.ant-table-column-has-filters >span{
     display: inline-block;
     vertical-align: top;
     height: 110px;
