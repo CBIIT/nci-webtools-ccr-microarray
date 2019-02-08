@@ -33,7 +33,7 @@ let emailTemplate = function (code,time,link,submit_time,project_id){
     }
 
 
-let emailFailedTemplate = function (code,time,link,submit_time,project_id){ 
+let emailFailedTemplate = function (code,time,submit_time,project_id){ 
 
     return "<b>Dear User:</b><br/>" +
         "<p>&nbsp;&nbsp;The job you submitted to the MicroArray processor failed to be processed using the MicroArrayPipeline R Package. Please correct and resubmit your data set.</p>" +
