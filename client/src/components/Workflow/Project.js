@@ -26,7 +26,7 @@ class Project extends Component {
 
         let type_content = (<div className="row"> <div className="col-sm-12"><Select value={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
             <Option value="0">GEO Data</Option>
-            <Option value="1">CEL files</Option>
+            <Option value="1">CEL Files</Option>
           </Select></div></div>);
         let source = "";
 
