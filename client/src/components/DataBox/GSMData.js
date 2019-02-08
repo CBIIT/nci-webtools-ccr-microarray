@@ -361,9 +361,9 @@ class GSMData extends Component {
                 if (this.state.term === "") {
                     return true;
                 }
-                if (row["gsm"].includes(this.state.term)) return true;
-                if (row["title"].includes(this.state.term)) return true;
-                if (row["description"].includes(this.state.term)) return true;
+                if (row["gsm"]&&row["gsm"].includes(this.state.term)) return true;
+                if (row["title"]&&row["title"].includes(this.state.term)) return true;
+                if (row["description"]&&row["description"].includes(this.state.term)) return true;
 
                 return false;
             }
