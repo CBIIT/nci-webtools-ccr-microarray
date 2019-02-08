@@ -252,7 +252,7 @@ router.post("/qAnalysis", function(req, res) {
     logger.info("File Path:")
     logger.info(config.uploadPath + "/" + data.projectId)
     // // upload data
-    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.bucket_folder +"/" + data.projectId + "/")
+    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path +"/" + data.projectId + "/")
     // //upload configure
 
     setTimeout(function() {
