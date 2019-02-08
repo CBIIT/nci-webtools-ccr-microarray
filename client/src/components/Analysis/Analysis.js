@@ -3165,7 +3165,22 @@ class Analysis extends Component {
                     if (result.status == 200) {
                         result = result.data;
                         let workflow2 = Object.assign({}, this.state.workflow);
-                        workflow2.dataList = result.gsm;
+                        if(result.gsm[0].gsm){
+                             workflow2.dataList = result.gsm;
+                        }else{
+                             let tmp_gsms =[]
+                             for(let i in result.gsm){
+                                tmp_gsms.push({
+                                    index:result.gsm[i].index,
+                                    title:result.gsm[i].title,
+                                    gsm:result.gsm[i]._row,
+                                    groups:result.gsm[i].groups,
+                                    colors:result.gsm[i].colors
+                                })
+                            }
+                            workflow2.dataList = tmp_gsms;
+                        }
+                       
                         workflow2.accessionCode = result.accessionCode;
                         workflow2.projectID = result.projectId;
                         workflow2.group_1 = result.group_1;
@@ -3180,6 +3195,7 @@ class Analysis extends Component {
                             }
 
                         }
+
 
                         if (result.mAplotBN) {
                             workflow2.list_mAplotBN = result.mAplotBN;
