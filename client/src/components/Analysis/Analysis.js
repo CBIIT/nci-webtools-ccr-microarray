@@ -361,9 +361,6 @@ class Analysis extends Component {
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["Type", "Single Sample GSEA"])
-                        ws_data.push(["Sorting", ""])
-                        ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
-                        ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
                         ws_data.push(["Filters", ""])
 
                         if (workflow.ssGSEA.search_keyword.name != "") {
@@ -593,9 +590,7 @@ class Analysis extends Component {
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["Type", "Pathways_For_Upregulated_Genes"])
-                        ws_data.push(["sorting", ""])
-                        ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
-                        ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
+                 
                         ws_data.push(["Filters", ""])
 
                         if (workflow.pathways_up.search_keyword.search_PATHWAY_ID != "") {
@@ -932,9 +927,7 @@ class Analysis extends Component {
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["Type", "Pathways_For_Upregulated_Genes"])
-                        ws_data.push(["sorting", ""])
-                        ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
-                        ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
+                    
                         ws_data.push(["Filters", ""])
 
                         if (workflow.pathways_down.search_keyword.search_PATHWAY_ID != "") {
@@ -1171,9 +1164,7 @@ class Analysis extends Component {
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["Type", "Differentially Expressed Genes"])
-                        ws_data.push(["sorting", ""])
-                        ws_data.push(["sorting.field", workflow.ssGSEA.sorting.name])
-                        ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
+                    
                         ws_data.push(["Filters", ""])
 
                         if (workflow.diff_expr_genes.search_keyword.search_symbol != "") {
