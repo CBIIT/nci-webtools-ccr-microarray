@@ -40,7 +40,7 @@ awsHander.getQueueUrl = function(next) {
     });
 }
 
-awsHander.upload = function(path, prex) {
+awsHander.upload = function(path, prex,errHandler) {
     // Handle promise fulfilled/rejected states
 
     bucketPromise.then(
@@ -51,7 +51,7 @@ awsHander.upload = function(path, prex) {
                     let fname = items[i];
                     let stat = fs.lstatSync(path + "/" + items[i]);
                     if (stat.isFile()) {
-
+                        console.log(prex + fname);
                         let fileStream = fs.createReadStream(path + "/" + items[i])
                         s3.putObject({
                             Bucket: bucketName,
@@ -61,7 +61,9 @@ awsHander.upload = function(path, prex) {
                         }, function(err, data) {
                             //logger.info(arguments);
                             // console.log('Successfully uploaded package.');
-
+                            // logger.info(err);
+                            // logger.info(data);
+                            //errHandler(err,data);
                         });
                     }
 
@@ -75,11 +77,7 @@ awsHander.upload = function(path, prex) {
             logger.info(err.stack)
             logger.info("[Queue] Send EMail To Client")
             logger.info(to)
-
-            let subject = "upload files fails";
-            let text = err.stack
-            emailer.sendMail(config.mail.from, to, subject, text, html)
-            return false;
+            errHandler()
         });
 }
 
@@ -105,8 +103,9 @@ awsHander.getQueueAttributes = function(attr, callback) {
 
 //sent message to queue.
 
-awsHander.sender = function(message, to) {
+awsHander.sender = function(message, to,errHandler) {
 
+    console.log("sent message")
 
     function send() {
 
@@ -123,11 +122,8 @@ awsHander.sender = function(message, to) {
                 logger.info("[Queue] Send Messages to Queue fails")
                 logger.info("Err")
                 logger.info(err.stack)
-                logger.info("[Queue] Send Email To Client")
-                logger.info(to)
-                let subject = "sent message to queue fails";
-                let text = err.stack
-                emailer.sendMail(config.mail.from, to, subject, text, html)
+                errHandler(err,data);
+   
             } else {
                 logger.info("[Queue] Send Messages to Queue success");
             }
@@ -146,7 +142,7 @@ awsHander.sender = function(message, to) {
 }
 
 
-awsHander.receiver = function(next, endCallback) {
+awsHander.receiver = function(next, endCallback,errHandler) {
     let params = {
         QueueUrl: global.queue_url,
         MaxNumberOfMessages: 1,
@@ -161,9 +157,9 @@ awsHander.receiver = function(next, endCallback) {
             logger.info("[Queue] Receive Messages from S3 fails")
             logger.info("Err")
             logger.info(err.stack)
-            if (endCallback != null) { endCallback() };
+            errHandler(err);
         } else {
-            logger.info(data)
+            console.log(data)
             if (data.Messages) {
                 let message = JSON.parse(data.Messages[0].Body)
 
@@ -171,8 +167,8 @@ awsHander.receiver = function(next, endCallback) {
                     
                     next(data, data.email, endCallback)
                 }
-            } else {
-                if (endCallback != null) { endCallback() };
+            }else{
+                if (endCallback) { endCallback() };
             }
 
         }
@@ -243,8 +239,8 @@ download = (projectId, key, filePath) => {
         Bucket: config.bucketName,
         Key: key
     }
-    // logger.info("[Queue] Download file from S3 ")
-    // logger.info("Key:", key)
+    logger.info("[Queue] Download file from S3 ")
+    logger.info("Key:", key)
     s3.getObject(params, (err, data) => {
         if (err) {
             console.error(err);

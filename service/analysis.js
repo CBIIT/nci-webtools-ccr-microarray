@@ -11,6 +11,7 @@ var rimraf = require('rimraf');
 var queue = require('../components/queue');
 const AWS = require('aws-sdk');
 var dateFormat = require('dateformat');
+var emailer = require('../components/mail');
 
 router.post('/upload', function(req, res) {
     logger.info("[start] upload files");
@@ -237,22 +238,45 @@ router.post("/qAnalysis", function(req, res) {
     data.email = req.body.email;
     data.domain = "microarray";
     data.submit = dateFormat(now, "yyyy-mm-dd, h:MM:ss TT");
+    data.dataList = req.body.dataList;
+    let CEL = ""
+    for (let i in req.body.dataList) {
+        CEL = req.body.dataList[i] + "," + CEL;
+    }
+    let code = ""
+    if (req.body.source == "fetch") {
+        code = "<p>&nbsp;&nbsp;Accession Code: <b>" + data.code + "</b></p>";
+    } else {
 
-
+        code = "<p>&nbsp;&nbsp;CEL Files: <b>" + CEL + "</b></p>";
+    }
     logger.info("[Queue] Start Using Queue for Analysis")
     logger.info("Input:")
     logger.info(JSON.stringify(data))
 
     function send(d) {
         logger.info("[Queue] Send Message to Queue", JSON.stringify(d));
-        queue.awsHander.sender(JSON.stringify(d), d.email);
+        queue.awsHander.sender(JSON.stringify(d), d.email, function(err, data) {
+
+            let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
+            let html = emailer.emailFailedTemplate(data.code, 0, data.submit, data.projectId)
+            emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+
+        });
+
     }
 
     logger.info("[upload file to S3]")
     logger.info("File Path:")
     logger.info(config.uploadPath + "/" + data.projectId)
     // // upload data
-    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path +"/" + data.projectId + "/")
+    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function() {
+
+        let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
+        let html = emailer.emailFailedTemplate(data.code, 0, data.submit, data.projectId)
+        emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+
+    })
     // //upload configure
 
     setTimeout(function() {
@@ -277,8 +301,8 @@ router.post("/getCurrentNumberOfJobsinQueue", function(req, res) {
                 status: 200,
                 data: result.Attributes.ApproximateNumberOfMessages
             });
-        }else{
-             res.json({
+        } else {
+            res.json({
                 status: 200,
                 data: -1
             });
@@ -297,7 +321,7 @@ router.post('/getResultByProjectId', function(req, res) {
     );
 
 
-    queue.awsHander.download(req.body.projectId, config.uploadPath, function(){
+    queue.awsHander.download(req.body.projectId, config.uploadPath, function() {
         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
             if (err) {
                 res.json({
