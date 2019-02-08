@@ -239,7 +239,6 @@ router.post("/qAnalysis", function(req, res) {
     data.submit = dateFormat(now, "yyyy-mm-dd, h:MM:ss TT");
 
 
-    logger.info("-----------------------------------------------")
     logger.info("[Queue] Start Using Queue for Analysis")
     logger.info("Input:")
     logger.info(JSON.stringify(data))

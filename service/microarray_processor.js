@@ -35,6 +35,7 @@ function polling() {
             queue.awsHander.receiver(qAnalysis, end);
 
         } catch (err) {
+             logger.info(err)
             end()
         }
         // Then notify the polling when your job is done:
@@ -50,15 +51,16 @@ function qAnalysis(data, emailto, endCallback) {
 
     let setVisibility =setInterval(function(){ 
 
-        awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle,45*1000)
+        queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle,60)
 
-     }, 60*1000);
+     }, 30*1000);
 
     //console.log("projectId:" + message.projectId)
     queue.awsHander.download(message.projectId, config.uploadPath,function(){
         r(message,function(){
             endCallback();
             clearInterval(setVisibility);
+            queue.awsHander.del(data.Messages[0].ReceiptHandle)
         })
     });
 
