@@ -239,7 +239,6 @@ router.post("/qAnalysis", function(req, res) {
     data.submit = dateFormat(now, "yyyy-mm-dd, h:MM:ss TT");
 
 
-    logger.info("-----------------------------------------------")
     logger.info("[Queue] Start Using Queue for Analysis")
     logger.info("Input:")
     logger.info(JSON.stringify(data))
@@ -253,9 +252,8 @@ router.post("/qAnalysis", function(req, res) {
     logger.info("File Path:")
     logger.info(config.uploadPath + "/" + data.projectId)
     // // upload data
-    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, "microarray/" + data.projectId + "/")
+    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path +"/" + data.projectId + "/")
     // //upload configure
-    //queue.awsHander.upload(config.configPath, data.projectId + "/config/",null)
 
     setTimeout(function() {
         send(data)
@@ -294,18 +292,12 @@ router.post("/getCurrentNumberOfJobsinQueue", function(req, res) {
 
 router.post('/getResultByProjectId', function(req, res) {
 
-    req.setTimeout(0) // no timeout
-
-
-
     logger.info("[Get contrast result from file]",
         "projectId:", req.body.projectId
     );
 
 
-    queue.awsHander.download(req.body.projectId, config.uploadPath, getResultFromFile, res, function() { console.log("download") });
-
-    function getResultFromFile(res, callback) {
+    queue.awsHander.download(req.body.projectId, config.uploadPath, function(){
         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
             if (err) {
                 res.json({
@@ -345,7 +337,8 @@ router.post('/getResultByProjectId', function(req, res) {
 
             }
         });
-    }
+    });
+
 
 });
 

@@ -128,7 +128,7 @@ class PUGTable extends Component {
                         // });
                         var link = "images/" + this.props.data.projectID + "/" + pic_link
                         //window.open("https://"+window.location.host+"/microarray/"+link);
-                        importantStuff.location.href = "https://"+window.location.host+"/microarray/"+link;
+                        importantStuff.location.href = "https://" + window.location.host + "/microarray/" + link;
 
                     }
 
@@ -150,7 +150,12 @@ class PUGTable extends Component {
         let content = "";
 
         const columns = [{
-                title: 'PATHWAY_ID',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                  <label for="input_pathway_down_search_PATHWAY_ID"><span style={{display:"none"}}>input_pathway_down_search_PATHWAY_ID</span><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_down_search_PATHWAY_ID"/></label>
+                                       <div>PATHWAY_ID</div>
+                </div>
+                ),
                 dataIndex: 'Pathway_ID',
                 width: "12%",
                 key: 'Pathway_ID',
@@ -165,7 +170,12 @@ class PUGTable extends Component {
 
             },
             {
-                title: 'SOURCE',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                 <label for="input_pathway_down_search_SOURCE"><span style={{display:"none"}}>input_pathway_down_search_SOURCE</span><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_down_search_SOURCE"/></label>
+                                      <div>SOURCE</div>
+                </div>
+                ),
                 dataIndex: 'Source',
                 width: "9%",
                 key: 'Source',
@@ -179,7 +189,12 @@ class PUGTable extends Component {
                 }
             },
             {
-                title: 'DESCRIPTION',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                    <label for="input_pathway_down_search_DESCRIPTION"><span style={{display:"none"}}>input_pathway_down_search_DESCRIPTION</span><Input onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_down_search_DESCRIPTION"/></label>
+                                      <div>DESCRIPTION</div>
+                </div>
+                ),
                 dataIndex: 'Description',
                 width: "10%",
                 key: 'Description',
@@ -190,7 +205,12 @@ class PUGTable extends Component {
                       </div>
                 ),
             }, {
-                title: 'TYPE',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                       <label for="input_pathway_down_search_TYPE"><span style={{display:"none"}}>input_pathway_down_search_TYPE</span><Input onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_down_search_TYPE"/></label>
+                                    <div>TYPE</div>
+                </div>
+                ),
                 dataIndex: 'Type',
                 width: "8%",
                 key: 'Type',
@@ -203,7 +223,12 @@ class PUGTable extends Component {
 
                 }
             }, {
-                title: 'P_VALUE',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                  <label for="input_pathway_down_search_p_value"><span style={{display:"none"}}>input_pathway_down_search_p_value</span><Input onPressEnter={value=>search(value) }    placeholder="P_Value"  id="input_pathway_down_search_p_value"/></label>
+                                      <div>P_VALUE</div>
+                </div>
+                ),
                 dataIndex: 'P_Value',
                 width: "8%",
                 key: 'P_Value',
@@ -217,7 +242,12 @@ class PUGTable extends Component {
 
                 }
             }, {
-                title: 'FDR',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                       <label for="input_pathway_down_search_fdr"><span style={{display:"none"}}>input_pathway_down_search_fdr</span><Input onPressEnter={value=>search(value) }    placeholder="FDR"  id="input_pathway_down_search_fdr"/></label>
+                                     <div>FDR</div>
+                </div>
+                ),
                 dataIndex: 'FDR',
                 width: "7%",
                 key: 'FDR',
@@ -230,7 +260,12 @@ class PUGTable extends Component {
 
                 }
             }, {
-                title: 'RATIO',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                       <label for="input_pathway_down_search_RATIO"><span style={{display:"none"}}>input_pathway_down_search_RATIO</span><Input onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_down_search_RATIO"/></label>
+                                     <div>RATIO</div>
+                </div>
+                ),
                 dataIndex: 'Ratio',
                 width: "7%",
                 key: 'Ratio',
@@ -243,7 +278,12 @@ class PUGTable extends Component {
 
                 }
             }, {
-                title: 'GENE_LIST',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                     <label for="input_pathway_down_search_GENE_LIST"><span style={{display:"none"}}>input_pathway_down_search_GENE_LIST</span><Input onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_down_search_GENE_LIST"/></label>
+                                    <div>GENE_LIST</div>
+                </div>
+                ),
                 dataIndex: 'Gene_List',
                 width: "10%",
                 key: 'Gene_List',
@@ -254,7 +294,12 @@ class PUGTable extends Component {
                       </div>
                 ),
             }, {
-                title: 'NUMBER_HITS',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                           <label for="input_pathway_down_search_NUMBER_HITS"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_HITS</span><Input onPressEnter={value=>search(value) }   placeholder="HITS"  id="input_pathway_down_search_NUMBER_HITS"/></label>
+                                   <div>NUMBER_HITS</div>
+                </div>
+                ),
                 dataIndex: 'Number_Hits',
                 width: "7%",
                 key: 'Number_Hits',
@@ -267,7 +312,12 @@ class PUGTable extends Component {
 
                 }
             }, {
-                title: 'NUMBER_GENES_PATHWAY',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                         <label for="input_pathway_down_search_NUMBER_GENES_PATHWAY"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_GENES_PATHWAY</span><Input onPressEnter={value=>search(value) }   placeholder="GENES_PATHWAY"  id="input_pathway_down_search_NUMBER_GENES_PATHWAY"/></label>
+                                   <div>NUMBER_GENES_PATHWAY</div>
+                </div>
+                ),
                 dataIndex: 'Number_Genes_Pathway',
                 width: "7%",
                 key: 'Number_Genes_Pathway',
@@ -281,7 +331,12 @@ class PUGTable extends Component {
                 }
 
             }, {
-                title: 'NUMBER_USER_GENES',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                        <label for="input_pathway_down_search_NUMBER_USER_GENES"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_USER_GENES</span><Input onPressEnter={value=>search(value) }   placeholder="USER_GENES"  id="input_pathway_down_search_NUMBER_USER_GENES"/></label>
+                                    <div>NUMBER_USER_GENES</div>
+                </div>
+                ),
                 dataIndex: 'Number_User_Genes',
                 width: "7%",
                 key: 'Number_User_Genes',
@@ -294,7 +349,12 @@ class PUGTable extends Component {
 
                 }
             }, {
-                title: 'TOTAL_NUMBER_GENES',
+                title: (
+                    <div style={{ textAlign: 'center' }}>
+                       <label for="input_pathway_down_search_TOTAL_NUMBER_GENES"><span style={{display:"none"}}>input_pathway_down_search_TOTAL_NUMBER_GENES</span><Input onPressEnter={value=>search(value) }   placeholder="GENES"  id="input_pathway_down_search_TOTAL_NUMBER_GENES"/></label>
+                              <div>TOTAL_NUMBER_GENES</div>
+                </div>
+                ),
                 dataIndex: 'Total_Number_Genes',
                 width: "8%",
                 key: 'Total_Number_Genes',
@@ -386,20 +446,7 @@ class PUGTable extends Component {
                                 </Dropdown>&nbsp;of total {this.props.data.pathways_down.pagination.total} records
 
                             </div>
-                             <div className="row" style={{"paddingLeft": "10px","paddingTop": "5px"}}>
-                               <div className="filter_col" style={{width:"12%"}} ><label for="input_pathway_down_search_PATHWAY_ID"><span style={{display:"none"}}>input_pathway_down_search_PATHWAY_ID</span><Input onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_down_search_PATHWAY_ID"/></label></div>
-                               <div className="filter_col" style={{width:"9%"}}><label for="input_pathway_down_search_SOURCE"><span style={{display:"none"}}>input_pathway_down_search_SOURCE</span><Input onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_down_search_SOURCE"/></label></div>
-                               <div className="filter_col" style={{width:"10%"}}><label for="input_pathway_down_search_DESCRIPTION"><span style={{display:"none"}}>input_pathway_down_search_DESCRIPTION</span><Input onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_down_search_DESCRIPTION"/></label></div>
-                               <div className="filter_col" style={{width:"10%"}} ><label for="input_pathway_down_search_TYPE"><span style={{display:"none"}}>input_pathway_down_search_TYPE</span><Input onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_down_search_TYPE"/></label></div>
-                               <div className="filter_col"  style={{width:"9%"}}><label for="input_pathway_down_search_p_value"><span style={{display:"none"}}>input_pathway_down_search_p_value</span><Input onPressEnter={value=>search(value) }    placeholder="P_Value"  id="input_pathway_down_search_p_value"/></label></div>
-                               <div className="filter_col" style={{width:"6%"}}><label for="input_pathway_down_search_fdr"><span style={{display:"none"}}>input_pathway_down_search_fdr</span><Input onPressEnter={value=>search(value) }    placeholder="FDR"  id="input_pathway_down_search_fdr"/></label></div>
-                               <div className="filter_col" style={{width:"6%"}}><label for="input_pathway_down_search_RATIO"><span style={{display:"none"}}>input_pathway_down_search_RATIO</span><Input onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_down_search_RATIO"/></label></div>
-                               <div className="filter_col" style={{width:"10%"}}><label for="input_pathway_down_search_GENE_LIST"><span style={{display:"none"}}>input_pathway_down_search_GENE_LIST</span><Input onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_down_search_GENE_LIST"/></label></div>
-                               <div className="filter_col" style={{width:"7%"}}><label for="input_pathway_down_search_NUMBER_HITS"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_HITS</span><Input onPressEnter={value=>search(value) }   placeholder="HITS"  id="input_pathway_down_search_NUMBER_HITS"/></label></div>
-                               <div className="filter_col"  style={{width:"6%"}}><label for="input_pathway_down_search_NUMBER_GENES_PATHWAY"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_GENES_PATHWAY</span><Input onPressEnter={value=>search(value) }   placeholder="GENES_PATHWAY"  id="input_pathway_down_search_NUMBER_GENES_PATHWAY"/></label></div>
-                               <div className="filter_col" style={{width:"6%"}}><label for="input_pathway_down_search_NUMBER_USER_GENES"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_USER_GENES</span><Input onPressEnter={value=>search(value) }   placeholder="USER_GENES"  id="input_pathway_down_search_NUMBER_USER_GENES"/></label></div>
-                               <div className="filter_col" style={{width:"8%"}}><label for="input_pathway_down_search_TOTAL_NUMBER_GENES"><span style={{display:"none"}}>input_pathway_down_search_TOTAL_NUMBER_GENES</span><Input onPressEnter={value=>search(value) }   placeholder="GENES"  id="input_pathway_down_search_TOTAL_NUMBER_GENES"/></label></div>
-                            </div>
+                         
                         </div>
                   <div>
                   <Table 

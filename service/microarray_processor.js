@@ -35,6 +35,7 @@ function polling() {
             queue.awsHander.receiver(qAnalysis, end);
 
         } catch (err) {
+             logger.info(err)
             end()
         }
         // Then notify the polling when your job is done:
@@ -47,8 +48,21 @@ function polling() {
 
 function qAnalysis(data, emailto, endCallback) {
     let message = JSON.parse(data.Messages[0].Body)
+
+    let setVisibility =setInterval(function(){ 
+
+        queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle,60)
+
+     }, 30*1000);
+
     //console.log("projectId:" + message.projectId)
-    queue.awsHander.download(message.projectId, config.uploadPath, r, message, endCallback);
+    queue.awsHander.download(message.projectId, config.uploadPath,function(){
+        r(message,function(){
+            endCallback();
+            clearInterval(setVisibility);
+            queue.awsHander.del(data.Messages[0].ReceiptHandle)
+        })
+    });
 
 }
 
@@ -61,8 +75,6 @@ function secondToDate(result) {
 
 
 function r(data, endCallback) {
-
-
 
     let start = new Date();
     let d = [];
@@ -85,8 +97,8 @@ function r(data, endCallback) {
     logger.info(JSON.stringify(d))
 
     R.execute("wrapper.R", d, function(err, returnValue) {
-        endCallback()
-        let end = new Date() - start
+        endCallback();
+        let end = new Date() - start;
         var now = new Date();
         if (err) {
             logger.info("[Queue] Run Contrast fails ", err)
@@ -103,12 +115,11 @@ function r(data, endCallback) {
             let html = emailer.emailTemplate(d[3], secondToDate(end / 1000), config.microarray_link + "?" + d[1], data.submit, d[1])
             let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM");
 
-
             // emailer.sendMail(config.mail.from,data.email,subject, "", html)
             emailer.sendMail(config.mail.from, data.email, subject, "", html)
             uploadResultToS3(config.uploadPath + "/" + data.projectId, data.projectId)
         }
-        console.log("end()")
+       
 
     });
 }
