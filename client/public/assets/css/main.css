@@ -669,7 +669,7 @@ tr:nth-child(even) {
 
 #tab_analysis .ant-table-pagination {
     position: absolute;
-    top: -52px;
+    top: -60px;
     right: 100px;
 }
 
