@@ -26,7 +26,7 @@ class Project extends Component {
 
         let type_content = (<div className="row"> <div className="col-sm-12"><Select value={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
             <Option value="0">GEO Data</Option>
-            <Option value="1">CEL files</Option>
+            <Option value="1">CEL Files</Option>
           </Select></div></div>);
         let source = "";
 
@@ -67,7 +67,7 @@ class Project extends Component {
         } else if (this.props.data.analysisType == "1") {
             source = (<div className="upload-block row">
                    <div className="col-sm-12">
-                    <Upload {...properties}>
+                    <Upload {...properties}   disabled={this.props.data.uploaded}>
                       <Button>
                         <Icon type="upload" /> Select File
                       </Button>
@@ -126,7 +126,7 @@ class Project extends Component {
             <div className="block">
               <div className="row">
                 <div className="col-sm-12">
-                  <label className="title">Choose analysis type</label>
+                  <label className="title">Choose Analysis Type</label>
                 </div>
               </div>
           {type_content}

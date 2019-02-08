@@ -345,7 +345,11 @@ class Analysis extends Component {
                             ws_data.push(["Upload Data", uploadD]);
                         }
 
-                        ws_data.push(["Accession Code", workflow.accessionCode])
+                        if (workflow.analysisType == "0") {
+                            ws_data.push(["Analysis Type", "GEO Data"])
+                            ws_data.push(["Accession Code", workflow.accessionCode])
+                        }
+
                         ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
@@ -573,8 +577,11 @@ class Analysis extends Component {
 
                             ws_data.push(["Upload Data", uploadD]);
                         }
+                        if (workflow.analysisType == "0") {
+                            ws_data.push(["Analysis Type", "GEO Data"])
+                            ws_data.push(["Accession Code", workflow.accessionCode])
+                        }
 
-                        ws_data.push(["Accession Code", workflow.accessionCode])
                         ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
@@ -911,7 +918,10 @@ class Analysis extends Component {
                             }
                             ws_data.push(["Upload Data", uploadD]);
                         }
-                        ws_data.push(["Accession Code", workflow.accessionCode])
+                           if (workflow.analysisType == "0") {
+                             ws_data.push(["Analysis Type", "GEO Data"])
+                             ws_data.push(["Accession Code", workflow.accessionCode])
+                         }
                         ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
@@ -1148,7 +1158,10 @@ class Analysis extends Component {
                             }
                             ws_data.push(["Upload Data", uploadD]);
                         }
-                        ws_data.push(["Accession Code", workflow.accessionCode])
+                        if (workflow.analysisType == "0") {
+                            ws_data.push(["Analysis Type", "GEO Data"])
+                            ws_data.push(["Accession Code", workflow.accessionCode])
+                        }
                         ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
@@ -2745,7 +2758,7 @@ class Analysis extends Component {
         }
 
     }
-    assignGroup = (group_name, dataList_keys,handler,callback) => {
+    assignGroup = (group_name, dataList_keys, handler, callback) => {
         // validate group_name
         let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
         if (group_name.match(pattern)) {
@@ -2758,12 +2771,12 @@ class Analysis extends Component {
             this.setState({
                 workflow: workflow
             });
-            callback(true,handler)
+            callback(true, handler)
 
         } else {
             document.getElementById("message-gsm-group").innerHTML = "The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 "
 
-            callback(false,handler)
+            callback(false, handler)
         }
 
     }
@@ -2992,7 +3005,7 @@ class Analysis extends Component {
         let reqBody = {};
 
         reqBody.projectId = code;
-
+        workflow.uploaded = false;
 
         workflow.progressing = true;
         workflow.loading_info = "Running Contrast...";

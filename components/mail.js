@@ -21,7 +21,7 @@ let emailTemplate = function (code,time,link,submit_time,project_id){
         "<p>&nbsp;&nbsp;Execution Time: <b>" +time+ "</b> </p>"+
         "<br/>" +
         "<p><b>&nbsp;&nbsp;Results</b></p>" +
-        "<p>&nbsp;&nbsp;Fitting results can be downloaded through following link:. Any additional information are included below. Fitting results can be downloaded through following links:</p>" +
+        "<p>&nbsp;&nbsp;Fitting results can be downloaded through following link:. Any additional information are included below.</p><p> Fitting results can be downloaded through following links:</p>" +
         "<p>&nbsp;&nbsp;&nbsp;&nbsp;"+link+"</p>"+
         "<p>&nbsp;&nbsp;Please note that result links above will be available for the next 7 days.</p>" +
         "<br/>"+

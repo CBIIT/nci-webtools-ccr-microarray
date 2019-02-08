@@ -6,6 +6,8 @@ var app = express();
 var logger = require('./components/logger');
 var ncp = require('ncp').ncp;
 var fs = require('fs');
+const AWS = require('aws-sdk');
+var queue = require('./components/queue');
 
 require('./routes')(app);
 
@@ -28,6 +30,19 @@ let logDirectory = config.logDir;
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
 // when shutdown signal is received, do graceful shutdown
+
+
+
+queue.awsHander.getQueueUrl(function(flag){
+    if(flag){
+        logger.info("[Queue] Get Queue URL");
+
+    }else{
+        logger.info("[Queue] Get Queue URL fails");
+       
+    }
+})
+
 process.on('SIGINT', function() {
     console.log('gracefully shutting down :)');
     process.exit();
