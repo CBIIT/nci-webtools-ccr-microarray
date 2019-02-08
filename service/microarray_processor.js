@@ -100,11 +100,11 @@ function r(data, endCallback) {
         endCallback();
         let end = new Date() - start;
         var now = new Date();
-        if (err) {
+        if (1) {
             logger.info("[Queue] Run Contrast fails ", err)
             logger.info("[Queue] sendMail to  ", data.email)
             let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
-            let html = emailer.emailFailedTemplate(d[3], secondToDate(end / 1000), config.microarray_link + "?" + d[1], data.submit, d[1])
+            let html = emailer.emailFailedTemplate(d[3], secondToDate(end / 1000), data.submit, d[1])
             emailer.sendMail(config.mail.from, data.email, subject, "text", html)
 
         } else {

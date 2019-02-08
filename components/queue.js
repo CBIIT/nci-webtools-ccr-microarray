@@ -40,7 +40,7 @@ awsHander.getQueueUrl = function(next) {
     });
 }
 
-awsHander.upload = function(path, prex) {
+awsHander.upload = function(path, prex,errHandler) {
     // Handle promise fulfilled/rejected states
 
     bucketPromise.then(
@@ -61,7 +61,7 @@ awsHander.upload = function(path, prex) {
                         }, function(err, data) {
                             //logger.info(arguments);
                             // console.log('Successfully uploaded package.');
-
+                            errHandler(err,data);
                         });
                     }
 
