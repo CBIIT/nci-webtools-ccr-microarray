@@ -11,6 +11,7 @@ var rimraf = require('rimraf');
 var queue = require('../components/queue');
 const AWS = require('aws-sdk');
 var dateFormat = require('dateformat');
+var emailer = require('../components/mail');
 
 router.post('/upload', function(req, res) {
     logger.info("[start] upload files");
@@ -269,7 +270,7 @@ router.post("/qAnalysis", function(req, res) {
     logger.info("File Path:")
     logger.info(config.uploadPath + "/" + data.projectId)
     // // upload data
-    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function(err, data) {
+    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function() {
 
         let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
         let html = emailer.emailFailedTemplate(data.code, 0, data.submit, data.projectId)

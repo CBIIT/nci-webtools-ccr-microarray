@@ -51,6 +51,7 @@ awsHander.upload = function(path, prex,errHandler) {
                     let fname = items[i];
                     let stat = fs.lstatSync(path + "/" + items[i]);
                     if (stat.isFile()) {
+                        console.log(prex + fname);
                         let fileStream = fs.createReadStream(path + "/" + items[i])
                         s3.putObject({
                             Bucket: bucketName,
@@ -60,7 +61,9 @@ awsHander.upload = function(path, prex,errHandler) {
                         }, function(err, data) {
                             //logger.info(arguments);
                             // console.log('Successfully uploaded package.');
-                            errHandler(err,data);
+                            // logger.info(err);
+                            // logger.info(data);
+                            //errHandler(err,data);
                         });
                     }
 
@@ -74,11 +77,7 @@ awsHander.upload = function(path, prex,errHandler) {
             logger.info(err.stack)
             logger.info("[Queue] Send EMail To Client")
             logger.info(to)
-
-            let subject = "upload files fails";
-            let text = err.stack
-            emailer.sendMail(config.mail.from, to, subject, text, html)
-            return false;
+            errHandler()
         });
 }
 
@@ -106,6 +105,7 @@ awsHander.getQueueAttributes = function(attr, callback) {
 
 awsHander.sender = function(message, to,errHandler) {
 
+    console.log("sent message")
 
     function send() {
 
@@ -249,7 +249,7 @@ download = (projectId, key, filePath) => {
             logger.info(params)
             logger.info(err.stack)
         } else {
-            
+
             if (!fs.existsSync(filePath + "/" + projectId)) {
                 fs.mkdir(filePath + "/" + projectId,
                     function() {
