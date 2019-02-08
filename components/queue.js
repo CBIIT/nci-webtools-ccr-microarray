@@ -4,7 +4,7 @@ const fs = require('fs');
 var emailer = require('./mail');
 var config = require('../config');
 var lib_path = require('path');
-var logger = require('../components/logger');
+var logger = require('../components/queue_logger');
 var bucketName = config.bucketName;
 
 var bucketPromise = new AWS.S3({ apiVersion: '2006-03-01' }).createBucket({ Bucket: bucketName }).promise();
