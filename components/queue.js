@@ -33,7 +33,7 @@ awsHander.getQueueUrl = function(next) {
             global.queue_url = "none";
             next(false);
         } else {
-            logger.info("[Queue] Queue URL is "+data.QueueUrl)
+            logger.info("[Queue] Queue URL is " + data.QueueUrl)
             global.queue_url = data.QueueUrl;
             next(true);
         }
@@ -88,7 +88,7 @@ awsHander.upload = function(path, prex) {
 
 awsHander.getQueueAttributes = function(attr, callback) {
     var params = {
-        QueueUrl: config.queue_url,
+        QueueUrl: global.queue_url,
         AttributeNames: attr
     };
     sqs.getQueueAttributes(params, function(err, data) {
@@ -106,40 +106,56 @@ awsHander.getQueueAttributes = function(attr, callback) {
 //sent message to queue.
 
 awsHander.sender = function(message, to) {
-    let params = {
-        MessageBody: message,
-        QueueUrl: config.queue_url,
-        DelaySeconds: 0,
-        MessageDeduplicationId: uuid(),
-        MessageGroupId: uuid()
-    };
-    sqs.sendMessage(params, function(err, data) {
-        if (err) {
 
-            logger.info("[Queue] Send Messages to S3 fails")
-            logger.info("Err")
-            logger.info(err.stack)
-            logger.info("[Queue] Send Email To Client")
-            logger.info(to)
-            let subject = "sent message to queue fails";
-            let text = err.stack
-            emailer.sendMail(config.mail.from, to, subject, text, html)
-        } else {}
-    });
+
+    function send() {
+
+        let params = {
+            MessageBody: message,
+            QueueUrl: global.queue_url,
+            DelaySeconds: 0,
+            MessageDeduplicationId: uuid(),
+            MessageGroupId: uuid()
+        };
+        sqs.sendMessage(params, function(err, data) {
+            if (err) {
+
+                logger.info("[Queue] Send Messages to Queue fails")
+                logger.info("Err")
+                logger.info(err.stack)
+                logger.info("[Queue] Send Email To Client")
+                logger.info(to)
+                let subject = "sent message to queue fails";
+                let text = err.stack
+                emailer.sendMail(config.mail.from, to, subject, text, html)
+            } else {
+                logger.info("[Queue] Send Messages to Queue success");
+            }
+        });
+    }
+
+    if (global.queue_url == null) {
+        awsHander.getQueueUrl(function() {
+            send();
+
+        })
+    } else {
+        send();
+    }
+
 }
 
 
 awsHander.receiver = function(next, endCallback) {
     let params = {
-        QueueUrl: config.queue_url,
+        QueueUrl: global.queue_url,
         MaxNumberOfMessages: 1,
         ReceiveRequestAttemptId: uuid(),
-        VisibilityTimeout: 5,
+        VisibilityTimeout: 60,
         WaitTimeSeconds: 0
     };
     let re = sqs.receiveMessage(params, function(err, data) {
         // once get message , del message from queue
-
         if (err) {
             console.log(err, err.stack);
             logger.info("[Queue] Receive Messages from S3 fails")
@@ -147,10 +163,12 @@ awsHander.receiver = function(next, endCallback) {
             logger.info(err.stack)
             if (endCallback != null) { endCallback() };
         } else {
+            logger.info(data)
             if (data.Messages) {
                 let message = JSON.parse(data.Messages[0].Body)
+
                 if (message.domain && message.domain == "microarray") {
-                    awsHander.del(data.Messages[0].ReceiptHandle)
+                    
                     next(data, data.email, endCallback)
                 }
             } else {
@@ -163,7 +181,7 @@ awsHander.receiver = function(next, endCallback) {
 
 awsHander.del = function(rec) {
     let params = {
-        QueueUrl: config.queue_url,
+        QueueUrl: global.queue_url,
         ReceiptHandle: rec
     };
     sqs.deleteMessage(params, function(err, data) {
@@ -178,17 +196,17 @@ awsHander.del = function(rec) {
     });
 }
 
-awsHander.changeMessageVisibility = function(receiptHandle,timeout){
-
+awsHander.changeMessageVisibility = function(receiptHandle, timeout) {
+    logger.info("Set Messages visibility")
     var visibilityParams = {
-      QueueUrl: config.queue_url,
-      ReceiptHandle: receiptHandle,
-      VisibilityTimeout: timeout
+        QueueUrl: global.queue_url,
+        ReceiptHandle: receiptHandle,
+        VisibilityTimeout: timeout
     };
     sqs.changeMessageVisibility(visibilityParams, function(err, data) {
-      if (err) {
-        logger.info("queue visibility change fails: " + err)
-      }
+        if (err) {
+            logger.info("queue visibility change fails: " + err)
+        }
     });
 }
 
@@ -252,7 +270,7 @@ download = (projectId, key, filePath) => {
             // logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
 
             //let fileStream =fs.createReadStream(path + "/" + items[i])
-            fs.writeFile(filePath + "/" + projectId + "/" + key.replace(config.bucket_folder +"/" + projectId + "/", ""), data.Body, function(err) {
+            fs.writeFile(filePath + "/" + projectId + "/" + key.replace(config.bucket_folder + "/" + projectId + "/", ""), data.Body, function(err) {
                 if (err) {
                     return console.log(err);
                 }
