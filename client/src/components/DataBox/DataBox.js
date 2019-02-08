@@ -168,7 +168,7 @@ class DataBox extends Component {
     showModal = () => {
         let currentState = Object.assign({}, this.state);
         currentState.visible = true;
-        currentState.group_name="";
+        currentState.group_name = "";
         this.setState(currentState);
     }
 
@@ -190,7 +190,7 @@ class DataBox extends Component {
         let workflow = Object.assign({}, this.state);
         workflow.group = "";
         document.getElementById("input_group_name").value = "";
-
+        document.getElementById("message-gsm-group").innerHTML = "";
 
         workflow.visible = false;
         let flag = workflow.added;
@@ -219,11 +219,15 @@ class DataBox extends Component {
 
             if (this.state.selected.length > 0) {
                 // if user select records in table 
-                this.props.assignGroup(document.getElementById("input_group_name").value, this.state.selected)
-                this.child.current.unselect(); // after create tag, previous selected record will unselect. 
-                let currentState = Object.assign({}, this.state);
-                currentState.added = true;
-                this.setState(currentState);
+                this.props.assignGroup(document.getElementById("input_group_name").value, this.state.selected, this,function(flag,handler) {
+                    if (flag) {
+                        handler.child.current.unselect(); // after create tag, previous selected record will unselect. 
+                        let currentState = Object.assign({}, handler.state);
+                        currentState.added = true;
+                        handler.setState(currentState);
+                    }
+                })
+
 
             } else {
                 document.getElementById("message-gsm-group").innerHTML = "Please select some gsm(s). "
@@ -311,10 +315,10 @@ class DataBox extends Component {
         }
 
         var selected_gsms = "";
-        let number_select =0 ;
+        let number_select = 0;
         if (this.props.data.dataList.length > 0) {
             for (var key in this.state.selected) {
-                number_select=number_select+1;
+                number_select = number_select + 1;
                 selected_gsms = selected_gsms + this.props.data.dataList[this.state.selected[key] - 1].gsm + ",";
             }
         }

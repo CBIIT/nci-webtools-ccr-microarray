@@ -590,7 +590,7 @@ class Analysis extends Component {
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["Type", "Pathways_For_Upregulated_Genes"])
-                 
+
                         ws_data.push(["Filters", ""])
 
                         if (workflow.pathways_up.search_keyword.search_PATHWAY_ID != "") {
@@ -927,7 +927,7 @@ class Analysis extends Component {
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["Type", "Pathways_For_Upregulated_Genes"])
-                    
+
                         ws_data.push(["Filters", ""])
 
                         if (workflow.pathways_down.search_keyword.search_PATHWAY_ID != "") {
@@ -1164,7 +1164,7 @@ class Analysis extends Component {
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["Type", "Differentially Expressed Genes"])
-                    
+
                         ws_data.push(["Filters", ""])
 
                         if (workflow.diff_expr_genes.search_keyword.search_symbol != "") {
@@ -2706,6 +2706,8 @@ class Analysis extends Component {
 
                         // init group with default value
                         //workflow.group = new Array(list.files.length).fill('Ctl');
+
+
                         workflow.uploaded = true;
                         this.setState({
                             workflow: workflow
@@ -2721,6 +2723,10 @@ class Analysis extends Component {
                         document.getElementById("message-gsm").innerHTML = result.msg;
                         document.getElementById("message-gsm").nextSibling.innerHTML = ""
                     }
+
+                    document.getElementById("btn-project-upload").disabled = true;
+                    document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default";
+
                 }).catch(error => console.log(error));
         } catch (error) {
 
@@ -2733,10 +2739,13 @@ class Analysis extends Component {
             });
             document.getElementById("message-gsm").innerHTML = error;
             document.getElementById("message-gsm").nextSibling.innerHTML = ""
+            document.getElementById("btn-project-upload").disabled = true;
+            document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default";
+
         }
 
     }
-    assignGroup = (group_name, dataList_keys) => {
+    assignGroup = (group_name, dataList_keys,handler,callback) => {
         // validate group_name
         let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
         if (group_name.match(pattern)) {
@@ -2749,12 +2758,12 @@ class Analysis extends Component {
             this.setState({
                 workflow: workflow
             });
-
+            callback(true,handler)
 
         } else {
             document.getElementById("message-gsm-group").innerHTML = "The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 "
 
-            return false;
+            callback(false,handler)
         }
 
     }
@@ -2853,18 +2862,18 @@ class Analysis extends Component {
     resetPCA = () => {
         let workflow = Object.assign({}, this.state.workflow);
         let pcaPlotLayout = {
-                                margin:workflow.PCA.layout.margin,
-                                width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
-                                height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
-                                scene: workflow.PCA.layout.scene
-                            }
+            margin: workflow.PCA.layout.margin,
+            width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
+            height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
+            scene: workflow.PCA.layout.scene
+        }
         workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
                              data={workflow.PCA.data} 
                              layout={pcaPlotLayout}  
                              /></div>;
         this.setState({
-                workflow: workflow
-            });
+            workflow: workflow
+        });
     }
 
     resetBoxPlotAN = () => {
