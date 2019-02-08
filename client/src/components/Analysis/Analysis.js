@@ -918,10 +918,10 @@ class Analysis extends Component {
                             }
                             ws_data.push(["Upload Data", uploadD]);
                         }
-                           if (workflow.analysisType == "0") {
-                             ws_data.push(["Analysis Type", "GEO Data"])
-                             ws_data.push(["Accession Code", workflow.accessionCode])
-                         }
+                        if (workflow.analysisType == "0") {
+                            ws_data.push(["Analysis Type", "GEO Data"])
+                            ws_data.push(["Accession Code", workflow.accessionCode])
+                        }
                         ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
@@ -2273,6 +2273,7 @@ class Analysis extends Component {
         reqBody.groups = [];
         reqBody.group_1 = workflow.group_1;
         reqBody.group_2 = workflow.group_2;
+        reqBody.dataList=[];
         if (workflow.uploaded) {
             reqBody.source = "upload";
         } else {
@@ -2281,13 +2282,15 @@ class Analysis extends Component {
 
 
         for (var i in workflow.dataList) {
+            reqBody.dataList.push(workflow.dataList[i].gsm);
             if (workflow.dataList[i].groups != "") {
-                reqBody.groups.push(workflow.dataList[i].groups)
+                reqBody.groups.push(workflow.dataList[i].groups);
             } else {
                 // default value of the group is Ctl
                 reqBody.groups.push("Ctl")
             }
         }
+
 
 
         reqBody.genSet = workflow.genSet;
