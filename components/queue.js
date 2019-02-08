@@ -221,7 +221,6 @@ awsHander.download = (projectId, filePath, next) => {
             logger.info("[Queue] Download file from S3 fails")
             logger.info(params2)
             logger.info(err.stack)
-            if (endCallback != null) { endCallback(); }
         } else {
 
             let files = data.Contents;
