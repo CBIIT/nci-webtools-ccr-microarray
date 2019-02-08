@@ -659,6 +659,17 @@ tr:nth-child(even) {
     }
 }
 
+
+#deg_tag2 .ant-table-column-has-filters >span{
+    display: inline-block;
+    vertical-align: top;
+    height: 110px;
+}
+#deg_tag3 .ant-table-column-has-filters >span{
+    display: inline-block;
+    vertical-align: top;
+    height: 110px;
+}
 .js-plotly-plot {
     display: block;
     width: 80%;
@@ -669,7 +680,7 @@ tr:nth-child(even) {
 
 #tab_analysis .ant-table-pagination {
     position: absolute;
-    top: -52px;
+    top: -60px;
     right: 100px;
 }
 
