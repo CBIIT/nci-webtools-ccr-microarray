@@ -114,7 +114,7 @@ function r(data, endCallback) {
 
             code = "<p>&nbsp;&nbsp;CEL Files: <b>" + data.dataList + "</b></p>";
         }
-        if (true) {
+        if (err) {
 
             logger.info("[Queue] Run Contrast fails ", err)
             logger.info("[Queue] sendMail to  ", data.email)
@@ -141,7 +141,7 @@ function r(data, endCallback) {
 
 function uploadResultToS3(path, pid) {
     logger.info("[Queue] Upload Results to S3", path)
-    queue.awsHander.upload(path, config.queue_input_path + "/" + data.projectId + "/", function(err, data) {
+    queue.awsHander.upload(path, config.queue_input_path + "/" + pid + "/", function(err, data) {
         // 
     });
 
