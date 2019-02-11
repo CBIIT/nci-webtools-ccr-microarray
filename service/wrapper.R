@@ -166,12 +166,16 @@ process = function(){
     
     boxplot_DataAN<-list(col=col_name,data=t(norm_celfiles@listData[[8]]),color=pData(norm_celfiles[[11]])$colors)
     
+    tmp_pca<-norm_celfiles[[9]]
     pcaData<-list(
-      col=colnames(norm_celfiles[[9]]),
+      col=colnames(tmp_pca$x[,1:3]),
       row=col_name,
-      x=norm_celfiles[[9]][,1],
-      y=norm_celfiles[[9]][,2],
-      z=norm_celfiles[[9]][,3],
+      x=tmp_pca$x[,1:3][,1],
+      y=tmp_pca$x[,1:3][,2],
+      z=tmp_pca$x[,1:3][,3],
+      xlable=round(tmp_pca$sdev[1]^2/sum(tmp_pca$sdev^2)*100,2),
+      ylable=round(tmp_pca$sdev[2]^2/sum(tmp_pca$sdev^2)*100,2),
+      zlable=round(tmp_pca$sdev[3]^2/sum(tmp_pca$sdev^2)*100,2),
       color=pData(norm_celfiles[[11]])$colors
       )
 
