@@ -55,12 +55,12 @@ class Contrast extends Component {
               <span>Run Contrast</span>
             </Button></div>);
         }
-        let group_1_content = (<Select value={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
-            <Option value="-1">---Select Group---</Option>
+        let group_1_content = (<Select id="select-group-1" value={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
+            <Option value="-1" aria-activedescendant="select-group-1">---Select Group---</Option>
             {options}
           </Select>);
-        let group_2_content = (<Select value={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
-            <Option value="-1">---Select Group---</Option>
+        let group_2_content = (<Select id="select-group-2" value={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
+            <Option value="-1" aria-activedescendant="select-group-2">---Select Group---</Option>
 
             {options}
           </Select>);
