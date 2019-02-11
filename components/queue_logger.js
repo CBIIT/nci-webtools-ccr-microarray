@@ -34,4 +34,4 @@
 
 
 
-module.exports = logger;
+module.exports = queue_logger;
