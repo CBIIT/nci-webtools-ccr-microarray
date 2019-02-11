@@ -258,13 +258,13 @@ class SSGSEATable extends Component {
                           <Option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
                         </OptGroup>
                         <OptGroup label="Mouse">
-                          <Option value="Co-expression">Co-expression</Option>
-                          <Option value="Gene Ontology">Gene Ontology</Option>
-                          <Option value="Curated Pathway">Curated Pathway</Option>
-                          <Option value="Metabolic">Metabolic</Option>
-                          <Option value="TF targets">TF targets</Option>
-                          <Option value="miRNA targets">miRNA targets</Option>
-                          <Option value="Location">Location</Option>
+                          <Option value="mouse$Co-expression">Co-expression</Option>
+                          <Option value="mouse$Gene Ontology">Gene Ontology</Option>
+                          <Option value="mouse$Curated Pathway">Curated Pathway</Option>
+                          <Option value="mouse$Metabolic">Metabolic</Option>
+                          <Option value="mouse$TF targets">TF targets</Option>
+                          <Option value="mouse$miRNA targets">miRNA targets</Option>
+                          <Option value="mouse$Location">Location</Option>
                         </OptGroup>
                       </Select></div>]
 
