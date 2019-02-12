@@ -212,7 +212,8 @@ let defaultState = {
             Heatmapolt: "",
         },
         geneHeatmap: "/ssgseaHeatmap1.jpg",
-        volcanoPlot: "/volcano.html",
+        volcanoPlot: "No Data",
+        volcanoPlotName:"/volcano.html"
     }
 };
 
@@ -1880,6 +1881,11 @@ class Analysis extends Component {
             sessionStorage.setItem("tag_deg_plot_status", e);
             window.tag_deg_plot_status = e;
         }
+        if (e == "volcanoPlot") {
+             let workflow = Object.assign({}, this.state.workflow);
+             workflow.volcanoPlot=<iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()} width={'100%'} height={'60%'} frameBorder={'0'}/>;
+             this.setState({ workflow: workflow });
+        }
 
     }
 
@@ -2475,9 +2481,12 @@ class Analysis extends Component {
                         if (result.status == 200) {
 
                         }
+                        workflow.volcanoPlot = <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
+                        workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                         workflow.uploading = false;
                         workflow.progressing = false;
                         workflow.QueueModalvisible = true;
+
                         this.setState({
                             workflow: workflow
                         });
@@ -2619,7 +2628,7 @@ class Analysis extends Component {
                                     break;
                             }
 
-                            workflow.volcanoPlot = "/volcano.html";
+                            workflow.volcanoPlot = <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
                             workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                             workflow.compared = true;
                             workflow.done_gsea = true;

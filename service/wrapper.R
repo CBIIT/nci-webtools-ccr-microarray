@@ -221,10 +221,7 @@ process = function(){
 
     ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
 
-
-
     saveRDS(ssGSEA_results,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
-
 
     ss_result<-ssGSEA_results$DEss
     re<-list(
