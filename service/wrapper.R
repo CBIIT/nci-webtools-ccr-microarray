@@ -192,7 +192,9 @@ process = function(){
         norm_celfiles[[10]]
         )
 
-  
+    saveRDS(return_plot_data,file = paste0(data_repo_path,"/return_plot_data.rds"))
+
+ 
     #### 3) Differentially Expressed Genes function takes files, group and contrast data. Returns list of DEGs for each contrast, annotated normalized data, and pheno data ####
     # Output should dynamically respond to user-selected contrast
 
@@ -207,16 +209,11 @@ process = function(){
     # # # Output should dynamically respond to user-selected contrast
     saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
     ## auto correct species
-    # if(grepl("mouse",celfiles@annotation)){
-    #   species<-"mouse"
-    # }
-
-    # if(grepl("human",celfiles@annotation)){
-    #   species<-"human"
-    # }
 
     
     l2p_pathways = l2pPathways(diff_expr_genes,species,data_repo_path,projectId,config_path)
+
+    saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
 
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
     # # # Output should dynamically respond to user-selected contrast
@@ -224,10 +221,7 @@ process = function(){
 
     ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
 
-    saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
-    
 
-    saveRDS(return_plot_data,file = paste0(data_repo_path,"/return_plot_data.rds"))
 
     saveRDS(ssGSEA_results,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
 
