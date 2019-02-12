@@ -82,7 +82,8 @@ class SSGSEATable extends Component {
         const columns = [{
             title: (
                     <div style={{ textAlign: 'center' }}>
-                       <label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label>
+                       <label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span>
+                       <Input aria-label="input_ssg_name" onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label>
                       <div>NAME</div>
                 </div>
                 ),
@@ -98,7 +99,8 @@ class SSGSEATable extends Component {
         }, {
             title: (
                     <div style={{ textAlign: 'center' }}>
-                       <label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label>
+                       <label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span>
+                       <Input aria-label="input_ssg_search_logFC" onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label>
                        <div>logFC</div>
                 </div>
                 ),
@@ -115,7 +117,8 @@ class SSGSEATable extends Component {
         },{
             title: (
                     <div style={{ textAlign: 'center' }}>
-                        <label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label>
+                        <label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span>
+                        <Input aria-label="input_ssg_search_p_value" onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label>
                         <div>P.Value</div>
                 </div>
                 ),
@@ -133,7 +136,8 @@ class SSGSEATable extends Component {
         },{
             title:  (
                     <div style={{ textAlign: 'center' }}>
-                          <label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label>
+                          <label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span>
+                          <Input aria-label="input_ssg_search_adj_p_value" onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label>
                      <div>adj.P.Vale</div>
                 </div>
                 ),
@@ -150,7 +154,8 @@ class SSGSEATable extends Component {
         },  {
             title:  (
                     <div style={{ textAlign: 'center' }}>
-                        <label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label>
+                        <label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span>
+                        <Input aria-label="input_ssg_search_Avg_Enrichment_Score" onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label>
                         <div>Avg.Enrichment.Score</div>
                 </div>
                 ),
@@ -184,7 +189,8 @@ class SSGSEATable extends Component {
         },  {
             title:  (
                     <div style={{ textAlign: 'center' }}>
-                         <label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label>
+                         <label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span>
+                         <Input aria-label="input_ssg_search_b"  onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label>
                          <div>B</div>
                 </div>
                 ),
