@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Input, Select, Upload, Button, Icon, message } from 'antd';
-const Option = Select.Option;
+import { Input, Upload, Button, Icon, message } from 'antd';
+
 
 class Project extends Component {
 
