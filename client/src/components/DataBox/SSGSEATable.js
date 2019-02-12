@@ -248,7 +248,7 @@ class SSGSEATable extends Component {
 
         let link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
-        let selection = [<div id={"ss_genset_select"}>     <select defaultValue="human$H: Hallmark Gene Sets" 
+        let selection = [<div id={"ss_genset_select"}>     <select className="ant-select-selection ant-select-selection--single" defaultValue="human$H: Hallmark Gene Sets" 
                         id="ssGSEA_genset"
                         onChange={(e) => this.props.handleGeneChange(e)} 
                         aria-label="Gene Set For ssGSEA"
@@ -308,7 +308,7 @@ class SSGSEATable extends Component {
                                  <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
                             </div>
         ]
-        content = [<select  style={{ width: 240 }} onChange={this.handleSelectionChange}>
+        content = [<select  className="ant-select-selection ant-select-selection--single" style={{ width: 240 }} onChange={this.handleSelectionChange}>
                                   <option value="ss_tag1">Single Sample GSEA</option>
                                   <option value="ss_tag2">Pathway Heatmap</option>
                                 </select>, selection, tabs]
