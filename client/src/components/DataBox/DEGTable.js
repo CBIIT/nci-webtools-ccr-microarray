@@ -70,7 +70,8 @@ class DEGTable extends Component {
 
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                    <label for="input_deg_search_symbol"><span style={{display:"none"}}>input_deg_search_symbol</span> <Input onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></label>
+                    <label for="input_deg_search_symbol"><span style={{display:"none"}}>input_deg_search_symbol</span>
+                     <Input  aria-label="input_deg_search_symbol" onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></label>
                     <div>SYMBOL</div>
                 </div>
                 ),
@@ -88,7 +89,8 @@ class DEGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                      <label for="input_deg_search_fc"><span style={{display:"none"}}>input_deg_search_fc</span> <Input onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></label>
+                      <label for="input_deg_search_fc"><span style={{display:"none"}}>input_deg_search_fc</span>
+                      <Input  aria-label="input_deg_search_fc"  onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></label>
                     <div>FC</div>
                 </div>
                 ),
@@ -106,7 +108,8 @@ class DEGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                          <label for="input_dge_search_p_value"><span style={{display:"none"}}>input_dge_search_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="0.05"  id="input_dge_search_p_value"/></label>
+                          <label for="input_dge_search_p_value"><span style={{display:"none"}}>input_dge_search_p_value</span> 
+                          <Input  aria-label="input_dge_search_p_value"  onPressEnter={value=>search(value) }    placeholder="0.05"  id="input_dge_search_p_value"/></label>
                            <div>P.Value</div>
                 </div>
                 ),
@@ -126,7 +129,8 @@ class DEGTable extends Component {
             {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                        <label for="input_deg_search_adj_p_value"><span style={{display:"none"}}>input_deg_search_adj_p_value</span> <Input onPressEnter={value=>search(value) }    placeholder="adj.p.val"  id="input_deg_search_adj_p_value"/></label>
+                        <label for="input_deg_search_adj_p_value"><span style={{display:"none"}}>input_deg_search_adj_p_value</span>
+                        <Input  aria-label="input_deg_search_adj_p_value" onPressEnter={value=>search(value) }    placeholder="adj.p.val"  id="input_deg_search_adj_p_value"/></label>
                         <div>adj.P.Val</div>
                 </div>
                 ),
@@ -146,7 +150,8 @@ class DEGTable extends Component {
             {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                         <label for="input_deg_search_aveexpr"><span style={{display:"none"}}>input_deg_search_aveexpr</span> <Input onPressEnter={value=>search(value) }   placeholder="AveExpr"  id="input_deg_search_aveexpr"/></label>
+                         <label for="input_deg_search_aveexpr"><span style={{display:"none"}}>input_deg_search_aveexpr</span>
+                         <Input aria-label="input_deg_search_aveexpr" onPressEnter={value=>search(value) }   placeholder="AveExpr"  id="input_deg_search_aveexpr"/></label>
                          <div>AveExpr</div>
                 </div>
                 ),
@@ -164,7 +169,8 @@ class DEGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                             <label for="input_deg_search_accnum"><span style={{display:"none"}}>input_deg_search_accnum</span> <Input onPressEnter={value=>search(value) }   placeholder="ACCNUM"  id="input_deg_search_accnum"/></label>
+                             <label for="input_deg_search_accnum"><span style={{display:"none"}}>input_deg_search_accnum</span>
+                             <Input aria-label="input_deg_search_accnum" onPressEnter={value=>search(value) }   placeholder="ACCNUM"  id="input_deg_search_accnum"/></label>
                          <div>ACCNUM</div>
                 </div>
                 ),
@@ -183,7 +189,8 @@ class DEGTable extends Component {
             {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                            <label for="input_deg_search_desc"><span style={{display:"none"}}>input_deg_search_desc</span> <Input onPressEnter={value=>search(value) }  placeholder="Desc"  id="input_deg_search_desc"/></label>
+                            <label for="input_deg_search_desc"><span style={{display:"none"}}>input_deg_search_desc</span>
+                            <Input aria-label="input_deg_search_desc" onPressEnter={value=>search(value) }  placeholder="Desc"  id="input_deg_search_desc"/></label>
                        <div>DESC</div>
                 </div>
                 ),
@@ -201,7 +208,8 @@ class DEGTable extends Component {
             {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                     <label for="input_deg_search_entrez"><span style={{display:"none"}}>input_deg_search_entrez</span> <Input onPressEnter={value=>search(value) } placeholder="ENTREZ"  id="input_deg_search_entrez"/></label>
+                     <label for="input_deg_search_entrez"><span style={{display:"none"}}>input_deg_search_entrez</span>
+                     <Input  aria-label="input_deg_search_entrez" onPressEnter={value=>search(value) } placeholder="ENTREZ"  id="input_deg_search_entrez"/></label>
                           <div>ENTREZ</div>
                 </div>
                 ),
@@ -228,7 +236,8 @@ class DEGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                       <label for="input_deg_search_probsetid"><span style={{display:"none"}}>input_deg_search_probsetid</span> <Input onPressEnter={value=>search(value) }   placeholder="probsetID"  id="input_deg_search_probsetid"/></label>
+                       <label for="input_deg_search_probsetid"><span style={{display:"none"}}>input_deg_search_probsetid</span>
+                       <Input aria-label="input_deg_search_probsetid" onPressEnter={value=>search(value) }   placeholder="probsetID"  id="input_deg_search_probsetid"/></label>
                         <div>probsetID</div>
                 </div>
                 ),
@@ -246,7 +255,8 @@ class DEGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                      <label for="input_deg_search_t"><span style={{display:"none"}}>input_deg_search_t</span> <Input onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></label>
+                      <label for="input_deg_search_t"><span style={{display:"none"}}>input_deg_search_t</span>
+                      <Input aria-label="input_deg_search_t" onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></label>
                       <div>t</div>
                 </div>
                 ),
@@ -265,7 +275,8 @@ class DEGTable extends Component {
             {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                       <label for="input_deg_search_b"><span style={{display:"none"}}>input_deg_search_b</span> <Input onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></label>
+                       <label for="input_deg_search_b"><span style={{display:"none"}}>input_deg_search_b</span>
+                       <Input aria-label="input_deg_search_b"  onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></label>
                        <div>b</div>
                 </div>
                 ),
