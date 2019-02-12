@@ -1946,9 +1946,9 @@ class Analysis extends Component {
         this.setState({ workflow: workflow });
     }
 
-    handleSelectType = (value) => {
+    handleSelectType = (event) => {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.analysisType = value;
+        workflow.analysisType = event.target.value;
         this.setState({ workflow: workflow });
     }
 
