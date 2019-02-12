@@ -262,7 +262,7 @@ class SSGSEATable extends Component {
                           <option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</option>
                           <option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</option>
                         </optgroup>
-                        <optGroup label="Mouse">
+                        <optgroup label="Mouse">
                           <option value="mouse$Co-expression">Co-expression</option>
                           <option value="mouse$Gene Ontology">Gene Ontology</option>
                           <option value="mouse$Curated Pathway">Curated Pathway</option>
