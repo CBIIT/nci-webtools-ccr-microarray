@@ -253,23 +253,23 @@ class SSGSEATable extends Component {
                         aria-label="Gene Set For ssGSEA"
                       >
                         <optgroup label="Human">
-                          <ption value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</ption>
-                          <ption value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</ption>
-                          <ption value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</ption>
-                          <ption value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</ption>
-                          <ption value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</ption>
-                          <ption value="human$C5: GO gene sets">C5: GO gene sets</ption>
-                          <ption value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</ption>
-                          <ption value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</ption>
+                          <option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</option>
+                          <option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</option>
+                          <option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</option>
+                          <option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</option>
+                          <option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</option>
+                          <option value="human$C5: GO gene sets">C5: GO gene sets</option>
+                          <option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</option>
+                          <option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</option>
                         </optgroup>
                         <OptGroup label="Mouse">
-                          <ption value="mouse$Co-expression">Co-expression</ption>
-                          <ption value="mouse$Gene Ontology">Gene Ontology</ption>
-                          <ption value="mouse$Curated Pathway">Curated Pathway</ption>
-                          <ption value="mouse$Metabolic">Metabolic</ption>
-                          <ption value="mouse$TF targets">TF targets</ption>
-                          <ption value="mouse$miRNA targets">miRNA targets</ption>
-                          <ption value="mouse$Location">Location</ption>
+                          <option value="mouse$Co-expression">Co-expression</option>
+                          <option value="mouse$Gene Ontology">Gene Ontology</option>
+                          <option value="mouse$Curated Pathway">Curated Pathway</option>
+                          <option value="mouse$Metabolic">Metabolic</option>
+                          <option value="mouse$TF targets">TF targets</option>
+                          <option value="mouse$miRNA targets">miRNA targets</option>
+                          <option value="mouse$Location">Location</option>
                         </optgroup>
                       </select></div>]
 
@@ -308,8 +308,8 @@ class SSGSEATable extends Component {
                             </div>
         ]
         content = [<Select defaultValue="ss_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
-                                  <ption value="ss_tag1">Single Sample GSEA</ption>
-                                  <ption value="ss_tag2">Pathway Heatmap</ption>
+                                  <option value="ss_tag1">Single Sample GSEA</option>
+                                  <option value="ss_tag2">Pathway Heatmap</option>
                                 </Select>, selection, tabs]
 
 
