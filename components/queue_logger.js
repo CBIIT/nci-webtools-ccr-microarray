@@ -9,7 +9,7 @@
  require('winston-daily-rotate-file');
  winston.emitErrs = true;
 
-  var logger = new (winston.Logger)({
+  var queue_logger = new (winston.Logger)({
     transports: [
       new (winston.transports.DailyRotateFile)({
             filename: config.logDir+'/queue.log',
@@ -34,4 +34,4 @@
 
 
 
-module.exports = logger;
+module.exports = queue_logger;

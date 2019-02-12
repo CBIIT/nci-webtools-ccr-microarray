@@ -166,12 +166,16 @@ process = function(){
     
     boxplot_DataAN<-list(col=col_name,data=t(norm_celfiles@listData[[8]]),color=pData(norm_celfiles[[11]])$colors)
     
+    tmp_pca<-norm_celfiles[[9]]
     pcaData<-list(
-      col=colnames(norm_celfiles[[9]]),
+      col=colnames(tmp_pca$x[,1:3]),
       row=col_name,
-      x=norm_celfiles[[9]][,1],
-      y=norm_celfiles[[9]][,2],
-      z=norm_celfiles[[9]][,3],
+      x=tmp_pca$x[,1:3][,1],
+      y=tmp_pca$x[,1:3][,2],
+      z=tmp_pca$x[,1:3][,3],
+      xlable=round(tmp_pca$sdev[1]^2/sum(tmp_pca$sdev^2)*100,2),
+      ylable=round(tmp_pca$sdev[2]^2/sum(tmp_pca$sdev^2)*100,2),
+      zlable=round(tmp_pca$sdev[3]^2/sum(tmp_pca$sdev^2)*100,2),
       color=pData(norm_celfiles[[11]])$colors
       )
 
@@ -203,20 +207,21 @@ process = function(){
     # # # Output should dynamically respond to user-selected contrast
     saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
     ## auto correct species
-    if(grepl("mouse",celfiles@annotation)){
-      species<-"mouse"
-    }
+    # if(grepl("mouse",celfiles@annotation)){
+    #   species<-"mouse"
+    # }
 
-    if(grepl("human",celfiles@annotation)){
-      species<-"human"
-    }
+    # if(grepl("human",celfiles@annotation)){
+    #   species<-"human"
+    # }
 
     
     l2p_pathways = l2pPathways(diff_expr_genes,species,data_repo_path,projectId,config_path)
 
     # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
     # # # Output should dynamically respond to user-selected contrast
-    
+    write(c(species,geneSet,config_path), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""))
+
     ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
 
     saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))

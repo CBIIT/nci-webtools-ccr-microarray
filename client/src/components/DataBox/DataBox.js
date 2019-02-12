@@ -362,10 +362,10 @@ class DataBox extends Component {
         > <div  style={{display:this.state.added?"none":"block"}}>
           <p style={{color: "#215a82"}}><b>{number_select} Selected GSM(s)</b></p>
            <p style={{display: selected_gsms==""&&this.state.visible==true?"block":"none"}} className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
-          <p><TextArea  autosize={false}  disabled style={{width:'100%',"color": "black"}} value={selected_gsms}/></p>
+          <p> <label for="textArea-group-selected"><span style={{display:"none"}}>Group selected</span> <TextArea id="textArea-group-selected" autosize={false}  disabled style={{width:'100%',"color": "black"}} value={selected_gsms}/></label></p>
           <p style={{color: "#215a82"}}><b>Group Name<span style={{color:"red","paddingLeft":"5px"}}> *</span></b> <span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
            <p className="err-message" id="message-gsm-group"></p>
-          <p> <Input  disabled={this.state.selected==""?true:false} aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)',"color":"black","font-size":"16px"}} onChange={this.handleInputOnChange}/>&nbsp;
+          <p>  <label for="input-define-group"><span style={{display:"none"}}>Define Grop</span> <Input  id="input-define-group" disabled={this.state.selected==""?true:false} aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)',"color":"black","font-size":"16px"}} onChange={this.handleInputOnChange}/>&nbsp;</label>
               <Button  type={this.state.selected==""||this.state.group_name==""?"default":"primary"}  disabled={this.state.selected==""||this.state.group_name==""?true:false}   onClick={this.createTag} >Add</Button>
           </p>
           </div>
