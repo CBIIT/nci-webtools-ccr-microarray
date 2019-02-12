@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'antd';
-const { Option, OptGroup } = Select;
+import { Menu, Dropdown, Button, Icon, Table, Input, Tooltip } from 'antd';
 
 
 class SSGSEATable extends Component {
@@ -248,31 +247,31 @@ class SSGSEATable extends Component {
 
         let link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
-        let selection = [<div id={"ss_genset_select"}>     <Select defaultValue="human$H: Hallmark Gene Sets" 
+        let selection = [<div id={"ss_genset_select"}>     <select defaultValue="human$H: Hallmark Gene Sets" 
                         id="ssGSEA_genset"
                         onChange={(e) => this.props.handleGeneChange(e)} 
                         aria-label="Gene Set For ssGSEA"
                       >
-                        <OptGroup label="Human">
-                          <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
-                          <Option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</Option>
-                          <Option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
-                          <Option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
-                          <Option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
-                          <Option value="human$C5: GO gene sets">C5: GO gene sets</Option>
-                          <Option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
-                          <Option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
-                        </OptGroup>
+                        <optgroup label="Human">
+                          <ption value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</ption>
+                          <ption value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</ption>
+                          <ption value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</ption>
+                          <ption value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</ption>
+                          <ption value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</ption>
+                          <ption value="human$C5: GO gene sets">C5: GO gene sets</ption>
+                          <ption value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</ption>
+                          <ption value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</ption>
+                        </optgroup>
                         <OptGroup label="Mouse">
-                          <Option value="mouse$Co-expression">Co-expression</Option>
-                          <Option value="mouse$Gene Ontology">Gene Ontology</Option>
-                          <Option value="mouse$Curated Pathway">Curated Pathway</Option>
-                          <Option value="mouse$Metabolic">Metabolic</Option>
-                          <Option value="mouse$TF targets">TF targets</Option>
-                          <Option value="mouse$miRNA targets">miRNA targets</Option>
-                          <Option value="mouse$Location">Location</Option>
-                        </OptGroup>
-                      </Select></div>]
+                          <ption value="mouse$Co-expression">Co-expression</ption>
+                          <ption value="mouse$Gene Ontology">Gene Ontology</ption>
+                          <ption value="mouse$Curated Pathway">Curated Pathway</ption>
+                          <ption value="mouse$Metabolic">Metabolic</ption>
+                          <ption value="mouse$TF targets">TF targets</ption>
+                          <ption value="mouse$miRNA targets">miRNA targets</ption>
+                          <ption value="mouse$Location">Location</ption>
+                        </optgroup>
+                      </select></div>]
 
         let tabs = [
             <div id="ss_tag1" className="ss_plot">
@@ -309,8 +308,8 @@ class SSGSEATable extends Component {
                             </div>
         ]
         content = [<Select defaultValue="ss_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
-                                  <Option value="ss_tag1">Single Sample GSEA</Option>
-                                  <Option value="ss_tag2">Pathway Heatmap</Option>
+                                  <ption value="ss_tag1">Single Sample GSEA</ption>
+                                  <ption value="ss_tag2">Pathway Heatmap</ption>
                                 </Select>, selection, tabs]
 
 
