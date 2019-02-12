@@ -56,7 +56,8 @@ class SSGSEATable extends Component {
     }
 
 
-    handleSelectionChange(value) {
+    handleSelectionChange(event) {
+        let value =event.target.value;
         if (value == "ss_tag1") {
             this.props.upateCurrentWorkingTabAndObject("ssGSEA")
         }
@@ -307,10 +308,10 @@ class SSGSEATable extends Component {
                                  <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
                             </div>
         ]
-        content = [<Select defaultValue="ss_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
+        content = [<select  style={{ width: 240 }} onChange={this.handleSelectionChange}>
                                   <option value="ss_tag1">Single Sample GSEA</option>
                                   <option value="ss_tag2">Pathway Heatmap</option>
-                                </Select>, selection, tabs]
+                                </select>, selection, tabs]
 
 
         return content;
