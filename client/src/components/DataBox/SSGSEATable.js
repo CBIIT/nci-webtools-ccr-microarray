@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'antd';
-const { Option, OptGroup } = Select;
+import { Menu, Dropdown, Button, Icon, Table, Input, Tooltip } from 'antd';
 
 
 class SSGSEATable extends Component {
@@ -57,7 +56,8 @@ class SSGSEATable extends Component {
     }
 
 
-    handleSelectionChange(value) {
+    handleSelectionChange(event) {
+        let value =event.target.value;
         if (value == "ss_tag1") {
             this.props.upateCurrentWorkingTabAndObject("ssGSEA")
         }
@@ -82,7 +82,8 @@ class SSGSEATable extends Component {
         const columns = [{
             title: (
                     <div style={{ textAlign: 'center' }}>
-                       <label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span><Input onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label>
+                       <label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span>
+                       <Input aria-label="input_ssg_name" onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label>
                       <div>NAME</div>
                 </div>
                 ),
@@ -98,7 +99,8 @@ class SSGSEATable extends Component {
         }, {
             title: (
                     <div style={{ textAlign: 'center' }}>
-                       <label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span><Input onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label>
+                       <label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span>
+                       <Input aria-label="input_ssg_search_logFC" onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label>
                        <div>logFC</div>
                 </div>
                 ),
@@ -115,7 +117,8 @@ class SSGSEATable extends Component {
         },{
             title: (
                     <div style={{ textAlign: 'center' }}>
-                        <label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label>
+                        <label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span>
+                        <Input aria-label="input_ssg_search_p_value" onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label>
                         <div>P.Value</div>
                 </div>
                 ),
@@ -133,7 +136,8 @@ class SSGSEATable extends Component {
         },{
             title:  (
                     <div style={{ textAlign: 'center' }}>
-                          <label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span><Input onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label>
+                          <label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span>
+                          <Input aria-label="input_ssg_search_adj_p_value" onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label>
                      <div>adj.P.Vale</div>
                 </div>
                 ),
@@ -150,7 +154,8 @@ class SSGSEATable extends Component {
         },  {
             title:  (
                     <div style={{ textAlign: 'center' }}>
-                        <label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span><Input onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label>
+                        <label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span>
+                        <Input aria-label="input_ssg_search_Avg_Enrichment_Score" onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label>
                         <div>Avg.Enrichment.Score</div>
                 </div>
                 ),
@@ -184,7 +189,8 @@ class SSGSEATable extends Component {
         },  {
             title:  (
                     <div style={{ textAlign: 'center' }}>
-                         <label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span><Input onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label>
+                         <label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span>
+                         <Input aria-label="input_ssg_search_b"  onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label>
                          <div>B</div>
                 </div>
                 ),
@@ -242,31 +248,31 @@ class SSGSEATable extends Component {
 
         let link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
-        let selection = [<div id={"ss_genset_select"}>     <Select defaultValue="human$H: Hallmark Gene Sets" 
+        let selection = [<div id={"ss_genset_select"}>     <select className="ant-select-selection ant-select-selection--single" defaultValue="human$H: Hallmark Gene Sets" 
                         id="ssGSEA_genset"
                         onChange={(e) => this.props.handleGeneChange(e)} 
                         aria-label="Gene Set For ssGSEA"
                       >
-                        <OptGroup label="Human">
-                          <Option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</Option>
-                          <Option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</Option>
-                          <Option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</Option>
-                          <Option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</Option>
-                          <Option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</Option>
-                          <Option value="human$C5: GO gene sets">C5: GO gene sets</Option>
-                          <Option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</Option>
-                          <Option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</Option>
-                        </OptGroup>
-                        <OptGroup label="Mouse">
-                          <Option value="mouse$Co-expression">Co-expression</Option>
-                          <Option value="mouse$Gene Ontology">Gene Ontology</Option>
-                          <Option value="mouse$Curated Pathway">Curated Pathway</Option>
-                          <Option value="mouse$Metabolic">Metabolic</Option>
-                          <Option value="mouse$TF targets">TF targets</Option>
-                          <Option value="mouse$miRNA targets">miRNA targets</Option>
-                          <Option value="mouse$Location">Location</Option>
-                        </OptGroup>
-                      </Select></div>]
+                        <optgroup label="Human">
+                          <option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</option>
+                          <option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</option>
+                          <option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</option>
+                          <option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</option>
+                          <option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</option>
+                          <option value="human$C5: GO gene sets">C5: GO gene sets</option>
+                          <option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</option>
+                          <option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</option>
+                        </optgroup>
+                        <optgroup label="Mouse">
+                          <option value="mouse$Co-expression">Co-expression</option>
+                          <option value="mouse$Gene Ontology">Gene Ontology</option>
+                          <option value="mouse$Curated Pathway">Curated Pathway</option>
+                          <option value="mouse$Metabolic">Metabolic</option>
+                          <option value="mouse$TF targets">TF targets</option>
+                          <option value="mouse$miRNA targets">miRNA targets</option>
+                          <option value="mouse$Location">Location</option>
+                        </optgroup>
+                      </select></div>]
 
         let tabs = [
             <div id="ss_tag1" className="ss_plot">
@@ -302,10 +308,10 @@ class SSGSEATable extends Component {
                                  <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
                             </div>
         ]
-        content = [<Select defaultValue="ss_tag1" style={{ width: 240 }} onChange={this.handleSelectionChange}>
-                                  <Option value="ss_tag1">Single Sample GSEA</Option>
-                                  <Option value="ss_tag2">Pathway Heatmap</Option>
-                                </Select>, selection, tabs]
+        content = [<select  className="ant-select-selection ant-select-selection--single" style={{ width: 240 }} onChange={this.handleSelectionChange}>
+                                  <option value="ss_tag1">Single Sample GSEA</option>
+                                  <option value="ss_tag2">Pathway Heatmap</option>
+                                </select>, selection, tabs]
 
 
         return content;

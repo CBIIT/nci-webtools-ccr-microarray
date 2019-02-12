@@ -43,35 +43,51 @@ class GSMData extends Component {
 
     isDataTableRendered(t) {
         console.log(t)
-        let iv = setInterval(clean508, 1000);
+        clean508();
 
-        let checkboxes = document.getElementsByClassName("ant-checkbox-wrapper")
-        if (checkboxes.length != 0) {
-            console.log("rendered")
-            console.log(t)
-        }
 
         function clean508() {
             console.log(t)
             let selectBox = document.getElementById("gsm-select")
             if (selectBox) {
                 let checkboxes = document.getElementsByClassName("ant-checkbox-wrapper");
-                if (checkboxes.length != 0) {
+                if (checkboxes) {
+                    if (checkboxes.length != 0) {
+                        // clearInterval(isDataTableRendered_iv);
+                        for (let i in checkboxes) {
+                            if (i != "length") {
+                                if (checkboxes[i]) {
+                                    if (checkboxes[i].firstElementChild) {
+                                        if (checkboxes[i].firstElementChild.firstElementChild) {
 
-                    for (let i in checkboxes) {
-                        let node = document.createElement("span");
-                        node.style.cssText = "display:none";
-                        let textnode = document.createTextNode("select groups");
-                        node.appendChild(textnode);
-                        if (!isNaN(parseInt(i))) {
-                            document.getElementsByClassName("ant-checkbox-wrapper")[parseInt(i)].appendChild(node)
-                            console.log("508")
+                                            let inputC = checkboxes[i].firstElementChild.firstElementChild;
+                                                inputC.setAttribute("id", "select" + i);
+                                                inputC.setAttribute("aria-label","select")
+                                            let inputD = checkboxes[i];
+                                                inputD.setAttribute("for", "select" + i);
+                                        }
+                                    }
+                                }
+
+                            }
+
+                            let node = document.createElement("span");
+
+                            node.style.cssText = "display:none";
+                            let textnode = document.createTextNode("select groups");
+                            node.appendChild(textnode);
+                            if (!isNaN(parseInt(i))) {
+                                document.getElementsByClassName("ant-checkbox-wrapper")[parseInt(i)].appendChild(node)
+                                console.log("508")
+                            }
                         }
+
                     }
-                    clearInterval(iv);
+
                 }
+
             } else {
-                clearInterval(iv);
+                // clearInterval(isDataTableRendered_iv);
             }
 
         }
@@ -361,9 +377,9 @@ class GSMData extends Component {
                 if (this.state.term === "") {
                     return true;
                 }
-                if (row["gsm"]&&row["gsm"].includes(this.state.term)) return true;
-                if (row["title"]&&row["title"].includes(this.state.term)) return true;
-                if (row["description"]&&row["description"].includes(this.state.term)) return true;
+                if (row["gsm"] && row["gsm"].includes(this.state.term)) return true;
+                if (row["title"] && row["title"].includes(this.state.term)) return true;
+                if (row["description"] && row["description"].includes(this.state.term)) return true;
 
                 return false;
             }

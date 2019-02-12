@@ -24,7 +24,7 @@ let emailTemplate = function (code,time,link,submit_time,project_id){
         "<p>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""+link+"\" target=\"_blank\">View Results</a></p>"+
         "<p>&nbsp;&nbsp;Please note that result links above will be available for the next 7 days.</p>" +
         "<br/>"+
-        "<p>Please contact us at <a href=\"NCIPIMixtureWebAdmin@mail.nih.gov\" target=\"_top\">NCIPIMixtureWebAdmin@mail.nih.gov </a>for more information or if you have any questions.</p>"+
+        "<p>Please contact us at <a href=\"NCIMicroArrayWebAdmin@mail.nih.gov\" target=\"_top\"> NCIMicroArrayWebAdmin@mail.nih.gov</a>for more information or if you have any questions.</p>"+
         "<br/>"+
         "<p>Respectfully,</p>" +
         "<p>MicroArray Web Tool</p>";
@@ -40,7 +40,7 @@ let emailFailedTemplate = function (code,time,submit_time,project_id){
         "<p>&nbsp;&nbsp;Submitted Time: <b>" +submit_time+ "</b> </p>"+
         "<p>&nbsp;&nbsp;Execution Time: <b>" +time+ "</b> </p>"+
         "<br/>" +
-        "<p>Please contact us at <a href=\"NCIPIMixtureWebAdmin@mail.nih.gov\" target=\"_top\">NCIPIMixtureWebAdmin@mail.nih.gov </a>for more information or if you have any questions.</p>"+
+        "<p>Please contact us at <a href=\"NCIMicroArrayWebAdmin@mail.nih.gov\" target=\"_top\"> NCIMicroArrayWebAdmin@mail.nih.gov</a>for more information or if you have any questions.</p>"+
         "<br/>"+
         "<p>Respectfully,</p>" +
         "<p>MicroArray Web Tool</p>";

@@ -1893,7 +1893,8 @@ class Analysis extends Component {
         });
     }
 
-    handleGeneChange = (value) => {
+    handleGeneChange = (event) => {
+        let value=event.target.value;
         let workflow = Object.assign({}, this.state.workflow);
         let reqBody = {};
         reqBody.projectId = workflow.projectID;
@@ -1946,21 +1947,21 @@ class Analysis extends Component {
         this.setState({ workflow: workflow });
     }
 
-    handleSelectType = (value) => {
+    handleSelectType = (event) => {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.analysisType = value;
+        workflow.analysisType = event.target.value;
         this.setState({ workflow: workflow });
     }
 
-    handleGroup1Select = (value) => {
+    handleGroup1Select = (event) => {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.group_1 = value;
+        workflow.group_1 = event.target.value;
         this.setState({ workflow: workflow });
     }
 
-    handleGroup2Select = (value) => {
+    handleGroup2Select = (event) => {
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.group_2 = value;
+        workflow.group_2 = event.target.value;
         this.setState({ workflow: workflow });
     }
 

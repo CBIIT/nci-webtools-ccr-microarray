@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Checkbox, Input, Select, Button } from 'antd';
-const { Option, OptGroup } = Select;
+import { Checkbox, Input,Button } from 'antd';
 
 class Contrast extends Component {
   
@@ -28,7 +27,7 @@ class Contrast extends Component {
         // find the unique value in grups 
         this.props.data.dataList.filter(function(v, i, self) {
             if (tmp_options.indexOf(v['groups']) == -1 && v['groups'] != "") {
-                var d = <Option key={v['groups']} value={v['groups']}>{v['groups']}</Option>
+                var d = <option key={v['groups']} value={v['groups']}>{v['groups']}</option>
                 options.unshift(d);
                 tmp_options.unshift(v['groups']);
             }
@@ -55,15 +54,15 @@ class Contrast extends Component {
               <span>Run Contrast</span>
             </Button></div>);
         }
-        let group_1_content = (<Select id="select-group-1" value={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
-            <Option value="-1" aria-activedescendant="select-group-1">---Select Group---</Option>
+        let group_1_content = (<select id="select-group-1" value={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
+            <option value="-1" aria-activedescendant="select-group-1">---select Group---</option>
             {options}
-          </Select>);
-        let group_2_content = (<Select id="select-group-2" value={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
-            <Option value="-1" aria-activedescendant="select-group-2">---Select Group---</Option>
+          </select>);
+        let group_2_content = (<select id="select-group-2" value={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
+            <option value="-1" aria-activedescendant="select-group-2">---select Group---</option>
 
             {options}
-          </Select>);
+          </select>);
 
         var content = "";
         if (options.length <= 1) {
@@ -74,14 +73,14 @@ class Contrast extends Component {
                 
                 <label className="title">Choose Contrast To Show:</label>
                 
-                <Select value={this.props.data.group_1} style={{ width: "100%" }}  disabled   aria-label="Select Group 1">
-                  <Option value="-1">---Select Group---</Option>
-                </Select>
+                <select value={this.props.data.group_1} style={{ width: "100%" }}  disabled   aria-label="select Group 1">
+                  <option value="-1">---select Group---</option>
+                </select>
                 
                 <label className="title">VS:</label>
-                 <Select value={this.props.data.group_2} style={{ width: "100%" }}  disabled aria-label="Select Group 2">
-                   <Option value="-1">---Select Group---</Option>
-                </Select>
+                 <select value={this.props.data.group_2} style={{ width: "100%" }}  disabled aria-label="select Group 2">
+                   <option value="-1">---select Group---</option>
+                </select>
                 
               </div>
               {queueBlock}
