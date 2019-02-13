@@ -63,18 +63,8 @@ process = function(){
   # cgroup2<-"RNA_1"
 
   if(action == "loadGSE"){
-     
-      #### 1) Process GEO files function takes gseid and returns ExpressionFeatureSet object  ####
-      #celfiles = processGEOfiles('pid','GSE37874 ', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
-     access_code<-toString(args[5])
-
-     # if(access_code=="test"){
-     #      data_repo_path<-paste0(toString(args[4]),"/","test",sep="")
-     #      celfiles = getLocalGEOfiles("test","GSE37874",c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'),data_repo_path) 
-     #      return(celfiles)
-     #  }
-
-   
+      
+      access_code<-toString(args[5])
       listGroups<-c()
       if(args[6]!=""){
         listGroups<-unlist((strsplit(args[6],",")))
@@ -85,10 +75,26 @@ process = function(){
         return ("Request field(s) is missing")
       }
 
-      celfiles = processGEOfiles(projectId,access_code,listGroups,data_repo_path)  
-      # remove downloaded tar file
-      fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
-      if (file.exists(fn)) file.remove(fn)
+      celfiles<-tryCatch(
+        {
+          # get geo files from upstream
+          return(processGEOfiles(projectId,access_code,listGroups,data_repo_path))
+          # remove downloaded tar file
+          fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
+          if (file.exists(fn)) file.remove(fn)
+        },
+        error =function(cond){
+          # add logger?
+          return(NULL)
+        },
+        warning = function(cond){
+          # add logger?
+          return(NULL)
+        },
+        finally={
+
+        }
+      
       return(celfiles)  
   }
 
