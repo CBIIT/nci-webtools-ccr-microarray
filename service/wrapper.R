@@ -372,7 +372,7 @@ process = function(){
 
     }
     if(ssGSEA_results == NULL){
-      return("ssgseaPathways fails")
+    
         re<-list(
                   ss_name="",
                   ss_data="",
