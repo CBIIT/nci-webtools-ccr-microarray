@@ -545,13 +545,13 @@ tr:nth-child(even) {
 
 #ssGSEA_genset {
     position: absolute;
-    left: 260px;
+    left: 230px;
     top: 50px;
-    width: 380px;
+    width: 250px;
 }
 
 #deg_select_option {
-    width: 330px;
+    width: 260px;
 }
 
 .nav>li>a {
