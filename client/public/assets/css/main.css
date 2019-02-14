@@ -547,7 +547,7 @@ tr:nth-child(even) {
     position: absolute;
     left: 260px;
     top: 50px;
-    width: 380px;
+    width: 250px;
 }
 
 #deg_select_option {
