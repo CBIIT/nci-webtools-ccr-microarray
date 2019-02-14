@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import DEGTable from './DEGTable'
 import PUGTable from './PUGTable'
 import PDGTable from './PDGTable'
-import { Select } from 'antd';
 
-const option = Select.option;
 
 
 class DEGBox extends Component {
