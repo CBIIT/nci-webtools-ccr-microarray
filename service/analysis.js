@@ -1549,19 +1549,19 @@ function JsonToObject(returnValue) {
         workflow.groups = "";
     }
 
-    if (returnValue.accessionCode || returnValue.accessionCode[0]) {
+    if (returnValue.accessionCode && returnValue.accessionCode[0]) {
         workflow.accessionCode = returnValue.accessionCode[0];
     } else {
         workflow.accessionCode = "";
     }
 
-    if (returnValue.group_1 || returnValue.group_1[0]) {
+    if (returnValue.group_1 && returnValue.group_1[0]) {
         workflow.group_1 = returnValue.group_1[0];
     } else {
         workflow.group_1 = "";
     }
 
-    if (returnValue.group_2 || returnValue.group_2[0]) {
+    if (returnValue.group_2 &&  returnValue.group_2[0]) {
         workflow.group_2 = returnValue.group_2[0];
     } else {
         workflow.group_2 = "";

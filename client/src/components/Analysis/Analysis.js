@@ -1906,8 +1906,8 @@ class Analysis extends Component {
         reqBody.projectId = workflow.projectID;
         reqBody.species = value.split("$")[0];
         reqBody.genSet = value.split("$")[1];
-        reqBody.group_1 = workflow.group_1;
-        reqBody.group_2 = workflow.group_2;
+        reqBody.group1 = workflow.group_1;
+        reqBody.group2 = workflow.group_2;
         //change button style
 
         workflow.progressing = true;
@@ -3194,7 +3194,7 @@ class Analysis extends Component {
                         }
                        
                         workflow2.accessionCode = result.accessionCode;
-                        workflow2.projectID = result.projectId;
+                        workflow2.projectID = result.projectId[0];
                         workflow2.group_1 = result.group_1;
                         workflow2.group_2 = result.group_2;
                         workflow2.groups = result.groups;
