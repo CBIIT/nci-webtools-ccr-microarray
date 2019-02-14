@@ -183,7 +183,7 @@ process = function(){
                    ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
                    saveRDS(ss_result,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
                            re<-list(
-                    ss_name=names(ss_result[1:1,]),
+                    ss_name=names(ss_result),
                     ss_data= ss_result[2:length(ss_result[,1]),],
                     uppath=l2p_pathways[[1]][[1]],
                     downpath=l2p_pathways[[1]][[2]],
@@ -235,15 +235,14 @@ process = function(){
           ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
          
            },error =function(cond){
-                
+                message(cond)
            },finally={
                    message("runSSGSEA finally")
                    file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
                    ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
-                   saveRDS(ss_result,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
                     re<-list(
-                    ss_name=names(ss_result[2:2,]),
-                    ss_data= ss_result[2:length(ss_result[,1]),],
+                    ss_name=names(ss_result),
+                    ss_data= ss_result[2:length(ss_result[,1]),]
                     )
                     write(toJSON(re),paste0(data_repo_path,"/ss_result.txt",sep=""))
             })
