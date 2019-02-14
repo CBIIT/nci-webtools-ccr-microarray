@@ -402,50 +402,55 @@ router.post('/runContrast', function(req, res) {
 
     R.execute("wrapper.R", data, function(err, returnValue) {
 
+        fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
+            if (err) {
+                res.json({
+                    status: 404,
+                    msg: err
+                });
+            } else {
 
-        if (err) {
-            res.json({
-                status: 404,
-                msg: returnValue
-            });
-        } else {
-            // store return value in session (deep copy)
-            req.session.runContrastData = toObject(returnValue);
-            req.session.option = req.body.group_1 + req.body.group_2 + req.body.genSet;
-            req.session.groups = req.body.groups;
-            req.session.projectId = req.body.projectId;
-            logger.info("API:/runContrast ", "store data in req.session")
-            //  // filter out data based on the filter
-            // if(req.body.actions == "runContrast"){
-            //      returnValue = filter(returnValue,req.body.pDEGs,req.body.foldDEGs,req.body.pPathways,req.body.foldssGSEA,req.body.pssGSEA);
-            // }
+                let re = JSON.parse(returnValue)
+                if (re.GSM) {
+                    // store return value in session (deep copy)
+                    req.session.runContrastData = JsonToObject(re);
+                    req.session.option = req.session.runContrastData.group_1 + req.session.runContrastData.group_2 + req.session.runContrastData.genSet;
+                    req.session.groups = req.session.runContrastData.groups;
+                    req.session.projectId = req.session.runContrastData.projectId;
+                    logger.info("store data in req.session")
+
+                    let return_data = "";
+
+                    return_data = {
+                        mAplotBN: req.session.runContrastData.maplotBN,
+                        mAplotAN: req.session.runContrastData.maplotAfter,
+                        group_1: req.session.runContrastData.group_1,
+                        group_2: req.session.runContrastData.group_2,
+                        groups: req.session.runContrastData.groups,
+                        projectId: req.session.runContrastData.projectId,
+                        accessionCode: req.session.runContrastData.accessionCode,
+                        gsm: re.GSM,
+                        mAplotBN: re.maplotBN,
+                        mAplotAN: re.maplotAfter
+                    }
 
 
-            let return_data = "";
+                    logger.info("Get Contrast result success")
+                    res.json({
+                        status: 200,
+                        data: return_data
+                    });
+                }else{
+                     res.json({
+                        status: 404,
+                        data: re
+                    });
+                }
 
-            return_data = {
-                mAplotBN: req.session.runContrastData.listPlots[1],
-                mAplotAN: req.session.runContrastData.listPlots[6]
+
             }
-            let type = req.body.targetObject;
+        })
 
-            if (type == "volcanoPlot") {
-                return_data = "/volcano.html"
-            }
-
-            if (type == "pathwayHeatMap") {
-
-                return_data = "/geneHeatmap.jpg"
-            }
-
-
-            logger.info("API:/runContrast ", "Contrast uses session ")
-            res.json({
-                status: 200,
-                data: return_data
-            });
-
-        }
     });
 
 });
@@ -1457,7 +1462,11 @@ function toObject(returnValue) {
     var list = "";
 
 
-    let d = returnValue.split("+++ssGSEA+++\"")[1];
+    let d = "";
+    if (returnValue.split("+++ssGSEA+++\"")) {
+        d = returnValue.split("+++ssGSEA+++\"")[1];
+    }
+
     // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
     let data_dir = d.substring(0, d.indexOf("{"));
     list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
