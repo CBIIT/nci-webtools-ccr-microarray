@@ -14,7 +14,8 @@ class DEGBox extends Component {
     }
 
 
-    handleSelectionChange(value) {
+    handleSelectionChange(event) {
+        let value = event.target.value;
         var list = document.getElementsByClassName("deg_plot");
         for (var i = 0; i < list.length; i++) {
             list[i].classList.add("hide");
