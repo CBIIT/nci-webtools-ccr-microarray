@@ -187,36 +187,38 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
     data.push(config.uploadPath);
     data.push(req.body.species);
     data.push(req.body.genSet);
-    data.push(config.configPath);
+   
+    data.push(req.body.group1);
+    data.push(req.body.group2);
+
+     data.push(config.configPath);
 
     R.execute("wrapper.R", data, function(err, returnValue) {
-        if (err) {
-            res.json({
-                status: 404,
-                msg: returnValue
-            });
-        } else {
 
+         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/ss_result.txt", 'utf8', function(err, returnValue) {
+            if (err) {
+                res.json({
+                    status: 404,
+                    msg: err
+                });
+            } else {
+                    let re = JSON.parse(returnValue)
+              
+                    // store return value in session (deep copy)
+                     let d = JsonToObject(re);
 
-            let d = returnValue.split("+++ssGSEA+++\"")[1];
-            // "/Users/cheny39/Documents/GitHub/nci-webtools-ccr-microarray/service/data/a891ca3a044443b78a8bc3c32fdaf02a/"
-            let data_dir = d.substring(0, d.indexOf("{"));
-            list = JSON.parse(decodeURIComponent(d.substring(d.indexOf("{"), d.length)));
-            let ssGSEA = list.ssGSEA.DEss;
-            for (let key in ssGSEA) {
-                ssGSEA = ssGSEA[key];
-            }
+                    // save result into session 
+                    if (req.session.runContrastData.ssGSEA) {
+                        req.session.runContrastData.ssGSEA =  d.ssGSEA;
+                    }
+                    logger.info("Get Contrast result success")
+                    res.json({
+                        status: 200,
+                        data: ""
+                    });
+                }
 
-
-            // save result into session 
-            if (req.session.runContrastData.ssGSEA) {
-                req.session.runContrastData.ssGSEA = ssGSEA;
-            }
-            res.json({
-                status: 200,
-                data: ""
-            });
-        }
+        })
 
     });
 

@@ -1906,6 +1906,8 @@ class Analysis extends Component {
         reqBody.projectId = workflow.projectID;
         reqBody.species = value.split("$")[0];
         reqBody.genSet = value.split("$")[1];
+        reqBody.group_1 = workflow.group_1;
+        reqBody.group_2 = workflow.group_2;
         //change button style
 
         workflow.progressing = true;
