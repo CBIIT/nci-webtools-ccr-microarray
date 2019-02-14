@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Select, message } from 'antd';
+import { message } from 'antd';
 import ReactSVG from 'react-svg'
 import Plot from 'react-plotly.js';
 
-const Option = Select.Option;
 
 
 class PostPlotsBox extends Component {
@@ -83,13 +82,13 @@ class PostPlotsBox extends Component {
 
 
 
-        let content = [<Select key="select_post_tag2" defaultValue="postHistogram" style={{ width: 240 }} onChange={this.handleSelectionChange}>
-                                  <Option key="post_opt_post_tag1" value="postHistogram">Histogram</Option>
-                                  <Option key="post_opt_post_tag2" value="postMAplots">MAplots</Option>
-                                  <Option key="post_opt_post_tag3" value="postBoxplots">Boxplots</Option>
-                                  <Option key="post_opt_post_tag4" value="postPCA">PCA</Option>
-                                  <Option key="post_opt_post_tag5" value="postHeatmap">Heatmap</Option>
-                                </Select>, tabs]
+        let content = [<select  className="ant-select-selection ant-select-selection--single" key="select_post_tag2" defaultValue="postHistogram" style={{ width: 240 }} onChange={this.handleSelectionChange}>
+                                  <option key="post_opt_post_tag1" value="postHistogram">Histogram</option>
+                                  <option key="post_opt_post_tag2" value="postMAplots">MAplots</option>
+                                  <option key="post_opt_post_tag3" value="postBoxplots">Boxplots</option>
+                                  <option key="post_opt_post_tag4" value="postPCA">PCA</option>
+                                  <option key="post_opt_post_tag5" value="postHeatmap">Heatmap</option>
+                                </select>, tabs]
 
 
         return (
