@@ -87,7 +87,7 @@ class SSGSEATable extends Component {
                       <div>NAME</div>
                 </div>
                 ),
-            dataIndex: '_row',
+            dataIndex: 'V1',
             sorter: true,
             render: (text, record, index) => {
 
@@ -104,7 +104,7 @@ class SSGSEATable extends Component {
                        <div>logFC</div>
                 </div>
                 ),
-            dataIndex: 'logFC',
+            dataIndex: 'V2',
             sorter: true,
             width: "10%",
             render: (text, record, index) => {
@@ -122,7 +122,7 @@ class SSGSEATable extends Component {
                         <div>P.Value</div>
                 </div>
                 ),
-            dataIndex: 'P.Value',
+            dataIndex: 'V5',
             sorter: true,
             width: "10%",
             defaultSortOrder: 'ascend',
@@ -141,7 +141,7 @@ class SSGSEATable extends Component {
                      <div>adj.P.Vale</div>
                 </div>
                 ),
-            dataIndex: 'adj.P.Val',
+            dataIndex: 'V6',
             sorter: true,
             width: "10%",
             render: (text, record, index) => {
@@ -159,7 +159,7 @@ class SSGSEATable extends Component {
                         <div>Avg.Enrichment.Score</div>
                 </div>
                 ),
-            dataIndex: 'Avg.Enrichment.Score',
+            dataIndex: 'V3',
             sorter: true,
             width: "20%",
             render: (text, record, index) => {
@@ -176,7 +176,7 @@ class SSGSEATable extends Component {
                         <div>t</div>
                 </div>
                 ),
-            dataIndex: 't',
+            dataIndex: 'V4',
             sorter: true,
             width: "10%",
             render: (text, record, index) => {
@@ -194,7 +194,7 @@ class SSGSEATable extends Component {
                          <div>B</div>
                 </div>
                 ),
-            dataIndex: 'B',
+            dataIndex: 'V7',
             sorter: true,
             width: "10%",
             render: (text, record, index) => {
@@ -308,7 +308,7 @@ class SSGSEATable extends Component {
                                  <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
                             </div>
         ]
-        content = [<select  className="ant-select-selection ant-select-selection--single" style={{ width: 240 }} onChange={this.handleSelectionChange}>
+        content = [<select  className="ant-select-selection ant-select-selection--single" style={{ width: 210 }} onChange={this.handleSelectionChange}>
                                   <option value="ss_tag1">Single Sample GSEA</option>
                                   <option value="ss_tag2">Pathway Heatmap</option>
                                 </select>, selection, tabs]

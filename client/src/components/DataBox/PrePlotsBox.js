@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import ReactSVG from 'react-svg'
-import { Select, message } from 'antd';
+import { message } from 'antd';
 import Plot from 'react-plotly.js';
 
 
-const Option = Select.Option;
 
 class PrePlotsBox extends Component {
 
@@ -80,14 +79,14 @@ class PrePlotsBox extends Component {
 
 
 
-        let content = [<Select key="select-pre-plots" defaultValue="preHistogram"
+        let content = [<select className="ant-select-selection ant-select-selection--single" key="select-pre-plots" defaultValue="preHistogram"
                         style = { { width: 240 } } onChange={ this.handleSelectionChange } >
-                        <Option key="pre_opt-tag1" value="preHistogram" > Histogram </Option> 
-                        <Option key="pre_opt-tag2" value="preMAplots" > MAplots </Option>
-                        <Option key="pre_opt-tag3" value="preBoxplots" > Boxplots </Option> 
-                        <Option key="pre_opt-tag4" value="preRLE" > RLE </Option> 
-                        <Option key="pre_opt-tag5" value="preNUSE" > NUSE </Option> 
-                        </Select>, tabs]
+                        <option key="pre_opt-tag1" value="preHistogram" > Histogram </option> 
+                        <option key="pre_opt-tag2" value="preMAplots" > MAplots </option>
+                        <option key="pre_opt-tag3" value="preBoxplots" > Boxplots </option> 
+                        <option key="pre_opt-tag4" value="preRLE" > RLE </option> 
+                        <option key="pre_opt-tag5" value="preNUSE" > NUSE </option> 
+                        </select>, tabs]
 
 
 

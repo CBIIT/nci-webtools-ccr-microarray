@@ -545,13 +545,13 @@ tr:nth-child(even) {
 
 #ssGSEA_genset {
     position: absolute;
-    left: 260px;
+    left: 230px;
     top: 50px;
-    width: 380px;
+    width: 250px;
 }
 
 #deg_select_option {
-    width: 330px;
+    width: 260px;
 }
 
 .nav>li>a {
@@ -1021,6 +1021,10 @@ input#input_group_name {
 
 .ant-table-wrapper{
     padding-top: 7px;
+}
+
+#input-define-group{
+        width: calc(100% - 68px);
 }
 @media only screen and (max-width: 600px) {
     .container-board-left .blocks {
