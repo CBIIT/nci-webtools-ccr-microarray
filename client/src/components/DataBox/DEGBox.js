@@ -4,7 +4,7 @@ import PUGTable from './PUGTable'
 import PDGTable from './PDGTable'
 import { Select } from 'antd';
 
-const Option = Select.Option;
+const option = Select.option;
 
 
 class DEGBox extends Component {
@@ -55,12 +55,12 @@ class DEGBox extends Component {
         ]
 
 
-        let content = [<Select id="deg_select_option" defaultValue="deg_tag1" onChange={this.handleSelectionChange}>
-                    <Option value="deg_tag1">Differentially Expressed Genes</Option>
-                    <Option value="deg_tag2">Pathways for Upregulated Genes</Option>
-                    <Option value="deg_tag3">Pathways for Downregulated Genes</Option>
-                    <Option value="deg_tag4">Interactive Volcano Plot</Option>
-                  </Select>, tabs]
+        let content = [<select   className="ant-select-selection ant-select-selection--single" id="deg_select_option" defaultValue="deg_tag1" onChange={this.handleSelectionChange}>
+                    <option value="deg_tag1">Differentially Expressed Genes</option>
+                    <option value="deg_tag2">Pathways for Upregulated Genes</option>
+                    <option value="deg_tag3">Pathways for Downregulated Genes</option>
+                    <option value="deg_tag4">Interactive Volcano Plot</option>
+                  </select>, tabs]
 
         return (
             <div>
