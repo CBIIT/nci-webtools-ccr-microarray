@@ -308,7 +308,7 @@ class SSGSEATable extends Component {
                                  <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
                             </div>
         ]
-        content = [<select  className="ant-select-selection ant-select-selection--single" style={{ width: 240 }} onChange={this.handleSelectionChange}>
+        content = [<select  className="ant-select-selection ant-select-selection--single" style={{ width: 210 }} onChange={this.handleSelectionChange}>
                                   <option value="ss_tag1">Single Sample GSEA</option>
                                   <option value="ss_tag2">Pathway Heatmap</option>
                                 </select>, selection, tabs]
