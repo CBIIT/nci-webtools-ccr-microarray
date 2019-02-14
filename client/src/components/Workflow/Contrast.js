@@ -54,11 +54,11 @@ class Contrast extends Component {
               <span>Run Contrast</span>
             </Button></div>);
         }
-        let group_1_content = (<select id="select-group-1" value={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
+        let group_1_content = (<select id="select-group-1" className="ant-select-selection ant-select-selection--single" value={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
             <option value="-1" aria-activedescendant="select-group-1">---select Group---</option>
             {options}
           </select>);
-        let group_2_content = (<select id="select-group-2" value={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
+        let group_2_content = (<select id="select-group-2" className="ant-select-selection ant-select-selection--single" value={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
             <option value="-1" aria-activedescendant="select-group-2">---select Group---</option>
 
             {options}
@@ -73,12 +73,12 @@ class Contrast extends Component {
                 
                 <label className="title">Choose Contrast To Show:</label>
                 
-                <select value={this.props.data.group_1} style={{ width: "100%" }}  disabled   aria-label="select Group 1">
+                <select className="ant-select-selection ant-select-selection--single" value={this.props.data.group_1} style={{ width: "100%" }}  disabled   aria-label="select Group 1">
                   <option value="-1">---select Group---</option>
                 </select>
                 
                 <label className="title">VS:</label>
-                 <select value={this.props.data.group_2} style={{ width: "100%" }}  disabled aria-label="select Group 2">
+                 <select className="ant-select-selection ant-select-selection--single" value={this.props.data.group_2} style={{ width: "100%" }}  disabled aria-label="select Group 2">
                    <option value="-1">---select Group---</option>
                 </select>
                 
