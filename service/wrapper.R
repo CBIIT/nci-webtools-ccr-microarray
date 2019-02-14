@@ -63,18 +63,8 @@ process = function(){
   # cgroup2<-"RNA_1"
 
   if(action == "loadGSE"){
-     
-      #### 1) Process GEO files function takes gseid and returns ExpressionFeatureSet object  ####
-      #celfiles = processGEOfiles('pid','GSE37874 ', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
-     access_code<-toString(args[5])
-
-     # if(access_code=="test"){
-     #      data_repo_path<-paste0(toString(args[4]),"/","test",sep="")
-     #      celfiles = getLocalGEOfiles("test","GSE37874",c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'),data_repo_path) 
-     #      return(celfiles)
-     #  }
-
-   
+      
+      access_code<-toString(args[5])
       listGroups<-c()
       if(args[6]!=""){
         listGroups<-unlist((strsplit(args[6],",")))
@@ -85,10 +75,26 @@ process = function(){
         return ("Request field(s) is missing")
       }
 
-      celfiles = processGEOfiles(projectId,access_code,listGroups,data_repo_path)  
-      # remove downloaded tar file
-      fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
-      if (file.exists(fn)) file.remove(fn)
+      celfiles<-tryCatch(
+        {
+          # get geo files from upstream
+          return(processGEOfiles(projectId,access_code,listGroups,data_repo_path))
+          # remove downloaded tar file
+          fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
+          if (file.exists(fn)) file.remove(fn)
+        },
+        error =function(cond){
+          # add logger?
+          return(NULL)
+        },
+        warning = function(cond){
+          # add logger?
+          return(NULL)
+        },
+        finally={
+
+        }
+      
       return(celfiles)  
   }
 
@@ -107,7 +113,22 @@ process = function(){
         return ("Request field(s) is missing")
       }
 
-    celfiles = processCELfiles(projectId,listGroups,data_repo_path) 
+    celfiles <-tryCatch(
+        { 
+        processCELfiles(projectId,listGroups,data_repo_path)
+        },
+        error =function(cond){
+          # add logger?
+          return(NULL)
+        },
+        warning = function(cond){
+          # add logger?
+          return(NULL)
+        },
+        finally={
+
+        }
+      
     return(celfiles)  
   }
 
@@ -144,16 +165,49 @@ process = function(){
 
     #celfiles = getLocalGEOfiles('pid','GSE37874', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
    
-
+  celfiles<-tryCatch(
+        { 
     if(source=="upload"){
-          celfiles = getCELfiles(projectId,listGroups,data_repo_path) 
+          return (getCELfiles(projectId,listGroups,data_repo_path))
        }else{
           celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
        }
-    
+    },
+    error =function(cond){
+        # add logger?
+        return(NULL)
+    },
+    warning = function(cond){
+        # add logger?
+        return(NULL)
+    },
+    finally={
+
+    }
+    if(celfiles == NULL){
+      return("Get celfiles fails")
+
+    }
     saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
 
-    norm_celfiles = QCnorm(celfiles,data_repo_path)
+    norm_celfiles <-tryCatch({
+
+        return(QCnorm(celfiles,data_repo_path))
+    },
+    error =function(cond){
+        # add logger?
+        return(NULL)
+    },
+    warning = function(cond){
+        # add logger?
+        return(NULL)
+    },
+    finally={
+
+    }
+    if(norm_celfiles == NULL){
+      return("QCnorm fails")
+    }
 
     col_name<-pData(celfiles)$title
 
@@ -204,14 +258,98 @@ process = function(){
     # # or if using processCELfiles() function for test example, create this contrasts variable:
     # #cons = c("KO_1-Ctl_1","KO_2-Ctl_2")
  
-    diff_expr_genes = diffExprGenes(norm_celfiles[[11]],cons,projectId,data_repo_path)       #Call function
+    diff_expr_genes  <-tryCatch(
+    { 
+      return(diffExprGenes(norm_celfiles[[11]],cons,projectId,data_repo_path))      #Call function
+    },error =function(cond){
+        # add logger?
+        return(NULL)
+    },
+    warning = function(cond){
+        # add logger?
+        return(NULL)
+    },
+    finally={
+
+    }
+    if(diff_expr_genes == NULL){
+      re<-list(
+      ss_name="",
+      ss_data="",
+      uppath="",
+      downpath="",
+      deg="",
+      maplotBN=return_plot_data[[2]],
+      hisBefore=return_plot_data[[1]],
+      boxplotDataBN=return_plot_data[[3]],
+      RLE=return_plot_data[[4]],
+      NUSE=return_plot_data[[5]],
+      hisAfter=return_plot_data[[6]],
+      maplotAfter=return_plot_data[[7]],
+      boxplotDataAN=return_plot_data[[8]],
+      pcaData=return_plot_data[[9]],
+      heatmapAfterNorm=return_plot_data[[10]],
+      accessionCode=access_code,
+      groups=listGroups,
+      group_1=cgroup1,
+      group_2=cgroup2,
+      genSet=geneSet,
+      projectId=projectId,
+      GSM=celfiles@phenoData@data
+      )
+
+    write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))
+    return(list(norm_celfiles=return_plot_data,diff_expr_genes="diffExprGenes fails",pathways="",ssGSEA="",ssColumn=""))
+
+    }
     # # #### 4) l2p pathway analysis function, takes DEGs and species as input, returns list of up and downregulated pathways for each contrast ####
     # # # Output should dynamically respond to user-selected contrast
     saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
     ## auto correct species
 
     
-    l2p_pathways = l2pPathways(diff_expr_genes,species,data_repo_path,projectId,config_path)
+    l2p_pathways <-tryCatch(
+    {
+      return(l2pPathways(diff_expr_genes,species,data_repo_path,projectId,config_path))
+     },error =function(cond){
+        # add logger?
+        return(NULL)
+    },warning = function(cond){
+        # add logger?
+        return(NULL)
+    },finally={
+
+    }
+    if(l2p_pathways == NULL){
+      re<-list(
+      ss_name="",
+      ss_data="",
+      uppath="",
+      downpath="",
+      deg=diff_expr_genes$listDEGs[[1]],
+      maplotBN=return_plot_data[[2]],
+      hisBefore=return_plot_data[[1]],
+      boxplotDataBN=return_plot_data[[3]],
+      RLE=return_plot_data[[4]],
+      NUSE=return_plot_data[[5]],
+      hisAfter=return_plot_data[[6]],
+      maplotAfter=return_plot_data[[7]],
+      boxplotDataAN=return_plot_data[[8]],
+      pcaData=return_plot_data[[9]],
+      heatmapAfterNorm=return_plot_data[[10]],
+      accessionCode=access_code,
+      groups=listGroups,
+      group_1=cgroup1,
+      group_2=cgroup2,
+      genSet=geneSet,
+      projectId=projectId,
+      GSM=celfiles@phenoData@data
+      )
+
+    write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))
+    return(list(norm_celfiles=return_plot_data,diff_expr_genes=diff_expr_genes[1],pathways="l2p_pathways fails",ssGSEA="",ssColumn=""))
+
+    }
 
     saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
 
@@ -219,7 +357,51 @@ process = function(){
     # # # Output should dynamically respond to user-selected contrast
     write(c(species,geneSet,config_path), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""))
 
-    ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
+    ssGSEA_results <-tryCatch(
+    {
+      return(ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path))
+    },error =function(cond){
+        # add logger?
+        return(NULL)
+    },
+    warning = function(cond){
+        # add logger?
+        return(NULL)
+    },
+    finally={
+
+    }
+    if(ssGSEA_results == NULL){
+    
+        re<-list(
+                  ss_name="",
+                  ss_data="",
+                  uppath=l2p_pathways[[1]][[1]],
+                  downpath=l2p_pathways[[1]][[2]],
+                  deg=diff_expr_genes$listDEGs[[1]],
+                  maplotBN=return_plot_data[[2]],
+                  hisBefore=return_plot_data[[1]],
+                  boxplotDataBN=return_plot_data[[3]],
+                  RLE=return_plot_data[[4]],
+                  NUSE=return_plot_data[[5]],
+                  hisAfter=return_plot_data[[6]],
+                  maplotAfter=return_plot_data[[7]],
+                  boxplotDataAN=return_plot_data[[8]],
+                  pcaData=return_plot_data[[9]],
+                  heatmapAfterNorm=return_plot_data[[10]],
+                  accessionCode=access_code,
+                  groups=listGroups,
+                  group_1=cgroup1,
+                  group_2=cgroup2,
+                  genSet=geneSet,
+                  projectId=projectId,
+                  GSM=celfiles@phenoData@data
+                )
+
+    write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))
+    return(list(norm_celfiles=return_plot_data,diff_expr_genes=diff_expr_genes[1],pathways=pathways=l2p_pathways,ssGSEA="ssgseaPathways fails",ssColumn=""))
+
+    }
 
     saveRDS(ssGSEA_results,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
 

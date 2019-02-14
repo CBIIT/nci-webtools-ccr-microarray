@@ -415,7 +415,7 @@ class GSMData extends Component {
                                   <Button >
                                     <span id="gsm-drop-down">25</span> <Icon type="down" />
                                   </Button>
-                            </Dropdown>of total {this.state.data.length} records
+                            </Dropdown>of total { this.state.renderData.filter(searchFilter, this).length} records
 
                         </div>
                         <div> 

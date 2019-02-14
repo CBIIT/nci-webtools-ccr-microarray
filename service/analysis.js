@@ -326,7 +326,7 @@ router.post('/getResultByProjectId', function(req, res) {
             if (err) {
                 res.json({
                     status: 404,
-                    msg: returnValue
+                    msg: err
                 });
             } else {
                 let re = JSON.parse(returnValue)
@@ -1500,16 +1500,62 @@ function JsonToObject(returnValue) {
 
 
     var workflow = {};
-    workflow.diff_expr_genes = returnValue.deg;
-    workflow.ssGSEA = returnValue.ss_data;
-    workflow.pathways_up = returnValue.uppath;
-    workflow.pathways_down = returnValue.downpath;
+    if (returnValue.deg) {
+        workflow.diff_expr_genes = returnValue.deg;
+    } else {
+        workflow.diff_expr_genes = "";
+    }
 
-    workflow.projectId = returnValue.projectId;
-    workflow.groups = returnValue.groups;
-    workflow.accessionCode = returnValue.accessionCode[0];
-    workflow.group_1 = returnValue.group_1[0];
-    workflow.group_2 = returnValue.group_2[0];
+    if (returnValue.ss_data) {
+        workflow.ssGSEA = returnValue.ss_data;
+    } else {
+        workflow.ssGSEA = "";
+    }
+
+    if (returnValue.uppath) {
+        workflow.pathways_up = returnValue.uppath;
+    } else {
+        workflow.pathways_up = "";
+    }
+
+    if (returnValue.downpath) {
+        workflow.pathways_down = returnValue.downpath;
+    } else {
+        workflow.pathways_down = "";
+    }
+
+
+    if (returnValue.projectId) {
+        workflow.projectId = returnValue.projectId;
+    } else {
+        workflow.projectId = "";
+    }
+
+
+    if (returnValue.groups) {
+        workflow.groups = returnValue.groups;
+    } else {
+        workflow.groups = "";
+    }
+
+    if (returnValue.accessionCode || returnValue.accessionCode[0]) {
+        workflow.accessionCode = returnValue.accessionCode[0];
+    } else {
+        workflow.accessionCode = "";
+    }
+
+    if (returnValue.group_1 || returnValue.group_1[0]) {
+        workflow.group_1 = returnValue.group_1[0];
+    } else {
+        workflow.group_1 = "";
+    }
+
+    if (returnValue.group_2 || returnValue.group_2[0]) {
+        workflow.group_2 = returnValue.group_2[0];
+    } else {
+        workflow.group_2 = "";
+    }
+
 
     workflow.listPlots = [returnValue.hisBefore,
         returnValue.maplotBN,
