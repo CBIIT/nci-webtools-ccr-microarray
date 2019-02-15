@@ -161,9 +161,16 @@ process = function(){
           # # # Output should dynamically respond to user-selected contrast
           saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
           ## auto correct species
+          species2<-"human"
+          if(grepl("mouse",celfiles@annotation)){
+              species2<-"mouse"
+            }
 
+          if(grepl("human",celfiles@annotation)){
+              species2<-"human"
+          }
           
-          l2p_pathways = l2pPathways(diff_expr_genes,species,data_repo_path,projectId,config_path)
+          l2p_pathways = l2pPathways(diff_expr_genes,species2,data_repo_path,projectId,config_path)
 
           saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
 

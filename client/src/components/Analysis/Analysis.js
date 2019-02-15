@@ -1260,11 +1260,25 @@ class Analysis extends Component {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'100%'} frameBorder={'0'} /></div>
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
     }
 
+    getVolcanoPlot(){
+        let workflow = Object.assign({}, this.state.workflow);
+        let volcanoPlot =  <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
+         workflow.volcanoPlot= <div>{volcanoPlot}</div>;
+        this.setState({ workflow: workflow });
+    }
+
+
+    onLoadComplete(){
+         let workflow = Object.assign({}, this.state.workflow);
+            workflow.progressing =false;
+          this.setState({ workflow: workflow });
+    }
+    
     getPCA() {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
@@ -1570,7 +1584,6 @@ class Analysis extends Component {
 
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
-
                         workflow.progressing = false;
                         workflow.NUSE.data = NUSERenderData;
                         workflow.NUSE.plot = <div> {NUSE}</div>;
@@ -1578,15 +1591,11 @@ class Analysis extends Component {
                         workflow.NUSE.style = plot_style;
                         this.setState({ workflow: workflow });
 
-
                     } else {
-
                         document.getElementById("message-pre-nuse").innerHTML = result.msg;
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
-
                     }
-
                 }).catch(error => console.log(error));
         } catch (error) {
             document.getElementById("message-pre-nuse").innerHTML = error;
@@ -1882,9 +1891,7 @@ class Analysis extends Component {
             window.tag_deg_plot_status = e;
         }
         if (e == "volcanoPlot") {
-             let workflow = Object.assign({}, this.state.workflow);
-             workflow.volcanoPlot=<iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()} width={'100%'} height={'60%'} frameBorder={'0'}/>;
-             this.setState({ workflow: workflow });
+             this.getVolcanoPlot();
         }
 
     }
@@ -2483,7 +2490,6 @@ class Analysis extends Component {
                         if (result.status == 200) {
 
                         }
-                        workflow.volcanoPlot = <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
                         workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                         workflow.uploading = false;
                         workflow.progressing = false;
@@ -2629,8 +2635,7 @@ class Analysis extends Component {
                                     this.getssGSEA();
                                     break;
                             }
-
-                            workflow.volcanoPlot = <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
+                            workflow.volcanoPlot=this.getVolcanoPlot();
                             workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                             workflow.compared = true;
                             workflow.done_gsea = true;
@@ -2895,10 +2900,12 @@ class Analysis extends Component {
             height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
             scene: workflow.PCA.layout.scene
         }
-        workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
+        if(!workflow.PCA.data==""){
+            workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
                              data={workflow.PCA.data} 
                              layout={pcaPlotLayout}  
                              /></div>;
+        }
         this.setState({
             workflow: workflow
         });
@@ -2911,13 +2918,16 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        workflow.BoxplotAN.plot = <Plot 
+        if(!workflow.BoxplotAN.data==""){
+             workflow.BoxplotAN.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.BoxplotAN.data} 
                              layout={workflow.BoxplotAN.layout}  
                              style={workflow.BoxplotAN.style} 
                              useResizeHandler={true}
                              />
+        }
+       
         this.setState({
             workflow: workflow
         });
@@ -2931,13 +2941,16 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        workflow.BoxplotBN.plot = <Plot 
+        if(!workflow.BoxplotBN.data==""){
+             workflow.BoxplotBN.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.BoxplotBN.data} 
                              layout={workflow.BoxplotBN.layout}  
                              style={workflow.BoxplotBN.style} 
                              useResizeHandler={true}
                              />
+        }
+       
         this.setState({
             workflow: workflow
         });
@@ -2949,13 +2962,16 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        workflow.RLE.plot = <Plot 
+        if(!workflow.RLE.data==""){
+             workflow.RLE.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.RLE.data} 
                              layout={workflow.RLE.layout}  
                              style={workflow.RLE.style} 
                              useResizeHandler={true}
                              />
+        }
+       
         this.setState({
             workflow: workflow
         });
@@ -2967,13 +2983,16 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        workflow.NUSE.plot = <Plot 
+        if(!workflow.NUSE.data==""){
+             workflow.NUSE.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.NUSE.data} 
                              layout={workflow.NUSE.layout}  
                              style={workflow.NUSE.style} 
                              useResizeHandler={true}
                              />
+        }
+       
         this.setState({
             workflow: workflow
         });
