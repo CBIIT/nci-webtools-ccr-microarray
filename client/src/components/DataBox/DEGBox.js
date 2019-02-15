@@ -39,7 +39,6 @@ class DEGBox extends Component {
         }
         if (value == "deg_tag4") {
             this.props.upateCurrentWorkingTabAndObject("volcanoPlot")
-            
         }
     }
 

@@ -1259,10 +1259,16 @@ class Analysis extends Component {
     getHeatmapolt() {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
-       
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'100%'} frameBorder={'0'} onLoad={this.onLoadComplete()}/></div>
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'100%'} frameBorder={'0'} /></div>
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
+        this.setState({ workflow: workflow });
+    }
+
+    getVolcanoPlot(){
+        let workflow = Object.assign({}, this.state.workflow);
+        let volcanoPlot =  <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
+         workflow.volcanoPlot= <div>{volcanoPlot}</div>;
         this.setState({ workflow: workflow });
     }
 
@@ -1885,7 +1891,7 @@ class Analysis extends Component {
             window.tag_deg_plot_status = e;
         }
         if (e == "volcanoPlot") {
-             this.getHeatmapolt();
+             this.getVolcanoPlot();
         }
 
     }
@@ -2629,7 +2635,7 @@ class Analysis extends Component {
                                     this.getssGSEA();
                                     break;
                             }
-
+                            workflow.volcanoPlot=this.getVolcanoPlot();
                             workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                             workflow.compared = true;
                             workflow.done_gsea = true;
@@ -2935,13 +2941,16 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        workflow.BoxplotBN.plot = <Plot 
+        if(!workflow.BoxplotBN.data==""){
+             workflow.BoxplotBN.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.BoxplotBN.data} 
                              layout={workflow.BoxplotBN.layout}  
                              style={workflow.BoxplotBN.style} 
                              useResizeHandler={true}
                              />
+        }
+       
         this.setState({
             workflow: workflow
         });
