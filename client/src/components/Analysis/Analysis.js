@@ -1259,12 +1259,22 @@ class Analysis extends Component {
     getHeatmapolt() {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
+        workflow.progressing =true;
+            workflow.loading_info="Loading";
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'100%'} frameBorder={'0'}/></div>
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'100%'} frameBorder={'0'} onload={this.onLoadComplete()}/></div>
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
     }
 
+
+    onLoadComplete(){
+         let workflow = Object.assign({}, this.state.workflow);
+            workflow.progressing =false;
+            workflow.loading_info="Loading";
+          this.setState({ workflow: workflow });
+    }
+    
     getPCA() {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
@@ -1882,9 +1892,7 @@ class Analysis extends Component {
             window.tag_deg_plot_status = e;
         }
         if (e == "volcanoPlot") {
-             let workflow = Object.assign({}, this.state.workflow);
-             workflow.volcanoPlot=<iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()} width={'100%'} height={'60%'} frameBorder={'0'}/>;
-             this.setState({ workflow: workflow });
+             this.getHeatmapolt();
         }
 
     }
@@ -2483,7 +2491,6 @@ class Analysis extends Component {
                         if (result.status == 200) {
 
                         }
-                        workflow.volcanoPlot = <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
                         workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                         workflow.uploading = false;
                         workflow.progressing = false;
@@ -2630,7 +2637,6 @@ class Analysis extends Component {
                                     break;
                             }
 
-                            workflow.volcanoPlot = <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
                             workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                             workflow.compared = true;
                             workflow.done_gsea = true;
