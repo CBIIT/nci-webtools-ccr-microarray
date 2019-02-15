@@ -17,10 +17,11 @@ class PostPlotsBox extends Component {
 
     componentDidMount() {
         if(this.props.data.dataList.length>0){
-            this.handleSelectionChange("postHistogram")
+            this.handleSelectionChange(null)
         }
     }
-    handleSelectionChange(value) {
+    handleSelectionChange(event) {
+        let value = event==null?"postHistogram":event.target.value;
         var list = document.getElementsByClassName("plot2");
         if (value == "postHistogram") { // 
             this.props.upateCurrentWorkingTabAndObject("getHistplotAN");
