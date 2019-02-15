@@ -2894,10 +2894,12 @@ class Analysis extends Component {
             height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
             scene: workflow.PCA.layout.scene
         }
-        workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
+        if(!workflow.PCA.data==""){
+            workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
                              data={workflow.PCA.data} 
                              layout={pcaPlotLayout}  
                              /></div>;
+        }
         this.setState({
             workflow: workflow
         });
