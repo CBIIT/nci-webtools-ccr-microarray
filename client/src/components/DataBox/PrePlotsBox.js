@@ -15,12 +15,12 @@ class PrePlotsBox extends Component {
 
     componentDidMount() {
         if(this.props.data.dataList.length>0){
-             this.handleSelectionChange("preHistogram")
+             this.handleSelectionChange(null)
         }
     }
 
-    handleSelectionChange(value) {
-
+    handleSelectionChange(event) {
+         let value = event==null?"preHistogram":event.target.value;
         var list = document.getElementsByClassName("plot1");
 
 

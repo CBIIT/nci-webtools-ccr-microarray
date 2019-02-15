@@ -1259,10 +1259,9 @@ class Analysis extends Component {
     getHeatmapolt() {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.progressing =true;
-            workflow.loading_info="Loading";
+       
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'100%'} frameBorder={'0'} onload={this.onLoadComplete()}/></div>
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'100%'} frameBorder={'0'} onLoad={this.onLoadComplete()}/></div>
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
     }
@@ -1271,7 +1270,6 @@ class Analysis extends Component {
     onLoadComplete(){
          let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing =false;
-            workflow.loading_info="Loading";
           this.setState({ workflow: workflow });
     }
     
@@ -1580,7 +1578,6 @@ class Analysis extends Component {
 
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
 
-
                         workflow.progressing = false;
                         workflow.NUSE.data = NUSERenderData;
                         workflow.NUSE.plot = <div> {NUSE}</div>;
@@ -1588,15 +1585,11 @@ class Analysis extends Component {
                         workflow.NUSE.style = plot_style;
                         this.setState({ workflow: workflow });
 
-
                     } else {
-
                         document.getElementById("message-pre-nuse").innerHTML = result.msg;
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
-
                     }
-
                 }).catch(error => console.log(error));
         } catch (error) {
             document.getElementById("message-pre-nuse").innerHTML = error;
@@ -2917,13 +2910,16 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        workflow.BoxplotAN.plot = <Plot 
+        if(!workflow.BoxplotAN.data==""){
+             workflow.BoxplotAN.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.BoxplotAN.data} 
                              layout={workflow.BoxplotAN.layout}  
                              style={workflow.BoxplotAN.style} 
                              useResizeHandler={true}
                              />
+        }
+       
         this.setState({
             workflow: workflow
         });
@@ -2955,13 +2951,16 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        workflow.RLE.plot = <Plot 
+        if(!workflow.RLE.data==""){
+             workflow.RLE.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.RLE.data} 
                              layout={workflow.RLE.layout}  
                              style={workflow.RLE.style} 
                              useResizeHandler={true}
                              />
+        }
+       
         this.setState({
             workflow: workflow
         });
@@ -2973,13 +2972,16 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        workflow.NUSE.plot = <Plot 
+        if(!workflow.NUSE.data==""){
+             workflow.NUSE.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.NUSE.data} 
                              layout={workflow.NUSE.layout}  
                              style={workflow.NUSE.style} 
                              useResizeHandler={true}
                              />
+        }
+       
         this.setState({
             workflow: workflow
         });
