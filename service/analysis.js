@@ -261,7 +261,7 @@ router.post("/qAnalysis", function(req, res) {
         queue.awsHander.sender(JSON.stringify(d), d.email, function(err, data) {
 
             let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
-            let html = emailer.emailFailedTemplate(data.code, 0, data.submit, data.projectId)
+            let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
             emailer.sendMail(config.mail.from, data.email, subject, "text", html)
 
         });
@@ -275,7 +275,7 @@ router.post("/qAnalysis", function(req, res) {
     queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function() {
 
         let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
-        let html = emailer.emailFailedTemplate(data.code, 0, data.submit, data.projectId)
+        let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
         emailer.sendMail(config.mail.from, data.email, subject, "text", html)
 
     })
