@@ -1026,6 +1026,8 @@ input#input_group_name {
 #input-define-group{
         width: calc(100% - 68px);
 }
+
+
 @media only screen and (max-width: 600px) {
     .container-board-left .blocks {
 

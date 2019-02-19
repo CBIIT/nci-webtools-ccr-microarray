@@ -55,11 +55,11 @@ class Contrast extends Component {
             </Button></div>);
         }
         let group_1_content = (<select id="select-group-1" className="ant-select-selection ant-select-selection--single" value={this.props.data.group_1} style={{ width: "100%" }}  onChange={this.props.handleGroup1Select}>
-            <option value="-1" aria-activedescendant="select-group-1">---select Group---</option>
+            <option value="-1" >---select Group---</option>
             {options}
           </select>);
         let group_2_content = (<select id="select-group-2" className="ant-select-selection ant-select-selection--single" value={this.props.data.group_2} style={{ width: "100%" }}  onChange={this.props.handleGroup2Select}>
-            <option value="-1" aria-activedescendant="select-group-2">---select Group---</option>
+            <option value="-1" >---select Group---</option>
 
             {options}
           </select>);
@@ -71,14 +71,13 @@ class Contrast extends Component {
                 <div>
                 <div className="block ">
                 
-                <label className="title">Choose Contrast To Show:</label>
-                
-                <select className="ant-select-selection ant-select-selection--single" value={this.props.data.group_1} style={{ width: "100%" }}  disabled   aria-label="select Group 1">
+                <label className="title" for="select-group-1">Choose Contrast To Show:</label>
+                <select id="select-group-1" className="ant-select-selection ant-select-selection--single" value={this.props.data.group_1} style={{ width: "100%" }}  disabled   aria-label="select Group 1">
                   <option value="-1">---select Group---</option>
                 </select>
                 
-                <label className="title">VS:</label>
-                 <select className="ant-select-selection ant-select-selection--single" value={this.props.data.group_2} style={{ width: "100%" }}  disabled aria-label="select Group 2">
+                <label className="title" for="select-group-2">VS:</label>
+                 <select  id="select-group-2"  className="ant-select-selection ant-select-selection--single" value={this.props.data.group_2} style={{ width: "100%" }}  disabled aria-label="select Group 2">
                    <option value="-1">---select Group---</option>
                 </select>
                 
@@ -92,9 +91,9 @@ class Contrast extends Component {
             content =
                 <div>
                <div className="block">
-                  <label className="title">Choose Contrast To Show: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+                  <label className="title"  for="select-group-1">Choose Contrast To Show: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_1_content}
-                  <label className="title">VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+                  <label className="title"  for="select-group-2">VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_2_content}
                  
                 </div>

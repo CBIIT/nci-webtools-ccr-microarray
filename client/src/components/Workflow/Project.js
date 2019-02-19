@@ -24,7 +24,7 @@ class Project extends Component {
             fileList: this.props.data.fileList
         };
 
-        let type_content = (<div className="row"> <div className="col-sm-12"><select className="ant-select-selection ant-select-selection--single" value={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
+        let type_content = (<div className="row"> <div className="col-sm-12"><select id="analysisType_selection" className="ant-select-selection ant-select-selection--single" value={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
             <option value="0">GEO Data</option>
             <option  value="1">CEL Files</option>
           </select></div></div>);
@@ -126,7 +126,7 @@ class Project extends Component {
             <div className="block">
               <div className="row">
                 <div className="col-sm-12">
-                  <label className="title">Choose Analysis Type</label>
+                  <label className="title" for='analysisType_selection'>Choose Analysis Type</label>
                 </div>
               </div>
           {type_content}
