@@ -1323,7 +1323,7 @@ class Analysis extends Component {
                                 height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
                                 scene: {
                                     xaxis: {
-                                        title: pcaData.col[0]+" "+pcaData.xlable+"%",
+                                        title: pcaData.col[0]+" ("+pcaData.xlable+"%)",
                                         backgroundcolor: "#DDDDDD",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,
@@ -1331,14 +1331,14 @@ class Analysis extends Component {
 
                                     },
                                     yaxis: {
-                                        title: pcaData.col[1]+" "+pcaData.ylable+"%",
+                                        title: pcaData.col[1]+" ("+pcaData.ylable+"%)",
                                         backgroundcolor: "#EEEEEE",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,
                                         zerolinecolor: "rgb(255, 255, 255)"
                                     },
                                     zaxis: {
-                                        title: pcaData.col[2]+" "+pcaData.zlable+"%",
+                                        title: pcaData.col[2]+" ("+pcaData.zlable+"%)",
                                         backgroundcolor: "#cccccc",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,
