@@ -1323,7 +1323,7 @@ class Analysis extends Component {
                                 height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
                                 scene: {
                                     xaxis: {
-                                        title: pcaData.col[0]+" "+pcaData.xlable+"%",
+                                        title: pcaData.col[0]+" ("+pcaData.xlable+"%)",
                                         backgroundcolor: "#DDDDDD",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,

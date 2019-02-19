@@ -7,7 +7,7 @@ var lib_path = require('path');
 var logger = require('../components/queue_logger');
 var bucketName = config.bucketName;
 
-var bucketPromise = new AWS.S3({ apiVersion: '2006-03-01' }).createBucket({ Bucket: bucketName }).promise();
+//var bucketPromise = new AWS.S3({ apiVersion: '2006-03-01' }).createBucket({ Bucket: bucketName }).promise();
 
 AWS.config.update({ region: 'us-east-1' });
 
@@ -30,6 +30,7 @@ awsHander.getQueueUrl = function(next) {
         if (err) {
 
             console.log(err, err.stack); // an error occurred
+            logger.info("[Queue]Get QueueUrl Fails " + err.stack)
             global.queue_url = "none";
             next(false);
         } else {
@@ -41,10 +42,6 @@ awsHander.getQueueUrl = function(next) {
 }
 
 awsHander.upload = function(path, prex,errHandler) {
-    // Handle promise fulfilled/rejected states
-
-    bucketPromise.then(
-        function(data) {
             fs.readdir(path, function(err, items) {
                 for (var i = 0; i < items.length; i++) {
 
@@ -59,26 +56,18 @@ awsHander.upload = function(path, prex,errHandler) {
                             Body: fileStream,
                             CacheControl: 'no-cache',
                         }, function(err, data) {
-                            //logger.info(arguments);
-                            // console.log('Successfully uploaded package.');
-                            // logger.info(err);
-                            // logger.info(data);
-                            //errHandler(err,data);
+                            
+                            if (err){
+                                logger.info("[Queue] upload file to S3 fails ")
+                                logger.info(err.stack)
+                                errHandler(err,data);
+                            }
                         });
                     }
 
                 }
             });
-        }).catch(
-        function(err) {
-            console.error(err, err.stack);
-            logger.info("[Queue] upload file to S3 fails ")
-            logger.info("Err")
-            logger.info(err.stack)
-            logger.info("[Queue] Send EMail To Client")
-            logger.info(to)
-            errHandler()
-        });
+       
 }
 
 
