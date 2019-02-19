@@ -360,10 +360,10 @@ class DataBox extends Component {
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
         > <div  style={{display:this.state.added?"none":"block"}}>
-          <p style={{color: "#215a82"}}><b>{number_select} Selected GSM(s)</b></p>
+          <p style={{color: "#215a82"}}><b><label for="textArea-group-selected">{number_select} Selected GSM(s)</label></b></p>
            <p style={{display: selected_gsms==""&&this.state.visible==true?"block":"none"}} className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
-          <p> <label for="textArea-group-selected"><span style={{display:"none"}}>Group selected</span> <TextArea id="textArea-group-selected" autosize={false}  disabled style={{width:'100%',"color": "black"}} value={selected_gsms}/></label></p>
-          <p style={{color: "#215a82"}}><b>Group Name<span style={{color:"red","paddingLeft":"5px"}}> *</span></b> <span style={{color:"#777777"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
+          <p> <TextArea id="textArea-group-selected" autosize={false}  disabled style={{width:'100%',"color": "black"}} value={selected_gsms}/></p>
+          <p style={{color: "#215a82"}}><b>Group Name<span style={{color:"red","paddingLeft":"5px"}}> *</span></b> <span style={{color:"#555"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
            <p className="err-message" id="message-gsm-group"></p>
           <p> 
             <label for="input-define-group">

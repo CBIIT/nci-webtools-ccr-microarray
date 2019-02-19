@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Dropdown, Icon, Table, Select, Input, message, Modal, Button, Tooltip } from 'antd';
+import { Menu, Dropdown, Icon, Table, Input, message, Modal, Button, Tooltip } from 'antd';
 const Search = Input.Search;
 
 

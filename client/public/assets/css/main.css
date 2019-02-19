@@ -4,10 +4,18 @@ body {
     padding: 0;
     word-break: break-word;
 }
+.ant-table-wrapper a{
+     color: rgb(33, 90, 130) !important;
+  
+}
+
+#tab_help a{
+     color: rgb(33, 90, 130) !important;
+  
+}
 
 a {
-    color: #3070a7;
-    text-decoration: none;
+     text-decoration: none;
 }
 
 label {
@@ -861,7 +869,7 @@ div#ss_tag1 {
 
 div#deg-select {
     position: absolute;
-    top: 50px;
+    top: 75px;
     right: 125px;
 }
 
@@ -900,7 +908,7 @@ input#input_group_name {
 
 .err-message {
     font-size: 18px;
-    color: red;
+    color: #B22222;
 }
 
 #checkbox_queue span {
