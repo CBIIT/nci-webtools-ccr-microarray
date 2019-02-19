@@ -53,7 +53,7 @@ class DEGBox extends Component {
         ]
 
 
-        let content = [ <label for="deg_select_option"><span>label for deg section selection </span></label>,<select   className="ant-select-selection ant-select-selection--single" id="deg_select_option" defaultValue="deg_tag1" onChange={this.handleSelectionChange}>
+        let content = [ <label for="deg_select_option"><span>DEG section selection </span></label>,<select   className="ant-select-selection ant-select-selection--single" id="deg_select_option" defaultValue="deg_tag1" onChange={this.handleSelectionChange}>
                     <option value="deg_tag1">Differentially Expressed Genes</option>
                     <option value="deg_tag2">Pathways for Upregulated Genes</option>
                     <option value="deg_tag3">Pathways for Downregulated Genes</option>
