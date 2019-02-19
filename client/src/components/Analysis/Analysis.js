@@ -1331,14 +1331,14 @@ class Analysis extends Component {
 
                                     },
                                     yaxis: {
-                                        title: pcaData.col[1]+" "+pcaData.ylable+"%",
+                                        title: pcaData.col[1]+" ("+pcaData.ylable+"%)",
                                         backgroundcolor: "#EEEEEE",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,
                                         zerolinecolor: "rgb(255, 255, 255)"
                                     },
                                     zaxis: {
-                                        title: pcaData.col[2]+" "+pcaData.zlable+"%",
+                                        title: pcaData.col[2]+" ("+pcaData.zlable+"%)",
                                         backgroundcolor: "#cccccc",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,
