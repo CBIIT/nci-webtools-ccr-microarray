@@ -91,7 +91,7 @@ class SSGSEATable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3}}>
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.25}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -164,7 +164,7 @@ class SSGSEATable extends Component {
             width: "20%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.2}}>
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.25}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -172,7 +172,8 @@ class SSGSEATable extends Component {
         }, {
             title:  (
                     <div style={{ textAlign: 'center' }}>
-                       <label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label>
+                       <label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span>
+                       <Input aria-label="input_ssg_search_t" onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label>
                         <div>t</div>
                 </div>
                 ),
