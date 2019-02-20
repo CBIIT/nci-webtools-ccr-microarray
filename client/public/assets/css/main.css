@@ -875,13 +875,13 @@ div#deg-select {
 
 div#pathways-down-select {
     position: absolute;
-    top: 50px;
+    top: 75px;
     right: 125px;
 }
 
 div#pathways-up-select {
     position: absolute;
-    top: 49px;
+    top: 75px;
     right: 125px;
 }
 
@@ -893,7 +893,7 @@ div#deg-select button {
 
 div#ss-select {
     position: absolute;
-    top: 51px;
+    top: 75px;
     right: 125;
 }
 
@@ -1035,6 +1035,11 @@ input#input_group_name {
         width: calc(100% - 68px);
 }
 
+#ss_genset_select{
+        position: absolute;
+    left: 233px;
+    top: 50px;
+}
 
 @media only screen and (max-width: 600px) {
     .container-board-left .blocks {
