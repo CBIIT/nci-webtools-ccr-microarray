@@ -350,7 +350,7 @@ class DataBox extends Component {
             var d = { 'key': key, 'name': key, 'gsms': value };
             groups_data_list.push(d);
         })
-        let group_table = <Table columns={columns} dataSource={groups_data_list} pagination={false}/>
+        let group_table = <Table columns={columns} scroll={{ x: 600}}  dataSource={groups_data_list} pagination={false}/>
         let modal = "";
 
 
