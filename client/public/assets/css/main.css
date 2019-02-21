@@ -713,7 +713,7 @@ tr:nth-child(even) {
 
 #tab_analysis .ant-table-pagination {
     position: absolute;
-    top: -60px;
+    top: -64px;
     right: 100px;
 }
 
@@ -722,7 +722,7 @@ tr:nth-child(even) {
 #gsm-select {
     position: absolute;
     right: 237px;
-    top: 61px;
+    top: 55px;
 }
 
 #gsm-select button {
@@ -972,6 +972,7 @@ input#input_group_name {
 .div-export-gsm {
     float: right;
     padding-right: 10px;
+    margin-top: -9px;
 
 }
 
