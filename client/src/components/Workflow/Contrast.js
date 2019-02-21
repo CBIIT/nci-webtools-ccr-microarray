@@ -45,12 +45,12 @@ class Contrast extends Component {
         let button = "";
         if (this.props.data.group_1 != "-1" && this.props.data.group_2 != "-1" && this.props.data.group_1 != this.props.data.group_2) {
             button = (<div style={{"padding":"8px 5px 10px 5px","margin":"10px"}}>
-                 <Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
+                 <Button id="btn-run-contrast" className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
               <span>Run Contrast </span>
             </Button></div>);
         } else {
             button = (<div style={{"padding":"8px 5px 10px 5px","margin":"10px"}}>
-                <Button className="ant-btn upload-start ant-btn-default" onClick={this.props.runContrast} disabled >
+                <Button id="btn-run-contrast" className="ant-btn upload-start ant-btn-default" onClick={this.props.runContrast} disabled >
               <span>Run Contrast</span>
             </Button></div>);
         }
