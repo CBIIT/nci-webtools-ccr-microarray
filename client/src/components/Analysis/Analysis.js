@@ -213,7 +213,7 @@ let defaultState = {
         },
         geneHeatmap: "/ssgseaHeatmap1.jpg",
         volcanoPlot: "No Data",
-        volcanoPlotName:"/volcano.html"
+        volcanoPlotName: "/volcano.html"
     }
 };
 
@@ -1265,20 +1265,20 @@ class Analysis extends Component {
         this.setState({ workflow: workflow });
     }
 
-    getVolcanoPlot(){
+    getVolcanoPlot() {
         let workflow = Object.assign({}, this.state.workflow);
-        let volcanoPlot =  <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
-         workflow.volcanoPlot= <div>{volcanoPlot}</div>;
+        let volcanoPlot = <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
+        workflow.volcanoPlot = <div>{volcanoPlot}</div>;
         this.setState({ workflow: workflow });
     }
 
 
-    onLoadComplete(){
-         let workflow = Object.assign({}, this.state.workflow);
-            workflow.progressing =false;
-          this.setState({ workflow: workflow });
+    onLoadComplete() {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.progressing = false;
+        this.setState({ workflow: workflow });
     }
-    
+
     getPCA() {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
@@ -1323,7 +1323,7 @@ class Analysis extends Component {
                                 height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
                                 scene: {
                                     xaxis: {
-                                        title: pcaData.col[0]+" ("+pcaData.xlable+"%)",
+                                        title: pcaData.col[0] + " (" + pcaData.xlable + "%)",
                                         backgroundcolor: "#DDDDDD",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,
@@ -1331,14 +1331,14 @@ class Analysis extends Component {
 
                                     },
                                     yaxis: {
-                                        title: pcaData.col[1]+" ("+pcaData.ylable+"%)",
+                                        title: pcaData.col[1] + " (" + pcaData.ylable + "%)",
                                         backgroundcolor: "#EEEEEE",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,
                                         zerolinecolor: "rgb(255, 255, 255)"
                                     },
                                     zaxis: {
-                                        title: pcaData.col[2]+" ("+pcaData.zlable+"%)",
+                                        title: pcaData.col[2] + " (" + pcaData.zlable + "%)",
                                         backgroundcolor: "#cccccc",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,
@@ -1891,7 +1891,7 @@ class Analysis extends Component {
             window.tag_deg_plot_status = e;
         }
         if (e == "volcanoPlot") {
-             this.getVolcanoPlot();
+            this.getVolcanoPlot();
         }
 
     }
@@ -1907,7 +1907,7 @@ class Analysis extends Component {
     }
 
     handleGeneChange = (event) => {
-        let value=event.target.value;
+        let value = event.target.value;
         let workflow = Object.assign({}, this.state.workflow);
         let reqBody = {};
         reqBody.projectId = workflow.projectID;
@@ -2289,7 +2289,7 @@ class Analysis extends Component {
         reqBody.groups = [];
         reqBody.group_1 = workflow.group_1;
         reqBody.group_2 = workflow.group_2;
-        reqBody.dataList=[];
+        reqBody.dataList = [];
         if (workflow.uploaded) {
             reqBody.source = "upload";
         } else {
@@ -2635,7 +2635,7 @@ class Analysis extends Component {
                                     this.getssGSEA();
                                     break;
                             }
-                            workflow.volcanoPlot=this.getVolcanoPlot();
+                            workflow.volcanoPlot = this.getVolcanoPlot();
                             workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
                             workflow.compared = true;
                             workflow.done_gsea = true;
@@ -2869,7 +2869,11 @@ class Analysis extends Component {
 
     hideWorkFlow = () => {
         document.getElementsByClassName("container-board-left")[0].style.display = 'none';
-        document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 80;
+        if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
+            // when user use mobile, container-board-right set to be 100% width
+            document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 80;
+
+        }
         document.getElementById("panel-show").style.display = 'inherit';
         document.getElementById("panel-hide").style.display = 'none';
         this.resetBoxPlotAN();
@@ -2882,6 +2886,7 @@ class Analysis extends Component {
     showWorkFlow = () => {
         document.getElementsByClassName("container-board-left")[0].style.display = 'block';
         document.getElementsByClassName("container-board-right")[0].removeAttribute("style");
+
         document.getElementById("panel-show").style.display = 'none';
         document.getElementById("panel-hide").style.display = 'inherit';
         this.resetBoxPlotAN();
@@ -2900,7 +2905,7 @@ class Analysis extends Component {
             height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
             scene: workflow.PCA.layout.scene
         }
-        if(!workflow.PCA.data==""){
+        if (!workflow.PCA.data == "") {
             workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
                              data={workflow.PCA.data} 
                              layout={pcaPlotLayout}  
@@ -2918,8 +2923,8 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        if(!workflow.BoxplotAN.data==""){
-             workflow.BoxplotAN.plot = <Plot 
+        if (!workflow.BoxplotAN.data == "") {
+            workflow.BoxplotAN.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.BoxplotAN.data} 
                              layout={workflow.BoxplotAN.layout}  
@@ -2927,7 +2932,7 @@ class Analysis extends Component {
                              useResizeHandler={true}
                              />
         }
-       
+
         this.setState({
             workflow: workflow
         });
@@ -2941,8 +2946,8 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        if(!workflow.BoxplotBN.data==""){
-             workflow.BoxplotBN.plot = <Plot 
+        if (!workflow.BoxplotBN.data == "") {
+            workflow.BoxplotBN.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.BoxplotBN.data} 
                              layout={workflow.BoxplotBN.layout}  
@@ -2950,7 +2955,7 @@ class Analysis extends Component {
                              useResizeHandler={true}
                              />
         }
-       
+
         this.setState({
             workflow: workflow
         });
@@ -2962,8 +2967,8 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        if(!workflow.RLE.data==""){
-             workflow.RLE.plot = <Plot 
+        if (!workflow.RLE.data == "") {
+            workflow.RLE.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.RLE.data} 
                              layout={workflow.RLE.layout}  
@@ -2971,7 +2976,7 @@ class Analysis extends Component {
                              useResizeHandler={true}
                              />
         }
-       
+
         this.setState({
             workflow: workflow
         });
@@ -2983,8 +2988,8 @@ class Analysis extends Component {
             showlegend: false,
             autosize: true
         };
-        if(!workflow.NUSE.data==""){
-             workflow.NUSE.plot = <Plot 
+        if (!workflow.NUSE.data == "") {
+            workflow.NUSE.plot = <Plot 
                              id="BoxplotAN" 
                              data={workflow.NUSE.data} 
                              layout={workflow.NUSE.layout}  
@@ -2992,7 +2997,7 @@ class Analysis extends Component {
                              useResizeHandler={true}
                              />
         }
-       
+
         this.setState({
             workflow: workflow
         });
@@ -3196,22 +3201,22 @@ class Analysis extends Component {
                     if (result.status == 200) {
                         result = result.data;
                         let workflow2 = Object.assign({}, this.state.workflow);
-                        if(result.gsm[0].gsm){
-                             workflow2.dataList = result.gsm;
-                        }else{
-                             let tmp_gsms =[]
-                             for(let i in result.gsm){
+                        if (result.gsm[0].gsm) {
+                            workflow2.dataList = result.gsm;
+                        } else {
+                            let tmp_gsms = []
+                            for (let i in result.gsm) {
                                 tmp_gsms.push({
-                                    index:result.gsm[i].index,
-                                    title:result.gsm[i].title,
-                                    gsm:result.gsm[i]._row,
-                                    groups:result.gsm[i].groups,
-                                    colors:result.gsm[i].colors
+                                    index: result.gsm[i].index,
+                                    title: result.gsm[i].title,
+                                    gsm: result.gsm[i]._row,
+                                    groups: result.gsm[i].groups,
+                                    colors: result.gsm[i].colors
                                 })
                             }
                             workflow2.dataList = tmp_gsms;
                         }
-                       
+
                         workflow2.accessionCode = result.accessionCode;
                         workflow2.projectID = result.projectId[0];
                         workflow2.group_1 = result.group_1;
