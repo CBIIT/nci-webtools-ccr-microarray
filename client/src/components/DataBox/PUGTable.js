@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon, Table, Select, Input, message, Modal, Button, Tooltip } from 'antd';
 const Search = Input.Search;
-
+const minWidth=150;
 
 
 
@@ -156,8 +156,8 @@ class PUGTable extends Component {
             sorter: true,
               render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12}}>
-                                    <span style={{"color":"#40a9ff"}} data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12:minWidth}}>
+                                    <span style={{"color":"rgb(33, 90, 130)"}} data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
                 }
@@ -174,7 +174,7 @@ class PUGTable extends Component {
             sorter: true,
               render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -191,7 +191,7 @@ class PUGTable extends Component {
             width: "10%",
             sorter: true,
             render: (text, record, index) => (
-                <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
             ),
@@ -204,11 +204,11 @@ class PUGTable extends Component {
                 </div>
                 ),
             dataIndex: 'Type',
-            width: "7%",
+            width: "8%",
             sorter: true,
               render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -222,12 +222,12 @@ class PUGTable extends Component {
                 </div>
                 ),
             dataIndex: 'P_Value',
-            width: "9%",
+            width: "8%",
             sorter: true,
             defaultSortOrder: 'ascend',
               render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -245,7 +245,7 @@ class PUGTable extends Component {
             sorter: true,
               render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -263,7 +263,7 @@ class PUGTable extends Component {
             sorter: true,
               render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -280,7 +280,7 @@ class PUGTable extends Component {
             width: "10%",
             sorter: true,
             render: (text, record, index) => (
-                <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
             ),
@@ -297,7 +297,7 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -316,7 +316,7 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -335,7 +335,7 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -353,7 +353,7 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08}}>
+                    return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -443,7 +443,7 @@ class PUGTable extends Component {
                         loading={this.props.data.pathways_up.loading}
                         onChange={this.handleTableChange}
                         onRowClick={this.showHeatMap}
-                        scroll={{ x: 960}}
+                        scroll={{ x: 600}}
                         />
                     {modal}
                     </div>

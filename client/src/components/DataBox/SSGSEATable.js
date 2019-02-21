@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Button, Icon, Table, Input, Tooltip } from 'antd';
-
+const minWidth=150;
 
 class SSGSEATable extends Component {
 
@@ -91,7 +91,7 @@ class SSGSEATable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3}}>
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.25>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.25:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -109,7 +109,7 @@ class SSGSEATable extends Component {
             width: "10%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -128,7 +128,7 @@ class SSGSEATable extends Component {
             defaultSortOrder: 'ascend',
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -146,7 +146,7 @@ class SSGSEATable extends Component {
             width: "10%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -161,10 +161,10 @@ class SSGSEATable extends Component {
                 ),
             dataIndex: 'V3',
             sorter: true,
-            width: "20%",
+            width: "25%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.2}}>
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.25>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.25:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -172,7 +172,8 @@ class SSGSEATable extends Component {
         }, {
             title:  (
                     <div style={{ textAlign: 'center' }}>
-                       <label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span><Input onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label>
+                       <label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span>
+                       <Input aria-label="input_ssg_search_t" onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label>
                         <div>t</div>
                 </div>
                 ),
@@ -181,7 +182,7 @@ class SSGSEATable extends Component {
             width: "10%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -199,7 +200,7 @@ class SSGSEATable extends Component {
             width: "10%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1}}>
+                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -248,8 +249,7 @@ class SSGSEATable extends Component {
 
         let link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
-        let selection = [<div id={"ss_genset_select"}>     <select className="ant-select-selection ant-select-selection--single" defaultValue="human$H: Hallmark Gene Sets" 
-                        id="ssGSEA_genset"
+        let selection = [<div id={"ss_genset_select"}> <label for="ss_gene_set_select_option"><span>ssGSEA Gene Sets selection </span></label>   <select id="ss_gene_set_select_option" className="ant-select-selection ant-select-selection--single" defaultValue="human$H: Hallmark Gene Sets" 
                         onChange={(e) => this.props.handleGeneChange(e)} 
                         aria-label="Gene Set For ssGSEA"
                       >
@@ -299,7 +299,7 @@ class SSGSEATable extends Component {
                                 pagination={this.props.data.ssGSEA.pagination}
                                 loading={this.props.data.ssGSEA.loading}
                                 onChange={this.handleTableChange}
-                                scroll={{ x: 960}}
+                                scroll={{ x: 600}}
                                 />
                      </div>
             </div>,
@@ -308,7 +308,7 @@ class SSGSEATable extends Component {
                                  <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
                             </div>
         ]
-        content = [<select  className="ant-select-selection ant-select-selection--single" style={{ width: 210 }} onChange={this.handleSelectionChange}>
+        content = [<label for="ss_select_option"><span>ssGSEA section selection </span></label>,<select   id="ss_select_option" className="ant-select-selection ant-select-selection--single"  onChange={this.handleSelectionChange}>
                                   <option value="ss_tag1">Single Sample GSEA</option>
                                   <option value="ss_tag2">Pathway Heatmap</option>
                                 </select>, selection, tabs]
