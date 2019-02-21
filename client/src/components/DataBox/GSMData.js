@@ -6,6 +6,8 @@ const Search = Input.Search;
 const Option = Select.Option;
 const Selections = []
 
+const minWidth=150;
+
 class GSMData extends Component {
 
     state = {
@@ -329,7 +331,7 @@ class GSMData extends Component {
                 defaultSortOrder: 'ascend',
                 sorter: (a, b) => ('' + a.gsm).localeCompare(b.gsm),
                 render: (text, record, index) => (
-                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.18}}>
+                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.18>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.18:minWidth}}>
                               <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                           </div>
                 ),
@@ -339,7 +341,7 @@ class GSMData extends Component {
                 width: '30%',
                 sorter: (a, b) => ('' + a.title).localeCompare(b.title),
                 render: (text, record, index) => (
-                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3}}>
+                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3:minWidth}}>
                           <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
@@ -349,7 +351,7 @@ class GSMData extends Component {
                 width: '30%',
                 sorter: (a, b) => a.description.length - b.description.length,
                 render: (text, record, index) => (
-                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3}}>
+                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.3:minWidth}}>
                           <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
@@ -359,7 +361,7 @@ class GSMData extends Component {
                 width: '15%',
                 sorter: (a, b) => ('' + a.groups).localeCompare(b.groups),
                 render: (text, record, index) => (
-                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.15}}>
+                    <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.15>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.15:minWidth}}>
                           <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
                 ),
@@ -420,7 +422,7 @@ class GSMData extends Component {
                         </div>
                         <div> 
                         <Table 
-                            scroll={{ x: 960}} 
+                            scroll={{ x: 600}} 
                             pagination={this.state.pagination}  
                             rowSelection = { rowSelection } 
                             columns = { columns } 

@@ -4,18 +4,23 @@ body {
     padding: 0;
     word-break: break-word;
 }
-.ant-table-wrapper a{
-     color: rgb(33, 90, 130) !important;
-  
+
+.ant-table-wrapper a {
+    color: rgb(33, 90, 130) !important;
+
 }
 
-#tab_help a{
-     color: rgb(33, 90, 130) !important;
-  
+#tab_help a {
+    color: rgb(33, 90, 130) !important;
+
+}
+
+th {
+    min-width: 150px;
 }
 
 a {
-     text-decoration: none;
+    text-decoration: none;
 }
 
 label {
@@ -31,9 +36,11 @@ p {
     font-size: 18px;
 
 }
+
 .ant-select-disabled {
     color: #666 !important;
 }
+
 button,
 input,
 optgroup,
@@ -327,7 +334,8 @@ tr:nth-child(even) {
     position: absolute !important;
     top: 54px;
     left: 150px;
-    width: 200px !important;
+    max-width: 400px;
+    width: 200px;
     min-height: 15px;
     height: 35px;
 }
@@ -539,6 +547,9 @@ tr:nth-child(even) {
 
 }
 
+#pre-normalization-plots-selection {
+    width: 240px;
+}
 
 #tab_help .container {
     min-height: 1150px;
@@ -581,11 +592,16 @@ tr:nth-child(even) {
     .container-board-left {
         width: 100%;
         margin: 0 0 20 0;
+        display: block;
     }
 
     .container-board-right {
         width: 100%;
+        margin: 0 0 20 0;
+        display: block !important;
     }
+
+
 
     #tab_analysis .blocks {
         min-height: 480px;
@@ -602,11 +618,16 @@ tr:nth-child(even) {
     .container-board-left {
         width: 100%;
         margin: 0 0 20 0;
+        display: block;
     }
 
     .container-board-right {
         width: 100%;
+        margin: 0 0 20 0;
+        display: block !important;
     }
+
+
 
     #tab_analysis .blocks {
         min-height: 480px;
@@ -670,16 +691,18 @@ tr:nth-child(even) {
 }
 
 
-#deg_tag2 th.ant-table-column-has-filters >span{
+#deg_tag2 th.ant-table-column-has-filters>span {
     display: inline-block;
     vertical-align: top;
     height: 110px;
 }
-#deg_tag3  th.ant-table-column-has-filters >span{
+
+#deg_tag3 th.ant-table-column-has-filters>span {
     display: inline-block;
     vertical-align: top;
     height: 110px;
 }
+
 .js-plotly-plot {
     display: block;
     width: 80%;
@@ -850,21 +873,9 @@ tr:nth-child(even) {
 }
 
 
-div#deg_tag1 {
-    /* padding-top: 15px;*/
-}
-
-div#deg_tag2 {
-    /*padding-top: 15px;*/
-}
-
-div#deg_tag3 {
-    /*padding-top: 15px;*/
-}
-
-
-div#ss_tag1 {
-    /*padding-top: 15px;*/
+select {
+    font-size: 15px;
+    font-weight: 400;
 }
 
 div#deg-select {
@@ -994,6 +1005,7 @@ input#input_group_name {
     padding: 0px 10px;
     margin-left: -6px;
 }
+
 #ss_tag1 .ant-input {
     width: calc(100% + 12px) !important;
     padding: 0px 10px;
@@ -1021,61 +1033,221 @@ input#input_group_name {
     padding: 0px 10px;
     margin-left: -6px;
 }
+
 #deg_tag3 .ant-input {
     width: calc(100% + 12px) !important;
     padding: 0px 10px;
     margin-left: -6px;
 }
 
-.ant-table-wrapper{
+.ant-table-wrapper {
     padding-top: 7px;
 }
 
-#input-define-group{
-        width: calc(100% - 68px);
+#input-define-group {
+    width: calc(100% - 68px);
 }
 
-#ss_genset_select{
-        position: absolute;
+#ss_genset_select {
+    position: absolute;
     left: 233px;
     top: 50px;
 }
 
-@media only screen and (max-width: 600px) {
-    .container-board-left .blocks {
+.plot1 img {
+    width: 50%;
+}
 
-        min-height: 520px;
-        margin-bottom: 20px;
+.plot2 img {
+    width: 50%;
+}
+
+#post-normalization-plots-selection {
+    width: 240px
+}
+
+#ss_select_option {
+    width: 210px;
+}
+
+@media only screen and (max-width: 600px) {
+
+
+    #btn-controll-data-table-display {
+        display: none;
+    }
+
+    .container-board-left {
+        width: 100%;
+        display: block !important;
+        margin: 0 0 20 0;
+    }
+
+    .container-board-right {
+        width: 100%;
+        margin: 0 0 20 0;
+        display: block !important;
+    }
+
+
+    #tab_analysis .blocks {
+        min-height: 480px;
+    }
+
+    /* GSM  */
+    .div-group-gsm {
+        width: 100%;
+        padding: 0px 10px;
+    }
+
+    .div-group-gsm button {
+        width: 100%;
+        padding: 0px 10px;
+    }
+
+    .div-export-gsm {
+        float: inherit;
+        padding: 0px 10px;
+    }
+
+    .input-search-gsm {
+        position: inherit !important;
+        min-height: 15px;
+        height: 35px;
+        width: : 100%;
+    }
+
+    #gsm-select {
+        position: inherit;
+        padding-top: 7px;
+        padding-left: 5px;
+    }
+
+    /*Pre-Normal-Plots*/
+    #pre-normalization-plots-selection {
+        width: 100%;
+    }
+
+    .plot1 img {
+        width: 90%;
+    }
+
+    /*Post-Normal-Plots*/
+
+    #post-normalization-plots-selection {
+        width: 100%
+    }
+
+    .plot2 img {
+        width: 90%;
+    }
+
+    #postPCA #scene {
+        top: 146px !important;
+    }
+
+
+    /*DEG*/
+
+
+    #deg_select_option {
+        width: 100%;
+    }
+
+    .div-export-deg {
+        float: inherit;
+        margin-top: 5px;
+        width: 100%;
+    }
+
+
+    .div-export-deg button {
+        width: 100%;
+    }
+
+    div#deg-select {
+        position: inherit;
+        margin-top: 5px;
+        margin-left: 2px;
+    }
+
+    /*pathwayUp*/
+    .div-export-pathwayUp {
+        float: inherit;
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    .div-export-pathwayUp button {
+        width: 100%;
+    }
+
+    div#pathways-up-select {
+        position: inherit;
+        margin-top: 5px;
+        margin-left: 2px;
+    }
+
+    /*pathwaydown*/
+
+    .div-export-pathwayDown {
+        float: inherit;
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    .div-export-pathwayDown button {
+        width: 100%;
+    }
+
+    div#pathways-down-select {
+        position: inherit;
+        margin-top: 5px;
+        margin-left: 2px;
+    }
+
+
+    /*ssgsea*/
+
+    #ss_select_option {
+        width: 100%;
+    }
+
+
+    #ss_genset_select {
+        position: inherit;
+        width: 100%;
+    }
+
+    #ss_genset_select select {
+        width: 100%;
+    }
+
+
+    .div-export-ss {
+        float: inherit;
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    .div-export-ss button {
+        width: 100%;
+    }
+
+    div#ss-select {
+        position: inherit;
+        margin-top: 5px;
+        margin-left: 2px;
+    }
+
+    #tab_analysis .ant-table-wrapper {
+        padding-top: 45px;
     }
 
     #tab_analysis .ant-table-pagination {
-        position: relative;
+        position: absolute;
         right: 0px;
-        top: 0px;
-    }
-
-    #deg_tag1 .ant-table-pagination {
-        position: relative;
-        right: 0px;
-        top: 0px;
-    }
-
-    #deg_tag2 .ant-table-pagination {
-        position: relative;
-        right: 0px;
-        top: 0px;
-    }
-
-    #deg_tag3 .ant-table-pagination {
-        position: relative;
-        right: 0px;
-        top: 0px;
-    }
-
-    #ss_tag1 .ant-table-pagination {
-        position: relative;
-        right: 0px;
-        top: 0px;
+        top: -55px;
     }
 
 
