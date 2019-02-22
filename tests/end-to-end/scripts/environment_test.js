@@ -7,4 +7,4 @@ describe('Test environmental Variables', function() {
         value.should.be.a('string');
         value.should.not.be.empty;
     });
-});
+});	

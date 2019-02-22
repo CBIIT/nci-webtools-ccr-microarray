@@ -1,0 +1,11 @@
+<testsuite name="Mocha Tests" tests="9" failures="0" errors="0" skipped="0" timestamp="Fri, 22 Feb 2019 16:36:34 GMT" time="9.352">
+<testcase classname="Microarray Smoke Test -About Page" name="Should have title &#x22;CCBR Microarray Analysis Workflow&#x22;" time="0.004"/>
+<testcase classname="Microarray Smoke Test -About Page" name="Should have navigation bar" time="0.005"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should have title &#x22;CCBR Microarray Analysis Workflow&#x22;" time="0.011"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Run Contrast Btn diabled" time="0.106"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab Pre-Normalization diabled" time="0.233"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab Post-Normalization diabled" time="0.232"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab DEG diabled" time="0.229"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab SSGSEA diabled" time="0.226"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab GSM Enabled" time="0.229"/>
+</testsuite>
