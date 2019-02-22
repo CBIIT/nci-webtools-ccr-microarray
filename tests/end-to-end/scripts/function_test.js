@@ -5,47 +5,8 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 const firefox = require('selenium-webdriver/firefox');
 
 
-describe('Microarray Smoke Test -About Page', function() {
 
-    this.timeout(0);
-    let driver,
-        website;
-    before(async function() {
-        const url = process.env.TEST_WEBSITE;
-        if (url) {
-            driver = await new Builder()
-                .forBrowser('firefox')
-                //.setFirefoxOptions(new firefox.Options().headless())
-                .build();
-
- 	//let driver = new Builder().forBrowser('firefox').build();
-            website = url;
-            await driver.get(website);
-            await driver.wait(until.elementLocated(By.xpath('//*[@id="tab_about"]/div/section/div/h3[2]')), 20000);
-        } else {
-            console.log("No TEST_WEBSITE set");
-            this.skip();
-        }
-    });
-
-    after(async function() {
-        driver.close();
-    });
-
-    it('Should have title "CCBR Microarray Analysis Workflow"', async function() {
-        const title = await driver.getTitle();
-        expect(title).is.equal('CCBR Microarray Analysis Workflow');
-    });
-
-    it('Should have navigation bar', async function() {
-        const nav = await driver.findElement(By.id('header-navbar'));
-        expect(nav).to.exist;
-    });
-
-});
-
-
-describe('Microarray Smoke Test -Analysis Page', function() {
+describe('Microarray function Test', function() {
 
     this.timeout(0);
     let driver,
@@ -171,48 +132,4 @@ it('Should group selection diabled', async function() {
     });
 	
 });
-
-
-
-describe('Microarray Smoke Test -Help Page', function() {
-
-    this.timeout(0);
-    let driver,
-        website;
-    before(async function() {
-        const url = process.env.TEST_WEBSITE;
-        if (url) {
-            driver = await new Builder()
-                .forBrowser('firefox')
-                //.setFirefoxOptions(new firefox.Options().headless())
-                .build();
-
- 	//let driver = new Builder().forBrowser('firefox').build();
-            website = url;
-            await driver.get(website);
-            await driver.wait(until.elementLocated(By.xpath('//*[@id="tab_about"]/div/section/div/h3[2]')), 20000);
-        } else {
-            console.log("No TEST_WEBSITE set");
-            this.skip();
-        }
-    });
-
-    after(async function() {
-        driver.close();
-    });
-
-    it('Should have content "uploading CEL files" ', async function() {
-        const helpBtn =  await driver.findElement(By.xpath('//*[@id="li-help"]/a'));
-        helpBtn.click();
-
-        let  content = await driver.findElement(By.xpath('//*[@id="tab_help"]/div/section/ul[1]/li[1]/p[1]'));
-    	content.getText().then(function(value){
-    		expect(value).to.contain('uploading CEL files')
-    	})
-    });
- 
-
-});
-
-
 
