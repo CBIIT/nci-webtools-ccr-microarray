@@ -1,0 +1,29 @@
+{
+  "name": "microarray-tests",
+  "version": "1.0.0",
+  "description": "microarray tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test:env;npm run test:smoke",
+    "test:env" :"mocha  -R xunit -O output=env-test.xml  end-to-end/scripts/environment_test.js",
+    "test:smoke": "mocha  -R xunit -O output=smoke-test.xml end-to-end/scripts/smoke_test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CBIIT/nci-webtools-ccr-microarray.git"
+  },
+  "keywords": [
+    "Microarray"
+  ],
+  "author": "Yizhen Chen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CBIIT/nci-webtools-ccr-microarray/issues"
+  },
+  "homepage": "https://github.com/CBIIT/nci-webtools-ccr-microarray#readme",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.0.0",
+    "selenium-webdriver": "^4.0.0-alpha.1"
+  }
+}
