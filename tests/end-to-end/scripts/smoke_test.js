@@ -155,7 +155,7 @@ it('Should submit a job to queue checked', async function() {
       		})
     });
 
-it('Should group selection diabled', async function() {
+it('Should group selection disabled', async function() {
         const analysisBtn =  await driver.findElement(By.xpath('//*[@id="li-analysis"]/a'));
         analysisBtn.click();
         const select1 = await driver.findElement(By.id('select-group-1'));

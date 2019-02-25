@@ -1,14 +1,49 @@
-<testsuite name="Mocha Tests" tests="12" failures="0" errors="0" skipped="0" timestamp="Fri, 22 Feb 2019 16:45:42 GMT" time="14.758">
-<testcase classname="Microarray Smoke Test -About Page" name="Should have title &#x22;CCBR Microarray Analysis Workflow&#x22;" time="0.005"/>
-<testcase classname="Microarray Smoke Test -About Page" name="Should have navigation bar" time="0.011"/>
-<testcase classname="Microarray Smoke Test -Analysis Page" name="Should have title &#x22;CCBR Microarray Analysis Workflow&#x22;" time="0.013"/>
-<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Run Contrast Btn diabled" time="0.093"/>
-<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab Pre-Normalization diabled" time="0.235"/>
-<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab Post-Normalization diabled" time="0.229"/>
-<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab DEG diabled" time="0.227"/>
-<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab SSGSEA diabled" time="0.228"/>
-<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab GSM enabled" time="0.231"/>
-<testcase classname="Microarray Smoke Test -Analysis Page" name="Should submit a job to queue checked" time="0.231"/>
-<testcase classname="Microarray Smoke Test -Analysis Page" name="Should group selection diabled" time="0.451"/>
-<testcase classname="Microarray Smoke Test -Help Page" name="Should have content &#x22;uploading CEL files&#x22; " time="0.011"/>
+<testsuite name="Mocha Tests" tests="5" failures="0" errors="4" skipped="0" timestamp="Fri, 22 Feb 2019 20:03:25 GMT" time="21.254">
+<testcase classname="Microarray function Test" name="Should be able to enter Accession Code and load data&#x22;" time="16.129"/>
+<testcase classname="Microarray function Test" name="Should be able to manager group&#x22;" time="0.911"><failure>element.isDisplayed is not a function
+TypeError: element.isDisplayed is not a function
+    at /Users/cheny39/Documents/GitHub/apps/microarray/app/tests/node_modules/selenium-webdriver/lib/until.js:318:20
+    at Promise (node_modules/selenium-webdriver/lib/webdriver.js:818:19)
+    at new Promise (&#x3C;anonymous&#x3E;)
+    at evaluateCondition (node_modules/selenium-webdriver/lib/webdriver.js:816:14)
+    at pollCondition (node_modules/selenium-webdriver/lib/webdriver.js:828:9)
+    at Promise (node_modules/selenium-webdriver/lib/webdriver.js:842:7)
+    at new Promise (&#x3C;anonymous&#x3E;)
+    at Driver.wait (node_modules/selenium-webdriver/lib/webdriver.js:825:18)
+    at Context.&#x3C;anonymous&#x3E; (end-to-end/scripts/function_test.js:86:19)
+    at &#x3C;anonymous&#x3E;
+    at process._tickCallback (internal/process/next_tick.js:189:7)</failure></testcase>
+<testcase classname="Microarray function Test" name="Should be able to select groups&#x22;" time="0"><failure>element.isEnabled is not a function
+TypeError: element.isEnabled is not a function
+    at /Users/cheny39/Documents/GitHub/apps/microarray/app/tests/node_modules/selenium-webdriver/lib/until.js:332:20
+    at Promise (node_modules/selenium-webdriver/lib/webdriver.js:818:19)
+    at new Promise (&#x3C;anonymous&#x3E;)
+    at evaluateCondition (node_modules/selenium-webdriver/lib/webdriver.js:816:14)
+    at pollCondition (node_modules/selenium-webdriver/lib/webdriver.js:828:9)
+    at Promise (node_modules/selenium-webdriver/lib/webdriver.js:842:7)
+    at new Promise (&#x3C;anonymous&#x3E;)
+    at Driver.wait (node_modules/selenium-webdriver/lib/webdriver.js:825:18)
+    at Context.&#x3C;anonymous&#x3E; (end-to-end/scripts/function_test.js:103:20)</failure></testcase>
+<testcase classname="Microarray function Test" name="Should be able to submit job to queue&#x22;" time="0"><failure>element.isEnabled is not a function
+TypeError: element.isEnabled is not a function
+    at /Users/cheny39/Documents/GitHub/apps/microarray/app/tests/node_modules/selenium-webdriver/lib/until.js:332:20
+    at Promise (node_modules/selenium-webdriver/lib/webdriver.js:818:19)
+    at new Promise (&#x3C;anonymous&#x3E;)
+    at evaluateCondition (node_modules/selenium-webdriver/lib/webdriver.js:816:14)
+    at pollCondition (node_modules/selenium-webdriver/lib/webdriver.js:828:9)
+    at Promise (node_modules/selenium-webdriver/lib/webdriver.js:842:7)
+    at new Promise (&#x3C;anonymous&#x3E;)
+    at Driver.wait (node_modules/selenium-webdriver/lib/webdriver.js:825:18)
+    at Context.&#x3C;anonymous&#x3E; (end-to-end/scripts/function_test.js:118:21)</failure></testcase>
+<testcase classname="Microarray function Test" name="Should be able to run contrast locally&#x22;" time="0"><failure>element.isEnabled is not a function
+TypeError: element.isEnabled is not a function
+    at /Users/cheny39/Documents/GitHub/apps/microarray/app/tests/node_modules/selenium-webdriver/lib/until.js:332:20
+    at Promise (node_modules/selenium-webdriver/lib/webdriver.js:818:19)
+    at new Promise (&#x3C;anonymous&#x3E;)
+    at evaluateCondition (node_modules/selenium-webdriver/lib/webdriver.js:816:14)
+    at pollCondition (node_modules/selenium-webdriver/lib/webdriver.js:828:9)
+    at Promise (node_modules/selenium-webdriver/lib/webdriver.js:842:7)
+    at new Promise (&#x3C;anonymous&#x3E;)
+    at Driver.wait (node_modules/selenium-webdriver/lib/webdriver.js:825:18)
+    at Context.&#x3C;anonymous&#x3E; (end-to-end/scripts/function_test.js:140:20)</failure></testcase>
 </testsuite>
