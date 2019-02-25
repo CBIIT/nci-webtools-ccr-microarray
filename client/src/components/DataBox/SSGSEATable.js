@@ -138,7 +138,7 @@ class SSGSEATable extends Component {
                     <div style={{ textAlign: 'center' }}>
                           <label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span>
                           <Input aria-label="input_ssg_search_adj_p_value" onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label>
-                     <div>adj.P.Vale</div>
+                     <div>adj.P.Value</div>
                 </div>
                 ),
             dataIndex: 'V6',
