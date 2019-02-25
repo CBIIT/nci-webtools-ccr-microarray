@@ -109,7 +109,7 @@ class SSGSEATable extends Component {
             width: "10%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
+                return <div className="single-line" >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -128,7 +128,7 @@ class SSGSEATable extends Component {
             defaultSortOrder: 'ascend',
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
+                return <div className="single-line">
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -138,7 +138,7 @@ class SSGSEATable extends Component {
                     <div style={{ textAlign: 'center' }}>
                           <label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span>
                           <Input aria-label="input_ssg_search_adj_p_value" onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label>
-                     <div>adj.P.Value</div>
+                     <div>adj.P.Val</div>
                 </div>
                 ),
             dataIndex: 'V6',
@@ -146,14 +146,14 @@ class SSGSEATable extends Component {
             width: "10%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
+                return <div className="single-line" >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
         },  {
             title:  (
-                    <div style={{ textAlign: 'center' }}>
+                    <div style={{ textAlign: 'center', "width":"190px"}}>
                         <label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span>
                         <Input aria-label="input_ssg_search_Avg_Enrichment_Score" onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label>
                         <div>Avg.Enrichment.Score</div>
@@ -164,7 +164,7 @@ class SSGSEATable extends Component {
             width: "25%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.25>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.25:minWidth}}>
+                return <div className="single-line" s>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -182,7 +182,7 @@ class SSGSEATable extends Component {
             width: "10%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
+                return <div className="single-line" >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -200,7 +200,7 @@ class SSGSEATable extends Component {
             width: "10%",
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
+                return <div className="single-line" >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -299,7 +299,7 @@ class SSGSEATable extends Component {
                                 pagination={this.props.data.ssGSEA.pagination}
                                 loading={this.props.data.ssGSEA.loading}
                                 onChange={this.handleTableChange}
-                                scroll={{ x: 600}}
+                                scroll={{ x: 600}} 
                                 />
                      </div>
             </div>,

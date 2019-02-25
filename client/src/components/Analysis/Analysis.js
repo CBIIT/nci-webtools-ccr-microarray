@@ -2898,7 +2898,7 @@ class Analysis extends Component {
         document.getElementsByClassName("container-board-left")[0].style.display = 'none';
         if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
             // when user use mobile, container-board-right set to be 100% width
-            document.getElementsByClassName("container-board-right")[0].style.width = document.getElementById("header-nci").offsetWidth - 80;
+            document.getElementsByClassName("container-board-right")[0].style.width = "1350 ";
 
         }
         document.getElementById("panel-show").style.display = 'inherit';
