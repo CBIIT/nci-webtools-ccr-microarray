@@ -4,9 +4,10 @@
   "description": "microarray tests",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test:env;npm run test:smoke",
+    "test": "npm run test:env;npm run test:smoke;npm run test:fn",
     "test:env" :"mocha  -R xunit -O output=env-test.xml  end-to-end/scripts/environment_test.js",
-    "test:smoke": "mocha  -R xunit -O output=smoke-test.xml end-to-end/scripts/smoke_test.js"
+    "test:smoke": "mocha  -R xunit -O output=smoke-test.xml end-to-end/scripts/smoke_test.js",
+     "test:fn": "mocha  -R xunit -O output=smoke-test.xml end-to-end/scripts/function_test.js"
   },
   "repository": {
     "type": "git",

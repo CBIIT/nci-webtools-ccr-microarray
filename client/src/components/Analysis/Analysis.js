@@ -302,8 +302,10 @@ class Analysis extends Component {
                 order: workflow.ssGSEA.sorting.order,
             },
             search_keyword: workflow.ssGSEA.search_keyword
-        }
-
+        };
+        workflow.progressing = true;
+        workflow.loading_info = "Export";
+        this.setState({ workflow: workflow });
         fetch('./api/analysis/getGSEA', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -402,13 +404,13 @@ class Analysis extends Component {
                         ]
                         for (let i in degData) {
                             exportData.push([
-                                degData[i]["_row"],
-                                degData[i]["logFC"],
-                                degData[i]["Avg.Enrichment.Score"],
-                                degData[i]["t"],
-                                degData[i]["P.Value"],
-                                degData[i]["adj.P.Val"],
-                                degData[i]["B"]
+                                degData[i]["V1"],
+                                degData[i]["V2"],
+                                degData[i]["V3"],
+                                degData[i]["V4"],
+                                degData[i]["V5"],
+                                degData[i]["V6"],
+                                degData[i]["V7"]
                             ])
                         }
 
@@ -421,9 +423,13 @@ class Analysis extends Component {
 
                     document.getElementById("message-ssgsea").innerHTML = result.msg
                 }
+                workflow.progressing = false;
+                workflow.loading_info = "Loading";
+                this.setState({ workflow: workflow });
 
-
-            }).catch(error => console.log(error));
+            }).catch(function(err){
+                console.log(err);
+            });
     }
 
     getssGSEA = (params = {}) => {
@@ -539,6 +545,10 @@ class Analysis extends Component {
             },
             search_keyword: workflow.pathways_up.search_keyword
         }
+
+          workflow.progressing = true;
+        workflow.loading_info = "Export";
+        this.setState({ workflow: workflow });
         fetch('./api/analysis/getUpPathWays', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -674,7 +684,9 @@ class Analysis extends Component {
 
                     document.getElementById("message-pug").innerHTML = "Contrast result no found";
                 }
-
+                workflow.progressing = false;
+                workflow.loading_info = "Loading";
+                this.setState({ workflow: workflow });
 
             }).catch(error => console.log(error));
     }
@@ -1125,6 +1137,10 @@ class Analysis extends Component {
             sorting: workflow.diff_expr_genes.sorting,
             search_keyword: workflow.diff_expr_genes.search_keyword
         }
+
+          workflow.progressing = true;
+        workflow.loading_info = "Export";
+        this.setState({ workflow: workflow });
         fetch('./api/analysis/getDEG', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -1252,6 +1268,10 @@ class Analysis extends Component {
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
                 }
+
+                  workflow.progressing = false;
+        workflow.loading_info = "Loading";
+        this.setState({ workflow: workflow });
 
             }).catch(error => console.log(error));
     }
@@ -2044,6 +2064,9 @@ class Analysis extends Component {
 
     exportGSE = () => {
         let workflow = Object.assign({}, this.state.workflow);
+          workflow.progressing = true;
+        workflow.loading_info = "Export";
+        this.setState({ workflow: workflow });
         var wb = XLSX.utils.book_new();
         wb.Props = {
             Title: "Export GSM Data",
@@ -2051,6 +2074,8 @@ class Analysis extends Component {
             Author: "Microarray",
             CreatedDate: new Date()
         };
+
+
         if (workflow.dataList.length != 0) {
             wb.SheetNames.push("Settings");
             let ws_data = [];
@@ -2087,7 +2112,9 @@ class Analysis extends Component {
             var ws2 = XLSX.utils.aoa_to_sheet(gsm);
             wb.Sheets["Results"] = ws2;
             var wbout = XLSX.writeFile(wb, "GSM_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
-
+              workflow.progressing = false;
+        workflow.loading_info = "loading";
+        this.setState({ workflow: workflow });
         }
     }
 
