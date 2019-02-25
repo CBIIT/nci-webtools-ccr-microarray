@@ -305,7 +305,7 @@ class SSGSEATable extends Component {
             </div>,
             <div id="ss_tag2" className="ss_plot hide" >
                                   <br/><br/>
-                                 <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
+                                 {this.props.data.geneHeatmap}
                             </div>
         ]
         content = [<label for="ss_select_option"><span>ssGSEA section selection </span></label>,<select   id="ss_select_option" className="ant-select-selection ant-select-selection--single"  onChange={this.handleSelectionChange}>
