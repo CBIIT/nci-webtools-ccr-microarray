@@ -583,6 +583,8 @@ tr:nth-child(even) {
     overflow: hidden;
 }
 
+
+
 @media (min-width: 365px) {
 
     #btn-controll-data-table-display {

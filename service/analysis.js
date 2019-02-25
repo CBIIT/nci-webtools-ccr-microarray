@@ -1165,7 +1165,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
             result = result.filter(function(r) {
                 var flag = false;
                 if (search_keyword.name != "") {
-                    if (r._row.toLowerCase().indexOf(search_keyword.name.toLowerCase()) != -1) {
+                    if (r["V1"].toLowerCase().indexOf(search_keyword.name.toLowerCase()) != -1) {
                         flag = true;
                     } else {
                         return false;
@@ -1174,7 +1174,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
                 }
 
                 if (search_keyword.search_logFC != "") {
-                    if (Math.abs(r["logFC"]) >= parseFloat(search_keyword.search_logFC)) {
+                    if (Math.abs(r["V2"]) >= parseFloat(search_keyword.search_logFC)) {
                         flag = true;
                     } else {
                         return false;
@@ -1184,7 +1184,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 
 
                 if (search_keyword.search_t != "") {
-                    if (r["t"] <= parseFloat(search_keyword.search_t)) {
+                    if (r["V4"] <= parseFloat(search_keyword.search_t)) {
                         flag = true;
                     } else {
                         return false;
@@ -1193,7 +1193,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
                 }
 
                 if (search_keyword.search_p_value != "") {
-                    if (r["P.Value"] <= parseFloat(search_keyword.search_p_value)) {
+                    if (r["V5"] <= parseFloat(search_keyword.search_p_value)) {
                         flag = true;
                     } else {
                         return false;
@@ -1202,7 +1202,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
                 }
 
                 if (search_keyword.search_Avg_Enrichment_Score != "") {
-                    if (r["Avg.Enrichment.Score"] <= parseFloat(search_keyword.search_Avg_Enrichment_Score)) {
+                    if (r["V3"] <= parseFloat(search_keyword.search_Avg_Enrichment_Score)) {
                         flag = true;
                     } else {
                         return false;
@@ -1211,7 +1211,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
                 }
 
                 if (search_keyword.search_adj_p_value != "") {
-                    if (r["adj.P.Val"] <= parseFloat(search_keyword.search_adj_p_value)) {
+                    if (r["V6"] <= parseFloat(search_keyword.search_adj_p_value)) {
                         flag = true;
                     } else {
                         return false;
@@ -1220,7 +1220,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
                 }
 
                 if (search_keyword.search_b != "") {
-                    if (r["B"] <= parseFloat(search_keyword.search_b)) {
+                    if (r["V7"] <= parseFloat(search_keyword.search_b)) {
                         flag = true;
                     } else {
                         return false;
