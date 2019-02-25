@@ -1,16 +1,16 @@
-<testsuite name="Mocha Tests" tests="5" failures="0" errors="4" skipped="0" timestamp="Fri, 22 Feb 2019 20:03:25 GMT" time="21.254">
-<testcase classname="Microarray function Test" name="Should be able to enter Accession Code and load data&#x22;" time="16.129"/>
-<testcase classname="Microarray function Test" name="Should be able to manager group&#x22;" time="0.911"><failure>element.isDisplayed is not a function
-TypeError: element.isDisplayed is not a function
-    at /Users/cheny39/Documents/GitHub/apps/microarray/app/tests/node_modules/selenium-webdriver/lib/until.js:318:20
-    at Promise (node_modules/selenium-webdriver/lib/webdriver.js:818:19)
-    at new Promise (&#x3C;anonymous&#x3E;)
-    at evaluateCondition (node_modules/selenium-webdriver/lib/webdriver.js:816:14)
-    at pollCondition (node_modules/selenium-webdriver/lib/webdriver.js:828:9)
-    at Promise (node_modules/selenium-webdriver/lib/webdriver.js:842:7)
-    at new Promise (&#x3C;anonymous&#x3E;)
-    at Driver.wait (node_modules/selenium-webdriver/lib/webdriver.js:825:18)
-    at Context.&#x3C;anonymous&#x3E; (end-to-end/scripts/function_test.js:86:19)
+<testsuite name="Mocha Tests" tests="5" failures="0" errors="5" skipped="0" timestamp="Mon, 25 Feb 2019 20:31:59 GMT" time="64.001">
+<testcase classname="Microarray function Test" name="Should be able to enter Accession Code and load data&#x22;" time="60.116"><failure>Waiting for element to be located By(css selector, *[id=&#x22;gsm-select&#x22;])
+Wait timed out after 60003ms
+TimeoutError: Waiting for element to be located By(css selector, *[id=&#x22;gsm-select&#x22;])
+Wait timed out after 60003ms
+    at /Users/cheny39/Documents/GitHub/apps/microarray/app/tests/node_modules/selenium-webdriver/lib/webdriver.js:834:17
+    at &#x3C;anonymous&#x3E;
+    at process._tickCallback (internal/process/next_tick.js:189:7)</failure></testcase>
+<testcase classname="Microarray function Test" name="Should be able to manager group&#x22;" time="0.006"><failure>Unable to locate element: //*[@id=&#x22;tab_analysis&#x22;]/div[1]/div[3]/div/div[2]/div[1]/div[2]/div[3]/div/div/div/div/div/div/div/table/tbody/tr[1]/td[1]/span/label/span[1]/input
+NoSuchElementError: Unable to locate element: //*[@id=&#x22;tab_analysis&#x22;]/div[1]/div[3]/div/div[2]/div[1]/div[2]/div[3]/div/div/div/div/div/div/div/table/tbody/tr[1]/td[1]/span/label/span[1]/input
+    at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:550:15)
+    at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:542:13)
+    at Executor.execute (node_modules/selenium-webdriver/lib/http.js:468:26)
     at &#x3C;anonymous&#x3E;
     at process._tickCallback (internal/process/next_tick.js:189:7)</failure></testcase>
 <testcase classname="Microarray function Test" name="Should be able to select groups&#x22;" time="0"><failure>element.isEnabled is not a function

@@ -6,6 +6,7 @@ import Help from '../Help/Help';
 import { Spin, Icon, Button, Modal } from 'antd';
 import Plot from 'react-plotly.js';
 import XLSX from 'xlsx';
+import imageExists from 'image-exists';
 
 
 const ButtonGroup = Button.Group;
@@ -211,7 +212,7 @@ let defaultState = {
             list_mAplotAN: "",
             Heatmapolt: "",
         },
-        geneHeatmap: "/ssgseaHeatmap1.jpg",
+        geneHeatmap: "no data",
         volcanoPlot: "No Data",
         volcanoPlotName: "/volcano.html"
     }
@@ -259,6 +260,8 @@ class Analysis extends Component {
         this.getCurrentNumberOfJobsinQueue();
         this.showWorkFlow = this.showWorkFlow.bind(this);
         this.hideWorkFlow = this.hideWorkFlow.bind(this);
+
+        this.getSSGSEAGeneHeatMap = this.getSSGSEAGeneHeatMap.bind(this);
 
 
     }
@@ -427,7 +430,7 @@ class Analysis extends Component {
                 workflow.loading_info = "Loading";
                 this.setState({ workflow: workflow });
 
-            }).catch(function(err){
+            }).catch(function(err) {
                 console.log(err);
             });
     }
@@ -517,8 +520,9 @@ class Analysis extends Component {
                     let min = 0;
                     let max = 99999;
                     let random = Math.random() * (+max - +min) + +min;
-                    workflow2.geneHeatmap = "/ssgseaHeatmap1.jpg?" + random
+
                     this.setState({ workflow: workflow2 });
+                    this.getSSGSEAGeneHeatMap();
 
                     this.resetSSGSEADisplay();
 
@@ -546,7 +550,7 @@ class Analysis extends Component {
             search_keyword: workflow.pathways_up.search_keyword
         }
 
-          workflow.progressing = true;
+        workflow.progressing = true;
         workflow.loading_info = "Export";
         this.setState({ workflow: workflow });
         fetch('./api/analysis/getUpPathWays', {
@@ -1138,7 +1142,7 @@ class Analysis extends Component {
             search_keyword: workflow.diff_expr_genes.search_keyword
         }
 
-          workflow.progressing = true;
+        workflow.progressing = true;
         workflow.loading_info = "Export";
         this.setState({ workflow: workflow });
         fetch('./api/analysis/getDEG', {
@@ -1269,9 +1273,9 @@ class Analysis extends Component {
                     document.getElementById("message-deg").innerHTML = result.msg;
                 }
 
-                  workflow.progressing = false;
-        workflow.loading_info = "Loading";
-        this.setState({ workflow: workflow });
+                workflow.progressing = false;
+                workflow.loading_info = "Loading";
+                this.setState({ workflow: workflow });
 
             }).catch(error => console.log(error));
     }
@@ -2064,7 +2068,7 @@ class Analysis extends Component {
 
     exportGSE = () => {
         let workflow = Object.assign({}, this.state.workflow);
-          workflow.progressing = true;
+        workflow.progressing = true;
         workflow.loading_info = "Export";
         this.setState({ workflow: workflow });
         var wb = XLSX.utils.book_new();
@@ -2112,9 +2116,9 @@ class Analysis extends Component {
             var ws2 = XLSX.utils.aoa_to_sheet(gsm);
             wb.Sheets["Results"] = ws2;
             var wbout = XLSX.writeFile(wb, "GSM_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
-              workflow.progressing = false;
-        workflow.loading_info = "loading";
-        this.setState({ workflow: workflow });
+            workflow.progressing = false;
+            workflow.loading_info = "loading";
+            this.setState({ workflow: workflow });
         }
     }
 
@@ -2296,6 +2300,27 @@ class Analysis extends Component {
         });
     }
 
+    getSSGSEAGeneHeatMap = () => {
+
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.geneHeatmap = "no data";
+        let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
+
+
+        imageExists(link, function(exists) {
+            if (exists) {
+                console.log("it exists");
+                workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
+                this.setState({
+                    workflow: workflow
+                });
+            } else {
+                console.log("oh well");
+            }
+        }.bind(this)).bind(this);
+
+
+    }
 
     runContrast = () => {
         let workflow = Object.assign({}, this.state.workflow);
@@ -2492,6 +2517,7 @@ class Analysis extends Component {
                 document.getElementById("message-use-queue").innerHTML = "Email is required"
                 workflow.uploading = false;
                 workflow.progressing = false;
+
                 this.setState({
                     workflow: workflow
                 });
@@ -2517,7 +2543,8 @@ class Analysis extends Component {
                         if (result.status == 200) {
 
                         }
-                        workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
+
+
                         workflow.uploading = false;
                         workflow.progressing = false;
                         workflow.QueueModalvisible = true;
@@ -2525,6 +2552,7 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
+                        this.getSSGSEAGeneHeatMap();
                     })
 
 
@@ -2632,7 +2660,7 @@ class Analysis extends Component {
                                     break;
 
                                 case "pathwayHeatMap":
-                                    workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
+                                    this.getSSGSEAGeneHeatMap();
                                     break;
                                 case "pathways_up":
                                     this.getPathwayUp()
@@ -2663,13 +2691,14 @@ class Analysis extends Component {
                                     break;
                             }
                             workflow.volcanoPlot = this.getVolcanoPlot();
-                            workflow.geneHeatmap = "/ssgseaHeatmap1.jpg";
+
                             workflow.compared = true;
                             workflow.done_gsea = true;
                             workflow.progressing = false;
                             this.setState({
                                 workflow: workflow
                             });
+                            this.getSSGSEAGeneHeatMap();
 
                             this.hideWorkFlow();
                         } else {
@@ -3269,7 +3298,7 @@ class Analysis extends Component {
                         }
                         workflow2.init = true;
                         workflow2.volcanoPlot = "/volcano.html";
-                        workflow2.geneHeatmap = "/ssgseaHeatmap1.jpg";
+
                         workflow2.compared = true;
                         workflow2.done_gsea = true;
                         workflow2.progressing = false;
@@ -3277,7 +3306,7 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow2
                         });
-
+                        this.getSSGSEAGeneHeatMap();
                         this.hideWorkFlow();
 
                         this.resetGSMDisplay();
