@@ -197,7 +197,7 @@ awsHander.download = (projectId, filePath, next) => {
     let params2 = {
         Bucket: config.bucketName,
         MaxKeys: 9000,
-        Prefix: "microarray/" + projectId
+        Prefix: config.queue_input_path+"/" + projectId
     };
     s3.listObjects(params2, (err, data) => {
         if (err) {
@@ -247,9 +247,9 @@ download = (projectId, key, filePath) => {
                         });
                     });
             }
-            logger.info("[Queue] Download file from S3")
-            logger.info("file")
-            logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
+            // logger.info("[Queue] Download file from S3")
+            // logger.info("file")
+            // logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
 
             //let fileStream =fs.createReadStream(path + "/" + items[i])
             fs.writeFile(filePath + "/" + projectId + "/" + key.replace(config.queue_input_path + "/" + projectId + "/", ""), data.Body, function(err) {
