@@ -35,7 +35,7 @@ class Contrast extends Component {
 
         let queueBlock = <div className="block ">
               <div  id="checkbox_queue">  <Checkbox checked={this.props.data.useQueue} onChange={this.handleSwitchChange} >Submit this job to a Queue</Checkbox></div>
-               <div className="queueMessage" style={{"paddingLeft":"23px"}}>(Jobs currently enquued: {this.props.data.numberOfTasksInQueue})</div>
+               <div className="queueMessage" style={{"paddingLeft":"23px"}}>(Jobs currently enqueued: {this.props.data.numberOfTasksInQueue})</div>
              <label className="title" > Email<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
              <Input  disabled={!this.props.data.useQueue} id="email"  aria-label="input email"  id="input-email" placeholder="email"/>
              <span className="queueMessage">Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</span>
@@ -45,12 +45,12 @@ class Contrast extends Component {
         let button = "";
         if (this.props.data.group_1 != "-1" && this.props.data.group_2 != "-1" && this.props.data.group_1 != this.props.data.group_2) {
             button = (<div style={{"padding":"8px 5px 10px 5px","margin":"10px"}}>
-                 <Button className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
+                 <Button id="btn-run-contrast" className="ant-btn upload-start ant-btn-primary" onClick={this.props.runContrast} >
               <span>Run Contrast </span>
             </Button></div>);
         } else {
             button = (<div style={{"padding":"8px 5px 10px 5px","margin":"10px"}}>
-                <Button className="ant-btn upload-start ant-btn-default" onClick={this.props.runContrast} disabled >
+                <Button id="btn-run-contrast" className="ant-btn upload-start ant-btn-default" onClick={this.props.runContrast} disabled >
               <span>Run Contrast</span>
             </Button></div>);
         }
@@ -71,12 +71,12 @@ class Contrast extends Component {
                 <div>
                 <div className="block ">
                 
-                <label className="title" for="select-group-1">Choose Contrast To Show:</label>
+                <label className="title" htmlFor="select-group-1">Choose Contrast To Show:</label>
                 <select id="select-group-1" className="ant-select-selection ant-select-selection--single" value={this.props.data.group_1} style={{ width: "100%" }}  disabled   aria-label="select Group 1">
                   <option value="-1">---select Group---</option>
                 </select>
                 
-                <label className="title" for="select-group-2">VS:</label>
+                <label className="title" htmlFor="select-group-2">VS:</label>
                  <select  id="select-group-2"  className="ant-select-selection ant-select-selection--single" value={this.props.data.group_2} style={{ width: "100%" }}  disabled aria-label="select Group 2">
                    <option value="-1">---select Group---</option>
                 </select>
@@ -91,9 +91,9 @@ class Contrast extends Component {
             content =
                 <div>
                <div className="block">
-                  <label className="title"  for="select-group-1">Choose Contrast To Show: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+                  <label className="title"  htmlFor="select-group-1">Choose Contrast To Show: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_1_content}
-                  <label className="title"  for="select-group-2">VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+                  <label className="title"  htmlFor="select-group-2">VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                   {group_2_content}
                  
                 </div>

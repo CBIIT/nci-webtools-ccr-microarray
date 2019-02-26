@@ -30,7 +30,7 @@ var execute = function(file, data, callback){
 
 	child.stderr.on('data', (e) => {
 		err_message += e.toString('utf8');
-		//logger.info("stderr:"+err_message);
+		logger.info("stderr:"+err_message);
 	});
 
 	child.on('disconnect',()=>{

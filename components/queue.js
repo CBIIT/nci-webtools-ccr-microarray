@@ -56,12 +56,10 @@ awsHander.upload = function(path, prex,errHandler) {
                             Body: fileStream,
                             CacheControl: 'no-cache',
                         }, function(err, data) {
-                            
-                            if (err){
-                                logger.info("[Queue] upload file to S3 fails ")
-                                logger.info(err.stack)
-                                errHandler(err,data);
-                            }
+                            logger.info("uplad finish")
+                           logger.info("uplad err:"+err);
+                           logger.info("uplad data:"+data);
+                            logger.info("uplad err stack:"+err.stack);
                         });
                     }
 
@@ -199,7 +197,7 @@ awsHander.download = (projectId, filePath, next) => {
     let params2 = {
         Bucket: config.bucketName,
         MaxKeys: 9000,
-        Prefix: "microarray/" + projectId
+        Prefix: config.queue_input_path+"/" + projectId
     };
     s3.listObjects(params2, (err, data) => {
         if (err) {
@@ -209,7 +207,7 @@ awsHander.download = (projectId, filePath, next) => {
         } else {
 
             let files = data.Contents;
-            console.log(files)
+            logger.info(files)
             for (var i in files) {
                 // download all files 
                 download(projectId, files[i].Key, filePath)
