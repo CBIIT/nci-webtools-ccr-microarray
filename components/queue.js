@@ -56,8 +56,10 @@ awsHander.upload = function(path, prex,errHandler) {
                             Body: fileStream,
                             CacheControl: 'no-cache',
                         }, function(err, data) {
-                           logger.info(err);
-                           logger.info(data);
+                            logger.info("uplad finish")
+                           logger.info("uplad err:"+err);
+                           logger.info("uplad data:"+data);
+                            logger.info("uplad err stack:"+err.stack);
                         });
                     }
 
@@ -205,7 +207,7 @@ awsHander.download = (projectId, filePath, next) => {
         } else {
 
             let files = data.Contents;
-            console.log(files)
+            logger.info(files)
             for (var i in files) {
                 // download all files 
                 download(projectId, files[i].Key, filePath)
