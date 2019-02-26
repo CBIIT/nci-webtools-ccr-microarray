@@ -56,12 +56,8 @@ awsHander.upload = function(path, prex,errHandler) {
                             Body: fileStream,
                             CacheControl: 'no-cache',
                         }, function(err, data) {
-                            
-                            if (err){
-                                logger.info("[Queue] upload file to S3 fails ")
-                                logger.info(err.stack)
-                                errHandler(err,data);
-                            }
+                           logger.info(err);
+                           logger.info(data);
                         });
                     }
 
