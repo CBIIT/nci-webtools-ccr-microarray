@@ -245,9 +245,9 @@ download = (projectId, key, filePath) => {
                         });
                     });
             }
-            // logger.info("[Queue] Download file from S3")
-            // logger.info("file")
-            // logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
+            logger.info("[Queue] Download file from S3")
+            logger.info("file")
+            logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
 
             //let fileStream =fs.createReadStream(path + "/" + items[i])
             fs.writeFile(filePath + "/" + projectId + "/" + key.replace(config.queue_input_path + "/" + projectId + "/", ""), data.Body, function(err) {
