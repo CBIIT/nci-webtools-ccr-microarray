@@ -2307,17 +2307,17 @@ class Analysis extends Component {
         let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
 
 
-        imageExists(link, function(exists) {
-            if (exists) {
-                console.log("it exists");
-                workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
-                this.setState({
-                    workflow: workflow
-                });
-            } else {
-                console.log("oh well");
-            }
-        }.bind(this)).bind(this);
+        // imageExists(link, function(exists) {
+        //     if (exists) {
+        //         console.log("it exists");
+        //         workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
+        //         this.setState({
+        //             workflow: workflow
+        //         });
+        //     } else {
+        //         console.log("oh well");
+        //     }
+        // }.bind(this)).bind(this);
 
 
     }
