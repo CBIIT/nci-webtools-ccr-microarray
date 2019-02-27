@@ -83,7 +83,7 @@ class PostPlotsBox extends Component {
 
 
 
-        let content = [<label for="post-normalization-plots-selection">Select Post-Normalization QC Plots</label>,<select  id="post-normalization-plots-selection" className="ant-select-selection ant-select-selection--single" key="select_post_tag2" defaultValue="postHistogram"  onChange={this.handleSelectionChange}>
+        let content = [<label key="label-post-normalization-plots-selection" htmlFor="post-normalization-plots-selection">Select Post-Normalization QC Plots</label>,<select  key="select-post-normalization-plots-selection" id="post-normalization-plots-selection" className="ant-select-selection ant-select-selection--single" key="select_post_tag2" defaultValue="postHistogram"  onChange={this.handleSelectionChange}>
                                   <option key="post_opt_post_tag1" value="postHistogram">Histogram</option>
                                   <option key="post_opt_post_tag2" value="postMAplots">MAplots</option>
                                   <option key="post_opt_post_tag3" value="postBoxplots">Boxplots</option>

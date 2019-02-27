@@ -152,7 +152,7 @@ class PUGTable extends Component {
         const columns = [{
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                  <label for="input_pathway_down_search_PATHWAY_ID"><span style={{display:"none"}}>input_pathway_down_search_PATHWAY_ID</span>
+                  <label htmlFor="input_pathway_down_search_PATHWAY_ID"><span style={{display:"none"}}>input_pathway_down_search_PATHWAY_ID</span>
                   <Input aria-label="input_pathway_down_search_PATHWAY_ID"  onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_down_search_PATHWAY_ID"/></label>
                                        <div>PATHWAY_ID</div>
                 </div>
@@ -173,7 +173,7 @@ class PUGTable extends Component {
             {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                 <label for="input_pathway_down_search_SOURCE"><span style={{display:"none"}}>input_pathway_down_search_SOURCE</span>
+                 <label htmlFor="input_pathway_down_search_SOURCE"><span style={{display:"none"}}>input_pathway_down_search_SOURCE</span>
                  <Input aria-label="input_pathway_down_search_SOURCE" onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_down_search_SOURCE"/></label>
                                       <div>SOURCE</div>
                 </div>
@@ -193,7 +193,7 @@ class PUGTable extends Component {
             {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                    <label for="input_pathway_down_search_DESCRIPTION"><span style={{display:"none"}}>input_pathway_down_search_DESCRIPTION</span>
+                    <label htmlFor="input_pathway_down_search_DESCRIPTION"><span style={{display:"none"}}>input_pathway_down_search_DESCRIPTION</span>
                     <Input aria-label="input_pathway_down_search_DESCRIPTION" onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_down_search_DESCRIPTION"/></label>
                                       <div>DESCRIPTION</div>
                 </div>
@@ -210,7 +210,7 @@ class PUGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                       <label for="input_pathway_down_search_TYPE"><span style={{display:"none"}}>input_pathway_down_search_TYPE</span>
+                       <label htmlFor="input_pathway_down_search_TYPE"><span style={{display:"none"}}>input_pathway_down_search_TYPE</span>
                        <Input  aria-label="input_pathway_down_search_TYPE"  onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_down_search_TYPE"/></label>
                                     <div>TYPE</div>
                 </div>
@@ -229,7 +229,7 @@ class PUGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                  <label for="input_pathway_down_search_p_value"><span style={{display:"none"}}>input_pathway_down_search_p_value</span>
+                  <label htmlFor="input_pathway_down_search_p_value"><span style={{display:"none"}}>input_pathway_down_search_p_value</span>
                   <Input aria-label="input_pathway_down_search_p_value"  onPressEnter={value=>search(value) }    placeholder="P_Value"  id="input_pathway_down_search_p_value"/></label>
                                       <div>P_VALUE</div>
                 </div>
@@ -249,7 +249,7 @@ class PUGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                       <label for="input_pathway_down_search_fdr"><span style={{display:"none"}}>input_pathway_down_search_fdr</span>
+                       <label htmlFor="input_pathway_down_search_fdr"><span style={{display:"none"}}>input_pathway_down_search_fdr</span>
                        <Input aria-label="input_pathway_down_search_fdr"   onPressEnter={value=>search(value) }    placeholder="FDR"  id="input_pathway_down_search_fdr"/></label>
                                      <div>FDR</div>
                 </div>
@@ -268,7 +268,7 @@ class PUGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                       <label for="input_pathway_down_search_RATIO"><span style={{display:"none"}}>input_pathway_down_search_RATIO</span>
+                       <label htmlFor="input_pathway_down_search_RATIO"><span style={{display:"none"}}>input_pathway_down_search_RATIO</span>
                        <Input aria-label="input_pathway_down_search_RATIO" onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_down_search_RATIO"/></label>
                                      <div>RATIO</div>
                 </div>
@@ -287,7 +287,7 @@ class PUGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                     <label for="input_pathway_down_search_GENE_LIST"><span style={{display:"none"}}>input_pathway_down_search_GENE_LIST</span>
+                     <label htmlFor="input_pathway_down_search_GENE_LIST"><span style={{display:"none"}}>input_pathway_down_search_GENE_LIST</span>
                      <Input aria-label="input_pathway_down_search_GENE_LIST" onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_down_search_GENE_LIST"/></label>
                                     <div>GENE_LIST</div>
                 </div>
@@ -304,7 +304,7 @@ class PUGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                           <label for="input_pathway_down_search_NUMBER_HITS"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_HITS</span>
+                           <label htmlFor="input_pathway_down_search_NUMBER_HITS"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_HITS</span>
                            <Input aria-label="input_pathway_down_search_NUMBER_HITS" onPressEnter={value=>search(value) }   placeholder="HITS"  id="input_pathway_down_search_NUMBER_HITS"/></label>
                                    <div>NUMBER_HITS</div>
                 </div>
@@ -323,7 +323,7 @@ class PUGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                         <label for="input_pathway_down_search_NUMBER_GENES_PATHWAY"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_GENES_PATHWAY</span>
+                         <label htmlFor="input_pathway_down_search_NUMBER_GENES_PATHWAY"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_GENES_PATHWAY</span>
                          <Input  aria-label="input_pathway_down_search_NUMBER_GENES_PATHWAY"  onPressEnter={value=>search(value) }   placeholder="GENES_PATHWAY"  id="input_pathway_down_search_NUMBER_GENES_PATHWAY"/></label>
                                    <div>NUMBER_GENES_PATHWAY</div>
                 </div>
@@ -343,7 +343,7 @@ class PUGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                        <label for="input_pathway_down_search_NUMBER_USER_GENES"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_USER_GENES</span>
+                        <label htmlFor="input_pathway_down_search_NUMBER_USER_GENES"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_USER_GENES</span>
                         <Input  aria-label="input_pathway_down_search_NUMBER_USER_GENES"  onPressEnter={value=>search(value) }   placeholder="USER_GENES"  id="input_pathway_down_search_NUMBER_USER_GENES"/></label>
                                     <div>NUMBER_USER_GENES</div>
                 </div>
@@ -362,7 +362,7 @@ class PUGTable extends Component {
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
-                       <label for="input_pathway_down_search_TOTAL_NUMBER_GENES"><span style={{display:"none"}}>input_pathway_down_search_TOTAL_NUMBER_GENES</span>
+                       <label htmlFor="input_pathway_down_search_TOTAL_NUMBER_GENES"><span style={{display:"none"}}>input_pathway_down_search_TOTAL_NUMBER_GENES</span>
                        <Input  aria-label="input_pathway_down_search_TOTAL_NUMBER_GENES" onPressEnter={value=>search(value) }   placeholder="GENES"  id="input_pathway_down_search_TOTAL_NUMBER_GENES"/></label>
                               <div>TOTAL_NUMBER_GENES</div>
                 </div>
@@ -467,7 +467,9 @@ class PUGTable extends Component {
                         pagination={this.props.data.pathways_down.pagination}
                         loading={this.props.data.pathways_down.loading}
                         onChange={this.handleTableChange}
-                        onRowClick={this.showHeatMap}
+                         onRow={(row, idx, event) => ({
+                                    onClick: () => { this.showHeatMap(row, idx, event); }
+                              })}
                         scroll={{ x: 600}}
                         />
                     {modal}

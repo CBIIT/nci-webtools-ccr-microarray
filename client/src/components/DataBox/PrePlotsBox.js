@@ -79,7 +79,7 @@ class PrePlotsBox extends Component {
 
 
 
-        let content = [<label for="pre-normalization-plots-selection">Select Pre-Normalization QC Plots</label>,<select id="pre-normalization-plots-selection" className="ant-select-selection ant-select-selection--single" key="select-pre-plots" defaultValue="preHistogram"
+        let content = [<label key="label-pre-normalization-plots-selection" htmlFor="pre-normalization-plots-selection">Select Pre-Normalization QC Plots</label>,<select key="pre-normalization-plots-selection" id="pre-normalization-plots-selection" className="ant-select-selection ant-select-selection--single" key="select-pre-plots" defaultValue="preHistogram"
                         onChange={ this.handleSelectionChange } >
                         <option key="pre_opt-tag1" value="preHistogram" > Histogram </option> 
                         <option key="pre_opt-tag2" value="preMAplots" > MAplots </option>
