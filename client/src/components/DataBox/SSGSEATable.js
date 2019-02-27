@@ -164,7 +164,7 @@ class SSGSEATable extends Component {
             width: "25%",
             render: (text, record, index) => {
 
-                return <div className="single-line" s>
+                return <div className="single-line">
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 

@@ -312,8 +312,8 @@ class DataBox extends Component {
         }
         // control tab  SSGSEA
         if (this.props.data.done_gsea) {
-            ssGSEABox = (<TabPane  tab="ssGSEA Results" key="ssGSEA_Results">
-                <SSGSEATable exportGSEA={this.props.exportGSEA}  getssGSEA={this.props.getssGSEA} handleGeneChange={this.props.handleGeneChange} key="ssgseaTable" data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
+            ssGSEABox = (<TabPane  tab="ssGSEA Results" key="ssGSEA_Results_tab">
+                <SSGSEATable key="ssgseaTable_" exportGSEA={this.props.exportGSEA}  getssGSEA={this.props.getssGSEA} handleGeneChange={this.props.handleGeneChange}  data={this.props.data} upateCurrentWorkingTabAndObject={this.props.upateCurrentWorkingTabAndObject}/></TabPane>);
         }
 
         var selected_gsms = "";
