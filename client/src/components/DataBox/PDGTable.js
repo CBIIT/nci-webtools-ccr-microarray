@@ -467,7 +467,9 @@ class PUGTable extends Component {
                         pagination={this.props.data.pathways_down.pagination}
                         loading={this.props.data.pathways_down.loading}
                         onChange={this.handleTableChange}
-                        onRowClick={this.showHeatMap}
+                         onRow={(row, idx, event) => ({
+                                    onClick: () => { this.showHeatMap(row, idx, event); }
+                              })}
                         scroll={{ x: 600}}
                         />
                     {modal}
