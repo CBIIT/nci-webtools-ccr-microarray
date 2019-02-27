@@ -584,6 +584,14 @@ tr:nth-child(even) {
 }
 
 
+#deg_tag4 .plot-container{
+    margin-top: 10px;
+}
+
+#deg_tag4 .modebar{
+    top: -20px;
+}
+
 
 @media (min-width: 365px) {
 
