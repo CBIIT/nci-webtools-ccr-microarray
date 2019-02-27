@@ -249,7 +249,7 @@ class SSGSEATable extends Component {
 
         let link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
-        let selection = [<div id={"ss_genset_select"}> <label for="ss_gene_set_select_option"><span>ssGSEA Gene Sets selection </span></label>   <select id="ss_gene_set_select_option" className="ant-select-selection ant-select-selection--single" defaultValue="human$H: Hallmark Gene Sets" 
+        let selection = [<div id={"ss_genset_select"}> <label htmlFor="ss_gene_set_select_option"><span>ssGSEA Gene Sets selection </span></label>   <select id="ss_gene_set_select_option" className="ant-select-selection ant-select-selection--single" defaultValue="human$H: Hallmark Gene Sets" 
                         onChange={(e) => this.props.handleGeneChange(e)} 
                         aria-label="Gene Set For ssGSEA"
                       >
@@ -308,7 +308,7 @@ class SSGSEATable extends Component {
                                  {this.props.data.geneHeatmap}
                             </div>
         ]
-        content = [<label for="ss_select_option"><span>ssGSEA section selection </span></label>,<select   id="ss_select_option" className="ant-select-selection ant-select-selection--single"  onChange={this.handleSelectionChange}>
+        content = [<label key="label_ss_select_option" htmlFor="ss_select_option"><span>ssGSEA section selection </span></label>,<select key="ss_select_option"   id="ss_select_option" className="ant-select-selection ant-select-selection--single"  onChange={this.handleSelectionChange}>
                                   <option value="ss_tag1">Single Sample GSEA</option>
                                   <option value="ss_tag2">Pathway Heatmap</option>
                                 </select>, selection, tabs]
