@@ -169,6 +169,7 @@ class DataBox extends Component {
         let currentState = Object.assign({}, this.state);
         currentState.visible = true;
         currentState.group_name = "";
+
         this.setState(currentState);
     }
 
@@ -190,6 +191,7 @@ class DataBox extends Component {
         let workflow = Object.assign({}, this.state);
         workflow.group = "";
         document.getElementById("input_group_name").value = "";
+        document.getElementById("input_group_name").setAttribute("value","")
         document.getElementById("message-gsm-group").innerHTML = "";
 
         workflow.visible = false;
@@ -368,7 +370,7 @@ class DataBox extends Component {
           <p> 
             <label for="input-define-group">
                 <span style={{display:"none"}}>Define Grop</span>
-                <Input  id="input-define-group" disabled={this.state.selected==""?true:false} aria-label="define group name"  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)',"color":"black","font-size":"16px"}} onChange={this.handleInputOnChange}/>&nbsp;
+                <input  id="input-define-group" disabled={this.state.selected==""?true:false} aria-label="define group name" className={this.state.selected==""?"ant-input ant-input-disabled":"ant-input "}  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)',"color":"black","font-size":"16px"}} onChange={this.handleInputOnChange}/>&nbsp;
                 <Button  type={this.state.selected==""||this.state.group_name==""?"default":"primary"}  disabled={this.state.selected==""||this.state.group_name==""?true:false}   onClick={this.createTag} >Add</Button>
            </label>
              
