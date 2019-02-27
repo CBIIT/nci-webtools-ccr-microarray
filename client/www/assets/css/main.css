@@ -584,6 +584,14 @@ tr:nth-child(even) {
 }
 
 
+#deg_tag4 .plot-container{
+    margin-top: 10px;
+}
+
+#deg_tag4 .modebar{
+    top: -20px;
+}
+
 
 @media (min-width: 365px) {
 
@@ -1071,6 +1079,10 @@ input#input_group_name {
 
 #ss_select_option {
     width: 210px;
+}
+
+#deg_tag4{
+    min-height: 600px;
 }
 
 @media only screen and (max-width: 600px) {

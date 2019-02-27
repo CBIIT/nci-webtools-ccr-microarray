@@ -164,7 +164,7 @@ class SSGSEATable extends Component {
             width: "25%",
             render: (text, record, index) => {
 
-                return <div className="single-line" s>
+                return <div className="single-line">
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -249,7 +249,7 @@ class SSGSEATable extends Component {
 
         let link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
 
-        let selection = [<div id={"ss_genset_select"}> <label htmlFor="ss_gene_set_select_option"><span>ssGSEA Gene Sets selection </span></label>   <select id="ss_gene_set_select_option" className="ant-select-selection ant-select-selection--single" defaultValue="human$H: Hallmark Gene Sets" 
+        let selection = [<div key="ss_genset_select" id={"ss_genset_select"}> <label key="ss_genset_select_label" htmlFor="ss_gene_set_select_option"><span>ssGSEA Gene Sets selection </span></label>   <select id="ss_gene_set_select_option" className="ant-select-selection ant-select-selection--single" defaultValue="human$H: Hallmark Gene Sets" 
                         onChange={(e) => this.props.handleGeneChange(e)} 
                         aria-label="Gene Set For ssGSEA"
                       >
@@ -275,7 +275,7 @@ class SSGSEATable extends Component {
                       </select></div>]
 
         let tabs = [
-            <div id="ss_tag1" className="ss_plot">
+            <div key="ss_tag1" id="ss_tag1" className="ss_plot">
                  
                           <div>
                                 <p className="err-message" id="message-ssgsea"></p>
@@ -303,7 +303,7 @@ class SSGSEATable extends Component {
                                 />
                      </div>
             </div>,
-            <div id="ss_tag2" className="ss_plot hide" >
+            <div  key="ss_tag2" id="ss_tag2" className="ss_plot hide" >
                                   <br/><br/>
                                  {this.props.data.geneHeatmap}
                             </div>

@@ -1284,14 +1284,14 @@ class Analysis extends Component {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'100%'} frameBorder={'0'} /></div>
+        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'600px'} frameBorder={'0'} /></div>
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
     }
 
     getVolcanoPlot() {
         let workflow = Object.assign({}, this.state.workflow);
-        let volcanoPlot = <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'60%'} frameBorder={'0'}/>;
+        let volcanoPlot = <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'600px'} frameBorder={'0'}/>;
         workflow.volcanoPlot = <div>{volcanoPlot}</div>;
         this.setState({ workflow: workflow });
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon, Table, Input, message, Modal, Button, Tooltip } from 'antd';
 const Search = Input.Search;
-const minWidth=150;
+const minWidth=100;
 
 class PUGTable extends Component {
 
