@@ -313,7 +313,7 @@ class DataBox extends Component {
         // control tab  SSGSEA
         if (this.props.data.done_gsea) {
             ssGSEABox = (<TabPane  key="ssGSEA_Results" tab="ssGSEA Results" >
-                <SSGSEATable  key="asdfasdfjaslkdfjalsj"  
+                <SSGSEATable  key="ssGSEA_Results_sstab_table"  
                               exportGSEA={this.props.exportGSEA}  
                               getssGSEA={this.props.getssGSEA} 
                               handleGeneChange={this.props.handleGeneChange}  
