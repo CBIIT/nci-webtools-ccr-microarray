@@ -1073,6 +1073,10 @@ input#input_group_name {
     width: 210px;
 }
 
+#deg_tag4{
+    min-height: 600px;
+}
+
 @media only screen and (max-width: 600px) {
 
 
