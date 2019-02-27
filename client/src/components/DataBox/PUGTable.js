@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon, Table, Select, Input, message, Modal, Button, Tooltip } from 'antd';
 const Search = Input.Search;
-const minWidth = 150;
+const minWidth = 100;
 
 
 
