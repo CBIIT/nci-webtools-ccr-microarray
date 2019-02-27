@@ -2876,7 +2876,7 @@ class Analysis extends Component {
             console.log("watch gsm display")
         }
         let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("gsm-select").style.right = width;
+        document.getElementById("gsm-select").style.right = width+"px";;
 
     }
 
@@ -2885,7 +2885,7 @@ class Analysis extends Component {
             console.log("watch deg display")
         }
         let width = document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("deg-select").style.right = width;
+        document.getElementById("deg-select").style.right = width+"px";
     }
 
     resetPathWayUPDisplay = () => {
@@ -2893,7 +2893,7 @@ class Analysis extends Component {
             console.log("watch pathways_up display")
         }
         let width = document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("pathways-up-select").style.right = width;
+        document.getElementById("pathways-up-select").style.right = width+"px";;
     }
 
     resetPathWayDownDisplay = () => {
@@ -2902,7 +2902,7 @@ class Analysis extends Component {
         }
 
         let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("pathways-down-select").style.right = width;
+        document.getElementById("pathways-down-select").style.right = width+"px";;
 
     }
 
@@ -2912,7 +2912,7 @@ class Analysis extends Component {
             console.log("watch SSGSEA display")
         }
         let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("ss-select").style.right = width;
+        document.getElementById("ss-select").style.right = width+"px";;
     }
 
 
@@ -2927,7 +2927,7 @@ class Analysis extends Component {
         document.getElementsByClassName("container-board-left")[0].style.display = 'none';
         if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
             // when user use mobile, container-board-right set to be 100% width
-            document.getElementsByClassName("container-board-right")[0].style.width = "1350 ";
+            document.getElementsByClassName("container-board-right")[0].style.width = "1350px";
 
         }
         document.getElementById("panel-show").style.display = 'inherit';
