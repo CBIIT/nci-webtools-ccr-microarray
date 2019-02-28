@@ -584,12 +584,12 @@ tr:nth-child(even) {
 }
 
 
-#deg_tag4 .plot-container{
-    margin-top: 10px;
+#deg_tag4 iframe{
+    margin-top: 20px;
 }
 
-#deg_tag4 .modebar{
-    top: -20px;
+.js-plotly-plot .plotly .modebar{
+    top: -30px !important;
 }
 
 

@@ -262,6 +262,7 @@ class Analysis extends Component {
         this.hideWorkFlow = this.hideWorkFlow.bind(this);
 
         this.getSSGSEAGeneHeatMap = this.getSSGSEAGeneHeatMap.bind(this);
+        this.buildgeneHeatmap = this.buildgeneHeatmap.bind(this);
 
 
     }
@@ -2303,23 +2304,26 @@ class Analysis extends Component {
     getSSGSEAGeneHeatMap = () => {
 
         let workflow = Object.assign({}, this.state.workflow);
-        workflow.geneHeatmap = "no data";
         let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
+        imageExists(link,this.buildgeneHeatmap);
 
 
-        // imageExists(link, function(exists) {
-        //     if (exists) {
-        //         console.log("it exists");
-        //         workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
-        //         this.setState({
-        //             workflow: workflow
-        //         });
-        //     } else {
-        //         console.log("oh well");
-        //     }
-        // }.bind(this)).bind(this);
 
 
+    }
+
+    buildgeneHeatmap=(exists)=>{
+        let workflow = Object.assign({}, this.state.workflow);
+        let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
+       
+        if (exists) {
+                workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
+               
+            } else {
+                
+                workflow.geneHeatmap = "no data";
+            }
+        this.setState({workflow: workflow});
     }
 
     runContrast = () => {
