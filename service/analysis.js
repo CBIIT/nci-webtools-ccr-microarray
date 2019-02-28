@@ -193,6 +193,21 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
 
      data.push(config.configPath);
 
+    //remove previous result. 
+    //ssgseaHeatmap1.jpg
+
+    fs.exists(config.uploadPath + "/" + req.body.projectId + "/ssgseaHeatmap1.jpg",function(exists){
+        if(exists){
+            fs.unlink(config.uploadPath + "/" + req.body.projectId + "/ssgseaHeatmap1.jpg")
+        }
+    })
+
+    fs.exists(config.uploadPath + "/" + req.body.projectId + "/ss_result.txt",function(exists){
+        if(exists){
+            fs.unlink(config.uploadPath + "/" + req.body.projectId + "/ss_result.txt")
+        }
+    })
+
     R.execute("wrapper.R", data, function(err, returnValue) {
 
          fs.readFile(config.uploadPath + "/" + req.body.projectId + "/ss_result.txt", 'utf8', function(err, returnValue) {
