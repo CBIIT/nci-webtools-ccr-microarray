@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Icon, Table, Select, Input, message, Modal, Button, Tooltip } from 'antd';
 const Search = Input.Search;
-const minWidth = 100;
+const minWidth = 110;
 
 
 
@@ -145,7 +145,7 @@ class PUGTable extends Component {
 
         const columns = [{
             title: (
-                <div style={{ textAlign: 'center' }}>
+                 <div class="pathway_pathways_id_head" >
                    <label htmlFor="input_pathway_up_search_PATHWAY_ID"><span style={{display:"none"}}>input_pathway_up_search_PATHWAY_ID</span>
                    <Input aria-label="input_pathway_up_search_PATHWAY_ID" onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_up_search_PATHWAY_ID"/></label>
                            <div>PATHWAY_ID</div>
@@ -156,14 +156,14 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12:minWidth}}>
+                return <div className="single-line pathway_pathways_id" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12:minWidth}}>
                                     <span style={{"color":"rgb(33, 90, 130)"}} data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+                <div class="pathway_source_head" >
                     <label htmlFor="input_pathway_up_search_SOURCE"><span style={{display:"none"}}>input_pathway_up_search_SOURCE</span>
                     <Input aria-label="input_pathway_up_search_SOURCE" onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_up_search_SOURCE"/></label>
                           <div>SOURCE</div>
@@ -174,14 +174,14 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09:minWidth}}>
+                return <div className="single-line pathway_source" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+                <div class="pathway_desc_head" >
                     <label htmlFor="input_pathway_up_search_DESCRIPTION"><span style={{display:"none"}}>input_pathway_up_search_DESCRIPTION</span>
                     <Input aria-label="input_pathway_up_search_DESCRIPTION" onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_up_search_DESCRIPTION"/></label>
                          <div>DESCRIPTION</div>
@@ -191,13 +191,13 @@ class PUGTable extends Component {
             width: "10%",
             sorter: true,
             render: (text, record, index) => (
-                <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
+                <div className="single-line pathway_desc" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
             ),
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+               <div class="pathway_type_head" >
                       <label htmlFor="input_pathway_up_search_TYPE"><span style={{display:"none"}}>input_pathway_up_search_TYPE</span>
                       <Input  aria-label="input_pathway_up_search_TYPE" onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_up_search_TYPE"/></label>
                               <div>TYPE</div>
@@ -208,14 +208,14 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
+                return <div className="single-line pathway_type" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+                <div class="pathway_p_value_head" >
                       <label htmlFor="input_pathway_up_search_p_value"><span style={{display:"none"}}>input_pathway_up_search_p_value</span>
                       <Input  aria-label="input_pathway_up_search_p_value"  onPressEnter={value=>search(value) }    placeholder="P_Value" id="input_pathway_up_search_p_value"/></label>
                              <div>P_VALUE</div>
@@ -227,14 +227,14 @@ class PUGTable extends Component {
             defaultSortOrder: 'ascend',
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
+                return <div className="single-line pathway_p_value" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+                <div class="pathway_fdr_head" >
                       <label htmlFor="input_pathway_up_search_fdr"><span style={{display:"none"}}>input_pathway_up_search_fdr</span>
                       <Input  aria-label="input_pathway_up_search_fdr" onPressEnter={value=>search(value) }    placeholder="FDR"  id="input_pathway_up_search_fdr"/></label>
                        <div>FDR</div>
@@ -245,14 +245,14 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
+                return <div className="single-line pathway_fdr" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+               <div class="pathway_ratio_head" >
                         <label htmlFor="input_pathway_up_search_RATIO"><span style={{display:"none"}}>input_pathway_up_search_RATIO</span>
                         <Input  aria-label="input_pathway_up_search_RATIO"  onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_up_search_RATIO"/></label>
                           <div>RATIO</div>
@@ -263,14 +263,14 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
+                return <div className="single-line pathway_ratio" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+                  <div class="pathway_gene_list_head" >
                    <label htmlFor="input_pathway_up_search_GENE_LIST"><span style={{display:"none"}}>input_pathway_up_search_GENE_LIST</span>
                    <Input aria-label="input_pathway_up_search_GENE_LIST" onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_up_search_GENE_LIST"/></label>
                           <div>GENE_LIST</div>
@@ -280,13 +280,13 @@ class PUGTable extends Component {
             width: "10%",
             sorter: true,
             render: (text, record, index) => (
-                <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
+                <div className="single-line pathway_gene_list" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                       </div>
             ),
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+                  <div class="pathway_number_hits_head" >
                          <label htmlFor="input_pathway_up_search_NUMBER_HITS"><span style={{display:"none"}}>input_pathway_up_search_NUMBER_HITS</span>
                          <Input aria-label="input_pathway_up_search_NUMBER_HITS" onPressEnter={value=>search(value) }   placeholder="HITS"  id="input_pathway_up_search_NUMBER_HITS"/></label>
                              <div>NUMBER_HITS</div>
@@ -297,7 +297,7 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
+                return <div className="single-line pathway_number_hits" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -305,7 +305,7 @@ class PUGTable extends Component {
 
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+                <div class="pathway_number_genes_pathway_head" >
                 <label htmlFor="input_pathway_up_search_NUMBER_GENES_PATHWAY"><span style={{display:"none"}}>input_pathway_up_search_NUMBER_GENES_PATHWAY</span>
                 <Input aria-label="input_pathway_up_search_NUMBER_GENES_PATHWAY" onPressEnter={value=>search(value) }   placeholder="GENES_PATHWAY"  id="input_pathway_up_search_NUMBER_GENES_PATHWAY"/></label>
                               <div>NUMBER_GENES_PATHWAY</div>
@@ -316,7 +316,7 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
+                return <div className="single-line pathway_number_genes_pathway" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -324,7 +324,7 @@ class PUGTable extends Component {
 
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+                <div class="pathway_number_user_genes_head" >
                     <label htmlFor="input_pathway_up_search_NUMBER_USER_GENES"><span style={{display:"none"}}>input_pathway_up_search_NUMBER_USER_GENES</span>
                     <Input aria-label="input_pathway_up_search_NUMBER_USER_GENES" onPressEnter={value=>search(value) }   placeholder="USER_GENES"  id="input_pathway_up_search_NUMBER_USER_GENES"/></label>
                             <div>NUMBER_USER_GENES</div>
@@ -335,14 +335,14 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
+                return <div className="single-line pathway_number_user_genes" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
         }, {
             title: (
-                <div style={{ textAlign: 'center' }}>
+                 <div class="pathway_total_number_genes_head" >
                      <label htmlFor="input_pathway_up_search_TOTAL_NUMBER_GENES"><span style={{display:"none"}}>input_pathway_up_search_TOTAL_NUMBER_GENES</span>
                      <Input aria-label="input_pathway_up_search_TOTAL_NUMBER_GENES"  onPressEnter={value=>search(value) }   placeholder="GENES"  id="input_pathway_up_search_TOTAL_NUMBER_GENES"/></label>           
                         <div>TOTAL_NUMBER_GENES</div>
@@ -353,7 +353,7 @@ class PUGTable extends Component {
             sorter: true,
             render: (text, record, index) => {
 
-                return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
+                return <div className="single-line pathway_total_number_genes" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
