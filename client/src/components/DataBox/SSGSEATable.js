@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Button, Icon, Table, Input, Tooltip } from 'antd';
-const minWidth=150;
+const minWidth = 110;
+const exponentialNum = 5
 
 class SSGSEATable extends Component {
 
@@ -57,7 +58,7 @@ class SSGSEATable extends Component {
 
 
     handleSelectionChange(event) {
-        let value =event.target.value;
+        let value = event.target.value;
         if (value == "ss_tag1") {
             this.props.upateCurrentWorkingTabAndObject("ssGSEA")
         }
@@ -81,14 +82,15 @@ class SSGSEATable extends Component {
 
         const columns = [{
             title: (
-                    <div style={{ textAlign: 'center' }}>
+                <div style={{ textAlign: 'center' }}>
                        <label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span>
                        <Input aria-label="input_ssg_name" onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label>
                       <div>NAME</div>
                 </div>
-                ),
+            ),
             dataIndex: 'V1',
             sorter: true,
+            width: "10%",
             render: (text, record, index) => {
 
                 return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.25>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.25:minWidth}}>
@@ -98,30 +100,30 @@ class SSGSEATable extends Component {
             }
         }, {
             title: (
-                    <div style={{ textAlign: 'center' }}>
+                <div style={{ textAlign: 'center' }}>
                        <label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span>
                        <Input aria-label="input_ssg_search_logFC" onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label>
                        <div>logFC</div>
                 </div>
-                ),
+            ),
             dataIndex: 'V2',
             sorter: true,
             width: "10%",
             render: (text, record, index) => {
 
                 return <div className="single-line" >
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
             }
-        },{
+        }, {
             title: (
-                    <div style={{ textAlign: 'center' }}>
+                <div style={{ textAlign: 'center' }}>
                         <label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span>
                         <Input aria-label="input_ssg_search_p_value" onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label>
                         <div>P.Value</div>
                 </div>
-                ),
+            ),
             dataIndex: 'V5',
             sorter: true,
             width: "10%",
@@ -129,79 +131,79 @@ class SSGSEATable extends Component {
             render: (text, record, index) => {
 
                 return <div className="single-line">
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
             }
-        },{
-            title:  (
-                    <div style={{ textAlign: 'center' }}>
+        }, {
+            title: (
+                <div style={{ textAlign: 'center' }}>
                           <label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span>
                           <Input aria-label="input_ssg_search_adj_p_value" onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label>
                      <div>adj.P.Val</div>
                 </div>
-                ),
+            ),
             dataIndex: 'V6',
             sorter: true,
             width: "10%",
             render: (text, record, index) => {
 
                 return <div className="single-line" >
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
             }
-        },  {
-            title:  (
-                    <div style={{ textAlign: 'center', "width":"190px"}}>
+        }, {
+            title: (
+                <div style={{ textAlign: 'center', "width":"190px"}}>
                         <label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span>
                         <Input aria-label="input_ssg_search_Avg_Enrichment_Score" onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label>
                         <div>Avg.Enrichment.Score</div>
                 </div>
-                ),
+            ),
             dataIndex: 'V3',
             sorter: true,
             width: "25%",
             render: (text, record, index) => {
 
                 return <div className="single-line">
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text)}</span>
                                     </div>
 
             }
         }, {
-            title:  (
-                    <div style={{ textAlign: 'center' }}>
+            title: (
+                <div style={{ textAlign: 'center' }}>
                        <label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span>
                        <Input aria-label="input_ssg_search_t" onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label>
                         <div>t</div>
                 </div>
-                ),
+            ),
             dataIndex: 'V4',
             sorter: true,
             width: "10%",
             render: (text, record, index) => {
 
                 return <div className="single-line" >
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
             }
-        },  {
-            title:  (
-                    <div style={{ textAlign: 'center' }}>
+        }, {
+            title: (
+                <div style={{ textAlign: 'center' }}>
                          <label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span>
                          <Input aria-label="input_ssg_search_b"  onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label>
                          <div>B</div>
                 </div>
-                ),
+            ),
             dataIndex: 'V7',
             sorter: true,
             width: "10%",
             render: (text, record, index) => {
 
                 return <div className="single-line" >
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
             }
@@ -308,7 +310,7 @@ class SSGSEATable extends Component {
                                  {this.props.data.geneHeatmap}
                             </div>
         ]
-        content = [<label key="label_ss_select_option" htmlFor="ss_select_option"><span>ssGSEA section selection </span></label>,<select key="ss_select_option"   id="ss_select_option" className="ant-select-selection ant-select-selection--single"  onChange={this.handleSelectionChange}>
+        content = [<label key="label_ss_select_option" htmlFor="ss_select_option"><span>ssGSEA section selection </span></label>, <select key="ss_select_option"   id="ss_select_option" className="ant-select-selection ant-select-selection--single"  onChange={this.handleSelectionChange}>
                                   <option value="ss_tag1">Single Sample GSEA</option>
                                   <option value="ss_tag2">Pathway Heatmap</option>
                                 </select>, selection, tabs]

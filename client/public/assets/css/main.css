@@ -15,9 +15,6 @@ body {
 
 }
 
-th {
-    min-width: 150px;
-}
 
 a {
     text-decoration: none;
@@ -469,7 +466,7 @@ tr:nth-child(even) {
 
 .ant-table-thead>tr>th,
 .ant-table-tbody>tr>td {
-    padding: 10px 10px !important;
+    padding: 8px 5px !important;
 }
 
 
@@ -584,12 +581,12 @@ tr:nth-child(even) {
 }
 
 
-#deg_tag4 .plot-container{
-    margin-top: 10px;
+#deg_tag4 iframe{
+    margin-top: 20px;
 }
 
-#deg_tag4 .modebar{
-    top: -20px;
+.js-plotly-plot .plotly .modebar{
+    top: -30px !important;
 }
 
 
@@ -1000,7 +997,7 @@ input#input_group_name {
 #deg_tag1 .ant-table-column-sorter {
     float: right;
     position: relative;
-    margin-top: -14px;
+    margin-top: -21px;
     padding-left: 9px;
 }
 
@@ -1012,18 +1009,12 @@ input#input_group_name {
 }
 
 #deg_tag1 .ant-input {
-    width: calc(100% + 12px) !important;
     padding: 0px 10px;
-    margin-left: -6px;
 }
 
 #ss_tag1 .ant-input {
-    width: calc(100% + 12px) !important;
     padding: 0px 10px;
-    margin-left: -6px;
 }
-
-
 
 #deg_tag2 .ant-table-column-sorter {
     float: right;
@@ -1040,15 +1031,13 @@ input#input_group_name {
 }
 
 #deg_tag2 .ant-input {
-    width: calc(100% + 12px) !important;
+    width: 100%  !important;
     padding: 0px 10px;
-    margin-left: -6px;
 }
 
 #deg_tag3 .ant-input {
-    width: calc(100% + 12px) !important;
+    width: 100%  !important;
     padding: 0px 10px;
-    margin-left: -6px;
 }
 
 .ant-table-wrapper {
@@ -1083,6 +1072,97 @@ input#input_group_name {
 
 #deg_tag4{
     min-height: 600px;
+}
+
+
+.deg_SYMBOL{
+    text-align: left;
+    min-width: 150px;
+}
+
+.deg_fc{
+    text-align: right;
+     width: 70px;
+}
+
+.p_value{
+     text-align: right;
+      min-width: 80px;
+}
+
+.adj_p_value{
+     text-align: right;
+      min-width: 80px;
+}
+
+.aveexpr{
+     text-align: right;
+      min-width: 90px;
+}
+.accnum{
+     text-align: right;
+     min-width: 90px;
+}
+
+.deg_desc{
+    text-align: left;
+    min-width: 200px;
+}
+
+.deg_entrez{
+     text-align: right;
+     width: 100px;
+}
+
+.deg_probsetid{
+     text-align: left;
+     min-width: 100px;
+}
+
+.deg_t{
+    text-align: right;
+    min-width: 70px;
+}
+.deg_b{
+    text-align: right;
+    min-width: 70px;
+}
+
+.pathway_source_head{
+    margin-top:-70px;
+}
+.pathway_desc_head{
+    margin-top:-70px;
+}
+.pathway_pathways_id_head{
+    margin-top:-70px;
+}
+.pathway_type_head{
+    margin-top:-70px;
+}
+.pathway_p_value_head{
+    margin-top:-70px;
+}
+.pathway_fdr_head{
+    margin-top:-70px;
+}
+.pathway_ratio_head{
+    margin-top:-70px;
+}
+.pathway_gene_list_head{
+    margin-top:-70px;
+}
+.pathway_number_hits_head{
+       margin-top: -50px;
+}
+.pathway_number_genes_pathway_head{
+   
+}
+.pathway_number_user_genes_head{
+     margin-top: -20px;
+}
+.pathway_total_number_genes_head{
+    margin-top: -20px;
 }
 
 @media only screen and (max-width: 600px) {
