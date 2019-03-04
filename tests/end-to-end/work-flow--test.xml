@@ -1,0 +1,8 @@
+<testsuite name="Mocha Tests" tests="6" failures="0" errors="0" skipped="0" timestamp="Mon, 04 Mar 2019 20:18:57 GMT" time="116.515">
+<testcase classname="Microarray Work Flow Test" name="Should be able to enter Accession Code and load data&#x22;" time="16.927"/>
+<testcase classname="Microarray Work Flow Test" name="Should be able to manager group&#x22;" time="2.295"/>
+<testcase classname="Microarray Work Flow Test" name="Should be able to select groups&#x22;" time="1.12"/>
+<testcase classname="Microarray Work Flow Test" name="Should be able to submit job to queue&#x22;" time="0.87"/>
+<testcase classname="Microarray Work Flow Test" name="Should be able to run contrast locally&#x22;" time="91.386"/>
+<testcase classname="Microarray Work Flow Test" name="Should be able to hide the menu and see the datatable&#x22;" time="0.023"/>
+</testsuite>

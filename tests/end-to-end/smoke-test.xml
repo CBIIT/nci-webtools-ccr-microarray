@@ -1,0 +1,14 @@
+<testsuite name="Mocha Tests" tests="12" failures="0" errors="0" skipped="0" timestamp="Mon, 04 Mar 2019 20:16:59 GMT" time="14.624">
+<testcase classname="Microarray Smoke Test -About Page" name="Should have title &#x22;CCBR Microarray Analysis Workflow&#x22;" time="0.004"/>
+<testcase classname="Microarray Smoke Test -About Page" name="Should have navigation bar" time="0.007"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should have title &#x22;CCBR Microarray Analysis Workflow&#x22;" time="0.011"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Run Contrast Btn diabled" time="0.115"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab Pre-Normalization diabled" time="0.229"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab Post-Normalization diabled" time="0.225"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab DEG diabled" time="0.224"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab SSGSEA diabled" time="0.223"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should Tab GSM enabled" time="0.224"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should submit a job to queue checked" time="0.222"/>
+<testcase classname="Microarray Smoke Test -Analysis Page" name="Should group selection disabled" time="0.447"/>
+<testcase classname="Microarray Smoke Test -Help Page" name="Should have content &#x22;uploading CEL files&#x22; " time="0.009"/>
+</testsuite>
