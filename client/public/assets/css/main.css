@@ -581,19 +581,28 @@ tr:nth-child(even) {
 }
 
 
-#deg_tag4 iframe{
+#deg_tag4 iframe {
     margin-top: 20px;
 }
 
-.js-plotly-plot .plotly .modebar{
+.js-plotly-plot .plotly .modebar {
     top: -30px !important;
 }
 
 
 @media (min-width: 365px) {
+     #panel-show {
+        position: absolute;
+        top: 236px;
+        z-index: 9;
+        left: 10px;
+    }
 
-    #btn-controll-data-table-display {
-        display: none;
+    #panel-hide {
+        position: absolute;
+        top: 229px;
+        z-index: 9;
+        left: 257px;
     }
 
     .container-board-left {
@@ -617,10 +626,7 @@ tr:nth-child(even) {
 
 
 @media (min-width: 768px) {
-
-    #btn-controll-data-table-display {
-        display: none;
-    }
+    
 
     .container-board-left {
         width: 100%;
@@ -641,20 +647,21 @@ tr:nth-child(even) {
     }
 }
 
-@media (min-width: 992px) {
 
-    #btn-controll-data-table-display {
-        padding-top: 10px;
-        width: 16px;
-        float: left;
-        display: block;
+@media (max-width: 1200px) {
+  #btn-controll-data-table-display {
+        display: none;
     }
+}
+
+@media (min-width: 1200px) {
 
     .container-board-left {
         width: 21%;
         float: left;
         margin-top: 0px;
         margin-right: 10px;
+        display: block;
     }
 
     .container-board-right {
@@ -673,7 +680,26 @@ tr:nth-child(even) {
 
 }
 
+@media(min-width: 1420px){
+
+     #panel-show {
+        position: relative;
+        top: 0;
+        left: 0;
+
+    }
+
+    #panel-hide {
+        position: relative;
+        top: 0;
+        left: 0;
+
+    }
+}
+
 @media (min-width: 1200px) {
+
+
 
     #btn-controll-data-table-display {
         padding-top: 10px;
@@ -1031,12 +1057,12 @@ input#input_group_name {
 }
 
 #deg_tag2 .ant-input {
-    width: 100%  !important;
+    width: 100% !important;
     padding: 0px 10px;
 }
 
 #deg_tag3 .ant-input {
-    width: 100%  !important;
+    width: 100% !important;
     padding: 0px 10px;
 }
 
@@ -1070,98 +1096,109 @@ input#input_group_name {
     width: 210px;
 }
 
-#deg_tag4{
+#deg_tag4 {
     min-height: 600px;
 }
 
 
-.deg_SYMBOL{
+.deg_SYMBOL {
     text-align: left;
     min-width: 150px;
 }
 
-.deg_fc{
+.deg_fc {
     text-align: right;
-     width: 70px;
+    width: 70px;
 }
 
-.p_value{
-     text-align: right;
-      min-width: 80px;
+.p_value {
+    text-align: right;
+    min-width: 80px;
 }
 
-.adj_p_value{
-     text-align: right;
-      min-width: 80px;
+.adj_p_value {
+    text-align: right;
+    min-width: 80px;
 }
 
-.aveexpr{
-     text-align: right;
-      min-width: 90px;
-}
-.accnum{
-     text-align: right;
-     min-width: 90px;
+.aveexpr {
+    text-align: right;
+    min-width: 90px;
 }
 
-.deg_desc{
+.accnum {
+    text-align: right;
+    min-width: 90px;
+}
+
+.deg_desc {
     text-align: left;
     min-width: 200px;
 }
 
-.deg_entrez{
-     text-align: right;
-     width: 100px;
-}
-
-.deg_probsetid{
-     text-align: left;
-     min-width: 100px;
-}
-
-.deg_t{
+.deg_entrez {
     text-align: right;
-    min-width: 70px;
+    width: 100px;
 }
-.deg_b{
+
+.deg_probsetid {
+    text-align: left;
+    min-width: 100px;
+}
+
+.deg_t {
     text-align: right;
     min-width: 70px;
 }
 
-.pathway_source_head{
-    margin-top:-70px;
+.deg_b {
+    text-align: right;
+    min-width: 70px;
 }
-.pathway_desc_head{
-    margin-top:-70px;
+
+.pathway_source_head {
+    margin-top: -70px;
 }
-.pathway_pathways_id_head{
-    margin-top:-70px;
+
+.pathway_desc_head {
+    margin-top: -70px;
 }
-.pathway_type_head{
-    margin-top:-70px;
+
+.pathway_pathways_id_head {
+    margin-top: -70px;
 }
-.pathway_p_value_head{
-    margin-top:-70px;
+
+.pathway_type_head {
+    margin-top: -70px;
 }
-.pathway_fdr_head{
-    margin-top:-70px;
+
+.pathway_p_value_head {
+    margin-top: -70px;
 }
-.pathway_ratio_head{
-    margin-top:-70px;
+
+.pathway_fdr_head {
+    margin-top: -70px;
 }
-.pathway_gene_list_head{
-    margin-top:-70px;
+
+.pathway_ratio_head {
+    margin-top: -70px;
 }
-.pathway_number_hits_head{
-       margin-top: -50px;
+
+.pathway_gene_list_head {
+    margin-top: -70px;
 }
-.pathway_number_genes_pathway_head{
-   
+
+.pathway_number_hits_head {
+    margin-top: -50px;
 }
-.pathway_number_user_genes_head{
-     margin-top: -20px;
+
+.pathway_number_genes_pathway_head {}
+
+.pathway_number_user_genes_head {
+    margin-top: -20px;
 }
-.pathway_total_number_genes_head{
+
+.pathway_total_number_genes_head {
     margin-top: -20px;
 }
 

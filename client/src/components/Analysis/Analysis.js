@@ -2936,7 +2936,9 @@ class Analysis extends Component {
     }
 
     hideWorkFlow = () => {
-        document.getElementsByClassName("container-board-left")[0].style.display = 'none';
+         if (document.getElementsByClassName("container-board-right")[0].clientWidth > 1200) {
+            document.getElementsByClassName("container-board-left")[0].style.display = 'none';
+        }
         if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
             // when user use mobile, container-board-right set to be 100% width
             document.getElementsByClassName("container-board-right")[0].style.width = "1350px";
@@ -2954,7 +2956,6 @@ class Analysis extends Component {
     showWorkFlow = () => {
         document.getElementsByClassName("container-board-left")[0].style.display = 'block';
         document.getElementsByClassName("container-board-right")[0].removeAttribute("style");
-
         document.getElementById("panel-show").style.display = 'none';
         document.getElementById("panel-hide").style.display = 'inherit';
         this.resetBoxPlotAN();
