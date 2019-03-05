@@ -1,4 +1,4 @@
-express = require('express');
+var express = require('express');
 var session = require('express-session');
 var router = express.Router();
 var R = require("../components/R");
@@ -12,7 +12,7 @@ const AWS = require('aws-sdk');
 var uuid = require('uuid');
 var AsyncPolling = require('async-polling');
 var dateFormat = require('dateformat');
-
+var rimraf = require("rimraf");
 
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
@@ -134,13 +134,18 @@ function r(data, endCallback) {
             uploadResultToS3(config.uploadPath + "/" + data.projectId, data.projectId)
         }
 
-        setTimeout(cleanData(data.projectId), 30*1000);
+        setTimeout(cleanData(data.projectId,config.uploadPath), 30*1000);
 
     });
 }
 
-function cleanData(pid,config.uploadPath){
-fs
+function cleanData(pid,uploadPath){
+    try {
+        rimraf.sync(uploadPath+"/"+pid);
+    }catch(err){
+         logger.info("[Queue] Delete result files fails  ", err)
+    }
+ 
 }
 
 
