@@ -107,21 +107,15 @@ class PUGTable extends Component {
             .then(result => {
                 this.props.changeLoadingStatus(false, "")
                 if (result.status == 200) {
-                    if (Object.keys(result.data).length === 0 && result.data.constructor === Object) {
+                    if (Object.keys(result.data).length ==0 || result.data.constructor ==Object) {
+                        
+                        importantStuff.location.href = window.location.protocol + "//" + window.location.host + "/microarray/assets/noheatmap.html";
 
-                        message.success('no rows to aggregate');
 
                     } else {
                         let pic_link = JSON.parse(result.data).pic_name
-
-                        //var link = "./images/" + this.props.data.projectID + "/" + pic_link
-                        // this.setState({
-                        //     heapMap: link,
-                        //     visible: true
-                        // });
                         var link = "images/" + this.props.data.projectID + "/" + pic_link
-                        //window.open("https://"+window.location.host+"/microarray/"+link);
-                        importantStuff.location.href = "https://" + window.location.host + "/microarray/" + link;
+                        importantStuff.location.href = window.location.protocol + "//" + window.location.host + "/microarray/" + link;
 
                     }
 
