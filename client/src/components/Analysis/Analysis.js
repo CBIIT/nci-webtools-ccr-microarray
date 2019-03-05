@@ -245,7 +245,7 @@ class Analysis extends Component {
         this.getPathwayUp = this.getPathwayUp.bind(this);
         this.getssGSEA = this.getssGSEA.bind(this);
         this.changeLoadingStatus = this.changeLoadingStatus.bind(this);
-        this.changeRUNContractModel = this.changeRUNContractModel.bind(this);
+        this.changeRunContrastMode = this.changeRunContrastMode.bind(this);
         this.initWithCode = this.initWithCode.bind(this);
 
 
@@ -277,7 +277,7 @@ class Analysis extends Component {
         }
     }
 
-    changeRUNContractModel = (params = false) => {
+    changeRunContrastMode = (params = false) => {
         let workflow = Object.assign({}, this.state.workflow);
         if (params) {
             workflow.useQueue = true;
@@ -3409,7 +3409,7 @@ class Analysis extends Component {
                         resetWorkFlowProject={this.resetWorkFlowProject}  
                         changeCode={this.changeCode} 
                         handleSelectType={this.handleSelectType} 
-                         changeRUNContractModel={this.changeRUNContractModel} 
+                         changeRunContrastMode={this.changeRunContrastMode} 
                         fileRemove={this.fileRemove} 
                         beforeUpload={this.beforeUpload} 
                         handleUpload={this.handleUpload} 
@@ -3501,7 +3501,7 @@ class Analysis extends Component {
                         beforeUpload={this.beforeUpload} 
                         handleUpload={this.handleUpload} 
                         loadGSE={this.loadGSE} 
-                        changeRUNContractModel={this.changeRUNContractModel}
+                        changeRunContrastMode={this.changeRunContrastMode}
                         handleGroup1Select={this.handleGroup1Select}  
                         handleGroup2Select={this.handleGroup2Select} 
                         runContrast={this.runContrast}

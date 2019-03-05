@@ -41,7 +41,7 @@ awsHander.getQueueUrl = function(next) {
     });
 }
 
-awsHander.upload = function(path, prex,errHandler) {
+awsHander.upload = function(path, prex,next) {
             fs.readdir(path, function(err, items) {
                 for (var i = 0; i < items.length; i++) {
 
@@ -60,10 +60,12 @@ awsHander.upload = function(path, prex,errHandler) {
                            logger.info("uplad err:"+err);
                            logger.info("uplad data:"+data);
                             logger.info("uplad err stack:"+err.stack);
+
                         });
                     }
 
                 }
+                next();
             });
        
 }
