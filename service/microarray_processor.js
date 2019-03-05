@@ -111,7 +111,6 @@ function r(data, endCallback) {
         if (data.source == "fetch") {
             code = "<p>&nbsp;&nbsp;Accession Code: <b>" + data.code + "</b></p>";
         } else {
-
             code = "<p>&nbsp;&nbsp;CEL Files: <b>" + data.dataList + "</b></p>";
         }
         if (err) {
@@ -141,8 +140,8 @@ function r(data, endCallback) {
 
 function uploadResultToS3(path, pid) {
     logger.info("[Queue] Upload Results to S3", path)
-    queue.awsHander.upload(path, config.queue_input_path + "/" + pid + "/", function(err, data) {
-        // 
+    queue.awsHander.upload(path, config.queue_input_path + "/" + pid + "/", function() {
+        
     });
 
 }
