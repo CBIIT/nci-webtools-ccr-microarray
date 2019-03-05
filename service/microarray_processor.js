@@ -134,9 +134,15 @@ function r(data, endCallback) {
             uploadResultToS3(config.uploadPath + "/" + data.projectId, data.projectId)
         }
 
+        setTimeout(cleanData(data.projectId), 30*1000);
 
     });
 }
+
+function cleanData(pid,config.uploadPath){
+fs
+}
+
 
 function uploadResultToS3(path, pid) {
     logger.info("[Queue] Upload Results to S3", path)

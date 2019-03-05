@@ -14,7 +14,7 @@ class Workflow extends Component {
                                 handleGroup1Select={this.props.handleGroup1Select}
                                 handleGroup2Select={this.props.handleGroup2Select}
                                 runContrast={this.props.runContrast}
-                                changeRUNContractModel={this.props.changeRUNContractModel}
+                                changeRunContrastMode={this.props.changeRunContrastMode}
 
                               />;
         return (

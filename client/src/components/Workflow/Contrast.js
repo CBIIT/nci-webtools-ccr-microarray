@@ -14,9 +14,9 @@ class Contrast extends Component {
 
 
         if (e.target.checked) {
-            this.props.changeRUNContractModel(true);
+            this.props.changeRunContrastMode(true);
         } else {
-            this.props.changeRUNContractModel(false);
+            this.props.changeRunContrastMode(false);
         }
     }
 
