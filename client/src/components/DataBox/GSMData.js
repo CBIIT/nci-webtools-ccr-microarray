@@ -405,7 +405,7 @@ class GSMData extends Component {
 
 
             content = <div>
-                         
+                        <div className="err-message" id="message-gsm"></div>
                         <div>
                             <Search aria-label="search" placeholder = "Search text"
                                     className = "input-search-gsm"

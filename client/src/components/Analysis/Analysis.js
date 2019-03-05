@@ -2305,25 +2305,25 @@ class Analysis extends Component {
 
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
-        imageExists(link,this.buildgeneHeatmap);
+        imageExists(link, this.buildgeneHeatmap);
 
 
 
 
     }
 
-    buildgeneHeatmap=(exists)=>{
+    buildgeneHeatmap = (exists) => {
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
-       
+
         if (exists) {
-                workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
-               
-            } else {
-                
-                workflow.geneHeatmap = "no data";
-            }
-        this.setState({workflow: workflow});
+            workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
+
+        } else {
+
+            workflow.geneHeatmap = "no data";
+        }
+        this.setState({ workflow: workflow });
     }
 
     runContrast = () => {
@@ -2515,7 +2515,7 @@ class Analysis extends Component {
         this.setState({
             workflow: workflow
         });
-
+         document.getElementById("message-gsm").innerHTML = "";
         if (workflow.useQueue) {
             if (document.getElementById("input-email").value == "") {
                 document.getElementById("message-use-queue").innerHTML = "Email is required"
@@ -2714,9 +2714,17 @@ class Analysis extends Component {
 
                         }
 
-                    }).catch(error => console.log(error));
+                    }).catch(function(error) {
+                        document.getElementById("message-gsm").innerHTML = error
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+                        this.setState({
+                            workflow: workflow
+                        });
+                    }.bind(this));
             } catch (err) {
 
+                document.getElementById("message-gsm").innerHTML = err
                 workflow.uploading = false;
                 workflow.progressing = false;
                 console.log(err);
@@ -2880,7 +2888,7 @@ class Analysis extends Component {
             console.log("watch gsm display")
         }
         let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("gsm-select").style.right = width+"px";;
+        document.getElementById("gsm-select").style.right = width + "px";;
 
     }
 
@@ -2889,7 +2897,7 @@ class Analysis extends Component {
             console.log("watch deg display")
         }
         let width = document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("deg-select").style.right = width+"px";
+        document.getElementById("deg-select").style.right = width + "px";
     }
 
     resetPathWayUPDisplay = () => {
@@ -2897,7 +2905,7 @@ class Analysis extends Component {
             console.log("watch pathways_up display")
         }
         let width = document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("pathways-up-select").style.right = width+"px";;
+        document.getElementById("pathways-up-select").style.right = width + "px";;
     }
 
     resetPathWayDownDisplay = () => {
@@ -2906,7 +2914,7 @@ class Analysis extends Component {
         }
 
         let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("pathways-down-select").style.right = width+"px";;
+        document.getElementById("pathways-down-select").style.right = width + "px";;
 
     }
 
@@ -2916,7 +2924,7 @@ class Analysis extends Component {
             console.log("watch SSGSEA display")
         }
         let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("ss-select").style.right = width+"px";;
+        document.getElementById("ss-select").style.right = width + "px";;
     }
 
 
