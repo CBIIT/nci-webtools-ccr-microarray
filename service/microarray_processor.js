@@ -1,4 +1,4 @@
-express = require('express');
+var express = require('express');
 var session = require('express-session');
 var router = express.Router();
 var R = require("../components/R");
@@ -12,7 +12,7 @@ const AWS = require('aws-sdk');
 var uuid = require('uuid');
 var AsyncPolling = require('async-polling');
 var dateFormat = require('dateformat');
-
+var rimraf = require("rimraf");
 
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
@@ -111,7 +111,6 @@ function r(data, endCallback) {
         if (data.source == "fetch") {
             code = "<p>&nbsp;&nbsp;Accession Code: <b>" + data.code + "</b></p>";
         } else {
-
             code = "<p>&nbsp;&nbsp;CEL Files: <b>" + data.dataList + "</b></p>";
         }
         if (err) {
@@ -135,14 +134,25 @@ function r(data, endCallback) {
             uploadResultToS3(config.uploadPath + "/" + data.projectId, data.projectId)
         }
 
+        setTimeout(cleanData(data.projectId,config.uploadPath), 30*1000);
 
     });
 }
 
+function cleanData(pid,uploadPath){
+    try {
+        rimraf.sync(uploadPath+"/"+pid);
+    }catch(err){
+         logger.info("[Queue] Delete result files fails  ", err)
+    }
+ 
+}
+
+
 function uploadResultToS3(path, pid) {
     logger.info("[Queue] Upload Results to S3", path)
-    queue.awsHander.upload(path, config.queue_input_path + "/" + pid + "/", function(err, data) {
-        // 
+    queue.awsHander.upload(path, config.queue_input_path + "/" + pid + "/", function() {
+        
     });
 
 }

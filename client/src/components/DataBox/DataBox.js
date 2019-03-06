@@ -368,13 +368,13 @@ class DataBox extends Component {
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
         > <div  style={{display:this.state.added?"none":"block"}}>
-          <p style={{color: "#215a82"}}><b><label for="textArea-group-selected">{number_select} Selected GSM(s)</label></b></p>
+          <p style={{color: "#215a82"}}><b><label htmlFor="textArea-group-selected">{number_select} Selected GSM(s)</label></b></p>
            <p style={{display: selected_gsms==""&&this.state.visible==true?"block":"none"}} className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
           <p> <TextArea id="textArea-group-selected" autosize={false}  disabled style={{width:'100%',"color": "black"}} value={selected_gsms}/></p>
           <p style={{color: "#215a82"}}><b>Group Name<span style={{color:"red","paddingLeft":"5px"}}> *</span></b> <span style={{color:"#555"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
            <p className="err-message" id="message-gsm-group"></p>
           <p> 
-            <label for="input-define-group">
+            <label htmlFor="input-define-group">
                 <span style={{display:"none"}}>Define Grop</span>
                 <input  id="input-define-group" disabled={this.state.selected==""?true:false} aria-label="define group name" className={this.state.selected==""?"ant-input ant-input-disabled":"ant-input "}  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)',"color":"black","font-size":"16px"}} onChange={this.handleInputOnChange}/>&nbsp;
                 <Button  type={this.state.selected==""||this.state.group_name==""?"default":"primary"}  disabled={this.state.selected==""||this.state.group_name==""?true:false}   onClick={this.createTag} >Add</Button>
