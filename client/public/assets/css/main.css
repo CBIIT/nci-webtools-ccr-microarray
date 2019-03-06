@@ -589,6 +589,9 @@ tr:nth-child(even) {
     top: -30px !important;
 }
 
+.ant-input-suffix{
+    display: none;
+}
 
 @media (min-width: 365px) {
      #panel-show {
@@ -616,7 +619,6 @@ tr:nth-child(even) {
         margin: 0 0 20 0;
         display: block !important;
     }
-
 
 
     #tab_analysis .blocks {
@@ -648,11 +650,6 @@ tr:nth-child(even) {
 }
 
 
-@media (max-width: 1200px) {
-  #btn-controll-data-table-display {
-        display: none;
-    }
-}
 
 @media (min-width: 1200px) {
 
@@ -697,10 +694,19 @@ tr:nth-child(even) {
     }
 }
 
+
 @media (min-width: 1200px) {
 
 
 
+     
+
+    #panel-hide {
+        position: relative;
+        top: 0;
+        left: 0;
+
+    }
     #btn-controll-data-table-display {
         padding-top: 10px;
         width: 16px;
@@ -1202,8 +1208,22 @@ input#input_group_name {
     margin-top: -20px;
 }
 
-@media only screen and (max-width: 600px) {
+@media (min-width: 1200px){
+    #tab_analysis > div.container.container-board > div.container-board-right > div > div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content > div.ant-tabs-tabpane.ant-tabs-tabpane-active > div:nth-child(3) > div:nth-child(2) > span > input{
+        width: 150px
+    }
+}
 
+@media only screen and (max-width: 1200px) {
+
+
+     #tab_analysis > div.container.container-board > div.container-board-right > div > div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content > div.ant-tabs-tabpane.ant-tabs-tabpane-active > div:nth-child(3) > div:nth-child(2) > span {
+    
+        display: contents;
+    }
+  #btn-controll-data-table-display {
+        display: none;
+    }
 
     #btn-controll-data-table-display {
         display: none;

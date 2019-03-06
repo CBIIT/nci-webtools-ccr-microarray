@@ -2515,7 +2515,7 @@ class Analysis extends Component {
         this.setState({
             workflow: workflow
         });
-         document.getElementById("message-gsm").innerHTML = "";
+        document.getElementById("message-gsm").innerHTML = "";
         if (workflow.useQueue) {
             if (document.getElementById("input-email").value == "") {
                 document.getElementById("message-use-queue").innerHTML = "Email is required"
@@ -2936,13 +2936,12 @@ class Analysis extends Component {
     }
 
     hideWorkFlow = () => {
-         if (document.getElementsByClassName("container-board-right")[0].clientWidth > 1200) {
+        if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
             document.getElementsByClassName("container-board-left")[0].style.display = 'none';
         }
         if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
             // when user use mobile, container-board-right set to be 100% width
             document.getElementsByClassName("container-board-right")[0].style.width = "1350px";
-
         }
         document.getElementById("panel-show").style.display = 'inherit';
         document.getElementById("panel-hide").style.display = 'none';
