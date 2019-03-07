@@ -887,27 +887,27 @@ tr:nth-child(even) {
 
 #deg_tag1 .ant-table-pagination {
     position: absolute;
-    top: -53px;
+    top: -58px;
     right: 88px;
 }
 
 #deg_tag2 .ant-table-pagination {
     position: absolute;
-    top: -53px;
+    top: -58px;
     right: 95px;
 }
 
 
 #deg_tag3 .ant-table-pagination {
     position: absolute;
-    top: -53px;
+    top: -58px;
     right: 95px;
 }
 
 
 #ss_tag1 .ant-table-pagination {
     position: absolute;
-    top: -53px;
+    top: -58px;
     right: 95px;
 }
 
@@ -919,19 +919,19 @@ select {
 
 div#deg-select {
     position: absolute;
-    top: 75px;
+    top: 73px;
     right: 125px;
 }
 
 div#pathways-down-select {
     position: absolute;
-    top: 75px;
+    top: 73px;
     right: 125px;
 }
 
 div#pathways-up-select {
     position: absolute;
-    top: 75px;
+    top: 73px;
     right: 125px;
 }
 
@@ -943,7 +943,7 @@ div#deg-select button {
 
 div#ss-select {
     position: absolute;
-    top: 75px;
+    top: 73px;
     right: 125;
 }
 
@@ -988,30 +988,39 @@ input#input_group_name {
 }
 
 .div-export-deg {
-    float: right;
-    margin-top: -31px;
+     position: absolute;
+    right: 0px;
+    padding-right: 10px;
+    top:75px;
 }
 
 .div-export-pathwayUp {
-    float: right;
-    margin-top: -31px;
+    position: absolute;
+    right: 0px;
+    padding-right: 10px;
+    top:75px;
 
 }
 
 .div-export-pathwayDown {
-    float: right;
-    margin-top: -31px;
+    position: absolute;
+    right: 0px;
+    padding-right: 10px;
+    top:75px;
 }
 
 .div-export-ss {
-    float: right;
-    margin-top: -30px;
+     position: absolute;
+    right: 0px;
+    padding-right: 10px;
+    top:75px;
 }
 
 .div-export-gsm {
-    float: right;
+    position: absolute;
+    right: 0px;
     padding-right: 10px;
-    margin-top: -9px;
+    top:50px;
 
 }
 
@@ -1073,7 +1082,7 @@ input#input_group_name {
 }
 
 .ant-table-wrapper {
-    padding-top: 7px;
+    padding-top:9px;
 }
 
 #input-define-group {
