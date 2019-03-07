@@ -147,6 +147,8 @@ class PUGTable extends Component {
             dataIndex: 'Pathway_ID',
             width: "10%",
             sorter: true,
+            className:'table_th',
+
             render: (text, record, index) => {
 
                 return <div className="single-line pathway_pathways_id" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10:minWidth}}>
