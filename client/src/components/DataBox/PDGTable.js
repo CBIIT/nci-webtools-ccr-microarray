@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Menu, Dropdown, Icon, Table, Input, message, Modal, Button, Tooltip } from 'antd';
 const Search = Input.Search;
 const minWidth = 110;
+const exponentialNum = 2;
 
 class PUGTable extends Component {
 
@@ -240,7 +241,7 @@ class PUGTable extends Component {
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
                 }
@@ -259,7 +260,7 @@ class PUGTable extends Component {
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
                 }
