@@ -22,9 +22,6 @@ class PUGTable extends Component {
         this.showHeatMap = this.showHeatMap.bind(this)
 
     }
- componentDidMount() {
-   this.props.checkAllDIVOverlap();
- }
 
 
     handleMenuClick = (e) => {
