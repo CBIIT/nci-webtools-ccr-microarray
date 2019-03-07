@@ -191,7 +191,7 @@ class DataBox extends Component {
         let workflow = Object.assign({}, this.state);
         workflow.group = "";
         document.getElementById("input_group_name").value = "";
-        document.getElementById("input_group_name").setAttribute("value","")
+        document.getElementById("input_group_name").setAttribute("value", "")
         document.getElementById("message-gsm-group").innerHTML = "";
 
         workflow.visible = false;
@@ -295,6 +295,7 @@ class DataBox extends Component {
                 /></TabPane>);
             degBox = (<TabPane tab="DEG-Enrichments Results"  key="DEG-Enrichments_Results">
                 <DEGBox  key="degBox" data={this.props.data} 
+                        checkAllDIVOverlap ={this.props.checkAllDIVOverlap}
                          changeLoadingStatus={this.props.changeLoadingStatus}
                          getDEG={this.props.getDEG}
                          getPathwayUp={this.props.getPathwayUp}
@@ -314,6 +315,7 @@ class DataBox extends Component {
         if (this.props.data.done_gsea) {
             ssGSEABox = (<TabPane  key="ssGSEA_Results" tab="ssGSEA Results" >
                 <SSGSEATable  key="ssGSEA_Results_sstab_table"  
+                              checkAllDIVOverlap ={this.props.checkAllDIVOverlap}
                               exportGSEA={this.props.exportGSEA}  
                               getssGSEA={this.props.getssGSEA} 
                               handleGeneChange={this.props.handleGeneChange}  

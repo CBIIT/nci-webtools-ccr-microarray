@@ -13,7 +13,9 @@ class DEGTable extends Component {
         this.handleTableChange = this.handleTableChange.bind(this);
     }
 
-
+ componentDidMount() {
+   this.props.checkAllDIVOverlap();
+ }
 
     handleTableChange = (pagination, filters, sorter) => {
 
