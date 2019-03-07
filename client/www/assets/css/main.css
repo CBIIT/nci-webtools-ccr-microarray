@@ -1217,6 +1217,54 @@ input#input_group_name {
     margin-top: -20px;
 }
 
+
+
+.pathway_up_source_head {
+    margin-top: -46px;
+}
+
+.pathway_up_desc_head {
+    margin-top: -46px;
+}
+
+.pathway_up_pathways_id_head {
+    margin-top: -46px;
+}
+
+.pathway_up_type_head {
+    margin-top: -46px;
+}
+
+.pathway_up_p_value_head {
+    margin-top: -46px;
+}
+
+.pathway_up_fdr_head {
+    margin-top: -46px;
+}
+
+.pathway_up_ratio_head {
+    margin-top: -46px;
+}
+
+.pathway_up_gene_list_head {
+    margin-top: -46px;
+}
+
+.pathway_up_number_hits_head {
+    margin-top: -25px;
+}
+
+.pathway_up_number_genes_pathway_head {}
+
+.pathway_up_number_user_genes_head {
+    margin-top: 0px;
+}
+
+.pathway_up_total_number_genes_head {
+    margin-top: 0px;
+}
+
 @media (min-width: 1200px){
     #tab_analysis > div.container.container-board > div.container-board-right > div > div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content > div.ant-tabs-tabpane.ant-tabs-tabpane-active > div:nth-child(3) > div:nth-child(2) > span > input{
         width: 150px
