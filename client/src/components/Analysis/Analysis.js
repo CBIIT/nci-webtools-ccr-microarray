@@ -348,7 +348,7 @@ class Analysis extends Component {
             let pagination = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div/div/div/ul');
             let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
 
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0 &&pagination.offsetWidth!=0) {
 
                 dt.style.paddingTop = "50px";
                 pagination.style.top = "-60px";
@@ -369,7 +369,7 @@ class Analysis extends Component {
             let pagination = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div/div/div/ul');
             let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
 
-            if (dt != null && pagination != null && displaySection != null && exportBtn != null) {
+            if (dt &&dt != null &&pagination&& pagination != null &&pagination.offsetWidth!=0&& displaySection&&displaySection != null && exportBtn != null) {
                 dt.style.paddingTop = "9px";
                 pagination.style.top = "-58px";
                 pagination.style.right = "100px";
