@@ -220,7 +220,7 @@ class DEGTable extends Component {
                     if (text != "" && text != "NA") {
                         let link = "https://www.ncbi.nlm.nih.gov/gene/" + text;
                         return <div  className="deg_entrez single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.11:minWidth}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}> <a href={link} target="_blank">{text}</a></span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}> <a href={link} target="_blank" >{text}</a></span>
                                     </div>
 
                     } else {
