@@ -212,7 +212,7 @@ let defaultState = {
             list_mAplotAN: "",
             Heatmapolt: "",
         },
-        geneHeatmap: "no data",
+        geneHeatmap: "Not enough significant pathways available with p-value < 0.05.",
         volcanoPlot: "No Data",
         volcanoPlotName: "/volcano.html"
     }
