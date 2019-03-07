@@ -145,8 +145,8 @@ class Help extends Component {
                           
                             ssGSEA is performed using the gsva package as described in (Hanzelmann et al., 2013).  Pathway enrichment scores are then analyzed to determine fold changes and p-values between groups of samples, similar to the differential gene expression analysis described above.  Differential pathway enrichment is ranked by p-value, and the top 50 pathways are displayed in a heatmap.  Human gene set modules were downloaded from the BROAD Institute’s MSigDB 
                               <a href="http://software.broadinstitute.org/gsea/msigdb/collections.jsp">(http://software.broadinstitute.org/gsea/msigdb/collections.jsp)</a>, 
-                            and mouse gene set modules were adapted from the Walter+Eliza Hall Institute of Medical Research 
-                             <a href="http://bioinf.wehi.edu.au/software/MSigDB/">(http://bioinf.wehi.edu.au/software/MSigDB/)</a>. 
+                            and mouse gene set modules were downloaded from the Gene Set Knowledgebase 
+                             <a href="https://www.bioconductor.org/packages/release/data/experiment/vignettes/gskb/inst/doc/gskb.pdf">(https://www.bioconductor.org/packages/release/data/experiment/vignettes/gskb/inst/doc/gskb.pdf)</a>. 
 
                             </p>
                               <p><img src="./assets/img/ssGSEA.gif" alt="National Cancer Institute" /></p>

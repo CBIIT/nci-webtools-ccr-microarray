@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Button, Icon, Table, Input, Tooltip } from 'antd';
 const minWidth = 110;
-const exponentialNum = 5
+const exponentialNum = 2;
 
 class SSGSEATable extends Component {
 
@@ -11,7 +11,9 @@ class SSGSEATable extends Component {
         this.handleSelectionChange = this.handleSelectionChange.bind(this)
 
     }
-
+ componentDidMount() {
+   this.props.checkAllDIVOverlap();
+ }
 
     handleMenuClick = (e) => {
         document.getElementById("ss-drop-down").innerHTML = e.key
@@ -112,7 +114,7 @@ class SSGSEATable extends Component {
             render: (text, record, index) => {
 
                 return <div className="single-line" >
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
@@ -167,7 +169,7 @@ class SSGSEATable extends Component {
             render: (text, record, index) => {
 
                 return <div className="single-line">
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text)}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
@@ -185,7 +187,7 @@ class SSGSEATable extends Component {
             render: (text, record, index) => {
 
                 return <div className="single-line" >
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }
@@ -203,7 +205,7 @@ class SSGSEATable extends Component {
             render: (text, record, index) => {
 
                 return <div className="single-line" >
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
             }

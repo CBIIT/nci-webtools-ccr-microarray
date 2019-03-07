@@ -3,7 +3,7 @@ import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'ant
 const Search = Input.Search;
 
 const minWidth=110;
-
+const exponentialNum = 2;
 
 class DEGTable extends Component {
 
@@ -13,7 +13,9 @@ class DEGTable extends Component {
         this.handleTableChange = this.handleTableChange.bind(this);
     }
 
-
+ componentDidMount() {
+   this.props.checkAllDIVOverlap();
+ }
 
     handleTableChange = (pagination, filters, sorter) => {
 
@@ -120,7 +122,7 @@ class DEGTable extends Component {
                 render: (text, record, index) => {
 
                     return <div className="p_value single-line"  style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10:minWidth}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
                 }
@@ -141,7 +143,7 @@ class DEGTable extends Component {
                 render: (text, record, index) => {
 
                     return <div  className="adj_p_value single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10:minWidth}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
                 }
