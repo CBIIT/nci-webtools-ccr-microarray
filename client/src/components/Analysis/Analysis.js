@@ -267,6 +267,8 @@ class Analysis extends Component {
 
     }
 
+
+
     componentDidMount() {
         if (this.props.location.search && this.props.location.search != "") {
 
@@ -275,6 +277,312 @@ class Analysis extends Component {
             this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
 
         }
+        // listen windows resize event
+        window.addEventListener("resize", this.updateDimensions);
+    }
+
+    // release the listener
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+
+    updateDimensions = () => {
+        this.checkAllDIVOverlap();
+    }
+
+    getElementByXpath = (path) => {
+        return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    }
+
+    checkOverLap = (rect1, rect2) => {
+        rect1 = rect1.getBoundingClientRect();
+        rect2 = rect2.getBoundingClientRect();
+        return !(rect1.right < rect2.left ||
+            rect1.left > rect2.right ||
+            rect1.bottom < rect2.top ||
+            rect1.top > rect2.bottom)
+    }
+
+
+    correctDIVOverlap = (div1, div2, next) => {
+        // Check  GSM  
+        let search_input = this.getElementByXpath(div1)
+        let pagination = this.getElementByXpath(div2);
+        if (search_input != null && pagination != null) {
+            if (this.checkOverLap(search_input, pagination)) {
+                next(true)
+            } else {
+                next(false)
+            }
+        }
+
+    }
+
+    checkAllDIVOverlap = () => {
+        // Check GSM
+        this.correctDIVOverlap('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input', '//*[@id="gsm-select"]', this.correctGSMDIVOverlap)
+
+        // Check  Deg
+        this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="deg-select"]', this.correctDegDIVOverlap)
+
+        // check pathway up
+        this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-up-select"]', this.correctPathWayUpDIVOverlap)
+
+        // check  pathway down
+        this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-down-select"]', this.correctPathWayDownDIVOverlap)
+
+        // // check ssgsea 
+        this.correctDIVOverlap('//*[@id="ss_gene_set_select_option"]', '//*[@id="ss-select"]', this.correctSSGSEADIVOverlap)
+
+
+
+    }
+
+
+    correctDegDIVOverlap = (flag) => {
+        if (flag) {
+
+            let dt = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div');
+            let displaySection = this.getElementByXpath('//*[@id="deg-select"]');
+            let pagination = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div/div/div/ul');
+            let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
+
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+
+                dt.style.paddingTop = "50px";
+                pagination.style.top = "-60px";
+                pagination.style.right = "auto";
+                pagination.style.left = displaySection.offsetWidth + 15 + "px";
+                displaySection.style.right = "auto";
+                displaySection.style.top = "115px";
+                exportBtn.style.right = "auto";
+                let width = displaySection.offsetWidth + pagination.offsetWidth + 35 + "px";
+                exportBtn.style.left = width;
+                exportBtn.style.top = "114px";
+
+            }
+        } else {
+
+            let dt = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div');
+            let displaySection = this.getElementByXpath('//*[@id="deg-select"]');
+            let pagination = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div/div/div/ul');
+            let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
+
+            if (dt != null && pagination != null && displaySection != null && exportBtn != null) {
+                dt.style.paddingTop = "9px";
+                pagination.style.top = "-58px";
+                pagination.style.right = "100px";
+                pagination.style.left = "auto";
+                let width = pagination.offsetWidth + 125;
+                displaySection.style.right = width + "px";
+                displaySection.style.top = "73px";
+                exportBtn.style.right = "0";
+                exportBtn.style.left = "auto";
+                exportBtn.style.top = "75px";
+            }
+        }
+
+    }
+
+    correctSSGSEADIVOverlap = (flag) => {
+        if (flag) {
+
+            let dt = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div')
+            let displaySection = this.getElementByXpath('//*[@id="ss-select"]')
+            let pagination = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div/div/div/ul')
+            let exportBtn = this.getElementByXpath('//*[@id="ss_tag1"]/div[2]');
+
+             if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null &&displaySection.offsetWidth!=0&& exportBtn && exportBtn != null) {
+
+                dt.style.paddingTop = "50px";
+                displaySection.style.right = "auto";
+                displaySection.style.top = "115px";
+
+                pagination.style.top = "-60px";
+                pagination.style.right = "auto";
+                pagination.style.left = displaySection.offsetWidth + 15 + "px";
+
+                exportBtn.style.right = "auto";
+                let width = displaySection.offsetWidth + pagination.offsetWidth + 35 + "px";
+                exportBtn.style.left = width;
+                exportBtn.style.top = "114px";
+            }
+
+        } else {
+            // not overlap back to normal
+            let dt = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div')
+            let displaySection = this.getElementByXpath('//*[@id="ss-select"]')
+            let pagination = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div/div/div/ul')
+            let exportBtn = this.getElementByXpath('//*[@id="ss_tag1"]/div[2]');
+            if (dt && dt != null && pagination && pagination != null &&pagination.offsetWidth!=0&& displaySection && displaySection != null && exportBtn && exportBtn != null) {
+
+                dt.style.paddingTop = "9px";
+                pagination.style.top = "-58px";
+                pagination.style.right = "100px";
+                pagination.style.left = "auto";
+                let width = pagination.offsetWidth + 125;
+                displaySection.style.right = width + "px";
+                displaySection.style.top = "73px";
+                exportBtn.style.right = "0";
+                exportBtn.style.left = "auto";
+                exportBtn.style.top = "75px";
+            }
+        }
+
+    }
+
+    correctPathWayUpDIVOverlap = (flag) => {
+        if (flag) {
+
+            let dt = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div')
+            let displaySection = this.getElementByXpath('//*[@id="pathways-up-select"]')
+            let pagination = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div/div/div/ul')
+            let exportBtn = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[2]');
+
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null &&displaySection.offsetWidth!=0&& exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+
+
+                dt.style.paddingTop = "50px";
+                displaySection.style.right = "auto";
+                displaySection.style.top = "115px";
+
+
+                pagination.style.top = "-60px";
+                pagination.style.right = "auto";
+                pagination.style.left = displaySection.offsetWidth + 15 + "px";
+
+                exportBtn.style.right = "auto";
+                let width = displaySection.offsetWidth + pagination.offsetWidth + 35 + "px";
+                exportBtn.style.left = width;
+                exportBtn.style.top = "114px";
+            }
+
+
+        } else {
+            let dt = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div');
+            let displaySection = this.getElementByXpath('//*[@id="pathways-up-select"]');
+            let pagination = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div/div/div/ul');
+            let exportBtn = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[2]');
+
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null &&pagination.offsetWidth!=0&& exportBtn && exportBtn != null) {
+
+
+                dt.style.paddingTop = "9px";
+                pagination.style.top = "-58px";
+                pagination.style.right = "100px";
+                pagination.style.left = "auto";
+                let width = pagination.offsetWidth + 125;
+                displaySection.style.right = width + "px";
+                displaySection.style.top = "73px";
+                exportBtn.style.right = "0";
+                exportBtn.style.left = "auto";
+                exportBtn.style.top = "75px";
+            }
+
+
+
+        }
+
+    }
+
+    correctPathWayDownDIVOverlap = (flag) => {
+        if (flag) {
+            let dt = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div');
+            let displaySection = this.getElementByXpath('//*[@id="pathways-down-select"]');
+            let pagination = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div/div/div/ul');
+            let exportBtn = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[2]');
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null &&displaySection.offsetWidth!=0&& exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+
+                dt.style.paddingTop = "50px";
+                displaySection.style.right = "auto";
+                displaySection.style.top = "115px";
+                pagination.style.top = "-60px";
+                pagination.style.right = "auto";
+                pagination.style.left = displaySection.offsetWidth + 15 + "px";
+                exportBtn.style.right = "auto";
+                let width = displaySection.offsetWidth + pagination.offsetWidth + 35 + "px";
+                exportBtn.style.left = width;
+                exportBtn.style.top = "114px";
+            }
+
+
+        } else {
+            // not overlap back to normal
+            let dt = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div');
+            let displaySection = this.getElementByXpath('//*[@id="pathways-down-select"]');
+            let pagination = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div/div/div/ul');
+            let exportBtn = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[2]');
+
+            if (dt && dt != null && pagination && pagination != null &&pagination.offsetWidth!=0&& displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+
+                dt.style.paddingTop = "9px";
+                pagination.style.top = "-58px";
+                pagination.style.right = "100px";
+                pagination.style.left = "auto";
+
+                let width = pagination.offsetWidth + 125;
+                displaySection.style.right = width + "px";
+                displaySection.style.top = "73px";
+                exportBtn.style.right = "0";
+                exportBtn.style.left = "auto";
+                exportBtn.style.top = "75px";
+            }
+        }
+
+    }
+
+
+
+
+    correctGSMDIVOverlap = (flag) => {
+        if (flag) {
+            // overlap
+            let dt = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div')
+            let displaySection = this.getElementByXpath('//*[@id="gsm-select"]')
+            let pagination = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div/div/div/ul')
+            let exportBtn = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[2]/div[2]');
+
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null &&displaySection.offsetWidth!=0&& exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+
+                dt.style.paddingTop = "50px";
+                displaySection.style.right = "auto";
+                displaySection.style.top = "100px";
+                pagination.style.top = "-60px";
+                pagination.style.right = "auto";
+                pagination.style.left = displaySection.offsetWidth + 15 + "px";
+                exportBtn.style.right = "auto";
+                let width = displaySection.offsetWidth + pagination.offsetWidth + 32 + "px";
+                exportBtn.style.left = width;
+                exportBtn.style.top = "92px";
+            }
+
+
+        } else {
+            // not overlap back to normal
+            let dt = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div')
+            let displaySection = this.getElementByXpath('//*[@id="gsm-select"]')
+            let pagination = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div/div/div/ul')
+            let exportBtn = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[2]/div[2]');
+
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+
+                dt.style.paddingTop = "9px";
+                let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
+                displaySection.style.right = width + "px";
+                displaySection.style.top = "55px";
+                pagination.style.top = "-62px";
+                pagination.style.right = "100px";
+                pagination.style.left = "auto";
+                exportBtn.style.right = "0";
+                exportBtn.style.left = "auto";
+                exportBtn.style.top = "50px";
+
+            }
+
+        }
+
+
     }
 
     changeRunContrastMode = (params = false) => {
@@ -2888,7 +3196,7 @@ class Analysis extends Component {
             console.log("watch gsm display")
         }
         let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("gsm-select").style.right = width + "px";;
+        document.getElementById("gsm-select").style.right = width + "px";
 
     }
 
@@ -2905,7 +3213,7 @@ class Analysis extends Component {
             console.log("watch pathways_up display")
         }
         let width = document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("pathways-up-select").style.right = width + "px";;
+        document.getElementById("pathways-up-select").style.right = width + "px";
     }
 
     resetPathWayDownDisplay = () => {
@@ -2950,6 +3258,7 @@ class Analysis extends Component {
         this.resetNUSE();
         this.resetPCA();
         this.resetBoxPlotBN();
+        this.checkAllDIVOverlap();
     }
 
     showWorkFlow = () => {
@@ -2962,6 +3271,7 @@ class Analysis extends Component {
         this.resetNUSE();
         this.resetPCA();
         this.resetBoxPlotBN();
+        this.checkAllDIVOverlap();
 
     }
 
@@ -3105,6 +3415,7 @@ class Analysis extends Component {
         }
 
     }
+
 
     initWithCode(code) {
 
@@ -3329,6 +3640,7 @@ class Analysis extends Component {
                             workflow: workflow
                         });
                     }
+                    this.checkAllDIVOverlap();
                 }).catch(error => console.log(error));
         } catch (err) {
             workflow.uploading = false;
@@ -3518,6 +3830,7 @@ class Analysis extends Component {
                             upateCurrentWorkingTab={this.upateCurrentWorkingTab}
                             assignGroup={this.assignGroup} 
                             deleteGroup={this.deleteGroup}
+                            checkAllDIVOverlap ={this.checkAllDIVOverlap}
                         
                             handleGeneChange={this.handleGeneChange} 
                             changessGSEA={this.changessGSEA}

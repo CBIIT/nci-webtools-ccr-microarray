@@ -11,7 +11,9 @@ class SSGSEATable extends Component {
         this.handleSelectionChange = this.handleSelectionChange.bind(this)
 
     }
-
+ componentDidMount() {
+   this.props.checkAllDIVOverlap();
+ }
 
     handleMenuClick = (e) => {
         document.getElementById("ss-drop-down").innerHTML = e.key
