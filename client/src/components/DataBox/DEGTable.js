@@ -13,7 +13,7 @@ class DEGTable extends Component {
         this.handleTableChange = this.handleTableChange.bind(this);
     }
 
- 
+    
 
     handleTableChange = (pagination, filters, sorter) => {
 
