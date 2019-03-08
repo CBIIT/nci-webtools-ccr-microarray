@@ -1736,6 +1736,10 @@ class Analysis extends Component {
                                 width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
                                 height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
                                 scene: {
+
+                                    camera: {
+                                         eye: { x: 0, y: 2, z: 1 }
+                                    },
                                     xaxis: {
                                         title: pcaData.col[0] + " (" + pcaData.xlable + "%)",
                                         backgroundcolor: "#DDDDDD",
