@@ -1308,28 +1308,7 @@ input#input_group_name {
     }
 
     /* GSM  */
-    .div-group-gsm {
-        width: 100%;
-        padding: 0px 10px;
-    }
-
-    .div-group-gsm button {
-        width: 100%;
-        padding: 0px 10px;
-    }
-
-    .div-export-gsm {
-        float: inherit;
-        padding: 0px 10px;
-    }
-
-    .input-search-gsm {
-        position: inherit !important;
-        min-height: 15px;
-        height: 35px;
-        width: : 100%;
-    }
-
+   
     #gsm-select {
         position: inherit;
         padding-top: 7px;
@@ -1363,95 +1342,22 @@ input#input_group_name {
     /*DEG*/
 
 
-    #deg_select_option {
-        width: 100%;
-    }
-
-    .div-export-deg {
-        float: inherit;
-        margin-top: 5px;
-        width: 100%;
-    }
-
-
-    .div-export-deg button {
-        width: 100%;
-    }
-
-    div#deg-select {
-        position: inherit;
-        margin-top: 5px;
-        margin-left: 2px;
-    }
+    
 
     /*pathwayUp*/
-    .div-export-pathwayUp {
-        float: inherit;
-        margin-top: 5px;
-        width: 100%;
-    }
+   
 
-    .div-export-pathwayUp button {
-        width: 100%;
-    }
-
-    div#pathways-up-select {
-        position: inherit;
-        margin-top: 5px;
-        margin-left: 2px;
-    }
-
+  
     /*pathwaydown*/
 
-    .div-export-pathwayDown {
-        float: inherit;
-        margin-top: 5px;
-        width: 100%;
-    }
+   
 
-    .div-export-pathwayDown button {
-        width: 100%;
-    }
-
-    div#pathways-down-select {
-        position: inherit;
-        margin-top: 5px;
-        margin-left: 2px;
-    }
 
 
     /*ssgsea*/
 
-    #ss_select_option {
-        width: 100%;
-    }
-
-
-    #ss_genset_select {
-        position: inherit;
-        width: 100%;
-    }
-
-    #ss_genset_select select {
-        width: 100%;
-    }
-
-
-    .div-export-ss {
-        float: inherit;
-        margin-top: 5px;
-        width: 100%;
-    }
-
-    .div-export-ss button {
-        width: 100%;
-    }
-
-    div#ss-select {
-        position: inherit;
-        margin-top: 5px;
-        margin-left: 2px;
-    }
+   
+  
 
     #tab_analysis .ant-table-wrapper {
         padding-top: 45px;
