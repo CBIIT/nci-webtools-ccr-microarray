@@ -79,7 +79,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 'SYMBOL',
-                sorter: true,
+                sorter: false,
                 width: "8%",
                 render: (text, record, index) => {
 
@@ -109,7 +109,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 'FC',
-                sorter: true,
+                sorter: false,
                 width: "6%",
                 render: (text, record, index) => {
 
@@ -139,7 +139,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 'P.Value',
-                sorter: true,
+                sorter: false,
                 width: "8%",
                 defaultSortOrder: 'ascend',
                 render: (text, record, index) => {
@@ -171,7 +171,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 'adj.P.Val',
-                sorter: true,
+                sorter: false,
                 width: "8%",
 
                 render: (text, record, index) => {
@@ -203,7 +203,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 'AveExpr',
-                sorter: true,
+                sorter: false,
                 width: "8%",
                 render: (text, record, index) => {
 
@@ -233,7 +233,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 'ACCNUM',
-                sorter: true,
+                sorter: false,
                 width: "9%",
                 render: (text, record, index) => {
 
@@ -264,7 +264,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 'DESC',
-                sorter: true,
+                sorter: false,
                 width: "15%",
                 render: (text, record, index) => {
 
@@ -294,7 +294,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 'ENTREZ',
-                sorter: true,
+                sorter: false,
                 width: "10%",
                 render: (text, record, index) => {
                     if (text != "" && text != "NA") {
@@ -333,7 +333,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 'probsetID',
-                sorter: true,
+                sorter: false,
                 width: "8%",
                 render: (text, record, index) => {
 
@@ -363,7 +363,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 't',
-                sorter: true,
+                sorter: false,
                 width: "5%",
                 render: (text, record, index) => {
 
@@ -394,7 +394,7 @@ class DEGTable extends Component {
                 </div>
                 ),
                 dataIndex: 'B',
-                sorter: true,
+                sorter: false,
                 width: "5%",
                 render: (text, record, index) => {
 
