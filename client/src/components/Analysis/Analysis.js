@@ -826,7 +826,7 @@ class Analysis extends Component {
     getssGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
 
-        if (params.search_keyword) {
+        if (params.sorting) {
             params = {
                 projectId: workflow.projectID,
                 page_size: params.page_size,
@@ -837,7 +837,7 @@ class Analysis extends Component {
                 },
                 search_keyword: params.search_keyword
             }
-
+             workflow.ssGSEA.sorting =params.sorting;
             workflow.ssGSEA.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
@@ -1087,7 +1087,7 @@ class Analysis extends Component {
     getPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
-        if (params.search_keyword) {
+        if (params.sorting) {
             params = {
                 projectId: workflow.projectID,
                 page_size: params.page_size,
@@ -1098,7 +1098,7 @@ class Analysis extends Component {
                 },
                 search_keyword: params.search_keyword
             }
-
+             workflow.pathways_up.sorting =params.sorting;
             workflow.pathways_up.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
@@ -1183,7 +1183,7 @@ class Analysis extends Component {
     getPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
-        if (params.search_keyword) {
+        if (params.sorting) {
             params = {
                 projectId: workflow.projectID,
                 page_size: params.page_size,
@@ -1200,6 +1200,7 @@ class Analysis extends Component {
                 pageSize: params.page_size,
 
             }
+              workflow.pathways_down.sorting = params.sorting;
             workflow.pathways_down.search_keyword = params.search_keyword;
         } else {
 
@@ -1427,7 +1428,7 @@ class Analysis extends Component {
     getDEG = (params = {}) => {
 
         let workflow = Object.assign({}, this.state.workflow);
-        if (params.search_keyword) {
+        if (params.sorting) {
 
             params = {
                 projectId: workflow.projectID,
@@ -1445,7 +1446,7 @@ class Analysis extends Component {
                 pageSize: params.page_size,
 
             }
-            workflow.sorting = params.sorting;
+             workflow.diff_expr_genes.sorting = params.sorting;
             workflow.diff_expr_genes.search_keyword = params.search_keyword;
 
         } else {

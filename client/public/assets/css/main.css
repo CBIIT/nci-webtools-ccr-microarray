@@ -1290,6 +1290,18 @@ input#input_group_name {
     min-width: 80px;
 }
 
+div.head-title{
+   float: left;
+    width: calc(100% - 25px);
+}
+div.head-sorter{
+    float: left;
+    clear: right;
+}
+div.head-sorter > div{
+    height: 10px;
+}
+
 
 @media (min-width: 1200px) {
     #tab_analysis>div.container.container-board>div.container-board-right>div>div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content>div.ant-tabs-tabpane.ant-tabs-tabpane-active>div:nth-child(3)>div:nth-child(2)>span>input {
