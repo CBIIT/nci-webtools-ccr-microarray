@@ -255,7 +255,7 @@ class SSGSEATable extends Component {
             render: (text, record, index) => {
 
                 return <div className="single-line" >
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
             }
