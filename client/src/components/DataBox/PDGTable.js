@@ -157,10 +157,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> PATHWAY_ID</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="PATHWAY_ID"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("PATHWAY_ID","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Pathway_ID"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Pathway_ID","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="PATHWAY_ID"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("PATHWAY_ID","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Pathway_ID"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Pathway_ID","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
@@ -189,10 +189,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> SOURCE</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="SOURCE"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("SOURCE","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Source"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Source","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="SOURCE"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("SOURCE","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Source"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Source","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
@@ -220,10 +220,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> DESCRIPTION</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="DESCRIPTION"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("DESCRIPTION","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Description"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Description","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="DESCRIPTION"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("DESCRIPTION","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Description"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Description","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
@@ -248,10 +248,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> TYPE</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="TYPE"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("TYPE","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Type"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Type","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="TYPE"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("TYPE","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Type"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Type","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
@@ -278,10 +278,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> P_VALUE</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="P_VALUE"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("P_VALUE","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="P_Value"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("P_Value","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="P_VALUE"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("P_VALUE","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="P_Value"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("P_Value","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
@@ -339,10 +339,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> RATIO</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="RATIO"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("RATIO","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Ratio"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Ratio","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="RATIO"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("RATIO","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Ratio"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Ratio","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
@@ -369,10 +369,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> GENE_LIST</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="GENE_LIST"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("GENE_LIST","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Gene_List"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Gene_List","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="GENE_LIST"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("GENE_LIST","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Gene_List"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Gene_List","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
@@ -397,10 +397,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> NUMBER_HITS</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_HITS"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("NUMBER_HITS","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Number_Hits"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Number_Hits","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_HITS"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("NUMBER_HITS","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Number_Hits"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Number_Hits","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
@@ -427,10 +427,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> NUMBER_GENES_PATHWAY</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_GENES_PATHWAY"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("NUMBER_GENES_PATHWAY","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Number_Genes_Pathway"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Number_Genes_Pathway","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_GENES_PATHWAY"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("NUMBER_GENES_PATHWAY","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Number_Genes_Pathway"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Number_Genes_Pathway","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
@@ -458,10 +458,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> NUMBER_USER_GENES</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_USER_GENES"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("NUMBER_USER_GENES","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Number_User_Genes"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Number_User_Genes","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_USER_GENES"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("NUMBER_USER_GENES","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Number_User_Genes"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Number_User_Genes","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
@@ -488,10 +488,10 @@ class PUGTable extends Component {
                             <div  className="head-title"> TOTAL_NUMBER_GENES</div>
                             <div className="head-sorter">
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="TOTAL_NUMBER_GENES"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("TOTAL_NUMBER_GENES","ascend")}><i className="fas fa-angle-up"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Total_Number_Genes"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Total_Number_Genes","ascend")}><i className="fas fa-angle-up"></i></a>
                                 </div>
                                 <div>
-                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="TOTAL_NUMBER_GENES"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("TOTAL_NUMBER_GENES","descend")}><i className="fas fa-angle-down"></i></a>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="Total_Number_Genes"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Total_Number_Genes","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
                                 
                             </div>
