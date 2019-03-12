@@ -2701,10 +2701,6 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
         imageExists(link, this.buildgeneHeatmap);
-
-
-
-
     }
 
     buildgeneHeatmap = (exists) => {
@@ -2713,12 +2709,8 @@ class Analysis extends Component {
 
         if (exists) {
             workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
-
-        } else {
-
-            workflow.geneHeatmap = "no data";
+            this.setState({ workflow: workflow });
         }
-        this.setState({ workflow: workflow });
     }
 
     runContrast = () => {
