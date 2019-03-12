@@ -545,7 +545,20 @@ function getPlots(req, type) {
                 if (typeof(req.session.runContrastData.listPlots[8].color[0]) == "number") {
                     req.session.runContrastData.listPlots[8].color = req.session.runContrastData.listPlots[8].color.map(x => rainbow[x / 5 - 1]);
                 }
-                return_data = req.session.runContrastData.listPlots[8]
+                let groups =[];
+                if(req.session.runContrastData.groups){
+
+                    for (var i=0; i<=req.session.runContrastData.groups.length - 1; i++) {
+                        if(req.session.runContrastData.groups[i]!='Ctl'){
+                            groups.push(req.session.runContrastData.groups[i]);
+                        }else{
+                            groups.push("Others");
+                        }
+                        
+                    }
+                }
+                req.session.runContrastData.listPlots[8].group_name=groups;
+                return_data = req.session.runContrastData.listPlots[8];
             } else {
                 return_data = "";
             }

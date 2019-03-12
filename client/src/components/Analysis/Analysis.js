@@ -1718,11 +1718,11 @@ class Analysis extends Component {
                                 x: pcaData.x,
                                 y: pcaData.y,
                                 z: pcaData.z,
-                                text: pcaData.row,
-                                mode: 'markers',
+                                text: pcaData.group_name,
+                                mode: 'markers+text',
                                 marker: {
                                     size: 10,
-                                    color: pcaData.color
+                                    color: pcaData.color,
                                 },
                                 type: 'scatter3d'
                             }];
