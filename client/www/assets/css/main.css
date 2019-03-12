@@ -1129,12 +1129,12 @@ input#input_group_name {
 
 .p_value {
     text-align: right;
-    min-width: 80px;
+    min-width: 100px;
 }
 
 .adj_p_value {
     text-align: right;
-    min-width: 80px;
+    min-width: 120px;
 }
 
 .aveexpr {
@@ -1144,7 +1144,7 @@ input#input_group_name {
 
 .accnum {
     text-align: right;
-    min-width: 90px;
+    min-width: 120px;
 }
 
 .deg_desc {
@@ -1214,19 +1214,19 @@ input#input_group_name {
 
 .pathway_number_hits_head {
     margin-top: -24px;
-    min-width: 80px;
+    min-width: 90px;
 }
 
 .pathway_number_genes_pathway_head {
-    min-width: 80px;
+    min-width: 120px;
 }
 
 .pathway_number_user_genes_head {
-    min-width: 80px;
+    min-width: 90px;
 }
 
 .pathway_total_number_genes_head {
-    min-width: 80px;
+    min-width: 100px;
 }
 
 
@@ -1272,22 +1272,22 @@ input#input_group_name {
 
 .pathway_up_number_hits_head {
     margin-top: -25px;
-    min-width: 80px;
+    min-width: 120px;
 }
 
 .pathway_up_number_genes_pathway_head {
-    min-width: 80px;
+    min-width: 120px;
 
 }
 
 .pathway_up_number_user_genes_head {
     margin-top: 0px;
-    min-width: 80px;
+    min-width: 90px;
 }
 
 .pathway_up_total_number_genes_head {
     margin-top: 0px;
-    min-width: 80px;
+    min-width: 100px;
 }
 
 div.head-title{
