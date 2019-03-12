@@ -15,7 +15,7 @@ describe('Microarray Smoke Test -About Page', function() {
         if (url) {
             driver = await new Builder()
                 .forBrowser('firefox')
-                //.setFirefoxOptions(new firefox.Options().headless())
+                .setFirefoxOptions(new firefox.Options().headless())
                 .build();
 
             //let driver = new Builder().forBrowser('firefox').build();
