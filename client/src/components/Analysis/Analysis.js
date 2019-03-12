@@ -2701,10 +2701,6 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
         imageExists(link, this.buildgeneHeatmap);
-
-
-
-
     }
 
     buildgeneHeatmap = (exists) => {
@@ -2713,12 +2709,8 @@ class Analysis extends Component {
 
         if (exists) {
             workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
-
-        } else {
-
-            workflow.geneHeatmap = "no data";
+            this.setState({ workflow: workflow });
         }
-        this.setState({ workflow: workflow });
     }
 
     runContrast = () => {
@@ -3835,11 +3827,20 @@ class Analysis extends Component {
                       <a  aria-label="panel display controller" id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
 
                   </div>
-                  <DataBox  data={this.state.workflow} 
+                <DataBox  data={this.state.workflow} 
+
+                            resetGSMDisplay={this.resetGSMDisplay}
+                            resetDEGDisplay={this.resetDEGDisplay}
+                            resetPathWayUPDisplay={this.resetPathWayUPDisplay}
+                            resetPathWayDownDisplay={this.resetPathWayDownDisplay}
+                            resetSSGSEADisplay={this.resetSSGSEADisplay}
+                            checkAllDIVOverlap ={this.checkAllDIVOverlap}
+                            
                             upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} 
                             upateCurrentWorkingTab={this.upateCurrentWorkingTab}
                             assignGroup={this.assignGroup} 
                             deleteGroup={this.deleteGroup}
+                            
                         
                             handleGeneChange={this.handleGeneChange} 
                             changessGSEA={this.changessGSEA}
@@ -3861,12 +3862,13 @@ class Analysis extends Component {
                              getPathwayUp={this.getPathwayUp}
                              getPathwayDown={this.getPathwayDown}
                              getssGSEA={this.getssGSEA}
-                               exportGSE={this.exportGSE}
+
+                              exportGSE={this.exportGSE}
                               exportGSEA={this.exportGSEA}
                               exportPathwayUp={this.exportPathwayUp}
                               exportPathwayDown={this.exportPathwayDown}
                               exportDEG={this.exportDEG}
-                             
+                                                         
                             />
                 </div>
                 <div className={modal}>

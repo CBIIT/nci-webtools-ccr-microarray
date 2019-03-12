@@ -35,6 +35,7 @@ class DataBox extends Component {
 
     handleTabChange = (key) => {
 
+        let callback =  this.props.checkAllDIVOverlap();
         if (key == "Pre-normalization_QC_Plots") {
             let type = window.tag_pre_plot_status;
             switch (type) {
@@ -121,28 +122,28 @@ class DataBox extends Component {
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
                     }else{
-                        this.props.resetDEGDisplay(this.props.checkAllDIVOverlap());
+                        this.props.resetDEGDisplay(callback);
                     }
                     break;
                 case "pathways_up":
                     if (this.props.data.pathways_up.data.length == 0) {
                         this.props.getPathwayUp();
                     }else{
-                        this.props.resetPathWayUPDisplay(this.props.checkAllDIVOverlap());
+                        this.props.resetPathWayUPDisplay(callback);
                     }
                     break;
                 case "pathways_down":
                     if (this.props.data.pathways_down.data.length == 0) {
                         this.props.getPathwayDown();
                     }else{
-                        this.props.resetPathWayDownDisplay(this.props.checkAllDIVOverlap());
+                        this.props.resetPathWayDownDisplay(callback);
                     }
                     break;
                 case "deg":
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
                     }else{
-                        this.props.resetDEGDisplay(this.props.checkAllDIVOverlap());
+                        this.props.resetDEGDisplay(callback);
                     }
                     break;;
 
@@ -150,7 +151,7 @@ class DataBox extends Component {
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
                     }else{
-                        this.props.resetDEGDisplay(this.props.checkAllDIVOverlap());
+                        this.props.resetDEGDisplay(callback);
                     }
             }
 
@@ -160,7 +161,7 @@ class DataBox extends Component {
 
         if (key == "GSM_1") {
             console.log(key)
-            this.props.resetGSMDisplay(this.props.checkAllDIVOverlap())
+            this.props.resetGSMDisplay(callback)
         }
 
         if (key == "ssGSEA_Results") {
