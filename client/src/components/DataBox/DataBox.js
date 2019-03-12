@@ -121,7 +121,7 @@ class DataBox extends Component {
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
                     }else{
-                        this.props.resetDEGDisplay(this.props.checkAllDIVOverlap());
+                        this.props.resetDEGDisplay();
                     }
                     break;
                 case "pathways_up":
@@ -142,7 +142,7 @@ class DataBox extends Component {
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
                     }else{
-                        this.props.resetDEGDisplay(this.props.checkAllDIVOverlap());
+                        this.props.resetDEGDisplay();
                     }
                     break;;
 
@@ -150,7 +150,7 @@ class DataBox extends Component {
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
                     }else{
-                        this.props.resetDEGDisplay(this.props.checkAllDIVOverlap());
+                        this.props.resetDEGDisplay();
                     }
             }
 
