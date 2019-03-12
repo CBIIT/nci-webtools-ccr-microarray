@@ -3,7 +3,8 @@ import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'ant
 const Search = Input.Search;
 
 const minWidth = 110;
-const exponentialNum = 2;
+const exponentialNum = 3;
+const exponentialNum2 = 6;
 
 class DEGTable extends Component {
 
@@ -13,9 +14,9 @@ class DEGTable extends Component {
         this.sorter = this.sorter.bind(this);
     }
 
-    
 
-  
+
+
     handleTableChange = (pagination, filters, sorter) => {
 
 
@@ -27,11 +28,11 @@ class DEGTable extends Component {
             search_keyword: this.props.data.diff_expr_genes.search_keyword
         });
     }
-       
+
 
 
     sorter = (field, order) => {
-      
+
         if (!field) {
             field = "P.Value"
         }
@@ -58,7 +59,7 @@ class DEGTable extends Component {
 
 
 
-          const columns = [{
+        const columns = [{
 
                 title: (
                     <div style={{ textAlign: 'center' }}>
@@ -112,7 +113,9 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "6%",
                 render: (text, record, index) => {
-
+                    if (text.length > 7) {
+                        text = Number.parseFloat(text).toExponential(exponentialNum2);
+                    }
                     return <div  className="deg_fc single-line"  style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.06>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="right" title={text}>{text}</span>
                                     </div>
@@ -206,7 +209,9 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "8%",
                 render: (text, record, index) => {
-
+                    if (text.length > 7) {
+                        text = Number.parseFloat(text).toExponential(exponentialNum2);
+                    }
                     return <div  className="aveexpr single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -368,7 +373,7 @@ class DEGTable extends Component {
                 render: (text, record, index) => {
 
                     return <div className="deg_t  single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05:minWidth}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
                 }
@@ -397,7 +402,9 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "5%",
                 render: (text, record, index) => {
-
+                    if (text.length > 7) {
+                        text = Number.parseFloat(text).toExponential(exponentialNum2);
+                    }
                     return <div  className="deg_b single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>

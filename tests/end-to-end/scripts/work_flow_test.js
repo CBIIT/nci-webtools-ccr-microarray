@@ -64,7 +64,7 @@ describe('Microarray Work Flow Test', function() {
         loadBtn.click();
 
         // wait loading to be complete
-        await driver.wait(until.elementLocated(By.id('gsm-select')), 60 * 1000);
+        await driver.wait(until.elementLocated(By.id('gsm-select')), 2 * 60 * 1000);
 
         // verify unber of gsm loaded
         let numOfRecord = await driver.findElement(By.id('gsm-select'));
@@ -80,9 +80,8 @@ describe('Microarray Work Flow Test', function() {
     it('Should be able to manage group"', async function() {
 
         // click first element as group 1
-        let group_1 = await driver.findElement(By.xpath("/html/body/div[2]/div/div/div/div[2]/div[3]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[3]/div/div/div/div/div/div/div/table/tbody/tr[1]/td[1]/span/label/span/input"));
+        let group_1 = await  driver.findElement(By.xpath('/html/body/div[2]/div/div/div/div[2]/div[3]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div/div/div/div/div/div/div/table/tbody/tr[7]/td[1]/span/label/span/input'));
         group_1.click();
-
 
         // open manage group modal
         let manageGroupBtn = await driver.findElement(By.xpath('/html/body/div[2]/div/div/div/div[2]/div[3]/div[1]/div[3]/div/div[3]/div[1]/div[2]/div[1]/button'));
@@ -109,11 +108,11 @@ describe('Microarray Work Flow Test', function() {
         await driver.wait(until.elementIsNotVisible(el), 50 * 1000);
 
         // check if second element in the datatable exist
-        await driver.wait(until.elementLocated(By.xpath('/html/body/div[2]/div/div/div/div[2]/div[3]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[3]/div/div/div/div/div/div/div/table/tbody/tr[2]/td[1]/span/label/span/input')), 20 * 1000);
+        // await driver.wait(until.elementLocated(By.xpath('/html/body/div[2]/div/div/div/div[2]/div[3]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[3]/div/div/div/div/div/div/div/table/tbody/tr[2]/td[1]/span/label/span/input')), 20 * 1000);
 
 
         // click 2rd element as group 1
-        let group_2 = await driver.findElement(By.xpath('/html/body/div[2]/div/div/div/div[2]/div[3]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[3]/div/div/div/div/div/div/div/table/tbody/tr[2]/td[1]/span/label/span/input'));
+        let group_2 = await driver.findElement(By.xpath('/html/body/div[2]/div/div/div/div[2]/div[3]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div/div/div/div/div/div/div/table/tbody/tr[2]/td[1]/span/label/span/input'));
         group_2.click();
 
 
@@ -154,6 +153,8 @@ describe('Microarray Work Flow Test', function() {
         runContrastBtn.isEnabled().then(function(value) {
             expect(value).to.equal(true)
         })
+
+
 
     });
 

@@ -929,20 +929,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     }
 
 
-    // sorting
-    if (sorting != null) {
-        if (sorting.order == "descend") {
-            result.sort(function(e1, e2) {
-                return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
-            })
-        }
 
-        if (sorting.order == "ascend") {
-            result.sort(function(e1, e2) {
-                return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
-            })
-        }
-    }
 
     // search
     if (search_keyword) {
@@ -983,7 +970,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
                 }
 
-                if (search_keyword.search_TYPE != "") {
+                if (search_keyword.search_DESCRIPTION != "") {
                     if (r.Description.toLowerCase().indexOf(search_keyword.search_TYPE.toLowerCase()) != -1) {
                         flag = true;
                     } else {
@@ -992,7 +979,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
 
                 }
 
-                if (search_keyword.search_DESCRIPTION != "") {
+                if (search_keyword.search_TYPE != "") {
                     if (r.Type.toLowerCase().indexOf(search_keyword.search_DESCRIPTION.toLowerCase()) != -1) {
                         flag = true;
                     } else {
@@ -1092,6 +1079,22 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
         }
 
     }
+
+        // sorting
+    if (sorting != null) {
+        if (sorting.order == "descend") {
+            result.sort(function(e1, e2) {
+                return (e1[sorting.name] < e2[sorting.name]) ? 1 : -1
+            })
+        }
+
+        if (sorting.order == "ascend") {
+            result.sort(function(e1, e2) {
+                return (e1[sorting.name] < e2[sorting.name]) ? -1 : 1
+            })
+        }
+    }
+    
 
     if (type == "pathways_up") {
         // store current filter result into tmp 

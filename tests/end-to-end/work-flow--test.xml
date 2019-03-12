@@ -1,8 +1,14 @@
-<testsuite name="Mocha Tests" tests="6" failures="0" errors="0" skipped="0" timestamp="Mon, 04 Mar 2019 20:18:57 GMT" time="116.515">
-<testcase classname="Microarray Work Flow Test" name="Should be able to enter Accession Code and load data&#x22;" time="16.927"/>
-<testcase classname="Microarray Work Flow Test" name="Should be able to manager group&#x22;" time="2.295"/>
-<testcase classname="Microarray Work Flow Test" name="Should be able to select groups&#x22;" time="1.12"/>
-<testcase classname="Microarray Work Flow Test" name="Should be able to submit job to queue&#x22;" time="0.87"/>
-<testcase classname="Microarray Work Flow Test" name="Should be able to run contrast locally&#x22;" time="91.386"/>
-<testcase classname="Microarray Work Flow Test" name="Should be able to hide the menu and see the datatable&#x22;" time="0.023"/>
+<testsuite name="Mocha Tests" tests="6" failures="0" errors="1" skipped="0" timestamp="Tue, 12 Mar 2019 20:20:21 GMT" time="45.128">
+<testcase classname="Microarray Work Flow Test" name="Should be able to enter Accession Code and load data&#x22;" time="19.094"/>
+<testcase classname="Microarray Work Flow Test" name="Should be able to manage group&#x22;" time="2.462"/>
+<testcase classname="Microarray Work Flow Test" name="Should be able to select groups&#x22;" time="1.159"/>
+<testcase classname="Microarray Work Flow Test" name="Should be able to submit job to queue&#x22;" time="0.937"/>
+<testcase classname="Microarray Work Flow Test" name="Should be able to run contrast locally&#x22;" time="15.075"/>
+<testcase classname="Microarray Work Flow Test" name="Should be able to hide the menu and see the datatable&#x22;" time="0.008"><failure>Browsing context has been discarded
+NoSuchWindowError: Browsing context has been discarded
+    at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:550:15)
+    at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:542:13)
+    at Executor.execute (node_modules/selenium-webdriver/lib/http.js:468:26)
+    at &#x3C;anonymous&#x3E;
+    at process._tickCallback (internal/process/next_tick.js:189:7)</failure></testcase>
 </testsuite>
