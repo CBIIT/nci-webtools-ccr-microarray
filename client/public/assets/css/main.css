@@ -6,7 +6,7 @@ body {
 }
 
 .ant-table-wrapper a {
-    color: rgb(33, 90, 130) !important;
+    color: rgb(0, 0, 255);
 
 }
 
@@ -589,12 +589,12 @@ tr:nth-child(even) {
     top: -30px !important;
 }
 
-.ant-input-suffix{
+.ant-input-suffix {
     display: none;
 }
 
 @media (min-width: 365px) {
-     #panel-show {
+    #panel-show {
         position: absolute;
         top: 236px;
         z-index: 9;
@@ -628,7 +628,7 @@ tr:nth-child(even) {
 
 
 @media (min-width: 768px) {
-    
+
 
     .container-board-left {
         width: 100%;
@@ -677,9 +677,9 @@ tr:nth-child(even) {
 
 }
 
-@media(min-width: 1420px){
+@media(min-width: 1420px) {
 
-     #panel-show {
+    #panel-show {
         position: relative;
         top: 0;
         left: 0;
@@ -699,7 +699,7 @@ tr:nth-child(even) {
 
 
 
-     
+
 
     #panel-hide {
         position: relative;
@@ -707,6 +707,7 @@ tr:nth-child(even) {
         left: 0;
 
     }
+
     #btn-controll-data-table-display {
         padding-top: 10px;
         width: 16px;
@@ -988,17 +989,17 @@ input#input_group_name {
 }
 
 .div-export-deg {
-     position: absolute;
+    position: absolute;
     right: 0px;
     padding-right: 10px;
-    top:75px;
+    top: 75px;
 }
 
 .div-export-pathwayUp {
     position: absolute;
     right: 0px;
     padding-right: 10px;
-    top:75px;
+    top: 75px;
 
 }
 
@@ -1006,21 +1007,21 @@ input#input_group_name {
     position: absolute;
     right: 0px;
     padding-right: 10px;
-    top:75px;
+    top: 75px;
 }
 
 .div-export-ss {
-     position: absolute;
+    position: absolute;
     right: 0px;
     padding-right: 10px;
-    top:75px;
+    top: 75px;
 }
 
 .div-export-gsm {
     position: absolute;
     right: 0px;
     padding-right: 10px;
-    top:50px;
+    top: 50px;
 
 }
 
@@ -1082,7 +1083,7 @@ input#input_group_name {
 }
 
 .ant-table-wrapper {
-    padding-top:9px;
+    padding-top: 9px;
 }
 
 #input-define-group {
@@ -1128,12 +1129,12 @@ input#input_group_name {
 
 .p_value {
     text-align: right;
-    min-width: 80px;
+    min-width: 100px;
 }
 
 .adj_p_value {
     text-align: right;
-    min-width: 80px;
+    min-width: 120px;
 }
 
 .aveexpr {
@@ -1143,7 +1144,7 @@ input#input_group_name {
 
 .accnum {
     text-align: right;
-    min-width: 90px;
+    min-width: 120px;
 }
 
 .deg_desc {
@@ -1172,79 +1173,97 @@ input#input_group_name {
 }
 
 .pathway_source_head {
-    margin-top: -70px;
+    margin-top: -48px;
+    min-width: 100px;
 }
 
 .pathway_desc_head {
-    margin-top: -70px;
+    margin-top: -48px;
+    min-width: 130px;
 }
 
 .pathway_pathways_id_head {
-    margin-top: -70px;
+    margin-top: -50px;
+    min-width: 125px;
 }
 
 .pathway_type_head {
-    margin-top: -70px;
+    margin-top: -48px;
+    min-width: 100px;
 }
 
 .pathway_p_value_head {
-    margin-top: -70px;
+    margin-top: -48px;
+    min-width: 100px;
 }
 
 .pathway_fdr_head {
-    margin-top: -70px;
+    margin-top: -48px;
+    min-width: 80px;
 }
 
 .pathway_ratio_head {
-    margin-top: -70px;
+    margin-top: -48px;
+    min-width: 80px;
 }
 
 .pathway_gene_list_head {
-    margin-top: -70px;
+    margin-top: -48px;
+    min-width: 80px;
 }
 
 .pathway_number_hits_head {
-    margin-top: -50px;
+    margin-top: -24px;
+    min-width: 90px;
 }
 
-.pathway_number_genes_pathway_head {}
+.pathway_number_genes_pathway_head {
+    min-width: 120px;
+}
 
 .pathway_number_user_genes_head {
-    margin-top: -20px;
+    min-width: 90px;
 }
 
 .pathway_total_number_genes_head {
-    margin-top: -20px;
+    min-width: 100px;
 }
 
 
 
 .pathway_up_source_head {
     margin-top: -46px;
+    min-width: 100px;
 }
 
 .pathway_up_desc_head {
     margin-top: -46px;
+    min-width: 130px;
 }
 
 .pathway_up_pathways_id_head {
     margin-top: -46px;
+    min-width: 125px;
 }
 
 .pathway_up_type_head {
     margin-top: -46px;
+    min-width: 100px;
 }
 
 .pathway_up_p_value_head {
     margin-top: -46px;
+    min-width: 100px;
 }
 
 .pathway_up_fdr_head {
     margin-top: -46px;
+    min-width: 80px;
 }
 
 .pathway_up_ratio_head {
     margin-top: -46px;
+    min-width: 80px;
 }
 
 .pathway_up_gene_list_head {
@@ -1253,83 +1272,81 @@ input#input_group_name {
 
 .pathway_up_number_hits_head {
     margin-top: -25px;
+    min-width: 120px;
 }
 
-.pathway_up_number_genes_pathway_head {}
+.pathway_up_number_genes_pathway_head {
+    min-width: 120px;
+
+}
 
 .pathway_up_number_user_genes_head {
     margin-top: 0px;
+    min-width: 90px;
 }
 
 .pathway_up_total_number_genes_head {
     margin-top: 0px;
+    min-width: 100px;
 }
 
-@media (min-width: 1200px){
-    #tab_analysis > div.container.container-board > div.container-board-right > div > div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content > div.ant-tabs-tabpane.ant-tabs-tabpane-active > div:nth-child(3) > div:nth-child(2) > span > input{
+div.head-title{
+   float: left;
+    width: calc(100% - 25px);
+}
+div.head-sorter{
+    float: left;
+    clear: right;
+}
+div.head-sorter > div{
+    height: 10px;
+}
+
+
+@media (min-width: 1200px) {
+    #tab_analysis>div.container.container-board>div.container-board-right>div>div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content>div.ant-tabs-tabpane.ant-tabs-tabpane-active>div:nth-child(3)>div:nth-child(2)>span>input {
         width: 150px
     }
 }
 
-@media only screen and (max-width: 1200px) {
 
+@media only screen and (max-width:768px) {
+    #tab_analysis>div.container.container-board>div.container-board-right>div>div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content>div.ant-tabs-tabpane.ant-tabs-tabpane-active>div:nth-child(3)>div:nth-child(2)>span {
 
-     #tab_analysis > div.container.container-board > div.container-board-right > div > div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content > div.ant-tabs-tabpane.ant-tabs-tabpane-active > div:nth-child(3) > div:nth-child(2) > span {
-    
         display: contents;
-    }
-  #btn-controll-data-table-display {
-        display: none;
-    }
-
-    #btn-controll-data-table-display {
-        display: none;
-    }
-
-    .container-board-left {
-        width: 100%;
-        display: block !important;
-        margin: 0 0 20 0;
-    }
-
-    .container-board-right {
-        width: 100%;
-        margin: 0 0 20 0;
-        display: block !important;
-    }
-
-
-    #tab_analysis .blocks {
-        min-height: 480px;
     }
 
     /* GSM  */
-    .div-group-gsm {
-        width: 100%;
-        padding: 0px 10px;
-    }
-
-    .div-group-gsm button {
-        width: 100%;
-        padding: 0px 10px;
-    }
-
-    .div-export-gsm {
-        float: inherit;
-        padding: 0px 10px;
-    }
-
-    .input-search-gsm {
-        position: inherit !important;
-        min-height: 15px;
-        height: 35px;
-        width: : 100%;
-    }
 
     #gsm-select {
         position: inherit;
         padding-top: 7px;
         padding-left: 5px;
+    }
+
+    #tab_analysis>div.container.container-board>div.container-board-right>div>div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content>div.ant-tabs-tabpane.ant-tabs-tabpane-active>div.row>div.div-group-gsm>button {
+        width: 100%;
+    }
+
+    #tab_analysis>div.container.container-board>div.container-board-right>div>div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content>div.ant-tabs-tabpane.ant-tabs-tabpane-active>div.row>div.div-group-gsm {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    .ant-table-wrapper {
+        padding-top: 50px;
+    }
+
+    .ant-pagination {
+
+        top: -58px !important;
+        right: auto !important;
+    }
+
+    .div-export-gsm {
+        position: inherit;
+        padding-left: 10px;
+
     }
 
     /*Pre-Normal-Plots*/
@@ -1355,108 +1372,137 @@ input#input_group_name {
         top: 146px !important;
     }
 
-
-    /*DEG*/
-
-
-    #deg_select_option {
-        width: 100%;
+    /* Deg */
+    #deg_tag1>div>div:nth-child(4)>div {
+        padding-top: 98px;
     }
 
     .div-export-deg {
-        float: inherit;
-        margin-top: 5px;
+        position: inherit;
+        padding: 5px 10px 5px 0px;
+        width: 100%
+    }
+
+    #btn-deg-export {
         width: 100%;
     }
 
-
-    .div-export-deg button {
-        width: 100%;
+    #deg_select_option {
+        width: 99%
     }
 
     div#deg-select {
+        top: 155px;
+        right: auto;
+
+    }
+
+    #deg_tag1 .ant-table-pagination {
+        right: auto;
+    }
+
+    /* pathway up */
+
+    #deg_tag2>div>div:nth-child(4)>div>div>div>ul {
+        right: auto;
+    }
+
+    #deg_tag2>div>div:nth-child(4)>div {
+        padding-top: 98px;
+    }
+
+    #pathways-up-select {
+        top: 155px !important;
+        right: auto !important;
+
+    }
+
+    #deg_select_option {
+        width: 99%
+    }
+
+    #deg_tag2>div>div.div-export-pathwayUp {
         position: inherit;
-        margin-top: 5px;
-        margin-left: 2px;
+        padding: 5px 10px 5px 0px;
+        width: 100%
+    }
+    #btn-pathwayUp-export{
+        width: 100%
+    }
+    /* pathway down */
+
+    #deg_tag3>div>div:nth-child(4)>div>div>div>ul {
+        right: auto;
     }
 
-    /*pathwayUp*/
-    .div-export-pathwayUp {
-        float: inherit;
-        margin-top: 5px;
-        width: 100%;
+    #deg_tag3>div>div:nth-child(4)>div {
+        padding-top: 91px;
     }
 
-    .div-export-pathwayUp button {
-        width: 100%;
+    #pathways-down-select {
+        top: 155px !important;
+        right: auto !important;
+
     }
 
-    div#pathways-up-select {
+    #deg_tag3>div>div.div-export-pathwayDown {
         position: inherit;
-        margin-top: 5px;
-        margin-left: 2px;
+        padding: 5px 10px 5px 0px;
+        width: 100%
     }
-
-    /*pathwaydown*/
-
-    .div-export-pathwayDown {
-        float: inherit;
-        margin-top: 5px;
-        width: 100%;
-    }
-
-    .div-export-pathwayDown button {
-        width: 100%;
-    }
-
-    div#pathways-down-select {
-        position: inherit;
-        margin-top: 5px;
-        margin-left: 2px;
+    #btn-pathwayDown-export{
+        width: 100%
     }
 
 
     /*ssgsea*/
 
-    #ss_select_option {
+    #ss_tag1 > div:nth-child(4) > div{
+          padding-top: 91px;
+    }
+
+    #btn-ss-export{
+ width: 100%
+    }
+
+    .div-export-ss{
+          position: inherit;
+        padding: 5px 10px 5px 0px;
+        width: 100%
+    }
+
+    #ss-select{
+         top: 155px !important;
+        right: auto !important;
+    }
+
+}
+
+@media only screen and (max-width: 1200px) {
+
+    #btn-controll-data-table-display {
+        display: none;
+    }
+
+    #btn-controll-data-table-display {
+        display: none;
+    }
+
+    .container-board-left {
         width: 100%;
+        display: block !important;
+        margin: 0 0 20 0;
     }
 
-
-    #ss_genset_select {
-        position: inherit;
+    .container-board-right {
         width: 100%;
+        margin: 0 0 20 0;
+        display: block !important;
     }
 
-    #ss_genset_select select {
-        width: 100%;
-    }
 
-
-    .div-export-ss {
-        float: inherit;
-        margin-top: 5px;
-        width: 100%;
-    }
-
-    .div-export-ss button {
-        width: 100%;
-    }
-
-    div#ss-select {
-        position: inherit;
-        margin-top: 5px;
-        margin-left: 2px;
-    }
-
-    #tab_analysis .ant-table-wrapper {
-        padding-top: 45px;
-    }
-
-    #tab_analysis .ant-table-pagination {
-        position: absolute;
-        right: 0px;
-        top: -55px;
+    #tab_analysis .blocks {
+        min-height: 480px;
     }
 
 
@@ -1479,8 +1525,4 @@ input#input_group_name {
     .ant-modal {
         top: 0px;
     }
-}
-
-.ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-sorters, .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-filters{
-    padding-right: 10px !important;
 }

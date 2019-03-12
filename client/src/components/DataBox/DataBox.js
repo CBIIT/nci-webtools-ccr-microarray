@@ -22,8 +22,9 @@ class DataBox extends Component {
             added: false
         }
 
-        this.createTag = this.createTag.bind(this)
-        this.showModal = this.showModal.bind(this)
+        this.createTag = this.createTag.bind(this);
+        this.showModal = this.showModal.bind(this);
+        this.handleTabChange = this.handleTabChange.bind(this);
     }
 
 
@@ -33,6 +34,7 @@ class DataBox extends Component {
     }
 
     handleTabChange = (key) => {
+
         if (key == "Pre-normalization_QC_Plots") {
             let type = window.tag_pre_plot_status;
             switch (type) {
@@ -118,27 +120,37 @@ class DataBox extends Component {
                 case "":
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
+                    }else{
+                        this.props.resetDEGDisplay(this.props.checkAllDIVOverlap());
                     }
                     break;
                 case "pathways_up":
                     if (this.props.data.pathways_up.data.length == 0) {
                         this.props.getPathwayUp();
+                    }else{
+                        this.props.resetPathWayUPDisplay(this.props.checkAllDIVOverlap());
                     }
                     break;
                 case "pathways_down":
                     if (this.props.data.pathways_down.data.length == 0) {
                         this.props.getPathwayDown();
+                    }else{
+                        this.props.resetPathWayDownDisplay(this.props.checkAllDIVOverlap());
                     }
                     break;
                 case "deg":
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
+                    }else{
+                        this.props.resetDEGDisplay(this.props.checkAllDIVOverlap());
                     }
                     break;;
 
                 default:
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
+                    }else{
+                        this.props.resetDEGDisplay(this.props.checkAllDIVOverlap());
                     }
             }
 
@@ -148,7 +160,7 @@ class DataBox extends Component {
 
         if (key == "GSM_1") {
             console.log(key)
-            // do nothing
+            this.props.resetGSMDisplay(this.props.checkAllDIVOverlap())
         }
 
         if (key == "ssGSEA_Results") {
@@ -158,10 +170,13 @@ class DataBox extends Component {
             // reload the data in this tag
             if (this.props.data.ssGSEA.data.length == 0) {
                 this.props.getssGSEA();
+            }else{
+                let callBack =this.props.checkAllDIVOverlap();
+                this.props.resetSSGSEADisplay(callBack);
             }
         }
-
-        this.props.upateCurrentWorkingTab(key)
+       
+         this.props.upateCurrentWorkingTab(key)
 
     }
 
@@ -378,7 +393,7 @@ class DataBox extends Component {
           <p> 
             <label htmlFor="input-define-group">
                 <span style={{display:"none"}}>Define Grop</span>
-                <input  id="input-define-group" disabled={this.state.selected==""?true:false} aria-label="define group name" className={this.state.selected==""?"ant-input ant-input-disabled":"ant-input "}  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)',"color":"black","font-size":"16px"}} onChange={this.handleInputOnChange}/>&nbsp;
+                <input  id="input-define-group" disabled={this.state.selected==""?true:false} aria-label="define group name" className={this.state.selected==""?"ant-input ant-input-disabled":"ant-input "}  placeholder={"Group Name"} id={"input_group_name"} style={{width:'calc(100% - 68px)',"color":"black","fontSize":"16px"}} onChange={this.handleInputOnChange}/>&nbsp;
                 <Button  type={this.state.selected==""||this.state.group_name==""?"default":"primary"}  disabled={this.state.selected==""||this.state.group_name==""?true:false}   onClick={this.createTag} >Add</Button>
            </label>
              

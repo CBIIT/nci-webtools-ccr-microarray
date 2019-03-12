@@ -50,34 +50,36 @@ class PUGTable extends Component {
 
     handleTableChange = (pagination, filters, sorter) => {
 
-        if (!sorter) {
-            sorter = {
-                field: "P_Value",
-                rder: "ascend"
-            }
-        }
-        if (!sorter.field) {
-            sorter.field = "P_Value"
-        }
-
-        if (!sorter.order) {
-            sorter.order = "ascend"
-        }
-
-
         this.props.getPathwayDown({
             page_size: pagination.pageSize,
             page_number: pagination.current,
-            sorting: {
-                name: sorter.field,
-                order: sorter.order,
-            },
-            search_keyword: this.props.data.pathways_down.search_keyword,
+            sorting: this.props.data.pathways_down.sorting,
+            search_keyword: this.props.data.pathways_down.search_keyword
         });
     }
 
 
+    sorter = (field, order) => {
 
+        if (!field) {
+            field = "P_Value"
+        }
+
+        if (!order) {
+            order = "ascend"
+        }
+
+        this.props.getPathwayDown({
+            page_size: this.props.data.pathways_down.pagination.pageSize,
+            page_number: this.props.data.pathways_down.pagination.current,
+            sorting: {
+                name: field,
+                order: order,
+            },
+            search_keyword: this.props.data.pathways_down.search_keyword
+        });
+
+    }
 
 
     handleOk = () => {
@@ -116,9 +118,9 @@ class PUGTable extends Component {
             .then(result => {
                 this.props.changeLoadingStatus(false, "")
                 if (result.status == 200) {
-                     if (Object.keys(result.data).length ==0 || result.data.constructor ==Object) {
+                    if (Object.keys(result.data).length == 0 || result.data.constructor == Object) {
 
-                  
+
                         importantStuff.location.href = window.location.protocol + "//" + window.location.host + "/microarray/assets/noheatmap.html";
 
 
@@ -148,20 +150,31 @@ class PUGTable extends Component {
 
         const columns = [{
                 title: (
-                <div className="pathway_pathways_id_head" >
+                    <div className="pathway_pathways_id_head" >
                       <label htmlFor="input_pathway_down_search_PATHWAY_ID"><span style={{display:"none"}}>input_pathway_down_search_PATHWAY_ID</span>
                       <Input aria-label="input_pathway_down_search_PATHWAY_ID"  onPressEnter={value=>search(value) }  placeholder="PATHWAY_ID"  id="input_pathway_down_search_PATHWAY_ID"/></label>
-                      <div>PATHWAY_ID</div>
+                        <div>   
+                            <div  className="head-title"> PATHWAY_ID</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="PATHWAY_ID"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("PATHWAY_ID","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="PATHWAY_ID"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("PATHWAY_ID","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'Pathway_ID',
                 width: "10%",
                 key: 'Pathway_ID',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
-                                    <span style={{"color":"rgb(33, 90, 130)"}}  data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span style={{"color":"rgb(0, 0, 255)"}}   data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
                 }
@@ -172,13 +185,24 @@ class PUGTable extends Component {
                     <div className="pathway_source_head" >
                          <label htmlFor="input_pathway_down_search_SOURCE"><span style={{display:"none"}}>input_pathway_down_search_SOURCE</span>
                          <Input aria-label="input_pathway_down_search_SOURCE" onPressEnter={value=>search(value) }  placeholder="source"  id="input_pathway_down_search_SOURCE"/></label>
-                          <div>SOURCE</div>
+                          <div>   
+                            <div  className="head-title"> SOURCE</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="SOURCE"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("SOURCE","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="SOURCE"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("SOURCE","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'Source',
                 width: "9%",
                 key: 'Source',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09:minWidth}}>
@@ -189,16 +213,27 @@ class PUGTable extends Component {
             },
             {
                 title: (
-                   <div className="pathway_desc_head" >
+                    <div className="pathway_desc_head" >
                     <label htmlFor="input_pathway_down_search_DESCRIPTION"><span style={{display:"none"}}>input_pathway_down_search_DESCRIPTION</span>
                     <Input aria-label="input_pathway_down_search_DESCRIPTION" onPressEnter={value=>search(value) }  placeholder="desc"  id="input_pathway_down_search_DESCRIPTION"/></label>
-                                      <div>DESCRIPTION</div>
+                      <div>   
+                            <div  className="head-title"> DESCRIPTION</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="DESCRIPTION"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("DESCRIPTION","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="DESCRIPTION"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("DESCRIPTION","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'Description',
                 width: "10%",
                 key: 'Description',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => (
                     <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                         <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -206,16 +241,27 @@ class PUGTable extends Component {
                 ),
             }, {
                 title: (
-                   <div className="pathway_type_head" >
+                    <div className="pathway_type_head" >
                        <label htmlFor="input_pathway_down_search_TYPE"><span style={{display:"none"}}>input_pathway_down_search_TYPE</span>
                        <Input  aria-label="input_pathway_down_search_TYPE"  onPressEnter={value=>search(value) }    placeholder="type"  id="input_pathway_down_search_TYPE"/></label>
-                                    <div>TYPE</div>
+                         <div>   
+                            <div  className="head-title"> TYPE</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="TYPE"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("TYPE","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="TYPE"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("TYPE","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'Type',
                 width: "10%",
                 key: 'Type',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
@@ -225,16 +271,27 @@ class PUGTable extends Component {
                 }
             }, {
                 title: (
-                   <div className="pathway_p_value_head" >
+                    <div className="pathway_p_value_head" >
                   <label htmlFor="input_pathway_down_search_p_value"><span style={{display:"none"}}>input_pathway_down_search_p_value</span>
                   <Input aria-label="input_pathway_down_search_p_value"  onPressEnter={value=>search(value) }    placeholder="P_Value"  id="input_pathway_down_search_p_value"/></label>
-                                      <div>P_VALUE</div>
+                                   <div>   
+                            <div  className="head-title"> P_VALUE</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="P_VALUE"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("P_VALUE","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="P_VALUE"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("P_VALUE","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'P_Value',
                 width: "8%",
                 key: 'P_Value',
-                sorter: true,
+                sorter: false,
                 defaultSortOrder: 'ascend',
                 render: (text, record, index) => {
 
@@ -248,13 +305,24 @@ class PUGTable extends Component {
                     <div className="pathway_fdr_head" >
                        <label htmlFor="input_pathway_down_search_fdr"><span style={{display:"none"}}>input_pathway_down_search_fdr</span>
                        <Input aria-label="input_pathway_down_search_fdr"   onPressEnter={value=>search(value) }    placeholder="FDR"  id="input_pathway_down_search_fdr"/></label>
-                                     <div>FDR</div>
+                         <div>   
+                            <div  className="head-title"> FDR</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="FDR"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("FDR","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="FDR"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("FDR","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'FDR',
                 width: "7%",
                 key: 'FDR',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -264,16 +332,27 @@ class PUGTable extends Component {
                 }
             }, {
                 title: (
-                   <div className="pathway_ratio_head" >
+                    <div className="pathway_ratio_head" >
                        <label htmlFor="input_pathway_down_search_RATIO"><span style={{display:"none"}}>input_pathway_down_search_RATIO</span>
                        <Input aria-label="input_pathway_down_search_RATIO" onPressEnter={value=>search(value) }   placeholder="Ratio"  id="input_pathway_down_search_RATIO"/></label>
-                                     <div>RATIO</div>
+                          <div>   
+                            <div  className="head-title"> RATIO</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="RATIO"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("RATIO","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="RATIO"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("RATIO","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'Ratio',
                 width: "7%",
                 key: 'Ratio',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -283,16 +362,27 @@ class PUGTable extends Component {
                 }
             }, {
                 title: (
-                   <div className="pathway_gene_list_head" >
+                    <div className="pathway_gene_list_head" >
                      <label htmlFor="input_pathway_down_search_GENE_LIST"><span style={{display:"none"}}>input_pathway_down_search_GENE_LIST</span>
                      <Input aria-label="input_pathway_down_search_GENE_LIST" onPressEnter={value=>search(value) }  placeholder="GENE_LIST"  id="input_pathway_down_search_GENE_LIST"/></label>
-                                    <div>GENE_LIST</div>
+                        <div>   
+                            <div  className="head-title"> GENE_LIST</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="GENE_LIST"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("GENE_LIST","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="GENE_LIST"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("GENE_LIST","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'Gene_List',
                 width: "10%",
                 key: 'Gene_List',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => (
                     <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.1:minWidth}}>
                          <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
@@ -300,16 +390,27 @@ class PUGTable extends Component {
                 ),
             }, {
                 title: (
-                   <div className="pathway_number_hits_head" >
+                    <div className="pathway_number_hits_head" >
                            <label htmlFor="input_pathway_down_search_NUMBER_HITS"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_HITS</span>
                            <Input aria-label="input_pathway_down_search_NUMBER_HITS" onPressEnter={value=>search(value) }   placeholder="HITS"  id="input_pathway_down_search_NUMBER_HITS"/></label>
-                                   <div>NUMBER_HITS</div>
+                               <div>   
+                            <div  className="head-title"> NUMBER_HITS</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_HITS"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("NUMBER_HITS","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_HITS"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("NUMBER_HITS","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'Number_Hits',
                 width: "7%",
                 key: 'Number_Hits',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -322,13 +423,24 @@ class PUGTable extends Component {
                     <div className="pathway_number_genes_pathway_head" >
                          <label htmlFor="input_pathway_down_search_NUMBER_GENES_PATHWAY"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_GENES_PATHWAY</span>
                          <Input  aria-label="input_pathway_down_search_NUMBER_GENES_PATHWAY"  onPressEnter={value=>search(value) }   placeholder="GENES_PATHWAY"  id="input_pathway_down_search_NUMBER_GENES_PATHWAY"/></label>
-                                   <div>NUMBER_GENES_PATHWAY</div>
+                           <div>   
+                            <div  className="head-title"> NUMBER_GENES_PATHWAY</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_GENES_PATHWAY"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("NUMBER_GENES_PATHWAY","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_GENES_PATHWAY"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("NUMBER_GENES_PATHWAY","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'Number_Genes_Pathway',
                 width: "7%",
                 key: 'Number_Genes_Pathway',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -339,16 +451,27 @@ class PUGTable extends Component {
 
             }, {
                 title: (
-                   <div className="pathway_number_user_genes_head" >
+                    <div className="pathway_number_user_genes_head" >
                         <label htmlFor="input_pathway_down_search_NUMBER_USER_GENES"><span style={{display:"none"}}>input_pathway_down_search_NUMBER_USER_GENES</span>
                         <Input  aria-label="input_pathway_down_search_NUMBER_USER_GENES"  onPressEnter={value=>search(value) }   placeholder="USER_GENES"  id="input_pathway_down_search_NUMBER_USER_GENES"/></label>
-                                    <div>NUMBER_USER_GENES</div>
+                          <div>   
+                            <div  className="head-title"> NUMBER_USER_GENES</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_USER_GENES"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("NUMBER_USER_GENES","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="NUMBER_USER_GENES"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("NUMBER_USER_GENES","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'Number_User_Genes',
                 width: "7%",
                 key: 'Number_User_Genes',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -361,13 +484,24 @@ class PUGTable extends Component {
                     <div className="pathway_total_number_genes_head" >
                        <label htmlFor="input_pathway_down_search_TOTAL_NUMBER_GENES"><span style={{display:"none"}}>input_pathway_down_search_TOTAL_NUMBER_GENES</span>
                        <Input  aria-label="input_pathway_down_search_TOTAL_NUMBER_GENES" onPressEnter={value=>search(value) }   placeholder="GENES"  id="input_pathway_down_search_TOTAL_NUMBER_GENES"/></label>
-                              <div>TOTAL_NUMBER_GENES</div>
+                          <div>   
+                            <div  className="head-title"> TOTAL_NUMBER_GENES</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="TOTAL_NUMBER_GENES"&&this.props.data.pathways_down.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("TOTAL_NUMBER_GENES","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.pathways_down.sorting.name=="TOTAL_NUMBER_GENES"&&this.props.data.pathways_down.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("TOTAL_NUMBER_GENES","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'Total_Number_Genes',
                 width: "8%",
                 key: 'Total_Number_Genes',
-                sorter: true,
+                sorter: false,
                 render: (text, record, index) => {
 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>

@@ -212,7 +212,7 @@ let defaultState = {
             list_mAplotAN: "",
             Heatmapolt: "",
         },
-        geneHeatmap: "no data",
+        geneHeatmap: "Not enough significant pathways available with p-value < 0.05.",
         volcanoPlot: "No Data",
         volcanoPlotName: "/volcano.html"
     }
@@ -263,6 +263,7 @@ class Analysis extends Component {
 
         this.getSSGSEAGeneHeatMap = this.getSSGSEAGeneHeatMap.bind(this);
         this.buildgeneHeatmap = this.buildgeneHeatmap.bind(this);
+        this.checkAllDIVOverlap = this.checkAllDIVOverlap.bind(this);
 
 
     }
@@ -288,7 +289,19 @@ class Analysis extends Component {
 
 
     updateDimensions = () => {
+        // reset container-board-right
+        if ((document.body.clientWidth - document.getElementsByClassName("container-board-left")[0].clientWidth) < 300) {
+            // mobile model
+            document.getElementsByClassName("container-board-right")[0].style.width = document.getElementsByClassName("container-board-left")[0].clientWidth + "px";
+
+        } else {
+            document.getElementsByClassName("container-board-right")[0].style.width = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - document.getElementsByClassName("container-board-left")[0].clientWidth - 80 + "px";
+
+        }
+
+        // reset all pagination
         this.checkAllDIVOverlap();
+
     }
 
     getElementByXpath = (path) => {
@@ -303,6 +316,7 @@ class Analysis extends Component {
             rect1.bottom < rect2.top ||
             rect1.top > rect2.bottom)
     }
+
 
 
     correctDIVOverlap = (div1, div2, next) => {
@@ -320,22 +334,23 @@ class Analysis extends Component {
     }
 
     checkAllDIVOverlap = () => {
-        // Check GSM
-        this.correctDIVOverlap('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input', '//*[@id="gsm-select"]', this.correctGSMDIVOverlap)
+        if (document.body.offsetWidth > 765) {
+            // Check GSM
+            this.correctDIVOverlap('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input', '//*[@id="gsm-select"]', this.correctGSMDIVOverlap)
 
-        // Check  Deg
-        this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="deg-select"]', this.correctDegDIVOverlap)
+            // Check  Deg
+            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="deg-select"]', this.correctDegDIVOverlap)
 
-        // check pathway up
-        this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-up-select"]', this.correctPathWayUpDIVOverlap)
+            // check pathway up
+            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-up-select"]', this.correctPathWayUpDIVOverlap)
 
-        // check  pathway down
-        this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-down-select"]', this.correctPathWayDownDIVOverlap)
+            // check  pathway down
+            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-down-select"]', this.correctPathWayDownDIVOverlap)
 
-        // // check ssgsea 
-        this.correctDIVOverlap('//*[@id="ss_gene_set_select_option"]', '//*[@id="ss-select"]', this.correctSSGSEADIVOverlap)
+            // // check ssgsea 
+            this.correctDIVOverlap('//*[@id="ss_gene_set_select_option"]', '//*[@id="ss-select"]', this.correctSSGSEADIVOverlap)
 
-
+        }
 
     }
 
@@ -348,7 +363,7 @@ class Analysis extends Component {
             let pagination = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div/div/div/ul');
             let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
 
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0 &&pagination.offsetWidth!=0) {
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0 && pagination.offsetWidth != 0) {
 
                 dt.style.paddingTop = "50px";
                 pagination.style.top = "-60px";
@@ -369,7 +384,19 @@ class Analysis extends Component {
             let pagination = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div/div/div/ul');
             let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
 
-            if (dt &&dt != null &&pagination&& pagination != null &&pagination.offsetWidth!=0&& displaySection&&displaySection != null && exportBtn != null) {
+            let deg_select_option = this.getElementByXpath('//*[@id="deg_select_option"]');
+
+
+            deg_select_option = deg_select_option.getBoundingClientRect();
+            let displaySection_client = displaySection.getBoundingClientRect();
+
+
+            if (dt && dt != null && pagination && pagination != null && pagination.offsetWidth != 0 && displaySection && displaySection != null && exportBtn != null) {
+                // check if move back will cause the overlap
+                if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > deg_select_option.right)) {
+                    return;
+                }
+
                 dt.style.paddingTop = "9px";
                 pagination.style.top = "-58px";
                 pagination.style.right = "100px";
@@ -393,7 +420,7 @@ class Analysis extends Component {
             let pagination = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div/div/div/ul')
             let exportBtn = this.getElementByXpath('//*[@id="ss_tag1"]/div[2]');
 
-             if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null &&displaySection.offsetWidth!=0&& exportBtn && exportBtn != null) {
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null) {
 
                 dt.style.paddingTop = "50px";
                 displaySection.style.right = "auto";
@@ -415,7 +442,21 @@ class Analysis extends Component {
             let displaySection = this.getElementByXpath('//*[@id="ss-select"]')
             let pagination = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div/div/div/ul')
             let exportBtn = this.getElementByXpath('//*[@id="ss_tag1"]/div[2]');
-            if (dt && dt != null && pagination && pagination != null &&pagination.offsetWidth!=0&& displaySection && displaySection != null && exportBtn && exportBtn != null) {
+
+
+            let select_option = this.getElementByXpath('//*[@id="ss_gene_set_select_option"]');
+            // check if move back will cause the overlap
+
+            select_option = select_option.getBoundingClientRect();
+            let displaySection_client = displaySection.getBoundingClientRect();
+
+
+            if (dt && dt != null && pagination && pagination != null && pagination.offsetWidth != 0 && displaySection && displaySection != null && exportBtn && exportBtn != null) {
+                // check if move back will cause the overlap
+
+                if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > select_option.right)) {
+                    return;
+                }
 
                 dt.style.paddingTop = "9px";
                 pagination.style.top = "-58px";
@@ -440,7 +481,7 @@ class Analysis extends Component {
             let pagination = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div/div/div/ul')
             let exportBtn = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[2]');
 
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null &&displaySection.offsetWidth!=0&& exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
 
 
                 dt.style.paddingTop = "50px";
@@ -465,7 +506,19 @@ class Analysis extends Component {
             let pagination = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div/div/div/ul');
             let exportBtn = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[2]');
 
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null &&pagination.offsetWidth!=0&& exportBtn && exportBtn != null) {
+            let deg_select_option = this.getElementByXpath('//*[@id="deg_select_option"]');
+            // check if move back will cause the overlap
+
+            deg_select_option = deg_select_option.getBoundingClientRect();
+            let displaySection_client = displaySection.getBoundingClientRect();
+
+
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && pagination.offsetWidth != 0 && exportBtn && exportBtn != null) {
+                // check if move back will cause the overlap
+
+                if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > deg_select_option.right)) {
+                    return;
+                }
 
 
                 dt.style.paddingTop = "9px";
@@ -492,7 +545,7 @@ class Analysis extends Component {
             let displaySection = this.getElementByXpath('//*[@id="pathways-down-select"]');
             let pagination = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div/div/div/ul');
             let exportBtn = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[2]');
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null &&displaySection.offsetWidth!=0&& exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
 
                 dt.style.paddingTop = "50px";
                 displaySection.style.right = "auto";
@@ -514,7 +567,22 @@ class Analysis extends Component {
             let pagination = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div/div/div/ul');
             let exportBtn = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[2]');
 
-            if (dt && dt != null && pagination && pagination != null &&pagination.offsetWidth!=0&& displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+            let deg_select_option = this.getElementByXpath('//*[@id="deg_select_option"]');
+            // check if move back will cause the overlap
+
+            deg_select_option = deg_select_option.getBoundingClientRect();
+            let displaySection_client = displaySection.getBoundingClientRect();
+
+
+
+
+            if (dt && dt != null && pagination && pagination != null && pagination.offsetWidth != 0 && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+                // check if move back will cause the overlap
+
+                if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > deg_select_option.right)) {
+                    return;
+                }
+
 
                 dt.style.paddingTop = "9px";
                 pagination.style.top = "-58px";
@@ -543,7 +611,7 @@ class Analysis extends Component {
             let pagination = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div/div/div/ul')
             let exportBtn = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[2]/div[2]');
 
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null &&displaySection.offsetWidth!=0&& exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
 
                 dt.style.paddingTop = "50px";
                 displaySection.style.right = "auto";
@@ -565,8 +633,19 @@ class Analysis extends Component {
             let pagination = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div/div/div/ul')
             let exportBtn = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[2]/div[2]');
 
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
 
+            let select_option = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input');
+
+            select_option = select_option.getBoundingClientRect();
+            let displaySection_client = displaySection.getBoundingClientRect();
+
+
+            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+                // check if move back will cause the overlap
+
+                if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > select_option.right)) {
+                    return;
+                }
                 dt.style.paddingTop = "9px";
                 let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
                 displaySection.style.right = width + "px";
@@ -747,7 +826,7 @@ class Analysis extends Component {
     getssGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
 
-        if (params.search_keyword) {
+        if (params.sorting) {
             params = {
                 projectId: workflow.projectID,
                 page_size: params.page_size,
@@ -758,7 +837,7 @@ class Analysis extends Component {
                 },
                 search_keyword: params.search_keyword
             }
-
+             workflow.ssGSEA.sorting =params.sorting;
             workflow.ssGSEA.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
@@ -833,7 +912,8 @@ class Analysis extends Component {
                     this.setState({ workflow: workflow2 });
                     this.getSSGSEAGeneHeatMap();
 
-                    this.resetSSGSEADisplay();
+                    this.resetSSGSEADisplay(this.checkAllDIVOverlap());
+
 
                 } else {
 
@@ -1007,7 +1087,7 @@ class Analysis extends Component {
     getPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
-        if (params.search_keyword) {
+        if (params.sorting) {
             params = {
                 projectId: workflow.projectID,
                 page_size: params.page_size,
@@ -1018,7 +1098,7 @@ class Analysis extends Component {
                 },
                 search_keyword: params.search_keyword
             }
-
+             workflow.pathways_up.sorting =params.sorting;
             workflow.pathways_up.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
@@ -1074,7 +1154,7 @@ class Analysis extends Component {
 
                     this.setState({ workflow: workflow2 });
 
-                    this.resetPathWayUPDisplay();
+                    this.resetPathWayUPDisplay(this.checkAllDIVOverlap());
 
                 } else {
 
@@ -1103,7 +1183,7 @@ class Analysis extends Component {
     getPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
-        if (params.search_keyword) {
+        if (params.sorting) {
             params = {
                 projectId: workflow.projectID,
                 page_size: params.page_size,
@@ -1120,6 +1200,7 @@ class Analysis extends Component {
                 pageSize: params.page_size,
 
             }
+              workflow.pathways_down.sorting = params.sorting;
             workflow.pathways_down.search_keyword = params.search_keyword;
         } else {
 
@@ -1170,7 +1251,7 @@ class Analysis extends Component {
                     workflow2.pathways_down.pagination = pagination;
 
                     this.setState({ workflow: workflow2 });
-                    this.resetPathWayDownDisplay();
+                    this.resetPathWayDownDisplay(this.checkAllDIVOverlap());
                 } else {
                     document.getElementById("message-pdg").innerHTML = result.msg;
                 }
@@ -1347,7 +1428,7 @@ class Analysis extends Component {
     getDEG = (params = {}) => {
 
         let workflow = Object.assign({}, this.state.workflow);
-        if (params.search_keyword) {
+        if (params.sorting) {
 
             params = {
                 projectId: workflow.projectID,
@@ -1365,7 +1446,7 @@ class Analysis extends Component {
                 pageSize: params.page_size,
 
             }
-            workflow.sorting = params.sorting;
+             workflow.diff_expr_genes.sorting = params.sorting;
             workflow.diff_expr_genes.search_keyword = params.search_keyword;
 
         } else {
@@ -1417,7 +1498,8 @@ class Analysis extends Component {
                     workflow2.diff_expr_genes.pagination = pagination;
 
                     this.setState({ workflow: workflow2 });
-                    this.resetDEGDisplay();
+                    this.resetDEGDisplay(this.checkAllDIVOverlap());
+
 
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
@@ -1655,6 +1737,10 @@ class Analysis extends Component {
                                 width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
                                 height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
                                 scene: {
+
+                                    camera: {
+                                         eye: { x: 0, y: 2, z: 1 }
+                                    },
                                     xaxis: {
                                         title: pcaData.col[0] + " (" + pcaData.xlable + "%)",
                                         backgroundcolor: "#DDDDDD",
@@ -2279,6 +2365,7 @@ class Analysis extends Component {
                         document.getElementById("message-ssgsea").innerHTML = result.msg;
                     }
                 })
+
         } catch (err) {
             document.getElementById("message-ssgsea").innerHTML = err;
             //change button style
@@ -2562,7 +2649,7 @@ class Analysis extends Component {
                             workflow: workflow
                         });
 
-                        this.resetGSMDisplay();
+                        this.resetGSMDisplay(this.checkAllDIVOverlap());
 
                     } else {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
@@ -3191,48 +3278,60 @@ class Analysis extends Component {
 
     }
 
-    resetGSMDisplay = () => {
+    resetGSMDisplay = (next) => {
         while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch gsm display")
         }
-        let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("gsm-select").style.right = width + "px";
+
+        if (next) {
+            next();
+        }
+        this.checkAllDIVOverlap();
 
     }
 
-    resetDEGDisplay = () => {
+    resetDEGDisplay = (next) => {
         while (document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch deg display")
         }
-        let width = document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("deg-select").style.right = width + "px";
+
+        if (next) {
+            next();
+        }
+        this.checkAllDIVOverlap();
     }
 
-    resetPathWayUPDisplay = () => {
+    resetPathWayUPDisplay = (next) => {
         while (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch pathways_up display")
         }
-        let width = document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("pathways-up-select").style.right = width + "px";
+
+        if (next) {
+            next();
+        }
+        this.checkAllDIVOverlap();
     }
 
-    resetPathWayDownDisplay = () => {
+    resetPathWayDownDisplay = (next) => {
         while (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch pathways_down display")
         }
-
-        let width = document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("pathways-down-select").style.right = width + "px";;
-
+        if (next) {
+            next();
+        };
+        this.checkAllDIVOverlap();
     }
 
 
-    resetSSGSEADisplay = () => {
+    resetSSGSEADisplay = (next) => {
         while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch SSGSEA display")
         }
-        let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-        document.getElementById("ss-select").style.right = width + "px";;
+
+        if (next) {
+            next();
+        }
+        this.checkAllDIVOverlap();
     }
 
 
@@ -3249,7 +3348,7 @@ class Analysis extends Component {
         }
         if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
             // when user use mobile, container-board-right set to be 100% width
-            document.getElementsByClassName("container-board-right")[0].style.width = "1350px";
+            document.getElementsByClassName("container-board-right")[0].style.width = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - document.getElementsByClassName("container-board-left")[0].clientWidth - 80 + "px";
         }
         document.getElementById("panel-show").style.display = 'inherit';
         document.getElementById("panel-hide").style.display = 'none';
@@ -3632,7 +3731,7 @@ class Analysis extends Component {
                         this.getSSGSEAGeneHeatMap();
                         this.hideWorkFlow();
 
-                        this.resetGSMDisplay();
+                        this.resetGSMDisplay(this.checkAllDIVOverlap());
 
                     } else {
                         workflow.progressing = false;
@@ -3826,11 +3925,19 @@ class Analysis extends Component {
 
                   </div>
                   <DataBox  data={this.state.workflow} 
+
+                            resetGSMDisplay={this.resetGSMDisplay}
+                            resetDEGDisplay={this.resetDEGDisplay}
+                            resetPathWayUPDisplay={this.resetPathWayUPDisplay}
+                            resetPathWayDownDisplay={this.resetPathWayDownDisplay}
+                            resetSSGSEADisplay={this.resetSSGSEADisplay}
+                            checkAllDIVOverlap ={this.checkAllDIVOverlap}
+                            
                             upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} 
                             upateCurrentWorkingTab={this.upateCurrentWorkingTab}
                             assignGroup={this.assignGroup} 
                             deleteGroup={this.deleteGroup}
-                            checkAllDIVOverlap ={this.checkAllDIVOverlap}
+                            
                         
                             handleGeneChange={this.handleGeneChange} 
                             changessGSEA={this.changessGSEA}

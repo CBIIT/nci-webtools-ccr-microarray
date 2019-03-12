@@ -30,28 +30,10 @@ class SSGSEATable extends Component {
 
     handleTableChange = (pagination, filters, sorter) => {
 
-        if (!sorter) {
-            sorter = {
-                field: "P.Value",
-                rder: "ascend"
-            }
-        }
-        if (!sorter.field) {
-            sorter.field = "P.Value"
-        }
-
-        if (!sorter.order) {
-            sorter.order = "ascend"
-        }
-
-
         this.props.getssGSEA({
             page_size: pagination.pageSize,
             page_number: pagination.current,
-            sorting: {
-                name: sorter.field,
-                order: sorter.order,
-            },
+            sorting:this.props.data.ssGSEA.sorting,
             search_keyword: this.props.data.ssGSEA.search_keyword,
         });
     }
@@ -74,6 +56,28 @@ class SSGSEATable extends Component {
         document.getElementById(value).className = document.getElementById(value).className.replace("hide", "");
     }
 
+     sorter = (field, order) => {
+
+        if (!field) {
+            field = "P.Value"
+        }
+
+        if (!order) {
+            order = "ascend"
+        }
+
+
+        this.props.getssGSEA({
+            page_size: this.props.data.ssGSEA.pagination.pageSize,
+            page_number: this.props.data.ssGSEA.pagination.current,
+            sorting: {
+                name: field,
+                order: order,
+            },
+            search_keyword: this.props.data.ssGSEA.search_keyword
+        });
+    }
+
 
     render() {
 
@@ -85,11 +89,22 @@ class SSGSEATable extends Component {
                 <div style={{ textAlign: 'center' }}>
                        <label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span>
                        <Input aria-label="input_ssg_name" onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label>
-                      <div>NAME</div>
+                      <div>   
+                            <div  className="head-title"> NAME</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="NAME"&&this.props.data.ssGSEA.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("NAME","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="NAME"&&this.props.data.ssGSEA.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("NAME","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
             ),
             dataIndex: 'V1',
-            sorter: true,
+            sorter: false,
             width: "10%",
             render: (text, record, index) => {
 
@@ -103,11 +118,22 @@ class SSGSEATable extends Component {
                 <div style={{ textAlign: 'center' }}>
                        <label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span>
                        <Input aria-label="input_ssg_search_logFC" onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label>
-                       <div>logFC</div>
+                        <div>   
+                            <div  className="head-title"> logFC</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="logFC"&&this.props.data.ssGSEA.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("logFC","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="logFC"&&this.props.data.ssGSEA.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("logFC","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
             ),
             dataIndex: 'V2',
-            sorter: true,
+            sorter: false,
             width: "10%",
             render: (text, record, index) => {
 
@@ -121,16 +147,27 @@ class SSGSEATable extends Component {
                 <div style={{ textAlign: 'center' }}>
                         <label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span>
                         <Input aria-label="input_ssg_search_p_value" onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label>
-                        <div>P.Value</div>
+                        <div>   
+                            <div  className="head-title"> P.Value</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="P.Value"&&this.props.data.ssGSEA.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("P.Value","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="P.Value"&&this.props.data.ssGSEA.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("P.Value","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
             ),
             dataIndex: 'V5',
-            sorter: true,
+            sorter: false,
             width: "10%",
             defaultSortOrder: 'ascend',
             render: (text, record, index) => {
 
-                return <div className="single-line">
+                return <div className="single-line" style={{"minWidth":"130px"}} >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
@@ -140,33 +177,55 @@ class SSGSEATable extends Component {
                 <div style={{ textAlign: 'center' }}>
                           <label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span>
                           <Input aria-label="input_ssg_search_adj_p_value" onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label>
-                     <div>adj.P.Val</div>
+                     <div>   
+                            <div  className="head-title"> adj.P.Value</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="adj.P.Val"&&this.props.data.ssGSEA.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("adj.P.Val","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="adj.P.Val"&&this.props.data.ssGSEA.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("adj.P.Val","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
             ),
             dataIndex: 'V6',
-            sorter: true,
+            sorter: false,
             width: "10%",
             render: (text, record, index) => {
 
-                return <div className="single-line" >
+                return <div className="single-line" style={{"minWidth":"130px"}} >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
 
             }
         }, {
             title: (
-                <div style={{ textAlign: 'center', "width":"190px"}}>
+                <div style={{ textAlign: 'center', "width":"230px"}}>
                         <label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span>
                         <Input aria-label="input_ssg_search_Avg_Enrichment_Score" onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label>
-                        <div>Avg.Enrichment.Score</div>
+                         <div>   
+                            <div  className="head-title"> Avg.Enrichment.Score</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="Avg.Enrichment.Score"&&this.props.data.ssGSEA.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("Avg.Enrichment.Score","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="Avg.Enrichment.Score"&&this.props.data.ssGSEA.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("Avg.Enrichment.Score","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
             ),
             dataIndex: 'V3',
-            sorter: true,
+            sorter: false,
             width: "25%",
             render: (text, record, index) => {
 
-                return <div className="single-line">
+                return <div className="single-line" style={{"minWidth":"130px"}} >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
 
@@ -176,11 +235,22 @@ class SSGSEATable extends Component {
                 <div style={{ textAlign: 'center' }}>
                        <label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span>
                        <Input aria-label="input_ssg_search_t" onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label>
-                        <div>t</div>
+                        <div>   
+                            <div  className="head-title"> t</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="t"&&this.props.data.ssGSEA.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("t","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="t"&&this.props.data.ssGSEA.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("t","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
             ),
             dataIndex: 'V4',
-            sorter: true,
+            sorter: false,
             width: "10%",
             render: (text, record, index) => {
 
@@ -194,11 +264,22 @@ class SSGSEATable extends Component {
                 <div style={{ textAlign: 'center' }}>
                          <label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span>
                          <Input aria-label="input_ssg_search_b"  onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label>
-                         <div>B</div>
+                              <div>   
+                            <div  className="head-title">B</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="B"&&this.props.data.ssGSEA.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("B","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.ssGSEA.sorting.name=="B"&&this.props.data.ssGSEA.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("B","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
             ),
             dataIndex: 'V7',
-            sorter: true,
+            sorter: false,
             width: "10%",
             render: (text, record, index) => {
 

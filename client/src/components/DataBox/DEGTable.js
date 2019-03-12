@@ -2,81 +2,84 @@ import React, { Component } from 'react';
 import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'antd';
 const Search = Input.Search;
 
-const minWidth=110;
+const minWidth = 110;
 const exponentialNum = 2;
 
 class DEGTable extends Component {
 
-
     constructor(props) {
         super(props);
         this.handleTableChange = this.handleTableChange.bind(this);
+        this.sorter = this.sorter.bind(this);
     }
 
- 
+    
 
+  
     handleTableChange = (pagination, filters, sorter) => {
-
-        if (!sorter) {
-            sorter = {
-                field: "P.Value",
-                rder: "ascend"
-            }
-        }
-        if (!sorter.field) {
-            sorter.field = "P.Value"
-        }
-
-        if (!sorter.order) {
-            sorter.order = "ascend"
-        }
 
 
         this.props.getDEG({
             page_size: pagination.pageSize,
             page_number: pagination.current,
-            sorting: {
-                name: sorter.field,
-                order: sorter.order,
-            },
+
+            sorting: this.props.data.diff_expr_genes.sorting,
             search_keyword: this.props.data.diff_expr_genes.search_keyword
         });
     }
+       
 
 
+    sorter = (field, order) => {
+      
+        if (!field) {
+            field = "P.Value"
+        }
 
-    handleMenuClick = (e) => {
-        document.getElementById("deg-drop-down").innerHTML = e.key
+        if (!order) {
+            order = "ascend"
+        }
+
+
         this.props.getDEG({
-            page_size: parseInt(e.key),
-            page_number: 1,
+            page_size: this.props.data.diff_expr_genes.pagination.pageSize,
+            page_number: this.props.data.diff_expr_genes.pagination.current,
             sorting: {
-                name: this.props.data.diff_expr_genes.sorting.name,
-                order: this.props.data.diff_expr_genes.sorting.order,
+                name: field,
+                order: order,
             },
             search_keyword: this.props.data.diff_expr_genes.search_keyword
         });
     }
 
-
-    export = () => {
-        this.props.exportDEG();
-    }
 
     render() {
         let content = "";
 
-        const columns = [{
+
+
+          const columns = [{
 
                 title: (
                     <div style={{ textAlign: 'center' }}>
                     <label htmlFor="input_deg_search_symbol"><span style={{display:"none"}}>input_deg_search_symbol</span>
                      <Input  aria-label="input_deg_search_symbol" onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></label>
-                    <div>SYMBOL</div>
+                           <div>   
+                        <div  className="head-title"> SYMBOL </div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="SYMBOL"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("SYMBOL","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="SYMBOL"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("SYMBOL","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                    </div>
                 </div>
                 ),
                 dataIndex: 'SYMBOL',
-                sorter: true,
+                sorter: false,
                 width: "8%",
                 render: (text, record, index) => {
 
@@ -91,11 +94,22 @@ class DEGTable extends Component {
                     <div style={{ textAlign: 'center' }}>
                       <label htmlFor="input_deg_search_fc"><span style={{display:"none"}}>input_deg_search_fc</span>
                       <Input  aria-label="input_deg_search_fc"  onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></label>
-                    <div>FC</div>
+                    <div>   
+                        <div  className="head-title"> FC </div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="FC"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("FC","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="FC"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("FC","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                    </div>
                 </div>
                 ),
                 dataIndex: 'FC',
-                sorter: true,
+                sorter: false,
                 width: "6%",
                 render: (text, record, index) => {
 
@@ -110,11 +124,22 @@ class DEGTable extends Component {
                     <div style={{ textAlign: 'center' }}>
                           <label htmlFor="input_dge_search_p_value"><span style={{display:"none"}}>input_dge_search_p_value</span> 
                           <Input  aria-label="input_dge_search_p_value"  onPressEnter={value=>search(value) }    placeholder="0.05"  id="input_dge_search_p_value"/></label>
-                           <div>P.Value</div>
+                           <div>   
+                            <div  className="head-title"> P.Value</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="P.Value"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("P.Value","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="P.Value"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("P.Value","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'P.Value',
-                sorter: true,
+                sorter: false,
                 width: "8%",
                 defaultSortOrder: 'ascend',
                 render: (text, record, index) => {
@@ -131,11 +156,22 @@ class DEGTable extends Component {
                     <div style={{ textAlign: 'center' }}>
                         <label htmlFor="input_deg_search_adj_p_value"><span style={{display:"none"}}>input_deg_search_adj_p_value</span>
                         <Input  aria-label="input_deg_search_adj_p_value" onPressEnter={value=>search(value) }    placeholder="adj.p.val"  id="input_deg_search_adj_p_value"/></label>
-                        <div>adj.P.Val</div>
+                          <div>   
+                            <div  className="head-title"> adj.P.Val</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="adj.P.Val"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("adj.P.Val","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="adj.P.Val"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("adj.P.Val","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'adj.P.Val',
-                sorter: true,
+                sorter: false,
                 width: "8%",
 
                 render: (text, record, index) => {
@@ -152,11 +188,22 @@ class DEGTable extends Component {
                     <div style={{ textAlign: 'center' }}>
                          <label htmlFor="input_deg_search_aveexpr"><span style={{display:"none"}}>input_deg_search_aveexpr</span>
                          <Input aria-label="input_deg_search_aveexpr" onPressEnter={value=>search(value) }   placeholder="AveExpr"  id="input_deg_search_aveexpr"/></label>
-                         <div>AveExpr</div>
+                         <div>   
+                            <div  className="head-title"> AveExpr</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="AveExpr"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("AveExpr","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="AveExpr"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("AveExpr","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'AveExpr',
-                sorter: true,
+                sorter: false,
                 width: "8%",
                 render: (text, record, index) => {
 
@@ -171,11 +218,22 @@ class DEGTable extends Component {
                     <div style={{ textAlign: 'center' }}>
                              <label htmlFor="input_deg_search_input_deg_search_accnum"><span style={{display:"none"}}>input_deg_search_accnum</span>
                              <Input aria-label="input_deg_search_accnum" onPressEnter={value=>search(value) }   placeholder="ACCNUM"  id="input_deg_search_accnum"/></label>
-                         <div>ACCNUM</div>
+                          <div>   
+                            <div  className="head-title"> ACCNUM</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="ACCNUM"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("ACCNUM","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="ACCNUM"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("ACCNUM","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'ACCNUM',
-                sorter: true,
+                sorter: false,
                 width: "9%",
                 render: (text, record, index) => {
 
@@ -191,11 +249,22 @@ class DEGTable extends Component {
                     <div style={{ textAlign: 'center' }}>
                             <label htmlFor="input_deg_search_desc"><span style={{display:"none"}}>input_deg_search_desc</span>
                             <Input aria-label="input_deg_search_desc" onPressEnter={value=>search(value) }  placeholder="Desc"  id="input_deg_search_desc"/></label>
-                       <div>DESC</div>
+                         <div>   
+                            <div  className="head-title"> DESC</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="DESC"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("DESC","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="DESC"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("DESC","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'DESC',
-                sorter: true,
+                sorter: false,
                 width: "15%",
                 render: (text, record, index) => {
 
@@ -210,11 +279,22 @@ class DEGTable extends Component {
                     <div style={{ textAlign: 'center' }}>
                      <label htmlFor="input_deg_search_entrez"><span style={{display:"none"}}>input_deg_search_entrez</span>
                      <Input  aria-label="input_deg_search_entrez" onPressEnter={value=>search(value) } placeholder="ENTREZ"  id="input_deg_search_entrez"/></label>
-                          <div>ENTREZ</div>
+                        <div>   
+                            <div  className="head-title"> ENTREZ</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="ENTREZ"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("ENTREZ","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="ENTREZ"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("ENTREZ","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'ENTREZ',
-                sorter: true,
+                sorter: false,
                 width: "10%",
                 render: (text, record, index) => {
                     if (text != "" && text != "NA") {
@@ -238,11 +318,22 @@ class DEGTable extends Component {
                     <div style={{ textAlign: 'center' }}>
                        <label htmlFor="input_deg_search_probsetid"><span style={{display:"none"}}>input_deg_search_probsetid</span>
                        <Input aria-label="input_deg_search_probsetid" onPressEnter={value=>search(value) }   placeholder="probsetID"  id="input_deg_search_probsetid"/></label>
-                        <div>probsetID</div>
+                         <div>   
+                            <div  className="head-title"> probsetID</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="probsetID"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("probsetID","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="probsetID"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("probsetID","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'probsetID',
-                sorter: true,
+                sorter: false,
                 width: "8%",
                 render: (text, record, index) => {
 
@@ -257,11 +348,22 @@ class DEGTable extends Component {
                     <div style={{ textAlign: 'center' }}>
                       <label htmlFor="input_deg_search_t"><span style={{display:"none"}}>input_deg_search_t</span>
                       <Input aria-label="input_deg_search_t" onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></label>
-                      <div>t</div>
+                       <div>   
+                            <div  className="head-title"> t</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="t"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("t","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="t"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("t","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 't',
-                sorter: true,
+                sorter: false,
                 width: "5%",
                 render: (text, record, index) => {
 
@@ -277,11 +379,22 @@ class DEGTable extends Component {
                     <div style={{ textAlign: 'center' }}>
                        <label htmlFor="input_deg_search_b"><span style={{display:"none"}}>input_deg_search_b</span>
                        <Input aria-label="input_deg_search_b"  onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></label>
-                       <div>b</div>
+                          <div>   
+                            <div  className="head-title"> b</div>
+                            <div className="head-sorter">
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="b"&&this.props.data.diff_expr_genes.sorting.order=="ascend"?"blue":"#ccc"}}   onClick={()=>this.sorter("b","ascend")}><i className="fas fa-angle-up"></i></a>
+                                </div>
+                                <div>
+                                    <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="b"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("b","descend")}><i className="fas fa-angle-down"></i></a>
+                                </div>
+                                
+                            </div>
+                        </div>
                 </div>
                 ),
                 dataIndex: 'B',
-                sorter: true,
+                sorter: false,
                 width: "5%",
                 render: (text, record, index) => {
 
