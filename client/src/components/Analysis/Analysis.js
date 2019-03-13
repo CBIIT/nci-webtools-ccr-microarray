@@ -1910,17 +1910,15 @@ class Analysis extends Component {
                             document.getElementById("message-post-maplot").innerHTML = "";
                             let workflow = Object.assign({}, this.state.workflow);
                             if (result.data != "") {
-                                let list_mAplotBN = [];
-                                for (let i = result.data.length - 1; i >= 0; i--) {
-                                    let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link }  alt="MAplot"/> </div>)
+                                let input = {
+                                    projectID: workflow.projectID,
+                                    pics: result.data,
+                                    groups: workflow.groups
                                 }
-                                let maplot_style = {
 
-                                };
+                                workflow.list_mAplotBN = result.data;
+                                workflow.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
 
-
-                                workflow.postplot.list_mAplotAN = <div style={ maplot_style } > { list_mAplotBN } </div>;
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
 
@@ -1949,17 +1947,14 @@ class Analysis extends Component {
             }
         } else {
             let workflow2 = Object.assign({}, this.state.workflow);
-            let list_mAplotBN = [];
-            for (let i = workflow2.list_mAplotAN.length - 1; i >= 0; i--) {
-                let link = "./images/" + workflow2.projectID + workflow2.list_mAplotAN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } alt="MAplot"/> </div>)
+
+            let input = {
+                projectID: workflow2.projectID,
+                pics: workflow2.list_mAplotAN,
+                groups: workflow2.groups
             }
-            let maplot_style = {
 
-            };
-
-
-            workflow2.postplot.list_mAplotAN = <div style={ maplot_style } > { list_mAplotBN } </div>;
+            workflow2.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
             workflow2.progressing = false;
             this.setState({ workflow: workflow2 });
         }
