@@ -1100,14 +1100,14 @@ input#input_group_name {
     width: 50%;
 }
 
-#preMAplots{
+#preMAplots img{
     width: 100% !important;
 }
 .plot2 img {
     width: 50%;
 }
 
-#postMAplots{
+#postMAplots img{
     width: 100% !important;
 }
 #post-normalization-plots-selection {
