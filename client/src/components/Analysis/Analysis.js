@@ -3,10 +3,11 @@ import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
 import About from '../About/About';
 import Help from '../Help/Help';
-import { Spin, Icon, Button, Modal } from 'antd';
+import { Spin, Icon, Button, Modal, Collapse } from 'antd';
 import Plot from 'react-plotly.js';
 import XLSX from 'xlsx';
 import imageExists from 'image-exists';
+import MAPlot from "../DataBox/MAPlot"
 
 
 const ButtonGroup = Button.Group;
@@ -837,7 +838,7 @@ class Analysis extends Component {
                 },
                 search_keyword: params.search_keyword
             }
-             workflow.ssGSEA.sorting =params.sorting;
+            workflow.ssGSEA.sorting = params.sorting;
             workflow.ssGSEA.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
@@ -1098,7 +1099,7 @@ class Analysis extends Component {
                 },
                 search_keyword: params.search_keyword
             }
-             workflow.pathways_up.sorting =params.sorting;
+            workflow.pathways_up.sorting = params.sorting;
             workflow.pathways_up.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
@@ -1200,7 +1201,7 @@ class Analysis extends Component {
                 pageSize: params.page_size,
 
             }
-              workflow.pathways_down.sorting = params.sorting;
+            workflow.pathways_down.sorting = params.sorting;
             workflow.pathways_down.search_keyword = params.search_keyword;
         } else {
 
@@ -1446,7 +1447,7 @@ class Analysis extends Component {
                 pageSize: params.page_size,
 
             }
-             workflow.diff_expr_genes.sorting = params.sorting;
+            workflow.diff_expr_genes.sorting = params.sorting;
             workflow.diff_expr_genes.search_keyword = params.search_keyword;
 
         } else {
@@ -1739,7 +1740,7 @@ class Analysis extends Component {
                                 scene: {
 
                                     camera: {
-                                         eye: { x: 0, y: 2, z: 1 }
+                                        eye: { x: 0, y: 2, z: 1 }
                                     },
                                     xaxis: {
                                         title: pcaData.col[0] + " (" + pcaData.xlable + "%)",
@@ -1909,17 +1910,15 @@ class Analysis extends Component {
                             document.getElementById("message-post-maplot").innerHTML = "";
                             let workflow = Object.assign({}, this.state.workflow);
                             if (result.data != "") {
-                                let list_mAplotBN = [];
-                                for (let i = result.data.length - 1; i >= 0; i--) {
-                                    let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link }  alt="MAplot"/> </div>)
+                                let input = {
+                                    projectID: workflow.projectID,
+                                    pics: result.data,
+                                    groups: workflow.groups
                                 }
-                                let maplot_style = {
 
-                                };
+                                workflow.list_mAplotBN = result.data;
+                                workflow.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
 
-
-                                workflow.postplot.list_mAplotAN = <div style={ maplot_style } > { list_mAplotBN } </div>;
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
 
@@ -1948,17 +1947,14 @@ class Analysis extends Component {
             }
         } else {
             let workflow2 = Object.assign({}, this.state.workflow);
-            let list_mAplotBN = [];
-            for (let i = workflow2.list_mAplotAN.length - 1; i >= 0; i--) {
-                let link = "./images/" + workflow2.projectID + workflow2.list_mAplotAN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } alt="MAplot"/> </div>)
+
+            let input = {
+                projectID: workflow2.projectID,
+                pics: workflow2.list_mAplotAN,
+                groups: workflow2.groups
             }
-            let maplot_style = {
 
-            };
-
-
-            workflow2.postplot.list_mAplotAN = <div style={ maplot_style } > { list_mAplotBN } </div>;
+            workflow2.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
             workflow2.progressing = false;
             this.setState({ workflow: workflow2 });
         }
@@ -2196,16 +2192,14 @@ class Analysis extends Component {
                             document.getElementById("message-pre-maplot").innerHTML = "";
                             if (result.data != "") {
                                 let workflow = Object.assign({}, this.state.workflow);
-                                let list_mAplotBN = [];
-                                for (let i = result.data.length - 1; i >= 0; i--) {
-                                    let link = "./images/" + workflow.projectID + result.data[i]
-                                    list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } alt="MAplot"/> </div>)
+                                let input = {
+                                    projectID: workflow.projectID,
+                                    pics: result.data,
+                                    groups: workflow.groups
                                 }
-                                let maplot_style = {
 
-                                };
                                 workflow.list_mAplotBN = result.data;
-                                workflow.preplots.list_mAplotBN = <div style={ maplot_style } > { list_mAplotBN } </div>;
+                                workflow.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
 
@@ -2234,15 +2228,12 @@ class Analysis extends Component {
             }
 
         } else {
-            let list_mAplotBN = [];
-            for (let i = workflow2.list_mAplotBN.length - 1; i >= 0; i--) {
-                let link = "./images/" + workflow2.projectID + workflow2.list_mAplotBN[i]
-                list_mAplotBN.push(<div key={"mAplotBN"+i}  > <img  src={ link } alt="MAplot"/> </div>)
+            let input = {
+                projectID: workflow2.projectID,
+                pics: workflow2.list_mAplotBN,
+                groups: workflow2.groups
             }
-            let maplot_style = {
-
-            };
-            workflow2.preplots.list_mAplotBN = <div style={ maplot_style } > { list_mAplotBN } </div>;
+            workflow2.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
             this.setState({ workflow: workflow2 });
 
         }
@@ -2555,7 +2546,7 @@ class Analysis extends Component {
         var groups = []
         for (var i in workflow.dataList) {
             if (workflow.dataList[i].group == "") {
-                groups.push("Ctl")
+                groups.push("others")
             } else {
                 groups.push(workflow.dataList[i].group)
             }
@@ -2637,7 +2628,7 @@ class Analysis extends Component {
 
                         workflow.dataList = list.files;
                         // init group with default value
-                        workflow.group = new Array(list.files.length).fill('Ctl');
+                        workflow.groups = new Array(list.files.length).fill('others');
 
                         // disable the input , prevent user to change the access code
                         document.getElementById("input-access-code").disabled = true
@@ -2745,8 +2736,8 @@ class Analysis extends Component {
             if (workflow.dataList[i].groups != "") {
                 reqBody.groups.push(workflow.dataList[i].groups);
             } else {
-                // default value of the group is Ctl
-                reqBody.groups.push("Ctl")
+                // default value of the group is others
+                reqBody.groups.push("others")
             }
         }
 
@@ -3082,7 +3073,7 @@ class Analysis extends Component {
                                     break;
                             }
                             workflow.volcanoPlot = this.getVolcanoPlot();
-
+                            workflow.groups =result.data.groups;
                             workflow.compared = true;
                             workflow.done_gsea = true;
                             workflow.progressing = false;
@@ -3191,9 +3182,6 @@ class Analysis extends Component {
                         }
                         workflow.dataList = list.files;
 
-
-                        // init group with default value
-                        //workflow.group = new Array(list.files.length).fill('Ctl');
 
 
                         workflow.uploaded = true;
@@ -3694,7 +3682,7 @@ class Analysis extends Component {
                         workflow2.groups = result.groups;
 
                         for (let i in workflow2.dataList) {
-                            if (result.groups[i] == "Ctl") {
+                            if (result.groups[i] == "others"||result.groups[i].toLowerCase() == 'clt') {
                                 workflow2.dataList[i].groups = "";
                             } else {
                                 workflow2.dataList[i].groups = result.groups[i];
@@ -3704,6 +3692,7 @@ class Analysis extends Component {
 
 
                         if (result.mAplotBN) {
+
                             workflow2.list_mAplotBN = result.mAplotBN;
                         }
 

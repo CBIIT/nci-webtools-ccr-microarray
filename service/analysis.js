@@ -66,7 +66,7 @@ router.post('/upload', function(req, res) {
         data.push(pid);
         //data path
         data.push(config.uploadPath);
-        data.push(new Array(number_of_files).fill("Ctl"));
+        data.push(new Array(number_of_files).fill("others"));
 
         R.execute("wrapper.R", data, function(err, returnValue) {
             if (err) {
