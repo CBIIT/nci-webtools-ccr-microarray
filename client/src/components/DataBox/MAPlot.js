@@ -23,10 +23,28 @@ class MAPlot extends Component {
 
         let unique_groups = groups.filter(function(item, i, ar) { return ar.indexOf(item) === i; });
 
+        // reorder the group list, put ungroup to the end of list
+        let _tmp =[];
+        let unGroupLabel;
+         for (let i = 0; i <= unique_groups.length - 1; i++) {
+
+                if(unique_groups[i].toLowerCase()=="ctl"||unique_groups[i].toLowerCase()=="others"){
+                    unGroupLabel=unique_groups[i];
+                }else{
+                    _tmp.push(unique_groups[i]);
+                }
+         }
+         if(unGroupLabel){
+             _tmp.push(unGroupLabel);
+         }
+
+         unique_groups =_tmp;
+
+
         // unique groups with their pics
         let unique_groups_pic = new Array(unique_groups.length)
 
-        for (let i = unique_groups.length - 1; i >= 0; i--) {
+        for (let i = 0; i <= unique_groups.length - 1; i++) {
 
             for (let j = groups.length - 1; j >= 0; j--) {
                 if (groups[j] == unique_groups[i]) {
@@ -64,14 +82,22 @@ class MAPlot extends Component {
 
             }
 
-            panels[i] = <Panel header={unique_groups[i]} key={i}>
+            panels[i] = <Panel header={unique_groups[i]} key={i} >
             				<div className="row">
 								{panels[i]}
     						</div>
     				  </Panel>;
         }
+        
+       
 
-        return   <Collapse >{panels}</Collapse>
+
+        let keys =[];
+
+        for (let i = unique_groups.length - 1; i >= 0; i--) {
+        	keys.push(String(i))
+        }
+        return   <Collapse defaultActiveKey={keys} >{panels}</Collapse>
 
     }// end render
 

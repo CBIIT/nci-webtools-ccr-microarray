@@ -1100,6 +1100,9 @@ input#input_group_name {
     width: 50%;
 }
 
+#preMAplots{
+    width: 100%;
+}
 .plot2 img {
     width: 50%;
 }
