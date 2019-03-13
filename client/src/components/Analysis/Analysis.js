@@ -2628,7 +2628,7 @@ class Analysis extends Component {
 
                         workflow.dataList = list.files;
                         // init group with default value
-                        workflow.group = new Array(list.files.length).fill('others');
+                        workflow.groups = new Array(list.files.length).fill('others');
 
                         // disable the input , prevent user to change the access code
                         document.getElementById("input-access-code").disabled = true
@@ -3073,7 +3073,7 @@ class Analysis extends Component {
                                     break;
                             }
                             workflow.volcanoPlot = this.getVolcanoPlot();
-
+                            workflow.groups =result.data.groups;
                             workflow.compared = true;
                             workflow.done_gsea = true;
                             workflow.progressing = false;
@@ -3682,7 +3682,7 @@ class Analysis extends Component {
                         workflow2.groups = result.groups;
 
                         for (let i in workflow2.dataList) {
-                            if (result.groups[i] == "others") {
+                            if (result.groups[i] == "others"||result.groups[i].toLowerCase() == 'clt') {
                                 workflow2.dataList[i].groups = "";
                             } else {
                                 workflow2.dataList[i].groups = result.groups[i];
