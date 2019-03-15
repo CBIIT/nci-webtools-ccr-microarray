@@ -1,0 +1,7 @@
+Error in read.table(file = file, header = header, sep = sep, quote = quote,  : 
+  no lines available in input
+In addition: Warning messages:
+1: In system(paste0("cd ", configuration_path, "; cat ", workspace,  :
+  error in running command
+2: In system(paste0("cd ", configuration_path, "; cat ", workspace,  :
+  error in running command
