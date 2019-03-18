@@ -60,7 +60,7 @@ function qAnalysis(data, emailto, endCallback) {
 
         queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, 60)
 
-    }, 30 * 1000);
+    }, 15 * 1000);
 
     //console.log("projectId:" + message.projectId)
     queue.awsHander.download(message.projectId, config.uploadPath, function() {
