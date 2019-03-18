@@ -73,10 +73,10 @@ class MAPlot extends Component {
                 let link = "./images/" + projectID + unique_groups_pic[i][j];
                 if (panels[i]) {
                 	
-                    panels[i].push(<div class="col-md-3" key={"mAplotBN"+count}  > <img  src={link } alt="MAplot"/> </div>);
+                    panels[i].push(<div className="col-md-3" key={"mAplotBN"+count}  > <img  src={link } alt="MAplot"/> </div>);
 
                 } else {
-                    panels[i] = new Array(<div class="col-md-3" key={"mAplotBN"+count}  > <img  src={link } alt="MAplot"/> </div>);
+                    panels[i] = new Array(<div className="col-md-3" key={"mAplotBN"+count}  > <img  src={link } alt="MAplot"/> </div>);
 
                 }
 

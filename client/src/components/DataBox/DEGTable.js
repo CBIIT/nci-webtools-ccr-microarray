@@ -7,19 +7,13 @@ const exponentialNum = 3;
 const exponentialNum2 = 6;
 
 class DEGTable extends Component {
-
     constructor(props) {
         super(props);
         this.handleTableChange = this.handleTableChange.bind(this);
         this.sorter = this.sorter.bind(this);
     }
 
-
-
-
     handleTableChange = (pagination, filters, sorter) => {
-
-
         this.props.getDEG({
             page_size: pagination.pageSize,
             page_number: pagination.current,
@@ -29,19 +23,13 @@ class DEGTable extends Component {
         });
     }
 
-
-
     sorter = (field, order) => {
-
         if (!field) {
             field = "P.Value"
         }
-
         if (!order) {
             order = "ascend"
         }
-
-
         this.props.getDEG({
             page_size: this.props.data.diff_expr_genes.pagination.pageSize,
             page_number: this.props.data.diff_expr_genes.pagination.current,
@@ -56,11 +44,7 @@ class DEGTable extends Component {
 
     render() {
         let content = "";
-
-
-
         const columns = [{
-
                 title: (
                     <div style={{ textAlign: 'center' }}>
                     <label htmlFor="input_deg_search_symbol"><span style={{display:"none"}}>input_deg_search_symbol</span>
@@ -74,7 +58,6 @@ class DEGTable extends Component {
                                 <div>
                                     <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="SYMBOL"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("SYMBOL","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
-                                
                             </div>
                     </div>
                 </div>
@@ -83,13 +66,10 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "8%",
                 render: (text, record, index) => {
-
                     return <div  className="single-line deg_SYMBOL" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
-
                 }
-
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
@@ -119,9 +99,7 @@ class DEGTable extends Component {
                     return <div  className="deg_fc single-line"  style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.06>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="right" title={text}>{text}</span>
                                     </div>
-
                 }
-
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
@@ -150,9 +128,7 @@ class DEGTable extends Component {
                     return <div className="p_value single-line"  style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
-
                 }
-
             },
             {
                 title: (
@@ -168,7 +144,6 @@ class DEGTable extends Component {
                                 <div>
                                     <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="adj.P.Val"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("adj.P.Val","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
-                                
                             </div>
                         </div>
                 </div>
@@ -176,15 +151,12 @@ class DEGTable extends Component {
                 dataIndex: 'adj.P.Val',
                 sorter: false,
                 width: "8%",
-
                 render: (text, record, index) => {
 
                     return <div  className="adj_p_value single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
-
                 }
-
             },
             {
                 title: (
@@ -200,7 +172,6 @@ class DEGTable extends Component {
                                 <div>
                                     <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="AveExpr"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("AveExpr","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
-                                
                             </div>
                         </div>
                 </div>
@@ -215,9 +186,7 @@ class DEGTable extends Component {
                     return <div  className="aveexpr single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
-
                 }
-
             }, {
                 title: (
                     <div style={{ textAlign: 'center' }}>
@@ -232,7 +201,6 @@ class DEGTable extends Component {
                                 <div>
                                     <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="ACCNUM"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("ACCNUM","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
-                                
                             </div>
                         </div>
                 </div>
@@ -241,13 +209,10 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "9%",
                 render: (text, record, index) => {
-
                     return <div  className="accnum single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.09>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12:minWidth+50}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
-
                 }
-
             },
             {
                 title: (
@@ -263,7 +228,6 @@ class DEGTable extends Component {
                                 <div>
                                     <a style={{"color": this.props.data.diff_expr_genes.sorting.name=="DESC"&&this.props.data.diff_expr_genes.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("DESC","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
-                                
                             </div>
                         </div>
                 </div>
@@ -272,11 +236,9 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "15%",
                 render: (text, record, index) => {
-
                     return <div  className="deg_desc single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.15>150?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.15:150}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
-
                 }
             },
             {

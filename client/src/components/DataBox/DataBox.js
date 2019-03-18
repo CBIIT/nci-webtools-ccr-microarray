@@ -21,20 +21,16 @@ class DataBox extends Component {
             group_name: "",
             added: false
         }
-
         this.createTag = this.createTag.bind(this);
         this.showModal = this.showModal.bind(this);
         this.handleTabChange = this.handleTabChange.bind(this);
     }
 
-
     handleInputOnChange = (e) => {
-
         this.setState({ group_name: e.target.value });
     }
 
     handleTabChange = (key) => {
-
         let callback =  this.props.checkAllDIVOverlap();
         if (key == "Pre-normalization_QC_Plots") {
             let type = window.tag_pre_plot_status;
@@ -76,7 +72,6 @@ class DataBox extends Component {
             }
 
         }
-
         if (key == "Post-normalization_Plots") {
             let type = window.tag_post_plot_status;
             switch (type) {
@@ -115,7 +110,6 @@ class DataBox extends Component {
         }
 
         if (key == "DEG-Enrichments_Results") {
-
             let type = window.tag_deg_plot_status;
             switch (type) {
                 case "":
@@ -154,11 +148,7 @@ class DataBox extends Component {
                         this.props.resetDEGDisplay(callback);
                     }
             }
-
-
-
         }
-
         if (key == "GSM_1") {
             console.log(key)
             this.props.resetGSMDisplay(callback)
