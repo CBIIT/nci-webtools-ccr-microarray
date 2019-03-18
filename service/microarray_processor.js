@@ -55,12 +55,12 @@ function polling() {
 function qAnalysis(data, emailto, endCallback) {
     console.log("qAnalysis")
     let message = JSON.parse(data.Messages[0].Body)
-
+    let i = 1;
     let setVisibility = setInterval(function() {
-
-        queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, 60)
-
-    }, 15 * 1000);
+        i=i+1;
+        console.log("qAnalysis interval:" , i);
+        queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i*60)
+    }, 30 * 1000);
 
     //console.log("projectId:" + message.projectId)
     queue.awsHander.download(message.projectId, config.uploadPath, function() {
