@@ -13,7 +13,6 @@ var uuid = require('uuid');
 var AsyncPolling = require('async-polling');
 var dateFormat = require('dateformat');
 var rimraf = require("rimraf");
-
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
 
@@ -58,6 +57,7 @@ function qAnalysis(data, emailto, endCallback) {
     let i = 1;
     let setVisibility = setInterval(function() {
         i=i+1;
+        if (i === 360) clearInterval(setVisibility); // pending for 6 hours then clearInterval
         console.log("qAnalysis interval:" , i);
         queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i*60)
     }, 30 * 1000);
