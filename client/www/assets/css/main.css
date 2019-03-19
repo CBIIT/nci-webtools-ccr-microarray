@@ -114,9 +114,19 @@ tr:nth-child(even) {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
 }
-
 #header-nci img {
     height: 60px;
+}
+
+
+#loading {
+    width: 180px;
+    height: 175px;
+    background: #efefef;
+    position: absolute;
+    left: calc(50% - 80px);
+    padding: 2%;
+    border-radius: 50%;
 }
 
 .header-banner {
@@ -592,6 +602,14 @@ tr:nth-child(even) {
 .ant-input-suffix {
     display: none;
 }
+
+div.ant-collapse-header {
+    color: brown !important;
+    font-weight: 600 !important;
+    font-size: 18px !important;
+}
+
+;
 
 @media (min-width: 365px) {
     #panel-show {
@@ -1100,16 +1118,18 @@ input#input_group_name {
     width: 50%;
 }
 
-#preMAplots img{
+#preMAplots img {
     width: 100% !important;
 }
+
 .plot2 img {
     width: 50%;
 }
 
-#postMAplots img{
+#postMAplots img {
     width: 100% !important;
 }
+
 #post-normalization-plots-selection {
     width: 240px
 }
@@ -1296,15 +1316,17 @@ input#input_group_name {
     min-width: 100px;
 }
 
-div.head-title{
-   float: left;
+div.head-title {
+    float: left;
     width: calc(100% - 25px);
 }
-div.head-sorter{
+
+div.head-sorter {
     float: left;
     clear: right;
 }
-div.head-sorter > div{
+
+div.head-sorter>div {
     height: 10px;
 }
 
@@ -1432,9 +1454,11 @@ div.head-sorter > div{
         padding: 5px 10px 5px 0px;
         width: 100%
     }
-    #btn-pathwayUp-export{
+
+    #btn-pathwayUp-export {
         width: 100%
     }
+
     /* pathway down */
 
     #deg_tag3>div>div:nth-child(4)>div>div>div>ul {
@@ -1456,29 +1480,30 @@ div.head-sorter > div{
         padding: 5px 10px 5px 0px;
         width: 100%
     }
-    #btn-pathwayDown-export{
+
+    #btn-pathwayDown-export {
         width: 100%
     }
 
 
     /*ssgsea*/
 
-    #ss_tag1 > div:nth-child(4) > div{
-          padding-top: 91px;
+    #ss_tag1>div:nth-child(4)>div {
+        padding-top: 91px;
     }
 
-    #btn-ss-export{
- width: 100%
+    #btn-ss-export {
+        width: 100%
     }
 
-    .div-export-ss{
-          position: inherit;
+    .div-export-ss {
+        position: inherit;
         padding: 5px 10px 5px 0px;
         width: 100%
     }
 
-    #ss-select{
-         top: 155px !important;
+    #ss-select {
+        top: 155px !important;
         right: auto !important;
     }
 

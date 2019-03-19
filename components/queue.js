@@ -6,29 +6,17 @@ var config = require('../config');
 var lib_path = require('path');
 var logger = require('../components/queue_logger');
 var bucketName = config.bucketName;
-
-//var bucketPromise = new AWS.S3({ apiVersion: '2006-03-01' }).createBucket({ Bucket: bucketName }).promise();
-
 AWS.config.update({ region: 'us-east-1' });
-
 var awsHander = {};
-
 var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
-
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
-
-
-
-
 
 awsHander.getQueueUrl = function(next) {
     var params = {
         QueueName: config.queue_name
     };
-
     sqs.getQueueUrl(params, function(err, data) {
         if (err) {
-
             console.log(err, err.stack); // an error occurred
             logger.info("[Queue]Get QueueUrl Fails " + err.stack)
             global.queue_url = "none";
@@ -44,7 +32,6 @@ awsHander.getQueueUrl = function(next) {
 awsHander.upload = function(path, prex,next) {
             fs.readdir(path, function(err, items) {
                 for (var i = 0; i < items.length; i++) {
-
                     let fname = items[i];
                     let stat = fs.lstatSync(path + "/" + items[i]);
                     if (stat.isFile()) {
@@ -60,10 +47,8 @@ awsHander.upload = function(path, prex,next) {
                            logger.info("uplad err:"+err);
                            logger.info("uplad data:"+data);
                             logger.info("uplad err stack:"+err.stack);
-
                         });
                     }
-
                 }
                 next();
             });
@@ -93,11 +78,7 @@ awsHander.getQueueAttributes = function(attr, callback) {
 //sent message to queue.
 
 awsHander.sender = function(message, to,errHandler) {
-
-    console.log("sent message")
-
     function send() {
-
         let params = {
             MessageBody: message,
             QueueUrl: global.queue_url,
@@ -107,29 +88,24 @@ awsHander.sender = function(message, to,errHandler) {
         };
         sqs.sendMessage(params, function(err, data) {
             if (err) {
-
                 logger.info("[Queue] Send Messages to Queue fails")
                 logger.info("Err")
                 logger.info(err.stack)
                 errHandler(err,data);
-   
             } else {
                 logger.info("[Queue] Send Messages to Queue success");
             }
         });
     }
-
     if (global.queue_url == null) {
         awsHander.getQueueUrl(function() {
             send();
-
         })
     } else {
         send();
     }
 
 }
-
 
 awsHander.receiver = function(next, endCallback,errHandler) {
     let params = {
@@ -175,8 +151,6 @@ awsHander.del = function(rec) {
             logger.info("[Queue] Delete Messages from S3 fails")
             logger.info("Err")
             logger.info(err.stack)
-        } else {
-            // logger.info("[Queue] Delete Messages from S3 Successfully")
         }
     });
 }
@@ -207,7 +181,6 @@ awsHander.download = (projectId, filePath, next) => {
             logger.info(params2)
             logger.info(err.stack)
         } else {
-
             let files = data.Contents;
             logger.info(files)
             for (var i in files) {
@@ -222,7 +195,6 @@ awsHander.download = (projectId, filePath, next) => {
     })
 }
 
-
 download = (projectId, key, filePath) => {
     var params = {
         Bucket: config.bucketName,
@@ -232,8 +204,6 @@ download = (projectId, key, filePath) => {
     logger.info("Key:", key)
     s3.getObject(params, (err, data) => {
         if (err) {
-            console.error(err);
-
             logger.info("[Queue] Download file from S3 fails")
             logger.info(params)
             logger.info(err.stack)
@@ -252,8 +222,6 @@ download = (projectId, key, filePath) => {
             // logger.info("[Queue] Download file from S3")
             // logger.info("file")
             // logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
-
-            //let fileStream =fs.createReadStream(path + "/" + items[i])
             fs.writeFile(filePath + "/" + projectId + "/" + key.replace(config.queue_input_path + "/" + projectId + "/", ""), data.Body, function(err) {
                 if (err) {
                     return console.log(err);
@@ -263,8 +231,6 @@ download = (projectId, key, filePath) => {
         }
     })
 }
-
-
 
 module.exports = {
     awsHander

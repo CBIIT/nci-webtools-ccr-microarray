@@ -89,7 +89,7 @@ class SSGSEATable extends Component {
             title: (
                 <div style={{ textAlign: 'center' }}>
                        <label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span>
-                       <Input aria-label="input_ssg_name" onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name"/></label>
+                       <Input aria-label="input_ssg_name" onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name" defaultValue={this.props.data.ssGSEA.search_keyword.name}/></label>
                       <div>   
                             <div  className="head-title"> NAME</div>
                             <div className="head-sorter">
@@ -258,11 +258,9 @@ class SSGSEATable extends Component {
             sorter: false,
             width: "10%",
             render: (text, record, index) => {
-
                 return <div className="single-line" >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
                                     </div>
-
             }
         }, {
             title: (
@@ -278,7 +276,6 @@ class SSGSEATable extends Component {
                                 <div>
                                     <a style={{"color": this.props.data.ssGSEA.sorting.name=="B"&&this.props.data.ssGSEA.sorting.order=="descend"?"blue":"#ccc"}} onClick={()=>this.sorter("B","descend")}><i className="fas fa-angle-down"></i></a>
                                 </div>
-                                
                             </div>
                         </div>
                 </div>
@@ -293,10 +290,8 @@ class SSGSEATable extends Component {
                 return <div className="single-line" >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
-
             }
         }, ];
-
 
         const search = (e) => {
             var search_name = document.getElementById("input_ssg_name").value;
@@ -306,7 +301,6 @@ class SSGSEATable extends Component {
             var search_p_value = document.getElementById("input_ssg_search_p_value").value;
             var search_adj_p_value = document.getElementById("input_ssg_search_adj_p_value").value;
             var search_b = document.getElementById("input_ssg_search_b").value;
-
             this.props.getssGSEA({
                 page_size: 25,
                 page_number: 1,
@@ -325,7 +319,6 @@ class SSGSEATable extends Component {
                 }
             })
         }
-
         const menu = (
             <Menu onClick={this.handleMenuClick}>
                     <Menu.Item key="15">15</Menu.Item>
@@ -335,14 +328,10 @@ class SSGSEATable extends Component {
                     <Menu.Item key="200">200</Menu.Item>
                 </Menu>
         );
-
-
         let link = "./images/" + this.props.data.projectID + this.props.data.geneHeatmap
-
         let selection = [<div key="ss_genset_select" id={"ss_genset_select"}> <label key="ss_genset_select_label" htmlFor="ss_gene_set_select_option"><span>ssGSEA Gene Sets selection </span></label>   <select id="ss_gene_set_select_option" className="ant-select-selection ant-select-selection--single" defaultValue="human$H: Hallmark Gene Sets" 
                         onChange={(e) => this.props.handleGeneChange(e)} 
-                        aria-label="Gene Set For ssGSEA"
-                      >
+                        aria-label="Gene Set For ssGSEA">
                         <optgroup label="Human">
                           <option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</option>
                           <option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</option>
@@ -363,10 +352,8 @@ class SSGSEATable extends Component {
                           <option value="mouse$Location">Location</option>
                         </optgroup>
                       </select></div>]
-
         let tabs = [
             <div key="ss_tag1" id="ss_tag1" className="ss_plot">
-                 
                           <div>
                                 <p className="err-message" id="message-ssgsea"></p>
                           </div>  
@@ -382,15 +369,8 @@ class SSGSEATable extends Component {
 
                          </div>
                          <div>
-                  
-                          <Table 
-                                columns={columns}
-                                dataSource={this.props.data.ssGSEA.data}
-                                pagination={this.props.data.ssGSEA.pagination}
-                                loading={this.props.data.ssGSEA.loading}
-                                onChange={this.handleTableChange}
-                                scroll={{ x: 600}} 
-                                />
+                          <Table  columns={columns}  dataSource={this.props.data.ssGSEA.data} pagination={this.props.data.ssGSEA.pagination}
+                                  loading={this.props.data.ssGSEA.loading} onChange={this.handleTableChange} scroll={{ x: 600}}  />
                      </div>
             </div>,
             <div  key="ss_tag2" id="ss_tag2" className="ss_plot hide" >
@@ -402,10 +382,7 @@ class SSGSEATable extends Component {
                                   <option value="ss_tag1">Single Sample GSEA</option>
                                   <option value="ss_tag2">Pathway Heatmap</option>
                                 </select>, selection, tabs]
-
-
         return content;
     }
 }
-
 export default SSGSEATable;

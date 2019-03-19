@@ -9,9 +9,7 @@ import XLSX from 'xlsx';
 import imageExists from 'image-exists';
 import MAPlot from "../DataBox/MAPlot"
 
-
 const ButtonGroup = Button.Group;
-
 let defaultState = {
     workflow: {
         tab_activeKey: "GSM_1",
@@ -47,8 +45,7 @@ let defaultState = {
             data: [],
             pagination: {
                 current: 1,
-                pageSize: 25,
-
+                pageSize: 25
             },
             loading: true,
             page_number: 1,
@@ -76,7 +73,6 @@ let defaultState = {
             pagination: {
                 current: 1,
                 pageSize: 25,
-
             },
             loading: true,
             page_size: 25,
@@ -96,17 +92,14 @@ let defaultState = {
             }
         },
         pathways_up: {
-
             data: [],
             pagination: {
                 current: 1,
                 pageSize: 25,
-
             },
             sorting: {
                 name: "P_Value",
                 order: "ascend",
-
             },
             loading: true,
             search_keyword: {
@@ -129,13 +122,11 @@ let defaultState = {
             pagination: {
                 current: 1,
                 pageSize: 25,
-
             },
             loading: true,
             sorting: {
                 name: "P_Value",
                 order: "ascend",
-
             },
             search_keyword: {
                 "search_PATHWAY_ID": "",
@@ -220,7 +211,6 @@ let defaultState = {
 };
 
 
-
 class Analysis extends Component {
 
     constructor(props) {
@@ -248,8 +238,6 @@ class Analysis extends Component {
         this.changeLoadingStatus = this.changeLoadingStatus.bind(this);
         this.changeRunContrastMode = this.changeRunContrastMode.bind(this);
         this.initWithCode = this.initWithCode.bind(this);
-
-
         this.exportGSE = this.exportGSE.bind(this);
         this.exportGSEA = this.exportGSEA.bind(this);
         this.exportPathwayUp = this.exportPathwayUp.bind(this);
@@ -258,26 +246,19 @@ class Analysis extends Component {
         this.getCurrentNumberOfJobsinQueue = this.getCurrentNumberOfJobsinQueue.bind(this);
         this.showModal = this.showModal.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
-        this.getCurrentNumberOfJobsinQueue();
         this.showWorkFlow = this.showWorkFlow.bind(this);
         this.hideWorkFlow = this.hideWorkFlow.bind(this);
-
         this.getSSGSEAGeneHeatMap = this.getSSGSEAGeneHeatMap.bind(this);
         this.buildgeneHeatmap = this.buildgeneHeatmap.bind(this);
         this.checkAllDIVOverlap = this.checkAllDIVOverlap.bind(this);
-
-
+        this.getCurrentNumberOfJobsinQueue();
     }
-
-
 
     componentDidMount() {
         if (this.props.location.search && this.props.location.search != "") {
-
             defaultState.workflow.progressing = true;
             this.state = Object.assign({}, defaultState);
             this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
-
         }
         // listen windows resize event
         window.addEventListener("resize", this.updateDimensions);
@@ -288,21 +269,16 @@ class Analysis extends Component {
         window.removeEventListener("resize", this.updateDimensions);
     }
 
-
     updateDimensions = () => {
         // reset container-board-right
         if ((document.body.clientWidth - document.getElementsByClassName("container-board-left")[0].clientWidth) < 300) {
             // mobile model
             document.getElementsByClassName("container-board-right")[0].style.width = document.getElementsByClassName("container-board-left")[0].clientWidth + "px";
-
         } else {
             document.getElementsByClassName("container-board-right")[0].style.width = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - document.getElementsByClassName("container-board-left")[0].clientWidth - 80 + "px";
-
         }
-
         // reset all pagination
         this.checkAllDIVOverlap();
-
     }
 
     getElementByXpath = (path) => {
@@ -318,54 +294,49 @@ class Analysis extends Component {
             rect1.top > rect2.bottom)
     }
 
-
-
-    correctDIVOverlap = (div1, div2, next) => {
+    correctDIVOverlap = (div1, div2, lengthfOfData, next) => {
         // Check  GSM  
-        let search_input = this.getElementByXpath(div1)
+        let search_input = this.getElementByXpath(div1);
         let pagination = this.getElementByXpath(div2);
         if (search_input != null && pagination != null) {
             if (this.checkOverLap(search_input, pagination)) {
-                next(true)
+                next(true);
             } else {
-                next(false)
+                next(false);
             }
         }
 
     }
 
     checkAllDIVOverlap = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        // less then 765 was consider as mobile 
         if (document.body.offsetWidth > 765) {
             // Check GSM
-            this.correctDIVOverlap('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input', '//*[@id="gsm-select"]', this.correctGSMDIVOverlap)
-
+            this.correctDIVOverlap('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input', '//*[@id="gsm-select"]', workflow.dataList.length, this.correctGSMDIVOverlap);
             // Check  Deg
-            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="deg-select"]', this.correctDegDIVOverlap)
-
+            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="deg-select"]', workflow.diff_expr_genes.data.length, this.correctDegDIVOverlap);
             // check pathway up
-            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-up-select"]', this.correctPathWayUpDIVOverlap)
-
+            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-up-select"]', workflow.pathways_up.data.length, this.correctPathWayUpDIVOverlap);
             // check  pathway down
-            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-down-select"]', this.correctPathWayDownDIVOverlap)
-
+            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-down-select"]', workflow.pathways_down.data.length, this.correctPathWayDownDIVOverlap);
             // // check ssgsea 
-            this.correctDIVOverlap('//*[@id="ss_gene_set_select_option"]', '//*[@id="ss-select"]', this.correctSSGSEADIVOverlap)
-
+            this.correctDIVOverlap('//*[@id="ss_gene_set_select_option"]', '//*[@id="ss-select"]', workflow.ssGSEA.data.length, this.correctSSGSEADIVOverlap);
         }
 
     }
 
-
     correctDegDIVOverlap = (flag) => {
+        let dt = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div');
+        let displaySection = this.getElementByXpath('//*[@id="deg-select"]');
+        let pagination = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div/div/div/ul');
+        let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
+        if (pagination == null) {
+            // when table data is null, then no pagination will show up
+           pagination = { offsetWidth: 0 ,style:{ top :0 ,right:0,left:0}}
+        }
         if (flag) {
-
-            let dt = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div');
-            let displaySection = this.getElementByXpath('//*[@id="deg-select"]');
-            let pagination = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div/div/div/ul');
-            let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
-
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0 && pagination.offsetWidth != 0) {
-
+            if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
                 dt.style.paddingTop = "50px";
                 pagination.style.top = "-60px";
                 pagination.style.right = "auto";
@@ -379,25 +350,14 @@ class Analysis extends Component {
 
             }
         } else {
-
-            let dt = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div');
-            let displaySection = this.getElementByXpath('//*[@id="deg-select"]');
-            let pagination = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div/div/div/ul');
-            let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
-
             let deg_select_option = this.getElementByXpath('//*[@id="deg_select_option"]');
-
-
             deg_select_option = deg_select_option.getBoundingClientRect();
             let displaySection_client = displaySection.getBoundingClientRect();
-
-
-            if (dt && dt != null && pagination && pagination != null && pagination.offsetWidth != 0 && displaySection && displaySection != null && exportBtn != null) {
+            if (dt && dt != null && displaySection && displaySection != null && exportBtn != null) {
                 // check if move back will cause the overlap
                 if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > deg_select_option.right)) {
                     return;
                 }
-
                 dt.style.paddingTop = "9px";
                 pagination.style.top = "-58px";
                 pagination.style.right = "100px";
@@ -414,23 +374,23 @@ class Analysis extends Component {
     }
 
     correctSSGSEADIVOverlap = (flag) => {
+        let dt = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div');
+        let displaySection = this.getElementByXpath('//*[@id="ss-select"]');
+        let pagination = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div/div/div/ul');
+        let exportBtn = this.getElementByXpath('//*[@id="ss_tag1"]/div[2]');
+        if (pagination == null) {
+            // when table data is null, then no pagination will show up
+            pagination = { offsetWidth: 0 ,style:{ top :0 ,right:0,left:0}}
+        }
         if (flag) {
 
-            let dt = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div')
-            let displaySection = this.getElementByXpath('//*[@id="ss-select"]')
-            let pagination = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div/div/div/ul')
-            let exportBtn = this.getElementByXpath('//*[@id="ss_tag1"]/div[2]');
-
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null) {
-
+            if (dt && dt != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null) {
                 dt.style.paddingTop = "50px";
                 displaySection.style.right = "auto";
                 displaySection.style.top = "115px";
-
                 pagination.style.top = "-60px";
                 pagination.style.right = "auto";
                 pagination.style.left = displaySection.offsetWidth + 15 + "px";
-
                 exportBtn.style.right = "auto";
                 let width = displaySection.offsetWidth + pagination.offsetWidth + 35 + "px";
                 exportBtn.style.left = width;
@@ -439,26 +399,15 @@ class Analysis extends Component {
 
         } else {
             // not overlap back to normal
-            let dt = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div')
-            let displaySection = this.getElementByXpath('//*[@id="ss-select"]')
-            let pagination = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div/div/div/ul')
-            let exportBtn = this.getElementByXpath('//*[@id="ss_tag1"]/div[2]');
-
-
             let select_option = this.getElementByXpath('//*[@id="ss_gene_set_select_option"]');
             // check if move back will cause the overlap
-
             select_option = select_option.getBoundingClientRect();
             let displaySection_client = displaySection.getBoundingClientRect();
-
-
-            if (dt && dt != null && pagination && pagination != null && pagination.offsetWidth != 0 && displaySection && displaySection != null && exportBtn && exportBtn != null) {
+            if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null) {
                 // check if move back will cause the overlap
-
                 if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > select_option.right)) {
                     return;
                 }
-
                 dt.style.paddingTop = "9px";
                 pagination.style.top = "-58px";
                 pagination.style.right = "100px";
@@ -475,53 +424,38 @@ class Analysis extends Component {
     }
 
     correctPathWayUpDIVOverlap = (flag) => {
+        let dt = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div');
+        let displaySection = this.getElementByXpath('//*[@id="pathways-up-select"]');
+        let pagination = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div/div/div/ul');
+        let exportBtn = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[2]');
+        if (pagination == null) {
+            // when table data is null, then no pagination will show up
+            pagination = { offsetWidth: 0 ,style:{ top :0 ,right:0,left:0}}
+        }
+
         if (flag) {
-
-            let dt = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div')
-            let displaySection = this.getElementByXpath('//*[@id="pathways-up-select"]')
-            let pagination = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div/div/div/ul')
-            let exportBtn = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[2]');
-
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
-
-
+            if (dt && dt != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
                 dt.style.paddingTop = "50px";
                 displaySection.style.right = "auto";
                 displaySection.style.top = "115px";
-
-
                 pagination.style.top = "-60px";
                 pagination.style.right = "auto";
                 pagination.style.left = displaySection.offsetWidth + 15 + "px";
-
                 exportBtn.style.right = "auto";
                 let width = displaySection.offsetWidth + pagination.offsetWidth + 35 + "px";
                 exportBtn.style.left = width;
                 exportBtn.style.top = "114px";
             }
-
-
         } else {
-            let dt = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div');
-            let displaySection = this.getElementByXpath('//*[@id="pathways-up-select"]');
-            let pagination = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div/div/div/ul');
-            let exportBtn = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[2]');
-
             let deg_select_option = this.getElementByXpath('//*[@id="deg_select_option"]');
             // check if move back will cause the overlap
-
             deg_select_option = deg_select_option.getBoundingClientRect();
             let displaySection_client = displaySection.getBoundingClientRect();
-
-
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && pagination.offsetWidth != 0 && exportBtn && exportBtn != null) {
+            if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null) {
                 // check if move back will cause the overlap
-
                 if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > deg_select_option.right)) {
                     return;
                 }
-
-
                 dt.style.paddingTop = "9px";
                 pagination.style.top = "-58px";
                 pagination.style.right = "100px";
@@ -533,21 +467,20 @@ class Analysis extends Component {
                 exportBtn.style.left = "auto";
                 exportBtn.style.top = "75px";
             }
-
-
-
         }
-
     }
 
     correctPathWayDownDIVOverlap = (flag) => {
+        let dt = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div');
+        let displaySection = this.getElementByXpath('//*[@id="pathways-down-select"]');
+        let pagination = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div/div/div/ul');
+        let exportBtn = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[2]');
+        if (pagination == null) {
+            // when table data is null, then no pagination will show up
+            pagination = { offsetWidth: 0 ,style:{ top :0 ,right:0,left:0}}
+        }
         if (flag) {
-            let dt = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div');
-            let displaySection = this.getElementByXpath('//*[@id="pathways-down-select"]');
-            let pagination = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div/div/div/ul');
-            let exportBtn = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[2]');
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
-
+            if (dt && dt != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
                 dt.style.paddingTop = "50px";
                 displaySection.style.right = "auto";
                 displaySection.style.top = "115px";
@@ -559,37 +492,21 @@ class Analysis extends Component {
                 exportBtn.style.left = width;
                 exportBtn.style.top = "114px";
             }
-
-
         } else {
             // not overlap back to normal
-            let dt = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div');
-            let displaySection = this.getElementByXpath('//*[@id="pathways-down-select"]');
-            let pagination = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div/div/div/ul');
-            let exportBtn = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[2]');
-
             let deg_select_option = this.getElementByXpath('//*[@id="deg_select_option"]');
             // check if move back will cause the overlap
-
             deg_select_option = deg_select_option.getBoundingClientRect();
             let displaySection_client = displaySection.getBoundingClientRect();
-
-
-
-
-            if (dt && dt != null && pagination && pagination != null && pagination.offsetWidth != 0 && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+            if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
                 // check if move back will cause the overlap
-
                 if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > deg_select_option.right)) {
                     return;
                 }
-
-
                 dt.style.paddingTop = "9px";
                 pagination.style.top = "-58px";
                 pagination.style.right = "100px";
                 pagination.style.left = "auto";
-
                 let width = pagination.offsetWidth + 125;
                 displaySection.style.right = width + "px";
                 displaySection.style.top = "73px";
@@ -598,22 +515,20 @@ class Analysis extends Component {
                 exportBtn.style.top = "75px";
             }
         }
-
     }
 
-
-
-
     correctGSMDIVOverlap = (flag) => {
+        let dt = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div');
+        let displaySection = this.getElementByXpath('//*[@id="gsm-select"]');
+        let pagination = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div/div/div/ul');
+        let exportBtn = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[2]/div[2]');
+        if (pagination == null) {
+            // when table data is null, then no pagination will show up
+             pagination = { offsetWidth: 0 ,style:{ top :0 ,right:0,left:0}}
+        }
         if (flag) {
             // overlap
-            let dt = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div')
-            let displaySection = this.getElementByXpath('//*[@id="gsm-select"]')
-            let pagination = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div/div/div/ul')
-            let exportBtn = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[2]/div[2]');
-
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
-
+            if (dt && dt != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
                 dt.style.paddingTop = "50px";
                 displaySection.style.right = "auto";
                 displaySection.style.top = "100px";
@@ -625,25 +540,13 @@ class Analysis extends Component {
                 exportBtn.style.left = width;
                 exportBtn.style.top = "92px";
             }
-
-
         } else {
             // not overlap back to normal
-            let dt = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div')
-            let displaySection = this.getElementByXpath('//*[@id="gsm-select"]')
-            let pagination = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div/div/div/ul')
-            let exportBtn = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[2]/div[2]');
-
-
             let select_option = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input');
-
             select_option = select_option.getBoundingClientRect();
             let displaySection_client = displaySection.getBoundingClientRect();
-
-
-            if (dt && dt != null && pagination && pagination != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
+            if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
                 // check if move back will cause the overlap
-
                 if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > select_option.right)) {
                     return;
                 }
@@ -657,12 +560,9 @@ class Analysis extends Component {
                 exportBtn.style.right = "0";
                 exportBtn.style.left = "auto";
                 exportBtn.style.top = "50px";
-
             }
 
         }
-
-
     }
 
     changeRunContrastMode = (params = false) => {
@@ -711,8 +611,6 @@ class Analysis extends Component {
                 res => res.json()
             )
             .then(result => {
-
-
                 if (result.status == 200) {
                     let workflow = Object.assign({}, this.state.workflow);
                     var wb = XLSX.utils.book_new();
@@ -724,27 +622,20 @@ class Analysis extends Component {
                     };
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Settings");
-
                         var ws_data = [];
-
                         if (workflow.analysisType == "1") {
                             // Upload
                             ws_data.push(["Analysis Type", "CEL Files"]);
-
                             let uploadD = ""
-
                             for (var i in workflow.dataList) {
                                 uploadD = workflow.dataList[i].title + "," + uploadD;
                             }
-
                             ws_data.push(["Upload Data", uploadD]);
                         }
-
                         if (workflow.analysisType == "0") {
                             ws_data.push(["Analysis Type", "GEO Data"])
                             ws_data.push(["Accession Code", workflow.accessionCode])
                         }
-
                         ws_data.push(["Contrasts", workflow.group_1 + " vs " + workflow.group_2])
                         let group_1_gsm = "";
                         let group_2_gsm = "";
@@ -761,11 +652,9 @@ class Analysis extends Component {
                         ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["Type", "Single Sample GSEA"])
                         ws_data.push(["Filters", ""])
-
                         if (workflow.ssGSEA.search_keyword.name != "") {
                             ws_data.push(["sorting.order", workflow.ssGSEA.sorting.order])
                         }
-
                         if (workflow.ssGSEA.search_keyword.search_logFC != "") {
                             ws_data.push(["logFC", workflow.ssGSEA.search_keyword.search_logFC])
                         }
@@ -784,11 +673,9 @@ class Analysis extends Component {
                         if (workflow.ssGSEA.search_keyword.search_t != "") {
                             ws_data.push(["t", workflow.ssGSEA.search_keyword.search_t])
                         }
-
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
                         wb.Sheets["Settings"] = ws;
                         wb.SheetNames.push("Results");
-
                         // export data
                         let degData = result.data.records;
                         let exportData = [
@@ -805,20 +692,17 @@ class Analysis extends Component {
                                 degData[i]["V7"]
                             ])
                         }
-
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Results"] = ws2;
                         var wbout = XLSX.writeFile(wb, "ssGSEA_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
 
                 } else {
-
                     document.getElementById("message-ssgsea").innerHTML = result.msg
                 }
                 workflow.progressing = false;
                 workflow.loading_info = "Loading";
                 this.setState({ workflow: workflow });
-
             }).catch(function(err) {
                 console.log(err);
             });
@@ -826,7 +710,6 @@ class Analysis extends Component {
 
     getssGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-
         if (params.sorting) {
             params = {
                 projectId: workflow.projectID,
@@ -846,7 +729,6 @@ class Analysis extends Component {
             }
             workflow.ssGSEA.search_keyword = params.search_keyword;
         } else {
-
             params = {
                 projectId: workflow.projectID,
                 page_number: workflow.ssGSEA.pagination.current,
@@ -857,16 +739,10 @@ class Analysis extends Component {
             workflow.ssGSEA.pagination = {
                 current: workflow.ssGSEA.pagination.current,
                 pageSize: workflow.ssGSEA.pagination.pageSize,
-
             }
-
         }
-
         workflow.ssGSEA.loading = true;
         this.setState({ workflow: workflow });
-
-
-
         fetch('./api/analysis/getGSEA', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -882,47 +758,33 @@ class Analysis extends Component {
             .then(result => {
                 document.getElementById("message-ssgsea").innerHTML = ""
                 let workflow2 = Object.assign({}, this.state.workflow);
-
-                document.getElementById("input_ssg_name").value = workflow2.ssGSEA.search_keyword.name;
-                document.getElementById("input_ssg_search_logFC").value = workflow2.ssGSEA.search_keyword.search_logFC;
-                document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = workflow2.ssGSEA.search_keyword.search_Avg_Enrichment_Score;
-                document.getElementById("input_ssg_search_t").value = workflow2.ssGSEA.search_keyword.search_t;
-                document.getElementById("input_ssg_search_p_value").value = workflow2.ssGSEA.search_keyword.search_p_value;
-                document.getElementById("input_ssg_search_adj_p_value").value = workflow2.ssGSEA.search_keyword.search_adj_p_value;
-                document.getElementById("input_ssg_search_b").value = workflow2.ssGSEA.search_keyword.search_b;
-
-
+                // document.getElementById("input_ssg_name").value = workflow2.ssGSEA.search_keyword.name;
+                // document.getElementById("input_ssg_search_logFC").value = workflow2.ssGSEA.search_keyword.search_logFC;
+                // document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = workflow2.ssGSEA.search_keyword.search_Avg_Enrichment_Score;
+                // document.getElementById("input_ssg_search_t").value = workflow2.ssGSEA.search_keyword.search_t;
+                // document.getElementById("input_ssg_search_p_value").value = workflow2.ssGSEA.search_keyword.search_p_value;
+                // document.getElementById("input_ssg_search_adj_p_value").value = workflow2.ssGSEA.search_keyword.search_adj_p_value;
+                // document.getElementById("input_ssg_search_b").value = workflow2.ssGSEA.search_keyword.search_b;
                 if (result.status == 200) {
                     const pagination = { ...workflow2.ssGSEA.pagination };
                     // Read total count from server
                     // pagination.total = data.totalCount;
                     pagination.total = result.data.totalCount;
-
                     for (let i = 0; i < result.data.records.length; i++) {
                         result.data.records[i].key = "GSEA" + i;
                     }
-
                     workflow2.ssGSEA.loading = false;
                     workflow2.ssGSEA.data = result.data.records;
                     workflow2.ssGSEA.pagination = pagination;
-
                     let min = 0;
                     let max = 99999;
                     let random = Math.random() * (+max - +min) + +min;
-
                     this.setState({ workflow: workflow2 });
                     this.getSSGSEAGeneHeatMap();
-
                     this.resetSSGSEADisplay(this.checkAllDIVOverlap());
-
-
                 } else {
-
                     document.getElementById("message-ssgsea").innerHTML = result.msg
                 }
-
-
-
             }).catch(error => console.log(error));
     }
 
@@ -1120,10 +982,8 @@ class Analysis extends Component {
                 pageSize: workflow.pathways_up.pagination.pageSize,
             }
         }
-
         workflow.pathways_up.loading = true;
         this.setState({ workflow: workflow });
-        console.log()
         fetch('./api/analysis/getUpPathWays', {
                 method: "POST",
                 body: JSON.stringify(params),
@@ -1161,23 +1021,6 @@ class Analysis extends Component {
 
                     document.getElementById("message-pug").innerHTML = result.msg;
                 }
-
-
-
-                document.getElementById("input_pathway_up_search_PATHWAY_ID").value = workflow2.pathways_up.search_keyword.search_PATHWAY_ID;
-                document.getElementById("input_pathway_up_search_SOURCE").value = workflow2.pathways_up.search_keyword.search_SOURCE;
-                document.getElementById("input_pathway_up_search_DESCRIPTION").value = workflow2.pathways_up.search_keyword.search_DESCRIPTION;
-                document.getElementById("input_pathway_up_search_TYPE").value = workflow2.pathways_up.search_keyword.search_TYPE;
-                document.getElementById("input_pathway_up_search_p_value").value = workflow.pathways_up.search_keyword.search_p_value;
-                document.getElementById("input_pathway_up_search_fdr").value = workflow2.pathways_up.search_keyword.search_fdr;
-                document.getElementById("input_pathway_up_search_RATIO").value = workflow2.pathways_up.search_keyword.search_RATIO;
-                document.getElementById("input_pathway_up_search_GENE_LIST").value = workflow2.pathways_up.search_keyword.search_GENE_LIST;
-                document.getElementById("input_pathway_up_search_NUMBER_HITS").value = workflow2.pathways_up.search_keyword.search_NUMBER_HITS;
-                document.getElementById("input_pathway_up_search_NUMBER_GENES_PATHWAY").value = workflow2.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY;
-                document.getElementById("input_pathway_up_search_NUMBER_USER_GENES").value = workflow2.pathways_up.search_keyword.search_NUMBER_USER_GENES;
-                document.getElementById("input_pathway_up_search_TOTAL_NUMBER_GENES").value = workflow2.load.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES;
-
-
             }).catch(error => console.log(error));
     }
 
@@ -1256,21 +1099,6 @@ class Analysis extends Component {
                 } else {
                     document.getElementById("message-pdg").innerHTML = result.msg;
                 }
-
-                document.getElementById("input_pathway_down_search_PATHWAY_ID").value = workflow2.pathways_down.search_keyword.search_PATHWAY_ID;
-                document.getElementById("input_pathway_down_search_SOURCE").value = workflow2.pathways_down.search_keyword.search_SOURCE;
-                document.getElementById("input_pathway_down_search_DESCRIPTION").value = workflow2.pathways_down.search_keyword.search_DESCRIPTION;
-                document.getElementById("input_pathway_down_search_TYPE").value = workflow2.pathways_down.search_keyword.search_TYPE;
-                document.getElementById("input_pathway_down_search_p_value").value = workflow2.pathways_down.search_keyword.search_p_value;
-                document.getElementById("input_pathway_down_search_fdr").value = workflow2.pathways_down.search_keyword.search_fdr;
-                document.getElementById("input_pathway_down_search_RATIO").value = workflow2.pathways_down.search_keyword.search_RATIO;
-                document.getElementById("input_pathway_down_search_GENE_LIST").value = workflow2.pathways_down.search_keyword.search_GENE_LIST;
-                document.getElementById("input_pathway_down_search_NUMBER_HITS").value = workflow2.pathways_down.search_keyword.search_NUMBER_HITS;
-                document.getElementById("input_pathway_down_search_NUMBER_GENES_PATHWAY").value = workflow2.pathways_down.search_keyword.search_NUMBER_GENES_PATHWAY;
-                document.getElementById("input_pathway_down_search_NUMBER_USER_GENES").value = workflow2.pathways_down.search_keyword.search_NUMBER_USER_GENES;
-                document.getElementById("input_pathway_down_search_TOTAL_NUMBER_GENES").value = workflow2.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES;
-
-
             }).catch(error => console.log(error));
     }
 
@@ -1427,10 +1255,8 @@ class Analysis extends Component {
     }
 
     getDEG = (params = {}) => {
-
         let workflow = Object.assign({}, this.state.workflow);
         if (params.sorting) {
-
             params = {
                 projectId: workflow.projectID,
                 page_size: params.page_size,
@@ -1441,7 +1267,6 @@ class Analysis extends Component {
                 },
                 search_keyword: params.search_keyword
             }
-
             workflow.diff_expr_genes.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
@@ -1449,7 +1274,6 @@ class Analysis extends Component {
             }
             workflow.diff_expr_genes.sorting = params.sorting;
             workflow.diff_expr_genes.search_keyword = params.search_keyword;
-
         } else {
             params = {
                 projectId: workflow.projectID,
@@ -1461,12 +1285,8 @@ class Analysis extends Component {
             workflow.diff_expr_genes.pagination = {
                 current: workflow.diff_expr_genes.pagination.current,
                 pageSize: workflow.diff_expr_genes.pagination.pageSize,
-
             }
-
         }
-
-
         workflow.diff_expr_genes.loading = true;
         this.setState({ workflow: workflow });
         fetch('./api/analysis/getDEG', {
@@ -1485,40 +1305,21 @@ class Analysis extends Component {
                 document.getElementById("message-deg").innerHTML = "";
                 let workflow2 = Object.assign({}, this.state.workflow);
                 if (result.status == 200) {
-
                     const pagination = { ...workflow2.diff_expr_genes.pagination };
                     // Read total count from server 
                     // pagination.total = data.totalCount;
                     pagination.total = result.data.totalCount;
-
                     for (let i = 0; i < result.data.records.length; i++) {
                         result.data.records[i].key = "DEG" + i;
                     }
                     workflow2.diff_expr_genes.loading = false;
                     workflow2.diff_expr_genes.data = result.data.records;
                     workflow2.diff_expr_genes.pagination = pagination;
-
                     this.setState({ workflow: workflow2 });
                     this.resetDEGDisplay(this.checkAllDIVOverlap());
-
-
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
                 }
-
-
-                document.getElementById("input_deg_search_symbol").value = workflow2.diff_expr_genes.search_keyword.search_symbol;
-                document.getElementById("input_deg_search_fc").value = workflow2.diff_expr_genes.search_keyword.search_fc;
-                document.getElementById("input_dge_search_p_value").value = workflow2.diff_expr_genes.search_keyword.search_p_value;
-                document.getElementById("input_deg_search_adj_p_value").value = workflow2.diff_expr_genes.search_keyword.search_adj_p_value;
-                document.getElementById("input_deg_search_aveexpr").value = workflow2.diff_expr_genes.search_keyword.search_aveexpr;
-                document.getElementById("input_deg_search_accnum").value = workflow2.diff_expr_genes.search_keyword.search_accnum;
-                document.getElementById("input_deg_search_desc").value = workflow2.diff_expr_genes.search_keyword.search_desc;
-                document.getElementById("input_deg_search_entrez").value = workflow2.diff_expr_genes.search_keyword.search_entrez;
-                document.getElementById("input_deg_search_probsetid").value = workflow2.diff_expr_genes.search_keyword.search_probsetid;
-                document.getElementById("input_deg_search_t").value = workflow2.diff_expr_genes.search_keyword.search_t;
-                document.getElementById("input_deg_search_b").value = workflow2.diff_expr_genes.search_keyword.search_b;
-
             }).catch(error => console.log(error));
     }
 
@@ -1824,7 +1625,6 @@ class Analysis extends Component {
                             let BoxplotRenderData = []
                             let BoxplotsData = result.data
                             for (let i = 0; i < result.data.col.length; i++) {
-
                                 let boxplotData = {
                                     y: BoxplotsData.data[i],
                                     type: "box",
@@ -1835,16 +1635,12 @@ class Analysis extends Component {
                                 }
                                 BoxplotRenderData.push(boxplotData)
                             }
-
                             let plot_layout = { showlegend: false, autosize: true }
-                            let Boxplots = <Plot 
-                             id="BoxplotAN" 
+                            let Boxplots = <Plot id="BoxplotAN" 
                              data={BoxplotRenderData} 
                              layout={this.state.workflow.BoxplotAN.layout}  
                              style={this.state.workflow.BoxplotAN.style} 
-                             useResizeHandler={true}
-                             />
-
+                             useResizeHandler={true} />
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             workflow.BoxplotAN.plot = <div> {Boxplots}</div>;
@@ -1855,9 +1651,7 @@ class Analysis extends Component {
                             workflow.progressing = false;
                             workflow.BoxplotAN.plot = "No Data";
                             this.setState({ workflow: workflow });
-
                         }
-
                         document.getElementById("message-post-boxplot").innerHTML = "";
                     } else {
                         document.getElementById("message-post-boxplot").innerHTML = result.msg;
@@ -1866,7 +1660,6 @@ class Analysis extends Component {
                         workflow.BoxplotAN.plot = "No Data";
                         this.setState({ workflow: workflow });
                     }
-
                 }).catch(error => console.log(error));
         } catch (error) {
             document.getElementById("message-post-boxplot").innerHTML = error;
@@ -1875,18 +1668,14 @@ class Analysis extends Component {
             workflow.BoxplotAN.plot = "No Data";
             this.setState({ workflow: workflow });
         }
-
     }
 
     getHistplotAN() {
-
         let workflow = Object.assign({}, this.state.workflow);
         let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.svg";
         let histplotAN = <div><img src={ histplotANLink }  alt="Histogram" /></div>;
-
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
-
     }
 
     getMAplotAN() {
@@ -1915,29 +1704,22 @@ class Analysis extends Component {
                                     pics: result.data,
                                     groups: workflow.groups
                                 }
-
                                 workflow.list_mAplotBN = result.data;
                                 workflow.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
-
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
-
                             } else {
-
                                 let workflow = Object.assign({}, this.state.workflow);
                                 workflow.postplot.list_mAplotAN = "No Data";
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
                             }
-
                         } else {
-
                             document.getElementById("message-post-maplot").innerHTML = result.msg;
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         }
-
                     }).catch(error => console.log(error));
             } catch (error) {
                 document.getElementById("message-post-maplot").innerHTML = error;
@@ -1947,13 +1729,11 @@ class Analysis extends Component {
             }
         } else {
             let workflow2 = Object.assign({}, this.state.workflow);
-
             let input = {
                 projectID: workflow2.projectID,
                 pics: workflow2.list_mAplotAN,
                 groups: workflow2.groups
             }
-
             workflow2.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
             workflow2.progressing = false;
             this.setState({ workflow: workflow2 });
@@ -1966,7 +1746,6 @@ class Analysis extends Component {
         workflow2.loading_info = "Loading NUSE...";
         this.setState({ workflow: workflow2 });
         let params = { projectId: workflow2.projectID };
-
         try {
             fetch('./api/analysis/getNUSE', {
                     method: "POST",
@@ -1978,7 +1757,6 @@ class Analysis extends Component {
                     document.getElementById("message-pre-nuse").innerHTML = "";
                     let workflow = Object.assign({}, this.state.workflow);
                     if (result.status == 200) {
-
                         let NUSERenderData = []
                         let NUSEplotsData = result.data
                         for (let i = 0; i < result.data.col.length; i++) {
@@ -1993,19 +1771,15 @@ class Analysis extends Component {
                             }
                             NUSERenderData.push(boxplotData)
                         }
-
                         let plot_layout = { showlegend: false }
                         let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9, }
-
                         let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
-
                         workflow.progressing = false;
                         workflow.NUSE.data = NUSERenderData;
                         workflow.NUSE.plot = <div> {NUSE}</div>;
                         workflow.NUSE.layout = plot_layout;
                         workflow.NUSE.style = plot_style;
                         this.setState({ workflow: workflow });
-
                     } else {
                         document.getElementById("message-pre-nuse").innerHTML = result.msg;
                         workflow.progressing = false;
@@ -2026,7 +1800,6 @@ class Analysis extends Component {
         workflow2.loading_info = "Loading RLE...";
         this.setState({ workflow: workflow2 });
         let params = { projectId: workflow2.projectID };
-
         try {
             fetch('./api/analysis/getRLE', {
                     method: "POST",
@@ -2042,7 +1815,6 @@ class Analysis extends Component {
                             let RLERenderData = []
                             let RLEplotsData = result.data
                             for (let i = 0; i < result.data.col.length; i++) {
-
                                 let boxplotData = {
                                     y: RLEplotsData.data[i],
                                     type: "box",
@@ -2053,13 +1825,9 @@ class Analysis extends Component {
                                 }
                                 RLERenderData.push(boxplotData)
                             }
-
-
                             let plot_layout = { showlegend: false }
                             let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9, }
-
                             let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style}  useResizeHandler={true}/>
-
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             workflow.RLE.data = RLERenderData;
@@ -2074,20 +1842,15 @@ class Analysis extends Component {
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         }
-
-
                     } else {
                         document.getElementById("message-pre-rle").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
                         workflow.RLE.plot = "No Data";
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
-
                     }
-
                 }).catch(error => console.log(error));
         } catch (error) {
-
             document.getElementById("message-pre-rle").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.RLE.plot = "No Data";
@@ -2097,13 +1860,11 @@ class Analysis extends Component {
     }
 
     getBoxplotBN() {
-
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
         workflow2.loading_info = "Loading Plots...";
         this.setState({ workflow: workflow2 });
         let params = { projectId: workflow2.projectID };
-
         try {
             fetch('./api/analysis/getBoxplotBN', {
                     method: "POST",
@@ -2119,7 +1880,6 @@ class Analysis extends Component {
                             let BoxplotRenderData = []
                             let BoxplotsData = result.data
                             for (let i = 0; i < result.data.col.length; i++) {
-
                                 let boxplotData = {
                                     y: BoxplotsData.data[i],
                                     type: "box",
@@ -2130,13 +1890,9 @@ class Analysis extends Component {
                                 }
                                 BoxplotRenderData.push(boxplotData)
                             }
-
                             let plot_layout = { showlegend: false }
                             let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9, }
-
-
                             let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
-
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             workflow.BoxplotBN.data = BoxplotRenderData;
@@ -2145,14 +1901,11 @@ class Analysis extends Component {
                             workflow.BoxplotBN.style = plot_style;
                             this.setState({ workflow: workflow });
                         } else {
-
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.preplots.Boxplots = "No Data";
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         }
-
-
                     } else {
                         document.getElementById("message-pre-boxplot").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
@@ -2160,10 +1913,8 @@ class Analysis extends Component {
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
                     }
-
                 }).catch(error => console.log(error));
         } catch (error) {
-
             document.getElementById("message-pre-boxplot").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
             workflow.preplots.Boxplots = "No Data";
@@ -2196,20 +1947,17 @@ class Analysis extends Component {
                                     projectID: workflow.projectID,
                                     pics: result.data,
                                     groups: workflow.groups
-                                }
-
+                                };
                                 workflow.list_mAplotBN = result.data;
                                 workflow.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
-
                             } else {
                                 let workflow = Object.assign({}, this.state.workflow);
                                 workflow.preplots.list_mAplotBN = "No Data";
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
                             }
-
                         } else {
                             document.getElementById("message-pre-maplot").innerHTML = result.msg;
                             let workflow = Object.assign({}, this.state.workflow);
@@ -2217,7 +1965,6 @@ class Analysis extends Component {
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         }
-
                     }).catch(error => console.log(error));
             } catch (error) {
                 document.getElementById("message-pre-maplot").innerHTML = error;
@@ -2226,7 +1973,6 @@ class Analysis extends Component {
                 workflow.progressing = false;
                 this.setState({ workflow: workflow });
             }
-
         } else {
             let input = {
                 projectID: workflow2.projectID,
@@ -2235,12 +1981,10 @@ class Analysis extends Component {
             }
             workflow2.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
             this.setState({ workflow: workflow2 });
-
         }
     }
 
     getHistplotBN() {
-
         let workflow = Object.assign({}, this.state.workflow);
         let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.svg";
         let histplotBN = <div><img src={ histplotBNLink }  alt="Histogram" /></div>;
@@ -2256,9 +2000,7 @@ class Analysis extends Component {
             obj.pagination = workflow.pagination;
             workflow.pathways_up = obj;
         }
-        this.setState({ workflow: workflow }, () => {
-            console.log("changePathways_up done");
-        });
+        this.setState({ workflow: workflow }, () => { console.log("changePathways_up done"); });
     }
 
     changePathways_down(obj) {
@@ -2269,7 +2011,6 @@ class Analysis extends Component {
             obj.pagination = workflow.pagination;
             workflow.pathways_down = obj;
         }
-
         this.setState({ workflow: workflow });
     }
 
@@ -2303,7 +2044,6 @@ class Analysis extends Component {
         if (e == "volcanoPlot") {
             this.getVolcanoPlot();
         }
-
     }
 
     upateCurrentWorkingTab = (e) => {
@@ -2311,9 +2051,7 @@ class Analysis extends Component {
         window.current_working_on_tag = e;
         let workflow = Object.assign({}, this.state.workflow);
         workflow.tab_activeKey = e;
-        this.setState({
-            workflow: workflow
-        });
+        this.setState({ workflow: workflow });
     }
 
     handleGeneChange = (event) => {
@@ -2326,7 +2064,6 @@ class Analysis extends Component {
         reqBody.group1 = workflow.group_1;
         reqBody.group2 = workflow.group_2;
         //change button style
-
         workflow.progressing = true;
         workflow.loading_info = "Running Analysis...";
         this.setState({
@@ -2337,18 +2074,13 @@ class Analysis extends Component {
                     method: "POST",
                     body: JSON.stringify(reqBody),
                     credentials: "same-origin",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                    headers: { 'Content-Type': 'application/json' }
                 })
                 .then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
                     workflow.progressing = false;
-                    this.setState({
-                        workflow: workflow
-                    });
-
+                    this.setState({ workflow: workflow });
                     if (result.status == 200) {
                         this.getssGSEA();
                     } else {
@@ -2356,7 +2088,6 @@ class Analysis extends Component {
                         document.getElementById("message-ssgsea").innerHTML = result.msg;
                     }
                 })
-
         } catch (err) {
             document.getElementById("message-ssgsea").innerHTML = err;
             //change button style
@@ -2417,35 +2148,25 @@ class Analysis extends Component {
     resetWorkFlowProject = () => {
         let workflow = Object.assign({}, this.state.workflow);
         if (workflow.analysisType == "0") {
-            //defaultState.workflow.analysisType = 0;
             document.getElementById("input-access-code").disabled = false;
             document.getElementById("btn-project-load-gse").disabled = false;
             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
         }
-        if (workflow.analysisType == "1") {
-            // defaultState.workflow.analysisType = 1;
-        }
         defaultState.workflow.analysisType = "0";
         let err_message = document.getElementsByClassName("err-message")
-
         for (let i = 0; i < err_message.length; i++) {
             err_message[i].innerHTML = ""; // or
         }
-
         if (document.getElementById("message-gsm") != null) {
             document.getElementById("message-gsm").nextSibling.innerHTML = "Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here."
-
         }
-
         document.getElementById("input-email").value = "";
-
         document.getElementById("message-success-use-queue").innerHTML = "";
         defaultState.workflow.progressing = false;
         this.setState({ workflow: defaultState.workflow });
     }
 
     changeLoadingStatus = (progressing, loading_info) => {
-
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = progressing;
         workflow.loading_info = loading_info;
@@ -2465,8 +2186,6 @@ class Analysis extends Component {
             Author: "Microarray",
             CreatedDate: new Date()
         };
-
-
         if (workflow.dataList.length != 0) {
             wb.SheetNames.push("Settings");
             let ws_data = [];
@@ -2476,20 +2195,15 @@ class Analysis extends Component {
                 ws_data.push(["Accession Code", workflow.accessionCode]);
 
             }
-
             if (workflow.analysisType == "1") {
                 // Upload
                 ws_data.push(["Analysis Type", "CEL Files"]);
-
-                let uploadD = ""
-
+                let uploadD = "";
                 for (var i in workflow.dataList) {
                     uploadD = workflow.dataList[i].title + "," + uploadD;
                 }
-
                 ws_data.push(["Upload Data", uploadD]);
             }
-
             let ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets["Settings"] = ws;
             wb.SheetNames.push("Results");
@@ -2498,7 +2212,7 @@ class Analysis extends Component {
             ]
             let rawData = workflow.dataList;
             for (var i in rawData) {
-                gsm.push([rawData[i].index, rawData[i].gsm, rawData[i].title, rawData[i].description, rawData[i].groups, ])
+                gsm.push([rawData[i].index, rawData[i].gsm, rawData[i].title, rawData[i].description, rawData[i].groups, ]);
             }
             var ws2 = XLSX.utils.aoa_to_sheet(gsm);
             wb.Sheets["Results"] = ws2;
@@ -2510,49 +2224,36 @@ class Analysis extends Component {
     }
 
     loadGSE = () => {
-
         let workflow = Object.assign({}, this.state.workflow);
         let reqBody = {};
         reqBody.code = "";
         reqBody.projectId = "";
         reqBody.groups = "";
-
         if (workflow.accessionCode == "") {
-            document.getElementById("message-load-accession-code").innerHTML = "Accession Code is required. "
+            document.getElementById("message-load-accession-code").innerHTML = "Accession Code is required. ";
             return;
         } else {
-            document.getElementById("message-load-accession-code").innerHTML = ""
+            document.getElementById("message-load-accession-code").innerHTML = "";
         }
-
-        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default"
-
+        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default";
         if (workflow.dataList != "") {
             // user click load after data already loaded.then it is a new transaction 
             window.location.reload(true);
         }
-
         reqBody.code = workflow.accessionCode;
-
-
         // this pid will be used to create a tmp folder to store the data. 
         workflow.projectID = this.uuidv4();
         reqBody.projectId = workflow.projectID;
-
-
-        // mock
-
-        // workflow.projectID = "test";
         // gruop info
         var groups = []
         for (var i in workflow.dataList) {
             if (workflow.dataList[i].group == "") {
-                groups.push("others")
+                groups.push("others");
             } else {
-                groups.push(workflow.dataList[i].group)
+                groups.push(workflow.dataList[i].group);
             }
         }
         reqBody.groups = groups;
-
         workflow.uploading = true;
         workflow.progressing = true;
         workflow.loading_info = "Loading GEO Data...";
@@ -2573,13 +2274,9 @@ class Analysis extends Component {
                 .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
-
                         let workflow = Object.assign({}, this.state.workflow);
-
-
                         if (result.data === "undefined" || Object.keys(result.data).length === 0) {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
                             workflow.uploading = false;
                             workflow.progressing = false;
                             document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
@@ -2589,12 +2286,9 @@ class Analysis extends Component {
                             });
                             return;
                         }
-
                         var data = result.data.split("+++loadGSE+++\"")[1]
-
                         if (typeof(data) === "undefined" || data == "") {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
                             workflow.uploading = false;
                             workflow.progressing = false;
                             document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
@@ -2604,13 +2298,9 @@ class Analysis extends Component {
                             });
                             return;
                         }
-
                         let list = JSON.parse(decodeURIComponent(data));
-                        //let list = result.data;
-
                         if (typeof(list) == "undefined" || list == null || list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
                             workflow.uploading = false;
                             workflow.progressing = false;
                             document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
@@ -2618,33 +2308,24 @@ class Analysis extends Component {
                             this.setState({
                                 workflow: workflow
                             });
-
                             return;
                         }
-
                         document.getElementById("message-gsm").innerHTML = ""
                         workflow.uploading = false;
                         workflow.progressing = false;
-
                         workflow.dataList = list.files;
                         // init group with default value
                         workflow.groups = new Array(list.files.length).fill('others');
-
                         // disable the input , prevent user to change the access code
                         document.getElementById("input-access-code").disabled = true
-
                         // change the word of load btn
                         document.getElementById("btn-project-load-gse").disabled = true
-
                         this.setState({
                             workflow: workflow
                         });
-
                         this.resetGSMDisplay(this.checkAllDIVOverlap());
-
                     } else {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-
                         workflow.uploading = false;
                         workflow.progressing = false;
                         this.setState({
@@ -2666,10 +2347,8 @@ class Analysis extends Component {
             });
             document.getElementById("message-gsm").innerHTML = err
             document.getElementById("message-gsm").nextSibling.innerHTML = ""
-
         }
     }
-
 
     showModal = () => {
         let workflow = Object.assign({}, this.state.workflow);
@@ -2729,8 +2408,6 @@ class Analysis extends Component {
         } else {
             reqBody.source = "fetch";
         }
-
-
         for (var i in workflow.dataList) {
             reqBody.dataList.push(workflow.dataList[i].gsm);
             if (workflow.dataList[i].groups != "") {
@@ -2740,9 +2417,6 @@ class Analysis extends Component {
                 reqBody.groups.push("others")
             }
         }
-
-
-
         reqBody.genSet = workflow.genSet;
         reqBody.pssGSEA = workflow.pssGSEA;
         reqBody.foldssGSEA = workflow.foldssGSEA;
@@ -2755,140 +2429,20 @@ class Analysis extends Component {
         } else {
             reqBody.targetObject = "";
         }
-
         workflow.progressing = true;
         workflow.loading_info = "Running Contrast...";
         // define action
         reqBody.actions = "runContrast";
-
-
-        workflow.diff_expr_genes = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            page_number: 1,
-            page_size: 25,
-            sorting: {
-                name: "P.Value",
-                order: "ascend",
-            },
-            search_keyword: {
-                "search_symbol": "",
-                "search_fc": "1.5",
-                "search_p_value": "0.05",
-                "search_adj_p_value": "",
-                "search_aveexpr": "",
-                "search_accnum": "",
-                "search_desc": "",
-                "search_entrez": "",
-                "search_probsetid": "",
-                "search_t": "",
-                "search_b": ""
-            }
-        };
+        workflow.diff_expr_genes = defaultState.workflow.diff_expr_genes;
         reqBody.deg = workflow.diff_expr_genes;
-        workflow.ssGSEA = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            page_size: 25,
-            page_number: 1,
-            sorting: {
-                name: "P.Value",
-                order: "ascend",
-            },
-            search_keyword: {
-                "name": "",
-                "search_logFC": "",
-                "search_Avg_Enrichment_Score": "",
-                "search_t": "",
-                "search_p_value": "",
-                "search_adj_p_value": "",
-                "search_b": "",
-            }
-        };
+        workflow.ssGSEA = defaultState.workflow.ssGSEA;
         reqBody.ssGSEA = workflow.ssGSEA;
-        workflow.pathways_up = {
-
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            sorting: {
-                name: "P_Value",
-                order: "ascend",
-
-            },
-            search_keyword: {
-                "search_PATHWAY_ID": "",
-                "search_SOURCE": "",
-                "search_DESCRIPTION": "",
-                "search_TYPE": "",
-                "search_p_value": "0.05",
-                "search_fdr": "",
-                "search_RATIO": "",
-                "search_GENE_LIST": "",
-                "search_NUMBER_HITS": "",
-                "search_NUMBER_GENES_PATHWAY": "",
-                "search_NUMBER_USER_GENES": "",
-                "search_TOTAL_NUMBER_GENES": "",
-            }
-        };
+        workflow.pathways_up = defaultState.workflow.pathways_up;
         reqBody.pathways_up = workflow.pathways_up;
-        workflow.pathways_down = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            sorting: {
-                name: "P_Value",
-                order: "ascend",
-
-            },
-            search_keyword: {
-                "search_PATHWAY_ID": "",
-                "search_SOURCE": "",
-                "search_DESCRIPTION": "",
-                "search_TYPE": "",
-                "search_p_value": "0.05",
-                "search_fdr": "",
-                "search_RATIO": "",
-                "search_GENE_LIST": "",
-                "search_NUMBER_HITS": "",
-                "search_NUMBER_GENES_PATHWAY": "",
-                "search_NUMBER_USER_GENES": "",
-                "search_TOTAL_NUMBER_GENES": "",
-            }
-        };
+        workflow.pathways_down = defaultState.workflow.pathways_down;
         reqBody.pathways_down = workflow.pathways_down;
-        workflow.preplots = {
-            histplotBN: "",
-            list_mAplotBN: "",
-            Boxplots: "",
-            RLE: "",
-            NUSE: ""
-        };
-        workflow.postplot = {
-            histplotAN: "",
-            list_mAplotAN: "",
-            Boxplots: "",
-            PCA: "",
-            Heatmapolt: ""
-        };
+        workflow.preplots = defaultState.workflow.preplots;
+        workflow.postplot = defaultState.workflow.postplot;
         workflow.volcanoPlot = "";
         this.setState({
             workflow: workflow
@@ -2899,7 +2453,6 @@ class Analysis extends Component {
                 document.getElementById("message-use-queue").innerHTML = "Email is required"
                 workflow.uploading = false;
                 workflow.progressing = false;
-
                 this.setState({
                     workflow: workflow
                 });
@@ -2922,34 +2475,23 @@ class Analysis extends Component {
                         }
                         return response.json();
                     }).then(result => {
-                        if (result.status == 200) {
-
-                        }
-
-
                         workflow.uploading = false;
                         workflow.progressing = false;
                         workflow.QueueModalvisible = true;
-
                         this.setState({
                             workflow: workflow
                         });
                         this.getSSGSEAGeneHeatMap();
                     })
-
-
             } catch (err) {
-
                 workflow.uploading = false;
                 workflow.progressing = false;
                 console.log(err);
                 document.getElementById("message-use-queue").innerHTML = err
-
                 this.setState({
                     workflow: workflow
                 });
             }
-
         } else {
             try {
                 fetch('./api/analysis/runContrast', {
@@ -2967,70 +2509,54 @@ class Analysis extends Component {
                         return response.json();
                     }).then(result => {
                         if (result.status == 200) {
-
                             let type = window.current_working_on_object;
-
                             if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
-                                // means  I open the GSM
+                                // open the GSM
                             }
-
                             if (window.current_working_on_tag == "Pre-normalization_QC_Plots") {
-                                // means  I open the Pre-plot
+                                // open the Pre-plot
                                 type = window.tag_pre_plot_status;
                             }
-
                             if (window.current_working_on_tag == "Post-normalization_Plots") {
-                                // means  I open the Post-plot
+                                // open the Post-plot
                                 type = window.tag_post_plot_status;
                             }
-
                             if (window.current_working_on_tag == "DEG-Enrichments_Results") {
-                                // means  I open the DEG
+                                // open the DEG
                                 type = window.tag_deg_plot_status;
                             }
-
                             if (window.current_working_on_tag == "ssGSEA_Results") {
-                                // means  I open the ssGSEA_Results
+                                // open the ssGSEA_Results
                                 type = "ssGSEA_Results";
                             }
-
                             if (result.data.mAplotBN != "") {
                                 workflow.list_mAplotBN = result.data.mAplotBN;
                             }
-
                             if (result.data.mAplotAN != "") {
                                 workflow.list_mAplotAN = result.data.mAplotAN;
                             }
-
                             switch (type) {
                                 case "getHistplotAN":
                                     this.getHistplotAN();
                                     break;
-
                                 case "getBoxplotAN":
                                     this.getBoxplotAN();
                                     break;
-
                                 case "getMAplotAN":
                                     this.getMAplotAN();
                                     break;
-
                                 case "getPCA":
                                     this.getPCA();
                                     break;
-
                                 case "getHeatmapolt":
                                     this.getHeatmapolt();
                                     break;
-
                                 case "getHistplotBN":
                                     this.getHistplotBN();
                                     break;
-
                                 case "getMAplotsBN":
                                     this.getMAplotsBN();
                                     break;
-
                                 case "getBoxplotBN":
                                     this.getBoxplotBN();
                                     break;
@@ -3040,7 +2566,6 @@ class Analysis extends Component {
                                 case "getNUSE":
                                     this.getNUSE();
                                     break;
-
                                 case "pathwayHeatMap":
                                     this.getSSGSEAGeneHeatMap();
                                     break;
@@ -3073,7 +2598,7 @@ class Analysis extends Component {
                                     break;
                             }
                             workflow.volcanoPlot = this.getVolcanoPlot();
-                            workflow.groups =result.data.groups;
+                            workflow.groups = result.data.groups;
                             workflow.compared = true;
                             workflow.done_gsea = true;
                             workflow.progressing = false;
@@ -3084,14 +2609,11 @@ class Analysis extends Component {
 
                             this.hideWorkFlow();
                         } else {
-
                             workflow.progressing = false;
                             this.setState({
                                 workflow: workflow
                             });
-
                         }
-
                     }).catch(function(error) {
                         document.getElementById("message-gsm").innerHTML = error
                         workflow.uploading = false;
@@ -3101,7 +2623,6 @@ class Analysis extends Component {
                         });
                     }.bind(this));
             } catch (err) {
-
                 document.getElementById("message-gsm").innerHTML = err
                 workflow.uploading = false;
                 workflow.progressing = false;
@@ -3110,19 +2631,13 @@ class Analysis extends Component {
                     workflow: workflow
                 });
             }
-
-
         }
-
     }
-
 
     handleUpload = () => {
         let workflow = Object.assign({}, this.state.workflow);
         const fileList = workflow.fileList;
         const formData = new FormData();
-
-
         // this pid will be used to create a tmp folder to store the data. 
         workflow.projectID = this.uuidv4();
         formData.append('projectId', workflow.projectID)
@@ -3130,16 +2645,12 @@ class Analysis extends Component {
         fileList.forEach((file) => {
             formData.append('cels', file);
         });
-
         workflow.uploading = true;
         workflow.progressing = true;
         this.setState({
             workflow: workflow
         });
-
         document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default"
-
-
         try {
             fetch('./api/analysis/upload', {
                     method: "POST",
@@ -3152,22 +2663,15 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         var data = result.data.split("+++getCELfiles+++\"")[1]
-
                         if (typeof(data) === "undefined" || data == "") {
-
                             workflow.uploading = false;
                             workflow.progressing = false;
                             document.getElementById("message-gsm").innerHTML = result.msg;
                             document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                            this.setState({
-                                workflow: workflow
-                            });
+                            this.setState({ workflow: workflow });
                             return;
                         }
-
                         let list = JSON.parse(decodeURIComponent(data));
-
-                        //let list = result.data;
                         workflow.uploading = false;
                         workflow.progressing = false;
                         if (list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
@@ -3178,18 +2682,13 @@ class Analysis extends Component {
                         for (let i in list.files) {
                             list.files[i]["gsm"] = list.files[i]["_row"];
                             list.files[i]["groups"] = "";
-                            //list.files[i]["gsm"]=list.files[i].title.split("_")[0];
                         }
                         workflow.dataList = list.files;
-
-
-
                         workflow.uploaded = true;
                         this.setState({
                             workflow: workflow
                         });
                     } else {
-
                         workflow.uploading = false;
                         workflow.progressing = false;
                         workflow.uploaded = true;
@@ -3199,14 +2698,10 @@ class Analysis extends Component {
                         document.getElementById("message-gsm").innerHTML = result.msg;
                         document.getElementById("message-gsm").nextSibling.innerHTML = ""
                     }
-
                     document.getElementById("btn-project-upload").disabled = true;
                     document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default";
-
                 }).catch(error => console.log(error));
         } catch (error) {
-
-
             workflow.uploading = false;
             workflow.progressing = false;
             workflow.uploaded = true;
@@ -3214,13 +2709,12 @@ class Analysis extends Component {
                 workflow: workflow
             });
             document.getElementById("message-gsm").innerHTML = error;
-            document.getElementById("message-gsm").nextSibling.innerHTML = ""
+            document.getElementById("message-gsm").nextSibling.innerHTML = "";
             document.getElementById("btn-project-upload").disabled = true;
             document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default";
-
         }
-
     }
+
     assignGroup = (group_name, dataList_keys, handler, callback) => {
         // validate group_name
         let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
@@ -3229,54 +2723,40 @@ class Analysis extends Component {
             for (var key in dataList_keys) {
                 workflow.dataList[dataList_keys[key] - 1].groups = group_name;
             }
-            document.getElementById("message-gsm-group").innerHTML = ""
-
-            this.setState({
-                workflow: workflow
-            });
-            callback(true, handler)
-
+            document.getElementById("message-gsm-group").innerHTML = "";
+            this.setState({ workflow: workflow });
+            callback(true, handler);
         } else {
-            document.getElementById("message-gsm-group").innerHTML = "The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 "
-
-            callback(false, handler)
+            document.getElementById("message-gsm-group").innerHTML = "The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 ";
+            callback(false, handler);
         }
-
     }
 
     deleteGroup = (group_name) => {
-
         let workflow = Object.assign({}, this.state.workflow);
         for (var key in workflow.dataList) {
             if (workflow.dataList[key].groups == group_name) {
                 workflow.dataList[key].groups = ""
             }
         }
-        this.setState({
-            workflow: workflow
-        });
+        this.setState({ workflow: workflow });
+    }
 
+    handleErrors = (response) => {
+        if (!response.ok) { throw Error(response.statusText); }
+        return response;
     }
 
     resetGSMDisplay = (next) => {
         while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch gsm display")
         }
-
-        if (next) {
-            next();
-        }
         this.checkAllDIVOverlap();
-
     }
 
     resetDEGDisplay = (next) => {
         while (document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch deg display")
-        }
-
-        if (next) {
-            next();
         }
         this.checkAllDIVOverlap();
     }
@@ -3285,10 +2765,6 @@ class Analysis extends Component {
         while (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch pathways_up display")
         }
-
-        if (next) {
-            next();
-        }
         this.checkAllDIVOverlap();
     }
 
@@ -3296,9 +2772,6 @@ class Analysis extends Component {
         while (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch pathways_down display")
         }
-        if (next) {
-            next();
-        };
         this.checkAllDIVOverlap();
     }
 
@@ -3307,20 +2780,10 @@ class Analysis extends Component {
         while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0] == "undefined") {
             console.log("watch SSGSEA display")
         }
-
-        if (next) {
-            next();
-        }
         this.checkAllDIVOverlap();
     }
 
 
-    handleErrors = (response) => {
-        if (!response.ok) {
-            throw Error(response.statusText);
-        }
-        return response;
-    }
 
     hideWorkFlow = () => {
         if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
@@ -3459,6 +2922,7 @@ class Analysis extends Component {
             workflow: workflow
         });
     }
+
     changeTab(tab) {
         console.log(tab)
         if (document.getElementById("li-about") != null) {
@@ -3486,7 +2950,6 @@ class Analysis extends Component {
                 document.getElementById("tab_about").className = "hide"
                 document.getElementById("tab_analysis").className = "hide"
                 document.getElementById("tab_help").className = ""
-
                 document.getElementById("li-about").className = ""
                 document.getElementById("li-analysis").className = ""
                 document.getElementById("li-help").className = "active"
@@ -3497,150 +2960,24 @@ class Analysis extends Component {
 
 
     initWithCode(code) {
-
         let workflow = Object.assign({}, this.state.workflow);
         let reqBody = {};
-
         reqBody.projectId = code;
         workflow.uploaded = false;
-
         workflow.progressing = true;
         workflow.loading_info = "Running Contrast...";
-
-        workflow.diff_expr_genes = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            page_number: 1,
-            page_size: 25,
-            sorting: {
-                name: "P.Value",
-                order: "ascend",
-            },
-            search_keyword: {
-                "search_symbol": "",
-                "search_fc": "1.5",
-                "search_p_value": "0.05",
-                "search_adj_p_value": "",
-                "search_aveexpr": "",
-                "search_accnum": "",
-                "search_desc": "",
-                "search_entrez": "",
-                "search_probsetid": "",
-                "search_t": "",
-                "search_b": ""
-            }
-        };
-
-        workflow.ssGSEA = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            page_size: 25,
-            page_number: 1,
-            sorting: {
-                name: "P.Value",
-                order: "ascend",
-            },
-            search_keyword: {
-                "name": "",
-                "search_logFC": "",
-                "search_Avg_Enrichment_Score": "",
-                "search_t": "",
-                "search_p_value": "",
-                "search_adj_p_value": "",
-                "search_b": "",
-            }
-        };
-
-        workflow.pathways_up = {
-
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            sorting: {
-                name: "P_Value",
-                order: "ascend",
-
-            },
-            search_keyword: {
-                "search_PATHWAY_ID": "",
-                "search_SOURCE": "",
-                "search_DESCRIPTION": "",
-                "search_TYPE": "",
-                "search_p_value": "0.05",
-                "search_fdr": "",
-                "search_RATIO": "",
-                "search_GENE_LIST": "",
-                "search_NUMBER_HITS": "",
-                "search_NUMBER_GENES_PATHWAY": "",
-                "search_NUMBER_USER_GENES": "",
-                "search_TOTAL_NUMBER_GENES": "",
-            }
-        };
-
-        workflow.pathways_down = {
-            data: [],
-            pagination: {
-                current: 1,
-                pageSize: 25,
-
-            },
-            loading: true,
-            sorting: {
-                name: "P_Value",
-                order: "ascend",
-
-            },
-            search_keyword: {
-                "search_PATHWAY_ID": "",
-                "search_SOURCE": "",
-                "search_DESCRIPTION": "",
-                "search_TYPE": "",
-                "search_p_value": "0.05",
-                "search_fdr": "",
-                "search_RATIO": "",
-                "search_GENE_LIST": "",
-                "search_NUMBER_HITS": "",
-                "search_NUMBER_GENES_PATHWAY": "",
-                "search_NUMBER_USER_GENES": "",
-                "search_TOTAL_NUMBER_GENES": "",
-            }
-        };
-
-        workflow.preplots = {
-            histplotBN: "",
-            list_mAplotBN: "",
-            Boxplots: "",
-            RLE: "",
-            NUSE: ""
-        };
-        workflow.postplot = {
-            histplotAN: "",
-            list_mAplotAN: "",
-            Boxplots: "",
-            PCA: "",
-            Heatmapolt: ""
-        };
+        workflow.diff_expr_genes = defaultState.workflow.diff_expr_genes;
+        workflow.ssGSEA = defaultState.workflow.ssGSEA;
+        workflow.pathways_up = defaultState.workflow.pathways_up;
+        workflow.pathways_down = defaultState.workflow.pathways_down;
+        workflow.preplots = defaultState.workflow.preplots;
+        workflow.postplot = defaultState.workflow.postplot;
         workflow.volcanoPlot = "";
         workflow.progressing = true;
         workflow.loading_info = "Loading...";
         this.setState({
             workflow: workflow
         });
-
         try {
             fetch('./api/analysis/getResultByProjectId', {
                     method: "POST",
@@ -3674,46 +3011,36 @@ class Analysis extends Component {
                             }
                             workflow2.dataList = tmp_gsms;
                         }
-
                         workflow2.accessionCode = result.accessionCode;
                         workflow2.projectID = result.projectId[0];
                         workflow2.group_1 = result.group_1;
                         workflow2.group_2 = result.group_2;
                         workflow2.groups = result.groups;
-
+                        // replace default group
                         for (let i in workflow2.dataList) {
-                            if (result.groups[i] == "others"||result.groups[i].toLowerCase() == 'clt') {
+                            if (result.groups[i].toLowerCase() == "others" || result.groups[i].toLowerCase() == 'clt') {
                                 workflow2.dataList[i].groups = "";
                             } else {
                                 workflow2.dataList[i].groups = result.groups[i];
                             }
-
                         }
-
-
                         if (result.mAplotBN) {
-
                             workflow2.list_mAplotBN = result.mAplotBN;
                         }
-
                         if (result.mAplotAN) {
                             workflow2.list_mAplotAN = result.mAplotAN;
                         }
                         workflow2.init = true;
                         workflow2.volcanoPlot = "/volcano.html";
-
                         workflow2.compared = true;
                         workflow2.done_gsea = true;
                         workflow2.progressing = false;
-
                         this.setState({
                             workflow: workflow2
                         });
                         this.getSSGSEAGeneHeatMap();
                         this.hideWorkFlow();
-
                         this.resetGSMDisplay(this.checkAllDIVOverlap());
-
                     } else {
                         workflow.progressing = false;
                         this.setState({
@@ -3732,9 +3059,7 @@ class Analysis extends Component {
         }
     }
 
-
     getCurrentNumberOfJobsinQueue = () => {
-
         fetch('./api/analysis/getCurrentNumberOfJobsinQueue', {
                 method: "POST",
                 credentials: "same-origin",
@@ -3759,12 +3084,9 @@ class Analysis extends Component {
                     // do nothing
                 }
             }).catch(error => console.log(error));
-
     }
 
     render() {
-
-
         // define group modal
         let queueModal = <Modal key="queue_modal" visible={this.state.workflow.QueueModalvisible}  className="custom_modal" title="MicroArray Queue" onCancel={this.handleCancel}
         footer={[
@@ -3776,32 +3098,13 @@ class Analysis extends Component {
           </div>
         </Modal>
         // end  group modal
-
-
-
         let modal = this.state.workflow.progressing ? "progress" : "progress-hidden";
         const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin  />;
-        let tabs = <div> <div className="header-nav">
-            <div className="div-container">
-                <ul className="nav navbar-nav" id="header-navbar">
-                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className="active"> <a href="#about" className="nav-link" >ABOUT</a></li>
-                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className=""> <a href="#analysis"  className="nav-link">ANALYSIS</a></li>
-                    <li  onClick={() => {this.changeTab('help')}}  id="li-help" className="" > <a href="#help"  className="nav-link">HELP</a></li>
-                </ul>
-            
-            </div>
-        </div>
-        <div className="content">
-                <div id="tab_about" > <About/></div>
-                <div id="tab_help" className="hide" > <Help/></div>
-                <div id="tab_analysis" className="hide">
-                <div className="container container-board">
-                  <Workflow data={this.state.workflow}
-                       
+        let workflow = <Workflow data={this.state.workflow}
                         resetWorkFlowProject={this.resetWorkFlowProject}  
                         changeCode={this.changeCode} 
                         handleSelectType={this.handleSelectType} 
-                         changeRunContrastMode={this.changeRunContrastMode} 
+                        changeRunContrastMode={this.changeRunContrastMode} 
                         fileRemove={this.fileRemove} 
                         beforeUpload={this.beforeUpload} 
                         handleUpload={this.handleUpload} 
@@ -3810,174 +3113,70 @@ class Analysis extends Component {
                         handleGroup2Select={this.handleGroup2Select} 
                         runContrast={this.runContrast}
                         exportGSE={this.exportGSE}/>
-
-                    <div id="btn-controll-data-table-display">
-                      <a  aria-label="panel display controller " id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
-                      <a  aria-label="panel display controller" id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
-
-                  </div>
-                <DataBox  data={this.state.workflow} 
-
-                            resetGSMDisplay={this.resetGSMDisplay}
-                            resetDEGDisplay={this.resetDEGDisplay}
-                            resetPathWayUPDisplay={this.resetPathWayUPDisplay}
-                            resetPathWayDownDisplay={this.resetPathWayDownDisplay}
-                            resetSSGSEADisplay={this.resetSSGSEADisplay}
-                            checkAllDIVOverlap ={this.checkAllDIVOverlap}
-                            
-                            upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} 
-                            upateCurrentWorkingTab={this.upateCurrentWorkingTab}
-                            assignGroup={this.assignGroup} 
-                            deleteGroup={this.deleteGroup}
-                            
-                        
-                            handleGeneChange={this.handleGeneChange} 
-                            changessGSEA={this.changessGSEA}
-                            changeLoadingStatus ={this.changeLoadingStatus}
-
-                            getHistplotBN={this.getHistplotBN}
-                            getMAplotsBN={this.getMAplotsBN}
-                            getBoxplotBN={this.getBoxplotBN}
-                            getRLE={this.getRLE}
-                            getNUSE={this.getNUSE}
-
-                             getBoxplotAN={this.getBoxplotAN}
-                             getMAplotAN={this.getMAplotAN}
-                             getHistplotAN={this.getHistplotAN}
-                             getPCA={this.getPCA}
-                             getHeatmapolt={this.getHeatmapolt}
-
-                             getDEG={this.getDEG}
-                             getPathwayUp={this.getPathwayUp}
-                             getPathwayDown={this.getPathwayDown}
-                             getssGSEA={this.getssGSEA}
-
-                              exportGSE={this.exportGSE}
-                              exportGSEA={this.exportGSEA}
-                              exportPathwayUp={this.exportPathwayUp}
-                              exportPathwayDown={this.exportPathwayDown}
-                              exportDEG={this.exportDEG}
-                                                         
-                            />
-                </div>
-                <div className={modal}>
-                    <div style={{
-                        "width": "180px",
-                        "height": "175px",
-                        "background": "#efefef",
-                        "position": "absolute",
-                        "left": "calc(50% - 80px)",
-                        "padding": "2%",
-                        "borderRadius": "50%"}}>
-                    <Spin indicator={antIcon} style={{color:"black"}} aria-label="loading"/>
-                    <label className="loading-info" aria-label="loading-info">{this.state.workflow.loading_info}</label>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </div>
-
-
-        if (this.props.location.search && this.props.location.search != "") {
-            tabs = <div><div className="header-nav">
+        let page_status = (this.props.location.search && this.props.location.search != "")
+        let tabs = <div> <div className="header-nav">
             <div className="div-container">
                 <ul className="nav navbar-nav" id="header-navbar">
-                    <li  onClick={() => {this.changeTab('about')}}  id="li-about"> <a href="#about" className="nav-link" >About</a></li>
-                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className="active"> <a href="#analysis"  className="nav-link">Analysis</a></li>
-                    <li  onClick={() => {this.changeTab('help')}}  id="li-help" className="" > <a href="#help"  className="nav-link">Help</a></li>
+                    <li  onClick={() => {this.changeTab('about')}}  id="li-about" className={page_status?"":"active"}> <a href="#about" className="nav-link" >ABOUT</a></li>
+                    <li  onClick={() => {this.changeTab('analysis')}}  id="li-analysis" className={page_status?"active":""}> <a href="#analysis"  className="nav-link">ANALYSIS</a></li>
+                    <li  onClick={() => {this.changeTab('help')}}  id="li-help" className="" > <a href="#help"  className="nav-link">HELP</a></li>
                 </ul>
-            
             </div>
         </div>
         <div className="content">
-                <div id="tab_about" className="hide"> <About/></div>
-                <div id="tab_help" className="hide"> <Help/></div>
-                <div id="tab_analysis">
+                <div id="tab_about" className={page_status?"hide":""}> <About/></div>
+                <div id="tab_help" className="hide" > <Help/></div>
+                <div id="tab_analysis" className={page_status?"":"hide"}>
                 <div className="container container-board">
-                  <Workflow data={this.state.workflow}
-                       
-                        resetWorkFlowProject={this.resetWorkFlowProject}  
-                        changeCode={this.changeCode} 
-                        handleSelectType={this.handleSelectType}  
-                        fileRemove={this.fileRemove} 
-                        beforeUpload={this.beforeUpload} 
-                        handleUpload={this.handleUpload} 
-                        loadGSE={this.loadGSE} 
-                        changeRunContrastMode={this.changeRunContrastMode}
-                        handleGroup1Select={this.handleGroup1Select}  
-                        handleGroup2Select={this.handleGroup2Select} 
-                        runContrast={this.runContrast}
-                        exportGSE={this.exportGSE}
-                        />
-
+                    {workflow}
                     <div id="btn-controll-data-table-display">
-                      <a  aria-label="panel display controller " id="panel-hide" onClick={this.hideWorkFlow} size="small" ><Icon type="caret-left" /></a>
-                      <a  aria-label="panel display controller" id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":"none"}}><Icon type="caret-right" /></a>
-
+                      <a  aria-label="panel display controller " id="panel-hide" onClick={this.hideWorkFlow} size="small" style={{"display":page_status?"none":"block"}}><Icon type="caret-left" /></a>
+                      <a  aria-label="panel display controller" id="panel-show" onClick={this.showWorkFlow}  size="small" style={{"display":page_status?"block":"none"}}><Icon type="caret-right" /></a>
                   </div>
-                  <DataBox  data={this.state.workflow} 
-
+                <DataBox    data={this.state.workflow} 
                             resetGSMDisplay={this.resetGSMDisplay}
                             resetDEGDisplay={this.resetDEGDisplay}
                             resetPathWayUPDisplay={this.resetPathWayUPDisplay}
                             resetPathWayDownDisplay={this.resetPathWayDownDisplay}
                             resetSSGSEADisplay={this.resetSSGSEADisplay}
                             checkAllDIVOverlap ={this.checkAllDIVOverlap}
-                            
                             upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} 
                             upateCurrentWorkingTab={this.upateCurrentWorkingTab}
                             assignGroup={this.assignGroup} 
                             deleteGroup={this.deleteGroup}
-                            
-                        
                             handleGeneChange={this.handleGeneChange} 
                             changessGSEA={this.changessGSEA}
                             changeLoadingStatus ={this.changeLoadingStatus}
-
                             getHistplotBN={this.getHistplotBN}
                             getMAplotsBN={this.getMAplotsBN}
                             getBoxplotBN={this.getBoxplotBN}
                             getRLE={this.getRLE}
                             getNUSE={this.getNUSE}
-
-                             getBoxplotAN={this.getBoxplotAN}
-                             getMAplotAN={this.getMAplotAN}
-                             getHistplotAN={this.getHistplotAN}
-                             getPCA={this.getPCA}
-                             getHeatmapolt={this.getHeatmapolt}
-
-                             getDEG={this.getDEG}
-                             getPathwayUp={this.getPathwayUp}
-                             getPathwayDown={this.getPathwayDown}
-                             getssGSEA={this.getssGSEA}
-
-                              exportGSE={this.exportGSE}
-                              exportGSEA={this.exportGSEA}
-                              exportPathwayUp={this.exportPathwayUp}
-                              exportPathwayDown={this.exportPathwayDown}
-                              exportDEG={this.exportDEG}
-                                                         
-                            />
+                            getBoxplotAN={this.getBoxplotAN}
+                            getMAplotAN={this.getMAplotAN}
+                            getHistplotAN={this.getHistplotAN}
+                            getPCA={this.getPCA}
+                            getHeatmapolt={this.getHeatmapolt}
+                            getDEG={this.getDEG}
+                            getPathwayUp={this.getPathwayUp}
+                            getPathwayDown={this.getPathwayDown}
+                            getssGSEA={this.getssGSEA}
+                            exportGSE={this.exportGSE}
+                            exportGSEA={this.exportGSEA}
+                            exportPathwayUp={this.exportPathwayUp}
+                            exportPathwayDown={this.exportPathwayDown}
+                            exportDEG={this.exportDEG} />
                 </div>
                 <div className={modal}>
-                    <div style={{
-                        "width": "180px",
-                        "height": "175px",
-                        "background": "#efefef",
-                        "position": "absolute",
-                        "left": "calc(50% - 80px)",
-                        "padding": "2%",
-                        "borderRadius": "50%"}}>
-                    <Spin indicator={antIcon} style={{color:"black"}} aria-label="loading"/>
-                    <label className="loading-info" aria-label="loading-info">{this.state.workflow.loading_info}</label>
+                    <div id="loading">
+                        <Spin indicator={antIcon} style={{color:"black"}} aria-label="loading"/>
+                        <label className="loading-info" aria-label="loading-info">{this.state.workflow.loading_info}</label>
                     </div>
                 </div>
             </div>
             </div>
-           
-             </div>
+        </div>
 
-        }
         return (<div>{tabs}{queueModal}</div>);
     }
 }
