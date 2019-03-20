@@ -9,17 +9,12 @@ class MAPlot extends Component {
         super(props);
 
     }
-
-
     render() {
-
         let projectID = this.props.data.projectID;
 
         let pics = this.props.data.pics;
 
         let groups = this.props.data.groups;
-
-
 
         let unique_groups = groups.filter(function(item, i, ar) { return ar.indexOf(item) === i; });
 
@@ -53,11 +48,8 @@ class MAPlot extends Component {
                     } else {
                         unique_groups_pic[i] = new Array(pics[j][0]);
                     }
-
                 }
             }
-
-
         }
         // construct html
         let count = 0;
@@ -79,19 +71,13 @@ class MAPlot extends Component {
                     panels[i] = new Array(<div className="col-md-3" key={"mAplotBN"+count}  > <img  src={link } alt="MAplot"/> </div>);
 
                 }
-
             }
-
-            panels[i] = <Panel header={unique_groups[i] + "("+unique_groups_pic[i].length+" Samples )"} key={i} >
+            panels[i] = <Panel header={unique_groups[i] + "   ("+unique_groups_pic[i].length+" Samples )"} key={i} >
             				<div className="row">
 								{panels[i]}
     						</div>
     				  </Panel>;
         }
-        
-       
-
-
         let keys =[];
 
         for (let i = unique_groups.length - 1; i >= 0; i--) {
@@ -100,8 +86,6 @@ class MAPlot extends Component {
         return   <Collapse defaultActiveKey={keys} >{panels}</Collapse>
 
     }// end render
-
-
 }
 
 export default MAPlot;
