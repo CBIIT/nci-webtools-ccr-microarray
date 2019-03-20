@@ -311,18 +311,18 @@ class Analysis extends Component {
     checkAllDIVOverlap = () => {
         let workflow = Object.assign({}, this.state.workflow);
         // less then 765 was consider as mobile 
-        if (document.body.offsetWidth > 765) {
-            // Check GSM
-            this.correctDIVOverlap('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input', '//*[@id="gsm-select"]', workflow.dataList.length, this.correctGSMDIVOverlap);
-            // Check  Deg
-            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="deg-select"]', workflow.diff_expr_genes.data.length, this.correctDegDIVOverlap);
-            // check pathway up
-            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-up-select"]', workflow.pathways_up.data.length, this.correctPathWayUpDIVOverlap);
-            // check  pathway down
-            this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-down-select"]', workflow.pathways_down.data.length, this.correctPathWayDownDIVOverlap);
-            // // check ssgsea 
-            this.correctDIVOverlap('//*[@id="ss_gene_set_select_option"]', '//*[@id="ss-select"]', workflow.ssGSEA.data.length, this.correctSSGSEADIVOverlap);
-        }
+        // if (document.body.offsetWidth > 765) {
+        //     // Check GSM
+        //     this.correctDIVOverlap('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input', '//*[@id="gsm-select"]', workflow.dataList.length, this.correctGSMDIVOverlap);
+        //     // Check  Deg
+        //     this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="deg-select"]', workflow.diff_expr_genes.data.length, this.correctDegDIVOverlap);
+        //     // check pathway up
+        //     this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-up-select"]', workflow.pathways_up.data.length, this.correctPathWayUpDIVOverlap);
+        //     // check  pathway down
+        //     this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-down-select"]', workflow.pathways_down.data.length, this.correctPathWayDownDIVOverlap);
+        //     // // check ssgsea 
+        //     this.correctDIVOverlap('//*[@id="ss_gene_set_select_option"]', '//*[@id="ss-select"]', workflow.ssGSEA.data.length, this.correctSSGSEADIVOverlap);
+        // }
 
     }
 
@@ -333,7 +333,7 @@ class Analysis extends Component {
         let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
         if (pagination == null) {
             // when table data is null, then no pagination will show up
-           pagination = { offsetWidth: 0 ,style:{ top :0 ,right:0,left:0}}
+            pagination = { offsetWidth: 0, style: { top: 0, right: 0, left: 0 } }
         }
         if (flag) {
             if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
@@ -380,7 +380,7 @@ class Analysis extends Component {
         let exportBtn = this.getElementByXpath('//*[@id="ss_tag1"]/div[2]');
         if (pagination == null) {
             // when table data is null, then no pagination will show up
-            pagination = { offsetWidth: 0 ,style:{ top :0 ,right:0,left:0}}
+            pagination = { offsetWidth: 0, style: { top: 0, right: 0, left: 0 } }
         }
         if (flag) {
 
@@ -430,7 +430,7 @@ class Analysis extends Component {
         let exportBtn = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[2]');
         if (pagination == null) {
             // when table data is null, then no pagination will show up
-            pagination = { offsetWidth: 0 ,style:{ top :0 ,right:0,left:0}}
+            pagination = { offsetWidth: 0, style: { top: 0, right: 0, left: 0 } }
         }
 
         if (flag) {
@@ -477,7 +477,7 @@ class Analysis extends Component {
         let exportBtn = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[2]');
         if (pagination == null) {
             // when table data is null, then no pagination will show up
-            pagination = { offsetWidth: 0 ,style:{ top :0 ,right:0,left:0}}
+            pagination = { offsetWidth: 0, style: { top: 0, right: 0, left: 0 } }
         }
         if (flag) {
             if (dt && dt != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
@@ -524,7 +524,7 @@ class Analysis extends Component {
         let exportBtn = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[2]/div[2]');
         if (pagination == null) {
             // when table data is null, then no pagination will show up
-             pagination = { offsetWidth: 0 ,style:{ top :0 ,right:0,left:0}}
+            pagination = { offsetWidth: 0, style: { top: 0, right: 0, left: 0 } }
         }
         if (flag) {
             // overlap
@@ -3042,6 +3042,10 @@ class Analysis extends Component {
                         this.hideWorkFlow();
                         this.resetGSMDisplay(this.checkAllDIVOverlap());
                     } else {
+                        if (document.getElementById("message-gsm") != null) {
+                            document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to completed, please contact admin or try again. ";
+                            document.getElementById("message-gsm").nextSibling.innerHTML="";
+                        }
                         workflow.progressing = false;
                         this.setState({
                             workflow: workflow

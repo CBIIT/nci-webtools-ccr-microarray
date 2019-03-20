@@ -21,7 +21,6 @@ class DEGBox extends Component {
             list[i].classList.add("hide");
         }
         document.getElementById(value).className = document.getElementById(value).className.replace("hide", "");
-
         if (value == "deg_tag1") {
             this.props.upateCurrentWorkingTabAndObject("deg")
         }
@@ -40,6 +39,7 @@ class DEGBox extends Component {
         if (value == "deg_tag4") {
             this.props.upateCurrentWorkingTabAndObject("volcanoPlot")
         }
+        this.props.checkAllDIVOverlap();
     }
 
     render() {
