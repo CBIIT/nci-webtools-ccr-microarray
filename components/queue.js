@@ -9,8 +9,10 @@ AWS.config.update({ region: 'us-east-1' });
 var awsHander = {};
 var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
+var AdmZip = require('adm-zip');
 
 awsHander.getQueueUrl = function(next) {
+
     var params = {
         QueueName: config.queue_name
     };
@@ -29,16 +31,20 @@ awsHander.getQueueUrl = function(next) {
 }
 
 awsHander.upload = function(path, prex) {
+            var zip = new AdmZip();
             fs.readdir(path, function(err, items) {
                 for (var i = 0; i < items.length; i++) {
-                    let fname = items[i];
-                    let stat = fs.lstatSync(path + "/" + items[i]);
+                   
                     if (stat.isFile()) {
                         console.log(prex + fname);
-                        let fileStream = fs.createReadStream(path + "/" + items[i])
-                        s3.putObject({
+                        zip.addLocalFile(path + "/" + items[i]);
+                    }
+                }
+                zip.writeZip(path + "/queue_upload.zip");
+                let fileStream = fs.createReadStream(path + "/queue_upload.zip")
+                s3.putObject({
                             Bucket: bucketName,
-                            Key: prex + fname,
+                            Key: prex + "queue_upload.zip",
                             Body: fileStream,
                             CacheControl: 'no-cache',
                         }, function(err, data) {
@@ -46,9 +52,7 @@ awsHander.upload = function(path, prex) {
                             logger.info("uplad err:"+err);
                             logger.info("uplad data:"+data);
                             logger.info("uplad err stack:"+err.stack);
-                        });
-                    }
-                }
+                  });
             });
        
 }
@@ -168,32 +172,8 @@ awsHander.changeMessageVisibility = function(receiptHandle, timeout) {
 }
 
 awsHander.download = (projectId, filePath, next) => {
-    let params2 = {
-        Bucket: config.bucketName,
-        MaxKeys: 9000,
-        Prefix: config.queue_input_path+"/" + projectId
-    };
-    s3.listObjects(params2, (err, data) => {
-        if (err) {
-            logger.info("[Queue] Download file from S3 fails")
-            logger.info(params2)
-            logger.info(err.stack)
-        } else {
-            let files = data.Contents;
-            logger.info(files)
-            for (var i in files) {
-                // download all files 
-                download(projectId, files[i].Key, filePath)
-            }
-            setTimeout(function() {
-                next()
-            }, 200 * i);
-
-        }
-    })
-}
-
-download = (projectId, key, filePath) => {
+    
+    let key =config.queue_input_path+"/"+projectId+"/queue_upload.zip"
     var params = {
         Bucket: config.bucketName,
         Key: key
@@ -207,28 +187,28 @@ download = (projectId, key, filePath) => {
             logger.info(err.stack)
         } else {
 
-            if (!fs.existsSync(filePath + "/" + projectId)) {
-                fs.mkdir(filePath + "/" + projectId,
-                    function() {
-                        fs.mkdir(filePath + "/" + projectId + "/config", function() {
-                            fs.mkdir(filePath + "/" + projectId + "/input", function() {
-                                fs.mkdir(filePath + "/" + projectId + "/output");
-                            });
-                        });
-                    });
-            }
+            
             // logger.info("[Queue] Download file from S3")
             // logger.info("file")
             // logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
-            fs.writeFile(filePath + "/" + projectId + "/" + key.replace(config.queue_input_path + "/" + projectId + "/", ""), data.Body, function(err) {
+            fs.writeFile(filePath + "/" + projectId + "/queue_upload.zip", data.Body, function(err) {
                 if (err) {
                     return console.log(err);
                 }
             })
-            // logger.info(filePath + "/" + projectId + "has been created!")
+            //unzip 
+            zip.extractAllTo(
+                filePath + "/" + projectId +"/", true);
+
+             setTimeout(function() {
+                next()
+            }, 2000);
         }
     })
+
 }
+
+
 
 module.exports = {
     awsHander
