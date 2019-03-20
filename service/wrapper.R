@@ -17,16 +17,10 @@ process = function(){
         action<-toString(args[2])
         projectId <- toString(args[3])
 
-        
-
         data_repo_path<-paste0(toString(args[4]),"/",projectId,sep="")
         setwd(toString(args[4]))
-
         if(action == "loadGSE"){
-           
             access_code<-toString(args[5])
-
-         
             listGroups<-c()
             if(args[6]!=""){
               listGroups<-unlist((strsplit(args[6],",")))
@@ -43,8 +37,6 @@ process = function(){
             if (file.exists(fn)) file.remove(fn)
             return(celfiles)  
         }
-
-
         if(action =="loadCEL"){
           #If user selects 'ANALYZE CEL FILES', call this function, input path of files (length of group assignments must match number of files for testing purposes):
           #celfiles = processCELfiles('pid',c('Ctl_1','Ctl_1','Ctl_1','KO_1','KO_1','KO_1','Ctl_2','Ctl_2','Ctl_2','KO_2','KO_2','KO_2'))
@@ -58,12 +50,9 @@ process = function(){
             if(projectId==""||listGroups==""){
               return ("Request field(s) is missing")
             }
-
           celfiles = processCELfiles(projectId,listGroups,data_repo_path) 
           return(celfiles)  
         }
-
-
 
         if(action=="runContrast"){
           i<-5
@@ -88,36 +77,24 @@ process = function(){
            i<-i+1
           config_path<-toString(args[i])
 
-
           #If user selects 'ANALYZE CEL FILES', call this function, input path of files (length of group assignments must match number of files for testing purposes):
           #celfiles = processCELfiles('/Users/valdezkm/Documents/2___Combined',c('Ctl_1','Ctl_1','Ctl_1','KO_1','KO_1','KO_1','Ctl_2','Ctl_2','Ctl_2','KO_2','KO_2','KO_2'))
 
           #### 2) QC / Normalize data function takes ExpressionFeatureSet from above and prints pre-normalization plots, QC plots, post-normalization plots.  Returns normalized data ExpressionFeatureSet ####
 
           #celfiles = getLocalGEOfiles('pid','GSE37874', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
-         
-
           if(source=="upload"){
                 celfiles = getCELfiles(projectId,listGroups,data_repo_path) 
              }else{
                 celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
              }
-          
           saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
-
           norm_celfiles = QCnorm(celfiles,data_repo_path)
-
           col_name<-pData(celfiles)$title
-
           boxplot_DataBN<-list(col=col_name,data=t(norm_celfiles@listData[[3]]),color=pData(norm_celfiles[[11]])$colors)
-
           RLE_data<-list(col=col_name,data=t(norm_celfiles@listData[[4]]),color=pData(norm_celfiles[[11]])$colors)
-
-
           NUSE_data<-list(col=col_name,data=t(norm_celfiles@listData[[5]]),color=pData(norm_celfiles[[11]])$colors)
-          
           boxplot_DataAN<-list(col=col_name,data=t(norm_celfiles@listData[[8]]),color=pData(norm_celfiles[[11]])$colors)
-          
           tmp_pca<-norm_celfiles[[9]]
           pcaData<-list(
             col=colnames(tmp_pca$x[,1:3]),
@@ -144,8 +121,7 @@ process = function(){
               norm_celfiles[[10]]
               )
 
-          saveRDS(return_plot_data,file = paste0(data_repo_path,"/return_plot_data.rds"))
-
+          #saveRDS(return_plot_data,file = paste0(data_repo_path,"/return_plot_data.rds"))
        
           #### 3) Differentially Expressed Genes function takes files, group and contrast data. Returns list of DEGs for each contrast, annotated normalized data, and pheno data ####
           # Output should dynamically respond to user-selected contrast
@@ -215,29 +191,21 @@ process = function(){
                     )
 
                   write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))
-
             })
-      
-
         }
 
 
         if(action=="runSSGSEA"){
-         
-
         tryCatch({
           # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
           # # # Output should dynamically respond to user-selected contrast
           diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
-
-
           species<-toString(args[5])
           geneSet<-toString(args[6])
           cgroup1<-toString(args[7])
           cgroup2<-toString(args[8])
           cons <-c(paste0(cgroup1,"-",cgroup2))
           config_path<-toString(args[9])
-
           write(c(species,geneSet,config_path), "saveImageFileName.txt", sep="\t")
           ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
          
@@ -253,10 +221,7 @@ process = function(){
                     )
                     write(toJSON(re),paste0(data_repo_path,"/ss_result.txt",sep=""))
             })
-      
-
         }
-
 
         if(action=="pathwaysHeapMap"){
          
@@ -293,14 +258,10 @@ process = function(){
 
           return(list(pic_name=pic_name))
         }
-
-
-
     },error =function(cond){
           # add logger?
           message(cond)
           message("error")
-          
     },
     finally={
        message("finally")
