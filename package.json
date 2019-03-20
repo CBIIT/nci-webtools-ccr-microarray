@@ -11,6 +11,7 @@
   "author": "Wei Yu",
   "license": "ISC",
   "dependencies": {
+    "adm-zip": "^0.4.13",
     "async-polling": "^0.2.1",
     "aws-sdk": "^2.384.0",
     "body-parser": "^1.17.2",
