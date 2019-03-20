@@ -1,7 +1,6 @@
 const AWS = require('aws-sdk');
 var uuid = require('uuid');
 const fs = require('fs');
-var emailer = require('./mail');
 var config = require('../config');
 var lib_path = require('path');
 var logger = require('../components/queue_logger');

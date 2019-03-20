@@ -244,16 +244,19 @@ router.post("/qAnalysis", function(req, res) {
     function send(d) {
         logger.info("[Queue] Send Message to Queue", JSON.stringify(d));
         queue.awsHander.sender(JSON.stringify(d), d.email, function(err, data) {
-        let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
+        logger.info("[Queue] Send Message to Queue fails", JSON.stringify(err));
+        llogger.info("[Queue] Send fails message  to client ", data.email)
+        let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED) ";
         let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
         emailer.sendMail(config.mail.from, data.email, subject, "text", html)
         });
     }
-    logger.info("[upload file to S3]")
-    logger.info("File Path:")
-    logger.info(config.uploadPath + "/" + data.projectId)
+    logger.info("[S3]upload file to S3")
+    logger.info("[S3]File Path:"+config.uploadPath + "/" + data.projectId)
     // // upload data
     queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function() {
+        logger.info("[S3] upload file to S3 fails");
+        logger.info("[Queue] Send fails message  to client ", data.email)
         let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
         let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
         emailer.sendMail(config.mail.from, data.email, subject, "text", html)
