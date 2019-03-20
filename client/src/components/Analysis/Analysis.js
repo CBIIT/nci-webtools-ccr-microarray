@@ -3043,7 +3043,7 @@ class Analysis extends Component {
                         this.resetGSMDisplay(this.checkAllDIVOverlap());
                     } else {
                         if (document.getElementById("message-gsm") != null) {
-                            document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to completed, please contact admin or try again. ";
+                            document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to complete, please contact admin or try again. ";
                             document.getElementById("message-gsm").nextSibling.innerHTML="";
                         }
                         workflow.progressing = false;
