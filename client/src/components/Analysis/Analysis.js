@@ -179,6 +179,11 @@ let defaultState = {
         preplots: {
             histplotBN: "",
             list_mAplotBN: "",
+            NUSE:"",
+            RLE:"",
+            Boxplots:"",
+            list_mAplotBN:"",
+            histplotBN:"",
         },
         list_mAplotBN: "",
         list_mAplotAN: "",
@@ -203,6 +208,10 @@ let defaultState = {
             histplotAN: "",
             list_mAplotAN: "",
             Heatmapolt: "",
+            histplotAN:"",
+            list_mAplotAN:"",
+            Boxplots:"",
+            PCA:""
         },
         geneHeatmap: "Not enough significant pathways available with p-value < 0.05.",
         volcanoPlot: "No Data",
