@@ -10,7 +10,7 @@ var awsHander = {};
 var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 var AdmZip = require('adm-zip');
-
+const zip = new AdmZip();
 awsHander.getQueueUrl = function(next) {
 
     var params = {
@@ -30,13 +30,12 @@ awsHander.getQueueUrl = function(next) {
     });
 }
 
-awsHander.upload = function(path, prex) {
-            var zip = new AdmZip();
+awsHander.upload = function(path, prex,next) {
+           
             fs.readdir(path, function(err, items) {
                 for (var i = 0; i < items.length; i++) {
-                   
+                    let stat = fs.lstatSync(path + "/" + items[i]);
                     if (stat.isFile()) {
-                        console.log(prex + fname);
                         zip.addLocalFile(path + "/" + items[i]);
                     }
                 }
@@ -49,9 +48,14 @@ awsHander.upload = function(path, prex) {
                             CacheControl: 'no-cache',
                         }, function(err, data) {
                             logger.info("uplad finish")
-                            logger.info("uplad err:"+err);
-                            logger.info("uplad data:"+data);
-                            logger.info("uplad err stack:"+err.stack);
+                            if(err){
+                                logger.info("uplad err:"+err);
+                                logger.info("uplad err stack:"+err.stack);
+                                next(false)
+                            }else{
+                                next(true);
+                            }
+                            
                   });
             });
        

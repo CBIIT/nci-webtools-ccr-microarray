@@ -131,17 +131,26 @@ function r(data, endCallback) {
                     emailer.sendMail(config.mail.from, data.email, subject, "text", html)
 
                 } else {
-                    logger.info("[Queue] Execution time: %dms", end);
-                    logger.info("[Email] Send Message to client", data.email);
-                    let html = emailer.emailTemplate(code, secondToDate(end / 1000), config.microarray_link + "?" + d[1], data.submit, d[1])
-                    let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM");
-                    // emailer.sendMail(config.mail.from,data.email,subject, "", html)
-                    emailer.sendMail(config.mail.from, data.email, subject, "", html)
-                    uploadResultToS3(config.uploadPath + "/" + data.projectId, data.projectId)
+                    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function(flag) {
+                        if (flag) {
+                            logger.info("[Queue] Execution time: %dms", end);
+                            logger.info("[Email] Send Message to client", data.email);
+                            let html = emailer.emailTemplate(code, secondToDate(end / 1000), config.microarray_link + "?" + d[1], data.submit, d[1])
+                            let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM");
+                            // emailer.sendMail(config.mail.from,data.email,subject, "", html)
+                            emailer.sendMail(config.mail.from, data.email, subject, "", html)
+                        } else {
+                            logger.info("[Queue] Run Contrast fails ", err)
+                            logger.info("[Queue] Send fails message  to client ", data.email)
+                            let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
+                            let html = emailer.emailFailedTemplate(code, secondToDate(end / 1000), data.submit, d[1])
+                            emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+                        }
+                    });
                 }
             });
         }
-        setTimeout(cleanData(data.projectId, config.uploadPath), 30 * 1000);
+        //setTimeout(cleanData(data.projectId, config.uploadPath), 30 * 1000);
     });
 }
 
@@ -151,12 +160,5 @@ function cleanData(pid, uploadPath) {
     } catch (err) {
         logger.info("[Queue] Delete result files fails  ", err)
     }
-
-}
-
-
-function uploadResultToS3(path, pid) {
-    logger.info("[Queue] Upload Results to S3", path)
-    queue.awsHander.upload(path, config.queue_input_path + "/" + pid + "/");
 
 }
