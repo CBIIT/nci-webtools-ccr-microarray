@@ -1537,7 +1537,7 @@ class Analysis extends Component {
                                     group_data[element]['group_name'].push(pcaData.group_name[i]);
                                     group_data[element]['row'].push(pcaData.row[i]);
                                 } else {
-                                    group_data[element]={}
+                                    group_data[element] = {}
                                     group_data[element]["x"] = [pcaData.x[i]];
                                     group_data[element]["y"] = [pcaData.y[i]];
                                     group_data[element]["z"] = [pcaData.z[i]];
@@ -1564,7 +1564,7 @@ class Analysis extends Component {
                                 })
 
                             }
-                            
+
 
                             let pcaPlotLayout = {
                                 showlegend: true,
@@ -1668,17 +1668,26 @@ class Analysis extends Component {
                                     y: BoxplotsData.data[i],
                                     type: "box",
                                     name: BoxplotsData.col[i],
+                                    showlegend: i%2==0?true:false,
+                                    legend:"a",
                                     marker: {
                                         color: BoxplotsData.color[i]
                                     }
+
                                 }
                                 BoxplotRenderData.push(boxplotData)
                             }
-                            let plot_layout = { showlegend: false, autosize: true }
+                            let plot_layout = {
+                                yaxis: {
+                                    title: 'normalized moisture',
+                                    zeroline: false
+                                },
+                              
+                                autosize: true
+                            }
                             let Boxplots = <Plot id="BoxplotAN" 
                              data={BoxplotRenderData} 
-                             layout={this.state.workflow.BoxplotAN.layout}  
-                             style={this.state.workflow.BoxplotAN.style} 
+                             layout={plot_layout}  
                              useResizeHandler={true} />
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
@@ -1922,7 +1931,7 @@ class Analysis extends Component {
                                 let boxplotData = {
                                     y: BoxplotsData.data[i],
                                     type: "box",
-                                    name: BoxplotsData.col[i],
+                                    name: workflow2.groups[i],
                                     marker: {
                                         color: BoxplotsData.color[i]
                                     }
