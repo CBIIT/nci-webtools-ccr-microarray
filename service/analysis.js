@@ -13,6 +13,7 @@ const AWS = require('aws-sdk');
 var dateFormat = require('dateformat');
 var emailer = require('../components/mail');
 
+
 router.post('/upload', function(req, res) {
     logger.info("[start] upload files");
     // create an incoming form object
@@ -174,37 +175,37 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
     data.push(config.configPath);
     //remove previous result. 
     //ssgseaHeatmap1.jpg
-    fs.exists(config.uploadPath + "/" + req.body.projectId + "/ssgseaHeatmap1.jpg",function(exists){
-        if(exists){
+    fs.exists(config.uploadPath + "/" + req.body.projectId + "/ssgseaHeatmap1.jpg", function(exists) {
+        if (exists) {
             fs.unlink(config.uploadPath + "/" + req.body.projectId + "/ssgseaHeatmap1.jpg")
         }
     })
-    fs.exists(config.uploadPath + "/" + req.body.projectId + "/ss_result.txt",function(exists){
-        if(exists){
+    fs.exists(config.uploadPath + "/" + req.body.projectId + "/ss_result.txt", function(exists) {
+        if (exists) {
             fs.unlink(config.uploadPath + "/" + req.body.projectId + "/ss_result.txt")
         }
     })
     R.execute("wrapper.R", data, function(err, returnValue) {
-         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/ss_result.txt", 'utf8', function(err, returnValue) {
+        fs.readFile(config.uploadPath + "/" + req.body.projectId + "/ss_result.txt", 'utf8', function(err, returnValue) {
             if (err) {
                 res.json({
                     status: 404,
                     msg: err
                 });
             } else {
-                    let re = JSON.parse(returnValue)
-                    // store return value in session (deep copy)
-                     let d = JsonToObject(re);
-                    // save result into session 
-                    if (req.session.runContrastData.ssGSEA) {
-                        req.session.runContrastData.ssGSEA =  d.ssGSEA;
-                    }
-                    logger.info("Get Contrast result success")
-                    res.json({
-                        status: 200,
-                        data: ""
-                    });
+                let re = JSON.parse(returnValue)
+                // store return value in session (deep copy)
+                let d = JsonToObject(re);
+                // save result into session 
+                if (req.session.runContrastData.ssGSEA) {
+                    req.session.runContrastData.ssGSEA = d.ssGSEA;
                 }
+                logger.info("Get Contrast result success")
+                res.json({
+                    status: 200,
+                    data: ""
+                });
+            }
         })
 
     });
@@ -241,26 +242,33 @@ router.post("/qAnalysis", function(req, res) {
     logger.info("[Queue] Start Using Queue for Analysis")
     logger.info("Input:")
     logger.info(JSON.stringify(data))
+
     function send(d) {
         logger.info("[Queue] Send Message to Queue", JSON.stringify(d));
         queue.awsHander.sender(JSON.stringify(d), d.email, function(err, data) {
-        let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
-        let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
-        emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+            logger.info("[Queue] Send Message to Queue fails", JSON.stringify(err));
+            llogger.info("[Queue] Send fails message  to client ", data.email)
+            let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED) ";
+            let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
+            emailer.sendMail(config.mail.from, data.email, subject, "text", html)
         });
     }
-    logger.info("[upload file to S3]")
-    logger.info("File Path:")
-    logger.info(config.uploadPath + "/" + data.projectId)
+    logger.info("[S3]upload file to S3")
+    logger.info("[S3]File Path:" + config.uploadPath + "/" + data.projectId)
     // // upload data
-    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function() {
-        let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
-        let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
-        emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function(flag) {
+        if (flag) {
+            send(data);
+        } else {
+            logger.info("[S3] upload files to S3 fails");
+            let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED) ";
+            let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
+            emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+        }
+
     })
-    // //upload configure
-    setTimeout(function() { send(data) }, 10000);
-    res.json({  status: 200, data: ""});
+     res.json({  status: 200, data: ""});
+
 })
 
 router.post("/getCurrentNumberOfJobsinQueue", function(req, res) {
@@ -386,8 +394,8 @@ router.post('/runContrast', function(req, res) {
                         status: 200,
                         data: return_data
                     });
-                }else{
-                     res.json({
+                } else {
+                    res.json({
                         status: 404,
                         data: re
                     });
@@ -457,17 +465,17 @@ function getPlots(req, type) {
                 if (typeof(req.session.runContrastData.listPlots[8].color[0]) == "number") {
                     req.session.runContrastData.listPlots[8].color = req.session.runContrastData.listPlots[8].color.map(x => rainbow[x / 5 - 1]);
                 }
-                let groups =[];
-                if(req.session.runContrastData.groups){
-                    for (var i=0; i<=req.session.runContrastData.groups.length - 1; i++) {
-                        if(req.session.runContrastData.groups[i]!='Ctl'){
+                let groups = [];
+                if (req.session.runContrastData.groups) {
+                    for (var i = 0; i <= req.session.runContrastData.groups.length - 1; i++) {
+                        if (req.session.runContrastData.groups[i] != 'Ctl') {
                             groups.push(req.session.runContrastData.groups[i]);
-                        }else{
+                        } else {
                             groups.push("Others");
                         }
                     }
                 }
-                req.session.runContrastData.listPlots[8].group_name=groups;
+                req.session.runContrastData.listPlots[8].group_name = groups;
                 return_data = req.session.runContrastData.listPlots[8];
             } else {
                 return_data = "";
@@ -1272,7 +1280,7 @@ function JsonToObject(returnValue) {
     } else {
         workflow.group_1 = "";
     }
-    if (returnValue.group_2 &&  returnValue.group_2[0]) {
+    if (returnValue.group_2 && returnValue.group_2[0]) {
         workflow.group_2 = returnValue.group_2[0];
     } else {
         workflow.group_2 = "";

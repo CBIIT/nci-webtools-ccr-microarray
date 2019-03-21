@@ -377,10 +377,10 @@ class DataBox extends Component {
           ]}
         > <div  style={{display:this.state.added?"none":"block"}}>
           <p style={{color: "#215a82"}}><b><label htmlFor="textArea-group-selected">{number_select} Selected GSM(s)</label></b></p>
-           <p style={{display: selected_gsms==""&&this.state.visible==true?"block":"none"}} className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
+          <p style={{display: selected_gsms==""&&this.state.visible==true?"block":"none"}} className="err-message" id="message-unselect-gsm-group">Please select some gsm(s) before add gsm(s) as a group </p>
           <p> <TextArea id="textArea-group-selected" autosize={false}  disabled style={{width:'100%',"color": "black"}} value={selected_gsms}/></p>
           <p style={{color: "#215a82"}}><b>Group Name<span style={{color:"red","paddingLeft":"5px"}}> *</span></b> <span style={{color:"#555"}}>(Must start with an ASCII letter,a-z or A-Z)</span></p>
-           <p className="err-message" id="message-gsm-group"></p>
+          <p className="err-message" id="message-gsm-group"></p>
           <p> 
             <label htmlFor="input-define-group">
                 <span style={{display:"none"}}>Define Grop</span>

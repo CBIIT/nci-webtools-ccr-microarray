@@ -32,7 +32,7 @@ function polling() {
 
     AsyncPolling(function(end) {
         try {
-            queue.awsHander.receiver(qAnalysis, end,function(err) {
+            queue.awsHander.receiver(qAnalysis, end, function(err) {
                 logger.info(err)
                 console.log("receiver err")
                 end()
@@ -56,10 +56,10 @@ function qAnalysis(data, emailto, endCallback) {
     let message = JSON.parse(data.Messages[0].Body)
     let i = 1;
     let setVisibility = setInterval(function() {
-        i=i+1;
+        i = i + 1;
         if (i === 360) clearInterval(setVisibility); // pending for 6 hours then clearInterval
-        console.log("qAnalysis interval:" , i);
-        queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i*60)
+        console.log("qAnalysis interval:", i);
+        queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * 60)
     }, 30 * 1000);
 
     //console.log("projectId:" + message.projectId)
@@ -116,43 +116,49 @@ function r(data, endCallback) {
         if (err) {
 
             logger.info("[Queue] Run Contrast fails ", err)
-            logger.info("[Queue] sendMail to  ", data.email)
+            logger.info("[Queue] Send fails message  to client ", data.email)
             let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
             let html = emailer.emailFailedTemplate(code, secondToDate(end / 1000), data.submit, d[1])
             emailer.sendMail(config.mail.from, data.email, subject, "text", html)
 
         } else {
+            fs.readFile(config.uploadPath + "/" + data.projectId + "/result.txt", 'utf8', function(err, returnValue) {
+                if (err) {
+                    logger.info("[Queue] Run Contrast fails ", err)
+                    logger.info("[Queue] Send fails message  to client ", data.email)
+                    let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
+                    let html = emailer.emailFailedTemplate(code, secondToDate(end / 1000), data.submit, d[1])
+                    emailer.sendMail(config.mail.from, data.email, subject, "text", html)
 
-            logger.info("[Queue] Execution time: %dms", end)
-            logger.info("[Queue] sendMail to  ", data.email)
-
-            let html = emailer.emailTemplate(code, secondToDate(end / 1000), config.microarray_link + "?" + d[1], data.submit, d[1])
-            let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM");
-
-            // emailer.sendMail(config.mail.from,data.email,subject, "", html)
-            emailer.sendMail(config.mail.from, data.email, subject, "", html)
-            uploadResultToS3(config.uploadPath + "/" + data.projectId, data.projectId)
+                } else {
+                    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function(flag) {
+                        if (flag) {
+                            logger.info("[Queue] Execution time: %dms", end);
+                            logger.info("[Email] Send Message to client", data.email);
+                            let html = emailer.emailTemplate(code, secondToDate(end / 1000), config.microarray_link + "?" + d[1], data.submit, d[1])
+                            let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM");
+                            // emailer.sendMail(config.mail.from,data.email,subject, "", html)
+                            emailer.sendMail(config.mail.from, data.email, subject, "", html)
+                        } else {
+                            logger.info("[Queue] Run Contrast fails ", err)
+                            logger.info("[Queue] Send fails message  to client ", data.email)
+                            let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
+                            let html = emailer.emailFailedTemplate(code, secondToDate(end / 1000), data.submit, d[1])
+                            emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+                        }
+                    });
+                }
+            });
         }
-
-        setTimeout(cleanData(data.projectId,config.uploadPath), 30*1000);
-
+        //setTimeout(cleanData(data.projectId, config.uploadPath), 30 * 1000);
     });
 }
 
-function cleanData(pid,uploadPath){
+function cleanData(pid, uploadPath) {
     try {
-        rimraf.sync(uploadPath+"/"+pid);
-    }catch(err){
-         logger.info("[Queue] Delete result files fails  ", err)
+        rimraf.sync(uploadPath + "/" + pid);
+    } catch (err) {
+        logger.info("[Queue] Delete result files fails  ", err)
     }
- 
-}
-
-
-function uploadResultToS3(path, pid) {
-    logger.info("[Queue] Upload Results to S3", path)
-    queue.awsHander.upload(path, config.queue_input_path + "/" + pid + "/", function() {
-        
-    });
 
 }
