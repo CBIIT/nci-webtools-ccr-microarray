@@ -189,6 +189,7 @@ awsHander.download = (projectId, filePath, next) => {
             logger.info("[Queue] Download file from S3 fails")
             logger.info(params)
             logger.info(err.stack)
+            next(false)
         } else {
 
             
@@ -205,7 +206,7 @@ awsHander.download = (projectId, filePath, next) => {
                 filePath + "/" + projectId +"/", true);
 
              setTimeout(function() {
-                next()
+                next(true)
             }, 2000);
         }
     })
