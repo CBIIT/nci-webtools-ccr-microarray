@@ -2439,7 +2439,11 @@ class Analysis extends Component {
             reqBody.targetObject = "";
         }
         workflow.progressing = true;
-        workflow.loading_info = "Running Contrast...";
+         if (workflow.useQueue) {
+             workflow.loading_info = "Submitting job to queue...";
+        }else{
+             workflow.loading_info = "Running Contrast...";
+        }
         // define action
         reqBody.actions = "runContrast";
         workflow.diff_expr_genes = defaultState.workflow.diff_expr_genes;
