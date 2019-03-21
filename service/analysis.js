@@ -267,7 +267,7 @@ router.post("/qAnalysis", function(req, res) {
         }
 
     })
-     res.json({  status: 200, data: ""});
+    res.json({ status: 200, data: "" });
 
 })
 
@@ -292,41 +292,49 @@ router.post('/getResultByProjectId', function(req, res) {
     logger.info("[Get contrast result from file]",
         "projectId:", req.body.projectId
     );
-    queue.awsHander.download(req.body.projectId, config.uploadPath, function() {
-        fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
-            if (err) {
-                res.json({
-                    status: 404,
-                    msg: err
-                });
-            } else {
-                let re = JSON.parse(returnValue)
-                // store return value in session (deep copy)
-                req.session.runContrastData = JsonToObject(re);
-                req.session.option = req.session.runContrastData.group_1 + req.session.runContrastData.group_2 + req.session.runContrastData.genSet;
-                req.session.groups = req.session.runContrastData.groups;
-                req.session.projectId = req.session.runContrastData.projectId;
-                logger.info("store data in req.session")
-                let return_data = "";
-                return_data = {
-                    mAplotBN: req.session.runContrastData.maplotBN,
-                    mAplotAN: req.session.runContrastData.maplotAfter,
-                    group_1: req.session.runContrastData.group_1,
-                    group_2: req.session.runContrastData.group_2,
-                    groups: req.session.runContrastData.groups,
-                    projectId: req.session.runContrastData.projectId,
-                    accessionCode: req.session.runContrastData.accessionCode,
-                    gsm: re.GSM,
-                    mAplotBN: re.maplotBN,
-                    mAplotAN: re.maplotAfter
+    queue.awsHander.download(req.body.projectId, config.uploadPath, function(flag) {
+        if (flag) {
+            fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
+                if (err) {
+                    res.json({
+                        status: 404,
+                        msg: err
+                    });
+                } else {
+                    let re = JSON.parse(returnValue)
+                    // store return value in session (deep copy)
+                    req.session.runContrastData = JsonToObject(re);
+                    req.session.option = req.session.runContrastData.group_1 + req.session.runContrastData.group_2 + req.session.runContrastData.genSet;
+                    req.session.groups = req.session.runContrastData.groups;
+                    req.session.projectId = req.session.runContrastData.projectId;
+                    logger.info("store data in req.session")
+                    let return_data = "";
+                    return_data = {
+                        mAplotBN: req.session.runContrastData.maplotBN,
+                        mAplotAN: req.session.runContrastData.maplotAfter,
+                        group_1: req.session.runContrastData.group_1,
+                        group_2: req.session.runContrastData.group_2,
+                        groups: req.session.runContrastData.groups,
+                        projectId: req.session.runContrastData.projectId,
+                        accessionCode: req.session.runContrastData.accessionCode,
+                        gsm: re.GSM,
+                        mAplotBN: re.maplotBN,
+                        mAplotAN: re.maplotAfter
+                    }
+                    logger.info("Get Contrast result success")
+                    res.json({
+                        status: 200,
+                        data: return_data
+                    });
                 }
-                logger.info("Get Contrast result success")
-                res.json({
-                    status: 200,
-                    data: return_data
-                });
-            }
-        });
+            });
+        }else{
+            res.json({
+                        status: 404,
+                        msg: "err"
+                    });
+        }
+
     });
 });
 

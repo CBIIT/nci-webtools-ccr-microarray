@@ -63,12 +63,19 @@ function qAnalysis(data, emailto, endCallback) {
     }, 30 * 1000);
 
     //console.log("projectId:" + message.projectId)
-    queue.awsHander.download(message.projectId, config.uploadPath, function() {
-        r(message, function() {
+    queue.awsHander.download(message.projectId, config.uploadPath, function(flag) {
+        if (flag) {
+            r(message, function() {
+                endCallback();
+                clearInterval(setVisibility);
+                queue.awsHander.del(data.Messages[0].ReceiptHandle)
+            })
+        } else {
             endCallback();
             clearInterval(setVisibility);
             queue.awsHander.del(data.Messages[0].ReceiptHandle)
-        })
+        }
+
     });
 
 }
