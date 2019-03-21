@@ -267,6 +267,7 @@ router.post("/qAnalysis", function(req, res) {
         }
 
     })
+     res.json({  status: 200, data: ""});
 
 })
 
