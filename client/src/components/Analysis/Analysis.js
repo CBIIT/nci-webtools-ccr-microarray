@@ -179,11 +179,11 @@ let defaultState = {
         preplots: {
             histplotBN: "",
             list_mAplotBN: "",
-            NUSE:"",
-            RLE:"",
-            Boxplots:"",
-            list_mAplotBN:"",
-            histplotBN:"",
+            NUSE: "",
+            RLE: "",
+            Boxplots: "",
+            list_mAplotBN: "",
+            histplotBN: "",
         },
         list_mAplotBN: "",
         list_mAplotAN: "",
@@ -208,10 +208,10 @@ let defaultState = {
             histplotAN: "",
             list_mAplotAN: "",
             Heatmapolt: "",
-            histplotAN:"",
-            list_mAplotAN:"",
-            Boxplots:"",
-            PCA:""
+            histplotAN: "",
+            list_mAplotAN: "",
+            Boxplots: "",
+            PCA: ""
         },
         geneHeatmap: "Not enough significant pathways available with p-value < 0.05.",
         volcanoPlot: "No Data",
@@ -1524,20 +1524,50 @@ class Analysis extends Component {
                     if (result.status == 200) {
                         if (result.data != "") {
                             let pcaData = result.data;
-                            let pcaPlotData = [{
-                                autosize: true,
-                                x: pcaData.x,
-                                y: pcaData.y,
-                                z: pcaData.z,
-                                text: pcaData.group_name,
-                                mode: 'markers+text',
-                                marker: {
-                                    size: 10,
-                                    color: pcaData.color,
-                                },
-                                type: 'scatter3d'
-                            }];
+
+                            let pcaPlotData = [];
+                            // break data in to groups 
+                            let group_data = {};
+                            pcaData.group_name.forEach(function(element, i) {
+                                if (group_data.hasOwnProperty(element)) {
+                                    group_data[element]["x"].push(pcaData.x[i]);
+                                    group_data[element]["y"].push(pcaData.y[i]);
+                                    group_data[element]["z"].push(pcaData.z[i]);
+                                    group_data[element]['color'].push(pcaData.color[i]);
+                                    group_data[element]['group_name'].push(pcaData.group_name[i]);
+                                    group_data[element]['row'].push(pcaData.row[i]);
+                                } else {
+                                    group_data[element]={}
+                                    group_data[element]["x"] = [pcaData.x[i]];
+                                    group_data[element]["y"] = [pcaData.y[i]];
+                                    group_data[element]["z"] = [pcaData.z[i]];
+                                    group_data[element]['color'] = [pcaData.color[i]];
+                                    group_data[element]['group_name'] = [pcaData.group_name[i]];
+                                    group_data[element]['row'] = [pcaData.row[i]];
+                                }
+                            });
+                            for (let element in group_data) {
+                                pcaPlotData.push({
+                                    autosize: true,
+                                    x: group_data[element]["x"],
+                                    y: group_data[element]["y"],
+                                    z: group_data[element]["z"],
+                                    text: pcaData.row,
+                                    mode: 'markers',
+                                    marker: {
+                                        size: 10,
+                                        color: group_data[element]['color'],
+                                    },
+                                    legendgroup: element,
+                                    name: element,
+                                    type: 'scatter3d'
+                                })
+
+                            }
+                            
+
                             let pcaPlotLayout = {
+                                showlegend: true,
                                 margin: {
                                     l: 25,
                                     r: 25,
@@ -1561,14 +1591,14 @@ class Analysis extends Component {
 
                                     },
                                     yaxis: {
-                                        title: pcaData.col[1] + " (" + pcaData.ylable + "%)",
+                                        title: pcaData.col[2] + " (" + pcaData.ylable + "%)",
                                         backgroundcolor: "#EEEEEE",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,
                                         zerolinecolor: "rgb(255, 255, 255)"
                                     },
                                     zaxis: {
-                                        title: pcaData.col[2] + " (" + pcaData.zlable + "%)",
+                                        title: pcaData.col[1] + " (" + pcaData.zlable + "%)",
                                         backgroundcolor: "#cccccc",
                                         gridcolor: "rgb(255, 255, 255)",
                                         showbackground: true,
@@ -2439,10 +2469,10 @@ class Analysis extends Component {
             reqBody.targetObject = "";
         }
         workflow.progressing = true;
-         if (workflow.useQueue) {
-             workflow.loading_info = "Submitting job to queue...";
-        }else{
-             workflow.loading_info = "Running Contrast...";
+        if (workflow.useQueue) {
+            workflow.loading_info = "Submitting job to queue...";
+        } else {
+            workflow.loading_info = "Running Contrast...";
         }
         // define action
         reqBody.actions = "runContrast";
@@ -3057,7 +3087,7 @@ class Analysis extends Component {
                     } else {
                         if (document.getElementById("message-gsm") != null) {
                             document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to complete, please contact admin or try again. ";
-                            document.getElementById("message-gsm").nextSibling.innerHTML="";
+                            document.getElementById("message-gsm").nextSibling.innerHTML = "";
                         }
                         workflow.progressing = false;
                         this.setState({
