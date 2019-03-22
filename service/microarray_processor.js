@@ -15,7 +15,6 @@ var dateFormat = require('dateformat');
 var rimraf = require("rimraf");
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
-
 queue.awsHander.getQueueUrl(function(flag) {
     if (flag) {
         logger.info("[Queue] Start queue");
@@ -29,7 +28,6 @@ queue.awsHander.getQueueUrl(function(flag) {
 })
 
 function polling() {
-
     AsyncPolling(function(end) {
         try {
             queue.awsHander.receiver(qAnalysis, end, function(err) {
@@ -45,11 +43,7 @@ function polling() {
         }
         // Then notify the polling when your job is done:
     }, config.queue_request_interval * 1000).run();
-
 }
-
-
-
 
 function qAnalysis(data, emailto, endCallback) {
     console.log("qAnalysis")
@@ -61,7 +55,6 @@ function qAnalysis(data, emailto, endCallback) {
         console.log("qAnalysis interval:", i);
         queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * 60)
     }, 30 * 1000);
-
     //console.log("projectId:" + message.projectId)
     queue.awsHander.download(message.projectId, config.uploadPath, function(flag) {
         if (flag) {
@@ -75,9 +68,7 @@ function qAnalysis(data, emailto, endCallback) {
             clearInterval(setVisibility);
             queue.awsHander.del(data.Messages[0].ReceiptHandle)
         }
-
     });
-
 }
 
 function secondToDate(result) {
@@ -87,9 +78,7 @@ function secondToDate(result) {
     return result = h + " hours " + m + " minutes " + s + " seconds";
 }
 
-
 function r(data, endCallback) {
-
     let start = new Date();
     let d = [];
     //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways

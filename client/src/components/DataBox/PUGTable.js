@@ -38,7 +38,10 @@ class PUGTable extends Component {
         });
     }
 
+    componentDidCatch(error, info) {
+        document.getElementById("message-pug").innerHTML = error;
 
+    }
 
     handleTableChange = (pagination, filters, sorter) => {
 
@@ -86,14 +89,14 @@ class PUGTable extends Component {
     }
 
 
-    showHeatMap(row, idx, event) {
+    showHeatMap(idx){
         // not reflected in interface 
         let reqBody = {};
         reqBody.projectId = this.props.data.projectID;
         reqBody.group1 = this.props.data.group_1;
         reqBody.group2 = this.props.data.group_2;
         reqBody.upOrDown = "upregulated_pathways";
-        reqBody.pathway_name = row.Description;
+        reqBody.pathway_name = this.props.data.pathways_up.data[idx.index].Description;
         this.props.changeLoadingStatus(true, "loading HeatMap")
 
         var importantStuff = window.open(window.location.protocol + "//" + window.location.host + "/microarray/assets/loading.html", '_blank');
@@ -168,7 +171,7 @@ class PUGTable extends Component {
             render: (text, record, index) => {
 
                 return <div className="single-line pathway_pathways_id" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.12>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.10:minWidth}}>
-                                    <span style={{"color":"rgb(0, 0, 255)"}} data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span style={{"color":"rgb(0, 0, 255)"}} data-toggle="tooltip" data-placement="left" title={text}><a style={{"color":"rgb(0, 0, 255)"}}  onClick ={()=>this.showHeatMap({index})}>{text}</a></span>
                                     </div>
 
             }
@@ -586,9 +589,9 @@ class PUGTable extends Component {
                         loading={this.props.data.pathways_up.loading}
                         onChange={this.handleTableChange}
                         // onRowClick={this.showHeatMap}
-                        onRow={(row, idx, event) => ({
-                                    onClick: () => { this.showHeatMap(row, idx, event); }
-                              })}
+                        // onRow={(row, idx, event) => ({
+                        //             onClick: () => { this.showHeatMap(row, idx, event); }
+                        //       })}
                         scroll={{ x: 600}}
                         />
                     {modal}
