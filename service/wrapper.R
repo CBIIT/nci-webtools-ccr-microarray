@@ -5,9 +5,6 @@ library(limma)
 library(GEOquery)
 library(oligo)
 library(Biobase)
-#source('./service/MAAPster_functions.R')
-
-
 
 
 process = function(){
