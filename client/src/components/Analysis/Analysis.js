@@ -259,7 +259,6 @@ class Analysis extends Component {
         this.hideWorkFlow = this.hideWorkFlow.bind(this);
         this.getSSGSEAGeneHeatMap = this.getSSGSEAGeneHeatMap.bind(this);
         this.buildgeneHeatmap = this.buildgeneHeatmap.bind(this);
-        this.checkAllDIVOverlap = this.checkAllDIVOverlap.bind(this);
         this.getCurrentNumberOfJobsinQueue();
     }
 
@@ -273,6 +272,13 @@ class Analysis extends Component {
         window.addEventListener("resize", this.updateDimensions);
     }
 
+    componentDidCatch(error, info) {
+        // Display fallback UI
+        this.resetWorkFlowProject();
+        document.getElementById("message-gsm").innerHTML = error;
+        document.getElementById("message-gsm").nextSibling.innerHTML = "";
+
+    }
     // release the listener
     componentWillUnmount() {
         window.removeEventListener("resize", this.updateDimensions);
@@ -286,293 +292,12 @@ class Analysis extends Component {
         } else {
             document.getElementsByClassName("container-board-right")[0].style.width = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - document.getElementsByClassName("container-board-left")[0].clientWidth - 80 + "px";
         }
-        // reset all pagination
-        this.checkAllDIVOverlap();
     }
 
     getElementByXpath = (path) => {
         return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     }
 
-    checkOverLap = (rect1, rect2) => {
-        rect1 = rect1.getBoundingClientRect();
-        rect2 = rect2.getBoundingClientRect();
-        return !(rect1.right < rect2.left ||
-            rect1.left > rect2.right ||
-            rect1.bottom < rect2.top ||
-            rect1.top > rect2.bottom)
-    }
-
-    correctDIVOverlap = (div1, div2, lengthfOfData, next) => {
-        // Check  GSM  
-        let search_input = this.getElementByXpath(div1);
-        let pagination = this.getElementByXpath(div2);
-        if (search_input != null && pagination != null) {
-            if (this.checkOverLap(search_input, pagination)) {
-                next(true);
-            } else {
-                next(false);
-            }
-        }
-
-    }
-
-    checkAllDIVOverlap = () => {
-        let workflow = Object.assign({}, this.state.workflow);
-        // less then 765 was consider as mobile 
-        // if (document.body.offsetWidth > 765) {
-        //     // Check GSM
-        //     this.correctDIVOverlap('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input', '//*[@id="gsm-select"]', workflow.dataList.length, this.correctGSMDIVOverlap);
-        //     // Check  Deg
-        //     this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="deg-select"]', workflow.diff_expr_genes.data.length, this.correctDegDIVOverlap);
-        //     // check pathway up
-        //     this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-up-select"]', workflow.pathways_up.data.length, this.correctPathWayUpDIVOverlap);
-        //     // check  pathway down
-        //     this.correctDIVOverlap('//*[@id="deg_select_option"]', '//*[@id="pathways-down-select"]', workflow.pathways_down.data.length, this.correctPathWayDownDIVOverlap);
-        //     // // check ssgsea 
-        //     this.correctDIVOverlap('//*[@id="ss_gene_set_select_option"]', '//*[@id="ss-select"]', workflow.ssGSEA.data.length, this.correctSSGSEADIVOverlap);
-        // }
-
-    }
-
-    correctDegDIVOverlap = (flag) => {
-        let dt = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div');
-        let displaySection = this.getElementByXpath('//*[@id="deg-select"]');
-        let pagination = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[4]/div/div/div/ul');
-        let exportBtn = this.getElementByXpath('//*[@id="deg_tag1"]/div/div[2]');
-        if (pagination == null) {
-            // when table data is null, then no pagination will show up
-            pagination = { offsetWidth: 0, style: { top: 0, right: 0, left: 0 } }
-        }
-        if (flag) {
-            if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
-                dt.style.paddingTop = "50px";
-                pagination.style.top = "-60px";
-                pagination.style.right = "auto";
-                pagination.style.left = displaySection.offsetWidth + 15 + "px";
-                displaySection.style.right = "auto";
-                displaySection.style.top = "115px";
-                exportBtn.style.right = "auto";
-                let width = displaySection.offsetWidth + pagination.offsetWidth + 35 + "px";
-                exportBtn.style.left = width;
-                exportBtn.style.top = "114px";
-
-            }
-        } else {
-            let deg_select_option = this.getElementByXpath('//*[@id="deg_select_option"]');
-            deg_select_option = deg_select_option.getBoundingClientRect();
-            let displaySection_client = displaySection.getBoundingClientRect();
-            if (dt && dt != null && displaySection && displaySection != null && exportBtn != null) {
-                // check if move back will cause the overlap
-                if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > deg_select_option.right)) {
-                    return;
-                }
-                dt.style.paddingTop = "9px";
-                pagination.style.top = "-58px";
-                pagination.style.right = "100px";
-                pagination.style.left = "auto";
-                let width = pagination.offsetWidth + 125;
-                displaySection.style.right = width + "px";
-                displaySection.style.top = "73px";
-                exportBtn.style.right = "0";
-                exportBtn.style.left = "auto";
-                exportBtn.style.top = "75px";
-            }
-        }
-
-    }
-
-    correctSSGSEADIVOverlap = (flag) => {
-        let dt = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div');
-        let displaySection = this.getElementByXpath('//*[@id="ss-select"]');
-        let pagination = this.getElementByXpath('//*[@id="ss_tag1"]/div[4]/div/div/div/ul');
-        let exportBtn = this.getElementByXpath('//*[@id="ss_tag1"]/div[2]');
-        if (pagination == null) {
-            // when table data is null, then no pagination will show up
-            pagination = { offsetWidth: 0, style: { top: 0, right: 0, left: 0 } }
-        }
-        if (flag) {
-
-            if (dt && dt != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null) {
-                dt.style.paddingTop = "50px";
-                displaySection.style.right = "auto";
-                displaySection.style.top = "115px";
-                pagination.style.top = "-60px";
-                pagination.style.right = "auto";
-                pagination.style.left = displaySection.offsetWidth + 15 + "px";
-                exportBtn.style.right = "auto";
-                let width = displaySection.offsetWidth + pagination.offsetWidth + 35 + "px";
-                exportBtn.style.left = width;
-                exportBtn.style.top = "114px";
-            }
-
-        } else {
-            // not overlap back to normal
-            let select_option = this.getElementByXpath('//*[@id="ss_gene_set_select_option"]');
-            // check if move back will cause the overlap
-            select_option = select_option.getBoundingClientRect();
-            let displaySection_client = displaySection.getBoundingClientRect();
-            if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null) {
-                // check if move back will cause the overlap
-                if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > select_option.right)) {
-                    return;
-                }
-                dt.style.paddingTop = "9px";
-                pagination.style.top = "-58px";
-                pagination.style.right = "100px";
-                pagination.style.left = "auto";
-                let width = pagination.offsetWidth + 125;
-                displaySection.style.right = width + "px";
-                displaySection.style.top = "73px";
-                exportBtn.style.right = "0";
-                exportBtn.style.left = "auto";
-                exportBtn.style.top = "75px";
-            }
-        }
-
-    }
-
-    correctPathWayUpDIVOverlap = (flag) => {
-        let dt = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div');
-        let displaySection = this.getElementByXpath('//*[@id="pathways-up-select"]');
-        let pagination = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[4]/div/div/div/ul');
-        let exportBtn = this.getElementByXpath('//*[@id="deg_tag2"]/div/div[2]');
-        if (pagination == null) {
-            // when table data is null, then no pagination will show up
-            pagination = { offsetWidth: 0, style: { top: 0, right: 0, left: 0 } }
-        }
-
-        if (flag) {
-            if (dt && dt != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
-                dt.style.paddingTop = "50px";
-                displaySection.style.right = "auto";
-                displaySection.style.top = "115px";
-                pagination.style.top = "-60px";
-                pagination.style.right = "auto";
-                pagination.style.left = displaySection.offsetWidth + 15 + "px";
-                exportBtn.style.right = "auto";
-                let width = displaySection.offsetWidth + pagination.offsetWidth + 35 + "px";
-                exportBtn.style.left = width;
-                exportBtn.style.top = "114px";
-            }
-        } else {
-            let deg_select_option = this.getElementByXpath('//*[@id="deg_select_option"]');
-            // check if move back will cause the overlap
-            deg_select_option = deg_select_option.getBoundingClientRect();
-            let displaySection_client = displaySection.getBoundingClientRect();
-            if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null) {
-                // check if move back will cause the overlap
-                if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > deg_select_option.right)) {
-                    return;
-                }
-                dt.style.paddingTop = "9px";
-                pagination.style.top = "-58px";
-                pagination.style.right = "100px";
-                pagination.style.left = "auto";
-                let width = pagination.offsetWidth + 125;
-                displaySection.style.right = width + "px";
-                displaySection.style.top = "73px";
-                exportBtn.style.right = "0";
-                exportBtn.style.left = "auto";
-                exportBtn.style.top = "75px";
-            }
-        }
-    }
-
-    correctPathWayDownDIVOverlap = (flag) => {
-        let dt = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div');
-        let displaySection = this.getElementByXpath('//*[@id="pathways-down-select"]');
-        let pagination = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[4]/div/div/div/ul');
-        let exportBtn = this.getElementByXpath('//*[@id="deg_tag3"]/div/div[2]');
-        if (pagination == null) {
-            // when table data is null, then no pagination will show up
-            pagination = { offsetWidth: 0, style: { top: 0, right: 0, left: 0 } }
-        }
-        if (flag) {
-            if (dt && dt != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
-                dt.style.paddingTop = "50px";
-                displaySection.style.right = "auto";
-                displaySection.style.top = "115px";
-                pagination.style.top = "-60px";
-                pagination.style.right = "auto";
-                pagination.style.left = displaySection.offsetWidth + 15 + "px";
-                exportBtn.style.right = "auto";
-                let width = displaySection.offsetWidth + pagination.offsetWidth + 35 + "px";
-                exportBtn.style.left = width;
-                exportBtn.style.top = "114px";
-            }
-        } else {
-            // not overlap back to normal
-            let deg_select_option = this.getElementByXpath('//*[@id="deg_select_option"]');
-            // check if move back will cause the overlap
-            deg_select_option = deg_select_option.getBoundingClientRect();
-            let displaySection_client = displaySection.getBoundingClientRect();
-            if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
-                // check if move back will cause the overlap
-                if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > deg_select_option.right)) {
-                    return;
-                }
-                dt.style.paddingTop = "9px";
-                pagination.style.top = "-58px";
-                pagination.style.right = "100px";
-                pagination.style.left = "auto";
-                let width = pagination.offsetWidth + 125;
-                displaySection.style.right = width + "px";
-                displaySection.style.top = "73px";
-                exportBtn.style.right = "0";
-                exportBtn.style.left = "auto";
-                exportBtn.style.top = "75px";
-            }
-        }
-    }
-
-    correctGSMDIVOverlap = (flag) => {
-        let dt = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div');
-        let displaySection = this.getElementByXpath('//*[@id="gsm-select"]');
-        let pagination = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[4]/div/div/div/ul');
-        let exportBtn = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[2]/div[2]');
-        if (pagination == null) {
-            // when table data is null, then no pagination will show up
-            pagination = { offsetWidth: 0, style: { top: 0, right: 0, left: 0 } }
-        }
-        if (flag) {
-            // overlap
-            if (dt && dt != null && displaySection && displaySection != null && displaySection.offsetWidth != 0 && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
-                dt.style.paddingTop = "50px";
-                displaySection.style.right = "auto";
-                displaySection.style.top = "100px";
-                pagination.style.top = "-60px";
-                pagination.style.right = "auto";
-                pagination.style.left = displaySection.offsetWidth + 15 + "px";
-                exportBtn.style.right = "auto";
-                let width = displaySection.offsetWidth + pagination.offsetWidth + 32 + "px";
-                exportBtn.style.left = width;
-                exportBtn.style.top = "92px";
-            }
-        } else {
-            // not overlap back to normal
-            let select_option = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]/div[3]/div/div[3]/div[1]/div[3]/div[2]/span/input');
-            select_option = select_option.getBoundingClientRect();
-            let displaySection_client = displaySection.getBoundingClientRect();
-            if (dt && dt != null && displaySection && displaySection != null && exportBtn && exportBtn != null && displaySection.offsetWidth != 0) {
-                // check if move back will cause the overlap
-                if (!(this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - pagination.offsetWidth - 125 - displaySection.offsetWidth > select_option.right)) {
-                    return;
-                }
-                dt.style.paddingTop = "9px";
-                let width = document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0].offsetWidth + 125;
-                displaySection.style.right = width + "px";
-                displaySection.style.top = "55px";
-                pagination.style.top = "-62px";
-                pagination.style.right = "100px";
-                pagination.style.left = "auto";
-                exportBtn.style.right = "0";
-                exportBtn.style.left = "auto";
-                exportBtn.style.top = "50px";
-            }
-
-        }
-    }
 
     changeRunContrastMode = (params = false) => {
         let workflow = Object.assign({}, this.state.workflow);
@@ -596,7 +321,7 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         params = {
             projectId: workflow.projectID,
-            page_size: 99999999,
+            page_size: 999999999,
             page_number: 1,
             sorting: {
                 name: workflow.ssGSEA.sorting.name,
@@ -713,7 +438,11 @@ class Analysis extends Component {
                 workflow.loading_info = "Loading";
                 this.setState({ workflow: workflow });
             }).catch(function(err) {
-                console.log(err);
+                let workflow = Object.assign({}, this.state.workflow);
+                workflow.progressing = false;
+                workflow.loading_info = "Loading";
+                this.setState({ workflow: workflow });
+                document.getElementById("message-ssgsea").innerHTML = err;
             });
     }
 
@@ -743,8 +472,8 @@ class Analysis extends Component {
                 page_number: workflow.ssGSEA.pagination.current,
                 page_size: workflow.ssGSEA.pagination.pageSize
             }
-            params.sorting = workflow.ssGSEA.sorting
-            params.search_keyword = workflow.ssGSEA.search_keyword
+            params.sorting = workflow.ssGSEA.sorting;
+            params.search_keyword = workflow.ssGSEA.search_keyword;
             workflow.ssGSEA.pagination = {
                 current: workflow.ssGSEA.pagination.current,
                 pageSize: workflow.ssGSEA.pagination.pageSize,
@@ -767,17 +496,8 @@ class Analysis extends Component {
             .then(result => {
                 document.getElementById("message-ssgsea").innerHTML = ""
                 let workflow2 = Object.assign({}, this.state.workflow);
-                // document.getElementById("input_ssg_name").value = workflow2.ssGSEA.search_keyword.name;
-                // document.getElementById("input_ssg_search_logFC").value = workflow2.ssGSEA.search_keyword.search_logFC;
-                // document.getElementById("input_ssg_search_Avg_Enrichment_Score").value = workflow2.ssGSEA.search_keyword.search_Avg_Enrichment_Score;
-                // document.getElementById("input_ssg_search_t").value = workflow2.ssGSEA.search_keyword.search_t;
-                // document.getElementById("input_ssg_search_p_value").value = workflow2.ssGSEA.search_keyword.search_p_value;
-                // document.getElementById("input_ssg_search_adj_p_value").value = workflow2.ssGSEA.search_keyword.search_adj_p_value;
-                // document.getElementById("input_ssg_search_b").value = workflow2.ssGSEA.search_keyword.search_b;
                 if (result.status == 200) {
                     const pagination = { ...workflow2.ssGSEA.pagination };
-                    // Read total count from server
-                    // pagination.total = data.totalCount;
                     pagination.total = result.data.totalCount;
                     for (let i = 0; i < result.data.records.length; i++) {
                         result.data.records[i].key = "GSEA" + i;
@@ -785,21 +505,21 @@ class Analysis extends Component {
                     workflow2.ssGSEA.loading = false;
                     workflow2.ssGSEA.data = result.data.records;
                     workflow2.ssGSEA.pagination = pagination;
-                    let min = 0;
-                    let max = 99999;
-                    let random = Math.random() * (+max - +min) + +min;
                     this.setState({ workflow: workflow2 });
                     this.getSSGSEAGeneHeatMap();
-                    this.resetSSGSEADisplay(this.checkAllDIVOverlap());
                 } else {
                     document.getElementById("message-ssgsea").innerHTML = result.msg
                 }
-            }).catch(error => console.log(error));
+            }).catch(error => {
+                let workflow = Object.assign({}, this.state.workflow);
+                workflow.ssGSEA.loading = false;
+                this.setState({ workflow: workflow });
+                document.getElementById("message-ssgsea").innerHTML = error;
+            })
     }
 
     exportPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-        // initialize
         params = {
             projectId: workflow.projectID,
             page_size: 99999999,
@@ -810,7 +530,6 @@ class Analysis extends Component {
             },
             search_keyword: workflow.pathways_up.search_keyword
         }
-
         workflow.progressing = true;
         workflow.loading_info = "Export";
         this.setState({ workflow: workflow });
@@ -828,7 +547,6 @@ class Analysis extends Component {
             )
             .then(result => {
                 if (result.status == 200) {
-
                     let workflow = Object.assign({}, this.state.workflow);
                     var wb = XLSX.utils.book_new();
                     wb.Props = {
@@ -840,9 +558,7 @@ class Analysis extends Component {
                     if (workflow.dataList.length != 0) {
                         wb.SheetNames.push("Settings");
                         var ws_data = [];
-
                         if (workflow.analysisType == "1") {
-                            // Upload
                             ws_data.push(["Analysis Type", "CEL Files"]);
 
                             let uploadD = ""
@@ -879,7 +595,6 @@ class Analysis extends Component {
                         if (workflow.pathways_up.search_keyword.search_PATHWAY_ID != "") {
                             ws_data.push(["Pathway_ID", workflow.pathways_up.search_keyword.search_PATHWAY_ID])
                         }
-
                         if (workflow.pathways_up.search_keyword.search_SOURCE != "") {
                             ws_data.push(["Source", workflow.pathways_up.search_keyword.search_SOURCE])
                         }
@@ -913,12 +628,9 @@ class Analysis extends Component {
                         if (workflow.pathways_up.search_keyword.search_GENE_LIST != "") {
                             ws_data.push(["Gene_List", workflow.pathways_up.search_keyword.search_GENE_LIST])
                         }
-
-
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
                         wb.Sheets["Settings"] = ws;
                         wb.SheetNames.push("Results");
-
                         // export data
                         let degData = result.data.records;
                         let exportData = [
@@ -940,20 +652,24 @@ class Analysis extends Component {
                                 degData[i]["Total_Number_Genes"]
                             ])
                         }
-
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Results"] = ws2;
                         var wbout = XLSX.writeFile(wb, "DEG_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
                     }
                 } else {
-
-                    document.getElementById("message-pug").innerHTML = "Contrast result no found";
+                    document.getElementById("message-pug").innerHTML = "export PathwayUp fails";
                 }
                 workflow.progressing = false;
                 workflow.loading_info = "Loading";
                 this.setState({ workflow: workflow });
 
-            }).catch(error => console.log(error));
+            }).catch(error => {
+                let workflow = Object.assign({}, this.state.workflow);
+                workflow.progressing = false;
+                workflow.loading_info = "Loading";
+                this.setState({ workflow: workflow });
+                document.getElementById("message-pug").innerHTML = error
+            });
     }
 
     getPathwayUp = (params = {}) => {
@@ -1010,32 +726,30 @@ class Analysis extends Component {
                 let workflow2 = Object.assign({}, this.state.workflow);
                 if (result.status == 200) {
                     const pagination = { ...workflow.pathways_up.pagination };
-                    // Read total count from server
-                    // pagination.total = data.totalCount;
                     pagination.total = result.data.totalCount;
-
                     for (let i = 0; i < result.data.records.length; i++) {
                         result.data.records[i].key = "pathway_up" + i;
                     }
-
                     workflow2.pathways_up.loading = false;
                     workflow2.pathways_up.data = result.data.records;
                     workflow2.pathways_up.pagination = pagination;
-
                     this.setState({ workflow: workflow2 });
-
-                    this.resetPathWayUPDisplay(this.checkAllDIVOverlap());
-
                 } else {
-
+                    workflow2.pathways_up.loading = false;
+                    this.setState({ workflow: workflow2 });
                     document.getElementById("message-pug").innerHTML = result.msg;
                 }
-            }).catch(error => console.log(error));
+            }).catch(error => {
+                let workflow2 = Object.assign({}, this.state.workflow);
+                workflow2.pathways_up.loading = false;
+                this.setState({ workflow: workflow2 });
+                document.getElementById("message-pug").innerHTML = error;
+                console.log(error)
+            });
     }
 
     getPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
-        // initialize
         if (params.sorting) {
             params = {
                 projectId: workflow.projectID,
@@ -1047,7 +761,6 @@ class Analysis extends Component {
                 },
                 search_keyword: params.search_keyword
             }
-
             workflow.pathways_down.pagination = {
                 current: params.page_number,
                 pageSize: params.page_size,
@@ -1056,7 +769,6 @@ class Analysis extends Component {
             workflow.pathways_down.sorting = params.sorting;
             workflow.pathways_down.search_keyword = params.search_keyword;
         } else {
-
             params = {
                 projectId: workflow.projectID,
                 page_number: workflow.pathways_down.pagination.current,
@@ -1069,10 +781,7 @@ class Analysis extends Component {
                 pageSize: workflow.pathways_down.pagination.pageSize,
 
             }
-
         }
-
-
         workflow.pathways_down.loading = true;
         this.setState({ workflow: workflow });
         fetch('./api/analysis/getDownPathWays', {
@@ -1104,11 +813,11 @@ class Analysis extends Component {
                     workflow2.pathways_down.pagination = pagination;
 
                     this.setState({ workflow: workflow2 });
-                    this.resetPathWayDownDisplay(this.checkAllDIVOverlap());
+                    this.resetPathWayDownDisplay();
                 } else {
                     document.getElementById("message-pdg").innerHTML = result.msg;
                 }
-            }).catch(error => console.log(error));
+            }).catch(error => document.getElementById("message-pdg").innerHTML = error);
     }
 
 
@@ -1223,11 +932,9 @@ class Analysis extends Component {
                             ws_data.push(["Gene_List", workflow.pathways_down.search_keyword.search_GENE_LIST])
                         }
 
-
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
                         wb.Sheets["Settings"] = ws;
                         wb.SheetNames.push("Results");
-
                         // export data
                         let degData = result.data.records;
                         let exportData = [
@@ -1260,7 +967,7 @@ class Analysis extends Component {
                 }
 
 
-            }).catch(error => console.log(error));
+            }).catch(error => document.getElementById("message-pdg").innerHTML = error);
     }
 
     getDEG = (params = {}) => {
@@ -1325,7 +1032,7 @@ class Analysis extends Component {
                     workflow2.diff_expr_genes.data = result.data.records;
                     workflow2.diff_expr_genes.pagination = pagination;
                     this.setState({ workflow: workflow2 });
-                    this.resetDEGDisplay(this.checkAllDIVOverlap());
+                    this.resetDEGDisplay();
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
                 }
@@ -1400,13 +1107,11 @@ class Analysis extends Component {
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
                         ws_data.push(["Type", "Differentially Expressed Genes"])
-
                         ws_data.push(["Filters", ""])
 
                         if (workflow.diff_expr_genes.search_keyword.search_symbol != "") {
                             ws_data.push(["SYMBOL", workflow.diff_expr_genes.search_keyword.search_symbol])
                         }
-
                         if (workflow.diff_expr_genes.search_keyword.search_fc != "") {
                             ws_data.push(["fc", workflow.diff_expr_genes.search_keyword.search_fc])
                         }
@@ -1437,16 +1142,13 @@ class Analysis extends Component {
                         if (workflow.diff_expr_genes.search_keyword.search_b != "") {
                             ws_data.push(["b", workflow.diff_expr_genes.search_keyword.search_b])
                         }
-
                         var ws = XLSX.utils.aoa_to_sheet(ws_data);
                         wb.Sheets["Settings"] = ws;
                         wb.SheetNames.push("Results");
-
                         // export data
                         let degData = result.data.records;
                         let exportData = [
                             ["SYMBOL", "FC", "logFC", "P.Value", "adj.P.value", "AveExpr", "ACCNUM", "DESC", "ENTREZ", "probsetID", "t", "B"]
-
                         ]
                         for (let i in degData) {
                             exportData.push([
@@ -1464,22 +1166,17 @@ class Analysis extends Component {
                                 degData[i]["B"]
                             ])
                         }
-
                         var ws2 = XLSX.utils.aoa_to_sheet(exportData);
                         wb.Sheets["Results"] = ws2;
                         var wbout = XLSX.writeFile(wb, "DEG_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
-
                     }
-
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
                 }
-
                 workflow.progressing = false;
                 workflow.loading_info = "Loading";
                 this.setState({ workflow: workflow });
-
-            }).catch(error => console.log(error));
+            }).catch(error => document.getElementById("message-deg").innerHTML = error);
     }
 
     getHeatmapolt() {
@@ -1497,7 +1194,6 @@ class Analysis extends Component {
         workflow.volcanoPlot = <div>{volcanoPlot}</div>;
         this.setState({ workflow: workflow });
     }
-
 
     onLoadComplete() {
         let workflow = Object.assign({}, this.state.workflow);
@@ -1524,7 +1220,6 @@ class Analysis extends Component {
                     if (result.status == 200) {
                         if (result.data != "") {
                             let pcaData = result.data;
-
                             let pcaPlotData = [];
                             // break data in to groups 
                             let group_data = {};
@@ -1564,8 +1259,6 @@ class Analysis extends Component {
                                 })
 
                             }
-
-
                             let pcaPlotLayout = {
                                 showlegend: true,
                                 margin: {
@@ -1578,7 +1271,6 @@ class Analysis extends Component {
                                 width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
                                 height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
                                 scene: {
-
                                     camera: {
                                         eye: { x: 0, y: 2, z: 1 }
                                     },
@@ -1606,9 +1298,7 @@ class Analysis extends Component {
                                     }
                                 }
                             }
-
                             var PCAIframe = <Plot data={pcaPlotData} layout={pcaPlotLayout} useResizeHandler={true} />
-
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             let plot_style = { "display": "block", "marginLeft": "auto", "marginRight": "auto", "width": "80%" }
@@ -1622,10 +1312,8 @@ class Analysis extends Component {
                             workflow.progressing = false;
                             workflow.PCA = "No Data";
                             this.setState({ workflow: workflow });
-
                         }
                         document.getElementById("message-post-pca").innerHTML = "";
-
                     } else {
                         document.getElementById("message-post-pca").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
@@ -1633,7 +1321,6 @@ class Analysis extends Component {
                         workflow.PCA = "No Data";
                         this.setState({ workflow: workflow });
                     }
-
                 }).catch(error => console.log(error));
         } catch (error) {
             document.getElementById("message-post-pca").innerHTML = error;
@@ -1667,31 +1354,26 @@ class Analysis extends Component {
                                 let boxplotData = {
                                     y: BoxplotsData.data[i],
                                     type: "box",
-                                    name: BoxplotsData.col[i],
-                                    showlegend: i%2==0?true:false,
-                                    legend:"a",
+                                    name: result.data.col[i],
                                     marker: {
                                         color: BoxplotsData.color[i]
                                     }
-
                                 }
                                 BoxplotRenderData.push(boxplotData)
                             }
                             let plot_layout = {
-                                yaxis: {
-                                    title: 'normalized moisture',
-                                    zeroline: false
-                                },
-                              
+                                showlegend:false,
+                                // yaxis: {
+                                //     title: 'normalized moisture',
+                                //     zeroline: false
+                                // },
                                 autosize: true
                             }
-                            let Boxplots = <Plot id="BoxplotAN" 
-                             data={BoxplotRenderData} 
-                             layout={plot_layout}  
-                             useResizeHandler={true} />
+
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.BoxplotAN.plot = <div> {Boxplots}</div>;
+                            workflow.BoxplotAN.plot = <div><Plot id="BoxplotAN" data={BoxplotRenderData}  style={plot_style} layout={plot_layout}  useResizeHandler={true} /></div>;
                             workflow.BoxplotAN.data = BoxplotRenderData;
                             this.setState({ workflow: workflow });
                         } else {
@@ -1931,7 +1613,7 @@ class Analysis extends Component {
                                 let boxplotData = {
                                     y: BoxplotsData.data[i],
                                     type: "box",
-                                    name: workflow2.groups[i],
+                                    name: result.data.col[i],
                                     marker: {
                                         color: BoxplotsData.color[i]
                                     }
@@ -1939,14 +1621,11 @@ class Analysis extends Component {
                                 BoxplotRenderData.push(boxplotData)
                             }
                             let plot_layout = { showlegend: false }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9, }
-                            let Boxplots = <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
+                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             workflow.BoxplotBN.data = BoxplotRenderData;
-                            workflow.BoxplotBN.plot = <div> {Boxplots}</div>;
-                            workflow.BoxplotBN.layout = plot_layout;
-                            workflow.BoxplotBN.style = plot_style;
+                            workflow.BoxplotBN.plot = <div> <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/></div>;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
@@ -1961,7 +1640,7 @@ class Analysis extends Component {
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
                     }
-                }).catch(error => console.log(error));
+                });
         } catch (error) {
             document.getElementById("message-pre-boxplot").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
@@ -2013,7 +1692,7 @@ class Analysis extends Component {
                             workflow.progressing = false;
                             this.setState({ workflow: workflow });
                         }
-                    }).catch(error => console.log(error));
+                    })
             } catch (error) {
                 document.getElementById("message-pre-maplot").innerHTML = error;
                 let workflow = Object.assign({}, this.state.workflow);
@@ -2323,7 +2002,7 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         let workflow = Object.assign({}, this.state.workflow);
-                        if (result.data === "undefined" || Object.keys(result.data).length === 0) {
+                        if (result.data === "undefined" || Object.keys(result.data).length === 0 || result.data.indexOf('{"files":') < 0) {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                             workflow.uploading = false;
                             workflow.progressing = false;
@@ -2334,7 +2013,7 @@ class Analysis extends Component {
                             });
                             return;
                         }
-                        var data = result.data.substr(result.data.indexOf('{"files":'),result.data.length)
+                        var data = result.data.substr(result.data.indexOf('{"files":'), result.data.length)
                         if (typeof(data) === "undefined" || data == "") {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                             workflow.uploading = false;
@@ -2371,7 +2050,6 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                        this.resetGSMDisplay(this.checkAllDIVOverlap());
                     } else {
                         document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                         workflow.uploading = false;
@@ -2379,12 +2057,21 @@ class Analysis extends Component {
                         this.setState({
                             workflow: workflow
                         });
-                        document.getElementById("message-gsm").innerHTML = result.data
+                        document.getElementById("message-gsm").innerHTML = result.msg
                         document.getElementById("message-gsm").nextSibling.innerHTML = ""
                         //message.error('load data fails.');
                     }
                 })
-                .catch(error => console.log(error));
+                .catch(error => {
+                    document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+                    workflow.uploading = false;
+                    workflow.progressing = false;
+                    this.setState({
+                        workflow: workflow
+                    });
+                    document.getElementById("message-gsm").innerHTML = error
+                    document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                });
         } catch (err) {
             //change button style
             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
@@ -2527,9 +2214,14 @@ class Analysis extends Component {
                         }
                         return response.json();
                     }).then(result => {
+                        if (result.status == 200) {
+                            workflow.QueueModalvisible = true;
+                        } else {
+                            workflow.QueueModalvisible = false;
+                            document.getElementById("message-use-queue").innerHTML = result.data;
+                        }
                         workflow.uploading = false;
                         workflow.progressing = false;
-                        workflow.QueueModalvisible = true;
                         this.setState({
                             workflow: workflow
                         });
@@ -2661,6 +2353,7 @@ class Analysis extends Component {
 
                             this.hideWorkFlow();
                         } else {
+                            document.getElementById("message-gsm").innerHTML = result.data
                             workflow.progressing = false;
                             this.setState({
                                 workflow: workflow
@@ -2795,46 +2488,15 @@ class Analysis extends Component {
     }
 
     handleErrors = (response) => {
-        if (!response.ok) { throw Error(response.statusText); }
+        if (!response.ok) {
+            throw Error(response.statusText);
+            // Display fallback UI
+            this.resetWorkFlowProject();
+            document.getElementById("message-gsm").innerHTML = response.statusText;
+            document.getElementById("message-gsm").nextSibling.innerHTML = "";
+        }
         return response;
     }
-
-    resetGSMDisplay = (next) => {
-        while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[0].getElementsByClassName("ant-table-pagination")[0] == "undefined") {
-            console.log("watch gsm display")
-        }
-        this.checkAllDIVOverlap();
-    }
-
-    resetDEGDisplay = (next) => {
-        while (document.getElementById("deg_tag1").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
-            console.log("watch deg display")
-        }
-        this.checkAllDIVOverlap();
-    }
-
-    resetPathWayUPDisplay = (next) => {
-        while (document.getElementById("deg_tag2").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
-            console.log("watch pathways_up display")
-        }
-        this.checkAllDIVOverlap();
-    }
-
-    resetPathWayDownDisplay = (next) => {
-        while (document.getElementById("deg_tag3").getElementsByClassName("ant-table-pagination")[0] == "undefined") {
-            console.log("watch pathways_down display")
-        }
-        this.checkAllDIVOverlap();
-    }
-
-
-    resetSSGSEADisplay = (next) => {
-        while (document.getElementById("tab_analysis").getElementsByClassName("ant-tabs-tabpane")[4].getElementsByClassName("ant-table-pagination")[0] == "undefined") {
-            console.log("watch SSGSEA display")
-        }
-        this.checkAllDIVOverlap();
-    }
-
 
 
     hideWorkFlow = () => {
@@ -2852,7 +2514,6 @@ class Analysis extends Component {
         this.resetNUSE();
         this.resetPCA();
         this.resetBoxPlotBN();
-        this.checkAllDIVOverlap();
     }
 
     showWorkFlow = () => {
@@ -2865,7 +2526,6 @@ class Analysis extends Component {
         this.resetNUSE();
         this.resetPCA();
         this.resetBoxPlotBN();
-        this.checkAllDIVOverlap();
 
     }
 
@@ -2935,23 +2595,11 @@ class Analysis extends Component {
     resetRLE = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.RLE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
-        workflow.RLE.layout = {
-            showlegend: false,
-            autosize: true
-        };
+        workflow.RLE.layout = { showlegend: false, autosize: true };
         if (!workflow.RLE.data == "") {
-            workflow.RLE.plot = <Plot 
-                             id="BoxplotAN" 
-                             data={workflow.RLE.data} 
-                             layout={workflow.RLE.layout}  
-                             style={workflow.RLE.style} 
-                             useResizeHandler={true}
-                             />
+            workflow.RLE.plot = <Plot id="BoxplotAN" data={workflow.RLE.data} layout={workflow.RLE.layout}  style={workflow.RLE.style} useResizeHandler={true} />
         }
-
-        this.setState({
-            workflow: workflow
-        });
+        this.setState({ workflow: workflow });
     }
     resetNUSE = () => {
         let workflow = Object.assign({}, this.state.workflow);
@@ -2961,15 +2609,8 @@ class Analysis extends Component {
             autosize: true
         };
         if (!workflow.NUSE.data == "") {
-            workflow.NUSE.plot = <Plot 
-                             id="BoxplotAN" 
-                             data={workflow.NUSE.data} 
-                             layout={workflow.NUSE.layout}  
-                             style={workflow.NUSE.style} 
-                             useResizeHandler={true}
-                             />
+            workflow.NUSE.plot = <Plot id="BoxplotAN" data={workflow.NUSE.data} layout={workflow.NUSE.layout} style={workflow.NUSE.style} useResizeHandler={true}/>
         }
-
         this.setState({
             workflow: workflow
         });
@@ -2982,22 +2623,18 @@ class Analysis extends Component {
                 document.getElementById("li-about").className = "active"
                 document.getElementById("li-analysis").className = ""
                 document.getElementById("li-help").className = ""
-
                 document.getElementById("tab_about").className = ""
                 document.getElementById("tab_analysis").className = "hide"
                 document.getElementById("tab_help").className = "hide"
             }
-
             if (tab == "analysis") {
                 document.getElementById("li-about").className = ""
                 document.getElementById("li-analysis").className = "active"
                 document.getElementById("li-help").className = ""
-
                 document.getElementById("tab_about").className = "hide"
                 document.getElementById("tab_analysis").className = ""
                 document.getElementById("tab_help").className = "hide"
             }
-
             if (tab == "help") {
                 document.getElementById("tab_about").className = "hide"
                 document.getElementById("tab_analysis").className = "hide"
@@ -3042,6 +2679,8 @@ class Analysis extends Component {
                 .then(function(response) {
                     if (!response.ok) {
                         throw Error(response.statusText);
+                        document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to complete, please contact admin or try again. ";
+                        document.getElementById("message-gsm").nextSibling.innerHTML = "";
                     }
                     return response.json();
                 }).then(result => {
@@ -3092,7 +2731,7 @@ class Analysis extends Component {
                         });
                         this.getSSGSEAGeneHeatMap();
                         this.hideWorkFlow();
-                        this.resetGSMDisplay(this.checkAllDIVOverlap());
+                        this.resetGSMDisplay();
                     } else {
                         if (document.getElementById("message-gsm") != null) {
                             document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to complete, please contact admin or try again. ";
@@ -3103,7 +2742,6 @@ class Analysis extends Component {
                             workflow: workflow
                         });
                     }
-                    this.checkAllDIVOverlap();
                 }).catch(error => console.log(error));
         } catch (err) {
             workflow.uploading = false;
@@ -3129,16 +2767,12 @@ class Analysis extends Component {
                 }
                 return response.json();
             }).then(result => {
-                if (result.status == 200) {
-                    result = result.data;
-                    let workflow = Object.assign({}, this.state.workflow);
-                    workflow.numberOfTasksInQueue = result;
-                    this.setState({
-                        workflow: workflow
-                    });
-                } else {
-                    // do nothing
-                }
+                result = result.data;
+                let workflow = Object.assign({}, this.state.workflow);
+                workflow.numberOfTasksInQueue = result;
+                this.setState({
+                    workflow: workflow
+                });
             }).catch(error => console.log(error));
     }
 
@@ -3195,7 +2829,6 @@ class Analysis extends Component {
                             resetPathWayUPDisplay={this.resetPathWayUPDisplay}
                             resetPathWayDownDisplay={this.resetPathWayDownDisplay}
                             resetSSGSEADisplay={this.resetSSGSEADisplay}
-                            checkAllDIVOverlap ={this.checkAllDIVOverlap}
                             upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} 
                             upateCurrentWorkingTab={this.upateCurrentWorkingTab}
                             assignGroup={this.assignGroup} 

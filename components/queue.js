@@ -97,9 +97,10 @@ awsHander.sender = function(message, to,errHandler) {
                 logger.info("[Queue] Send Messages to Queue fails")
                 logger.info("Err")
                 logger.info(err.stack)
-                errHandler(err,data);
+                errHandler(true,err,data);
             } else {
                 logger.info("[Queue] Send Messages to Queue success");
+                errHandler(false,err,data);
             }
         });
     }
