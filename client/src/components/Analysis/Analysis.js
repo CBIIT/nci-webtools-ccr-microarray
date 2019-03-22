@@ -2334,7 +2334,7 @@ class Analysis extends Component {
                             });
                             return;
                         }
-                        var data = result.data.split("+++loadGSE+++\"")[1]
+                        var data = result.data.substr(result.data.indexOf('{"files":'),result.data.length)
                         if (typeof(data) === "undefined" || data == "") {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                             workflow.uploading = false;
