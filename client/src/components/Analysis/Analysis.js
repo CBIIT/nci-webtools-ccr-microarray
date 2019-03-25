@@ -1432,7 +1432,8 @@ class Analysis extends Component {
                                 let input = {
                                     projectID: workflow.projectID,
                                     pics: result.data,
-                                    groups: workflow.groups
+                                    groups: workflow.groups,
+                                    dataList:workflow.dataList
                                 }
                                 workflow.list_mAplotBN = result.data;
                                 workflow.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
@@ -1462,7 +1463,8 @@ class Analysis extends Component {
             let input = {
                 projectID: workflow2.projectID,
                 pics: workflow2.list_mAplotAN,
-                groups: workflow2.groups
+                groups: workflow2.groups,
+                dataList:workflow2.dataList
             }
             workflow2.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
             workflow2.progressing = false;
@@ -1673,8 +1675,9 @@ class Analysis extends Component {
                                 let input = {
                                     projectID: workflow.projectID,
                                     pics: result.data,
-                                    groups: workflow.groups
-                                };
+                                    groups: workflow.groups,
+                                    dataList:workflow.dataList
+                                }
                                 workflow.list_mAplotBN = result.data;
                                 workflow.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
                                 workflow.progressing = false;
@@ -1704,7 +1707,8 @@ class Analysis extends Component {
             let input = {
                 projectID: workflow2.projectID,
                 pics: workflow2.list_mAplotBN,
-                groups: workflow2.groups
+                groups: workflow2.groups,
+                dataList:workflow2.dataList
             }
             workflow2.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
             this.setState({ workflow: workflow2 });
@@ -2731,7 +2735,6 @@ class Analysis extends Component {
                         });
                         this.getSSGSEAGeneHeatMap();
                         this.hideWorkFlow();
-                        this.resetGSMDisplay();
                     } else {
                         if (document.getElementById("message-gsm") != null) {
                             document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to complete, please contact admin or try again. ";
@@ -2742,11 +2745,14 @@ class Analysis extends Component {
                             workflow: workflow
                         });
                     }
-                }).catch(error => console.log(error));
+                });
         } catch (err) {
             workflow.uploading = false;
             workflow.progressing = false;
-            console.log(err);
+            if (document.getElementById("message-gsm") != null) {
+                            document.getElementById("message-gsm").innerHTML = err;
+                            document.getElementById("message-gsm").nextSibling.innerHTML = "";
+                        }
             this.setState({
                 workflow: workflow
             });
