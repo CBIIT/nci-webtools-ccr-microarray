@@ -31,7 +31,6 @@ class DataBox extends Component {
     }
 
     handleTabChange = (key) => {
-        let callback =  this.props.checkAllDIVOverlap();
         if (key == "Pre-normalization_QC_Plots") {
             let type = window.tag_pre_plot_status;
             switch (type) {
@@ -115,55 +114,37 @@ class DataBox extends Component {
                 case "":
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
-                    }else{
-                        this.props.resetDEGDisplay(callback);
                     }
                     break;
                 case "pathways_up":
                     if (this.props.data.pathways_up.data.length == 0) {
                         this.props.getPathwayUp();
-                    }else{
-                        this.props.resetPathWayUPDisplay(callback);
                     }
                     break;
                 case "pathways_down":
                     if (this.props.data.pathways_down.data.length == 0) {
                         this.props.getPathwayDown();
-                    }else{
-                        this.props.resetPathWayDownDisplay(callback);
                     }
                     break;
                 case "deg":
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
-                    }else{
-                        this.props.resetDEGDisplay(callback);
                     }
                     break;;
 
                 default:
                     if (this.props.data.diff_expr_genes.data.length == 0) {
                         this.props.getDEG();
-                    }else{
-                        this.props.resetDEGDisplay(callback);
                     }
             }
         }
         if (key == "GSM_1") {
-            console.log(key)
-            this.props.resetGSMDisplay(callback)
+           // do nothing
         }
 
         if (key == "ssGSEA_Results") {
-            console.log(key)
-            // if ssGSEA data length ==0 mean, the result is empty 
-            // or user re-run constrast the program clean the data.
-            // reload the data in this tag
             if (this.props.data.ssGSEA.data.length == 0) {
                 this.props.getssGSEA();
-            }else{
-                let callBack =this.props.checkAllDIVOverlap();
-                this.props.resetSSGSEADisplay(callBack);
             }
         }
        
@@ -301,7 +282,6 @@ class DataBox extends Component {
                 /></TabPane>);
             degBox = (<TabPane tab="DEG-Enrichments Results"  key="DEG-Enrichments_Results">
                 <DEGBox  key="degBox" data={this.props.data} 
-                        checkAllDIVOverlap ={this.props.checkAllDIVOverlap}
                          changeLoadingStatus={this.props.changeLoadingStatus}
                          getDEG={this.props.getDEG}
                          getPathwayUp={this.props.getPathwayUp}
@@ -321,7 +301,6 @@ class DataBox extends Component {
         if (this.props.data.done_gsea) {
             ssGSEABox = (<TabPane  key="ssGSEA_Results" tab="ssGSEA Results" >
                 <SSGSEATable  key="ssGSEA_Results_sstab_table"  
-                              checkAllDIVOverlap ={this.props.checkAllDIVOverlap}
                               exportGSEA={this.props.exportGSEA}  
                               getssGSEA={this.props.getssGSEA} 
                               handleGeneChange={this.props.handleGeneChange}  

@@ -27,7 +27,10 @@ class SSGSEATable extends Component {
         });
     }
 
+    componentDidCatch(error, info) {
+        document.getElementById("message-ssgsea").innerHTML = error;
 
+    }
 
     handleTableChange = (pagination, filters, sorter) => {
 

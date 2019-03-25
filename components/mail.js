@@ -22,7 +22,7 @@ let emailTemplate = function (code,time,link,submit_time,project_id){
         "<p><b>&nbsp;&nbsp;Results</b></p>" +
         "<p>&nbsp;&nbsp;The results of your job are available through the following link.</p>" +
         "<p>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""+link+"\" target=\"_blank\">View Results</a></p>"+
-        "<p>&nbsp;&nbsp;Please note that result links above will be available for the next 7 days.</p>" +
+        "<p>&nbsp;&nbsp;Please note that result links above will be available for the next 14 days.</p>" +
         "<br/>"+
         "<p>Please contact us at <a href=\"NCIMicroArrayWebAdmin@mail.nih.gov\" target=\"_top\"> NCIMicroArrayWebAdmin@mail.nih.gov</a> for more information or if you have any questions.</p>"+
         "<br/>"+

@@ -13,7 +13,6 @@ class DEGBox extends Component {
         this.state = { content: "No Data" };
     }
 
-
     handleSelectionChange(event) {
         let value = event.target.value;
         var list = document.getElementsByClassName("deg_plot");
@@ -39,16 +38,15 @@ class DEGBox extends Component {
         if (value == "deg_tag4") {
             this.props.upateCurrentWorkingTabAndObject("volcanoPlot")
         }
-        this.props.checkAllDIVOverlap();
     }
 
     render() {
 
         let tabs = [<div key="deg_tag1" id="deg_tag1" className="deg_plot">
-                        <DEGTable exportDEG={this.props.exportDEG} checkAllDIVOverlap ={this.props.checkAllDIVOverlap} changeDeg={this.props.changeDeg} data={this.props.data} getDEG={this.props.getDEG} />
+                        <DEGTable exportDEG={this.props.exportDEG} changeDeg={this.props.changeDeg} data={this.props.data} getDEG={this.props.getDEG} />
                    </div>,
-            <div key="deg_tag2_pathway_up" id="deg_tag2" className="deg_plot hide" ><PUGTable checkAllDIVOverlap ={this.props.checkAllDIVOverlap} exportPathwayUp={this.props.exportPathwayUp} changeLoadingStatus={this.props.changeLoadingStatus} changePathways_up={this.props.changePathways_up} data={this.props.data}  getPathwayUp={this.props.getPathwayUp}/></div>,
-            <div key="deg_tag3_pathway_down" id="deg_tag3" className="deg_plot hide"><PDGTable checkAllDIVOverlap ={this.props.checkAllDIVOverlap} exportPathwayDown={this.props.exportPathwayDown}  changeLoadingStatus={this.props.changeLoadingStatus} changePathways_down={this.props.changePathways_down} data={this.props.data}  getPathwayDown={this.props.getPathwayDown} /></div>,
+            <div key="deg_tag2_pathway_up" id="deg_tag2" className="deg_plot hide" ><PUGTable exportPathwayUp={this.props.exportPathwayUp} changeLoadingStatus={this.props.changeLoadingStatus} changePathways_up={this.props.changePathways_up} data={this.props.data}  getPathwayUp={this.props.getPathwayUp}/></div>,
+            <div key="deg_tag3_pathway_down" id="deg_tag3" className="deg_plot hide"><PDGTable exportPathwayDown={this.props.exportPathwayDown}  changeLoadingStatus={this.props.changeLoadingStatus} changePathways_down={this.props.changePathways_down} data={this.props.data}  getPathwayDown={this.props.getPathwayDown} /></div>,
             <div key="deg_tag4_volcano" id="deg_tag4" className="deg_plot hide">{this.props.data.volcanoPlot}</div>
         ]
 

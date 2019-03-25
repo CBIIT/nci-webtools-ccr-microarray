@@ -100,17 +100,10 @@ router.post('/loadGSE', function(req, res) {
     R.execute("wrapper.R", data, function(err, returnValue) {
         if (err) {
             logger.info("API:/loadGSE result ", "status 404 ");
-            logger.warn("API:/loadGSE result ", "status 404 ", err);
-            res.json({
-                status: 404,
-                msg: returnValue
-            });
+            res.json({ status: 404, msg: returnValue });
         } else {
             logger.info("API:/loadGSE result ", "status 200 ");
-            res.json({
-                status: 200,
-                data: returnValue
-            });
+            res.json({ status: 200, data: returnValue });
         }
     });
 });
@@ -145,15 +138,9 @@ router.post('/pathwaysHeapMap', function(req, res) {
 
     R.execute("wrapper.R", data, function(err, returnValue) {
         if (err) {
-            res.json({
-                status: 404,
-                msg: returnValue
-            });
+            res.json({ status: 404, msg: err });
         } else {
-            res.json({
-                status: 200,
-                data: returnValue
-            });
+            res.json({ status: 200, data: returnValue });
         }
     });
 });
@@ -188,10 +175,7 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
     R.execute("wrapper.R", data, function(err, returnValue) {
         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/ss_result.txt", 'utf8', function(err, returnValue) {
             if (err) {
-                res.json({
-                    status: 404,
-                    msg: err
-                });
+                res.json({ status: 404, msg: err });
             } else {
                 let re = JSON.parse(returnValue)
                 // store return value in session (deep copy)
@@ -201,10 +185,7 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
                     req.session.runContrastData.ssGSEA = d.ssGSEA;
                 }
                 logger.info("Get Contrast result success")
-                res.json({
-                    status: 200,
-                    data: ""
-                });
+                res.json({ status: 200, data: "" });
             }
         })
 
@@ -245,12 +226,18 @@ router.post("/qAnalysis", function(req, res) {
 
     function send(d) {
         logger.info("[Queue] Send Message to Queue", JSON.stringify(d));
-        queue.awsHander.sender(JSON.stringify(d), d.email, function(err, data) {
-            logger.info("[Queue] Send Message to Queue fails", JSON.stringify(err));
-            llogger.info("[Queue] Send fails message  to client ", data.email)
-            let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED) ";
-            let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
-            emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+        queue.awsHander.sender(JSON.stringify(d), d.email, function(flag, err, data) {
+            if (flag) {
+                logger.info("[Queue] Send Message to Queue fails", JSON.stringify(err));
+                logger.info("[Queue] Send fails message  to client ", data.email)
+                let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED) ";
+                let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
+                emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+                res.json({ status: 404, data: "Send Message to Queue fails" });
+            }else{
+                res.json({ status: 200, data: "" });
+            }
+
         });
     }
     logger.info("[S3]upload file to S3")
@@ -259,30 +246,26 @@ router.post("/qAnalysis", function(req, res) {
     queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function(flag) {
         if (flag) {
             send(data);
+
         } else {
             logger.info("[S3] upload files to S3 fails");
             let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED) ";
             let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
             emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+            res.json({ status: 404, data: "upload files to S3 fails" });
         }
 
     })
-     res.json({  status: 200, data: ""});
+
 
 })
 
 router.post("/getCurrentNumberOfJobsinQueue", function(req, res) {
     let d = queue.awsHander.getQueueAttributes(["ApproximateNumberOfMessages"], function(result) {
         if (result != -1) {
-            res.json({
-                status: 200,
-                data: result.Attributes.ApproximateNumberOfMessages
-            });
+            res.json({ status: 200, data: result.Attributes.ApproximateNumberOfMessages });
         } else {
-            res.json({
-                status: 200,
-                data: -1
-            });
+            res.json({ status: 404, data: -1 });
         }
     });
 })
@@ -292,41 +275,40 @@ router.post('/getResultByProjectId', function(req, res) {
     logger.info("[Get contrast result from file]",
         "projectId:", req.body.projectId
     );
-    queue.awsHander.download(req.body.projectId, config.uploadPath, function() {
-        fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
-            if (err) {
-                res.json({
-                    status: 404,
-                    msg: err
-                });
-            } else {
-                let re = JSON.parse(returnValue)
-                // store return value in session (deep copy)
-                req.session.runContrastData = JsonToObject(re);
-                req.session.option = req.session.runContrastData.group_1 + req.session.runContrastData.group_2 + req.session.runContrastData.genSet;
-                req.session.groups = req.session.runContrastData.groups;
-                req.session.projectId = req.session.runContrastData.projectId;
-                logger.info("store data in req.session")
-                let return_data = "";
-                return_data = {
-                    mAplotBN: req.session.runContrastData.maplotBN,
-                    mAplotAN: req.session.runContrastData.maplotAfter,
-                    group_1: req.session.runContrastData.group_1,
-                    group_2: req.session.runContrastData.group_2,
-                    groups: req.session.runContrastData.groups,
-                    projectId: req.session.runContrastData.projectId,
-                    accessionCode: req.session.runContrastData.accessionCode,
-                    gsm: re.GSM,
-                    mAplotBN: re.maplotBN,
-                    mAplotAN: re.maplotAfter
+    queue.awsHander.download(req.body.projectId, config.uploadPath, function(flag) {
+        if (flag) {
+            fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
+                if (err) {
+                    res.json({ status: 404, msg: err });
+                } else {
+                    let re = JSON.parse(returnValue)
+                    // store return value in session (deep copy)
+                    req.session.runContrastData = JsonToObject(re);
+                    req.session.option = req.session.runContrastData.group_1 + req.session.runContrastData.group_2 + req.session.runContrastData.genSet;
+                    req.session.groups = req.session.runContrastData.groups;
+                    req.session.projectId = req.session.runContrastData.projectId;
+                    logger.info("store data in req.session")
+                    let return_data = "";
+                    return_data = {
+                        mAplotBN: req.session.runContrastData.maplotBN,
+                        mAplotAN: req.session.runContrastData.maplotAfter,
+                        group_1: req.session.runContrastData.group_1,
+                        group_2: req.session.runContrastData.group_2,
+                        groups: req.session.runContrastData.groups,
+                        projectId: req.session.runContrastData.projectId,
+                        accessionCode: req.session.runContrastData.accessionCode,
+                        gsm: re.GSM,
+                        mAplotBN: re.maplotBN,
+                        mAplotAN: re.maplotAfter
+                    }
+                    logger.info("Get Contrast result success")
+                    res.json({ status: 200, data: return_data });
                 }
-                logger.info("Get Contrast result success")
-                res.json({
-                    status: 200,
-                    data: return_data
-                });
-            }
-        });
+            });
+        } else {
+            res.json({ status: 404, msg: "err" });
+        }
+
     });
 });
 
@@ -363,10 +345,7 @@ router.post('/runContrast', function(req, res) {
     R.execute("wrapper.R", data, function(err, returnValue) {
         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
             if (err) {
-                res.json({
-                    status: 404,
-                    msg: err
-                });
+                res.json({ status: 404, data: JSON.stringify(err) });
             } else {
                 let re = JSON.parse(returnValue)
                 if (re.GSM) {
@@ -390,15 +369,9 @@ router.post('/runContrast', function(req, res) {
                         mAplotAN: re.maplotAfter
                     }
                     logger.info("Get Contrast result success")
-                    res.json({
-                        status: 200,
-                        data: return_data
-                    });
+                    res.json({ status: 200, data: return_data });
                 } else {
-                    res.json({
-                        status: 404,
-                        data: re
-                    });
+                    res.json({ status: 404, data: re });
                 }
             }
         })
@@ -415,7 +388,7 @@ function sin_to_hex(i, phase, size) {
     return hex.length === 1 ? "0" + hex : hex;
 }
 
-function getPlots(req, type) {
+function getPlots(req, res, type) {
     let return_data = "";
     let uniqueColorCodeArray = "";
     let size = "";
@@ -535,90 +508,52 @@ function getPlots(req, type) {
         default:
             return_data = "";
     }
-    return return_data
+    //response
+    res.json({ status: 200, data: return_data });
 }
 
-
-
 router.post('/getHistplotBN', function(req, res) {
-    res.json({
-        status: 200,
-        data: getPlots(req, "getHistplotBN")
-    });
+    getPlots(req, res, "getHistplotBN")
 });
 
 router.post('/getHistplotAN', function(req, res) {
-    res.json({
-        status: 200,
-        data: getPlots(req, "getHistplotAN")
-    });
+    getPlots(req, res, "getHistplotAN")
 });
 
 router.post('/getBoxplotAN', function(req, res) {
-    res.json({
-        status: 200,
-        data: getPlots(req, "getBoxplotAN")
-    });
+    getPlots(req, res, "getBoxplotAN")
 });
 
 router.post('/getMAplotAN', function(req, res) {
-    console.time("API_getMAplotAN")
-    var dd = getPlots(req, "getMAplotAN");
-    console.time("API_getMAplotAN")
-    res.json({
-        status: 200,
-        data: dd
-    });
+    getPlots(req, res, "getMAplotAN");
 });
 
 router.post('/getPCA', function(req, res) {
-    res.json({
-        status: 200,
-        data: getPlots(req, "getPCA")
-    });
+    getPlots(req, res, "getPCA")
 });
 
 router.post('/getHeatmapolt', function(req, res) {
-    res.json({
-        status: 200,
-        data: getPlots(req, "getHeatmapolt")
-    });
+    getPlots(req, res, "getHeatmapolt")
 });
 
 router.post('/getBoxplotAN', function(req, res) {
-    res.json({
-        status: 200,
-        data: getPlots(req, "getBoxplotAN")
-    });
+    getPlots(req, res, "getBoxplotAN")
 });
 
 router.post('/getMAplotsBN', function(req, res) {
-    res.json({
-        status: 200,
-        data: getPlots(req, "getMAplotsBN")
-    });
+    getPlots(req, res, "getMAplotsBN")
 });
 
 router.post('/getBoxplotBN', function(req, res) {
-    res.json({
-        status: 200,
-        data: getPlots(req, "getBoxplotBN")
-    });
+    getPlots(req, res, "getBoxplotBN")
 });
 
 router.post('/getRLE', function(req, res) {
-    res.json({
-        status: 200,
-        data: getPlots(req, "getRLE")
-    });
+    getPlots(req, res, "getRLE")
 });
 
-
 router.post('/getNUSE', function(req, res) {
-    res.json({
-        status: 200,
-        data: getPlots(req, "getNUSE")
-    });
+    getPlots(req, res, "getNUSE")
 });
 
 

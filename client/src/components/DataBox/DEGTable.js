@@ -23,6 +23,11 @@ class DEGTable extends Component {
         });
     }
 
+    componentDidCatch(error, info) {
+        document.getElementById("message-deg").innerHTML = error;
+
+    }
+
     sorter = (field, order) => {
         if (!field) {
             field = "P.Value"

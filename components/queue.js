@@ -97,9 +97,10 @@ awsHander.sender = function(message, to,errHandler) {
                 logger.info("[Queue] Send Messages to Queue fails")
                 logger.info("Err")
                 logger.info(err.stack)
-                errHandler(err,data);
+                errHandler(true,err,data);
             } else {
                 logger.info("[Queue] Send Messages to Queue success");
+                errHandler(false,err,data);
             }
         });
     }
@@ -189,6 +190,7 @@ awsHander.download = (projectId, filePath, next) => {
             logger.info("[Queue] Download file from S3 fails")
             logger.info(params)
             logger.info(err.stack)
+            next(false)
         } else {
 
             
@@ -205,7 +207,7 @@ awsHander.download = (projectId, filePath, next) => {
                 filePath + "/" + projectId +"/", true);
 
              setTimeout(function() {
-                next()
+                next(true)
             }, 2000);
         }
     })
