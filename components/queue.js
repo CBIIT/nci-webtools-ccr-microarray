@@ -212,7 +212,7 @@ awsHander.download = (projectId, filePath, next) => {
                             } else {
                                 let zip2 = new AdmZip(filePath + "/" + projectId + "/queue_upload.zip");
                                 //unzip 
-                                zip.extractAllTo(filePath + "/" + projectId + "/", true);
+                                zip2.extractAllTo(filePath + "/" + projectId + "/", true);
                                 setTimeout(function() {
                                     next(true)
                                 }, 2000);
