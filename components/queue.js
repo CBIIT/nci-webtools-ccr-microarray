@@ -204,7 +204,21 @@ awsHander.download = (projectId, filePath, next) => {
                         logger.info(err)
                         next(false)
                     } else {
-                        fs.writeFile(filePath + "/" + projectId + "/queue_upload.zip", data.Body, function(err) {
+                        saveFile(filePath,projectId,data,next);
+                    }
+                });
+            } else { // if the directory exist
+                saveFile(filePath,projectId,data,next);
+
+            }
+        }
+    })
+
+}
+
+
+function saveFile(filePath,projectId,data,next){
+    fs.writeFile(filePath + "/" + projectId + "/queue_upload.zip", data.Body, function(err) {
                             if (err) {
                                 logger.info("write file to disk fails")
                                 logger.info(err)
@@ -219,31 +233,7 @@ awsHander.download = (projectId, filePath, next) => {
 
                             }
                         })
-                    }
-                });
-            } else { // if the directory exist
-                fs.writeFile(filePath + "/" + projectId + "/queue_upload.zip", data.Body, function(err) {
-                    if (err) {
-                        logger.info("write file to disk fails")
-                        logger.info(err)
-                        next(false)
-                    } else {
-                        let zip2 = new AdmZip(filePath + "/" + projectId + "/queue_upload.zip");
-                        //unzip 
-                        zip2.extractAllTo(filePath + "/" + projectId + "/", true);
-                        setTimeout(function() {
-                            next(true)
-                        }, 2000);
-
-                    }
-                })
-
-            }
-        }
-    })
-
 }
-
 
 
 module.exports = {
