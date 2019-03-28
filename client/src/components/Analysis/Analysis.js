@@ -1612,16 +1612,24 @@ class Analysis extends Component {
                         if (result.data != "") {
                             let BoxplotRenderData = [];
                             let BoxplotsData = result.data;
+                            //get max Y value 
                             let maxY = Math.max(...BoxplotsData.data[0]);
+                            // get max x value 
                             let maxX = workflow.groups.length+0.5;
+                            // x,y value use to positiion the legend. 
+
+                            // get group with max word length 
                             const reducer2 =(accumulator,v,i,array)=>{
                                 if(accumulator.length<=v.length){
                                     accumulator = v;
                                 }
                                 return accumulator;
                             };
-                            let max_text_length = workflow.groups.reduce(reducer2,"a")
+                            let max_text_length = workflow.groups.reduce(reducer2,"a") // max text length 
+
+                            // use max text length to calculate the max text width.
                             let text_max_width = max_text_length.length*15;
+
                             // pick trace show legend. Only one trace in a group of trace need to show legend. 
                             const reducer = (accumulator, v, i, array) => {
                                 if (array.indexOf(v) === i)
@@ -1637,7 +1645,9 @@ class Analysis extends Component {
                                     });
                                 return accumulator
                             };
+
                             let legend_settings = workflow.groups.reduce(reducer, []);
+
                             for (let i = 0; i < result.data.col.length; i++) {
                                 let boxplotData = {
                                     y: BoxplotsData.data[i],
@@ -1648,15 +1658,11 @@ class Analysis extends Component {
                                     },
                                     hovertext: result.data.col[i]
                                 };
-
                                 BoxplotRenderData.push(boxplotData);
                             }
-
-
-
+                            // use annotations to show legend
                             let plot_layout = { showlegend: false,annotations:legend_settings }
                             let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
-
                             workflow.progressing = false;
                             workflow.BoxplotBN.data = BoxplotRenderData;
                             workflow.BoxplotBN.plot = <div> <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/></div>;
