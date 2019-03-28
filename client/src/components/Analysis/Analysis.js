@@ -1362,7 +1362,7 @@ class Analysis extends Component {
                                 BoxplotRenderData.push(boxplotData)
                             }
                             let plot_layout = {
-                                showlegend:false,
+                                showlegend: false,
                                 // yaxis: {
                                 //     title: 'normalized moisture',
                                 //     zeroline: false
@@ -1433,7 +1433,7 @@ class Analysis extends Component {
                                     projectID: workflow.projectID,
                                     pics: result.data,
                                     groups: workflow.groups,
-                                    dataList:workflow.dataList
+                                    dataList: workflow.dataList
                                 }
                                 workflow.list_mAplotBN = result.data;
                                 workflow.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
@@ -1464,7 +1464,7 @@ class Analysis extends Component {
                 projectID: workflow2.projectID,
                 pics: workflow2.list_mAplotAN,
                 groups: workflow2.groups,
-                dataList:workflow2.dataList
+                dataList: workflow2.dataList
             }
             workflow2.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
             workflow2.progressing = false;
@@ -1607,24 +1607,56 @@ class Analysis extends Component {
                 .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
+                        let workflow = Object.assign({}, this.state.workflow);
                         document.getElementById("message-pre-boxplot").innerHTML = "";
                         if (result.data != "") {
-                            let BoxplotRenderData = []
-                            let BoxplotsData = result.data
+                            let BoxplotRenderData = [];
+                            let BoxplotsData = result.data;
+                            let maxY = Math.max(...BoxplotsData.data[0]);
+                            let maxX = workflow.groups.length+0.5;
+                            const reducer2 =(accumulator,v,i,array)=>{
+                                if(accumulator.length<=v.length){
+                                    accumulator = v;
+                                }
+                                return accumulator;
+                            };
+                            let max_text_length = workflow.groups.reduce(reducer2,"a")
+                            let text_max_width = max_text_length.length*15;
+                            // pick trace show legend. Only one trace in a group of trace need to show legend. 
+                            const reducer = (accumulator, v, i, array) => {
+                                if (array.indexOf(v) === i)
+                                    accumulator.push({
+                                        x: maxX,
+                                        y: maxY-accumulator.length * maxY  / 1.5 / workflow.groups.length,
+                                        xref: 'x',
+                                        yref: 'y',
+                                        text: '<span style="text-align:right"><span style="color:'+BoxplotsData.color[i]+'">O</span>   '+v+'</span>',
+                                        showarrow: false,
+                                        width:text_max_width,
+                                        align: "left",
+                                    });
+                                return accumulator
+                            };
+                            let legend_settings = workflow.groups.reduce(reducer, []);
                             for (let i = 0; i < result.data.col.length; i++) {
                                 let boxplotData = {
                                     y: BoxplotsData.data[i],
                                     type: "box",
-                                    name: result.data.col[i],
+                                    name: BoxplotsData.col[i],
                                     marker: {
                                         color: BoxplotsData.color[i]
-                                    }
-                                }
-                                BoxplotRenderData.push(boxplotData)
+                                    },
+                                    hovertext: result.data.col[i]
+                                };
+
+                                BoxplotRenderData.push(boxplotData);
                             }
-                            let plot_layout = { showlegend: false }
+
+
+
+                            let plot_layout = { showlegend: false,annotations:legend_settings }
                             let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
-                            let workflow = Object.assign({}, this.state.workflow);
+
                             workflow.progressing = false;
                             workflow.BoxplotBN.data = BoxplotRenderData;
                             workflow.BoxplotBN.plot = <div> <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/></div>;
@@ -1676,7 +1708,7 @@ class Analysis extends Component {
                                     projectID: workflow.projectID,
                                     pics: result.data,
                                     groups: workflow.groups,
-                                    dataList:workflow.dataList
+                                    dataList: workflow.dataList
                                 }
                                 workflow.list_mAplotBN = result.data;
                                 workflow.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
@@ -1708,7 +1740,7 @@ class Analysis extends Component {
                 projectID: workflow2.projectID,
                 pics: workflow2.list_mAplotBN,
                 groups: workflow2.groups,
-                dataList:workflow2.dataList
+                dataList: workflow2.dataList
             }
             workflow2.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
             this.setState({ workflow: workflow2 });
@@ -2750,9 +2782,9 @@ class Analysis extends Component {
             workflow.uploading = false;
             workflow.progressing = false;
             if (document.getElementById("message-gsm") != null) {
-                            document.getElementById("message-gsm").innerHTML = err;
-                            document.getElementById("message-gsm").nextSibling.innerHTML = "";
-                        }
+                document.getElementById("message-gsm").innerHTML = err;
+                document.getElementById("message-gsm").nextSibling.innerHTML = "";
+            }
             this.setState({
                 workflow: workflow
             });

@@ -59,14 +59,15 @@ function qAnalysis(data, emailto, endCallback) {
     queue.awsHander.download(message.projectId, config.uploadPath, function(flag) {
         if (flag) {
             r(message, function() {
+                queue.awsHander.del(data.Messages[0].ReceiptHandle)
                 endCallback();
                 clearInterval(setVisibility);
-                queue.awsHander.del(data.Messages[0].ReceiptHandle)
             })
         } else {
+            queue.awsHander.del(data.Messages[0].ReceiptHandle)
             endCallback();
             clearInterval(setVisibility);
-            queue.awsHander.del(data.Messages[0].ReceiptHandle)
+           
         }
     });
 }
