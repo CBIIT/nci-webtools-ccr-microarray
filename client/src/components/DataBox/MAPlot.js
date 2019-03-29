@@ -11,13 +11,15 @@ class MAPlot extends Component {
     }
     render() {
         let projectID = this.props.data.projectID;
-
         let pics = this.props.data.pics;
-
+        let dataList = this.props.data.dataList;
+        let tmp_pics =[];
+        pics.forEach(function(e,i){
+            tmp_pics.push([e+"@"+dataList[i].title])
+        })
+        pics = tmp_pics;
         let groups = this.props.data.groups;
-
         let unique_groups = groups.filter(function(item, i, ar) { return ar.indexOf(item) === i; });
-
         // reorder the group list, put ungroup to the end of list
         let _tmp =[];
         let unGroupLabel;
@@ -62,17 +64,24 @@ class MAPlot extends Component {
 
                 count = count + 1;
 
-                let link = "./images/" + projectID + unique_groups_pic[i][j];
+                let link = "./images/" + projectID + unique_groups_pic[i][j].split("@")[0];
+                let title =unique_groups_pic[i][j].split("@")[1];
                 if (panels[i]) {
                 	
-                    panels[i].push(<div className="col-md-3" key={"mAplotBN"+count}  > <img  src={link } alt="MAplot"/> </div>);
+                    panels[i].push(<div className="col-md-3" key={"mAplotBN"+count}  >
+                                        <div className="maplot-title"> {title} </div>
+                                         <div> <img  src={link } alt="MAplot"/></div>
+                                </div> );
 
                 } else {
-                    panels[i] = new Array(<div className="col-md-3" key={"mAplotBN"+count}  > <img  src={link } alt="MAplot"/> </div>);
+                    panels[i] = new Array(<div className="col-md-3" key={"mAplotBN"+count}  >
+                                            <div className="maplot-title"> {title} </div>
+                                            <div>  <img  src={link } alt="MAplot"/> </div>
+                     </div>);
 
                 }
             }
-            panels[i] = <Panel header={unique_groups[i] + "   ("+unique_groups_pic[i].length+" Samples )"} key={i} >
+            panels[i] = <Panel header={unique_groups[i] + "   ("+unique_groups_pic[i].length+unique_groups_pic[i].length==1?" Sample )":" Samples )"} key={i} >
             				<div className="row">
 								{panels[i]}
     						</div>

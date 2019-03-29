@@ -30,35 +30,35 @@ awsHander.getQueueUrl = function(next) {
     });
 }
 
-awsHander.upload = function(path, prex,next) {
-           
-            fs.readdir(path, function(err, items) {
-                for (var i = 0; i < items.length; i++) {
-                    let stat = fs.lstatSync(path + "/" + items[i]);
-                    if (stat.isFile()) {
-                        zip.addLocalFile(path + "/" + items[i]);
-                    }
-                }
-                zip.writeZip(path + "/queue_upload.zip");
-                let fileStream = fs.createReadStream(path + "/queue_upload.zip")
-                s3.putObject({
-                            Bucket: bucketName,
-                            Key: prex + "queue_upload.zip",
-                            Body: fileStream,
-                            CacheControl: 'no-cache',
-                        }, function(err, data) {
-                            logger.info("uplad finish")
-                            if(err){
-                                logger.info("uplad err:"+err);
-                                logger.info("uplad err stack:"+err.stack);
-                                next(false)
-                            }else{
-                                next(true);
-                            }
-                            
-                  });
-            });
-       
+awsHander.upload = function(path, prex, next) {
+
+    fs.readdir(path, function(err, items) {
+        for (var i = 0; i < items.length; i++) {
+            let stat = fs.lstatSync(path + "/" + items[i]);
+            if (stat.isFile()) {
+                zip.addLocalFile(path + "/" + items[i]);
+            }
+        }
+        zip.writeZip(path + "/queue_upload.zip");
+        let fileStream = fs.createReadStream(path + "/queue_upload.zip")
+        s3.putObject({
+            Bucket: bucketName,
+            Key: prex + "queue_upload.zip",
+            Body: fileStream,
+            CacheControl: 'no-cache',
+        }, function(err, data) {
+            logger.info("uplad finish")
+            if (err) {
+                logger.info("uplad err:" + err);
+                logger.info("uplad err stack:" + err.stack);
+                next(false)
+            } else {
+                next(true);
+            }
+
+        });
+    });
+
 }
 
 
@@ -83,7 +83,7 @@ awsHander.getQueueAttributes = function(attr, callback) {
 
 //sent message to queue.
 
-awsHander.sender = function(message, to,errHandler) {
+awsHander.sender = function(message, to, errHandler) {
     function send() {
         let params = {
             MessageBody: message,
@@ -97,10 +97,10 @@ awsHander.sender = function(message, to,errHandler) {
                 logger.info("[Queue] Send Messages to Queue fails")
                 logger.info("Err")
                 logger.info(err.stack)
-                errHandler(true,err,data);
+                errHandler(true, err, data);
             } else {
                 logger.info("[Queue] Send Messages to Queue success");
-                errHandler(false,err,data);
+                errHandler(false, err, data);
             }
         });
     }
@@ -114,7 +114,7 @@ awsHander.sender = function(message, to,errHandler) {
 
 }
 
-awsHander.receiver = function(next, endCallback,errHandler) {
+awsHander.receiver = function(next, endCallback, errHandler) {
     let params = {
         QueueUrl: global.queue_url,
         MaxNumberOfMessages: 1,
@@ -136,10 +136,10 @@ awsHander.receiver = function(next, endCallback,errHandler) {
                 let message = JSON.parse(data.Messages[0].Body)
 
                 if (message.domain && message.domain == "microarray") {
-                    
+
                     next(data, data.email, endCallback)
                 }
-            }else{
+            } else {
                 if (endCallback) { endCallback() };
             }
 
@@ -177,8 +177,8 @@ awsHander.changeMessageVisibility = function(receiptHandle, timeout) {
 }
 
 awsHander.download = (projectId, filePath, next) => {
-    
-    let key =config.queue_input_path+"/"+projectId+"/queue_upload.zip"
+
+    let key = config.queue_input_path + "/" + projectId + "/queue_upload.zip"
     var params = {
         Bucket: config.bucketName,
         Key: key
@@ -193,27 +193,47 @@ awsHander.download = (projectId, filePath, next) => {
             next(false)
         } else {
 
-            
-            // logger.info("[Queue] Download file from S3")
-            // logger.info("file")
-            // logger.info(filePath + "/" + projectId + "/" + key.replace("microarray/" + projectId + "/", ""))
-            fs.writeFile(filePath + "/" + projectId + "/queue_upload.zip", data.Body, function(err) {
-                if (err) {
-                    return console.log(err);
-                }
-            })
-            //unzip 
-            zip.extractAllTo(
-                filePath + "/" + projectId +"/", true);
 
-             setTimeout(function() {
-                next(true)
-            }, 2000);
+            //logger.info("[Queue] Download file from S3")
+            //logger.info("file")
+            logger.info(filePath + "/" + projectId + "/")
+            if (!fs.existsSync(filePath + "/" + projectId + "/")) {
+                fs.mkdir(filePath + "/" + projectId + "/", function(err) {
+                    if (err) {
+                        logger.info("create dir" + filePath + "/" + projectId + "/" + "  fails")
+                        logger.info(err)
+                        next(false)
+                    } else {
+                        saveFile(filePath,projectId,data,next);
+                    }
+                });
+            } else { // if the directory exist
+                saveFile(filePath,projectId,data,next);
+
+            }
         }
     })
 
 }
 
+
+function saveFile(filePath,projectId,data,next){
+    fs.writeFile(filePath + "/" + projectId + "/queue_upload.zip", data.Body, function(err) {
+                            if (err) {
+                                logger.info("write file to disk fails")
+                                logger.info(err)
+                                next(false)
+                            } else {
+                                let zip2 = new AdmZip(filePath + "/" + projectId + "/queue_upload.zip");
+                                //unzip 
+                                zip2.extractAllTo(filePath + "/" + projectId + "/", true);
+                                setTimeout(function() {
+                                    next(true)
+                                }, 2000);
+
+                            }
+                        })
+}
 
 
 module.exports = {

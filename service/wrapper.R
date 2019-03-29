@@ -159,7 +159,7 @@ process = function(){
                 
             },finally={
                    message("ssgseaPathways finally")
-                  file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
+                   file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
                    ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
                    saveRDS(ss_result,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
                            re<-list(

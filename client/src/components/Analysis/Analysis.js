@@ -1348,33 +1348,11 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         if (result.data != "") {
-                            let BoxplotRenderData = []
-                            let BoxplotsData = result.data
-                            for (let i = 0; i < result.data.col.length; i++) {
-                                let boxplotData = {
-                                    y: BoxplotsData.data[i],
-                                    type: "box",
-                                    name: result.data.col[i],
-                                    marker: {
-                                        color: BoxplotsData.color[i]
-                                    }
-                                }
-                                BoxplotRenderData.push(boxplotData)
-                            }
-                            let plot_layout = {
-                                showlegend:false,
-                                // yaxis: {
-                                //     title: 'normalized moisture',
-                                //     zeroline: false
-                                // },
-                                autosize: true
-                            }
-
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
                             let workflow = Object.assign({}, this.state.workflow);
+                            let render_data = this.generateBOXPLOT(result, workflow);
                             workflow.progressing = false;
-                            workflow.BoxplotAN.plot = <div><Plot id="BoxplotAN" data={BoxplotRenderData}  style={plot_style} layout={plot_layout}  useResizeHandler={true} /></div>;
-                            workflow.BoxplotAN.data = BoxplotRenderData;
+                            workflow.BoxplotAN.plot =render_data.plot;
+                            workflow.BoxplotAN.data = render_data.data;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
@@ -1432,7 +1410,8 @@ class Analysis extends Component {
                                 let input = {
                                     projectID: workflow.projectID,
                                     pics: result.data,
-                                    groups: workflow.groups
+                                    groups: workflow.groups,
+                                    dataList: workflow.dataList
                                 }
                                 workflow.list_mAplotBN = result.data;
                                 workflow.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
@@ -1462,7 +1441,8 @@ class Analysis extends Component {
             let input = {
                 projectID: workflow2.projectID,
                 pics: workflow2.list_mAplotAN,
-                groups: workflow2.groups
+                groups: workflow2.groups,
+                dataList: workflow2.dataList
             }
             workflow2.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
             workflow2.progressing = false;
@@ -1487,28 +1467,10 @@ class Analysis extends Component {
                     document.getElementById("message-pre-nuse").innerHTML = "";
                     let workflow = Object.assign({}, this.state.workflow);
                     if (result.status == 200) {
-                        let NUSERenderData = []
-                        let NUSEplotsData = result.data
-                        for (let i = 0; i < result.data.col.length; i++) {
-
-                            let boxplotData = {
-                                y: NUSEplotsData.data[i],
-                                type: "box",
-                                name: NUSEplotsData.col[i],
-                                marker: {
-                                    color: NUSEplotsData.color[i]
-                                }
-                            }
-                            NUSERenderData.push(boxplotData)
-                        }
-                        let plot_layout = { showlegend: false }
-                        let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9, }
-                        let NUSE = <Plot  data={NUSERenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/>
+                        let render_data = this.generateBOXPLOT(result, workflow);
                         workflow.progressing = false;
-                        workflow.NUSE.data = NUSERenderData;
-                        workflow.NUSE.plot = <div> {NUSE}</div>;
-                        workflow.NUSE.layout = plot_layout;
-                        workflow.NUSE.style = plot_style;
+                        workflow.NUSE.data = render_data.data;
+                        workflow.NUSE.plot = render_data.plot;
                         this.setState({ workflow: workflow });
                     } else {
                         document.getElementById("message-pre-nuse").innerHTML = result.msg;
@@ -1542,31 +1504,13 @@ class Analysis extends Component {
                     if (result.status == 200) {
                         document.getElementById("message-pre-rle").innerHTML = "";
                         if (result.data != "") {
-                            let RLERenderData = []
-                            let RLEplotsData = result.data
-                            for (let i = 0; i < result.data.col.length; i++) {
-                                let boxplotData = {
-                                    y: RLEplotsData.data[i],
-                                    type: "box",
-                                    name: RLEplotsData.col[i],
-                                    marker: {
-                                        color: RLEplotsData.color[i]
-                                    }
-                                }
-                                RLERenderData.push(boxplotData)
-                            }
-                            let plot_layout = { showlegend: false }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9, }
-                            let RLE = <Plot data={RLERenderData} layout={plot_layout}  style={plot_style}  useResizeHandler={true}/>
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.RLE.data = RLERenderData;
-                            workflow.RLE.plot = <div> {RLE}</div>;
-                            workflow.RLE.layout = plot_layout;
-                            workflow.RLE.style = plot_style;
+                            let render_data = this.generateBOXPLOT(result, workflow);
+                            workflow.RLE.data = render_data.data;
+                            workflow.RLE.plot = render_data.plot;
                             this.setState({ workflow: workflow });
                         } else {
-
                             let workflow = Object.assign({}, this.state.workflow);
                             workflow.RLE.plot = "No Data";
                             workflow.progressing = false;
@@ -1589,6 +1533,71 @@ class Analysis extends Component {
         }
     }
 
+    generateBOXPLOT(result, workflow) {
+
+        let BoxplotRenderData = [];
+        let BoxplotsData = result.data;
+        //get max Y value 
+        let maxY = Math.max(...BoxplotsData.data[0]);
+        let minY = Math.min(...BoxplotsData.data[0]);
+        let gap = maxY-minY;
+        // get max x value 
+        let maxX = workflow.groups.length + 0.5;
+        // x,y value use to positiion the legend. 
+
+        // get group with max word length 
+        const reducer2 = (accumulator, v, i, array) => {
+            if (accumulator.length <= v.length) {
+                accumulator = v;
+            }
+            return accumulator;
+        };
+        let max_text_length = workflow.groups.reduce(reducer2, "a"); // max text length 
+
+        // use max text length to calculate the max text width.
+        let text_max_width = max_text_length.length * 15;
+
+        // pick trace show legend. Only one trace in a group of trace need to show legend. 
+        const reducer = (accumulator, v, i, array) => {
+            if (array.indexOf(v) === i)
+                accumulator.push({
+                    x: maxX,
+                    y: maxY - accumulator.length * gap / 10,
+                    xref: 'x',
+                    yref: 'y',
+                    text: '<span style="text-align:right"><span style="color:' + BoxplotsData.color[i] + '">O</span>   ' + v + '</span>',
+                    showarrow: false,
+                    width: text_max_width,
+                    align: "left",
+                });
+            return accumulator
+        };
+
+        let legend_settings = workflow.groups.reduce(reducer, []);
+
+        for (let i = 0; i < result.data.col.length; i++) {
+            let boxplotData = {
+                y: BoxplotsData.data[i],
+                type: "box",
+                name: BoxplotsData.col[i],
+                marker: {
+                    color: BoxplotsData.color[i]
+                },
+                hovertext: result.data.col[i]
+            };
+            BoxplotRenderData.push(boxplotData);
+        }
+        // use annotations to show legend
+        let plot_layout = { showlegend: false, annotations: legend_settings }
+        let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
+
+        return {
+                    data: BoxplotRenderData,
+                    plot: <div> <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/></div>
+                };
+    }
+
+
     getBoxplotBN() {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
@@ -1605,27 +1614,13 @@ class Analysis extends Component {
                 .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
+                        let workflow = Object.assign({}, this.state.workflow);
                         document.getElementById("message-pre-boxplot").innerHTML = "";
                         if (result.data != "") {
-                            let BoxplotRenderData = []
-                            let BoxplotsData = result.data
-                            for (let i = 0; i < result.data.col.length; i++) {
-                                let boxplotData = {
-                                    y: BoxplotsData.data[i],
-                                    type: "box",
-                                    name: result.data.col[i],
-                                    marker: {
-                                        color: BoxplotsData.color[i]
-                                    }
-                                }
-                                BoxplotRenderData.push(boxplotData)
-                            }
-                            let plot_layout = { showlegend: false }
-                            let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
-                            let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
-                            workflow.BoxplotBN.data = BoxplotRenderData;
-                            workflow.BoxplotBN.plot = <div> <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/></div>;
+                            let render_data = this.generateBOXPLOT(result, workflow);
+                            workflow.BoxplotBN.data = render_data.data;
+                            workflow.BoxplotBN.plot = render_data.plot;
                             this.setState({ workflow: workflow });
                         } else {
                             let workflow = Object.assign({}, this.state.workflow);
@@ -1673,8 +1668,9 @@ class Analysis extends Component {
                                 let input = {
                                     projectID: workflow.projectID,
                                     pics: result.data,
-                                    groups: workflow.groups
-                                };
+                                    groups: workflow.groups,
+                                    dataList: workflow.dataList
+                                }
                                 workflow.list_mAplotBN = result.data;
                                 workflow.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
                                 workflow.progressing = false;
@@ -1704,7 +1700,8 @@ class Analysis extends Component {
             let input = {
                 projectID: workflow2.projectID,
                 pics: workflow2.list_mAplotBN,
-                groups: workflow2.groups
+                groups: workflow2.groups,
+                dataList: workflow2.dataList
             }
             workflow2.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
             this.setState({ workflow: workflow2 });
@@ -2731,7 +2728,6 @@ class Analysis extends Component {
                         });
                         this.getSSGSEAGeneHeatMap();
                         this.hideWorkFlow();
-                        this.resetGSMDisplay();
                     } else {
                         if (document.getElementById("message-gsm") != null) {
                             document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to complete, please contact admin or try again. ";
@@ -2742,11 +2738,14 @@ class Analysis extends Component {
                             workflow: workflow
                         });
                     }
-                }).catch(error => console.log(error));
+                });
         } catch (err) {
             workflow.uploading = false;
             workflow.progressing = false;
-            console.log(err);
+            if (document.getElementById("message-gsm") != null) {
+                document.getElementById("message-gsm").innerHTML = err;
+                document.getElementById("message-gsm").nextSibling.innerHTML = "";
+            }
             this.setState({
                 workflow: workflow
             });
