@@ -2488,7 +2488,7 @@ class Analysis extends Component {
 
     handleErrors = (response) => {
         if (!response.ok) {
-            throw Error(response.statusText);
+            //throw Error(response.statusText);
             // Display fallback UI
             this.resetWorkFlowProject();
             document.getElementById("message-gsm").innerHTML = response.statusText;

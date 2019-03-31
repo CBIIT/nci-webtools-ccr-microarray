@@ -313,7 +313,7 @@ class PUGTable extends Component {
             width: "7%",
             sorter: false,
             render: (text, record, index) => {
-                if (text.length > 5) {
+                if (text.toString().length > 4) {
                     text = Number.parseFloat(text).toExponential(exponentialNum);
                 }
                 return <div className="single-line pathway_fdr" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -344,7 +344,7 @@ class PUGTable extends Component {
             width: "7%",
             sorter: false,
             render: (text, record, index) => {
-                if (text.length > 7) {
+                if (text.toString().length > 7) {
                     text = Number.parseFloat(text).toExponential(exponentialNum2);
                 }
                 return <div className="single-line pathway_ratio" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -403,7 +403,7 @@ class PUGTable extends Component {
             width: "7%",
             sorter: false,
             render: (text, record, index) => {
-                if (text.length > 7) {
+                if (text.toString().length > 7) {
                     text = Number.parseFloat(text).toExponential(exponentialNum2);
                 }
                 return <div className="single-line pathway_number_hits" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -435,7 +435,7 @@ class PUGTable extends Component {
             width: "7%",
             sorter: false,
             render: (text, record, index) => {
-                if (text.length > 7) {
+                if (text.toString().length > 7) {
                     text = Number.parseFloat(text).toExponential(exponentialNum2);
                 }
                 return <div className="single-line pathway_number_genes_pathway" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -467,7 +467,7 @@ class PUGTable extends Component {
             width: "7%",
             sorter: false,
             render: (text, record, index) => {
-                if (text.length > 7) {
+                if (text.toString().length > 7) {
                     text = Number.parseFloat(text).toExponential(exponentialNum2);
                 }
                 return <div className="single-line pathway_number_user_genes" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -534,14 +534,14 @@ class PUGTable extends Component {
                     "search_SOURCE": search_SOURCE,
                     "search_DESCRIPTION": search_DESCRIPTION,
                     "search_TYPE": search_TYPE,
-                    "search_p_value": search_p_value,
-                    "search_fdr": search_fdr,
-                    "search_RATIO": search_RATIO,
+                    "search_p_value": Number(search_p_value),
+                    "search_fdr": Number(search_fdr),
+                    "search_RATIO": Number(search_RATIO),
                     "search_GENE_LIST": search_GENE_LIST,
-                    "search_NUMBER_HITS": search_NUMBER_HITS,
-                    "search_NUMBER_GENES_PATHWAY": search_NUMBER_GENES_PATHWAY,
-                    "search_NUMBER_USER_GENES": search_NUMBER_USER_GENES,
-                    "search_TOTAL_NUMBER_GENES": search_TOTAL_NUMBER_GENES,
+                    "search_NUMBER_HITS": Number(search_NUMBER_HITS),
+                    "search_NUMBER_GENES_PATHWAY": Number(search_NUMBER_GENES_PATHWAY),
+                    "search_NUMBER_USER_GENES": Number(search_NUMBER_USER_GENES),
+                    "search_TOTAL_NUMBER_GENES": Number(search_TOTAL_NUMBER_GENES),
                 }
             })
         }
