@@ -2180,6 +2180,7 @@ class Analysis extends Component {
         workflow.preplots = defaultState.workflow.preplots;
         workflow.postplot = defaultState.workflow.postplot;
         workflow.list_mAplotBN ="";
+        workflow.list_mAplotAN="";
         workflow.volcanoPlot = "";
         this.setState({
             workflow: workflow
