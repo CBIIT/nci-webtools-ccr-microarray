@@ -81,7 +81,8 @@ class MAPlot extends Component {
 
                 }
             }
-            panels[i] = <Panel header={unique_groups[i] + "   ("+unique_groups_pic[i].length+unique_groups_pic[i].length==1?" Sample )":" Samples )"} key={i} >
+            let samples = unique_groups_pic[i].length==1?" Sample )":" Samples )";
+            panels[i] = <Panel header={unique_groups[i] + "   ("+unique_groups_pic[i].length+ samples} key={i} >
             				<div className="row">
 								{panels[i]}
     						</div>

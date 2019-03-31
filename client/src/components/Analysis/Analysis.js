@@ -2179,6 +2179,7 @@ class Analysis extends Component {
         reqBody.pathways_down = workflow.pathways_down;
         workflow.preplots = defaultState.workflow.preplots;
         workflow.postplot = defaultState.workflow.postplot;
+        workflow.list_mAplotBN ="";
         workflow.volcanoPlot = "";
         this.setState({
             workflow: workflow
