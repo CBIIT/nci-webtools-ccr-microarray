@@ -31,13 +31,13 @@ function polling() {
         try {
             queue.awsHander.receiver(qAnalysis, end, function(err) {
                 logger.info(err)
-                console.log("receiver err")
+                logger.info(("receiver err")
                 end()
             });
 
         } catch (err) {
             logger.info(err)
-            console.log("receiver err")
+            logger.info(("receiver err")
             end()
         }
         // Then notify the polling when your job is done:
@@ -51,20 +51,26 @@ function qAnalysis(data, emailto, endCallback) {
     let setVisibility = setInterval(function() {
         i = i + 1;
         if (i === 360) clearInterval(setVisibility); // pending for 6 hours then clearInterval
-        console.log("qAnalysis interval:", i);
+        logger.info("qAnalysis interval:", i);
         queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * 60)
     }, 30 * 1000);
     //console.log("projectId:" + message.projectId)
     queue.awsHander.download(message.projectId, config.uploadPath, function(flag) {
+         logger.info("Get R result ", flag);
         if (flag) {
             r(message, function() {
+
+                logger.info("del queue message");
                 queue.awsHander.del(data.Messages[0].ReceiptHandle)
                 endCallback();
+                logger.info("clear Visibility");
                 clearInterval(setVisibility);
             })
         } else {
+            logger.info("del queue message");
             queue.awsHander.del(data.Messages[0].ReceiptHandle)
             endCallback();
+             logger.info("clear Visibility");
             clearInterval(setVisibility);
            
         }
@@ -145,8 +151,9 @@ function r(data, endCallback) {
                     });
                 }
             });
-        }
-        //setTimeout(cleanData(data.projectId, config.uploadPath), 30 * 1000);
+        } 
+        logger.info("clear result");
+        setTimeout(cleanData(data.projectId, config.uploadPath), 30 * 1000);
     });
 }
 
