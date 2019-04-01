@@ -10,7 +10,7 @@ import imageExists from 'image-exists';
 import MAPlot from "../DataBox/MAPlot"
 
 const ButtonGroup = Button.Group;
-let defaultState = {
+const defaultState = {
     workflow: {
         tab_activeKey: "GSM_1",
         numberOfTasksInQueue: 0,
@@ -264,8 +264,8 @@ class Analysis extends Component {
 
     componentDidMount() {
         if (this.props.location.search && this.props.location.search != "") {
-            defaultState.workflow.progressing = true;
             this.state = Object.assign({}, defaultState);
+            this.state.workflow.progressing = true;
             this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
         }
         // listen windows resize event
@@ -1349,7 +1349,7 @@ class Analysis extends Component {
                             let workflow = Object.assign({}, this.state.workflow);
                             let render_data = this.generateBOXPLOT(result, workflow);
                             workflow.progressing = false;
-                            workflow.BoxplotAN.plot =render_data.plot;
+                            workflow.BoxplotAN.plot = render_data.plot;
                             workflow.BoxplotAN.data = render_data.data;
                             this.setState({ workflow: workflow });
                         } else {
@@ -1538,7 +1538,7 @@ class Analysis extends Component {
         //get max Y value 
         let maxY = Math.max(...BoxplotsData.data[0]);
         let minY = Math.min(...BoxplotsData.data[0]);
-        let gap = maxY-minY;
+        let gap = maxY - minY;
         // get max x value 
         let maxX = workflow.groups.length + 0.5;
         // x,y value use to positiion the legend. 
@@ -1590,9 +1590,9 @@ class Analysis extends Component {
         let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
 
         return {
-                    data: BoxplotRenderData,
-                    plot: <div> <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/></div>
-                };
+            data: BoxplotRenderData,
+            plot: <div> <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/></div>
+        };
     }
 
 
@@ -2167,18 +2167,132 @@ class Analysis extends Component {
         }
         // define action
         reqBody.actions = "runContrast";
-        workflow.diff_expr_genes = defaultState.workflow.diff_expr_genes;
+        workflow.diff_expr_genes={
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25
+            },
+            loading: true,
+            page_number: 1,
+            page_size: 25,
+            sorting: {
+                name: "P.Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "search_symbol": "",
+                "search_fc": "1.5",
+                "search_p_value": "0.05",
+                "search_adj_p_value": "",
+                "search_aveexpr": "",
+                "search_accnum": "",
+                "search_desc": "",
+                "search_entrez": "",
+                "search_probsetid": "",
+                "search_t": "",
+                "search_b": ""
+            }
+        };
         reqBody.deg = workflow.diff_expr_genes;
-        workflow.ssGSEA = defaultState.workflow.ssGSEA;
+        workflow.ssGSEA = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25,
+            },
+            loading: true,
+            page_size: 25,
+            page_number: 1,
+            sorting: {
+                name: "P.Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "name": "",
+                "search_logFC": "",
+                "search_Avg_Enrichment_Score": "",
+                "search_t": "",
+                "search_p_value": "",
+                "search_adj_p_value": "",
+                "search_b": "",
+            }
+        };
         reqBody.ssGSEA = workflow.ssGSEA;
-        workflow.pathways_up = defaultState.workflow.pathways_up;
+        workflow.pathways_up = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25,
+            },
+            sorting: {
+                name: "P_Value",
+                order: "ascend",
+            },
+            loading: true,
+            search_keyword: {
+                "search_PATHWAY_ID": "",
+                "search_SOURCE": "",
+                "search_DESCRIPTION": "",
+                "search_TYPE": "",
+                "search_p_value": "0.05",
+                "search_fdr": "",
+                "search_RATIO": "",
+                "search_GENE_LIST": "",
+                "search_NUMBER_HITS": "",
+                "search_NUMBER_GENES_PATHWAY": "",
+                "search_NUMBER_USER_GENES": "",
+                "search_TOTAL_NUMBER_GENES": "",
+            }
+        };
         reqBody.pathways_up = workflow.pathways_up;
-        workflow.pathways_down = defaultState.workflow.pathways_down;
+        workflow.pathways_down = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25,
+            },
+            loading: true,
+            sorting: {
+                name: "P_Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "search_PATHWAY_ID": "",
+                "search_SOURCE": "",
+                "search_DESCRIPTION": "",
+                "search_TYPE": "",
+                "search_p_value": "0.05",
+                "search_fdr": "",
+                "search_RATIO": "",
+                "search_GENE_LIST": "",
+                "search_NUMBER_HITS": "",
+                "search_NUMBER_GENES_PATHWAY": "",
+                "search_NUMBER_USER_GENES": "",
+                "search_TOTAL_NUMBER_GENES": "",
+            }
+        };
         reqBody.pathways_down = workflow.pathways_down;
-        workflow.preplots = defaultState.workflow.preplots;
-        workflow.postplot = defaultState.workflow.postplot;
-        workflow.list_mAplotBN ="";
-        workflow.list_mAplotAN="";
+        workflow.preplots = {
+            histplotBN: "",
+            list_mAplotBN: "",
+            NUSE: "",
+            RLE: "",
+            Boxplots: "",
+            list_mAplotBN: "",
+            histplotBN: "",
+        };
+        workflow.postplot = {
+            histplotAN: "",
+            list_mAplotAN: "",
+            Heatmapolt: "",
+            histplotAN: "",
+            list_mAplotAN: "",
+            Boxplots: "",
+            PCA: ""
+        };
+        workflow.list_mAplotBN = "";
+        workflow.list_mAplotAN = "";
         workflow.volcanoPlot = "";
         this.setState({
             workflow: workflow
@@ -2270,12 +2384,12 @@ class Analysis extends Component {
                                 // open the ssGSEA_Results
                                 type = "ssGSEA_Results";
                             }
-                            if (result.data.mAplotBN != "") {
-                                workflow.list_mAplotBN = result.data.mAplotBN;
-                            }
-                            if (result.data.mAplotAN != "") {
-                                workflow.list_mAplotAN = result.data.mAplotAN;
-                            }
+                            // if (result.data.mAplotBN != "") {
+                            //     workflow.list_mAplotBN = result.data.mAplotBN;
+                            // }
+                            // if (result.data.mAplotAN != "") {
+                            //     workflow.list_mAplotAN = result.data.mAplotAN;
+                            // }
                             switch (type) {
                                 case "getHistplotAN":
                                     this.getHistplotAN();
