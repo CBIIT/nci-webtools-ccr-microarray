@@ -2179,6 +2179,8 @@ class Analysis extends Component {
         reqBody.pathways_down = workflow.pathways_down;
         workflow.preplots = defaultState.workflow.preplots;
         workflow.postplot = defaultState.workflow.postplot;
+        workflow.list_mAplotBN ="";
+        workflow.list_mAplotAN="";
         workflow.volcanoPlot = "";
         this.setState({
             workflow: workflow
@@ -2486,7 +2488,7 @@ class Analysis extends Component {
 
     handleErrors = (response) => {
         if (!response.ok) {
-            throw Error(response.statusText);
+            //throw Error(response.statusText);
             // Display fallback UI
             this.resetWorkFlowProject();
             document.getElementById("message-gsm").innerHTML = response.statusText;

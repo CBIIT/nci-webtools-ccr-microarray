@@ -140,7 +140,7 @@ class SSGSEATable extends Component {
             sorter: false,
             width: "10%",
             render: (text, record, index) => {
-                 if(text.length>7){
+                 if(text.toString().length>7){
                     text =Number.parseFloat(text).toExponential(exponentialNum2);
                 }
                 return <div className="single-line" >
@@ -230,7 +230,7 @@ class SSGSEATable extends Component {
             sorter: false,
             width: "25%",
             render: (text, record, index) => {
-                if(text.length>7){
+                if(text.toString().length>7){
                     text =Number.parseFloat(text).toExponential(exponentialNum2);
                 }
                 return <div className="single-line" style={{"minWidth":"130px"}} >
@@ -287,7 +287,7 @@ class SSGSEATable extends Component {
             sorter: false,
             width: "10%",
             render: (text, record, index) => {
-                if(text.length>7){
+                if(text.toString().length>7){
                     text =Number.parseFloat(text).toExponential(exponentialNum2);
                 }
                 return <div className="single-line" >
@@ -313,12 +313,12 @@ class SSGSEATable extends Component {
                 },
                 search_keyword: {
                     "name": search_name,
-                    "search_logFC": search_logFC,
-                    "search_Avg_Enrichment_Score": search_Avg_Enrichment_Score,
-                    "search_t": search_t,
-                    "search_p_value": search_p_value,
-                    "search_adj_p_value": search_adj_p_value,
-                    "search_b": search_b,
+                    "search_logFC": Number(search_logFC),
+                    "search_Avg_Enrichment_Score": Number(search_Avg_Enrichment_Score),
+                    "search_t": Number(search_t),
+                    "search_p_value": Number(search_p_value),
+                    "search_adj_p_value": Number(search_adj_p_value),
+                    "search_b": Number(search_b)
                 }
             })
         }

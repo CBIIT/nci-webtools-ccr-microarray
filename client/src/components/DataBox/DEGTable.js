@@ -98,7 +98,7 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "6%",
                 render: (text, record, index) => {
-                    if (text.length > 7) {
+                    if (text.toString().length > 7) {
                         text = Number.parseFloat(text).toExponential(exponentialNum2);
                     }
                     return <div  className="deg_fc single-line"  style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.06>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
@@ -185,7 +185,7 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "8%",
                 render: (text, record, index) => {
-                    if (text.length > 7) {
+                    if (text.toString().length > 7) {
                         text = Number.parseFloat(text).toExponential(exponentialNum2);
                     }
                     return <div  className="aveexpr single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
@@ -369,7 +369,7 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "5%",
                 render: (text, record, index) => {
-                    if (text.length > 7) {
+                    if (text.toString().length > 7) {
                         text = Number.parseFloat(text).toExponential(exponentialNum2);
                     }
                     return <div  className="deg_b single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05:minWidth}}>
@@ -407,16 +407,16 @@ class DEGTable extends Component {
                 },
                 search_keyword: {
                     "search_symbol": search_symbol,
-                    "search_fc": search_fc,
-                    "search_p_value": search_p_value,
-                    "search_adj_p_value": search_adj_p_value,
-                    "search_aveexpr": search_aveexpr,
+                    "search_fc": Number(search_fc),
+                    "search_p_value": Number(search_p_value),
+                    "search_adj_p_value": Number(search_adj_p_value),
+                    "search_aveexpr": Number(search_aveexpr),
                     "search_accnum": search_accnum,
                     "search_desc": search_desc,
                     "search_entrez": search_entrez,
                     "search_probsetid": search_probsetid,
-                    "search_t": search_t,
-                    "search_b": search_b
+                    "search_t": Number(search_t),
+                    "search_b": Number(search_b),
                 }
             })
         }

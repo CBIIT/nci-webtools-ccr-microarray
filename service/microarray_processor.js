@@ -18,7 +18,6 @@ var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 queue.awsHander.getQueueUrl(function(flag) {
     if (flag) {
         logger.info("[Queue] Start queue");
-
         setTimeout(function() { polling(); }, 1000);
 
     } else {

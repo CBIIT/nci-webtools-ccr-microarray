@@ -129,6 +129,18 @@ class GSMData extends Component {
         currentState.pagination.current = 1;
         document.getElementById("gsm-drop-down").innerHTML = e.key
         let renderData = currentState.data;
+        if (this.state.term != "") {
+            renderData =[];
+            for (var i = currentState.data.length - 1; i >= 0; i--) {
+                let flag = false;
+                if (currentState.data[i]["gsm"].includes(this.state.term)) flag = true;
+                if (currentState.data[i]["title"].includes(this.state.term)) flag = true;
+                if (currentState.data[i]["description"].includes(this.state.term)) flag = true;
+                if (flag) {
+                    renderData.push(currentState.data[i])
+                }
+            }
+        }
 
         // sort data
         if (currentState.sorter.field == "gsm") {
@@ -181,17 +193,7 @@ class GSMData extends Component {
             }
         }
 
-        if (this.state.term != "") {
-            for (var i = currentState.data.length - 1; i >= 0; i--) {
-                let flag = false;
-                if (currentState.data[i]["gsm"].includes(this.state.term)) flag = true;
-                if (currentState.data[i]["title"].includes(this.state.term)) flag = true;
-                if (currentState.data[i]["description"].includes(this.state.term)) flag = true;
-                if (flag) {
-                    renderData.push(currentState.data[i])
-                }
-            }
-        }
+     
         let start_index = currentState.pagination.pageSize * (currentState.pagination.current - 1)
         let end_index = currentState.pagination.pageSize * (currentState.pagination.current)
         if (end_index > renderData.length) {
@@ -242,6 +244,20 @@ class GSMData extends Component {
         let renderData = set.data;
         set.sorter.field = sorter.field;
         set.sorter.order = sorter.order;
+
+        if (this.state.term != "") {
+            renderData =[];
+            for (var i = set.data.length - 1; i >= 0; i--) {
+                let flag = false;
+                if (set.data[i]["gsm"].includes(this.state.term)) flag = true;
+                if (set.data[i]["title"].includes(this.state.term)) flag = true;
+                if (set.data[i]["description"].includes(this.state.term)) flag = true;
+                if (flag) {
+                    renderData.push(set.data[i]);
+                }
+            }
+        }
+
         // sort data
         if (sorter.field == "gsm") {
             if (sorter.order == "descend") {
@@ -290,18 +306,6 @@ class GSMData extends Component {
                 renderData.sort(function(a, b) {
                     return !(a.groups.length > b.groups.length)
                 })
-            }
-        }
-
-        if (this.state.term != "") {
-            for (var i = set.data.length - 1; i >= 0; i--) {
-                let flag = false;
-                if (set.data[i]["gsm"].includes(this.state.term)) flag = true;
-                if (set.data[i]["title"].includes(this.state.term)) flag = true;
-                if (set.data[i]["description"].includes(this.state.term)) flag = true;
-                if (flag) {
-                    renderData.push(set.data[i])
-                }
             }
         }
 
