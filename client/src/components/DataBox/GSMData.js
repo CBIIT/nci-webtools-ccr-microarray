@@ -27,6 +27,8 @@ class GSMData extends Component {
     };
     constructor(props) {
         super(props);
+        this.state.renderData = this.props.data.dataList;
+        this.state.data=this.props.data.dataList;
     }
 
 
@@ -413,7 +415,7 @@ class GSMData extends Component {
                         <div>
                             <Search aria-label="search" placeholder = "Search text"
                                     className = "input-search-gsm"
-                                    onSearch = { value => this.setState({ term: value }) }
+                                    onSearch = { value => this.setState({ term: value ,renderData : this.props.data.dataList}) }
                             />
                         </div>
                         <div id="gsm-select">Display  
