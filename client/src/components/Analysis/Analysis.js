@@ -813,7 +813,6 @@ class Analysis extends Component {
                     workflow2.pathways_down.pagination = pagination;
 
                     this.setState({ workflow: workflow2 });
-                    this.resetPathWayDownDisplay();
                 } else {
                     document.getElementById("message-pdg").innerHTML = result.msg;
                 }
@@ -1032,7 +1031,6 @@ class Analysis extends Component {
                     workflow2.diff_expr_genes.data = result.data.records;
                     workflow2.diff_expr_genes.pagination = pagination;
                     this.setState({ workflow: workflow2 });
-                    this.resetDEGDisplay();
                 } else {
                     document.getElementById("message-deg").innerHTML = result.msg;
                 }
@@ -2826,10 +2824,6 @@ class Analysis extends Component {
                   </div>
                 <DataBox    data={this.state.workflow} 
                             resetGSMDisplay={this.resetGSMDisplay}
-                            resetDEGDisplay={this.resetDEGDisplay}
-                            resetPathWayUPDisplay={this.resetPathWayUPDisplay}
-                            resetPathWayDownDisplay={this.resetPathWayDownDisplay}
-                            resetSSGSEADisplay={this.resetSSGSEADisplay}
                             upateCurrentWorkingTabAndObject={this.upateCurrentWorkingTabAndObject} 
                             upateCurrentWorkingTab={this.upateCurrentWorkingTab}
                             assignGroup={this.assignGroup} 
