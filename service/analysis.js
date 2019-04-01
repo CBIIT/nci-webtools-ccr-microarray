@@ -756,28 +756,28 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
                     }
                 }
                 if (search_keyword.search_p_value != "") {
-                    if (r["P_Value"] <= parseFloat(search_keyword.search_p_value)) {
+                    if (parseFloat(r["P_Value"]) <= parseFloat(search_keyword.search_p_value)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_fdr != "") {
-                    if (r["FDR"] <= parseFloat(search_keyword.search_fdr)) {
+                    if (parseFloat(r["FDR"]) <= parseFloat(search_keyword.search_fdr)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_RATIO != "") {
-                    if (r["Ratio"] <= parseFloat(search_keyword.search_RATIO)) {
+                    if (parseFloat(r["Ratio"]) <= parseFloat(search_keyword.search_RATIO)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_NUMBER_HITS != "") {
-                    if (r["Number_Hits"] <= parseFloat(search_keyword.search_NUMBER_HITS)) {
+                    if (parseFloat(r["Number_Hits"]) <= parseFloat(search_keyword.search_NUMBER_HITS)) {
                         flag = true;
                     } else {
                         return false;
@@ -791,21 +791,21 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
                     }
                 }
                 if (search_keyword.search_NUMBER_GENES_PATHWAY != "") {
-                    if (r["Number_Genes_Pathway"] <= parseFloat(search_keyword.search_NUMBER_GENES_PATHWAY)) {
+                    if (parseFloat(r["Number_Genes_Pathway"]) <= parseFloat(search_keyword.search_NUMBER_GENES_PATHWAY)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_NUMBER_USER_GENES != "") {
-                    if (r["Number_User_Genes"] <= parseFloat(search_keyword.search_NUMBER_USER_GENES)) {
+                    if (parseFloat(r["Number_User_Genes"]) <= parseFloat(search_keyword.search_NUMBER_USER_GENES)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_TOTAL_NUMBER_GENES != "") {
-                    if (r["Total_Number_Genes"] <= parseFloat(search_keyword.search_TOTAL_NUMBER_GENES)) {
+                    if (parseFloat(r["Total_Number_Genes"]) <= parseFloat(search_keyword.search_TOTAL_NUMBER_GENES)) {
                         flag = true;
                     } else {
                         return false;
@@ -917,35 +917,35 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
                     }
                 }
                 if (search_keyword.search_t != "") {
-                    if (r["V4"] <= parseFloat(search_keyword.search_t)) {
+                    if (parseFloat(r["V4"]) <= parseFloat(search_keyword.search_t)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_p_value != "") {
-                    if (r["V5"] <= parseFloat(search_keyword.search_p_value)) {
+                    if (parseFloat(r["V5"]) <= parseFloat(search_keyword.search_p_value)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_Avg_Enrichment_Score != "") {
-                    if (r["V3"] <= parseFloat(search_keyword.search_Avg_Enrichment_Score)) {
+                    if (parseFloat(r["V3"]) <= parseFloat(search_keyword.search_Avg_Enrichment_Score)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_adj_p_value != "") {
-                    if (r["V6"] <= parseFloat(search_keyword.search_adj_p_value)) {
+                    if (parseFloat(r["V6"]) <= parseFloat(search_keyword.search_adj_p_value)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_b != "") {
-                    if (r["V7"] <= parseFloat(search_keyword.search_b)) {
+                    if (parseFloat(r["V7"]) <= parseFloat(search_keyword.search_b)) {
                         flag = true;
                     } else {
                         return false;
@@ -1030,28 +1030,28 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
                     }
                 }
                 if (search_keyword.search_adj_p_value != "") {
-                    if (r['adj.P.Val'] <= parseFloat(search_keyword.search_adj_p_value)) {
+                    if (parseFloat(r['adj.P.Val']) <= parseFloat(search_keyword.search_adj_p_value)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_aveexpr != "") {
-                    if (r.AveExpr <= parseFloat(search_keyword.search_aveexpr)) {
+                    if (parseFloat(r.AveExpr) <= parseFloat(search_keyword.search_aveexpr)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_b != "") {
-                    if (r.B <= parseFloat(search_keyword.search_b)) {
+                    if (parseFloat(r.B) <= parseFloat(search_keyword.search_b)) {
                         flag = true;
                     } else {
                         return false;
                     }
                 }
                 if (search_keyword.search_p_value != "") {
-                    if (r["P.Value"] <= parseFloat(search_keyword.search_p_value)) {
+                    if (parseFloat(r["P.Value"]) <= parseFloat(search_keyword.search_p_value)) {
                         flag = true;
                     } else {
                         return false;
@@ -1094,7 +1094,7 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
                 }
 
                 if (search_keyword.search_t != "") {
-                    if (r.t <= parseFloat(search_keyword.search_t)) {
+                    if (parseFloat(r.t) <= parseFloat(search_keyword.search_t)) {
                         flag = true;
                     } else {
                         return false;
