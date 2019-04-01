@@ -13,11 +13,23 @@ class DEGTable extends Component {
         this.sorter = this.sorter.bind(this);
     }
 
+
+
+ handleMenuClick = (e) => {
+        document.getElementById("deg-drop-down").innerHTML = e.key;
+         this.props.getDEG({
+            page_size: parseInt(e.key),
+            page_number: 1,
+            sorting: this.props.data.diff_expr_genes.sorting,
+            search_keyword: this.props.data.diff_expr_genes.search_keyword
+        });
+    }
+
+
     handleTableChange = (pagination, filters, sorter) => {
         this.props.getDEG({
             page_size: pagination.pageSize,
             page_number: pagination.current,
-
             sorting: this.props.data.diff_expr_genes.sorting,
             search_keyword: this.props.data.diff_expr_genes.search_keyword
         });
