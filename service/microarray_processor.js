@@ -31,13 +31,13 @@ function polling() {
         try {
             queue.awsHander.receiver(qAnalysis, end, function(err) {
                 logger.info(err)
-                logger.info(("receiver err")
+                logger.info("receiver err")
                 end()
             });
 
         } catch (err) {
             logger.info(err)
-            logger.info(("receiver err")
+            logger.info("receiver err")
             end()
         }
         // Then notify the polling when your job is done:
