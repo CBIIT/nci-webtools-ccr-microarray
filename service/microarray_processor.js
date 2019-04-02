@@ -56,7 +56,7 @@ function qAnalysis(data, emailto, endCallback) {
     }, 30 * 1000);
     //console.log("projectId:" + message.projectId)
     queue.awsHander.download(message.projectId, config.uploadPath, function(flag) {
-         logger.info("Get R result ", flag);
+        logger.info("Get R result ", flag);
         if (flag) {
             r(message, function() {
 
@@ -70,9 +70,9 @@ function qAnalysis(data, emailto, endCallback) {
             logger.info("del queue message");
             queue.awsHander.del(data.Messages[0].ReceiptHandle)
             endCallback();
-             logger.info("clear Visibility");
+            logger.info("clear Visibility");
             clearInterval(setVisibility);
-           
+
         }
     });
 }
@@ -151,9 +151,9 @@ function r(data, endCallback) {
                     });
                 }
             });
-        } 
+        }
         logger.info("clear result");
-        setTimeout(cleanData(data.projectId, config.uploadPath), 30 * 1000);
+        setTimeout(function() { cleanData(data.projectId, config.uploadPath) }, 30 * 1000);
     });
 }
 
