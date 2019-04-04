@@ -2603,7 +2603,12 @@ class Analysis extends Component {
             //throw Error(response.statusText);
             // Display fallback UI
             this.resetWorkFlowProject();
-            document.getElementById("message-gsm").innerHTML = response.statusText;
+            if(response.statusText != ""){
+                document.getElementById("message-gsm").innerHTML = response.statusText;
+            }else{
+                document.getElementById("message-gsm").innerHTML = "Network issue, response.status : " + response.status;
+            }
+            
             document.getElementById("message-gsm").nextSibling.innerHTML = "";
         }
         return response;

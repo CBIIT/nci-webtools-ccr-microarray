@@ -31,13 +31,13 @@ function polling() {
         try {
             queue.awsHander.receiver(qAnalysis, end, function(err) {
                 logger.info(err)
-                logger.info(("receiver err")
+                logger.info("receiver err")
                 end()
             });
 
         } catch (err) {
             logger.info(err)
-            logger.info(("receiver err")
+            logger.info("receiver err")
             end()
         }
         // Then notify the polling when your job is done:
@@ -56,7 +56,7 @@ function qAnalysis(data, emailto, endCallback) {
     }, 30 * 1000);
     //console.log("projectId:" + message.projectId)
     queue.awsHander.download(message.projectId, config.uploadPath, function(flag) {
-         logger.info("Get R result ", flag);
+        logger.info("Get R result ", flag);
         if (flag) {
             r(message, function() {
 
@@ -70,9 +70,9 @@ function qAnalysis(data, emailto, endCallback) {
             logger.info("del queue message");
             queue.awsHander.del(data.Messages[0].ReceiptHandle)
             endCallback();
-             logger.info("clear Visibility");
+            logger.info("clear Visibility");
             clearInterval(setVisibility);
-           
+
         }
     });
 }
@@ -122,6 +122,8 @@ function r(data, endCallback) {
             let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
             let html = emailer.emailFailedTemplate(code, secondToDate(end / 1000), data.submit, d[1])
             emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+            logger.info("clear result");
+            cleanData(data.projectId, config.uploadPath);
 
         } else {
             fs.readFile(config.uploadPath + "/" + data.projectId + "/result.txt", 'utf8', function(err, returnValue) {
@@ -131,7 +133,8 @@ function r(data, endCallback) {
                     let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
                     let html = emailer.emailFailedTemplate(code, secondToDate(end / 1000), data.submit, d[1])
                     emailer.sendMail(config.mail.from, data.email, subject, "text", html)
-
+                    logger.info("clear result");
+                    cleanData(data.projectId, config.uploadPath);
                 } else {
                     queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function(flag) {
                         if (flag) {
@@ -148,12 +151,13 @@ function r(data, endCallback) {
                             let html = emailer.emailFailedTemplate(code, secondToDate(end / 1000), data.submit, d[1])
                             emailer.sendMail(config.mail.from, data.email, subject, "text", html)
                         }
+                        logger.info("clear result");
+                        cleanData(data.projectId, config.uploadPath);
                     });
                 }
             });
-        } 
-        logger.info("clear result");
-        setTimeout(cleanData(data.projectId, config.uploadPath), 30 * 1000);
+        }
+
     });
 }
 
