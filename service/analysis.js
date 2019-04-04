@@ -235,6 +235,7 @@ router.post("/qAnalysis", function(req, res) {
                 emailer.sendMail(config.mail.from, data.email, subject, "text", html)
                 res.json({ status: 404, data: "Send Message to Queue fails" });
             }else{
+                 logger.info("[Queue] Send Message to Queue success");
                 res.json({ status: 200, data: "" });
             }
 
@@ -245,6 +246,7 @@ router.post("/qAnalysis", function(req, res) {
     // // upload data
     queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function(flag) {
         if (flag) {
+            logger.info("[S3] upload files to S3 success");
             send(data);
 
         } else {
