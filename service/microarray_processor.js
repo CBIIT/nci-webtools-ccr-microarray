@@ -48,13 +48,16 @@ function qAnalysis(data, emailto, endCallback) {
     console.log("qAnalysis")
     let message = JSON.parse(data.Messages[0].Body)
     let i = 1;
+    queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * 90);
     let setVisibility = setInterval(function() {
         i = i + 1;
         if (i === 360) clearInterval(setVisibility); // pending for 6 hours then clearInterval
         logger.info("qAnalysis interval:", i);
-        queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * 60)
+        queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * 90);
     }, 30 * 1000);
-    //console.log("projectId:" + message.projectId)
+
+
+
     queue.awsHander.download(message.projectId, config.uploadPath, function(flag) {
         logger.info("Get R result ", flag);
         if (flag) {
