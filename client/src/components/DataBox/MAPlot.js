@@ -69,13 +69,11 @@ class MAPlot extends Component {
                 if (panels[i]) {
                 	
                     panels[i].push(<div className="col-md-3" key={"mAplotBN"+count}  >
-                                        <div className="maplot-title"> {title} </div>
                                          <div> <img  src={link } alt="MAplot"/></div>
                                 </div> );
 
                 } else {
                     panels[i] = new Array(<div className="col-md-3" key={"mAplotBN"+count}  >
-                                            <div className="maplot-title"> {title} </div>
                                             <div>  <img  src={link } alt="MAplot"/> </div>
                      </div>);
 
