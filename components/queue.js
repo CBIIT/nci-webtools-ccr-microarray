@@ -10,7 +10,7 @@ var awsHander = {};
 var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 var AdmZip = require('adm-zip');
-const zip = new AdmZip();
+
 awsHander.getQueueUrl = function(next) {
 
     var params = {
@@ -31,7 +31,7 @@ awsHander.getQueueUrl = function(next) {
 }
 
 awsHander.upload = function(path, prex, next) {
-
+    let zip = new AdmZip();
     fs.readdir(path, function(err, items) {
         for (var i = 0; i < items.length; i++) {
             let stat = fs.lstatSync(path + "/" + items[i]);
