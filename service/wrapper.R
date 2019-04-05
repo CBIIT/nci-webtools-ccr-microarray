@@ -7,8 +7,22 @@ library(oligo)
 library(Biobase)
 
 
+
 process = function(){
  tryCatch({
+        # GSE53163
+        # GSE66660
+        # GSE54336
+        #  GSE60518
+        # // GSE53552
+        # // GSE54017
+        # // GSE55457
+        # // GSE55584
+        # // GSE55235
+        # // GSE50790
+        # // GSE49800
+        # // GSE51143
+        # // GSE25628
         #args --van  --args code projectID groups action pDEGs foldDEGs pPathways  contrast-group1 contract-group2
         args <- commandArgs(trailingOnly=TRUE)
         action<-toString(args[2])

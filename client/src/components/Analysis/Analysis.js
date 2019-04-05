@@ -10,6 +10,23 @@ import imageExists from 'image-exists';
 import MAPlot from "../DataBox/MAPlot"
 
 const ButtonGroup = Button.Group;
+
+const httpErrorMessage ={
+    400:"Bad Request",
+    401:"Unauthorized",
+    404:"Not Found",
+    403:"Forbidden",
+    405:"Method Not Allowed",
+    408:"Request Timeout",
+    500:"Internal Server Error",
+    501:"Not Implemented",
+    502:"Bad Gateway",
+    503:"Service Unavailable",
+    504:"Gateway Timeout",
+    505:"HTTP Version Not Supported"
+}
+
+
 const defaultState = {
     workflow: {
         tab_activeKey: "GSM_1",
@@ -1540,7 +1557,7 @@ class Analysis extends Component {
         let minY = Math.min(...BoxplotsData.data[0]);
         let gap = maxY - minY;
         // get max x value 
-        let maxX = workflow.groups.length + 0.5;
+        let maxX = workflow.groups.length + 0.1 * workflow.groups.length;
         // x,y value use to positiion the legend. 
 
         // get group with max word length 
@@ -2606,12 +2623,16 @@ class Analysis extends Component {
             if(response.statusText != ""){
                 document.getElementById("message-gsm").innerHTML = response.statusText;
             }else{
-                document.getElementById("message-gsm").innerHTML = "Network issue, response.status : " + response.status;
+                let errorMessage =""
+                if(httpErrorMessage[response.status]) errorMessage = httpErrorMessage[response.status] ;
+                document.getElementById("message-gsm").innerHTML = "Error Code : " + response.status + "  " + errorMessage;
             }
             
             document.getElementById("message-gsm").nextSibling.innerHTML = "";
+
+        }else{
+            return response;
         }
-        return response;
     }
 
 
