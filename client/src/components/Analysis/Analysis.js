@@ -1557,7 +1557,7 @@ class Analysis extends Component {
         let minY = Math.min(...BoxplotsData.data[0]);
         let gap = maxY - minY;
         // get max x value 
-        let maxX = workflow.groups.length + 0.1 * workflow.groups.lengt;
+        let maxX = workflow.groups.length + 0.1 * workflow.groups.length;
         // x,y value use to positiion the legend. 
 
         // get group with max word length 
