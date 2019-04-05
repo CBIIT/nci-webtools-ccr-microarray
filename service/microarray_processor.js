@@ -54,7 +54,7 @@ function qAnalysis(data, emailto, endCallback) {
         if (i === 360) clearInterval(setVisibility); // pending for 6 hours then clearInterval
         logger.info("qAnalysis interval:", i);
         queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * 90);
-    }, 30 * 1000);
+    }, 45 * 1000);
 
 
 
