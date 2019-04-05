@@ -41,7 +41,9 @@ router.post('/upload', function(req, res) {
     // rename it to it's orignal name
     form.on('file', function(field, file) {
         number_of_files = number_of_files + 1;
-        fs.rename(file.path, path.join(form.uploadDir, file.name));
+        fs.rename(file.path, path.join(form.uploadDir, file.name), (err) => {
+            if (err) throw  logger.info("Rename  file name err" + err);
+        });
     });
     // log any errors that occur
     form.on('error', function(err) {
@@ -234,8 +236,8 @@ router.post("/qAnalysis", function(req, res) {
                 let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
                 emailer.sendMail(config.mail.from, data.email, subject, "text", html)
                 res.json({ status: 404, data: "Send Message to Queue fails" });
-            }else{
-                 logger.info("[Queue] Send Message to Queue success");
+            } else {
+                logger.info("[Queue] Send Message to Queue success");
                 res.json({ status: 200, data: "" });
             }
 
