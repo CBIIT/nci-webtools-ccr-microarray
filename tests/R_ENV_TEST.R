@@ -1,11 +1,11 @@
 library(mpstr)
 
-workspace <-paste0(getwd(),"/test_data/R_ENV_TEST")
+workspace <-paste0(getwd(),"/../../tmp")
 access_code <-"GSE20489"
 projectId<-"testGSE20489"
 listGroups<-c("T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","others","others","others","others")
 data_repo_path<-workspace
-config_path<-paste0(getwd(),"/test_data/R_ENV_TEST_CONFIG")
+config_path<-paste0(getwd(),"/../../data")
 
 cons<-"T1-T2"
 
