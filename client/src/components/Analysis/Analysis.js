@@ -1608,7 +1608,7 @@ class Analysis extends Component {
             showlegend: false,
             annotations: legend_settings,
             yaxis: {
-                title: BoxplotsData.ylable,
+                title: BoxplotsData.ylable[0],
                 zeroline: false
             }
         }
