@@ -184,7 +184,7 @@ process = function(){
              
              
             },error =function(cond){
-                
+                 message(cond)
             },finally={
                      if(ss_result==""){
                       ss_name_d= ""
@@ -193,6 +193,7 @@ process = function(){
                       ss_name_d=names(ss_result)
                       ss_data_d=ss_result[2:length(ss_result[,1]),]
                      }
+                    colorsD <-list(name=names(norm_celfiles[[10]]),colors=norm_celfiles[[10]])
                     re<-list(
                     ss_name=ss_name_d,
                     ss_data= ss_data_d,
@@ -215,7 +216,8 @@ process = function(){
                     group_2=cgroup2,
                     genSet=geneSet,
                     projectId=projectId,
-                    GSM=celfiles@phenoData@data
+                    GSM=celfiles@phenoData@data,
+                    colors=col2hex(celfiles@phenoData@data$colors)
                     )
 
                   write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))
