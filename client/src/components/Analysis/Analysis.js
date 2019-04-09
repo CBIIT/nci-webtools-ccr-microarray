@@ -1395,8 +1395,9 @@ class Analysis extends Component {
 
     getHistplotAN() {
         let workflow = Object.assign({}, this.state.workflow);
-        let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.svg";
-        let histplotAN = <div><img src={ histplotANLink }  alt="Histogram" /></div>;
+        let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.html";
+        let histplotAN = <iframe title="volcanoPlot" src={histplotANLink+"?"+this.uuidv4()}  width={'100%'} height={'600px'} frameBorder={'0'}/>;
+        //let histplotAN = <div><img src={ histplotANLink }  alt="Histogram" /></div>;
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
     }
@@ -1725,8 +1726,9 @@ class Analysis extends Component {
 
     getHistplotBN() {
         let workflow = Object.assign({}, this.state.workflow);
-        let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.svg";
-        let histplotBN = <div><img src={ histplotBNLink }  alt="Histogram" /></div>;
+        let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.html";
+        //let histplotBN = <div><img src={ histplotBNLink }  alt="Histogram" /></div>;
+        let histplotBN = <iframe title="volcanoPlot" src={histplotBNLink+"?"+this.uuidv4()}  width={'100%'} height={'600px'} frameBorder={'0'}/>;
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
     }
@@ -2375,9 +2377,6 @@ class Analysis extends Component {
                         }
                     }).then(this.handleErrors)
                     .then(function(response) {
-                        if (!response.ok) {
-                            throw Error(response.statusText);
-                        }
                         return response.json();
                     }).then(result => {
                         if (result.status == 200) {

@@ -1,11 +1,11 @@
 library(mpstr)
 
-workspace <-paste0(getwd(),"/../../tmp")
-access_code <-"GSE20489"
-projectId<-"testGSE20489"
-listGroups<-c("T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T1","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","T2","others","others","others","others")
+workspace <-paste0("/Users/cheny39/Documents/GitHub/apps/microarray/tmp")
+access_code <-"GSE37874"
+projectId<-"testGSE37874"
+listGroups<-c("T1","T1","T1","T1","T1","T2","T2","T2","others","others","others","others")
 data_repo_path<-workspace
-config_path<-paste0(getwd(),"/../../data")
+config_path<-paste0("/Users/cheny39/Documents/GitHub/apps/microarray/data")
 
 cons<-"T1-T2"
 
@@ -21,7 +21,7 @@ celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path)
 norm_celfiles = QCnorm(celfiles,data_repo_path)
 
 
-diff_expr_genes = diffExprGenes(norm_celfiles[[11]],cons,projectId,data_repo_path)       #Call function
+diff_expr_genes = diffExprGenes(norm_celfiles[[9]],cons,projectId,data_repo_path)       #Call function
       
 
 species2<-"human"
