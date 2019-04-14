@@ -1,13 +1,14 @@
+import { Spin, Icon, Button, Modal, Collapse } from 'antd';
 import React, { Component } from 'react';
 import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
 import About from '../About/About';
 import Help from '../Help/Help';
-import { Spin, Icon, Button, Modal, Collapse } from 'antd';
 import Plot from 'react-plotly.js';
 import XLSX from 'xlsx';
 import imageExists from 'image-exists';
-import MAPlot from "../DataBox/MAPlot"
+import MAPlot from "../DataBox/MAPlot";
+import CIframe from "../DataBox/CIframe";
 
 const ButtonGroup = Button.Group;
 
@@ -1198,19 +1199,19 @@ class Analysis extends Component {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
-        let HeatMapIframe = <div><iframe title={"Heatmap"} src={link}  width={'100%'} height={'600px'} frameBorder={'0'} /></div>
+        let HeatMapIframe = <CIframe title={"Heatmap"} link={link} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
     }
 
     getVolcanoPlot() {
         let workflow = Object.assign({}, this.state.workflow);
-        let volcanoPlot = <iframe title="volcanoPlot" src={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()}  width={'100%'} height={'600px'} frameBorder={'0'}/>;
+        let volcanoPlot = <CIframe title={"volcanoPlot"} link={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.volcanoPlot = <div>{volcanoPlot}</div>;
         this.setState({ workflow: workflow });
     }
 
-    onLoadComplete() {
+    onLoadComplete =()=> {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = false;
         this.setState({ workflow: workflow });
@@ -1392,16 +1393,21 @@ class Analysis extends Component {
             this.setState({ workflow: workflow });
         }
     }
-
     getHistplotAN() {
         let workflow = Object.assign({}, this.state.workflow);
         let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.html";
-        let histplotAN = <iframe title="volcanoPlot" src={histplotANLink+"?"+this.uuidv4()}  width={'100%'} height={'600px'} frameBorder={'0'}/>;
-        //let histplotAN = <div><img src={ histplotANLink }  alt="Histogram" /></div>;
+        //let histplotANLink ="http://localhost:9000/images/51c1f031e3fd42ef88cb39112c27ce34//heatmapAfterNorm213123.html"
+        // let histplotAN = <Ciframe onLoad={this.onLoadComplete}  src={histplotANLink+"?"+this.uuidv4()}  width={'100%'} height={'600px'} frameBorder={'0'}/>;
+       
+        let histplotAN = <CIframe title={"HistplotAN"} link={histplotANLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
     }
-
+    showLoading =()=>{
+        let workflow = Object.assign({}, this.state.workflow);
+         workflow.progressing = true;
+        this.setState({ workflow: workflow });
+    }
     getMAplotAN() {
         let workflow2 = Object.assign({}, this.state.workflow);
         if (workflow2.list_mAplotAN == "") {
@@ -1735,7 +1741,8 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.html";
         //let histplotBN = <div><img src={ histplotBNLink }  alt="Histogram" /></div>;
-        let histplotBN = <iframe title="volcanoPlot" src={histplotBNLink+"?"+this.uuidv4()}  width={'100%'} height={'600px'} frameBorder={'0'}/>;
+        let histplotBN = <CIframe title={"volcanoPlot"} link={histplotBNLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
+      
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
     }
