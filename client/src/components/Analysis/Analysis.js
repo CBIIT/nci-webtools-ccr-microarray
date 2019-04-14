@@ -1403,9 +1403,10 @@ class Analysis extends Component {
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
     }
-    showLoading =()=>{
+    showLoading =(title)=>{
         let workflow = Object.assign({}, this.state.workflow);
-         workflow.progressing = true;
+        workflow.progressing = true;
+        workflow.loading_info = title;
         this.setState({ workflow: workflow });
     }
     getMAplotAN() {

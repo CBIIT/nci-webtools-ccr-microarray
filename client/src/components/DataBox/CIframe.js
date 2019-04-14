@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class CIframe  extends Component {
   constructor(props) {
     super(props);
-    this.props.showLoading();
+    this.props.showLoading("Loading Plot ...");
   }
 
 hideSpinner = () => {
