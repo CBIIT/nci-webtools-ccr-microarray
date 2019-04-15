@@ -211,6 +211,7 @@ router.post("/qAnalysis", function(req, res) {
     data.domain = "microarray";
     data.submit = dateFormat(now, "yyyy-mm-dd, h:MM:ss TT");
     data.dataList = req.body.dataList;
+    data.normal = request.body.normal;
     let CEL = ""
     for (let i in req.body.dataList) {
         CEL = req.body.dataList[i] + "," + CEL;
@@ -294,6 +295,7 @@ router.post('/getResultByProjectId', function(req, res) {
                     logger.info("store data in req.session")
                     let return_data = "";
                     return_data = {
+                        normal:req.session.runContrastData.normal,
                         mAplotBN: req.session.runContrastData.maplotBN,
                         mAplotAN: req.session.runContrastData.maplotAfter,
                         group_1: req.session.runContrastData.group_1,
@@ -332,20 +334,10 @@ router.post('/runContrast', function(req, res) {
     data.push(req.body.group_2);
     data.push(req.body.species);
     data.push(req.body.genSet);
+    data.push(req.body.normal);
     data.push(req.body.source)
     data.push(config.configPath);
-    logger.info("API:/runContrast ",
-        "code:", req.body.code,
-        "groups:", req.body.groups,
-        "group_1:", req.body.group_1,
-        "group_2:", req.body.group_2,
-        "species:", req.body.species,
-        "genSet:", req.body.genSet,
-        "pssGSEA:", req.body.pssGSEA,
-        "foldssGSEA:", req.body.foldssGSEA,
-        "source:", req.body.source,
-        "data_repo_path:", config.uploadPath
-    );
+    logger.info("runContrast  R code " );
     R.execute("wrapper.R", data, function(err, returnValue) {
         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
             if (err) {
@@ -371,7 +363,8 @@ router.post('/runContrast', function(req, res) {
                         accessionCode: req.session.runContrastData.accessionCode,
                         gsm: re.GSM,
                         mAplotBN: re.maplotBN,
-                        mAplotAN: re.maplotAfter
+                        mAplotAN: re.maplotAfter,
+                        normal:req.body.normal
                     }
                     logger.info("Get Contrast result success")
                     res.json({ status: 200, data: return_data });
@@ -1226,9 +1219,9 @@ function JsonToObject(returnValue) {
         returnValue.boxplotDataAN,
         returnValue.pcaData,
         returnValue.heatmapAfterNorm
-    ]
+    ];
 
-
+    workflow.normal = returnValue.normal;
     return workflow;
 }
 

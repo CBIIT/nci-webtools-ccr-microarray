@@ -101,6 +101,7 @@ function r(data, endCallback) {
     d.push(data.group_2);
     d.push(data.species);
     d.push(data.genSet);
+    d.push(data.normal);
     d.push(data.source);
     d.push(config.configPath);
 

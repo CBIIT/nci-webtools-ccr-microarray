@@ -233,7 +233,8 @@ const defaultState = {
         },
         geneHeatmap: "Not enough significant pathways available with p-value < 0.05.",
         volcanoPlot: "No Data",
-        volcanoPlotName: "/volcano.html"
+        volcanoPlotName: "/volcano.html",
+        normal:"RMA"
     }
 };
 
@@ -1872,6 +1873,12 @@ class Analysis extends Component {
         this.setState({ workflow: workflow });
     }
 
+    handleNormalSelect = (event) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.normal = event.target.value;
+        this.setState({ workflow: workflow });
+    }
+
     handleGroup2Select = (event) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.group_2 = event.target.value;
@@ -2187,6 +2194,7 @@ class Analysis extends Component {
         reqBody.pPathways = workflow.pPathways;
         reqBody.species = workflow.species;
         reqBody.genSet = workflow.genSet;
+        reqBody.normal = workflow.normal;
         reqBody.sorting = "";
         if (workflow.current_working_on_object) {
             reqBody.targetObject = workflow.current_working_on_object;

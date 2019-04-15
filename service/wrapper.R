@@ -90,6 +90,8 @@ process = function(){
           i<-i+1
           geneSet<-toString(args[i])
           i<-i+1
+          normal<-toString(args[i])
+          i<-i+1
           source<-toString(args[i])
            i<-i+1
           config_path<-toString(args[i])
@@ -106,7 +108,11 @@ process = function(){
                 celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
              }
           saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
-          norm_celfiles = QCnorm(celfiles,data_repo_path)
+          if(normal=="RMA")
+            norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
+          else{
+            norm_celfiles =loess_QCnorm(celfiles,data_repo_path)
+          }
           col_name<-pData(celfiles)$title
           boxplot_DataBN<-list(col=col_name,data=t(norm_celfiles@listData[[2]][[1]]),ylable=norm_celfiles@listData[[2]][[2]],color=pData(norm_celfiles[[9]])$colors)
           RLE_data<-list(col=col_name,data=t(norm_celfiles@listData[[3]][[1]]),ylable=norm_celfiles@listData[[3]][[2]],color=pData(norm_celfiles[[9]])$colors)
