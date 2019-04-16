@@ -234,7 +234,9 @@ const defaultState = {
         geneHeatmap: "Not enough significant pathways available with p-value < 0.05.",
         volcanoPlot: "No Data",
         volcanoPlotName: "/volcano.html",
-        normal:"RMA"
+        normal:"RMA",
+        histplotBN:"",
+        histplotAN:""
     }
 };
 
@@ -280,7 +282,6 @@ class Analysis extends Component {
         this.buildgeneHeatmap = this.buildgeneHeatmap.bind(this);
         this.getCurrentNumberOfJobsinQueue();
     }
-
     componentDidMount() {
         if (this.props.location.search && this.props.location.search != "") {
             this.state = Object.assign({}, defaultState);
@@ -290,19 +291,16 @@ class Analysis extends Component {
         // listen windows resize event
         window.addEventListener("resize", this.updateDimensions);
     }
-
     componentDidCatch(error, info) {
         // Display fallback UI
         this.resetWorkFlowProject();
         document.getElementById("message-gsm").innerHTML = error;
         document.getElementById("message-gsm").nextSibling.innerHTML = "";
-
     }
     // release the listener
     componentWillUnmount() {
         window.removeEventListener("resize", this.updateDimensions);
     }
-
     updateDimensions = () => {
         // reset container-board-right
         if ((document.body.clientWidth - document.getElementsByClassName("container-board-left")[0].clientWidth) < 300) {
@@ -312,12 +310,9 @@ class Analysis extends Component {
             document.getElementsByClassName("container-board-right")[0].style.width = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - document.getElementsByClassName("container-board-left")[0].clientWidth - 80 + "px";
         }
     }
-
     getElementByXpath = (path) => {
         return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
     }
-
-
     changeRunContrastMode = (params = false) => {
         let workflow = Object.assign({}, this.state.workflow);
         if (params) {
@@ -335,7 +330,6 @@ class Analysis extends Component {
             return v.toString(16);
         });
     }
-
     exportGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         params = {
@@ -464,7 +458,6 @@ class Analysis extends Component {
                 document.getElementById("message-ssgsea").innerHTML = err;
             });
     }
-
     getssGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         if (params.sorting) {
@@ -536,7 +529,6 @@ class Analysis extends Component {
                 document.getElementById("message-ssgsea").innerHTML = error;
             })
     }
-
     exportPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         params = {
@@ -690,7 +682,6 @@ class Analysis extends Component {
                 document.getElementById("message-pug").innerHTML = error
             });
     }
-
     getPathwayUp = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
@@ -766,7 +757,6 @@ class Analysis extends Component {
                 console.log(error)
             });
     }
-
     getPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         if (params.sorting) {
@@ -837,8 +827,6 @@ class Analysis extends Component {
                 }
             }).catch(error => document.getElementById("message-pdg").innerHTML = error);
     }
-
-
     exportPathwayDown = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
@@ -987,7 +975,6 @@ class Analysis extends Component {
 
             }).catch(error => document.getElementById("message-pdg").innerHTML = error);
     }
-
     getDEG = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
         if (params.sorting) {
@@ -1055,8 +1042,6 @@ class Analysis extends Component {
                 }
             }).catch(error => console.log(error));
     }
-
-
     exportDEG = (params = {}) => {
 
         let workflow = Object.assign({}, this.state.workflow);
@@ -1195,29 +1180,26 @@ class Analysis extends Component {
                 this.setState({ workflow: workflow });
             }).catch(error => document.getElementById("message-deg").innerHTML = error);
     }
-
     getHeatmapolt() {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
-        let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
+
+        let link = "./images/" + workflow.projectID + "/histAfterRMAnorm.html"
         let HeatMapIframe = <CIframe title={"Heatmap"} link={link} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
     }
-
     getVolcanoPlot() {
         let workflow = Object.assign({}, this.state.workflow);
         let volcanoPlot = <CIframe title={"volcanoPlot"} link={"./images/"+workflow.projectID+workflow.volcanoPlotName+"?"+this.uuidv4()} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.volcanoPlot = <div>{volcanoPlot}</div>;
         this.setState({ workflow: workflow });
     }
-
     onLoadComplete =()=> {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = false;
         this.setState({ workflow: workflow });
     }
-
     getPCA() {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
@@ -1345,7 +1327,6 @@ class Analysis extends Component {
             workflow.progressing = false;
             this.setState({ workflow: workflow });
         }
-
     }
     getBoxplotAN() {
         let workflow2 = Object.assign({}, this.state.workflow);
@@ -1396,10 +1377,7 @@ class Analysis extends Component {
     }
     getHistplotAN() {
         let workflow = Object.assign({}, this.state.workflow);
-        let histplotANLink = './images/' + workflow.projectID + "/histAfterNorm.html";
-        //let histplotANLink ="http://localhost:9000/images/51c1f031e3fd42ef88cb39112c27ce34//heatmapAfterNorm213123.html"
-        // let histplotAN = <Ciframe onLoad={this.onLoadComplete}  src={histplotANLink+"?"+this.uuidv4()}  width={'100%'} height={'600px'} frameBorder={'0'}/>;
-       
+        let histplotANLink = './images/' + workflow.projectID + "/" +  workflow.histplotAN;
         let histplotAN = <CIframe title={"HistplotAN"} link={histplotANLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
@@ -1472,7 +1450,6 @@ class Analysis extends Component {
             workflow2.progressing = false;
             this.setState({ workflow: workflow2 });
         }
-
     }
     getNUSE() {
         let workflow2 = Object.assign({}, this.state.workflow);
@@ -1509,7 +1486,6 @@ class Analysis extends Component {
             this.setState({ workflow: workflow });
         }
     }
-
     getRLE() {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
@@ -1556,7 +1532,6 @@ class Analysis extends Component {
             this.setState({ workflow: workflow });
         }
     }
-
     generateBOXPLOT(result, workflow) {
 
         let BoxplotRenderData = [];
@@ -1627,8 +1602,6 @@ class Analysis extends Component {
             plot: <div> <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/></div>
         };
     }
-
-
     getBoxplotBN() {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
@@ -1675,7 +1648,6 @@ class Analysis extends Component {
             this.setState({ workflow: workflow });
         }
     }
-
     getMAplotsBN() {
         let workflow2 = Object.assign({}, this.state.workflow);
         if (workflow2.list_mAplotBN == "") {
@@ -1738,17 +1710,15 @@ class Analysis extends Component {
             this.setState({ workflow: workflow2 });
         }
     }
-
     getHistplotBN() {
         let workflow = Object.assign({}, this.state.workflow);
-        let histplotBNLink = './images/' + workflow.projectID + "/histBeforeNorm.html";
+        let histplotBNLink = './images/' + workflow.projectID + "/" + workflow.histplotBN;
         //let histplotBN = <div><img src={ histplotBNLink }  alt="Histogram" /></div>;
         let histplotBN = <CIframe title={"volcanoPlot"} link={histplotBNLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
       
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
     }
-
     changePathways_up(obj) {
         let workflow = Object.assign({}, this.state.workflow);
         if (obj.pagination) {
@@ -1759,7 +1729,6 @@ class Analysis extends Component {
         }
         this.setState({ workflow: workflow }, () => { console.log("changePathways_up done"); });
     }
-
     changePathways_down(obj) {
         let workflow = Object.assign({}, this.state.workflow);
         if (obj.pagination) {
@@ -1770,8 +1739,6 @@ class Analysis extends Component {
         }
         this.setState({ workflow: workflow });
     }
-
-
     changessGSEA(obj) {
         let workflow = Object.assign({}, this.state.workflow);
         if (obj.pagination) {
@@ -1782,7 +1749,6 @@ class Analysis extends Component {
         }
         this.setState({ workflow: workflow });
     }
-
     upateCurrentWorkingTabAndObject = (e) => {
         window.current_working_on_object = e;
         sessionStorage.setItem("current_working_on_object", e);
@@ -1802,7 +1768,6 @@ class Analysis extends Component {
             this.getVolcanoPlot();
         }
     }
-
     upateCurrentWorkingTab = (e) => {
         sessionStorage.setItem("current_working_on_tag", e);
         window.current_working_on_tag = e;
@@ -1810,7 +1775,6 @@ class Analysis extends Component {
         workflow.tab_activeKey = e;
         this.setState({ workflow: workflow });
     }
-
     handleGeneChange = (event) => {
         let value = event.target.value;
         let workflow = Object.assign({}, this.state.workflow);
@@ -1854,37 +1818,31 @@ class Analysis extends Component {
             });
         }
     }
-
     changeCode(event) {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.accessionCode = event.target.value;
         this.setState({ workflow: workflow });
     }
-
     handleSelectType = (event) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.analysisType = event.target.value;
         this.setState({ workflow: workflow });
     }
-
     handleGroup1Select = (event) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.group_1 = event.target.value;
         this.setState({ workflow: workflow });
     }
-
     handleNormalSelect = (event) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.normal = event.target.value;
         this.setState({ workflow: workflow });
     }
-
     handleGroup2Select = (event) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.group_2 = event.target.value;
         this.setState({ workflow: workflow });
     }
-
     fileRemove = (file) => {
         let workflow = Object.assign({}, this.state.workflow);
         const index = workflow.fileList.indexOf(file);
@@ -1893,7 +1851,6 @@ class Analysis extends Component {
         workflow.fileList = newFileList;
         this.setState({ workflow: workflow });
     }
-
     beforeUpload = (fl) => {
         let workflow = Object.assign({}, this.state.workflow);
         let names = [];
@@ -1907,7 +1864,6 @@ class Analysis extends Component {
         });
         this.setState({ workflow: workflow });
     }
-
     resetWorkFlowProject = () => {
         let workflow = Object.assign({}, this.state.workflow);
         if (workflow.analysisType == "0") {
@@ -1928,15 +1884,12 @@ class Analysis extends Component {
         defaultState.workflow.progressing = false;
         this.setState({ workflow: defaultState.workflow });
     }
-
     changeLoadingStatus = (progressing, loading_info) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = progressing;
         workflow.loading_info = loading_info;
         this.setState({ workflow: workflow });
-
     }
-
     exportGSE = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = true;
@@ -1985,7 +1938,6 @@ class Analysis extends Component {
             this.setState({ workflow: workflow });
         }
     }
-
     loadGSE = () => {
         let workflow = Object.assign({}, this.state.workflow);
         let reqBody = {};
@@ -2120,7 +2072,6 @@ class Analysis extends Component {
             document.getElementById("message-gsm").nextSibling.innerHTML = ""
         }
     }
-
     showModal = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.QueueModalvisible = true;
@@ -2128,7 +2079,6 @@ class Analysis extends Component {
             workflow: workflow
         });
     }
-
     handleCancel = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.QueueModalvisible = false;
@@ -2136,14 +2086,12 @@ class Analysis extends Component {
             workflow: workflow
         });
     }
-
     getSSGSEAGeneHeatMap = () => {
 
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
         imageExists(link, this.buildgeneHeatmap);
     }
-
     buildgeneHeatmap = (exists) => {
         let workflow = Object.assign({}, this.state.workflow);
         let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
@@ -2153,7 +2101,6 @@ class Analysis extends Component {
             this.setState({ workflow: workflow });
         }
     }
-
     runContrast = () => {
         let workflow = Object.assign({}, this.state.workflow);
         document.getElementById("message-use-queue").innerHTML = "";
@@ -2423,12 +2370,7 @@ class Analysis extends Component {
                                 // open the ssGSEA_Results
                                 type = "ssGSEA_Results";
                             }
-                            // if (result.data.mAplotBN != "") {
-                            //     workflow.list_mAplotBN = result.data.mAplotBN;
-                            // }
-                            // if (result.data.mAplotAN != "") {
-                            //     workflow.list_mAplotAN = result.data.mAplotAN;
-                            // }
+
                             switch (type) {
                                 case "getHistplotAN":
                                     this.getHistplotAN();
@@ -2496,11 +2438,12 @@ class Analysis extends Component {
                             workflow.compared = true;
                             workflow.done_gsea = true;
                             workflow.progressing = false;
+                            workflow.histplotBN=result.data.histplotBN;
+                            workflow.histplotAN=result.data.histplotAN;
                             this.setState({
                                 workflow: workflow
                             });
                             this.getSSGSEAGeneHeatMap();
-
                             this.hideWorkFlow();
                         } else {
                             document.getElementById("message-gsm").innerHTML = result.data
@@ -2528,7 +2471,6 @@ class Analysis extends Component {
             }
         }
     }
-
     handleUpload = () => {
         let workflow = Object.assign({}, this.state.workflow);
         const fileList = workflow.fileList;
@@ -2609,7 +2551,6 @@ class Analysis extends Component {
             document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default";
         }
     }
-
     assignGroup = (group_name, dataList_keys, handler, callback) => {
         // validate group_name
         let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
@@ -2626,7 +2567,6 @@ class Analysis extends Component {
             callback(false, handler);
         }
     }
-
     deleteGroup = (group_name) => {
         let workflow = Object.assign({}, this.state.workflow);
         for (var key in workflow.dataList) {
@@ -2636,7 +2576,6 @@ class Analysis extends Component {
         }
         this.setState({ workflow: workflow });
     }
-
     handleErrors = (response) => {
         if (!response.ok) {
             //throw Error(response.statusText);
@@ -2656,8 +2595,6 @@ class Analysis extends Component {
             return response;
         }
     }
-
-
     hideWorkFlow = () => {
         if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
             document.getElementsByClassName("container-board-left")[0].style.display = 'none';
@@ -2674,7 +2611,6 @@ class Analysis extends Component {
         this.resetPCA();
         this.resetBoxPlotBN();
     }
-
     showWorkFlow = () => {
         document.getElementsByClassName("container-board-left")[0].style.display = 'block';
         document.getElementsByClassName("container-board-right")[0].removeAttribute("style");
@@ -2685,9 +2621,7 @@ class Analysis extends Component {
         this.resetNUSE();
         this.resetPCA();
         this.resetBoxPlotBN();
-
     }
-
     resetPCA = () => {
         let workflow = Object.assign({}, this.state.workflow);
         let pcaPlotLayout = {
@@ -2706,7 +2640,6 @@ class Analysis extends Component {
             workflow: workflow
         });
     }
-
     resetBoxPlotAN = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.BoxplotAN.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
@@ -2728,8 +2661,6 @@ class Analysis extends Component {
             workflow: workflow
         });
     }
-
-
     resetBoxPlotBN = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.BoxplotBN.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
@@ -2774,7 +2705,6 @@ class Analysis extends Component {
             workflow: workflow
         });
     }
-
     changeTab(tab) {
         console.log(tab)
         if (document.getElementById("li-about") != null) {
@@ -2803,10 +2733,7 @@ class Analysis extends Component {
                 document.getElementById("li-help").className = "active"
             }
         }
-
     }
-
-
     initWithCode(code) {
         let workflow = Object.assign({}, this.state.workflow);
         let reqBody = {};
@@ -2885,6 +2812,8 @@ class Analysis extends Component {
                         workflow2.compared = true;
                         workflow2.done_gsea = true;
                         workflow2.progressing = false;
+                        workflow2.histplotBN=result.histplotBN;
+                        workflow2.histplotAN=result.histplotAN;
                         this.setState({
                             workflow: workflow2
                         });
@@ -2913,7 +2842,6 @@ class Analysis extends Component {
             });
         }
     }
-
     getCurrentNumberOfJobsinQueue = () => {
         fetch('./api/analysis/getCurrentNumberOfJobsinQueue', {
                 method: "POST",
@@ -2936,7 +2864,6 @@ class Analysis extends Component {
                 });
             }).catch(error => console.log(error));
     }
-
     render() {
         // define group modal
         let queueModal = <Modal key="queue_modal" visible={this.state.workflow.QueueModalvisible}  className="custom_modal" title="MicroArray Queue" onCancel={this.handleCancel}
@@ -2952,6 +2879,7 @@ class Analysis extends Component {
         let modal = this.state.workflow.progressing ? "progress" : "progress-hidden";
         const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin  />;
         let workflow = <Workflow data={this.state.workflow}
+                        handleNormalSelect ={this.handleNormalSelect}
                         resetWorkFlowProject={this.resetWorkFlowProject}  
                         changeCode={this.changeCode} 
                         handleSelectType={this.handleSelectType} 

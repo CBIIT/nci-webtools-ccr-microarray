@@ -211,7 +211,7 @@ router.post("/qAnalysis", function(req, res) {
     data.domain = "microarray";
     data.submit = dateFormat(now, "yyyy-mm-dd, h:MM:ss TT");
     data.dataList = req.body.dataList;
-    data.normal = request.body.normal;
+    data.normal = req.body.normal;
     let CEL = ""
     for (let i in req.body.dataList) {
         CEL = req.body.dataList[i] + "," + CEL;
@@ -295,6 +295,9 @@ router.post('/getResultByProjectId', function(req, res) {
                     logger.info("store data in req.session")
                     let return_data = "";
                     return_data = {
+                        histplotBN:req.session.runContrastData.hisBefore,
+                        histplotAN:req.session.runContrastData.hisAfter,
+                        colors: req.session.runContrastData.colors,
                         normal:req.session.runContrastData.normal,
                         mAplotBN: req.session.runContrastData.maplotBN,
                         mAplotAN: req.session.runContrastData.maplotAfter,
@@ -352,7 +355,11 @@ router.post('/runContrast', function(req, res) {
                     req.session.projectId = req.session.runContrastData.projectId;
                     logger.info("store data in req.session")
                     let return_data = "";
+                    logger.info("req.session.runContrastData.hisBefore")
+                    logger.info(req.session.runContrastData.hisBefore)
                     return_data = {
+                        histplotBN:req.session.runContrastData.hisBefore,
+                        histplotAN:req.session.runContrastData.hisAfter,
                         colors: req.session.runContrastData.colors,
                         mAplotBN: req.session.runContrastData.maplotBN,
                         mAplotAN: req.session.runContrastData.maplotAfter,
@@ -1209,18 +1216,19 @@ function JsonToObject(returnValue) {
     } else {
         workflow.group_2 = "";
     }
-    workflow.listPlots = [returnValue.hisBefore,
+    workflow.listPlots = [returnValue.hisBefore[0],
         returnValue.maplotBN,
         returnValue.boxplotDataBN,
         returnValue.RLE,
         returnValue.NUSE,
-        returnValue.hisAfter,
+        returnValue.hisAfter[0],
         returnValue.maplotAfter,
         returnValue.boxplotDataAN,
         returnValue.pcaData,
         returnValue.heatmapAfterNorm
     ];
-
+    workflow.hisBefore = returnValue.hisBefore[0];
+    workflow.hisAfter = returnValue.hisAfter[0];
     workflow.normal = returnValue.normal;
     return workflow;
 }

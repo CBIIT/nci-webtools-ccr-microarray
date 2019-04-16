@@ -106,14 +106,14 @@ process = function(){
                 celfiles = getCELfiles(projectId,listGroups,data_repo_path) 
              }else{
                 celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
-             }
+          }
           saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
-          # if(normal=="RMA")
-          #   norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
-          # else{
-          #   norm_celfiles =loess_QCnorm(celfiles,data_repo_path)
-          # }
-          norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
+          if(normal=="RMA")
+             norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
+           else{
+             norm_celfiles =loess_QCnorm(celfiles,data_repo_path)
+          }
+          # norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
           col_name<-pData(celfiles)$title
           boxplot_DataBN<-list(col=col_name,data=t(norm_celfiles@listData[[2]][[1]]),ylable=norm_celfiles@listData[[2]][[2]],color=pData(norm_celfiles[[9]])$colors)
           RLE_data<-list(col=col_name,data=t(norm_celfiles@listData[[3]][[1]]),ylable=norm_celfiles@listData[[3]][[2]],color=pData(norm_celfiles[[9]])$colors)
@@ -138,7 +138,7 @@ process = function(){
               boxplot_DataBN,
               RLE_data,
               NUSE_data,
-              "histAfterNorm.html",
+              "histAfterRMAnorm.html",
               norm_celfiles[[5]]@listData,
               boxplot_DataAN,
               pcaData,
@@ -185,7 +185,7 @@ process = function(){
               file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
                if (!file.exists(file)) {
                  ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
-                  saveRDS(ss_result,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
+                 saveRDS(ss_result,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
                   
               }
              

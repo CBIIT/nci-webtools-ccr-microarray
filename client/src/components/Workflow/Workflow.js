@@ -12,6 +12,7 @@ class Workflow extends Component {
                                 handleGroup2Select={this.props.handleGroup2Select}
                                 runContrast={this.props.runContrast}
                                 changeRunContrastMode={this.props.changeRunContrastMode}
+                                handleNormalSelect = {this.props.handleNormalSelect}
                               />;
         let project = <Project 
                     data={this.props.data}  
