@@ -1991,12 +1991,13 @@ class Analysis extends Component {
                 .then(result => {
                     if (result.status == 200) {
                         let workflow = Object.assign({}, this.state.workflow);
+
                         if (result.data === "undefined" || Object.keys(result.data).length === 0 || result.data.indexOf('{"files":') < 0) {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                             workflow.uploading = false;
                             workflow.progressing = false;
-                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
-                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                              document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", ". ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
+                           document.getElementById("message-gsm").nextSibling.innerHTML = ""
                             this.setState({
                                 workflow: workflow
                             });
@@ -2007,7 +2008,7 @@ class Analysis extends Component {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                             workflow.uploading = false;
                             workflow.progressing = false;
-                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
+                              document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", ". ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
                             document.getElementById("message-gsm").nextSibling.innerHTML = ""
                             this.setState({
                                 workflow: workflow
@@ -2019,7 +2020,7 @@ class Analysis extends Component {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                             workflow.uploading = false;
                             workflow.progressing = false;
-                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", "").replace(/"/g, "")
+                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", ". ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
                             document.getElementById("message-gsm").nextSibling.innerHTML = ""
                             this.setState({
                                 workflow: workflow
@@ -2050,16 +2051,6 @@ class Analysis extends Component {
                         document.getElementById("message-gsm").nextSibling.innerHTML = ""
                         //message.error('load data fails.');
                     }
-                })
-                .catch(error => {
-                    document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-                    workflow.uploading = false;
-                    workflow.progressing = false;
-                    this.setState({
-                        workflow: workflow
-                    });
-                    document.getElementById("message-gsm").innerHTML = error
-                    document.getElementById("message-gsm").nextSibling.innerHTML = ""
                 });
         } catch (err) {
             //change button style
