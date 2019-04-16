@@ -1996,8 +1996,8 @@ class Analysis extends Component {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                             workflow.uploading = false;
                             workflow.progressing = false;
-                              document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", ". ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
-                           document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ").replace("files Please", "files. Please")
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
                             this.setState({
                                 workflow: workflow
                             });
@@ -2008,7 +2008,7 @@ class Analysis extends Component {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                             workflow.uploading = false;
                             workflow.progressing = false;
-                              document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", ". ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
+                              document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
                             document.getElementById("message-gsm").nextSibling.innerHTML = ""
                             this.setState({
                                 workflow: workflow
@@ -2020,7 +2020,7 @@ class Analysis extends Component {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                             workflow.uploading = false;
                             workflow.progressing = false;
-                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", ". ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
+                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ").replace("files Please", "files. Please")
                             document.getElementById("message-gsm").nextSibling.innerHTML = ""
                             this.setState({
                                 workflow: workflow
