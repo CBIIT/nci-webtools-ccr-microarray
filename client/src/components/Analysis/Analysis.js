@@ -225,18 +225,19 @@ const defaultState = {
         postplot: {
             histplotAN: "",
             list_mAplotAN: "",
-            Heatmapolt: "",
             histplotAN: "",
             list_mAplotAN: "",
+            Heatmapolt: "",
             Boxplots: "",
             PCA: ""
         },
         geneHeatmap: "Not enough significant pathways available with p-value < 0.05.",
         volcanoPlot: "No Data",
         volcanoPlotName: "/volcano.html",
-        normal:"RMA",
-        histplotBN:"",
-        histplotAN:""
+        normal: "RMA",
+        histplotBN_url: "",
+        histplotAN_url: "",
+        heatmapolt_url: ""
     }
 };
 
@@ -1184,7 +1185,7 @@ class Analysis extends Component {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
 
-        let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
+        let link = "./images/" + workflow.projectID + "/" + workflow.heatmapolt_url
         let HeatMapIframe = <CIframe title={"Heatmap"} link={link} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
@@ -1195,7 +1196,7 @@ class Analysis extends Component {
         workflow.volcanoPlot = <div>{volcanoPlot}</div>;
         this.setState({ workflow: workflow });
     }
-    onLoadComplete =()=> {
+    onLoadComplete = () => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = false;
         this.setState({ workflow: workflow });
@@ -1377,12 +1378,12 @@ class Analysis extends Component {
     }
     getHistplotAN() {
         let workflow = Object.assign({}, this.state.workflow);
-        let histplotANLink = './images/' + workflow.projectID + "/" +  workflow.histplotAN;
+        let histplotANLink = './images/' + workflow.projectID + "/" + workflow.histplotAN_url;
         let histplotAN = <CIframe title={"HistplotAN"} link={histplotANLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
     }
-    showLoading =(title)=>{
+    showLoading = (title) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = true;
         workflow.loading_info = title;
@@ -1712,10 +1713,10 @@ class Analysis extends Component {
     }
     getHistplotBN() {
         let workflow = Object.assign({}, this.state.workflow);
-        let histplotBNLink = './images/' + workflow.projectID + "/" + workflow.histplotBN;
+        let histplotBNLink = './images/' + workflow.projectID + "/" + workflow.histplotBN_url;
         //let histplotBN = <div><img src={ histplotBNLink }  alt="Histogram" /></div>;
         let histplotBN = <CIframe title={"volcanoPlot"} link={histplotBNLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
-      
+
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
     }
@@ -2283,6 +2284,9 @@ class Analysis extends Component {
         workflow.list_mAplotBN = "";
         workflow.list_mAplotAN = "";
         workflow.volcanoPlot = "";
+        workflow.histplotBN_url = "";
+        workflow.histplotAN_url = "";
+        workflow.heatmapolt_url = "";
         this.setState({
             workflow: workflow
         });
@@ -2438,8 +2442,9 @@ class Analysis extends Component {
                             workflow.compared = true;
                             workflow.done_gsea = true;
                             workflow.progressing = false;
-                            workflow.histplotBN=result.data.histplotBN;
-                            workflow.histplotAN=result.data.histplotAN;
+                            workflow.histplotBN_url = result.data.histplotBN;
+                            workflow.histplotAN_url = result.data.histplotAN;
+                            workflow.heatmapolt_url = result.data.heatmapolt;
                             this.setState({
                                 workflow: workflow
                             });
@@ -2812,8 +2817,9 @@ class Analysis extends Component {
                         workflow2.compared = true;
                         workflow2.done_gsea = true;
                         workflow2.progressing = false;
-                        workflow2.histplotBN=result.histplotBN;
-                        workflow2.histplotAN=result.histplotAN;
+                        workflow2.histplotBN_url = result.histplotBN;
+                        workflow2.histplotAN_url = result.histplotAN;
+                        workflow2.heatmapolt_url = result.heatmapolt;
                         this.setState({
                             workflow: workflow2
                         });
