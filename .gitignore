@@ -6,6 +6,7 @@ package-lock.json
 .DS_Store
 .Rproj.user
 /bak/
+/client/www/
 /mpstr_pathworks_mac/
 /mpstr_pathworks_linux/
 *.log

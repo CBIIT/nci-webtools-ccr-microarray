@@ -42,7 +42,7 @@ router.post('/upload', function(req, res) {
     form.on('file', function(field, file) {
         number_of_files = number_of_files + 1;
         fs.rename(file.path, path.join(form.uploadDir, file.name), (err) => {
-            if (err) throw  logger.info("Rename  file name err" + err);
+            if (err) throw logger.info("Rename  file name err" + err);
         });
     });
     // log any errors that occur
@@ -211,6 +211,7 @@ router.post("/qAnalysis", function(req, res) {
     data.domain = "microarray";
     data.submit = dateFormat(now, "yyyy-mm-dd, h:MM:ss TT");
     data.dataList = req.body.dataList;
+    data.normal = req.body.normal;
     let CEL = ""
     for (let i in req.body.dataList) {
         CEL = req.body.dataList[i] + "," + CEL;
@@ -294,6 +295,10 @@ router.post('/getResultByProjectId', function(req, res) {
                     logger.info("store data in req.session")
                     let return_data = "";
                     return_data = {
+                        histplotBN:req.session.runContrastData.hisBefore,
+                        histplotAN:req.session.runContrastData.hisAfter,
+                        colors: req.session.runContrastData.colors,
+                        normal:req.session.runContrastData.normal,
                         mAplotBN: req.session.runContrastData.maplotBN,
                         mAplotAN: req.session.runContrastData.maplotAfter,
                         group_1: req.session.runContrastData.group_1,
@@ -332,20 +337,10 @@ router.post('/runContrast', function(req, res) {
     data.push(req.body.group_2);
     data.push(req.body.species);
     data.push(req.body.genSet);
+    data.push(req.body.normal);
     data.push(req.body.source)
     data.push(config.configPath);
-    logger.info("API:/runContrast ",
-        "code:", req.body.code,
-        "groups:", req.body.groups,
-        "group_1:", req.body.group_1,
-        "group_2:", req.body.group_2,
-        "species:", req.body.species,
-        "genSet:", req.body.genSet,
-        "pssGSEA:", req.body.pssGSEA,
-        "foldssGSEA:", req.body.foldssGSEA,
-        "source:", req.body.source,
-        "data_repo_path:", config.uploadPath
-    );
+    logger.info("runContrast  R code " );
     R.execute("wrapper.R", data, function(err, returnValue) {
         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
             if (err) {
@@ -360,7 +355,12 @@ router.post('/runContrast', function(req, res) {
                     req.session.projectId = req.session.runContrastData.projectId;
                     logger.info("store data in req.session")
                     let return_data = "";
+                    logger.info("req.session.runContrastData.hisBefore")
+                    logger.info(req.session.runContrastData.hisBefore)
                     return_data = {
+                        histplotBN:req.session.runContrastData.hisBefore,
+                        histplotAN:req.session.runContrastData.hisAfter,
+                        colors: req.session.runContrastData.colors,
                         mAplotBN: req.session.runContrastData.maplotBN,
                         mAplotAN: req.session.runContrastData.maplotAfter,
                         group_1: req.session.runContrastData.group_1,
@@ -370,7 +370,8 @@ router.post('/runContrast', function(req, res) {
                         accessionCode: req.session.runContrastData.accessionCode,
                         gsm: re.GSM,
                         mAplotBN: re.maplotBN,
-                        mAplotAN: re.maplotAfter
+                        mAplotAN: re.maplotAfter,
+                        normal:req.body.normal
                     }
                     logger.info("Get Contrast result success")
                     res.json({ status: 200, data: return_data });
@@ -385,31 +386,11 @@ router.post('/runContrast', function(req, res) {
 });
 
 
-function sin_to_hex(i, phase, size) {
-    let sin = Math.sin(Math.PI / size * 2 * i + phase);
-    let int = Math.floor(sin * 127) + 128;
-    let hex = int.toString(16);
-    return hex.length === 1 ? "0" + hex : hex;
-}
+
 
 function getPlots(req, res, type) {
     let return_data = "";
-    let uniqueColorCodeArray = "";
     let size = "";
-    let rainbow = [];
-    if (req.session && req.session.runContrastData && (type == "getBoxplotAN" || type == "getPCA" || type == "getBoxplotBN" || type == "getRLE" || type == "getNUSE")) {
-        uniqueColorCodeArray = req.session.runContrastData.listPlots[8].color.filter(function(item, pos) {
-            return req.session.runContrastData.listPlots[8].color.indexOf(item) == pos;
-        })
-        size = uniqueColorCodeArray.length;
-        rainbow = new Array(size);
-        for (let i = 0; i < size; i++) {
-            let red = sin_to_hex(i, 0 * Math.PI * 2 / 3, size); // 0   deg
-            let blue = sin_to_hex(i, 1 * Math.PI * 2 / 3, size); // 120 deg
-            let green = sin_to_hex(i, 2 * Math.PI * 2 / 3, size); // 240 deg
-            rainbow[i] = "#" + red + green + blue;
-        }
-    }
     switch (type) {
         case "getHistplotAN":
             if (req.session && req.session.runContrastData) {
@@ -421,7 +402,7 @@ function getPlots(req, res, type) {
         case "getBoxplotAN":
             if (req.session && req.session.runContrastData) {
                 if (typeof(req.session.runContrastData.listPlots[7].color[0]) == "number") {
-                    req.session.runContrastData.listPlots[7].color = req.session.runContrastData.listPlots[7].color.map(x => rainbow[x / 5 - 1]);
+                    req.session.runContrastData.listPlots[7].color = req.session.runContrastData.listPlots[7].color = req.session.runContrastData.colors;
                 }
                 return_data = req.session.runContrastData.listPlots[7]
 
@@ -440,7 +421,7 @@ function getPlots(req, res, type) {
         case "getPCA":
             if (req.session && req.session.runContrastData) {
                 if (typeof(req.session.runContrastData.listPlots[8].color[0]) == "number") {
-                    req.session.runContrastData.listPlots[8].color = req.session.runContrastData.listPlots[8].color.map(x => rainbow[x / 5 - 1]);
+                    req.session.runContrastData.listPlots[8].color = req.session.runContrastData.listPlots[8].color = req.session.runContrastData.colors;
                 }
                 let groups = [];
                 if (req.session.runContrastData.groups) {
@@ -482,7 +463,7 @@ function getPlots(req, res, type) {
         case "getBoxplotBN":
             if (req.session && req.session.runContrastData) {
                 if (typeof(req.session.runContrastData.listPlots[2].color[0]) == "number") {
-                    req.session.runContrastData.listPlots[2].color = req.session.runContrastData.listPlots[2].color.map(x => rainbow[x / 5 - 1]);
+                    req.session.runContrastData.listPlots[2].color = req.session.runContrastData.listPlots[2].color = req.session.runContrastData.colors;
                 }
                 return_data = req.session.runContrastData.listPlots[2]
             } else {
@@ -492,7 +473,7 @@ function getPlots(req, res, type) {
         case "getRLE":
             if (req.session && req.session.runContrastData) {
                 if (typeof(req.session.runContrastData.listPlots[3].color[0]) == "number") {
-                    req.session.runContrastData.listPlots[3].color = req.session.runContrastData.listPlots[3].color.map(x => rainbow[x / 5 - 1]);
+                    req.session.runContrastData.listPlots[3].color = req.session.runContrastData.listPlots[3].color = req.session.runContrastData.colors;
                 }
                 return_data = req.session.runContrastData.listPlots[3]
             } else {
@@ -502,7 +483,7 @@ function getPlots(req, res, type) {
         case "getNUSE":
             if (req.session && req.session.runContrastData) {
                 if (typeof(req.session.runContrastData.listPlots[4].color[0]) == "number") {
-                    req.session.runContrastData.listPlots[4].color = req.session.runContrastData.listPlots[4].color.map(x => rainbow[x / 5 - 1]);
+                    req.session.runContrastData.listPlots[4].color = req.session.runContrastData.listPlots[4].color = req.session.runContrastData.colors;
                 }
                 return_data = req.session.runContrastData.listPlots[4]
             } else {
@@ -1204,11 +1185,22 @@ function JsonToObject(returnValue) {
     } else {
         workflow.projectId = "";
     }
+
+
     if (returnValue.groups) {
         workflow.groups = returnValue.groups;
+        // map color with groups 
+
     } else {
-        workflow.groups = "";
+        workflow.groups = [];
     }
+
+    if (returnValue.colors) {
+        workflow.colors = returnValue.colors;
+    } else {
+        workflow.colors = [];
+    }
+
     if (returnValue.accessionCode && returnValue.accessionCode[0]) {
         workflow.accessionCode = returnValue.accessionCode[0];
     } else {
@@ -1224,17 +1216,20 @@ function JsonToObject(returnValue) {
     } else {
         workflow.group_2 = "";
     }
-    workflow.listPlots = [returnValue.hisBefore,
+    workflow.listPlots = [returnValue.hisBefore[0],
         returnValue.maplotBN,
         returnValue.boxplotDataBN,
         returnValue.RLE,
         returnValue.NUSE,
-        returnValue.hisAfter,
+        returnValue.hisAfter[0],
         returnValue.maplotAfter,
         returnValue.boxplotDataAN,
         returnValue.pcaData,
         returnValue.heatmapAfterNorm
-    ]
+    ];
+    workflow.hisBefore = returnValue.hisBefore[0];
+    workflow.hisAfter = returnValue.hisAfter[0];
+    workflow.normal = returnValue.normal;
     return workflow;
 }
 

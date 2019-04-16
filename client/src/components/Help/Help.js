@@ -98,7 +98,7 @@ class Help extends Component {
 
                            <h3>Normalization</h3>
                            <p>Each sample is normalized to correct for technical artifacts using the Robust Multichip Averaging (RMA) method described in (Irizarry et al., 2003). Pre-normalization and post-normalization histograms, MA plots and box plots display relative expression (represented by probe intensity) before and after RMA.  Data for the plots are generated with the oligo package.</p>
-                           <p>Histogram: The histogram displays the density of probes at each log-intensity. Each sample is represented by a line.  After RMA, all samples lines should follow the same curve.</p>
+                           <p>Histogram: The histogram displays the density of probes at each log-intensity. Each sample is represented by a curved line. Before RMA, samples should be distributed randomly. An outlier sample may be due to technical problems, and separate groupings of samples may indicate batch effects.  Either of these potential issues should be investigated further before downstream analyses.  After RMA, all samples lines should follow the same curve.  Again, if samples are clustered into groups, batch effects may be present.</p>
                             <p><img src="./assets/img/histogram.gif" alt="National Cancer Institute" /></p>
           
                            <p>MA plot: Log-ratios (M) are plotted against the average log-intensities (A). Plots are generated that compare each sample to the median of all samples. After RMA, the red sample line should be relatively equal to the blue median line.</p>
