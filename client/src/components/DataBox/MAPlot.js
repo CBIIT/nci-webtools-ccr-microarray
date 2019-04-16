@@ -11,7 +11,7 @@ class MAPlot extends Component {
     }
     render() {
         let projectID = this.props.data.projectID;
-        let pics = this.props.data.pics;
+        let pics = this.props.pics;
         let dataList = this.props.data.dataList;
         let tmp_pics =[];
         pics.forEach(function(e,i){

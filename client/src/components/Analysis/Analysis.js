@@ -256,12 +256,10 @@ class Analysis extends Component {
         this.getNUSE = this.getNUSE.bind(this);
         this.getRLE = this.getRLE.bind(this);
         this.getBoxplotBN = this.getBoxplotBN.bind(this);
-        this.getMAplotsBN = this.getMAplotsBN.bind(this);
         this.getHeatmapolt = this.getHeatmapolt.bind(this);
         this.getPCA = this.getPCA.bind(this);
         this.getBoxplotAN = this.getBoxplotAN.bind(this);
         this.getHistplotAN = this.getHistplotAN.bind(this);
-        this.getMAplotAN = this.getMAplotAN.bind(this);
         this.getDEG = this.getDEG.bind(this);
         this.getPathwayDown = this.getPathwayDown.bind(this);
         this.getPathwayUp = this.getPathwayUp.bind(this);
@@ -1389,7 +1387,7 @@ class Analysis extends Component {
         workflow.loading_info = title;
         this.setState({ workflow: workflow });
     }
-    getMAplotAN() {
+    getMAplotAN =()=> {
         let workflow2 = Object.assign({}, this.state.workflow);
         if (workflow2.list_mAplotAN == "") {
             workflow2.progressing = true;
@@ -1417,7 +1415,7 @@ class Analysis extends Component {
                                     dataList: workflow.dataList
                                 }
                                 workflow.list_mAplotBN = result.data;
-                                workflow.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
+                                workflow.postplot.list_mAplotAN = <div > <MAPlot pics = {result.data}  data = {this.state.workflow}/></div>;
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
                             } else {
@@ -1441,13 +1439,7 @@ class Analysis extends Component {
             }
         } else {
             let workflow2 = Object.assign({}, this.state.workflow);
-            let input = {
-                projectID: workflow2.projectID,
-                pics: workflow2.list_mAplotAN,
-                groups: workflow2.groups,
-                dataList: workflow2.dataList
-            }
-            workflow2.postplot.list_mAplotAN = <div > <MAPlot data = {input}/></div>;
+            workflow2.postplot.list_mAplotAN = <div > <MAPlot pics = {this.state.workflow.list_mAplotAN}  data = {this.state.workflow}/></div>;;
             workflow2.progressing = false;
             this.setState({ workflow: workflow2 });
         }
@@ -2033,6 +2025,7 @@ class Analysis extends Component {
                         workflow.dataList = list.files;
                         // init group with default value
                         workflow.groups = new Array(list.files.length).fill('others');
+                        
                         // disable the input , prevent user to change the access code
                         document.getElementById("input-access-code").disabled = true
                         // change the word of load btn
