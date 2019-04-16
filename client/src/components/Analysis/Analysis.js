@@ -1184,7 +1184,7 @@ class Analysis extends Component {
         document.getElementById("message-post-heatmap").innerHTML = "";
         let workflow = Object.assign({}, this.state.workflow);
 
-        let link = "./images/" + workflow.projectID + "/histAfterRMAnorm.html"
+        let link = "./images/" + workflow.projectID + "/heatmapAfterNorm.html"
         let HeatMapIframe = <CIframe title={"Heatmap"} link={link} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
         this.setState({ workflow: workflow });
