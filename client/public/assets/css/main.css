@@ -1189,7 +1189,7 @@ div.head-sorter>div {
     font-weight: 500;
 }
 
-.ant-tabs.ant-tabs-card .ant-tabs-card-content>.ant-tabs-tabpane-inactive, .ant-tabs.ant-tabs-editable-card .ant-tabs-card-content>.ant-tabs-tabpane-inactive {
+.ant-tabs-tabpane-inactive {
     display: none !important; 
 }
 
