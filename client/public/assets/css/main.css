@@ -1189,6 +1189,10 @@ div.head-sorter>div {
     font-weight: 500;
 }
 
+.ant-tabs-tabpane-inactive {
+    display: none !important; 
+}
+
 @media only screen and (max-width:768px) {
     #tab_analysis>div.container.container-board>div.container-board-right>div>div.ant-tabs-content.ant-tabs-content-no-animated.ant-tabs-top-content.ant-tabs-card-content>div.ant-tabs-tabpane.ant-tabs-tabpane-active>div:nth-child(3)>div:nth-child(2)>span {
         display: contents;
