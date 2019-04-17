@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactSVG from 'react-svg'
 import { message } from 'antd';
 import Plot from 'react-plotly.js';
+import MAPlot from './MAPlot';
 
 
 
@@ -71,7 +72,7 @@ class PrePlotsBox extends Component {
 
 
         let tabs = [<div id="preHistogram" key="pre_tag1" className="plot1" ><div> <p className="err-message" id="message-pre-histogram"></p></div>   { this.props.data.preplots.histplotBN } </div>,
-            <div id="preMAplots" key="pre_tag2"  className="plot1  hide"  > <div> <p className="err-message" id="message-pre-maplot"></p></div>  { this.props.data.preplots.list_mAplotBN } </div>,
+            <div id="preMAplots" key="pre_tag2"  className="plot1  hide"  > <div> <p className="err-message" id="message-pre-maplot"></p></div>  <div > <MAPlot pics = {this.props.data.list_mAplotBN}  data = {this.props.data}/></div> </div>,
             <div id="preBoxplots" key="pre_tag3"  className="plot1 hide"> <div> <p className="err-message" id="message-pre-boxplot"></p></div>  {this.props.data.BoxplotBN.plot}</div>,
             <div id="preRLE" key="pre_tag4"  className="plot1 hide"> <div> <p className="err-message" id="message-pre-rle"></p></div>  {this.props.data.RLE.plot} </div>,
             <div id="preNUSE" key="pre_tag5"  className="plot1 hide"> <div> <p className="err-message" id="message-pre-nuse"></p></div>  {this.props.data.NUSE.plot} </div>
