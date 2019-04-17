@@ -21,6 +21,8 @@ celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path)
 norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
 
 
+
+
 diff_expr_genes = diffExprGenes(norm_celfiles[[9]],cons,projectId,data_repo_path)       #Call function
       
 
@@ -34,6 +36,15 @@ species2<-"human"
           }
           
 l2p_pathways = l2pPathways(diff_expr_genes,species2,data_repo_path,projectId,config_path)
+
+
+norm_celfiles2 = loess_QCnorm(celfiles,data_repo_path)
+
+diff_expr_genes2 = diffExprGenes(norm_celfiles2[[9]],cons,projectId,data_repo_path)       #Call function
+      
+
+          
+l2p_pathways = l2pPathways(diff_expr_genes2,species2,data_repo_path,projectId,config_path)
 
 
 #ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)

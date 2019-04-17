@@ -25,7 +25,12 @@ class MAPlot extends Component {
 
             pics.forEach(function(e, i) {
                 tmp_pics.push([e + "@" + dataList[i].title])
-                tmp_groups.push(dataList[i].groups)
+                if(dataList[i].groups ==""||dataList[i].groups.toLowerCase()=="ctl"){
+                    tmp_groups.push("others")
+                }else{
+                     tmp_groups.push(dataList[i].groups)
+                }
+                
             })
             pics = tmp_pics;
 
