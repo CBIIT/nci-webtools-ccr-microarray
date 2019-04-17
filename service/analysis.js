@@ -308,7 +308,8 @@ router.post('/getResultByProjectId', function(req, res) {
                         accessionCode: req.session.runContrastData.accessionCode,
                         gsm: re.GSM,
                         mAplotBN: re.maplotBN,
-                        mAplotAN: re.maplotAfter
+                        mAplotAN: re.maplotAfter,
+                        heatmapolt:req.session.runContrastData.heatmapAfterNorm
                     }
                     logger.info("Get Contrast result success")
                     res.json({ status: 200, data: return_data });
@@ -371,7 +372,8 @@ router.post('/runContrast', function(req, res) {
                         gsm: re.GSM,
                         mAplotBN: re.maplotBN,
                         mAplotAN: re.maplotAfter,
-                        normal:req.body.normal
+                        normal:req.body.normal,
+                        heatmapolt:req.session.runContrastData.heatmapAfterNorm
                     }
                     logger.info("Get Contrast result success")
                     res.json({ status: 200, data: return_data });
@@ -1230,6 +1232,7 @@ function JsonToObject(returnValue) {
     workflow.hisBefore = returnValue.hisBefore[0];
     workflow.hisAfter = returnValue.hisAfter[0];
     workflow.normal = returnValue.normal;
+    workflow.heatmapAfterNorm =returnValue.heatmapAfterNorm[0];
     return workflow;
 }
 

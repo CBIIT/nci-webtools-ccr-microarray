@@ -12,7 +12,7 @@ hideSpinner = () => {
 render() {
     return (
       <div >
-         <iframe onLoad={this.hideSpinner} title={this.props.title}  src={this.props.link}  width={'100%'} height={'600px'} frameBorder={'0'} />
+         <iframe onLoad={this.hideSpinner} title={this.props.title}  src={this.props.link}  width={'100%'} height={'980px'} frameBorder={'0'} />
       </div>
     );
   }
