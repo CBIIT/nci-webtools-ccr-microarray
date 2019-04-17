@@ -115,11 +115,11 @@ process = function(){
           }
           # norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
           col_name<-pData(celfiles)$title
-          boxplot_DataBN<-list(col=col_name,data=t(norm_celfiles@listData[[2]][[1]]),ylable=norm_celfiles@listData[[2]][[2]],color=pData(norm_celfiles[[9]])$colors)
-          RLE_data<-list(col=col_name,data=t(norm_celfiles@listData[[3]][[1]]),ylable=norm_celfiles@listData[[3]][[2]],color=pData(norm_celfiles[[9]])$colors)
-          NUSE_data<-list(col=col_name,data=t(norm_celfiles@listData[[4]][[1]]),ylable=norm_celfiles@listData[[4]][[2]],color=pData(norm_celfiles[[9]])$colors)
-          boxplot_DataAN<-list(col=col_name,data=t(norm_celfiles@listData[[6]][[1]]),ylable=norm_celfiles@listData[[6]][[2]],color=pData(norm_celfiles[[9]])$colors)
-          tmp_pca<-norm_celfiles[[7]]
+          boxplot_DataBN<-list(col=col_name,data=t(norm_celfiles@listData[[2]][[1]]),ylable=norm_celfiles@listData[[2]][[2]],color=pData(norm_celfiles[[10]])$colors)
+          RLE_data<-list(col=col_name,data=t(norm_celfiles@listData[[3]][[1]]),ylable=norm_celfiles@listData[[3]][[2]],color=pData(norm_celfiles[[10]])$colors)
+          NUSE_data<-list(col=col_name,data=t(norm_celfiles@listData[[4]][[1]]),ylable=norm_celfiles@listData[[4]][[2]],color=pData(norm_celfiles[[10]])$colors)
+          boxplot_DataAN<-list(col=col_name,data=t(norm_celfiles@listData[[7]][[1]]),ylable=norm_celfiles@listData[[7]][[2]],color=pData(norm_celfiles[[10]])$colors)
+          tmp_pca<-norm_celfiles[[8]]
           pcaData<-list(
             col=colnames(tmp_pca$x[,1:3]),
             row=col_name,
@@ -129,7 +129,7 @@ process = function(){
             xlable=round(tmp_pca$sdev[1]^2/sum(tmp_pca$sdev^2)*100,2),
             ylable=round(tmp_pca$sdev[2]^2/sum(tmp_pca$sdev^2)*100,2),
             zlable=round(tmp_pca$sdev[3]^2/sum(tmp_pca$sdev^2)*100,2),
-            color=pData(norm_celfiles[[9]])$colors
+            color=pData(norm_celfiles[[10]])$colors
             )
 
           return_plot_data <- List(
@@ -138,13 +138,12 @@ process = function(){
               boxplot_DataBN,
               RLE_data,
               NUSE_data,
-              "histAfterRMAnorm.html",
-              norm_celfiles[[5]]@listData,
+              norm_celfiles[[5]],
+              norm_celfiles[[6]]@listData,
               boxplot_DataAN,
               pcaData,
-              norm_celfiles[[8]]
+              norm_celfiles[[9]]
               )
-
           #saveRDS(return_plot_data,file = paste0(data_repo_path,"/return_plot_data.rds"))
        
           #### 3) Differentially Expressed Genes function takes files, group and contrast data. Returns list of DEGs for each contrast, annotated normalized data, and pheno data ####
@@ -156,7 +155,7 @@ process = function(){
           # # or if using processCELfiles() function for test example, create this contrasts variable:
           # #cons = c("KO_1-Ctl_1","KO_2-Ctl_2")
        
-          diff_expr_genes = diffExprGenes(norm_celfiles[[9]],cons,projectId,data_repo_path)       #Call function
+          diff_expr_genes = diffExprGenes(norm_celfiles[[10]],cons,projectId,data_repo_path)       #Call function
           # # #### 4) l2p pathway analysis function, takes DEGs and species as input, returns list of up and downregulated pathways for each contrast ####
           # # # Output should dynamically respond to user-selected contrast
           saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
@@ -188,8 +187,6 @@ process = function(){
                  saveRDS(ss_result,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
                   
               }
-             
-             
             },error =function(cond){
                  message(cond)
             },finally={
@@ -200,7 +197,6 @@ process = function(){
                       ss_name_d=names(ss_result)
                       ss_data_d=ss_result[2:length(ss_result[,1]),]
                      }
-                    colorsD <-list(name=names(norm_celfiles[[10]]),colors=norm_celfiles[[10]])
                     re<-list(
                     ss_name=ss_name_d,
                     ss_data= ss_data_d,
@@ -299,6 +295,7 @@ process = function(){
           # add logger?
           message(cond)
           message("error")
+          write(toJSON(cond),paste0(data_repo_path,"/overall_error.txt",sep=""))
     },
     finally={
        message("finally")

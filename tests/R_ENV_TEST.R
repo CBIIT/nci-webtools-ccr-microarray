@@ -47,5 +47,6 @@ diff_expr_genes2 = diffExprGenes(norm_celfiles2[[9]],cons,projectId,data_repo_pa
 l2p_pathways = l2pPathways(diff_expr_genes2,species2,data_repo_path,projectId,config_path)
 
 
-#ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
+#
+ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
 
