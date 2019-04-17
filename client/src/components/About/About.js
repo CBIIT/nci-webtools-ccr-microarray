@@ -28,6 +28,7 @@ class About extends Component {
                                 <li>GeneChip™ Human Gene 1.0 ST Array (v1 & v2)</li>
                                 <li>GeneChip™ Human Gene 1.1 ST Array Version 1</li>
                                 <li>GeneChip™ Human Gene 2.0 ST Array</li>
+                                <li>GeneChip™ Human Gene 2.1 ST</li>
                                 <li>Clariom™ S Assay HT, human</li>
                                 <li>Clariom™ S Assay, human</li>
                                 <li>Human Genome U219 Array</li>
