@@ -1387,7 +1387,7 @@ class Analysis extends Component {
         workflow.loading_info = title;
         this.setState({ workflow: workflow });
     }
-    getMAplotAN =()=> {
+    getMAplotAN = () => {
         let workflow2 = Object.assign({}, this.state.workflow);
         if (workflow2.list_mAplotAN == "") {
             workflow2.progressing = true;
@@ -1408,13 +1408,7 @@ class Analysis extends Component {
                             document.getElementById("message-post-maplot").innerHTML = "";
                             let workflow = Object.assign({}, this.state.workflow);
                             if (result.data != "") {
-                                let input = {
-                                    projectID: workflow.projectID,
-                                    pics: result.data,
-                                    groups: workflow.groups,
-                                    dataList: workflow.dataList
-                                }
-                                workflow.list_mAplotBN = result.data;
+                                workflow.list_mAplotAN = result.data;
                                 workflow.postplot.list_mAplotAN = <div > <MAPlot pics = {result.data}  data = {this.state.workflow}/></div>;
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
@@ -1661,14 +1655,8 @@ class Analysis extends Component {
                             document.getElementById("message-pre-maplot").innerHTML = "";
                             if (result.data != "") {
                                 let workflow = Object.assign({}, this.state.workflow);
-                                let input = {
-                                    projectID: workflow.projectID,
-                                    pics: result.data,
-                                    groups: workflow.groups,
-                                    dataList: workflow.dataList
-                                }
                                 workflow.list_mAplotBN = result.data;
-                                workflow.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
+                                workflow.postplot.list_mAplotBN = <div > <MAPlot pics = {result.data}  data = {this.state.workflow}/></div>;
                                 workflow.progressing = false;
                                 this.setState({ workflow: workflow });
                             } else {
@@ -1693,13 +1681,7 @@ class Analysis extends Component {
                 this.setState({ workflow: workflow });
             }
         } else {
-            let input = {
-                projectID: workflow2.projectID,
-                pics: workflow2.list_mAplotBN,
-                groups: workflow2.groups,
-                dataList: workflow2.dataList
-            }
-            workflow2.preplots.list_mAplotBN = <div > <MAPlot data = {input}/></div>;
+            workflow2.postplot.list_mAplotBN = <div > <MAPlot pics = {workflow2.list_mAplotBN}  data = {this.state.workflow2}/></div>;
             this.setState({ workflow: workflow2 });
         }
     }
@@ -1862,6 +1844,9 @@ class Analysis extends Component {
         if (workflow.analysisType == "0") {
             document.getElementById("input-access-code").disabled = false;
             document.getElementById("btn-project-load-gse").disabled = false;
+             // disable the input , prevent user to change the access code
+
+            document.getElementById("analysisType_selection").disabled = false;
             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
         }
         defaultState.workflow.analysisType = "0";
@@ -2000,7 +1985,7 @@ class Analysis extends Component {
                             document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
                             workflow.uploading = false;
                             workflow.progressing = false;
-                              document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
+                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
                             document.getElementById("message-gsm").nextSibling.innerHTML = ""
                             this.setState({
                                 workflow: workflow
@@ -2025,11 +2010,13 @@ class Analysis extends Component {
                         workflow.dataList = list.files;
                         // init group with default value
                         workflow.groups = new Array(list.files.length).fill('others');
-                        
+
                         // disable the input , prevent user to change the access code
-                        document.getElementById("input-access-code").disabled = true
+                        document.getElementById("input-access-code").disabled = true;
                         // change the word of load btn
-                        document.getElementById("btn-project-load-gse").disabled = true
+                        document.getElementById("btn-project-load-gse").disabled = true;
+
+                        document.getElementById("analysisType_selection").disabled = true;
                         this.setState({
                             workflow: workflow
                         });
@@ -2804,6 +2791,15 @@ class Analysis extends Component {
                         workflow2.histplotBN_url = result.histplotBN;
                         workflow2.histplotAN_url = result.histplotAN;
                         workflow2.heatmapolt_url = result.heatmapolt;
+                         // disable the input , prevent user to change the access code
+                        document.getElementById("input-access-code").disabled = true;
+                        // change the word of load btn
+                        document.getElementById("btn-project-load-gse").disabled = true;
+                        //
+                        document.getElementById("analysisType_selection").disabled = true;
+                        //
+                        document.getElementById("btn-project-load-gse").classList.replace("ant-btn-primary","ant-btn-default");
+
                         this.setState({
                             workflow: workflow2
                         });

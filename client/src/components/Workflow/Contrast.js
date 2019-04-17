@@ -65,7 +65,7 @@ class Contrast extends Component {
             {options}
           </select>);
 
-        let normalization_option = (<select id="select-normal" className="ant-select-selection ant-select-selection--single" style={{ width: "100%" }}  onChange={this.props.handleNormalSelect}>
+        let normalization_option = (<select id="select-normal" className="ant-select-selection ant-select-selection--single" style={{ width: "100%" }} value={this.props.data.normal}  onChange={this.props.handleNormalSelect}>
             <option value="RMA" >RMA</option>
             <option value="RMA_Loess" >RMA plus Cyclic Loess</option>
           </select>);

@@ -24,7 +24,7 @@ class Project extends Component {
             fileList: this.props.data.fileList
         };
 
-        let type_content = (<div className="row"> <div className="col-sm-12"><select disabled={ this.props.data.fileList.length==0 ? false: true} id="analysisType_selection" className="ant-select-selection ant-select-selection--single" value={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
+        let type_content = (<div className="row"> <div className="col-sm-12"><select disabled={ this.props.data.fileList.length != 0}  id="analysisType_selection" className="ant-select-selection ant-select-selection--single" value={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
             <option value="0">GEO Data</option>
             <option  value="1">CEL Files</option>
           </select></div></div>);
@@ -38,13 +38,13 @@ class Project extends Component {
                     
                       <label className="title">Accession Code<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
                        <span className="err-message" id="message-load-accession-code"></span>
-                      <Input  aria-label="input accessionCode"  id="input-access-code" disabled={ this.props.data.fileList.length==0 ? false: true} onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
+                      <Input  aria-label="input accessionCode"  id="input-access-code" disabled={ this.props.data.fileList.length !== 0} onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
                       </div>
                 </div>
                 <div className="row">
                       <div className="col-sm-6">
                     
-                        <button id="btn-project-load-gse" type="button" disabled={ this.props.data.fileList.length==0 ? false: true}   className="ant-btn upload-start ant-btn-primary" onClick={this.props.loadGSE}>
+                        <button id="btn-project-load-gse" type="button" disabled={ this.props.data.fileList.length !== 0}   className="ant-btn upload-start ant-btn-primary" onClick={this.props.loadGSE}>
                           <span>{uploading ? 'Load' : 'Load' }</span>
                         </button>
 
@@ -72,7 +72,7 @@ class Project extends Component {
                         <Icon type="upload" /> Select File
                       </Button>
                     </Upload>
-                    </div>
+                    </div>  
                      <div className="col-sm-6">
                     <Button
                       id="btn-project-upload"
