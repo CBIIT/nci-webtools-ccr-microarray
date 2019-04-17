@@ -21,7 +21,7 @@ class MAPlot extends Component {
         let dataList = this.state.dataList;
         let tmp_pics = [];
         let tmp_groups =[];
-        if (dataList.length > 0 && pics!="No Data") {
+        if (dataList.length > 0 && pics!="No Data" && pics!="") {
 
             pics.forEach(function(e, i) {
                 tmp_pics.push([e + "@" + dataList[i].title])
