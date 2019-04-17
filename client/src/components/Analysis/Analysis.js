@@ -1373,7 +1373,7 @@ class Analysis extends Component {
                     .then(this.handleErrors)
                     .then(res => res.json())
                     .then(result => {
-                        let workflow= Object.assign({}, this.state.workflow);
+                        let workflow = Object.assign({}, this.state.workflow);
                         if (result.status == 200) {
                             document.getElementById("message-post-maplot").innerHTML = "";
                             let workflow = Object.assign({}, this.state.workflow);
@@ -2272,9 +2272,11 @@ class Analysis extends Component {
                         }
                     }).then(this.handleErrors)
                     .then(function(response) {
-                        return response.json();
+                        if (response) {
+                            return response.json();
+                        }
                     }).then(result => {
-                        if (result.status == 200) {
+                        if (result && result.status == 200) {
                             let type = window.current_working_on_object;
                             if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
                                 // open the GSM
@@ -2372,11 +2374,13 @@ class Analysis extends Component {
                             this.getSSGSEAGeneHeatMap();
                             this.hideWorkFlow();
                         } else {
-                            document.getElementById("message-gsm").innerHTML = result.data
-                            workflow.progressing = false;
-                            this.setState({
-                                workflow: workflow
-                            });
+                            if (result && result.data) {
+                                document.getElementById("message-gsm").innerHTML = result.data
+                                workflow.progressing = false;
+                                this.setState({
+                                    workflow: workflow
+                                });
+                            }
                         }
                     }).catch(function(error) {
                         document.getElementById("message-gsm").innerHTML = error
