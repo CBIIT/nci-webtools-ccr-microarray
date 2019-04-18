@@ -167,7 +167,7 @@ function r(data, endCallback) {
 
 function cleanData(pid, uploadPath) {
     try {
-        rimraf.sync(uploadPath + "/" + pid);
+        //rimraf.sync(uploadPath + "/" + pid);
     } catch (err) {
         logger.info("[Queue] Delete result files fails  ", err)
     }
