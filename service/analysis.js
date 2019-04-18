@@ -1218,7 +1218,8 @@ function JsonToObject(returnValue) {
     } else {
         workflow.group_2 = "";
     }
-    workflow.listPlots = [returnValue.hisBefore[0],
+    if(returnValue.hisBefore){
+         workflow.listPlots = [returnValue.hisBefore[0],
         returnValue.maplotBN,
         returnValue.boxplotDataBN,
         returnValue.RLE,
@@ -1231,8 +1232,17 @@ function JsonToObject(returnValue) {
     ];
     workflow.hisBefore = returnValue.hisBefore[0];
     workflow.hisAfter = returnValue.hisAfter[0];
-    workflow.normal = returnValue.normal;
-    workflow.heatmapAfterNorm =returnValue.heatmapAfterNorm[0];
+    }
+
+    if(returnValue.normal){
+            workflow.normal = returnValue.normal;
+    }
+
+    if(returnValue.heatmapAfterNorm){
+         workflow.heatmapAfterNorm =returnValue.heatmapAfterNorm[0];
+    }
+   
+
     return workflow;
 }
 
