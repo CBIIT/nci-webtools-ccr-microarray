@@ -156,17 +156,14 @@ class DataBox extends Component {
         let currentState = Object.assign({}, this.state);
         currentState.visible = true;
         currentState.group_name = "";
-
         this.setState(currentState);
     }
 
     handleOk = () => {
-
         let workflow = Object.assign({}, this.state);
         workflow.loading = true;
         this.setState(workflow);
         setTimeout(() => {
-
             let workflow = Object.assign({}, this.state);
             workflow.loading = false;
             workflow.visible = false;
@@ -180,7 +177,6 @@ class DataBox extends Component {
         document.getElementById("input_group_name").value = "";
         document.getElementById("input_group_name").setAttribute("value", "")
         document.getElementById("message-gsm-group").innerHTML = "";
-
         workflow.visible = false;
         let flag = workflow.added;
         workflow.added = false;
@@ -188,13 +184,9 @@ class DataBox extends Component {
             workflow.selected = [];
         }
         this.setState(workflow);
-        // call child unselect function
         if (flag) {
-
             this.child.current.unselect();
         }
-
-
     }
 
     selection = (selectedRowKeys) => {
@@ -250,11 +242,10 @@ class DataBox extends Component {
         // define group btn
         if (this.props.data.dataList.length > 0) {
             define_group_click_btn =
-
                 <div className="row">
-            <div className="div-group-gsm"><Button  type="primary" onClick={this.showModal} >Manage Group</Button> </div>
-             <div  className="div-export-gsm"><Button   id="btn-project-export" className="upload-start"  type="primary" onClick={this.props.exportGSE}> Export</Button> </div>
-           </div>;
+                    <div className="div-group-gsm"><Button  type="primary" onClick={this.showModal} >Manage Group</Button> </div>
+                    <div  className="div-export-gsm"><Button   id="btn-project-export" className="upload-start"  type="primary" onClick={this.props.exportGSE}> Export</Button> </div>
+               </div>;
         }
 
         if (this.props.data.compared) {
@@ -348,7 +339,6 @@ class DataBox extends Component {
         let group_table = <Table columns={columns} scroll={{ x: 600}}  dataSource={groups_data_list} pagination={false}/>
         let modal = "";
 
-
         // define group modal
         modal = <Modal key="group_define_modal" visible={visible}  className="custom_modal" title="Manage GSM Group(s)" onOk={this.handleOk} onCancel={this.handleCancel}
         footer={[
@@ -374,9 +364,6 @@ class DataBox extends Component {
           {group_table}
         </Modal>
         // end  group modal
-
-
-
         let content = (<Tabs onChange={this.handleTabChange} type="card" activeKey={this.props.data.tab_activeKey} >
                       <TabPane tab="GSM Data" key="GSM_1">
                           {define_group_click_btn}
