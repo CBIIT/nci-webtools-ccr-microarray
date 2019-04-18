@@ -114,7 +114,7 @@ process = function(){
              hisAfter <-"histAfterRMAnorm.html"
            }else{
              norm_celfiles =loess_QCnorm(celfiles,data_repo_path)
-              hisAfter <-"heatmapAfterLoessNorm.html"
+              hisAfter <-"histAfterLoessNorm.html"
           }
           # norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
           col_name<-pData(celfiles)$title
