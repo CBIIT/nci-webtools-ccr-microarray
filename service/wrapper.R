@@ -108,10 +108,13 @@ process = function(){
                 celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
           }
           saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
-          if(normal=="RMA")
+
+          if(normal=="RMA"){
              norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
-           else{
+             hisAfter <-"histAfterRMAnorm.html"
+           }else{
              norm_celfiles =loess_QCnorm(celfiles,data_repo_path)
+              hisAfter <-"heatmapAfterLoessNorm.html"
           }
           # norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
           col_name<-pData(celfiles)$title
@@ -138,7 +141,7 @@ process = function(){
               boxplot_DataBN,
               RLE_data,
               NUSE_data,
-              norm_celfiles[[5]],
+              hisAfter,
               norm_celfiles[[6]]@listData,
               boxplot_DataAN,
               pcaData,
@@ -179,7 +182,7 @@ process = function(){
 
            tryCatch({
               ss_result<-""
-              ssGSEA_results = ssgseaPathways(diff_expr_genes,species2,geneSet,data_repo_path,projectId,config_path)
+              ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
               message("ssgseaPathways finally")
               file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
                if (!file.exists(file)) {
