@@ -1638,9 +1638,8 @@ class Analysis extends Component {
     getHistplotBN = () => {
         let workflow = Object.assign({}, this.state.workflow);
         let histplotBNLink = './images/' + workflow.projectID + "/" + workflow.histplotBN_url;
-        //let histplotBN = <div><img src={ histplotBNLink }  alt="Histogram" /></div>;
+        histplotBNLink="https://wwww.gogle.com"
         let histplotBN = <CIframe title={"histplotBN"} link={histplotBNLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
-
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
     }
@@ -1891,7 +1890,7 @@ class Analysis extends Component {
         var groups = []
         for (var i in workflow.dataList) {
             if (workflow.dataList[i].group == "") {
-                groups.push("others");
+                groups.push("Others");
             } else {
                 groups.push(workflow.dataList[i].group);
             }
@@ -1959,7 +1958,7 @@ class Analysis extends Component {
                         workflow.progressing = false;
                         workflow.dataList = list.files;
                         // init group with default value
-                        workflow.groups = new Array(list.files.length).fill('others');
+                        workflow.groups = new Array(list.files.length).fill('Others');
 
                         // disable the input , prevent user to change the access code
                         document.getElementById("input-access-code").disabled = true;
@@ -2054,7 +2053,7 @@ class Analysis extends Component {
                 reqBody.groups.push(workflow.dataList[i].groups);
             } else {
                 // default value of the group is others
-                reqBody.groups.push("others")
+                reqBody.groups.push("Others")
             }
         }
         reqBody.genSet = workflow.genSet;

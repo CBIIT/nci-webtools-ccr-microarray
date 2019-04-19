@@ -60,7 +60,7 @@ router.post('/upload', function(req, res) {
         data.push(pid);
         //data path
         data.push(config.uploadPath);
-        data.push(new Array(number_of_files).fill("others"));
+        data.push(new Array(number_of_files).fill("Others"));
         R.execute("wrapper.R", data, function(err, returnValue) {
             if (err) {
                 logger.info("API:/upload result ", "status 404 ");
