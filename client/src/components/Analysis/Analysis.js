@@ -2718,6 +2718,11 @@ class Analysis extends Component {
                             }
                             workflow2.dataList = tmp_gsms;
                         }
+                        if(result.source&&result.source=="upload"){
+                            // change analysis type
+                            workflow2.analysisType = "1";
+                            workflow2.uploaded =true;
+                        }
                         workflow2.accessionCode = result.accessionCode;
                         workflow2.projectID = result.projectId[0];
                         workflow2.group_1 = result.group_1;

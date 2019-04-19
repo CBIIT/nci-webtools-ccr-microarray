@@ -201,6 +201,7 @@ process = function(){
                       ss_data_d=ss_result[2:length(ss_result[,1]),]
                      }
                     re<-list(
+                    source=source,
                     ss_name=ss_name_d,
                     ss_data= ss_data_d,
                     uppath=l2p_pathways[[1]][[1]],

@@ -295,6 +295,7 @@ router.post('/getResultByProjectId', function(req, res) {
                     logger.info("store data in req.session")
                     let return_data = "";
                     return_data = {
+                        source:req.session.runContrastData.source,
                         histplotBN:req.session.runContrastData.hisBefore,
                         histplotAN:req.session.runContrastData.hisAfter,
                         colors: req.session.runContrastData.colors,
@@ -359,6 +360,7 @@ router.post('/runContrast', function(req, res) {
                     logger.info("req.session.runContrastData.hisBefore")
                     logger.info(req.session.runContrastData.hisBefore)
                     return_data = {
+                        source:req.session.runContrastData.source,
                         histplotBN:req.session.runContrastData.hisBefore,
                         histplotAN:req.session.runContrastData.hisAfter,
                         colors: req.session.runContrastData.colors,
@@ -1241,7 +1243,10 @@ function JsonToObject(returnValue) {
     if(returnValue.heatmapAfterNorm){
          workflow.heatmapAfterNorm =returnValue.heatmapAfterNorm[0];
     }
-   
+    
+    if(returnValue.source){
+        workflow.source = returnValue.source;
+    }
 
     return workflow;
 }
