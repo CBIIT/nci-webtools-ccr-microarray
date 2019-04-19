@@ -1189,12 +1189,25 @@ class Analysis extends Component {
                             let pcaPlotData = [];
                             // break data in to groups 
                             let group_data = {};
+                            let color_for_others = "#000";
                             pcaData.group_name.forEach(function(element, i) {
+                                let color = pcaData.color[i]
+                                if (pcaData.group_name[i].toLowerCase() == "others") {
+                                    if (color_for_others == "#000")
+                                        color_for_others = pcaData.color[i];
+                                }
+
+                                if (pcaData.group_name[i].toLowerCase() == workflow2.group_2 || pcaData.group_name[i].toLowerCase() == workflow2.group_1) {
+                                    color = pcaData.color[i];
+                                } else {
+                                    color = color_for_others;
+                                }
+
                                 if (group_data.hasOwnProperty(element)) {
                                     group_data[element]["x"].push(pcaData.x[i]);
                                     group_data[element]["y"].push(pcaData.y[i]);
                                     group_data[element]["z"].push(pcaData.z[i]);
-                                    group_data[element]['color'].push(pcaData.color[i]);
+                                    group_data[element]['color'].push(color);
                                     group_data[element]['group_name'].push(pcaData.group_name[i]);
                                     group_data[element]['row'].push(pcaData.row[i]);
                                 } else {
@@ -1202,12 +1215,19 @@ class Analysis extends Component {
                                     group_data[element]["x"] = [pcaData.x[i]];
                                     group_data[element]["y"] = [pcaData.y[i]];
                                     group_data[element]["z"] = [pcaData.z[i]];
-                                    group_data[element]['color'] = [pcaData.color[i]];
+                                    group_data[element]['color'] = [color];
                                     group_data[element]['group_name'] = [pcaData.group_name[i]];
                                     group_data[element]['row'] = [pcaData.row[i]];
                                 }
                             });
                             for (let element in group_data) {
+                                let color ="";
+                                if (element.toLowerCase() == workflow2.group_2 || element.toLowerCase() == workflow2.group_1) {
+                                    color = group_data[element]['color'];
+                                } else {
+                                    color = color_for_others;
+                                }
+
                                 pcaPlotData.push({
                                     autosize: true,
                                     x: group_data[element]["x"],
@@ -1217,7 +1237,7 @@ class Analysis extends Component {
                                     mode: 'markers',
                                     marker: {
                                         size: 10,
-                                        color: group_data[element]['color'],
+                                        color: color,
                                     },
                                     legendgroup: element,
                                     name: element,
@@ -1345,7 +1365,6 @@ class Analysis extends Component {
     getHistplotAN = () => {
         let workflow = Object.assign({}, this.state.workflow);
         let histplotANLink = './images/' + workflow.projectID + "/" + workflow.histplotAN_url;
-        //histplotANLink = "http://localhost:9000/images/7bfe2a621904463f94d3e19b00c878ac/heatmapAfterRMAnorm.html"
         let histplotAN = <CIframe title={"HistplotAN"} link={histplotANLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.postplot.histplotAN = histplotAN;
         this.setState({ workflow: workflow });
@@ -1491,9 +1510,13 @@ class Analysis extends Component {
         // x,y value use to positiion the legend. 
 
         // get group with max word length 
+        let color_for_others = "#000";
         const reducer2 = (accumulator, v, i, array) => {
             if (accumulator.length <= v.length) {
                 accumulator = v;
+            }
+            if (v.toLowerCase() == "others") {
+                color_for_others = BoxplotsData.color[i]
             }
             return accumulator;
         };
@@ -1504,13 +1527,20 @@ class Analysis extends Component {
 
         // pick trace show legend. Only one trace in a group of trace need to show legend. 
         const reducer = (accumulator, v, i, array) => {
+            let cMarker = "";
+            if (v == workflow.group_2 || v == workflow.group_1) {
+                cMarker = BoxplotsData.color[i];
+            } else {
+                cMarker = color_for_others;
+            }
+
             if (array.indexOf(v) === i)
                 accumulator.push({
                     x: maxX,
                     y: maxY - accumulator.length * gap / 10,
                     xref: 'x',
                     yref: 'y',
-                    text: '<span style="text-align:right"><span style="color:' + BoxplotsData.color[i] + '">O</span>   ' + v + '</span>',
+                    text: '<span style="text-align:right"><span style="color:' + cMarker + '">O</span>   ' + v + '</span>',
                     showarrow: false,
                     width: text_max_width,
                     align: "left",
@@ -1521,13 +1551,21 @@ class Analysis extends Component {
         let legend_settings = workflow.groups.reduce(reducer, []);
 
         for (let i = 0; i < result.data.col.length; i++) {
+            let cMarker = ""
+            if (workflow.groups[i] == workflow.group_2 || workflow.groups[i] == workflow.group_1) {
+                cMarker = {
+                    color: BoxplotsData.color[i]
+                }
+            } else {
+                cMarker = {
+                    color: color_for_others
+                }
+            }
             let boxplotData = {
                 y: BoxplotsData.data[i],
                 type: "box",
                 name: BoxplotsData.col[i],
-                marker: {
-                    color: BoxplotsData.color[i]
-                },
+                marker: cMarker,
                 hovertext: result.data.col[i]
             };
             BoxplotRenderData.push(boxplotData);
@@ -1638,9 +1676,7 @@ class Analysis extends Component {
     getHistplotBN = () => {
         let workflow = Object.assign({}, this.state.workflow);
         let histplotBNLink = './images/' + workflow.projectID + "/" + workflow.histplotBN_url;
-        //let histplotBN = <div><img src={ histplotBNLink }  alt="Histogram" /></div>;
         let histplotBN = <CIframe title={"histplotBN"} link={histplotBNLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
-
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
     }
@@ -1891,7 +1927,7 @@ class Analysis extends Component {
         var groups = []
         for (var i in workflow.dataList) {
             if (workflow.dataList[i].group == "") {
-                groups.push("others");
+                groups.push("Others");
             } else {
                 groups.push(workflow.dataList[i].group);
             }
@@ -1959,7 +1995,7 @@ class Analysis extends Component {
                         workflow.progressing = false;
                         workflow.dataList = list.files;
                         // init group with default value
-                        workflow.groups = new Array(list.files.length).fill('others');
+                        workflow.groups = new Array(list.files.length).fill('Others');
 
                         // disable the input , prevent user to change the access code
                         document.getElementById("input-access-code").disabled = true;
@@ -2054,7 +2090,7 @@ class Analysis extends Component {
                 reqBody.groups.push(workflow.dataList[i].groups);
             } else {
                 // default value of the group is others
-                reqBody.groups.push("others")
+                reqBody.groups.push("Others")
             }
         }
         reqBody.genSet = workflow.genSet;
@@ -2717,6 +2753,11 @@ class Analysis extends Component {
                                 })
                             }
                             workflow2.dataList = tmp_gsms;
+                        }
+                        if (result.source && result.source == "upload") {
+                            // change analysis type
+                            workflow2.analysisType = "1";
+                            workflow2.uploaded = true;
                         }
                         workflow2.accessionCode = result.accessionCode;
                         workflow2.projectID = result.projectId[0];

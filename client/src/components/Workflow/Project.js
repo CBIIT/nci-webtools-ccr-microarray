@@ -3,7 +3,8 @@ import { Input, Upload, Button, Icon, message } from 'antd';
 
 
 class Project extends Component {
-
+    
+   
     constructor(props) {
         super(props);
     }
@@ -30,7 +31,7 @@ class Project extends Component {
           </select></div></div>);
         let source = "";
 
-        if (this.props.data.analysisType == "0") {
+        if (  this.props.data.analysisType== "0") {
             source = (
                 <div>
                 <div className="row">
@@ -64,7 +65,7 @@ class Project extends Component {
                 </div>
               </div>
             );
-        } else if (this.props.data.analysisType == "1") {
+        } else if (  this.props.data.analysisType == "1") {
             source = (<div className="upload-block row">
                    <div className="col-sm-12">
                     <Upload {...properties}   disabled={this.props.data.uploaded}>
