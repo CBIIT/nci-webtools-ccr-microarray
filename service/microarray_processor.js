@@ -51,7 +51,7 @@ function qAnalysis(data, emailto, endCallback) {
     queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * config.visibility_timeout);
     let setVisibility = setInterval(function() {
         i = i + 1;
-        if (i * config.visibility_timeout) >queue_msg_retention_seconds ) clearInterval(setVisibility); // pending for 6 hours then clearInterval
+        if ((i * config.visibility_timeout) >config.queue_msg_retention_seconds ) clearInterval(setVisibility); // pending for 6 hours then clearInterval
         logger.info("qAnalysis interval:", i);
         queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * config.visibility_timeout);
     }, 45 * 1000);
