@@ -25,11 +25,14 @@ const server = app.listen(config.port, function() {
 
 server.timeout=config.timeout;
 
-let logDirectory = config.logDir;
+let logDirectory = config.development.log_dir;
 // ensure log directory exists
-fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+fs.existsSync("../"+logDirectory) || fs.mkdirSync("../"+logDirectory);
 
 // when shutdown signal is received, do graceful shutdown
+let fileDirectory = config.development.upload_path;
+// ensure log directory exists
+fs.existsSync("../"+fileDirectory) || fs.mkdirSync("../"+fileDirectory);
 
 
 
