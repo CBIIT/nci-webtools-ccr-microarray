@@ -1674,6 +1674,7 @@ class Analysis extends Component {
     getHistplotBN = () => {
         let workflow = Object.assign({}, this.state.workflow);
         let histplotBNLink = './images/' + workflow.projectID + "/" + workflow.histplotBN_url;
+        histplotBNLink="http://localhost:3000/"
         let histplotBN = <CIframe title={"histplotBN"} link={histplotBNLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
         workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });

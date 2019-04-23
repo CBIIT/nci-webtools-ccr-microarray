@@ -72,39 +72,70 @@ class MAPlot extends Component {
             // construct html
             let count = 0;
 
-            let panels = new Array(unique_groups.length)
+            let panels = new Array();
 
-            for (let i = unique_groups_pic.length - 1; i >= 0; i--) {
+            let panels_pic = new Array(unique_groups.length);
 
-                for (let j = unique_groups_pic[i].length - 1; j >= 0; j--) {
+
+            let firstGroup ="";
+
+            let secondGroup ="";
+
+            for (let m = 0; m <unique_groups_pic.length; m++) {
+
+                for (let k = 0; k <unique_groups_pic[m].length; k++) {
 
                     count = count + 1;
 
-                    let link = "./images/" + projectID + unique_groups_pic[i][j].split("@")[0];
-                    let title = unique_groups_pic[i][j].split("@")[1];
-                    if (panels[i]) {
+                    let link = "./images/" + projectID + unique_groups_pic[m][k].split("@")[0];
+                    let title = unique_groups_pic[m][k].split("@")[1];
+                    if (panels_pic[m]) {
 
-                        panels[i].push(<div className="col-md-3" key={"mAplotBN"+count}  >
+                        panels_pic[m].push(<div className="col-md-3" key={"mAplotBN"+count}  >
                                          <div> <img  src={link } alt="MAplot"/></div>
                                 </div>);
 
                     } else {
-                        panels[i] = new Array(<div className="col-md-3" key={"mAplotBN"+count}  >
+                        panels_pic[m] = new Array(<div className="col-md-3" key={"mAplotBN"+count}  >
                                             <div>  <img  src={link } alt="MAplot"/> </div>
                      </div>);
 
                     }
                 }
-                let samples = unique_groups_pic[i].length == 1 ? " Sample )" : " Samples )";
-                panels[i] = <Panel header={unique_groups[i] + "   ("+unique_groups_pic[i].length+ samples} key={i} >
+
+                if(unique_groups[m] ==  this.props.data.group_1){
+                    firstGroup =<Panel header={unique_groups[m] + "   ("+unique_groups_pic[m].length+ samples} key={String(m)} >
                             <div className="row">
-                                {panels[i]}
+                                {panels_pic[m]}
                             </div>
                       </Panel>;
+                      continue;
+                }
+
+
+                if(unique_groups[m] ==  this.props.data.group_2){
+                    secondGroup=<Panel header={unique_groups[m] + "   ("+unique_groups_pic[m].length+ samples} key={String(m)} >
+                            <div className="row">
+                                {panels_pic[m]}
+                            </div>
+                      </Panel>;
+                      continue;
+                }
+
+
+                let samples = unique_groups_pic[m].length == 1 ? " Sample )" : " Samples )";
+                panels.push(<Panel header={unique_groups[m] + "   ("+unique_groups_pic[m].length+ samples} key={String(m)} >
+                                <div className="row">
+                                    {panels_pic[m]}
+                                </div>
+                            </Panel>);
             }
+            panels.unshift(secondGroup);
+            panels.unshift(firstGroup); 
+
             let keys = [];
 
-            for (let i = unique_groups.length - 1; i >= 0; i--) {
+            for (let i = 99; i >= 0; i--) {
                 keys.push(String(i))
             }
             return <Collapse defaultActiveKey={keys} >{panels}</Collapse>
