@@ -1192,14 +1192,12 @@ class Analysis extends Component {
                             let color_for_others = "#000";
                             pcaData.group_name.forEach(function(element, i) {
                                 let color = pcaData.color[i]
-                                if (pcaData.group_name[i].toLowerCase() == "others") {
-                                    if (color_for_others == "#000")
-                                        color_for_others = pcaData.color[i];
-                                }
 
                                 if (pcaData.group_name[i].toLowerCase() == workflow2.group_2 || pcaData.group_name[i].toLowerCase() == workflow2.group_1) {
                                     color = pcaData.color[i];
                                 } else {
+                                     if (color_for_others == "#000")
+                                        color_for_others = pcaData.color[i];
                                     color = color_for_others;
                                 }
 
@@ -1515,9 +1513,6 @@ class Analysis extends Component {
             if (accumulator.length <= v.length) {
                 accumulator = v;
             }
-            if (v.toLowerCase() == "others") {
-                color_for_others = BoxplotsData.color[i]
-            }
             return accumulator;
         };
         let max_text_length = workflow.groups.reduce(reducer2, "a"); // max text length 
@@ -1531,6 +1526,9 @@ class Analysis extends Component {
             if (v == workflow.group_2 || v == workflow.group_1) {
                 cMarker = BoxplotsData.color[i];
             } else {
+                if(color_for_others=="#000"){
+                     color_for_others = BoxplotsData.color[i]
+                }
                 cMarker = color_for_others;
             }
 
