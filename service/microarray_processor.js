@@ -15,6 +15,20 @@ var dateFormat = require('dateformat');
 var rimraf = require("rimraf");
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
+
+if(!config.queue_msg_retention_seconds){
+    config.queue_msg_retention_seconds =1209600;
+}
+
+if(!config.visibility_timeout){
+    config.visibility_timeout =90;
+}
+
+if(!config.queue_long_pull_time){
+    config.queue_long_pull_time =45;
+}
+
+
 queue.awsHander.getQueueUrl(function(flag) {
     if (flag) {
         logger.info("[Queue] Start queue");
