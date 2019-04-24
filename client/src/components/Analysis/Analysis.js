@@ -1399,7 +1399,6 @@ class Analysis extends Component {
                         let workflow = Object.assign({}, this.state.workflow);
                         if (result.status == 200) {
                             document.getElementById("message-post-maplot").innerHTML = "";
-                            let workflow = Object.assign({}, this.state.workflow);
                             if (result.data != "") {
                                 workflow.list_mAplotAN = result.data;
                             } else {
@@ -1650,8 +1649,10 @@ class Analysis extends Component {
                 fetch('./api/analysis/getMAplotsBN', {
                         method: "POST",
                         body: JSON.stringify(params),
-                        processData: false,
-                        contentType: false
+                        credentials: "same-origin",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     }).then(this.handleErrors)
                     .then(res => res.json())
                     .then(result => {
