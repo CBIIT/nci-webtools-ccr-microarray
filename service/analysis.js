@@ -183,8 +183,8 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
                 // store return value in session (deep copy)
                 let d = JsonToObject(re);
                 // save result into session 
-                if (req.session.runContrastData.ssGSEA) {
-                    req.session.runContrastData.ssGSEA = d.ssGSEA;
+                if (req.session[req.body.projectId].ssGSEA) {
+                    req.session[req.body.projectId].ssGSEA = d.ssGSEA;
                 }
                 logger.info("Get Contrast result success")
                 res.json({ status: 200, data: "" });
@@ -235,7 +235,7 @@ router.post("/qAnalysis", function(req, res) {
                 logger.info("[Queue] Send fails message  to client ", data.email)
                 let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED) ";
                 let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
-                emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+                emailer.sendMail(config.mail.web_admin_email, data.email, subject, "text", html)
                 res.json({ status: 404, data: "Send Message to Queue fails" });
             } else {
                 logger.info("[Queue] Send Message to Queue success");
@@ -256,7 +256,7 @@ router.post("/qAnalysis", function(req, res) {
             logger.info("[S3] upload files to S3 fails");
             let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED) ";
             let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
-            emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+            emailer.sendMail(config.mail.web_admin_email, data.email, subject, "text", html)
             res.json({ status: 404, data: "upload files to S3 fails" });
         }
 
@@ -288,29 +288,29 @@ router.post('/getResultByProjectId', function(req, res) {
                 } else {
                     let re = JSON.parse(returnValue)
                     // store return value in session (deep copy)
-                    req.session.runContrastData = JsonToObject(re);
-                    req.session.option = req.session.runContrastData.group_1 + req.session.runContrastData.group_2 + req.session.runContrastData.genSet;
-                    req.session.groups = req.session.runContrastData.groups;
-                    req.session.projectId = req.session.runContrastData.projectId;
+                    req.session[req.body.projectId] = JsonToObject(re);
+                    req.session[req.body.projectId].option = req.session[req.body.projectId].group_1 + req.session[req.body.projectId].group_2 + req.session[req.body.projectId].genSet;
+                    req.session[req.body.projectId].groups = req.session[req.body.projectId].groups;
+                    req.session[req.body.projectId].projectId = req.session[req.body.projectId].projectId;
                     logger.info("store data in req.session")
                     let return_data = "";
                     return_data = {
-                        source:req.session.runContrastData.source,
-                        histplotBN:req.session.runContrastData.hisBefore,
-                        histplotAN:req.session.runContrastData.hisAfter,
-                        colors: req.session.runContrastData.colors,
-                        normal:req.session.runContrastData.normal,
-                        mAplotBN: req.session.runContrastData.maplotBN,
-                        mAplotAN: req.session.runContrastData.maplotAfter,
-                        group_1: req.session.runContrastData.group_1,
-                        group_2: req.session.runContrastData.group_2,
-                        groups: req.session.runContrastData.groups,
-                        projectId: req.session.runContrastData.projectId,
-                        accessionCode: req.session.runContrastData.accessionCode,
+                        source:req.session[req.body.projectId].source,
+                        histplotBN:req.session[req.body.projectId].hisBefore,
+                        histplotAN:req.session[req.body.projectId].hisAfter,
+                        colors: req.session[req.body.projectId].colors,
+                        normal:req.session[req.body.projectId].normal,
+                        mAplotBN: req.session[req.body.projectId].maplotBN,
+                        mAplotAN: req.session[req.body.projectId].maplotAfter,
+                        group_1: req.session[req.body.projectId].group_1,
+                        group_2: req.session[req.body.projectId].group_2,
+                        groups: req.session[req.body.projectId].groups,
+                        projectId: req.session[req.body.projectId].projectId,
+                        accessionCode: req.session[req.body.projectId].accessionCode,
                         gsm: re.GSM,
                         mAplotBN: re.maplotBN,
                         mAplotAN: re.maplotAfter,
-                        heatmapolt:req.session.runContrastData.heatmapAfterNorm
+                        heatmapolt:req.session[req.body.projectId].heatmapAfterNorm
                     }
                     logger.info("Get Contrast result success")
                     res.json({ status: 200, data: return_data });
@@ -351,31 +351,31 @@ router.post('/runContrast', function(req, res) {
                 let re = JSON.parse(returnValue)
                 if (re.GSM) {
                     // store return value in session (deep copy)
-                    req.session.runContrastData = JsonToObject(re);
-                    req.session.option = req.session.runContrastData.group_1 + req.session.runContrastData.group_2 + req.session.runContrastData.genSet;
-                    req.session.groups = req.session.runContrastData.groups;
-                    req.session.projectId = req.session.runContrastData.projectId;
+                    req.session[req.body.projectId] = JsonToObject(re);
+                    req.session[req.body.projectId].option = req.session[req.body.projectId].group_1 + req.session[req.body.projectId].group_2 + req.session[req.body.projectId].genSet;
+                    req.session[req.body.projectId].groups = req.session[req.body.projectId].groups;
+                    req.session[req.body.projectId].projectId = req.session[req.body.projectId].projectId;
                     logger.info("store data in req.session")
                     let return_data = "";
-                    logger.info("req.session.runContrastData.hisBefore")
-                    logger.info(req.session.runContrastData.hisBefore)
+                    logger.info("req.session[req.body.projectId].hisBefore")
+                    logger.info(req.session[req.body.projectId].hisBefore)
                     return_data = {
-                        source:req.session.runContrastData.source,
-                        histplotBN:req.session.runContrastData.hisBefore,
-                        histplotAN:req.session.runContrastData.hisAfter,
-                        colors: req.session.runContrastData.colors,
-                        mAplotBN: req.session.runContrastData.maplotBN,
-                        mAplotAN: req.session.runContrastData.maplotAfter,
-                        group_1: req.session.runContrastData.group_1,
-                        group_2: req.session.runContrastData.group_2,
-                        groups: req.session.runContrastData.groups,
-                        projectId: req.session.runContrastData.projectId,
-                        accessionCode: req.session.runContrastData.accessionCode,
+                        source:req.session[req.body.projectId].source,
+                        histplotBN:req.session[req.body.projectId].hisBefore,
+                        histplotAN:req.session[req.body.projectId].hisAfter,
+                        colors: req.session[req.body.projectId].colors,
+                        mAplotBN: req.session[req.body.projectId].maplotBN,
+                        mAplotAN: req.session[req.body.projectId].maplotAfter,
+                        group_1: req.session[req.body.projectId].group_1,
+                        group_2: req.session[req.body.projectId].group_2,
+                        groups: req.session[req.body.projectId].groups,
+                        projectId: req.session[req.body.projectId].projectId,
+                        accessionCode: req.session[req.body.projectId].accessionCode,
                         gsm: re.GSM,
                         mAplotBN: re.maplotBN,
                         mAplotAN: re.maplotAfter,
                         normal:req.body.normal,
-                        heatmapolt:req.session.runContrastData.heatmapAfterNorm
+                        heatmapolt:req.session[req.body.projectId].heatmapAfterNorm
                     }
                     logger.info("Get Contrast result success")
                     res.json({ status: 200, data: return_data });
@@ -397,18 +397,18 @@ function getPlots(req, res, type) {
     let size = "";
     switch (type) {
         case "getHistplotAN":
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[5]
+            if (req.session && req.session[req.body.projectId]) {
+                return_data = req.session[req.body.projectId].listPlots[5]
             } else {
                 return_data = "";
             }
             break;
         case "getBoxplotAN":
-            if (req.session && req.session.runContrastData) {
-                if (typeof(req.session.runContrastData.listPlots[7].color[0]) == "number") {
-                    req.session.runContrastData.listPlots[7].color = req.session.runContrastData.listPlots[7].color = req.session.runContrastData.colors;
+            if (req.session && req.session[req.body.projectId]) {
+                if (typeof(req.session[req.body.projectId].listPlots[7].color[0]) == "number") {
+                    req.session[req.body.projectId].listPlots[7].color = req.session[req.body.projectId].listPlots[7].color = req.session[req.body.projectId].colors;
                 }
-                return_data = req.session.runContrastData.listPlots[7]
+                return_data = req.session[req.body.projectId].listPlots[7]
 
             } else {
                 return_data = "";
@@ -416,80 +416,80 @@ function getPlots(req, res, type) {
             break;
         case "getMAplotAN":
             console.time("getMAplotAN")
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[6]
+            if (req.session && req.session[req.body.projectId]) {
+                return_data = req.session[req.body.projectId].listPlots[6]
             } else {
                 return_data = "";
             }
             break;
         case "getPCA":
-            if (req.session && req.session.runContrastData) {
-                if (typeof(req.session.runContrastData.listPlots[8].color[0]) == "number") {
-                    req.session.runContrastData.listPlots[8].color = req.session.runContrastData.listPlots[8].color = req.session.runContrastData.colors;
+            if (req.session && req.session[req.body.projectId]) {
+                if (typeof(req.session[req.body.projectId].listPlots[8].color[0]) == "number") {
+                    req.session[req.body.projectId].listPlots[8].color = req.session[req.body.projectId].listPlots[8].color = req.session[req.body.projectId].colors;
                 }
                 let groups = [];
-                if (req.session.runContrastData.groups) {
-                    for (var i = 0; i <= req.session.runContrastData.groups.length - 1; i++) {
-                        if (req.session.runContrastData.groups[i] != 'Ctl') {
-                            groups.push(req.session.runContrastData.groups[i]);
+                if (req.session[req.body.projectId].groups) {
+                    for (var i = 0; i <= req.session[req.body.projectId].groups.length - 1; i++) {
+                        if (req.session[req.body.projectId].groups[i] != 'Ctl') {
+                            groups.push(req.session[req.body.projectId].groups[i]);
                         } else {
                             groups.push("Others");
                         }
                     }
                 }
-                req.session.runContrastData.listPlots[8].group_name = groups;
-                return_data = req.session.runContrastData.listPlots[8];
+                req.session[req.body.projectId].listPlots[8].group_name = groups;
+                return_data = req.session[req.body.projectId].listPlots[8];
             } else {
                 return_data = "";
             }
             break;
         case "getHeatmapolt":
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[9]
+            if (req.session && req.session[req.body.projectId]) {
+                return_data = req.session[req.body.projectId].listPlots[9]
             } else {
                 return_data = "";
             }
             break;
         case "getHistplotBN":
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[0]
+            if (req.session && req.session[req.body.projectId]) {
+                return_data = req.session[req.body.projectId].listPlots[0]
             } else {
                 return_data = "";
             }
             break;
         case "getMAplotsBN":
-            if (req.session && req.session.runContrastData) {
-                return_data = req.session.runContrastData.listPlots[1]
+            if (req.session && req.session[req.body.projectId]) {
+                return_data = req.session[req.body.projectId].listPlots[1]
             } else {
                 return_data = "";
             }
             break;
         case "getBoxplotBN":
-            if (req.session && req.session.runContrastData) {
-                if (typeof(req.session.runContrastData.listPlots[2].color[0]) == "number") {
-                    req.session.runContrastData.listPlots[2].color = req.session.runContrastData.listPlots[2].color = req.session.runContrastData.colors;
+            if (req.session && req.session[req.body.projectId]) {
+                if (typeof(req.session[req.body.projectId].listPlots[2].color[0]) == "number") {
+                    req.session[req.body.projectId].listPlots[2].color = req.session[req.body.projectId].listPlots[2].color = req.session[req.body.projectId].colors;
                 }
-                return_data = req.session.runContrastData.listPlots[2]
+                return_data = req.session[req.body.projectId].listPlots[2]
             } else {
                 return_data = "";
             }
             break;
         case "getRLE":
-            if (req.session && req.session.runContrastData) {
-                if (typeof(req.session.runContrastData.listPlots[3].color[0]) == "number") {
-                    req.session.runContrastData.listPlots[3].color = req.session.runContrastData.listPlots[3].color = req.session.runContrastData.colors;
+            if (req.session && req.session[req.body.projectId]) {
+                if (typeof(req.session[req.body.projectId].listPlots[3].color[0]) == "number") {
+                    req.session[req.body.projectId].listPlots[3].color = req.session[req.body.projectId].listPlots[3].color = req.session[req.body.projectId].colors;
                 }
-                return_data = req.session.runContrastData.listPlots[3]
+                return_data = req.session[req.body.projectId].listPlots[3]
             } else {
                 return_data = "";
             }
             break;
         case "getNUSE":
-            if (req.session && req.session.runContrastData) {
-                if (typeof(req.session.runContrastData.listPlots[4].color[0]) == "number") {
-                    req.session.runContrastData.listPlots[4].color = req.session.runContrastData.listPlots[4].color = req.session.runContrastData.colors;
+            if (req.session && req.session[req.body.projectId]) {
+                if (typeof(req.session[req.body.projectId].listPlots[4].color[0]) == "number") {
+                    req.session[req.body.projectId].listPlots[4].color = req.session[req.body.projectId].listPlots[4].color = req.session[req.body.projectId].colors;
                 }
-                return_data = req.session.runContrastData.listPlots[4]
+                return_data = req.session[req.body.projectId].listPlots[4]
             } else {
                 return_data = "";
             }
@@ -547,7 +547,7 @@ router.post('/getNUSE', function(req, res) {
 
 
 router.post('/getUpPathWays', function(req, res) {
-    if (req.session && req.session.runContrastData) {
+    if (req.session && req.session[req.body.projectId]) {
         res.json({
             status: 200,
             data: getUpPathWays(req)
@@ -561,7 +561,7 @@ router.post('/getUpPathWays', function(req, res) {
 });
 
 router.post('/getDownPathWays', function(req, res) {
-    if (req.session && req.session.runContrastData) {
+    if (req.session && req.session[req.body.projectId]) {
         res.json({
             status: 200,
             data: getDownPathWays(req)
@@ -575,7 +575,7 @@ router.post('/getDownPathWays', function(req, res) {
 });
 
 router.post('/getGSEA', function(req, res) {
-    if (req.session && req.session.runContrastData) {
+    if (req.session && req.session[req.body.projectId]) {
         res.json({
             status: 200,
             data: getGSEA(req)
@@ -589,7 +589,7 @@ router.post('/getGSEA', function(req, res) {
 });
 
 router.post('/getDEG', function(req, res) {
-    if (req.session && req.session.runContrastData) {
+    if (req.session && req.session[req.body.projectId]) {
         res.json({
             status: 200,
             data: getDEG(req)
@@ -605,7 +605,7 @@ router.post('/getDEG', function(req, res) {
 
 function getUpPathWays(req) {
     return getPathWays(
-        req.session.runContrastData.pathways_up, {},
+        req.session[req.body.projectId].pathways_up, {},
         req.body.sorting,
         req.body.search_keyword,
         req.body.page_size,
@@ -615,7 +615,7 @@ function getUpPathWays(req) {
 
 function getDownPathWays(req) {
     return getPathWays(
-        req.session.runContrastData.pathways_down, {},
+        req.session[req.body.projectId].pathways_down, {},
         req.body.sorting,
         req.body.search_keyword,
         req.body.page_size,
@@ -625,7 +625,7 @@ function getDownPathWays(req) {
 
 function getGSEA(req) {
     return getGSEA_filter(
-        req.session.runContrastData.ssGSEA, {},
+        req.session[req.body.projectId].ssGSEA, {},
         req.body.sorting,
         req.body.search_keyword,
         req.body.page_size,
@@ -637,7 +637,7 @@ function getDEG(req) {
     let threadhold = {}
     // add filter 
     return getDEG_filter(
-        req.session.runContrastData.diff_expr_genes,
+        req.session[req.body.projectId].diff_expr_genes,
         threadhold,
         req.body.sorting,
         req.body.search_keyword,
@@ -650,25 +650,25 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     let result = data;
     if (type == "pathways_up") {
         // store
-        if (req.session.pathway_up_tmp) {
-            if (req.session.pathway_up_tmp.sorting_order == sorting.order &&
-                req.session.pathway_up_tmp.sorting_name == sorting.name &&
-                req.session.pathway_up_tmp.search_PATHWAY_ID == search_keyword.search_PATHWAY_ID &&
-                req.session.pathway_up_tmp.search_SOURCE == search_keyword.search_SOURCE &&
-                req.session.pathway_up_tmp.search_TYPE == search_keyword.search_TYPE &&
-                req.session.pathway_up_tmp.search_DESCRIPTION == search_keyword.search_DESCRIPTION &&
-                req.session.pathway_up_tmp.search_p_value == search_keyword.search_p_value &&
-                req.session.pathway_up_tmp.search_fdr == search_keyword.search_fdr &&
-                req.session.pathway_up_tmp.search_RATIO == search_keyword.search_RATIO &&
-                req.session.pathway_up_tmp.search_NUMBER_HITS == search_keyword.search_NUMBER_HITS &&
-                req.session.pathway_up_tmp.search_GENE_LIST == search_keyword.search_GENE_LIST &&
-                req.session.pathway_up_tmp.search_NUMBER_GENES_PATHWAY == search_keyword.search_NUMBER_GENES_PATHWAY &&
-                req.session.pathway_up_tmp.search_NUMBER_USER_GENES == search_keyword.search_NUMBER_USER_GENES &&
-                req.session.pathway_up_tmp.search_TOTAL_NUMBER_GENES == search_keyword.search_TOTAL_NUMBER_GENES) {
+        if (req.session[req.body.projectId].pathway_up_tmp) {
+            if (req.session[req.body.projectId].pathway_up_tmp.sorting_order == sorting.order &&
+                req.session[req.body.projectId].pathway_up_tmp.sorting_name == sorting.name &&
+                req.session[req.body.projectId].pathway_up_tmp.search_PATHWAY_ID == search_keyword.search_PATHWAY_ID &&
+                req.session[req.body.projectId].pathway_up_tmp.search_SOURCE == search_keyword.search_SOURCE &&
+                req.session[req.body.projectId].pathway_up_tmp.search_TYPE == search_keyword.search_TYPE &&
+                req.session[req.body.projectId].pathway_up_tmp.search_DESCRIPTION == search_keyword.search_DESCRIPTION &&
+                req.session[req.body.projectId].pathway_up_tmp.search_p_value == search_keyword.search_p_value &&
+                req.session[req.body.projectId].pathway_up_tmp.search_fdr == search_keyword.search_fdr &&
+                req.session[req.body.projectId].pathway_up_tmp.search_RATIO == search_keyword.search_RATIO &&
+                req.session[req.body.projectId].pathway_up_tmp.search_NUMBER_HITS == search_keyword.search_NUMBER_HITS &&
+                req.session[req.body.projectId].pathway_up_tmp.search_GENE_LIST == search_keyword.search_GENE_LIST &&
+                req.session[req.body.projectId].pathway_up_tmp.search_NUMBER_GENES_PATHWAY == search_keyword.search_NUMBER_GENES_PATHWAY &&
+                req.session[req.body.projectId].pathway_up_tmp.search_NUMBER_USER_GENES == search_keyword.search_NUMBER_USER_GENES &&
+                req.session[req.body.projectId].pathway_up_tmp.search_TOTAL_NUMBER_GENES == search_keyword.search_TOTAL_NUMBER_GENES) {
                 // return index
                 let output = {
-                    totalCount: req.session.pathway_up_tmp.data.length,
-                    records: req.session.pathway_up_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+                    totalCount: req.session[req.body.projectId].pathway_up_tmp.data.length,
+                    records: req.session[req.body.projectId].pathway_up_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
                 }
                 return output;
             }
@@ -676,25 +676,25 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     }
     if (type == "pathways_down") {
         // store
-        if (req.session.pathway_down_tmp) {
-            if (req.session.pathway_down_tmp.sorting_order == sorting.order &&
-                req.session.pathway_down_tmp.sorting_name == sorting.name &&
-                req.session.pathway_down_tmp.search_PATHWAY_ID == search_keyword.search_PATHWAY_ID &&
-                req.session.pathway_down_tmp.search_SOURCE == search_keyword.search_SOURCE &&
-                req.session.pathway_down_tmp.search_TYPE == search_keyword.search_TYPE &&
-                req.session.pathway_down_tmp.search_DESCRIPTION == search_keyword.search_DESCRIPTION &&
-                req.session.pathway_down_tmp.search_p_value == search_keyword.search_p_value &&
-                req.session.pathway_down_tmp.search_fdr == search_keyword.search_fdr &&
-                req.session.pathway_down_tmp.search_RATIO == search_keyword.search_RATIO &&
-                req.session.pathway_down_tmp.search_NUMBER_HITS == search_keyword.search_NUMBER_HITS &&
-                req.session.pathway_down_tmp.search_GENE_LIST == search_keyword.search_GENE_LIST &&
-                req.session.pathway_down_tmp.search_NUMBER_GENES_PATHWAY == search_keyword.search_NUMBER_GENES_PATHWAY &&
-                req.session.pathway_down_tmp.search_NUMBER_USER_GENES == search_keyword.search_NUMBER_USER_GENES &&
-                req.session.pathway_down_tmp.search_TOTAL_NUMBER_GENES == search_keyword.search_TOTAL_NUMBER_GENES) {
+        if (req.session[req.body.projectId].pathway_down_tmp) {
+            if (req.session[req.body.projectId].pathway_down_tmp.sorting_order == sorting.order &&
+                req.session[req.body.projectId].pathway_down_tmp.sorting_name == sorting.name &&
+                req.session[req.body.projectId].pathway_down_tmp.search_PATHWAY_ID == search_keyword.search_PATHWAY_ID &&
+                req.session[req.body.projectId].pathway_down_tmp.search_SOURCE == search_keyword.search_SOURCE &&
+                req.session[req.body.projectId].pathway_down_tmp.search_TYPE == search_keyword.search_TYPE &&
+                req.session[req.body.projectId].pathway_down_tmp.search_DESCRIPTION == search_keyword.search_DESCRIPTION &&
+                req.session[req.body.projectId].pathway_down_tmp.search_p_value == search_keyword.search_p_value &&
+                req.session[req.body.projectId].pathway_down_tmp.search_fdr == search_keyword.search_fdr &&
+                req.session[req.body.projectId].pathway_down_tmp.search_RATIO == search_keyword.search_RATIO &&
+                req.session[req.body.projectId].pathway_down_tmp.search_NUMBER_HITS == search_keyword.search_NUMBER_HITS &&
+                req.session[req.body.projectId].pathway_down_tmp.search_GENE_LIST == search_keyword.search_GENE_LIST &&
+                req.session[req.body.projectId].pathway_down_tmp.search_NUMBER_GENES_PATHWAY == search_keyword.search_NUMBER_GENES_PATHWAY &&
+                req.session[req.body.projectId].pathway_down_tmp.search_NUMBER_USER_GENES == search_keyword.search_NUMBER_USER_GENES &&
+                req.session[req.body.projectId].pathway_down_tmp.search_TOTAL_NUMBER_GENES == search_keyword.search_TOTAL_NUMBER_GENES) {
                 // return index
                 let output = {
-                    totalCount: req.session.pathway_down_tmp.data.length,
-                    records: req.session.pathway_down_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+                    totalCount: req.session[req.body.projectId].pathway_down_tmp.data.length,
+                    records: req.session[req.body.projectId].pathway_down_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
                 }
                 return output;
             }
@@ -819,7 +819,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     }
     if (type == "pathways_up") {
         // store current filter result into tmp 
-        req.session.pathway_up_tmp = {
+        req.session[req.body.projectId].pathway_up_tmp = {
             sorting_order: sorting.order,
             sorting_name: sorting.name,
             search_PATHWAY_ID: search_keyword.search_PATHWAY_ID,
@@ -839,7 +839,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     }
     if (type == "pathways_down") {
         // store current filter result into tmp 
-        req.session.pathway_down_tmp = {
+        req.session[req.body.projectId].pathway_down_tmp = {
             sorting_order: sorting.order,
             sorting_name: sorting.name,
             search_PATHWAY_ID: search_keyword.search_PATHWAY_ID,
@@ -957,25 +957,25 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
 function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, page_number, req) {
     let result = data;
     // store
-    if (req.session.deg_tmp) {
+    if (req.session[req.body.projectId].deg_tmp) {
         // if only request a page's content do not need to filter out the data
-        if (req.session.deg_tmp.sorting_order == sorting.order &&
-            req.session.deg_tmp.sorting_name == sorting.name &&
-            req.session.deg_tmp.search_symbol == search_keyword.search_symbol &&
-            req.session.deg_tmp.search_fc == search_keyword.search_fc &&
-            req.session.deg_tmp.search_p_value == search_keyword.search_p_value &&
-            req.session.deg_tmp.search_adj_p_value == search_keyword.search_adj_p_value &&
-            req.session.deg_tmp.search_aveexpr == search_keyword.search_aveexpr &&
-            req.session.deg_tmp.search_accnum == search_keyword.search_accnum &&
-            req.session.deg_tmp.search_desc == search_keyword.search_desc &&
-            req.session.deg_tmp.search_entrez == search_keyword.search_entrez &&
-            req.session.deg_tmp.search_probsetid == search_keyword.search_probsetid &&
-            req.session.deg_tmp.search_t == search_keyword.search_t &&
-            req.session.deg_tmp.search_b == search_keyword.search_b) {
+        if (req.session[req.body.projectId].deg_tmp.sorting_order == sorting.order &&
+            req.session[req.body.projectId].deg_tmp.sorting_name == sorting.name &&
+            req.session[req.body.projectId].deg_tmp.search_symbol == search_keyword.search_symbol &&
+            req.session[req.body.projectId].deg_tmp.search_fc == search_keyword.search_fc &&
+            req.session[req.body.projectId].deg_tmp.search_p_value == search_keyword.search_p_value &&
+            req.session[req.body.projectId].deg_tmp.search_adj_p_value == search_keyword.search_adj_p_value &&
+            req.session[req.body.projectId].deg_tmp.search_aveexpr == search_keyword.search_aveexpr &&
+            req.session[req.body.projectId].deg_tmp.search_accnum == search_keyword.search_accnum &&
+            req.session[req.body.projectId].deg_tmp.search_desc == search_keyword.search_desc &&
+            req.session[req.body.projectId].deg_tmp.search_entrez == search_keyword.search_entrez &&
+            req.session[req.body.projectId].deg_tmp.search_probsetid == search_keyword.search_probsetid &&
+            req.session[req.body.projectId].deg_tmp.search_t == search_keyword.search_t &&
+            req.session[req.body.projectId].deg_tmp.search_b == search_keyword.search_b) {
             logger.info("Get Deg data from session success")
             let output = {
-                totalCount: req.session.deg_tmp.data.length,
-                records: req.session.deg_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+                totalCount: req.session[req.body.projectId].deg_tmp.data.length,
+                records: req.session[req.body.projectId].deg_tmp.data.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
             }
             return output;
         } else {
@@ -1095,7 +1095,7 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
     }
     logger.info("Put Deg data into session ")
     // store current filter result into tmp 
-    req.session.deg_tmp = {
+    req.session[req.body.projectId].deg_tmp = {
         sorting_order: sorting.order,
         sorting_name: sorting.name,
         search_symbol: search_keyword.search_symbol,

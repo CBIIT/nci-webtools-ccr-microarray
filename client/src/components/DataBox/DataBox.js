@@ -141,14 +141,12 @@ class DataBox extends Component {
         if (key == "GSM_1") {
            // do nothing
         }
-
         if (key == "ssGSEA_Results") {
             if (this.props.data.ssGSEA.data.length == 0) {
                 this.props.getssGSEA();
             }
         }
-       
-         this.props.upateCurrentWorkingTab(key)
+        this.props.upateCurrentWorkingTab(key)
 
     }
 
@@ -197,7 +195,6 @@ class DataBox extends Component {
         if (document.getElementById("input_group_name").value == "") {
             document.getElementById("message-gsm-group").innerHTML = "tag name is required. "
         } else {
-
             if (this.state.selected.length > 0) {
                 // if user select records in table 
                 this.props.assignGroup(document.getElementById("input_group_name").value, this.state.selected, this, function(flag, handler) {
@@ -208,7 +205,6 @@ class DataBox extends Component {
                         handler.setState(currentState);
                     }
                 })
-
 
             } else {
                 document.getElementById("message-gsm-group").innerHTML = "Please select some gsm(s). "
