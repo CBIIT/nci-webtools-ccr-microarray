@@ -828,8 +828,8 @@ class Analysis extends Component {
                     let workflow = Object.assign({}, this.state.workflow);
                     var wb = XLSX.utils.book_new();
                     wb.Props = {
-                        Title: "Export Pathways For Upregulated Genes Data",
-                        Subject: "Pathways For Upregulated Genes Data",
+                        Title: "Export Pathways For Downregulated Genes Data",
+                        Subject: "Pathways For Downregulated Genes Data",
                         Author: "Microarray",
                         CreatedDate: new Date()
                     };
@@ -863,7 +863,7 @@ class Analysis extends Component {
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
-                        ws_data.push(["Type", "Pathways_For_Upregulated_Genes"])
+                        ws_data.push(["Type", "Pathways_For_Downregulated_Genes"])
 
                         ws_data.push(["Filters", ""])
 
@@ -1177,8 +1177,10 @@ class Analysis extends Component {
             fetch('./api/analysis/getPCA', {
                     method: "POST",
                     body: JSON.stringify(params),
-                    processData: false,
-                    contentType: false
+                    credentials: "same-origin",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 })
                 .then(this.handleErrors)
                 .then(res => res.json())
@@ -1193,10 +1195,10 @@ class Analysis extends Component {
                             pcaData.group_name.forEach(function(element, i) {
                                 let color = pcaData.color[i]
 
-                                if (pcaData.group_name[i].toLowerCase() == workflow2.group_2 || pcaData.group_name[i].toLowerCase() == workflow2.group_1) {
+                                if (pcaData.group_name[i].toLowerCase() == workflow2.group_2.toLowerCase() || pcaData.group_name[i].toLowerCase() == workflow2.group_1.toLowerCase()) {
                                     color = pcaData.color[i];
                                 } else {
-                                     if (color_for_others == "#000")
+                                    if (color_for_others == "#000")
                                         color_for_others = pcaData.color[i];
                                     color = color_for_others;
                                 }
@@ -1219,8 +1221,8 @@ class Analysis extends Component {
                                 }
                             });
                             for (let element in group_data) {
-                                let color ="";
-                                if (element.toLowerCase() == workflow2.group_2 || element.toLowerCase() == workflow2.group_1) {
+                                let color = "";
+                                if (element.toLowerCase() == workflow2.group_2.toLowerCase() || element.toLowerCase() == workflow2.group_1.toLowerCase()) {
                                     color = group_data[element]['color'];
                                 } else {
                                     color = color_for_others;
@@ -1323,8 +1325,10 @@ class Analysis extends Component {
             fetch('./api/analysis/getBoxplotAN', {
                     method: "POST",
                     body: JSON.stringify(params),
-                    processData: false,
-                    contentType: false
+                    credentials: "same-origin",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 })
                 .then(this.handleErrors)
                 .then(res => res.json())
@@ -1384,8 +1388,10 @@ class Analysis extends Component {
                 fetch('./api/analysis/getMAplotAN', {
                         method: "POST",
                         body: JSON.stringify(params),
-                        processData: false,
-                        contentType: false
+                        credentials: "same-origin",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     })
                     .then(this.handleErrors)
                     .then(res => res.json())
@@ -1405,7 +1411,7 @@ class Analysis extends Component {
                         }
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
-                    }).catch(error => console.log(error));
+                    })
             } catch (error) {
                 document.getElementById("message-post-maplot").innerHTML = error;
                 let workflow = Object.assign({}, this.state.workflow);
@@ -1424,8 +1430,10 @@ class Analysis extends Component {
             fetch('./api/analysis/getNUSE', {
                     method: "POST",
                     body: JSON.stringify(params),
-                    processData: false,
-                    contentType: false
+                    credentials: "same-origin",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 }).then(res => res.json())
                 .then(result => {
                     document.getElementById("message-pre-nuse").innerHTML = "";
@@ -1435,13 +1443,12 @@ class Analysis extends Component {
                         workflow.progressing = false;
                         workflow.NUSE.data = render_data.data;
                         workflow.NUSE.plot = render_data.plot;
-                        this.setState({ workflow: workflow });
                     } else {
                         document.getElementById("message-pre-nuse").innerHTML = result.msg;
                         workflow.progressing = false;
-                        this.setState({ workflow: workflow });
                     }
-                }).catch(error => console.log(error));
+                    this.setState({ workflow: workflow });
+                })
         } catch (error) {
             document.getElementById("message-pre-nuse").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
@@ -1459,26 +1466,26 @@ class Analysis extends Component {
             fetch('./api/analysis/getRLE', {
                     method: "POST",
                     body: JSON.stringify(params),
-                    processData: false,
-                    contentType: false
+                    credentials: "same-origin",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 }).then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
                     if (result.status == 200) {
                         document.getElementById("message-pre-rle").innerHTML = "";
+                        let workflow = Object.assign({}, this.state.workflow);
                         if (result.data != "") {
-                            let workflow = Object.assign({}, this.state.workflow);
                             workflow.progressing = false;
                             let render_data = this.generateBOXPLOT(result, workflow);
                             workflow.RLE.data = render_data.data;
                             workflow.RLE.plot = render_data.plot;
-                            this.setState({ workflow: workflow });
                         } else {
-                            let workflow = Object.assign({}, this.state.workflow);
                             workflow.RLE.plot = "No Data";
                             workflow.progressing = false;
-                            this.setState({ workflow: workflow });
                         }
+                        this.setState({ workflow: workflow });
                     } else {
                         document.getElementById("message-pre-rle").innerHTML = result.msg;
                         let workflow = Object.assign({}, this.state.workflow);
@@ -1486,7 +1493,7 @@ class Analysis extends Component {
                         workflow.progressing = false;
                         this.setState({ workflow: workflow });
                     }
-                }).catch(error => console.log(error));
+                })
         } catch (error) {
             document.getElementById("message-pre-rle").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
@@ -1526,8 +1533,8 @@ class Analysis extends Component {
             if (v == workflow.group_2 || v == workflow.group_1) {
                 cMarker = BoxplotsData.color[i];
             } else {
-                if(color_for_others=="#000"){
-                     color_for_others = BoxplotsData.color[i]
+                if (color_for_others == "#000") {
+                    color_for_others = BoxplotsData.color[i]
                 }
                 cMarker = color_for_others;
             }
@@ -1594,8 +1601,10 @@ class Analysis extends Component {
             fetch('./api/analysis/getBoxplotBN', {
                     method: "POST",
                     body: JSON.stringify(params),
-                    processData: false,
-                    contentType: false
+                    credentials: "same-origin",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 }).then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {

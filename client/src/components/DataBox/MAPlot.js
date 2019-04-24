@@ -103,6 +103,7 @@ class MAPlot extends Component {
                     }
                 }
 
+                let samples = unique_groups_pic[m].length == 1 ? " Sample )" : " Samples )";
                 if(unique_groups[m] ==  this.props.data.group_1){
                     firstGroup =<Panel header={unique_groups[m] + "   ("+unique_groups_pic[m].length+ samples} key={String(m)} >
                             <div className="row">
@@ -123,7 +124,7 @@ class MAPlot extends Component {
                 }
 
 
-                let samples = unique_groups_pic[m].length == 1 ? " Sample )" : " Samples )";
+              
                 panels.push(<Panel header={unique_groups[m] + "   ("+unique_groups_pic[m].length+ samples} key={String(m)} >
                                 <div className="row">
                                     {panels_pic[m]}

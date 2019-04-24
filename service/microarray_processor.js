@@ -28,6 +28,10 @@ if(!config.queue_long_pull_time){
     config.queue_long_pull_time =45;
 }
 
+if(!config.queue_request_interval){
+    config.queue_request_interval = 3;
+}
+
 
 queue.awsHander.getQueueUrl(function(flag) {
     if (flag) {
@@ -75,11 +79,10 @@ function qAnalysis(data, emailto, endCallback) {
     queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * config.visibility_timeout);
     let setVisibility = setInterval(function() {
         i = i + 1;
-        if ((i * config.visibility_timeout) > config.queue_msg_retention_seconds) clearInterval(setVisibility); // pending for 6 hours then clearInterval
+        if ((i * config.visibility_timeout) > config.queue_msg_fitting_timeout) clearInterval(setVisibility); // pending for 6 hours then clearInterval
         logger.info("qAnalysis interval:", i);
         queue.awsHander.changeMessageVisibility(data.Messages[0].ReceiptHandle, i * config.visibility_timeout);
     }, config.queue_long_pull_time * 1000);
-
 
 
     queue.awsHander.download(message.projectId, config.uploadPath, function(flag) {
@@ -149,7 +152,7 @@ function r(data, endCallback) {
         //     logger.info("[Queue] Send fails message  to client ", data.email)
         //     let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
         //     let html = emailer.emailFailedTemplate(code, secondToDate(end / 1000), data.submit, d[1])
-        //     emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+        //     emailer.sendMail(config.mail.web_admin_email, data.email, subject, "text", html)
         //     logger.info("clear result");
         //     cleanData(data.projectId, config.uploadPath);
 
@@ -160,7 +163,7 @@ function r(data, endCallback) {
                 logger.info("[Queue] Send fails message  to client ", data.email)
                 let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
                 let html = emailer.emailFailedTemplate(code, secondToDate(end / 1000), data.submit, d[1])
-                emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+                emailer.sendMail(config.mail.web_admin_email, data.email, subject, "text", html)
                 logger.info("clear result");
                 cleanData(data.projectId, config.uploadPath);
             } else {
@@ -170,14 +173,14 @@ function r(data, endCallback) {
                         logger.info("[Email] Send Message to client", data.email);
                         let html = emailer.emailTemplate(code, secondToDate(end / 1000), config.microarray_link + "?" + d[1], data.submit, d[1])
                         let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM");
-                        // emailer.sendMail(config.mail.from,data.email,subject, "", html)
-                        emailer.sendMail(config.mail.from, data.email, subject, "", html)
+                        // emailer.sendMail(config.mail.web_admin_email,data.email,subject, "", html)
+                        emailer.sendMail(config.mail.web_admin_email, data.email, subject, "", html)
                     } else {
                         logger.info("[Queue] Run Contrast fails ", err)
                         logger.info("[Queue] Send fails message  to client ", data.email)
                         let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED)";
                         let html = emailer.emailFailedTemplate(code, secondToDate(end / 1000), data.submit, d[1])
-                        emailer.sendMail(config.mail.from, data.email, subject, "text", html)
+                        emailer.sendMail(config.mail.web_admin_email, data.email, subject, "text", html)
                     }
                     logger.info("clear result");
                     cleanData(data.projectId, config.uploadPath);
