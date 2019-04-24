@@ -828,8 +828,8 @@ class Analysis extends Component {
                     let workflow = Object.assign({}, this.state.workflow);
                     var wb = XLSX.utils.book_new();
                     wb.Props = {
-                        Title: "Export Pathways For Upregulated Genes Data",
-                        Subject: "Pathways For Upregulated Genes Data",
+                        Title: "Export Pathways For Downregulated Genes Data",
+                        Subject: "Pathways For Downregulated Genes Data",
                         Author: "Microarray",
                         CreatedDate: new Date()
                     };
