@@ -828,8 +828,8 @@ class Analysis extends Component {
                     let workflow = Object.assign({}, this.state.workflow);
                     var wb = XLSX.utils.book_new();
                     wb.Props = {
-                        Title: "Export Pathways For Upregulated Genes Data",
-                        Subject: "Pathways For Upregulated Genes Data",
+                        Title: "Export Pathways For Downregulated Genes Data",
+                        Subject: "Pathways For Downregulated Genes Data",
                         Author: "Microarray",
                         CreatedDate: new Date()
                     };
@@ -863,7 +863,7 @@ class Analysis extends Component {
                         }
                         ws_data.push([workflow.group_1, group_1_gsm])
                         ws_data.push([workflow.group_2, group_2_gsm])
-                        ws_data.push(["Type", "Pathways_For_Upregulated_Genes"])
+                        ws_data.push(["Type", "Pathways_For_Downregulated_Genes"])
 
                         ws_data.push(["Filters", ""])
 
@@ -1388,8 +1388,10 @@ class Analysis extends Component {
                 fetch('./api/analysis/getMAplotAN', {
                         method: "POST",
                         body: JSON.stringify(params),
-                        processData: false,
-                        contentType: false
+                        credentials: "same-origin",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     })
                     .then(this.handleErrors)
                     .then(res => res.json())
