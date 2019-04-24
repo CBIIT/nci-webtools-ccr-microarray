@@ -28,6 +28,10 @@ if(!config.queue_long_pull_time){
     config.queue_long_pull_time =45;
 }
 
+if(!config.queue_request_interval){
+    config.queue_request_interval = 3;
+}
+
 
 queue.awsHander.getQueueUrl(function(flag) {
     if (flag) {
