@@ -2772,6 +2772,7 @@ class Analysis extends Component {
                         workflow2.group_1 = result.group_1;
                         workflow2.group_2 = result.group_2;
                         workflow2.groups = result.groups;
+                        workflow2.normal = result.normal;
                         // replace default group
                         for (let i in workflow2.dataList) {
                             if (result.groups[i].toLowerCase() == "others" || result.groups[i].toLowerCase() == 'clt') {
