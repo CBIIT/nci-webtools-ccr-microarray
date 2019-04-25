@@ -18,6 +18,8 @@ class MAPlot extends Component {
     render() {
         let projectID = this.props.data.projectID;
         let pics = this.props.pics;
+        let group_1 =this.props.data.group_1;
+        let group_2 =this.props.data.group_2;
         let dataList = this.state.dataList;
         let tmp_pics = [];
         let tmp_groups =[];
@@ -25,7 +27,7 @@ class MAPlot extends Component {
 
             pics.forEach(function(e, i) {
                 tmp_pics.push([e + "@" + dataList[i].title])
-                if(dataList[i].groups ==""||dataList[i].groups.toLowerCase()=="ctl"){
+                if(dataList[i].groups!=group_1&&dataList[i].groups!=group_2){
                     tmp_groups.push("Others")
                 }else{
                      tmp_groups.push(dataList[i].groups)
@@ -40,7 +42,7 @@ class MAPlot extends Component {
             let _tmp = [];
             let unGroupLabel;
             for (let i = 0; i <= unique_groups.length - 1; i++) {
-                if (unique_groups[i].toLowerCase() == "ctl" || unique_groups[i].toLowerCase() == "others") {
+                if (unique_groups[i] !=group_1 && unique_groups[i]!=group_2) {
                     unGroupLabel = unique_groups[i];
                 } else {
                     _tmp.push(unique_groups[i]);
