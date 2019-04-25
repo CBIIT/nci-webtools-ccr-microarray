@@ -1194,7 +1194,7 @@ class Analysis extends Component {
                             let color_for_others = "#000";
                             pcaData.group_name.forEach(function(element, i) {
                                 let color = pcaData.color[i]
-                                
+
                                 if (pcaData.group_name[i].toLowerCase() == workflow2.group_2.toLowerCase() || pcaData.group_name[i].toLowerCase() == workflow2.group_1.toLowerCase()) {
                                     color = pcaData.color[i];
                                 } else {
@@ -1530,14 +1530,16 @@ class Analysis extends Component {
         // pick trace show legend. Only one trace in a group of trace need to show legend. 
         const reducer = (accumulator, v, i, array) => {
             let cMarker = "";
+            let v2 ="";
             if (v == workflow.group_2 || v == workflow.group_1) {
                 cMarker = BoxplotsData.color[i];
+                v2=v;
             } else {
                 if (color_for_others == "#000") {
                     color_for_others = BoxplotsData.color[i]
                 }
                 cMarker = color_for_others;
-                v="Others"
+                v2="Others"
             }
 
             if (array.indexOf(v) === i)
@@ -1546,7 +1548,7 @@ class Analysis extends Component {
                     y: maxY - accumulator.length * gap / 10,
                     xref: 'x',
                     yref: 'y',
-                    text: '<span style="text-align:right"><span style="color:' + cMarker + '">O</span>   ' + v + '</span>',
+                    text: '<span style="text-align:right"><span style="color:' + cMarker + '">O</span>   ' + v2 + '</span>',
                     showarrow: false,
                     width: text_max_width,
                     align: "left",
