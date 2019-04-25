@@ -1201,6 +1201,7 @@ class Analysis extends Component {
                                     if (color_for_others == "#000")
                                         color_for_others = pcaData.color[i];
                                     color = color_for_others;
+                                    element="Others";
                                 }
 
                                 if (group_data.hasOwnProperty(element)) {
@@ -1529,13 +1530,16 @@ class Analysis extends Component {
         // pick trace show legend. Only one trace in a group of trace need to show legend. 
         const reducer = (accumulator, v, i, array) => {
             let cMarker = "";
+            let v2 ="";
             if (v == workflow.group_2 || v == workflow.group_1) {
                 cMarker = BoxplotsData.color[i];
+                v2=v;
             } else {
                 if (color_for_others == "#000") {
                     color_for_others = BoxplotsData.color[i]
                 }
                 cMarker = color_for_others;
+                v2="Others"
             }
 
             if (array.indexOf(v) === i)
@@ -1544,7 +1548,7 @@ class Analysis extends Component {
                     y: maxY - accumulator.length * gap / 10,
                     xref: 'x',
                     yref: 'y',
-                    text: '<span style="text-align:right"><span style="color:' + cMarker + '">O</span>   ' + v + '</span>',
+                    text: '<span style="text-align:right"><span style="color:' + cMarker + '">O</span>   ' + v2 + '</span>',
                     showarrow: false,
                     width: text_max_width,
                     align: "left",
@@ -2772,6 +2776,7 @@ class Analysis extends Component {
                         workflow2.group_1 = result.group_1;
                         workflow2.group_2 = result.group_2;
                         workflow2.groups = result.groups;
+                        workflow2.normal = result.normal;
                         // replace default group
                         for (let i in workflow2.dataList) {
                             if (result.groups[i].toLowerCase() == "others" || result.groups[i].toLowerCase() == 'clt') {

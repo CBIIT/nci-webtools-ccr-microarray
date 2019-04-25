@@ -308,6 +308,7 @@ router.post('/getResultByProjectId', function(req, res) {
                         projectId: req.session[req.body.projectId].projectId,
                         accessionCode: req.session[req.body.projectId].accessionCode,
                         gsm: re.GSM,
+                        normal:re.normal,
                         mAplotBN: re.maplotBN,
                         mAplotAN: re.maplotAfter,
                         heatmapolt:req.session[req.body.projectId].heatmapAfterNorm
