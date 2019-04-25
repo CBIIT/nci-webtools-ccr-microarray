@@ -26,7 +26,7 @@ class MAPlot extends Component {
             pics.forEach(function(e, i) {
                 tmp_pics.push([e + "@" + dataList[i].title])
                 if(dataList[i].groups ==""||dataList[i].groups.toLowerCase()=="ctl"){
-                    tmp_groups.push("others")
+                    tmp_groups.push("Others")
                 }else{
                      tmp_groups.push(dataList[i].groups)
                 }
@@ -40,7 +40,6 @@ class MAPlot extends Component {
             let _tmp = [];
             let unGroupLabel;
             for (let i = 0; i <= unique_groups.length - 1; i++) {
-
                 if (unique_groups[i].toLowerCase() == "ctl" || unique_groups[i].toLowerCase() == "others") {
                     unGroupLabel = unique_groups[i];
                 } else {
@@ -52,7 +51,6 @@ class MAPlot extends Component {
             }
 
             unique_groups = _tmp;
-
 
             // unique groups with their pics
             let unique_groups_pic = new Array(unique_groups.length)
