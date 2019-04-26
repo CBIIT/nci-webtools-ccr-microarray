@@ -1546,7 +1546,7 @@ class Analysis extends Component {
 
             if (array.indexOf(v) === i){
 
-                if ((v2 == "Others" && !flag_other) || v2 != "Others")) {
+                if ((v2 == "Others" && !flag_other) || v2 != "Others") {
                         if(v2 == "Others" && !flag_other){
                             flag_other =true;
                         }
