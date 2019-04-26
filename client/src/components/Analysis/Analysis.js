@@ -1567,6 +1567,15 @@ class Analysis extends Component {
     };
 
     let legend_settings = workflow.groups.reduce(reducer, []);
+    // shift Other to the last element
+    for(let j = 0 ; j < legend_settings.length; j++){
+        if(legend_settings[j].text.indexOf("Others")>0){
+            let tmp = legend_settings[legend_settings.length-1].text;
+            legend_settings[legend_settings.length-1].text =legend_settings[j].text;
+            legend_settings[j].text =tmp;
+            break;
+        }
+    }
 
     for (let i = 0; i < result.data.col.length; i++) {
         let cMarker = ""
