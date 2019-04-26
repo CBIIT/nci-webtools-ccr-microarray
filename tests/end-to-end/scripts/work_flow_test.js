@@ -198,7 +198,7 @@ describe('Microarray Work Flow Test', function() {
         el = await driver.findElement(By.id("btn-run-contrast"));
         await driver.wait(until.elementIsEnabled(el), 10 * 1000);
         // make sure add to queue  checkbox unchecked
-        let ckBox = await driver.findElement(By.xpath('/html/body/div[2]/div/div/div/div[2]/div[3]/div[1]/div[1]/div/div[2]/div[2]/div[1]/label/span[1]'));
+        let ckBox = await driver.findElement(By.xpath('//*[@id="checkbox_queue"]/label/span[1]'));
         expect(ckBox).to.exist;
         ckBox.getAttribute("class").then(
             function(value) {
