@@ -47,7 +47,6 @@ awsHander.upload = function(path, prex, next) {
             Body: fileStream,
             CacheControl: 'no-cache',
         }, function(err, data) {
-            logger.info("uplad finish")
             if (err) {
                 logger.info("uplad err:" + err);
                 logger.info("uplad err stack:" + err.stack);
