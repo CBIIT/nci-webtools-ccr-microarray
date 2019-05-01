@@ -295,11 +295,11 @@ router.post('/getResultByProjectId', function(req, res) {
                     logger.info("store data in req.session")
                     let return_data = "";
                     return_data = {
-                        source:req.session[req.body.projectId].source,
-                        histplotBN:req.session[req.body.projectId].hisBefore,
-                        histplotAN:req.session[req.body.projectId].hisAfter,
+                        source: req.session[req.body.projectId].source,
+                        histplotBN: req.session[req.body.projectId].hisBefore,
+                        histplotAN: req.session[req.body.projectId].hisAfter,
                         colors: req.session[req.body.projectId].colors,
-                        normal:req.session[req.body.projectId].normal,
+                        normal: req.session[req.body.projectId].normal,
                         mAplotBN: req.session[req.body.projectId].maplotBN,
                         mAplotAN: req.session[req.body.projectId].maplotAfter,
                         group_1: req.session[req.body.projectId].group_1,
@@ -308,10 +308,10 @@ router.post('/getResultByProjectId', function(req, res) {
                         projectId: req.session[req.body.projectId].projectId,
                         accessionCode: req.session[req.body.projectId].accessionCode,
                         gsm: re.GSM,
-                        normal:re.normal,
+                        normal: re.normal,
                         mAplotBN: re.maplotBN,
                         mAplotAN: re.maplotAfter,
-                        heatmapolt:req.session[req.body.projectId].heatmapAfterNorm
+                        heatmapolt: req.session[req.body.projectId].heatmapAfterNorm
                     }
                     logger.info("Get Contrast result success")
                     res.json({ status: 200, data: return_data });
@@ -343,11 +343,30 @@ router.post('/runContrast', function(req, res) {
     data.push(req.body.normal);
     data.push(req.body.source)
     data.push(config.configPath);
-    logger.info("runContrast  R code " );
+    logger.info("runContrast  R code ");
     R.execute("wrapper.R", data, function(err, returnValue) {
         fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
             if (err) {
-                res.json({ status: 404, data: JSON.stringify(err) });
+                try {
+                    let return_data = "";
+                    let paths = ["geneHeatmap.err", "getCELfiles.err", "getLocalGEOfiles.err", "l2pPathways.err", "loess_QCnorm.err", "processCELfiles.err", "processGEOfiles.err", "RMA_QCnorm.err", "ssgseaPathways.err", "/diffExprGenes.err"]
+                    for (var i = paths.length - 1; i >= 0; i--) {
+                        let path = config.uploadPath + "/" + req.body.projectId + paths[i];
+                        if (fs.existsSync(path)) {
+                            fs.readFile(path, 'utf8', function(err, returnValue) {
+                                if(returnValue.indexOf("halted")>0){
+                                    return_data = returnValue;
+                                }
+                            })
+                        }
+                    }
+                    res.json({ status: 404, data:return_data});
+
+
+                } catch (err) {
+                    res.json({ status: 404, data: "unknow error" });
+                }
+
             } else {
                 let re = JSON.parse(returnValue)
                 if (re.GSM) {
@@ -361,9 +380,9 @@ router.post('/runContrast', function(req, res) {
                     logger.info("req.session[req.body.projectId].hisBefore")
                     logger.info(req.session[req.body.projectId].hisBefore)
                     return_data = {
-                        source:req.session[req.body.projectId].source,
-                        histplotBN:req.session[req.body.projectId].hisBefore,
-                        histplotAN:req.session[req.body.projectId].hisAfter,
+                        source: req.session[req.body.projectId].source,
+                        histplotBN: req.session[req.body.projectId].hisBefore,
+                        histplotAN: req.session[req.body.projectId].hisAfter,
                         colors: req.session[req.body.projectId].colors,
                         mAplotBN: req.session[req.body.projectId].maplotBN,
                         mAplotAN: req.session[req.body.projectId].maplotAfter,
@@ -375,8 +394,8 @@ router.post('/runContrast', function(req, res) {
                         gsm: re.GSM,
                         mAplotBN: re.maplotBN,
                         mAplotAN: re.maplotAfter,
-                        normal:req.body.normal,
-                        heatmapolt:req.session[req.body.projectId].heatmapAfterNorm
+                        normal: req.body.normal,
+                        heatmapolt: req.session[req.body.projectId].heatmapAfterNorm
                     }
                     logger.info("Get Contrast result success")
                     res.json({ status: 200, data: return_data });
@@ -1221,31 +1240,31 @@ function JsonToObject(returnValue) {
     } else {
         workflow.group_2 = "";
     }
-    if(returnValue.hisBefore){
-         workflow.listPlots = [returnValue.hisBefore[0],
-        returnValue.maplotBN,
-        returnValue.boxplotDataBN,
-        returnValue.RLE,
-        returnValue.NUSE,
-        returnValue.hisAfter[0],
-        returnValue.maplotAfter,
-        returnValue.boxplotDataAN,
-        returnValue.pcaData,
-        returnValue.heatmapAfterNorm
-    ];
-    workflow.hisBefore = returnValue.hisBefore[0];
-    workflow.hisAfter = returnValue.hisAfter[0];
+    if (returnValue.hisBefore) {
+        workflow.listPlots = [returnValue.hisBefore[0],
+            returnValue.maplotBN,
+            returnValue.boxplotDataBN,
+            returnValue.RLE,
+            returnValue.NUSE,
+            returnValue.hisAfter[0],
+            returnValue.maplotAfter,
+            returnValue.boxplotDataAN,
+            returnValue.pcaData,
+            returnValue.heatmapAfterNorm
+        ];
+        workflow.hisBefore = returnValue.hisBefore[0];
+        workflow.hisAfter = returnValue.hisAfter[0];
     }
 
-    if(returnValue.normal){
-            workflow.normal = returnValue.normal;
+    if (returnValue.normal) {
+        workflow.normal = returnValue.normal;
     }
 
-    if(returnValue.heatmapAfterNorm){
-         workflow.heatmapAfterNorm =returnValue.heatmapAfterNorm[0];
+    if (returnValue.heatmapAfterNorm) {
+        workflow.heatmapAfterNorm = returnValue.heatmapAfterNorm[0];
     }
-    
-    if(returnValue.source){
+
+    if (returnValue.source) {
         workflow.source = returnValue.source;
     }
 
