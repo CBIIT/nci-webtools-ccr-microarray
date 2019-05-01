@@ -97,7 +97,7 @@ class Help extends Component {
                           </p>
 
                            <h3>Normalization</h3>
-                           <p>Each sample is normalized to correct for technical artifacts using the Robust Multichip Averaging (RMA) method described in (Irizarry et al., 2003). Pre-normalization and post-normalization histograms, MA plots and box plots display relative expression (represented by probe intensity) before and after RMA.  Data for the plots are generated with the oligo package.</p>
+                           <p>Each sample is normalized to correct for technical artifacts using the Robust Multichip Averaging (RMA) method described in (Irizarry et al., 2003). Optional cyclic loess is also available and can be performed if RMA is insufficient (Ballman, Grill, Oberg, & Therneau, 2004; Bolstad, Irizarry, Astrand, & Speed, 2003). All samples are used for normalization regardless of group selections. Pre-normalization and post-normalization histograms, MA plots and box plots display relative expression (represented by probe intensity) before and after RMA. Data for the plots are generated with the oligo package (Carvalho & Irizarry, 2010).</p>
                            <p>Histogram: The histogram displays the density of probes at each log-intensity. Each sample is represented by a curved line. Before RMA, samples should be distributed randomly. An outlier sample may be due to technical problems, and separate groupings of samples may indicate batch effects.  Either of these potential issues should be investigated further before downstream analyses.  After RMA, all samples lines should follow the same curve.  Again, if samples are clustered into groups, batch effects may be present.</p>
                             <p><img src="./assets/img/histogram.gif" alt="National Cancer Institute" /></p>
           
@@ -147,7 +147,6 @@ class Help extends Component {
                               <a href="http://software.broadinstitute.org/gsea/msigdb/collections.jsp">(http://software.broadinstitute.org/gsea/msigdb/collections.jsp)</a>, 
                             and mouse gene set modules were downloaded from the Gene Set Knowledgebase 
                              <a href="https://www.bioconductor.org/packages/release/data/experiment/vignettes/gskb/inst/doc/gskb.pdf">(https://www.bioconductor.org/packages/release/data/experiment/vignettes/gskb/inst/doc/gskb.pdf)</a>. 
-
                             </p>
                               <p><img src="./assets/img/ssGSEA.gif" alt="National Cancer Institute" /></p>
           
@@ -158,7 +157,8 @@ class Help extends Component {
 
                                <h3>References</h3>
 <ul>
-
+<li>Ballman, K. V., Grill, D. E., Oberg, A. L., & Therneau, T. M. (2004). Faster cyclic loess: normalizing RNA arrays via linear models. Bioinformatics, 20(16), 2778-2786. doi:10.1093/bioinformatics/bth327</li>
+<li>Bolstad, B. M., Irizarry, R. A., Astrand, M., & Speed, T. P. (2003). A comparison of normalization methods for high density oligonucleotide array data based on variance and bias. Bioinformatics, 19(2), 185-193.</li>
 <li>Carvalho, B. S., & Irizarry, R. A. (2010). A framework for oligonucleotide microarray preprocessing. Bioinformatics, 26(19), 2363-2367. doi:10.1093/bioinformatics/btq431</li>
 <li>Hanzelmann, S., Castelo, R., & Guinney, J. (2013). GSVA: gene set variation analysis for microarray and RNA-seq data. BMC Bioinformatics, 14, 7. doi:10.1186/1471-2105-14-7</li>
 <li>Irizarry, R. A., Hobbs, B., Collin, F., Beazer-Barclay, Y. D., Antonellis, K. J., Scherf, U., & Speed, T. P. (2003). Exploration, normalization, and summaries of high density oligonucleotide array probe level data. Biostatistics, 4(2), 249-264. doi:10.1093/biostatistics/4.2.249</li>
