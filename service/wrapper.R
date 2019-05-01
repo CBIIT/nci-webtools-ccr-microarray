@@ -107,7 +107,7 @@ process = function(){
              }else{
                 celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
           }
-          saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
+          #saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
 
           if(normal=="RMA"){
              norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
@@ -181,19 +181,25 @@ process = function(){
           write(c(species,geneSet,config_path), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""))
 
            tryCatch({
-              ss_result<-""
+             
               ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
-              message("ssgseaPathways finally")
-              file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
-               if (!file.exists(file)) {
-                 ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
-                 saveRDS(ss_result,file = paste0(data_repo_path,"/ssGSEA_results.rds"))
-                  
-              }
+
             },error =function(cond){
-                 message(cond)
+                 # message(cond)
+
             },finally={
-                     if(ss_result==""){
+                ss_result<-""
+                file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
+                write(c(file), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
+
+                 if (file.exists(file)) {
+                    ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
+                     write(toJSON(ss_result), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
+                  }else{
+                  write(c("no find"), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
+
+                 }
+                    if(typeof(ss_result)!="list"){
                       ss_name_d= ""
                       ss_data_d =""
                      }else{
@@ -248,16 +254,19 @@ process = function(){
           ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
          
            },error =function(cond){
-                message(cond)
+                # message(cond)
            },finally={
                    message("runSSGSEA finally")
                    file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
-                   ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
+                   if (file.exists(file)) {
+                     ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
                     re<-list(
                     ss_name=names(ss_result),
                     ss_data= ss_result[2:length(ss_result[,1]),]
                     )
                     write(toJSON(re),paste0(data_repo_path,"/ss_result.txt",sep=""))
+                  }
+                  
             })
         }
 
@@ -298,12 +307,12 @@ process = function(){
         }
     },error =function(cond){
           # add logger?
-          message(cond)
-          message("error")
-          write(toJSON(cond),paste0(data_repo_path,"/overall_error.txt",sep=""))
+          # message(cond)
+          # message("error")
+          write(toJSON(cond$message),paste0(data_repo_path,"/overall_error.txt",sep=""))
     },
     finally={
-       message("finally")
+       #message("finally")
        #return(NULL)
     })
 

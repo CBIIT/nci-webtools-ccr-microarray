@@ -18,6 +18,7 @@ var execute = function(file, data, callback){
 	data.forEach(function(dt){
 		args.push(dt);
 	});
+	logger.info("args:"+args); 
 	var child = child_process.spawn("Rscript", args, options);
 	var body = '';
 	var err_message = '';
