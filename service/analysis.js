@@ -327,85 +327,97 @@ router.post('/getResultByProjectId', function(req, res) {
 
 
 router.post('/runContrast', function(req, res) {
-    req.setTimeout(0) // no timeout
-    let data = [];
-    //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-    data.push("runContrast"); // action
-    data.push(req.body.projectId);
-    //data path
-    data.push(config.uploadPath);
-    data.push(req.body.code);
-    data.push(req.body.groups);
-    data.push(req.body.group_1);
-    data.push(req.body.group_2);
-    data.push(req.body.species);
-    data.push(req.body.genSet);
-    data.push(req.body.normal);
-    data.push(req.body.source)
-    data.push(config.configPath);
-    logger.info("runContrast  R code ");
-    R.execute("wrapper.R", data, function(err, returnValue) {
-        fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
-            if (err) {
-                try {
-                    let return_data = "";
-                    let paths = ["geneHeatmap.err", "getCELfiles.err", "getLocalGEOfiles.err", "l2pPathways.err", "loess_QCnorm.err", "processCELfiles.err", "processGEOfiles.err", "RMA_QCnorm.err", "ssgseaPathways.err", "/diffExprGenes.err"]
-                    for (var i = paths.length - 1; i >= 0; i--) {
-                        let path = config.uploadPath + "/" + req.body.projectId + paths[i];
-                        if (fs.existsSync(path)) {
-                            fs.readFile(path, 'utf8', function(err, returnValue) {
-                                if(returnValue.indexOf("halted")>0){
-                                    return_data = returnValue;
-                                }
-                            })
-                        }
-                    }
-                    res.json({ status: 404, data:return_data});
+req.setTimeout(0) // no timeout
+let data = [];
+//the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
+data.push("runContrast"); // action
+data.push(req.body.projectId);
+//data path
+data.push(config.uploadPath);
+data.push(req.body.code);
+data.push(req.body.groups);
+data.push(req.body.group_1);
+data.push(req.body.group_2);
+data.push(req.body.species);
+data.push(req.body.genSet);
+data.push(req.body.normal);
+data.push(req.body.source)
+data.push(config.configPath);
+logger.info("runContrast  R code ");
+R.execute("wrapper.R", data, function(err, returnValue) {
+        if (fs.existsSync(config.uploadPath + "/" + req.body.projectId + "/result.txt")) {
 
+            fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
 
-                } catch (err) {
-                    res.json({ status: 404, data: "unknow error" });
-                }
-
-            } else {
-                let re = JSON.parse(returnValue)
-                if (re.GSM) {
-                    // store return value in session (deep copy)
-                    req.session[req.body.projectId] = JsonToObject(re);
-                    req.session[req.body.projectId].option = req.session[req.body.projectId].group_1 + req.session[req.body.projectId].group_2 + req.session[req.body.projectId].genSet;
-                    req.session[req.body.projectId].groups = req.session[req.body.projectId].groups;
-                    req.session[req.body.projectId].projectId = req.session[req.body.projectId].projectId;
-                    logger.info("store data in req.session")
-                    let return_data = "";
-                    logger.info("req.session[req.body.projectId].hisBefore")
-                    logger.info(req.session[req.body.projectId].hisBefore)
-                    return_data = {
-                        source: req.session[req.body.projectId].source,
-                        histplotBN: req.session[req.body.projectId].hisBefore,
-                        histplotAN: req.session[req.body.projectId].hisAfter,
-                        colors: req.session[req.body.projectId].colors,
-                        mAplotBN: req.session[req.body.projectId].maplotBN,
-                        mAplotAN: req.session[req.body.projectId].maplotAfter,
-                        group_1: req.session[req.body.projectId].group_1,
-                        group_2: req.session[req.body.projectId].group_2,
-                        groups: req.session[req.body.projectId].groups,
-                        projectId: req.session[req.body.projectId].projectId,
-                        accessionCode: req.session[req.body.projectId].accessionCode,
-                        gsm: re.GSM,
-                        mAplotBN: re.maplotBN,
-                        mAplotAN: re.maplotAfter,
-                        normal: req.body.normal,
-                        heatmapolt: req.session[req.body.projectId].heatmapAfterNorm
-                    }
-                    logger.info("Get Contrast result success")
-                    res.json({ status: 200, data: return_data });
+                if (err) {
+                    res.json({ status: 404, data: err });
                 } else {
-                    res.json({ status: 404, data: re });
+
+                    let re = JSON.parse(returnValue)
+                    if (re.GSM) {
+                        // store return value in session (deep copy)
+                        req.session[req.body.projectId] = JsonToObject(re);
+                        req.session[req.body.projectId].option = req.session[req.body.projectId].group_1 + req.session[req.body.projectId].group_2 + req.session[req.body.projectId].genSet;
+                        req.session[req.body.projectId].groups = req.session[req.body.projectId].groups;
+                        req.session[req.body.projectId].projectId = req.session[req.body.projectId].projectId;
+                        logger.info("store data in req.session")
+                        let return_data = "";
+                        logger.info("req.session[req.body.projectId].hisBefore")
+                        logger.info(req.session[req.body.projectId].hisBefore)
+                        return_data = {
+                            source: req.session[req.body.projectId].source,
+                            histplotBN: req.session[req.body.projectId].hisBefore,
+                            histplotAN: req.session[req.body.projectId].hisAfter,
+                            colors: req.session[req.body.projectId].colors,
+                            mAplotBN: req.session[req.body.projectId].maplotBN,
+                            mAplotAN: req.session[req.body.projectId].maplotAfter,
+                            group_1: req.session[req.body.projectId].group_1,
+                            group_2: req.session[req.body.projectId].group_2,
+                            groups: req.session[req.body.projectId].groups,
+                            projectId: req.session[req.body.projectId].projectId,
+                            accessionCode: req.session[req.body.projectId].accessionCode,
+                            gsm: re.GSM,
+                            mAplotBN: re.maplotBN,
+                            mAplotAN: re.maplotAfter,
+                            normal: req.body.normal,
+                            heatmapolt: req.session[req.body.projectId].heatmapAfterNorm
+                        }
+                        logger.info("Get Contrast result success")
+                        res.json({ status: 200, data: return_data });
+                    } else {
+                        res.json({ status: 404, data: re });
+                    }
+
+                }
+            })
+        } else {
+
+            let return_data = "R Internal Error";
+            let paths = ["geneHeatmap.err", "getCELfiles.err", "getLocalGEOfiles.err", "l2pPathways.err", "loess_QCnorm.err", "processCELfiles.err", "processGEOfiles.err", "RMA_QCnorm.err", "ssgseaPathways.err", "diffExprGenes.err"]
+            for (var i = paths.length - 1; i >= 0; i--) {
+                if (fs.existsSync(config.uploadPath + "/" + req.body.projectId + "/" + paths[i])) {
+                    let returnValue = fs.readFileSync(config.uploadPath + "/" + req.body.projectId + "/" + paths[i],'utf8');
+                    if (returnValue.indexOf("halted") > 0) {
+                        return_data = returnValue
+                    }
                 }
             }
-        })
+            if (return_data == "R Internal Error") {
+                if (fs.existsSync(config.uploadPath + "/" + req.body.projectId + "/overall_error.txt")) {
+                    let returnValue = fs.readFileSync(config.uploadPath + "/" + req.body.projectId + "/overall_error.txt",'utf8');
+                    if (returnValue != "" && returnValue != []) {
+                        return_data = returnValue;
+                    }
+                }
+            }
+            if(return_data && return_data !=""){
+                return_data ="Error Message : " + return_data.replace(/\$/g, "").replace(/\[/g, "").replace(/\]/g, "").replace(/\"/g, "")  
+            }
+            res.json({ status: 404, data: return_data });
+        }
 
-    });
+
+});
 
 });
 

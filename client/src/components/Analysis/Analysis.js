@@ -2441,7 +2441,7 @@ runContrast = () => {
                         this.getSSGSEAGeneHeatMap();
                         this.hideWorkFlow();
                     } else {
-                        if (result && result.data) {
+                        if (result){
                             document.getElementById("message-gsm").innerHTML = result.data
                             workflow.progressing = false;
                             this.setState({
