@@ -327,60 +327,32 @@ router.post('/getResultByProjectId', function(req, res) {
 
 
 router.post('/runContrast', function(req, res) {
-    req.setTimeout(0) // no timeout
-    let data = [];
-    //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-    data.push("runContrast"); // action
-    data.push(req.body.projectId);
-    //data path
-    data.push(config.uploadPath);
-    data.push(req.body.code);
-    data.push(req.body.groups);
-    data.push(req.body.group_1);
-    data.push(req.body.group_2);
-    data.push(req.body.species);
-    data.push(req.body.genSet);
-    data.push(req.body.normal);
-    data.push(req.body.source)
-    data.push(config.configPath);
-    logger.info("runContrast  R code ");
-    R.execute("wrapper.R", data, function(err, returnValue) {
+req.setTimeout(0) // no timeout
+let data = [];
+//the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
+data.push("runContrast"); // action
+data.push(req.body.projectId);
+//data path
+data.push(config.uploadPath);
+data.push(req.body.code);
+data.push(req.body.groups);
+data.push(req.body.group_1);
+data.push(req.body.group_2);
+data.push(req.body.species);
+data.push(req.body.genSet);
+data.push(req.body.normal);
+data.push(req.body.source)
+data.push(config.configPath);
+logger.info("runContrast  R code ");
+R.execute("wrapper.R", data, function(err, returnValue) {
+        if (fs.existsSync(config.uploadPath + "/" + req.body.projectId + "/result.txt")) {
+
             fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
-                    if (err) {
-                        try {
-                            let return_data = "R Internal Error";
-                            let paths = ["geneHeatmap.err", "getCELfiles.err", "getLocalGEOfiles.err", "l2pPathways.err", "loess_QCnorm.err", "processCELfiles.err", "processGEOfiles.err", "RMA_QCnorm.err", "ssgseaPathways.err", "diffExprGenes.err"]
-                            for (var i = paths.length - 1; i >= 0; i--) {
-                                let fpath = config.uploadPath + "/" + req.body.projectId + "/" + paths[i];
-                                path.exists(fpath, function(exists) {
-                                    if (exists) {
-                                        fs.readFileSync(fpath, 'utf8', function(err, returnValue) {
-                                            if (!err&&returnValue.indexOf("halted")>0) {
-                                                return_data = returnValue;
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                            if (return_data == "R Internal Error") {
-                                let fpath = config.uploadPath + "/" + req.body.projectId + "/overall_error.txt"
-                                path.exists(fpath, function(exists) {
-                                    if (exists) {
-                                        fs.readFileSync(fpath, 'utf8', function(err, returnValue) {
-                                            if (!err) {
-                                                return_data = returnValue;
-                                            }
-                                        })
-                                    }
-                                });
-                            }
-                            res.json({ status: 404, data: return_data });
 
-                    } catch (err) {
-                        res.json({ status: 404, data: "R Internal Error" });
-                    }
-
+                if (err) {
+                    res.json({ status: 404, data: err });
                 } else {
+
                     let re = JSON.parse(returnValue)
                     if (re.GSM) {
                         // store return value in session (deep copy)
@@ -415,10 +387,35 @@ router.post('/runContrast', function(req, res) {
                     } else {
                         res.json({ status: 404, data: re });
                     }
+
                 }
             })
+        } else {
 
-    });
+            let return_data = "R Internal Error";
+            let paths = ["geneHeatmap.err", "getCELfiles.err", "getLocalGEOfiles.err", "l2pPathways.err", "loess_QCnorm.err", "processCELfiles.err", "processGEOfiles.err", "RMA_QCnorm.err", "ssgseaPathways.err", "diffExprGenes.err"]
+            for (var i = paths.length - 1; i >= 0; i--) {
+                if (fs.existsSync(config.uploadPath + "/" + req.body.projectId + "/" + paths[i])) {
+                    let returnValue = fs.readFileSync(config.uploadPath + "/" + req.body.projectId + "/" + paths[i],'utf8');
+                    if (returnValue.indexOf("halted") > 0) {
+                        return_data = returnValue
+                    }
+                }
+            }
+            if (return_data == "R Internal Error") {
+                if (fs.existsSync(config.uploadPath + "/" + req.body.projectId + "/overall_error.txt")) {
+                    let returnValue = fs.readFileSync(config.uploadPath + "/" + req.body.projectId + "/overall_error.txt",'utf8');
+                    if (returnValue != "" && returnValue != []) {
+                        return_data = returnValue;
+                    }
+                }
+            }
+            res.json({ status: 404, data: return_data });
+
+        }
+
+
+});
 
 });
 
