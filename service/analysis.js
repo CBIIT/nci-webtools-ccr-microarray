@@ -83,6 +83,18 @@ router.post('/upload', function(req, res) {
 });
 
 
+router.post('/getConfiguration', function(req, res) {
+        if (config) {
+            res.json({ status: 200, data: config });
+        } else {
+            res.json({ status: 404, msg: "no configuration is avaliable." });
+        }
+});
+
+
+
+
+
 router.post('/loadGSE', function(req, res) {
     let data = [];
     //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways

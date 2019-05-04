@@ -107,13 +107,15 @@ process = function(){
              }else{
                 celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
           }
+
+          cons <-c(paste0(cgroup1,"-",cgroup2))
           #saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
 
           if(normal=="RMA"){
-             norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
+             norm_celfiles = RMA_QCnorm(celfiles,data_repo_path,cons)
              hisAfter <-"histAfterRMAnorm.html"
            }else{
-             norm_celfiles =loess_QCnorm(celfiles,data_repo_path)
+             norm_celfiles =loess_QCnorm(celfiles,data_repo_path,cons)
               hisAfter <-"histAfterLoessNorm.html"
           }
           # norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
@@ -153,7 +155,7 @@ process = function(){
           # Output should dynamically respond to user-selected contrast
 
           # # if using processGEOfiles() function for test example, create this contrasts variable:
-          cons <-c(paste0(cgroup1,"-",cgroup2))
+        
           #cons <-c("RNA_1-RNA_2")
           # # or if using processCELfiles() function for test example, create this contrasts variable:
           # #cons = c("KO_1-Ctl_1","KO_2-Ctl_2")
