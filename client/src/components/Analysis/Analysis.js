@@ -257,6 +257,7 @@ class Analysis extends Component {
         }
         // listen windows resize event
         window.addEventListener("resize", this.updateDimensions);
+        this.updateSupportEmail();
     }
     componentDidCatch(error, info) {
         // Display fallback UI
@@ -296,6 +297,27 @@ class Analysis extends Component {
                 v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
+    }
+
+    updateSupportEmail=()=>{
+         fetch('./api/analysis/getConfiguration', {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(
+                res => res.json()
+            )
+            .then(result => {
+                  if (result.status == 200) {
+                    // change 
+                     document.getElementById("support_email").href="mailto:"+result.data.mail.support_email+"?subject=MicroArray Support"; 
+                  }
+            })
+
     }
     exportGSEA = (params = {}) => {
         let workflow = Object.assign({}, this.state.workflow);
