@@ -134,12 +134,14 @@ class MAPlot extends Component {
             panels.unshift(secondGroup);
             panels.unshift(firstGroup); 
 
+            let final_panels =[firstGroup,secondGroup]
+
             let keys = [];
 
             for (let i = 99; i >= 0; i--) {
                 keys.push(String(i))
             }
-            return <Collapse defaultActiveKey={keys} >{panels}</Collapse>
+            return <Collapse defaultActiveKey={keys} >{final_panels}</Collapse>
         }else{
 
             return "No Data"

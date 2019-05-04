@@ -18,7 +18,7 @@ celfiles = processGEOfiles(projectId,access_code,listGroups,data_repo_path)
 celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
 
 
-norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
+norm_celfiles = RMA_QCnorm(celfiles,data_repo_path,cons)
 
 
 
@@ -38,7 +38,7 @@ species2<-"human"
 l2p_pathways = l2pPathways(diff_expr_genes,species2,data_repo_path,projectId,config_path)
 
 
-norm_celfiles2 = loess_QCnorm(celfiles,data_repo_path)
+norm_celfiles2 = loess_QCnorm(celfiles,data_repo_path,cons)
 
 diff_expr_genes2 = diffExprGenes(norm_celfiles2[[10]],cons,projectId,data_repo_path)       #Call function
       

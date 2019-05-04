@@ -1196,55 +1196,46 @@ class Analysis extends Component {
                                 let color = pcaData.color[i]
 
                                 if (pcaData.group_name[i].toLowerCase() == workflow2.group_2.toLowerCase() || pcaData.group_name[i].toLowerCase() == workflow2.group_1.toLowerCase()) {
-                                    color = pcaData.color[i];
-                                } else {
-                                    if (color_for_others == "#000")
-                                        color_for_others = pcaData.color[i];
-                                    color = color_for_others;
-                                    element = "Others";
+                                    if (group_data.hasOwnProperty(element)) {
+                                        group_data[element]["x"].push(pcaData.x[i]);
+                                        group_data[element]["y"].push(pcaData.y[i]);
+                                        group_data[element]["z"].push(pcaData.z[i]);
+                                        group_data[element]['color'].push(pcaData.color[i]);
+                                        group_data[element]['group_name'].push(pcaData.group_name[i]);
+                                        group_data[element]['row'].push(pcaData.row[i]);
+                                    } else {
+                                        group_data[element] = {}
+                                        group_data[element]["x"] = [pcaData.x[i]];
+                                        group_data[element]["y"] = [pcaData.y[i]];
+                                        group_data[element]["z"] = [pcaData.z[i]];
+                                        group_data[element]['color'] = [pcaData.color[i]];
+                                        group_data[element]['group_name'] = [pcaData.group_name[i]];
+                                        group_data[element]['row'] = [pcaData.row[i]];
+                                    }
                                 }
 
-                                if (group_data.hasOwnProperty(element)) {
-                                    group_data[element]["x"].push(pcaData.x[i]);
-                                    group_data[element]["y"].push(pcaData.y[i]);
-                                    group_data[element]["z"].push(pcaData.z[i]);
-                                    group_data[element]['color'].push(color);
-                                    group_data[element]['group_name'].push(pcaData.group_name[i]);
-                                    group_data[element]['row'].push(pcaData.row[i]);
-                                } else {
-                                    group_data[element] = {}
-                                    group_data[element]["x"] = [pcaData.x[i]];
-                                    group_data[element]["y"] = [pcaData.y[i]];
-                                    group_data[element]["z"] = [pcaData.z[i]];
-                                    group_data[element]['color'] = [color];
-                                    group_data[element]['group_name'] = [pcaData.group_name[i]];
-                                    group_data[element]['row'] = [pcaData.row[i]];
-                                }
+
                             });
                             for (let element in group_data) {
                                 let color = "";
                                 if (element.toLowerCase() == workflow2.group_2.toLowerCase() || element.toLowerCase() == workflow2.group_1.toLowerCase()) {
                                     color = group_data[element]['color'];
-                                } else {
-                                    color = color_for_others;
+                                    pcaPlotData.push({
+                                        autosize: true,
+                                        x: group_data[element]["x"],
+                                        y: group_data[element]["y"],
+                                        z: group_data[element]["z"],
+                                        text: pcaData.row,
+                                        mode: 'markers',
+                                        marker: {
+                                            size: 10,
+                                            color: color,
+                                        },
+                                        legendgroup: element,
+                                        name: element,
+                                        type: 'scatter3d'
+                                    })
                                 }
-
-                                pcaPlotData.push({
-                                    autosize: true,
-                                    x: group_data[element]["x"],
-                                    y: group_data[element]["y"],
-                                    z: group_data[element]["z"],
-                                    text: pcaData.row,
-                                    mode: 'markers',
-                                    marker: {
-                                        size: 10,
-                                        color: color,
-                                    },
-                                    legendgroup: element,
-                                    name: element,
-                                    type: 'scatter3d'
-                                })
-
                             }
                             let pcaPlotLayout = {
                                 showlegend: true,
@@ -1535,141 +1526,67 @@ class Analysis extends Component {
             let v2 = "";
             if (v == workflow.group_2 || v == workflow.group_1) {
                 cMarker = BoxplotsData.color[i];
-                v2 = v;
-            } else {
-                if (color_for_others == "#000") {
-                    color_for_others = BoxplotsData.color[i]
+                if (array.indexOf(v) === i) {
+                    accumulator.push({
+                        x: maxX,
+                        y: maxY - accumulator.length * gap / 10,
+                        xref: 'x',
+                        yref: 'y',
+                        text: '<span style="text-align:right"><span style="color:' + cMarker + '">O</span>   ' + v + '</span>',
+                        showarrow: false,
+                        width: text_max_width,
+                        align: "left",
+                    });
+
                 }
-                cMarker = color_for_others;
-                v2 = "Others";
             }
 
-            if (array.indexOf(v) === i){
-
-                if ((v2 == "Others" && !flag_other) || v2 != "Others") {
-                        if(v2 == "Others" && !flag_other){
-                            flag_other =true;
-                        }
-                        accumulator.push({
-                            x: maxX,
-                            y: maxY - accumulator.length * gap / 10,
-                            xref: 'x',
-                            yref: 'y',
-                            text: '<span style="text-align:right"><span style="color:' + cMarker + '">O</span>   ' + v2 + '</span>',
-                            showarrow: false,
-                            width: text_max_width,
-                            align: "left",
-                        });
-            }
-        }
-
-        return accumulator
-    };
-
-    let legend_settings = workflow.groups.reduce(reducer, []);
-    // shift Other to the last element
-    for(let j = 0 ; j < legend_settings.length; j++){
-        if(legend_settings[j].text.indexOf("Others")>0){
-            let tmp = legend_settings[legend_settings.length-1].text;
-            legend_settings[legend_settings.length-1].text =legend_settings[j].text;
-            legend_settings[j].text =tmp;
-            break;
-        }
-    }
-
-    for (let i = 0; i < result.data.col.length; i++) {
-        let cMarker = ""
-        if (workflow.groups[i] == workflow.group_2 || workflow.groups[i] == workflow.group_1) {
-            cMarker = {
-                color: BoxplotsData.color[i]
-            }
-        } else {
-            cMarker = {
-                color: color_for_others
-            }
-        }
-        let boxplotData = {
-            y: BoxplotsData.data[i],
-            type: "box",
-            name: BoxplotsData.col[i],
-            marker: cMarker,
-            hovertext: result.data.col[i]
+            return accumulator
         };
-        BoxplotRenderData.push(boxplotData);
-    }
-    // use annotations to show legend
-    let plot_layout = {
-        showlegend: false,
-        annotations: legend_settings,
-        yaxis: {
-            title: BoxplotsData.ylable[0],
-            zeroline: false
-        }
-    }
-    let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
 
-    return {
-        data: BoxplotRenderData,
-        plot: <div> <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/></div>
-    };
-}
-getBoxplotBN = () => {
-    let workflow2 = Object.assign({}, this.state.workflow);
-    workflow2.progressing = true;
-    workflow2.loading_info = "Loading Plots...";
-    this.setState({ workflow: workflow2 });
-    let params = { projectId: workflow2.projectID };
-    try {
-        fetch('./api/analysis/getBoxplotBN', {
-                method: "POST",
-                body: JSON.stringify(params),
-                credentials: "same-origin",
-                headers: {
-                    'Content-Type': 'application/json'
+        let legend_settings = workflow.groups.reduce(reducer, []);
+
+
+        for (let i = 0; i < result.data.col.length; i++) {
+            let cMarker = ""
+            if (workflow.groups[i] == workflow.group_2 || workflow.groups[i] == workflow.group_1) {
+                cMarker = {
+                    color: BoxplotsData.color[i]
                 }
-            }).then(this.handleErrors)
-            .then(res => res.json())
-            .then(result => {
-                if (result.status == 200) {
-                    let workflow = Object.assign({}, this.state.workflow);
-                    document.getElementById("message-pre-boxplot").innerHTML = "";
-                    if (result.data != "") {
-                        workflow.progressing = false;
-                        let render_data = this.generateBOXPLOT(result, workflow);
-                        workflow.BoxplotBN.data = render_data.data;
-                        workflow.BoxplotBN.plot = render_data.plot;
-                        this.setState({ workflow: workflow });
-                    } else {
-                        let workflow = Object.assign({}, this.state.workflow);
-                        workflow.preplots.Boxplots = "No Data";
-                        workflow.progressing = false;
-                        this.setState({ workflow: workflow });
-                    }
-                } else {
-                    document.getElementById("message-pre-boxplot").innerHTML = result.msg;
-                    let workflow = Object.assign({}, this.state.workflow);
-                    workflow.preplots.Boxplots = "No Data";
-                    workflow.progressing = false;
-                    this.setState({ workflow: workflow });
-                }
-            });
-    } catch (error) {
-        document.getElementById("message-pre-boxplot").innerHTML = error;
-        let workflow = Object.assign({}, this.state.workflow);
-        workflow.preplots.Boxplots = "No Data";
-        workflow.progressing = false;
-        this.setState({ workflow: workflow });
+                let boxplotData = {
+                    y: BoxplotsData.data[i],
+                    type: "box",
+                    name: BoxplotsData.col[i],
+                    marker: cMarker,
+                    hovertext: result.data.col[i]
+                };
+                BoxplotRenderData.push(boxplotData);
+            }
+        }
+        // use annotations to show legend
+        let plot_layout = {
+            showlegend: false,
+            annotations: legend_settings,
+            yaxis: {
+                title: BoxplotsData.ylable[0],
+                zeroline: false
+            }
+        }
+        let plot_style = { "width": document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 }
+
+        return {
+            data: BoxplotRenderData,
+            plot: <div> <Plot  data={BoxplotRenderData} layout={plot_layout}  style={plot_style} useResizeHandler={true}/></div>
+        };
     }
-}
-getMAplotsBN = () => {
-    let workflow2 = Object.assign({}, this.state.workflow);
-    if (workflow2.list_mAplotBN == "") {
+    getBoxplotBN = () => {
+        let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
         workflow2.loading_info = "Loading Plots...";
-        let params = { projectId: workflow2.projectID };
         this.setState({ workflow: workflow2 });
+        let params = { projectId: workflow2.projectID };
         try {
-            fetch('./api/analysis/getMAplotsBN', {
+            fetch('./api/analysis/getBoxplotBN', {
                     method: "POST",
                     body: JSON.stringify(params),
                     credentials: "same-origin",
@@ -1679,620 +1596,1128 @@ getMAplotsBN = () => {
                 }).then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
-                    let workflow = Object.assign({}, this.state.workflow);
                     if (result.status == 200) {
+                        let workflow = Object.assign({}, this.state.workflow);
+                        document.getElementById("message-pre-boxplot").innerHTML = "";
                         if (result.data != "") {
-                            document.getElementById("message-pre-maplot").innerHTML = "";
-                            workflow.list_mAplotBN = result.data;
+                            workflow.progressing = false;
+                            let render_data = this.generateBOXPLOT(result, workflow);
+                            workflow.BoxplotBN.data = render_data.data;
+                            workflow.BoxplotBN.plot = render_data.plot;
+                            this.setState({ workflow: workflow });
                         } else {
-                            workflow.list_mAplotBN = "No Data";
+                            let workflow = Object.assign({}, this.state.workflow);
+                            workflow.preplots.Boxplots = "No Data";
+                            workflow.progressing = false;
+                            this.setState({ workflow: workflow });
                         }
                     } else {
-                        workflow.list_mAplotBN = "No Data";
+                        document.getElementById("message-pre-boxplot").innerHTML = result.msg;
+                        let workflow = Object.assign({}, this.state.workflow);
+                        workflow.preplots.Boxplots = "No Data";
+                        workflow.progressing = false;
+                        this.setState({ workflow: workflow });
                     }
-                    workflow.progressing = false;
-                    this.setState({ workflow: workflow });
-                })
+                });
         } catch (error) {
-            document.getElementById("message-pre-maplot").innerHTML = error;
+            document.getElementById("message-pre-boxplot").innerHTML = error;
             let workflow = Object.assign({}, this.state.workflow);
-            workflow.list_mAplotBN = "No Data";
+            workflow.preplots.Boxplots = "No Data";
             workflow.progressing = false;
             this.setState({ workflow: workflow });
         }
     }
-}
-
-
-getHistplotBN = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    let histplotBNLink = './images/' + workflow.projectID + "/" + workflow.histplotBN_url;
-    let histplotBN = <CIframe title={"histplotBN"} link={histplotBNLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
-    workflow.preplots.histplotBN = histplotBN;
-    this.setState({ workflow: workflow });
-}
-changePathways_up = (obj) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    if (obj.pagination) {
-        workflow.pathways_up = obj;
-    } else {
-        obj.pagination = workflow.pagination;
-        workflow.pathways_up = obj;
-    }
-    this.setState({ workflow: workflow }, () => { console.log("changePathways_up done"); });
-}
-changePathways_down = (obj) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    if (obj.pagination) {
-        workflow.pathways_down = obj;
-    } else {
-        obj.pagination = workflow.pagination;
-        workflow.pathways_down = obj;
-    }
-    this.setState({ workflow: workflow });
-}
-changessGSEA = (obj) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    if (obj.pagination) {
-        workflow.ssGSEA = obj;
-    } else {
-        obj.pagination = workflow.pagination;
-        workflow.ssGSEA = obj;
-    }
-    this.setState({ workflow: workflow });
-}
-upateCurrentWorkingTabAndObject = (e) => {
-    window.current_working_on_object = e;
-    sessionStorage.setItem("current_working_on_object", e);
-    if (e == "getHistplotBN" || e == "getMAplotsBN" || e == "getBoxplotBN" || e == "getRLE" || e == "getNUSE") {
-        sessionStorage.setItem("tag_pre_plot_status", e);
-        window.tag_pre_plot_status = e;
-    }
-    if (e == "getHistplotAN" || e == "getBoxplotAN" || e == "getPCA" || e == "getHistplotBN") {
-        sessionStorage.setItem("tag_post_plot_status", e);
-        window.tag_post_plot_status = e;
-    }
-    if (e == "pathways_up" || e == "pathways_down" || e == "deg") {
-        sessionStorage.setItem("tag_deg_plot_status", e);
-        window.tag_deg_plot_status = e;
-    }
-    if (e == "volcanoPlot") {
-        this.getVolcanoPlot();
-    }
-}
-upateCurrentWorkingTab = (e) => {
-    sessionStorage.setItem("current_working_on_tag", e);
-    window.current_working_on_tag = e;
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.tab_activeKey = e;
-    this.setState({ workflow: workflow });
-}
-handleGeneChange = (event) => {
-    let value = event.target.value;
-    let workflow = Object.assign({}, this.state.workflow);
-    let reqBody = {};
-    reqBody.projectId = workflow.projectID;
-    reqBody.species = value.split("$")[0];
-    reqBody.genSet = value.split("$")[1];
-    reqBody.group1 = workflow.group_1;
-    reqBody.group2 = workflow.group_2;
-    //change button style
-    workflow.progressing = true;
-    workflow.loading_info = "Running Analysis...";
-    this.setState({
-        workflow: workflow
-    });
-    try {
-        fetch('./api/analysis/getssGSEAWithDiffGenSet', {
-                method: "POST",
-                body: JSON.stringify(reqBody),
-                credentials: "same-origin",
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(this.handleErrors)
-            .then(res => res.json())
-            .then(result => {
+    getMAplotsBN = () => {
+        let workflow2 = Object.assign({}, this.state.workflow);
+        if (workflow2.list_mAplotBN == "") {
+            workflow2.progressing = true;
+            workflow2.loading_info = "Loading Plots...";
+            let params = { projectId: workflow2.projectID };
+            this.setState({ workflow: workflow2 });
+            try {
+                fetch('./api/analysis/getMAplotsBN', {
+                        method: "POST",
+                        body: JSON.stringify(params),
+                        credentials: "same-origin",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(this.handleErrors)
+                    .then(res => res.json())
+                    .then(result => {
+                        let workflow = Object.assign({}, this.state.workflow);
+                        if (result.status == 200) {
+                            if (result.data != "") {
+                                document.getElementById("message-pre-maplot").innerHTML = "";
+                                workflow.list_mAplotBN = result.data;
+                            } else {
+                                workflow.list_mAplotBN = "No Data";
+                            }
+                        } else {
+                            workflow.list_mAplotBN = "No Data";
+                        }
+                        workflow.progressing = false;
+                        this.setState({ workflow: workflow });
+                    })
+            } catch (error) {
+                document.getElementById("message-pre-maplot").innerHTML = error;
+                let workflow = Object.assign({}, this.state.workflow);
+                workflow.list_mAplotBN = "No Data";
                 workflow.progressing = false;
                 this.setState({ workflow: workflow });
-                if (result.status == 200) {
-                    this.getssGSEA();
-                } else {
-                    //change button style
-                    document.getElementById("message-ssgsea").innerHTML = result.msg;
-                }
-            })
-    } catch (err) {
-        document.getElementById("message-ssgsea").innerHTML = err;
-        //change button style
-        workflow.progressing = false;
-        this.setState({
-            workflow: workflow
-        });
-    }
-}
-changeCode = (event) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.accessionCode = event.target.value;
-    this.setState({ workflow: workflow });
-}
-handleSelectType = (event) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.analysisType = event.target.value;
-    this.setState({ workflow: workflow });
-}
-handleGroup1Select = (event) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.group_1 = event.target.value;
-    this.setState({ workflow: workflow });
-}
-handleNormalSelect = (event) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.normal = event.target.value;
-    this.setState({ workflow: workflow });
-}
-handleGroup2Select = (event) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.group_2 = event.target.value;
-    this.setState({ workflow: workflow });
-}
-fileRemove = (file) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    const index = workflow.fileList.indexOf(file);
-    const newFileList = workflow.fileList.slice();
-    newFileList.splice(index, 1);
-    workflow.fileList = newFileList;
-    this.setState({ workflow: workflow });
-}
-beforeUpload = (fl) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    let names = [];
-    workflow.fileList.forEach(function(f) {
-        names.push(f.name);
-    });
-    fl.forEach(function(file) {
-        if (names.indexOf(file.name) == -1) {
-            workflow.fileList = [...workflow.fileList, file];
-        }
-    });
-    this.setState({ workflow: workflow });
-}
-resetWorkFlowProject = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    if (workflow.analysisType == "0") {
-        document.getElementById("input-access-code").disabled = false;
-        document.getElementById("btn-project-load-gse").disabled = false;
-        // disable the input , prevent user to change the access code
-
-        document.getElementById("analysisType_selection").disabled = false;
-        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
-    }
-    defaultState.workflow.analysisType = "0";
-    let err_message = document.getElementsByClassName("err-message")
-    for (let i = 0; i < err_message.length; i++) {
-        err_message[i].innerHTML = ""; // or
-    }
-    if (document.getElementById("message-gsm") != null) {
-        document.getElementById("message-gsm").nextSibling.innerHTML = "Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here."
-    }
-    document.getElementById("input-email").value = "";
-    document.getElementById("message-success-use-queue").innerHTML = "";
-    defaultState.workflow.progressing = false;
-    this.setState({ workflow: defaultState.workflow });
-}
-changeLoadingStatus = (progressing, loading_info) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.progressing = progressing;
-    workflow.loading_info = loading_info;
-    this.setState({ workflow: workflow });
-}
-exportGSE = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.progressing = true;
-    workflow.loading_info = "Export";
-    this.setState({ workflow: workflow });
-    var wb = XLSX.utils.book_new();
-    wb.Props = {
-        Title: "Export GSM Data",
-        Subject: "GSM Data",
-        Author: "Microarray",
-        CreatedDate: new Date()
-    };
-    if (workflow.dataList.length != 0) {
-        wb.SheetNames.push("Settings");
-        let ws_data = [];
-        if (workflow.analysisType == "0") {
-            // GSM 
-            ws_data.push(["Analysis Type", "GEO Data"]);
-            ws_data.push(["Accession Code", workflow.accessionCode]);
-
-        }
-        if (workflow.analysisType == "1") {
-            // Upload
-            ws_data.push(["Analysis Type", "CEL Files"]);
-            let uploadD = "";
-            for (var i in workflow.dataList) {
-                uploadD = workflow.dataList[i].title + "," + uploadD;
             }
-            ws_data.push(["Upload Data", uploadD]);
         }
-        let ws = XLSX.utils.aoa_to_sheet(ws_data);
-        wb.Sheets["Settings"] = ws;
-        wb.SheetNames.push("Results");
-        let gsm = [
-            ['id', 'gsm', 'title', 'description', 'group']
-        ]
-        let rawData = workflow.dataList;
-        for (var i in rawData) {
-            gsm.push([rawData[i].index, rawData[i].gsm, rawData[i].title, rawData[i].description, rawData[i].groups, ]);
-        }
-        var ws2 = XLSX.utils.aoa_to_sheet(gsm);
-        wb.Sheets["Results"] = ws2;
-        var wbout = XLSX.writeFile(wb, "GSM_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
-        workflow.progressing = false;
-        workflow.loading_info = "loading";
+    }
+
+
+    getHistplotBN = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        let histplotBNLink = './images/' + workflow.projectID + "/" + workflow.histplotBN_url;
+        let histplotBN = <CIframe title={"histplotBN"} link={histplotBNLink} data={this.state.workflow} onLoadComplete={this.onLoadComplete} showLoading={this.showLoading} />;
+        workflow.preplots.histplotBN = histplotBN;
         this.setState({ workflow: workflow });
     }
-}
-loadGSE = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    let reqBody = {};
-    reqBody.code = "";
-    reqBody.projectId = "";
-    reqBody.groups = "";
-    if (workflow.accessionCode == "") {
-        document.getElementById("message-load-accession-code").innerHTML = "Accession Code is required. ";
-        return;
-    } else {
-        document.getElementById("message-load-accession-code").innerHTML = "";
-    }
-    document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default";
-    if (workflow.dataList != "") {
-        // user click load after data already loaded.then it is a new transaction 
-        window.location.reload(true);
-    }
-    reqBody.code = workflow.accessionCode;
-    // this pid will be used to create a tmp folder to store the data. 
-    workflow.projectID = this.uuidv4();
-    reqBody.projectId = workflow.projectID;
-    // gruop info
-    var groups = []
-    for (var i in workflow.dataList) {
-        if (workflow.dataList[i].group == "") {
-            groups.push("Others");
+    changePathways_up = (obj) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        if (obj.pagination) {
+            workflow.pathways_up = obj;
         } else {
-            groups.push(workflow.dataList[i].group);
+            obj.pagination = workflow.pagination;
+            workflow.pathways_up = obj;
+        }
+        this.setState({ workflow: workflow }, () => { console.log("changePathways_up done"); });
+    }
+    changePathways_down = (obj) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        if (obj.pagination) {
+            workflow.pathways_down = obj;
+        } else {
+            obj.pagination = workflow.pagination;
+            workflow.pathways_down = obj;
+        }
+        this.setState({ workflow: workflow });
+    }
+    changessGSEA = (obj) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        if (obj.pagination) {
+            workflow.ssGSEA = obj;
+        } else {
+            obj.pagination = workflow.pagination;
+            workflow.ssGSEA = obj;
+        }
+        this.setState({ workflow: workflow });
+    }
+    upateCurrentWorkingTabAndObject = (e) => {
+        window.current_working_on_object = e;
+        sessionStorage.setItem("current_working_on_object", e);
+        if (e == "getHistplotBN" || e == "getMAplotsBN" || e == "getBoxplotBN" || e == "getRLE" || e == "getNUSE") {
+            sessionStorage.setItem("tag_pre_plot_status", e);
+            window.tag_pre_plot_status = e;
+        }
+        if (e == "getHistplotAN" || e == "getBoxplotAN" || e == "getPCA" || e == "getHistplotBN") {
+            sessionStorage.setItem("tag_post_plot_status", e);
+            window.tag_post_plot_status = e;
+        }
+        if (e == "pathways_up" || e == "pathways_down" || e == "deg") {
+            sessionStorage.setItem("tag_deg_plot_status", e);
+            window.tag_deg_plot_status = e;
+        }
+        if (e == "volcanoPlot") {
+            this.getVolcanoPlot();
         }
     }
-    reqBody.groups = groups;
-    workflow.uploading = true;
-    workflow.progressing = true;
-    workflow.loading_info = "Loading GEO Data...";
-    this.setState({
-        workflow: workflow
-    });
-
-    try {
-        fetch('./api/analysis/loadGSE', {
-                method: "POST",
-                body: JSON.stringify(reqBody),
-                credentials: "same-origin",
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(this.handleErrors)
-            .then(res => res.json())
-            .then(result => {
-                if (result.status == 200) {
-                    let workflow = Object.assign({}, this.state.workflow);
-
-                    if (result.data === "undefined" || Object.keys(result.data).length === 0 || result.data.indexOf('{"files":') < 0) {
-                        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-                        workflow.uploading = false;
-                        workflow.progressing = false;
-                        document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ").replace("files Please", "files. Please")
-                        document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                        this.setState({
-                            workflow: workflow
-                        });
-                        return;
-                    }
-                    var data = result.data.substr(result.data.indexOf('{"files":'), result.data.length)
-                    if (typeof(data) === "undefined" || data == "") {
-                        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-                        workflow.uploading = false;
-                        workflow.progressing = false;
-                        document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
-                        document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                        this.setState({
-                            workflow: workflow
-                        });
-                        return;
-                    }
-                    let list = JSON.parse(decodeURIComponent(data));
-                    if (typeof(list) == "undefined" || list == null || list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
-                        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-                        workflow.uploading = false;
-                        workflow.progressing = false;
-                        document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ").replace("files Please", "files. Please")
-                        document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                        this.setState({
-                            workflow: workflow
-                        });
-                        return;
-                    }
-                    document.getElementById("message-gsm").innerHTML = ""
-                    workflow.uploading = false;
-                    workflow.progressing = false;
-                    workflow.dataList = list.files;
-                    // init group with default value
-                    workflow.groups = new Array(list.files.length).fill('Others');
-
-                    // disable the input , prevent user to change the access code
-                    document.getElementById("input-access-code").disabled = true;
-                    // change the word of load btn
-                    document.getElementById("btn-project-load-gse").disabled = true;
-
-                    document.getElementById("analysisType_selection").disabled = true;
-                    this.setState({
-                        workflow: workflow
-                    });
-                } else {
-                    document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-                    workflow.uploading = false;
-                    workflow.progressing = false;
-                    this.setState({
-                        workflow: workflow
-                    });
-                    document.getElementById("message-gsm").innerHTML = result.msg
-                    document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                    //message.error('load data fails.');
-                }
-            });
-    } catch (err) {
+    upateCurrentWorkingTab = (e) => {
+        sessionStorage.setItem("current_working_on_tag", e);
+        window.current_working_on_tag = e;
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.tab_activeKey = e;
+        this.setState({ workflow: workflow });
+    }
+    handleGeneChange = (event) => {
+        let value = event.target.value;
+        let workflow = Object.assign({}, this.state.workflow);
+        let reqBody = {};
+        reqBody.projectId = workflow.projectID;
+        reqBody.species = value.split("$")[0];
+        reqBody.genSet = value.split("$")[1];
+        reqBody.group1 = workflow.group_1;
+        reqBody.group2 = workflow.group_2;
         //change button style
-        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
-        workflow.uploading = false;
-        workflow.progressing = false;
+        workflow.progressing = true;
+        workflow.loading_info = "Running Analysis...";
         this.setState({
             workflow: workflow
         });
-        document.getElementById("message-gsm").innerHTML = err
-        document.getElementById("message-gsm").nextSibling.innerHTML = ""
+        try {
+            fetch('./api/analysis/getssGSEAWithDiffGenSet', {
+                    method: "POST",
+                    body: JSON.stringify(reqBody),
+                    credentials: "same-origin",
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(this.handleErrors)
+                .then(res => res.json())
+                .then(result => {
+                    workflow.progressing = false;
+                    this.setState({ workflow: workflow });
+                    if (result.status == 200) {
+                        this.getssGSEA();
+                    } else {
+                        //change button style
+                        document.getElementById("message-ssgsea").innerHTML = result.msg;
+                    }
+                })
+        } catch (err) {
+            document.getElementById("message-ssgsea").innerHTML = err;
+            //change button style
+            workflow.progressing = false;
+            this.setState({
+                workflow: workflow
+            });
+        }
     }
-}
-showModal = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.QueueModalvisible = true;
-    this.setState({
-        workflow: workflow
-    });
-}
-handleCancel = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.QueueModalvisible = false;
-    this.setState({
-        workflow: workflow
-    });
-}
-getSSGSEAGeneHeatMap = () => {
-
-    let workflow = Object.assign({}, this.state.workflow);
-    let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
-    imageExists(link, this.buildgeneHeatmap);
-}
-buildgeneHeatmap = (exists) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
-
-    if (exists) {
-        workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
+    changeCode = (event) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.accessionCode = event.target.value;
         this.setState({ workflow: workflow });
     }
-}
-runContrast = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    document.getElementById("message-use-queue").innerHTML = "";
-    let reqBody = {};
-    reqBody.code = "";
-    reqBody.projectId = "";
-    reqBody.groups = "";
-    reqBody.actions = "";
-    reqBody.pPathways = "";
-    reqBody.genSet = "";
-    reqBody.pssGSEA = "";
-    reqBody.foldssGSEA = "";
-    reqBody.species = "";
-    reqBody.genSet = "";
-    reqBody.code = workflow.accessionCode;
-    reqBody.projectId = workflow.projectID;
-    reqBody.groups = [];
-    reqBody.group_1 = workflow.group_1;
-    reqBody.group_2 = workflow.group_2;
-    reqBody.dataList = [];
-    if (workflow.uploaded) {
-        reqBody.source = "upload";
-    } else {
-        reqBody.source = "fetch";
+    handleSelectType = (event) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.analysisType = event.target.value;
+        this.setState({ workflow: workflow });
     }
-    for (var i in workflow.dataList) {
-        reqBody.dataList.push(workflow.dataList[i].gsm);
-        if (workflow.dataList[i].groups != "") {
-            reqBody.groups.push(workflow.dataList[i].groups);
+    handleGroup1Select = (event) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.group_1 = event.target.value;
+        this.setState({ workflow: workflow });
+    }
+    handleNormalSelect = (event) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.normal = event.target.value;
+        this.setState({ workflow: workflow });
+    }
+    handleGroup2Select = (event) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.group_2 = event.target.value;
+        this.setState({ workflow: workflow });
+    }
+    fileRemove = (file) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        const index = workflow.fileList.indexOf(file);
+        const newFileList = workflow.fileList.slice();
+        newFileList.splice(index, 1);
+        workflow.fileList = newFileList;
+        this.setState({ workflow: workflow });
+    }
+    beforeUpload = (fl) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        let names = [];
+        workflow.fileList.forEach(function(f) {
+            names.push(f.name);
+        });
+        fl.forEach(function(file) {
+            if (names.indexOf(file.name) == -1) {
+                workflow.fileList = [...workflow.fileList, file];
+            }
+        });
+        this.setState({ workflow: workflow });
+    }
+    resetWorkFlowProject = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        if (workflow.analysisType == "0") {
+            document.getElementById("input-access-code").disabled = false;
+            document.getElementById("btn-project-load-gse").disabled = false;
+            // disable the input , prevent user to change the access code
+
+            document.getElementById("analysisType_selection").disabled = false;
+            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary";
+        }
+        defaultState.workflow.analysisType = "0";
+        let err_message = document.getElementsByClassName("err-message")
+        for (let i = 0; i < err_message.length; i++) {
+            err_message[i].innerHTML = ""; // or
+        }
+        if (document.getElementById("message-gsm") != null) {
+            document.getElementById("message-gsm").nextSibling.innerHTML = "Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here."
+        }
+        document.getElementById("input-email").value = "";
+        document.getElementById("message-success-use-queue").innerHTML = "";
+        defaultState.workflow.progressing = false;
+        this.setState({ workflow: defaultState.workflow });
+    }
+    changeLoadingStatus = (progressing, loading_info) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.progressing = progressing;
+        workflow.loading_info = loading_info;
+        this.setState({ workflow: workflow });
+    }
+    exportGSE = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.progressing = true;
+        workflow.loading_info = "Export";
+        this.setState({ workflow: workflow });
+        var wb = XLSX.utils.book_new();
+        wb.Props = {
+            Title: "Export GSM Data",
+            Subject: "GSM Data",
+            Author: "Microarray",
+            CreatedDate: new Date()
+        };
+        if (workflow.dataList.length != 0) {
+            wb.SheetNames.push("Settings");
+            let ws_data = [];
+            if (workflow.analysisType == "0") {
+                // GSM 
+                ws_data.push(["Analysis Type", "GEO Data"]);
+                ws_data.push(["Accession Code", workflow.accessionCode]);
+
+            }
+            if (workflow.analysisType == "1") {
+                // Upload
+                ws_data.push(["Analysis Type", "CEL Files"]);
+                let uploadD = "";
+                for (var i in workflow.dataList) {
+                    uploadD = workflow.dataList[i].title + "," + uploadD;
+                }
+                ws_data.push(["Upload Data", uploadD]);
+            }
+            let ws = XLSX.utils.aoa_to_sheet(ws_data);
+            wb.Sheets["Settings"] = ws;
+            wb.SheetNames.push("Results");
+            let gsm = [
+                ['id', 'gsm', 'title', 'description', 'group']
+            ]
+            let rawData = workflow.dataList;
+            for (var i in rawData) {
+                gsm.push([rawData[i].index, rawData[i].gsm, rawData[i].title, rawData[i].description, rawData[i].groups, ]);
+            }
+            var ws2 = XLSX.utils.aoa_to_sheet(gsm);
+            wb.Sheets["Results"] = ws2;
+            var wbout = XLSX.writeFile(wb, "GSM_" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+            workflow.progressing = false;
+            workflow.loading_info = "loading";
+            this.setState({ workflow: workflow });
+        }
+    }
+    loadGSE = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        let reqBody = {};
+        reqBody.code = "";
+        reqBody.projectId = "";
+        reqBody.groups = "";
+        if (workflow.accessionCode == "") {
+            document.getElementById("message-load-accession-code").innerHTML = "Accession Code is required. ";
+            return;
         } else {
-            // default value of the group is others
-            reqBody.groups.push("Others")
+            document.getElementById("message-load-accession-code").innerHTML = "";
         }
-    }
-    reqBody.genSet = workflow.genSet;
-    reqBody.pssGSEA = workflow.pssGSEA;
-    reqBody.foldssGSEA = workflow.foldssGSEA;
-    reqBody.pPathways = workflow.pPathways;
-    reqBody.species = workflow.species;
-    reqBody.genSet = workflow.genSet;
-    reqBody.normal = workflow.normal;
-    reqBody.sorting = "";
-    if (workflow.current_working_on_object) {
-        reqBody.targetObject = workflow.current_working_on_object;
-    } else {
-        reqBody.targetObject = "";
-    }
-    workflow.progressing = true;
-    if (workflow.useQueue) {
-        workflow.loading_info = "Submitting job to queue...";
-    } else {
-        workflow.loading_info = "Running Contrast...";
-    }
-    // define action
-    reqBody.actions = "runContrast";
-    workflow.diff_expr_genes = {
-        data: [],
-        pagination: {
-            current: 1,
-            pageSize: 25
-        },
-        loading: true,
-        page_number: 1,
-        page_size: 25,
-        sorting: {
-            name: "P.Value",
-            order: "ascend",
-        },
-        search_keyword: {
-            "search_symbol": "",
-            "search_fc": "1.5",
-            "search_p_value": "0.05",
-            "search_adj_p_value": "",
-            "search_aveexpr": "",
-            "search_accnum": "",
-            "search_desc": "",
-            "search_entrez": "",
-            "search_probsetid": "",
-            "search_t": "",
-            "search_b": ""
+        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-default";
+        if (workflow.dataList != "") {
+            // user click load after data already loaded.then it is a new transaction 
+            window.location.reload(true);
         }
-    };
-    reqBody.deg = workflow.diff_expr_genes;
-    workflow.ssGSEA = {
-        data: [],
-        pagination: {
-            current: 1,
-            pageSize: 25,
-        },
-        loading: true,
-        page_size: 25,
-        page_number: 1,
-        sorting: {
-            name: "P.Value",
-            order: "ascend",
-        },
-        search_keyword: {
-            "name": "",
-            "search_logFC": "",
-            "search_Avg_Enrichment_Score": "",
-            "search_t": "",
-            "search_p_value": "",
-            "search_adj_p_value": "",
-            "search_b": "",
+        reqBody.code = workflow.accessionCode;
+        // this pid will be used to create a tmp folder to store the data. 
+        workflow.projectID = this.uuidv4();
+        reqBody.projectId = workflow.projectID;
+        // gruop info
+        var groups = []
+        for (var i in workflow.dataList) {
+            if (workflow.dataList[i].group == "") {
+                groups.push("Others");
+            } else {
+                groups.push(workflow.dataList[i].group);
+            }
         }
-    };
-    reqBody.ssGSEA = workflow.ssGSEA;
-    workflow.pathways_up = {
-        data: [],
-        pagination: {
-            current: 1,
-            pageSize: 25,
-        },
-        sorting: {
-            name: "P_Value",
-            order: "ascend",
-        },
-        loading: true,
-        search_keyword: {
-            "search_PATHWAY_ID": "",
-            "search_SOURCE": "",
-            "search_DESCRIPTION": "",
-            "search_TYPE": "",
-            "search_p_value": "0.05",
-            "search_fdr": "",
-            "search_RATIO": "",
-            "search_GENE_LIST": "",
-            "search_NUMBER_HITS": "",
-            "search_NUMBER_GENES_PATHWAY": "",
-            "search_NUMBER_USER_GENES": "",
-            "search_TOTAL_NUMBER_GENES": "",
-        }
-    };
-    reqBody.pathways_up = workflow.pathways_up;
-    workflow.pathways_down = {
-        data: [],
-        pagination: {
-            current: 1,
-            pageSize: 25,
-        },
-        loading: true,
-        sorting: {
-            name: "P_Value",
-            order: "ascend",
-        },
-        search_keyword: {
-            "search_PATHWAY_ID": "",
-            "search_SOURCE": "",
-            "search_DESCRIPTION": "",
-            "search_TYPE": "",
-            "search_p_value": "0.05",
-            "search_fdr": "",
-            "search_RATIO": "",
-            "search_GENE_LIST": "",
-            "search_NUMBER_HITS": "",
-            "search_NUMBER_GENES_PATHWAY": "",
-            "search_NUMBER_USER_GENES": "",
-            "search_TOTAL_NUMBER_GENES": "",
-        }
-    };
-    reqBody.pathways_down = workflow.pathways_down;
-    workflow.preplots = {
-        histplotBN: "",
-        list_mAplotBN: "",
-        NUSE: "",
-        RLE: "",
-        Boxplots: "",
-        list_mAplotBN: "",
-        histplotBN: "",
-    };
-    workflow.postplot = {
-        histplotAN: "",
-        list_mAplotAN: "",
-        Heatmapolt: "",
-        histplotAN: "",
-        list_mAplotAN: "",
-        Boxplots: "",
-        PCA: ""
-    };
-    workflow.list_mAplotBN = "";
-    workflow.list_mAplotAN = "";
-    workflow.volcanoPlot = "";
-    workflow.histplotBN_url = "";
-    workflow.histplotAN_url = "";
-    workflow.heatmapolt_url = "";
-    this.setState({
-        workflow: workflow
-    });
-    document.getElementById("message-gsm").innerHTML = "";
-    if (workflow.useQueue) {
-        if (document.getElementById("input-email").value == "") {
-            document.getElementById("message-use-queue").innerHTML = "Email is required"
+        reqBody.groups = groups;
+        workflow.uploading = true;
+        workflow.progressing = true;
+        workflow.loading_info = "Loading GEO Data...";
+        this.setState({
+            workflow: workflow
+        });
+
+        try {
+            fetch('./api/analysis/loadGSE', {
+                    method: "POST",
+                    body: JSON.stringify(reqBody),
+                    credentials: "same-origin",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(this.handleErrors)
+                .then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        let workflow = Object.assign({}, this.state.workflow);
+
+                        if (result.data === "undefined" || Object.keys(result.data).length === 0 || result.data.indexOf('{"files":') < 0) {
+                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+                            workflow.uploading = false;
+                            workflow.progressing = false;
+                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ").replace("files Please", "files. Please")
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                            this.setState({
+                                workflow: workflow
+                            });
+                            return;
+                        }
+                        var data = result.data.substr(result.data.indexOf('{"files":'), result.data.length)
+                        if (typeof(data) === "undefined" || data == "") {
+                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+                            workflow.uploading = false;
+                            workflow.progressing = false;
+                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ")
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                            this.setState({
+                                workflow: workflow
+                            });
+                            return;
+                        }
+                        let list = JSON.parse(decodeURIComponent(data));
+                        if (typeof(list) == "undefined" || list == null || list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
+                            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+                            workflow.uploading = false;
+                            workflow.progressing = false;
+                            document.getElementById("message-gsm").innerHTML = result.data.replace("\\n", " ").replace(/"/g, "").replace("[1] +++loadGSE+++", " ").replace("files Please", "files. Please")
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                            this.setState({
+                                workflow: workflow
+                            });
+                            return;
+                        }
+                        document.getElementById("message-gsm").innerHTML = ""
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+                        workflow.dataList = list.files;
+                        // init group with default value
+                        workflow.groups = new Array(list.files.length).fill('Others');
+
+                        // disable the input , prevent user to change the access code
+                        document.getElementById("input-access-code").disabled = true;
+                        // change the word of load btn
+                        document.getElementById("btn-project-load-gse").disabled = true;
+
+                        document.getElementById("analysisType_selection").disabled = true;
+                        this.setState({
+                            workflow: workflow
+                        });
+                    } else {
+                        document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+                        this.setState({
+                            workflow: workflow
+                        });
+                        document.getElementById("message-gsm").innerHTML = result.msg
+                        document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                        //message.error('load data fails.');
+                    }
+                });
+        } catch (err) {
+            //change button style
+            document.getElementById("btn-project-load-gse").className = "ant-btn upload-start ant-btn-primary"
             workflow.uploading = false;
             workflow.progressing = false;
             this.setState({
                 workflow: workflow
             });
-            return
-        } else {
-            reqBody.email = document.getElementById("input-email").value
+            document.getElementById("message-gsm").innerHTML = err
+            document.getElementById("message-gsm").nextSibling.innerHTML = ""
         }
+    }
+    showModal = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.QueueModalvisible = true;
+        this.setState({
+            workflow: workflow
+        });
+    }
+    handleCancel = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.QueueModalvisible = false;
+        this.setState({
+            workflow: workflow
+        });
+    }
+    getSSGSEAGeneHeatMap = () => {
+
+        let workflow = Object.assign({}, this.state.workflow);
+        let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
+        imageExists(link, this.buildgeneHeatmap);
+    }
+    buildgeneHeatmap = (exists) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        let link = "./images/" + workflow.projectID + "/ssgseaHeatmap1.jpg?" + this.uuidv4();
+
+        if (exists) {
+            workflow.geneHeatmap = <img src= {link}  style={{width:"100%"}} alt="Pathway Heatmap"/>
+            this.setState({ workflow: workflow });
+        }
+    }
+    runContrast = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        document.getElementById("message-use-queue").innerHTML = "";
+        let reqBody = {};
+        reqBody.code = "";
+        reqBody.projectId = "";
+        reqBody.groups = "";
+        reqBody.actions = "";
+        reqBody.pPathways = "";
+        reqBody.genSet = "";
+        reqBody.pssGSEA = "";
+        reqBody.foldssGSEA = "";
+        reqBody.species = "";
+        reqBody.genSet = "";
+        reqBody.code = workflow.accessionCode;
+        reqBody.projectId = workflow.projectID;
+        reqBody.groups = [];
+        reqBody.group_1 = workflow.group_1;
+        reqBody.group_2 = workflow.group_2;
+        reqBody.dataList = [];
+        if (workflow.uploaded) {
+            reqBody.source = "upload";
+        } else {
+            reqBody.source = "fetch";
+        }
+        for (var i in workflow.dataList) {
+            reqBody.dataList.push(workflow.dataList[i].gsm);
+            if (workflow.dataList[i].groups != "") {
+                reqBody.groups.push(workflow.dataList[i].groups);
+            } else {
+                // default value of the group is others
+                reqBody.groups.push("Others")
+            }
+        }
+        reqBody.genSet = workflow.genSet;
+        reqBody.pssGSEA = workflow.pssGSEA;
+        reqBody.foldssGSEA = workflow.foldssGSEA;
+        reqBody.pPathways = workflow.pPathways;
+        reqBody.species = workflow.species;
+        reqBody.genSet = workflow.genSet;
+        reqBody.normal = workflow.normal;
+        reqBody.sorting = "";
+        if (workflow.current_working_on_object) {
+            reqBody.targetObject = workflow.current_working_on_object;
+        } else {
+            reqBody.targetObject = "";
+        }
+        workflow.progressing = true;
+        if (workflow.useQueue) {
+            workflow.loading_info = "Submitting job to queue...";
+        } else {
+            workflow.loading_info = "Running Contrast...";
+        }
+        // define action
+        reqBody.actions = "runContrast";
+        workflow.diff_expr_genes = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25
+            },
+            loading: true,
+            page_number: 1,
+            page_size: 25,
+            sorting: {
+                name: "P.Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "search_symbol": "",
+                "search_fc": "1.5",
+                "search_p_value": "0.05",
+                "search_adj_p_value": "",
+                "search_aveexpr": "",
+                "search_accnum": "",
+                "search_desc": "",
+                "search_entrez": "",
+                "search_probsetid": "",
+                "search_t": "",
+                "search_b": ""
+            }
+        };
+        reqBody.deg = workflow.diff_expr_genes;
+        workflow.ssGSEA = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25,
+            },
+            loading: true,
+            page_size: 25,
+            page_number: 1,
+            sorting: {
+                name: "P.Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "name": "",
+                "search_logFC": "",
+                "search_Avg_Enrichment_Score": "",
+                "search_t": "",
+                "search_p_value": "",
+                "search_adj_p_value": "",
+                "search_b": "",
+            }
+        };
+        reqBody.ssGSEA = workflow.ssGSEA;
+        workflow.pathways_up = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25,
+            },
+            sorting: {
+                name: "P_Value",
+                order: "ascend",
+            },
+            loading: true,
+            search_keyword: {
+                "search_PATHWAY_ID": "",
+                "search_SOURCE": "",
+                "search_DESCRIPTION": "",
+                "search_TYPE": "",
+                "search_p_value": "0.05",
+                "search_fdr": "",
+                "search_RATIO": "",
+                "search_GENE_LIST": "",
+                "search_NUMBER_HITS": "",
+                "search_NUMBER_GENES_PATHWAY": "",
+                "search_NUMBER_USER_GENES": "",
+                "search_TOTAL_NUMBER_GENES": "",
+            }
+        };
+        reqBody.pathways_up = workflow.pathways_up;
+        workflow.pathways_down = {
+            data: [],
+            pagination: {
+                current: 1,
+                pageSize: 25,
+            },
+            loading: true,
+            sorting: {
+                name: "P_Value",
+                order: "ascend",
+            },
+            search_keyword: {
+                "search_PATHWAY_ID": "",
+                "search_SOURCE": "",
+                "search_DESCRIPTION": "",
+                "search_TYPE": "",
+                "search_p_value": "0.05",
+                "search_fdr": "",
+                "search_RATIO": "",
+                "search_GENE_LIST": "",
+                "search_NUMBER_HITS": "",
+                "search_NUMBER_GENES_PATHWAY": "",
+                "search_NUMBER_USER_GENES": "",
+                "search_TOTAL_NUMBER_GENES": "",
+            }
+        };
+        reqBody.pathways_down = workflow.pathways_down;
+        workflow.preplots = {
+            histplotBN: "",
+            list_mAplotBN: "",
+            NUSE: "",
+            RLE: "",
+            Boxplots: "",
+            list_mAplotBN: "",
+            histplotBN: "",
+        };
+        workflow.postplot = {
+            histplotAN: "",
+            list_mAplotAN: "",
+            Heatmapolt: "",
+            histplotAN: "",
+            list_mAplotAN: "",
+            Boxplots: "",
+            PCA: ""
+        };
+        workflow.list_mAplotBN = "";
+        workflow.list_mAplotAN = "";
+        workflow.volcanoPlot = "";
+        workflow.histplotBN_url = "";
+        workflow.histplotAN_url = "";
+        workflow.heatmapolt_url = "";
+        this.setState({
+            workflow: workflow
+        });
+        document.getElementById("message-gsm").innerHTML = "";
+        if (workflow.useQueue) {
+            if (document.getElementById("input-email").value == "") {
+                document.getElementById("message-use-queue").innerHTML = "Email is required"
+                workflow.uploading = false;
+                workflow.progressing = false;
+                this.setState({
+                    workflow: workflow
+                });
+                return
+            } else {
+                reqBody.email = document.getElementById("input-email").value
+            }
+            try {
+                fetch('./api/analysis/qAnalysis', {
+                        method: "POST",
+                        body: JSON.stringify(reqBody),
+                        credentials: "same-origin",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(this.handleErrors)
+                    .then(function(response) {
+                        if (!response.ok) {
+                            throw Error(response.statusText);
+                        }
+                        return response.json();
+                    }).then(result => {
+                        if (result.status == 200) {
+                            workflow.QueueModalvisible = true;
+                        } else {
+                            workflow.QueueModalvisible = false;
+                            document.getElementById("message-use-queue").innerHTML = result.data;
+                        }
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+                        this.setState({
+                            workflow: workflow
+                        });
+                        this.getSSGSEAGeneHeatMap();
+                    })
+            } catch (err) {
+                workflow.uploading = false;
+                workflow.progressing = false;
+                console.log(err);
+                document.getElementById("message-use-queue").innerHTML = err
+                this.setState({
+                    workflow: workflow
+                });
+            }
+        } else {
+            try {
+                fetch('./api/analysis/runContrast', {
+                        method: "POST",
+                        body: JSON.stringify(reqBody),
+                        credentials: "same-origin",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(this.handleErrors)
+                    .then(function(response) {
+                        if (response) {
+                            return response.json();
+                        }
+                    }).then(result => {
+                        if (result && result.status == 200) {
+                            let type = window.current_working_on_object;
+                            if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
+                                // open the GSM
+                            }
+                            if (window.current_working_on_tag == "Pre-normalization_QC_Plots") {
+                                // open the Pre-plot
+                                type = window.tag_pre_plot_status;
+                            }
+                            if (window.current_working_on_tag == "Post-normalization_Plots") {
+                                // open the Post-plot
+                                type = window.tag_post_plot_status;
+                            }
+                            if (window.current_working_on_tag == "DEG-Enrichments_Results") {
+                                // open the DEG
+                                type = window.tag_deg_plot_status;
+                            }
+                            if (window.current_working_on_tag == "ssGSEA_Results") {
+                                // open the ssGSEA_Results
+                                type = "ssGSEA_Results";
+                            }
+
+                            switch (type) {
+                                case "getHistplotAN":
+                                    this.getHistplotAN();
+                                    break;
+                                case "getBoxplotAN":
+                                    this.getBoxplotAN();
+                                    break;
+                                case "getMAplotAN":
+                                    this.getMAplotAN();
+                                    break;
+                                case "getPCA":
+                                    this.getPCA();
+                                    break;
+                                case "getHeatmapolt":
+                                    this.getHeatmapolt();
+                                    break;
+                                case "getHistplotBN":
+                                    this.getHistplotBN();
+                                    break;
+                                case "getMAplotsBN":
+                                    this.getMAplotsBN();
+                                    break;
+                                case "getBoxplotBN":
+                                    this.getBoxplotBN();
+                                    break;
+                                case "getRLE":
+                                    this.getRLE();
+                                    break;
+                                case "getNUSE":
+                                    this.getNUSE();
+                                    break;
+                                case "pathwayHeatMap":
+                                    this.getSSGSEAGeneHeatMap();
+                                    break;
+                                case "pathways_up":
+                                    this.getPathwayUp()
+                                    break;
+                                case "pathways_down":
+                                    this.getPathwayDown();
+                                    break;
+                                case "ssGSEA":
+                                    this.getssGSEA();
+                                    break;
+                                case "deg":
+                                    this.getDEG();
+                                    break;
+                                case "Pre-normalization_QC_Plots":
+                                    this.getHistplotBN();
+                                    break;
+                                case "Post-normalization_Plots":
+                                    this.getHistplotAN();
+                                    break;
+                                case "DEG-Enrichments_Results":
+                                    this.getDEG();
+                                    break;
+                                case "GSM_1":
+                                    // do nothing
+                                    break;
+                                case "ssGSEA_Results":
+                                    this.getssGSEA();
+                                    break;
+                            }
+                            workflow.volcanoPlot = this.getVolcanoPlot();
+                            workflow.groups = result.data.groups;
+                            workflow.compared = true;
+                            workflow.done_gsea = true;
+                            workflow.progressing = false;
+                            workflow.histplotBN_url = result.data.histplotBN;
+                            workflow.histplotAN_url = result.data.histplotAN;
+                            workflow.heatmapolt_url = result.data.heatmapolt;
+                            this.setState({
+                                workflow: workflow
+                            });
+                            this.getSSGSEAGeneHeatMap();
+                            this.hideWorkFlow();
+                        } else {
+                            if (result) {
+                                document.getElementById("message-gsm").innerHTML = result.data
+                                workflow.progressing = false;
+                                this.setState({
+                                    workflow: workflow
+                                });
+                            }
+                        }
+                    }).catch(function(error) {
+                        document.getElementById("message-gsm").innerHTML = error
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+                        this.setState({
+                            workflow: workflow
+                        });
+                    }.bind(this));
+            } catch (err) {
+                document.getElementById("message-gsm").innerHTML = err
+                workflow.uploading = false;
+                workflow.progressing = false;
+                console.log(err);
+                this.setState({
+                    workflow: workflow
+                });
+            }
+        }
+    }
+    handleUpload = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        const fileList = workflow.fileList;
+        const formData = new FormData();
+        // this pid will be used to create a tmp folder to store the data. 
+        workflow.projectID = this.uuidv4();
+        formData.append('projectId', workflow.projectID)
+
+        fileList.forEach((file) => {
+            formData.append('cels', file);
+        });
+        workflow.uploading = true;
+        workflow.progressing = true;
+        this.setState({
+            workflow: workflow
+        });
+        document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default"
         try {
-            fetch('./api/analysis/qAnalysis', {
+            fetch('./api/analysis/upload', {
+                    method: "POST",
+                    body: formData,
+                    processData: false,
+                    contentType: false
+                })
+                .then(this.handleErrors)
+                .then(res => res.json())
+                .then(result => {
+                    if (result.status == 200) {
+                        var data = result.data.split("+++getCELfiles+++\"")[1]
+                        if (typeof(data) === "undefined" || data == "") {
+                            workflow.uploading = false;
+                            workflow.progressing = false;
+                            document.getElementById("message-gsm").innerHTML = result.msg;
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                            this.setState({ workflow: workflow });
+                            return;
+                        }
+                        let list = JSON.parse(decodeURIComponent(data));
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+                        if (list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
+                            document.getElementById("message-gsm").innerHTML = "load data fails.";
+                            document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                            return;
+                        }
+                        for (let i in list.files) {
+                            list.files[i]["gsm"] = list.files[i]["_row"];
+                            list.files[i]["groups"] = "";
+                        }
+                        workflow.dataList = list.files;
+                        workflow.uploaded = true;
+                        this.setState({
+                            workflow: workflow
+                        });
+                    } else {
+                        workflow.uploading = false;
+                        workflow.progressing = false;
+                        workflow.uploaded = true;
+                        this.setState({
+                            workflow: workflow
+                        });
+                        document.getElementById("message-gsm").innerHTML = result.msg;
+                        document.getElementById("message-gsm").nextSibling.innerHTML = ""
+                    }
+                    document.getElementById("btn-project-upload").disabled = true;
+                    document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default";
+                }).catch(error => console.log(error));
+        } catch (error) {
+            workflow.uploading = false;
+            workflow.progressing = false;
+            workflow.uploaded = true;
+            this.setState({
+                workflow: workflow
+            });
+            document.getElementById("message-gsm").innerHTML = error;
+            document.getElementById("message-gsm").nextSibling.innerHTML = "";
+            document.getElementById("btn-project-upload").disabled = true;
+            document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default";
+        }
+    }
+    assignGroup = (group_name, dataList_keys, handler, callback) => {
+        // validate group_name
+        let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
+        if (group_name.match(pattern)) {
+            let workflow = Object.assign({}, this.state.workflow);
+            for (var key in dataList_keys) {
+                workflow.dataList[dataList_keys[key] - 1].groups = group_name;
+            }
+            document.getElementById("message-gsm-group").innerHTML = "";
+            this.setState({ workflow: workflow });
+            callback(true, handler);
+        } else {
+            document.getElementById("message-gsm-group").innerHTML = "The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 ";
+            callback(false, handler);
+        }
+    }
+    deleteGroup = (group_name) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        for (var key in workflow.dataList) {
+            if (workflow.dataList[key].groups == group_name) {
+                workflow.dataList[key].groups = ""
+            }
+        }
+        this.setState({ workflow: workflow });
+    }
+    handleErrors = (response) => {
+        if (!response.ok) {
+            //throw Error(response.statusText);
+            // Display fallback UI
+            this.resetWorkFlowProject();
+            if (response.statusText != "") {
+                document.getElementById("message-gsm").innerHTML = response.statusText;
+            } else {
+                let errorMessage = ""
+                if (httpErrorMessage[response.status]) errorMessage = httpErrorMessage[response.status];
+                document.getElementById("message-gsm").innerHTML = "Error Code : " + response.status + "  " + errorMessage;
+            }
+
+            document.getElementById("message-gsm").nextSibling.innerHTML = "";
+
+        } else {
+            return response;
+        }
+    }
+    hideWorkFlow = () => {
+        if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
+            document.getElementsByClassName("container-board-left")[0].style.display = 'none';
+        }
+        if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
+            // when user use mobile, container-board-right set to be 100% width
+            document.getElementsByClassName("container-board-right")[0].style.width = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - document.getElementsByClassName("container-board-left")[0].clientWidth - 80 + "px";
+        }
+        document.getElementById("panel-show").style.display = 'inherit';
+        document.getElementById("panel-hide").style.display = 'none';
+        this.resetBoxPlotAN();
+        this.resetRLE();
+        this.resetNUSE();
+        this.resetPCA();
+        this.resetBoxPlotBN();
+    }
+    showWorkFlow = () => {
+        document.getElementsByClassName("container-board-left")[0].style.display = 'block';
+        document.getElementsByClassName("container-board-right")[0].removeAttribute("style");
+        document.getElementById("panel-show").style.display = 'none';
+        document.getElementById("panel-hide").style.display = 'inherit';
+        this.resetBoxPlotAN();
+        this.resetRLE();
+        this.resetNUSE();
+        this.resetPCA();
+        this.resetBoxPlotBN();
+    }
+    resetPCA = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        let pcaPlotLayout = {
+            margin: workflow.PCA.layout.margin,
+            width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
+            height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
+            scene: workflow.PCA.layout.scene
+        }
+        if (!workflow.PCA.data == "") {
+            workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
+                             data={workflow.PCA.data} 
+                             layout={pcaPlotLayout}  
+                             /></div>;
+        }
+        this.setState({
+            workflow: workflow
+        });
+    }
+    resetBoxPlotAN = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.BoxplotAN.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.BoxplotAN.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        if (!workflow.BoxplotAN.data == "") {
+            workflow.BoxplotAN.plot = <Plot 
+                             id="BoxplotAN" 
+                             data={workflow.BoxplotAN.data} 
+                             layout={workflow.BoxplotAN.layout}  
+                             style={workflow.BoxplotAN.style} 
+                             useResizeHandler={true}
+                             />
+        }
+
+        this.setState({
+            workflow: workflow
+        });
+    }
+    resetBoxPlotBN = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.BoxplotBN.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.BoxplotBN.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        if (!workflow.BoxplotBN.data == "") {
+            workflow.BoxplotBN.plot = <Plot 
+                             id="BoxplotAN" 
+                             data={workflow.BoxplotBN.data} 
+                             layout={workflow.BoxplotBN.layout}  
+                             style={workflow.BoxplotBN.style} 
+                             useResizeHandler={true}
+                             />
+        }
+
+        this.setState({
+            workflow: workflow
+        });
+    }
+    resetRLE = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.RLE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.RLE.layout = { showlegend: false, autosize: true };
+        if (!workflow.RLE.data == "") {
+            workflow.RLE.plot = <Plot id="BoxplotAN" data={workflow.RLE.data} layout={workflow.RLE.layout}  style={workflow.RLE.style} useResizeHandler={true} />
+        }
+        this.setState({ workflow: workflow });
+    }
+    resetNUSE = () => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.NUSE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
+        workflow.NUSE.layout = {
+            showlegend: false,
+            autosize: true
+        };
+        if (!workflow.NUSE.data == "") {
+            workflow.NUSE.plot = <Plot id="BoxplotAN" data={workflow.NUSE.data} layout={workflow.NUSE.layout} style={workflow.NUSE.style} useResizeHandler={true}/>
+        }
+        this.setState({
+            workflow: workflow
+        });
+    }
+    changeTab(tab) {
+        console.log(tab)
+        if (document.getElementById("li-about") != null) {
+            if (tab == "about") {
+                document.getElementById("li-about").className = "active"
+                document.getElementById("li-analysis").className = ""
+                document.getElementById("li-help").className = ""
+                document.getElementById("tab_about").className = ""
+                document.getElementById("tab_analysis").className = "hide"
+                document.getElementById("tab_help").className = "hide"
+            }
+            if (tab == "analysis") {
+                document.getElementById("li-about").className = ""
+                document.getElementById("li-analysis").className = "active"
+                document.getElementById("li-help").className = ""
+                document.getElementById("tab_about").className = "hide"
+                document.getElementById("tab_analysis").className = ""
+                document.getElementById("tab_help").className = "hide"
+            }
+            if (tab == "help") {
+                document.getElementById("tab_about").className = "hide"
+                document.getElementById("tab_analysis").className = "hide"
+                document.getElementById("tab_help").className = ""
+                document.getElementById("li-about").className = ""
+                document.getElementById("li-analysis").className = ""
+                document.getElementById("li-help").className = "active"
+            }
+        }
+    }
+    initWithCode = (code) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        let reqBody = {};
+        reqBody.projectId = code;
+        workflow.uploaded = false;
+        workflow.progressing = true;
+        workflow.loading_info = "Running Contrast...";
+        workflow.diff_expr_genes = defaultState.workflow.diff_expr_genes;
+        workflow.ssGSEA = defaultState.workflow.ssGSEA;
+        workflow.pathways_up = defaultState.workflow.pathways_up;
+        workflow.pathways_down = defaultState.workflow.pathways_down;
+        workflow.preplots = defaultState.workflow.preplots;
+        workflow.postplot = defaultState.workflow.postplot;
+        workflow.volcanoPlot = "";
+        workflow.progressing = true;
+        workflow.loading_info = "Loading...";
+        this.setState({
+            workflow: workflow
+        });
+        try {
+            fetch('./api/analysis/getResultByProjectId', {
                     method: "POST",
                     body: JSON.stringify(reqBody),
                     credentials: "same-origin",
@@ -2303,457 +2728,102 @@ runContrast = () => {
                 .then(function(response) {
                     if (!response.ok) {
                         throw Error(response.statusText);
+                        document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to complete, please contact admin or try again. ";
+                        document.getElementById("message-gsm").nextSibling.innerHTML = "";
                     }
                     return response.json();
                 }).then(result => {
                     if (result.status == 200) {
-                        workflow.QueueModalvisible = true;
-                    } else {
-                        workflow.QueueModalvisible = false;
-                        document.getElementById("message-use-queue").innerHTML = result.data;
-                    }
-                    workflow.uploading = false;
-                    workflow.progressing = false;
-                    this.setState({
-                        workflow: workflow
-                    });
-                    this.getSSGSEAGeneHeatMap();
-                })
-        } catch (err) {
-            workflow.uploading = false;
-            workflow.progressing = false;
-            console.log(err);
-            document.getElementById("message-use-queue").innerHTML = err
-            this.setState({
-                workflow: workflow
-            });
-        }
-    } else {
-        try {
-            fetch('./api/analysis/runContrast', {
-                    method: "POST",
-                    body: JSON.stringify(reqBody),
-                    credentials: "same-origin",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then(this.handleErrors)
-                .then(function(response) {
-                    if (response) {
-                        return response.json();
-                    }
-                }).then(result => {
-                    if (result && result.status == 200) {
-                        let type = window.current_working_on_object;
-                        if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
-                            // open the GSM
+                        result = result.data;
+                        let workflow2 = Object.assign({}, this.state.workflow);
+                        if (result.gsm[0].gsm) {
+                            workflow2.dataList = result.gsm;
+                        } else {
+                            let tmp_gsms = []
+                            for (let i in result.gsm) {
+                                tmp_gsms.push({
+                                    index: result.gsm[i].index,
+                                    title: result.gsm[i].title,
+                                    gsm: result.gsm[i]._row,
+                                    groups: result.gsm[i].groups,
+                                    colors: result.gsm[i].colors
+                                })
+                            }
+                            workflow2.dataList = tmp_gsms;
                         }
-                        if (window.current_working_on_tag == "Pre-normalization_QC_Plots") {
-                            // open the Pre-plot
-                            type = window.tag_pre_plot_status;
+                        if (result.source && result.source == "upload") {
+                            // change analysis type
+                            workflow2.analysisType = "1";
+                            workflow2.uploaded = true;
                         }
-                        if (window.current_working_on_tag == "Post-normalization_Plots") {
-                            // open the Post-plot
-                            type = window.tag_post_plot_status;
+                        workflow2.accessionCode = result.accessionCode;
+                        workflow2.projectID = result.projectId[0];
+                        workflow2.group_1 = result.group_1;
+                        workflow2.group_2 = result.group_2;
+                        workflow2.groups = result.groups;
+                        workflow2.normal = result.normal;
+                        // replace default group
+                        for (let i in workflow2.dataList) {
+                            if (result.groups[i].toLowerCase() == "others" || result.groups[i].toLowerCase() == 'clt') {
+                                workflow2.dataList[i].groups = "";
+                            } else {
+                                workflow2.dataList[i].groups = result.groups[i];
+                            }
                         }
-                        if (window.current_working_on_tag == "DEG-Enrichments_Results") {
-                            // open the DEG
-                            type = window.tag_deg_plot_status;
+                        if (result.mAplotBN) {
+                            workflow2.list_mAplotBN = result.mAplotBN;
                         }
-                        if (window.current_working_on_tag == "ssGSEA_Results") {
-                            // open the ssGSEA_Results
-                            type = "ssGSEA_Results";
+                        if (result.mAplotAN) {
+                            workflow2.list_mAplotAN = result.mAplotAN;
                         }
+                        workflow2.init = true;
+                        workflow2.volcanoPlot = "/volcano.html";
+                        workflow2.compared = true;
+                        workflow2.done_gsea = true;
+                        workflow2.progressing = false;
+                        workflow2.histplotBN_url = result.histplotBN;
+                        workflow2.histplotAN_url = result.histplotAN;
+                        workflow2.heatmapolt_url = result.heatmapolt;
+                        // disable the input , prevent user to change the access code
+                        document.getElementById("input-access-code").disabled = true;
+                        // change the word of load btn
+                        document.getElementById("btn-project-load-gse").disabled = true;
+                        //
+                        document.getElementById("analysisType_selection").disabled = true;
+                        //
+                        document.getElementById("btn-project-load-gse").classList.replace("ant-btn-primary", "ant-btn-default");
 
-                        switch (type) {
-                            case "getHistplotAN":
-                                this.getHistplotAN();
-                                break;
-                            case "getBoxplotAN":
-                                this.getBoxplotAN();
-                                break;
-                            case "getMAplotAN":
-                                this.getMAplotAN();
-                                break;
-                            case "getPCA":
-                                this.getPCA();
-                                break;
-                            case "getHeatmapolt":
-                                this.getHeatmapolt();
-                                break;
-                            case "getHistplotBN":
-                                this.getHistplotBN();
-                                break;
-                            case "getMAplotsBN":
-                                this.getMAplotsBN();
-                                break;
-                            case "getBoxplotBN":
-                                this.getBoxplotBN();
-                                break;
-                            case "getRLE":
-                                this.getRLE();
-                                break;
-                            case "getNUSE":
-                                this.getNUSE();
-                                break;
-                            case "pathwayHeatMap":
-                                this.getSSGSEAGeneHeatMap();
-                                break;
-                            case "pathways_up":
-                                this.getPathwayUp()
-                                break;
-                            case "pathways_down":
-                                this.getPathwayDown();
-                                break;
-                            case "ssGSEA":
-                                this.getssGSEA();
-                                break;
-                            case "deg":
-                                this.getDEG();
-                                break;
-                            case "Pre-normalization_QC_Plots":
-                                this.getHistplotBN();
-                                break;
-                            case "Post-normalization_Plots":
-                                this.getHistplotAN();
-                                break;
-                            case "DEG-Enrichments_Results":
-                                this.getDEG();
-                                break;
-                            case "GSM_1":
-                                // do nothing
-                                break;
-                            case "ssGSEA_Results":
-                                this.getssGSEA();
-                                break;
-                        }
-                        workflow.volcanoPlot = this.getVolcanoPlot();
-                        workflow.groups = result.data.groups;
-                        workflow.compared = true;
-                        workflow.done_gsea = true;
-                        workflow.progressing = false;
-                        workflow.histplotBN_url = result.data.histplotBN;
-                        workflow.histplotAN_url = result.data.histplotAN;
-                        workflow.heatmapolt_url = result.data.heatmapolt;
                         this.setState({
-                            workflow: workflow
+                            workflow: workflow2
                         });
                         this.getSSGSEAGeneHeatMap();
                         this.hideWorkFlow();
                     } else {
-                        if (result){
-                            document.getElementById("message-gsm").innerHTML = result.data
-                            workflow.progressing = false;
-                            this.setState({
-                                workflow: workflow
-                            });
+                        if (document.getElementById("message-gsm") != null) {
+                            document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to complete, please contact admin or try again. ";
+                            document.getElementById("message-gsm").nextSibling.innerHTML = "";
                         }
+                        workflow.progressing = false;
+                        this.setState({
+                            workflow: workflow
+                        });
                     }
-                }).catch(function(error) {
-                    document.getElementById("message-gsm").innerHTML = error
-                    workflow.uploading = false;
-                    workflow.progressing = false;
-                    this.setState({
-                        workflow: workflow
-                    });
-                }.bind(this));
+                });
         } catch (err) {
-            document.getElementById("message-gsm").innerHTML = err
             workflow.uploading = false;
             workflow.progressing = false;
-            console.log(err);
+            if (document.getElementById("message-gsm") != null) {
+                document.getElementById("message-gsm").innerHTML = err;
+                document.getElementById("message-gsm").nextSibling.innerHTML = "";
+            }
             this.setState({
                 workflow: workflow
             });
         }
     }
-}
-handleUpload = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    const fileList = workflow.fileList;
-    const formData = new FormData();
-    // this pid will be used to create a tmp folder to store the data. 
-    workflow.projectID = this.uuidv4();
-    formData.append('projectId', workflow.projectID)
-
-    fileList.forEach((file) => {
-        formData.append('cels', file);
-    });
-    workflow.uploading = true;
-    workflow.progressing = true;
-    this.setState({
-        workflow: workflow
-    });
-    document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default"
-    try {
-        fetch('./api/analysis/upload', {
+    getCurrentNumberOfJobsinQueue = () => {
+        fetch('./api/analysis/getCurrentNumberOfJobsinQueue', {
                 method: "POST",
-                body: formData,
-                processData: false,
-                contentType: false
-            })
-            .then(this.handleErrors)
-            .then(res => res.json())
-            .then(result => {
-                if (result.status == 200) {
-                    var data = result.data.split("+++getCELfiles+++\"")[1]
-                    if (typeof(data) === "undefined" || data == "") {
-                        workflow.uploading = false;
-                        workflow.progressing = false;
-                        document.getElementById("message-gsm").innerHTML = result.msg;
-                        document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                        this.setState({ workflow: workflow });
-                        return;
-                    }
-                    let list = JSON.parse(decodeURIComponent(data));
-                    workflow.uploading = false;
-                    workflow.progressing = false;
-                    if (list.files == null || typeof(list.files) == "undefined" || list.files.length == 0) {
-                        document.getElementById("message-gsm").innerHTML = "load data fails.";
-                        document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                        return;
-                    }
-                    for (let i in list.files) {
-                        list.files[i]["gsm"] = list.files[i]["_row"];
-                        list.files[i]["groups"] = "";
-                    }
-                    workflow.dataList = list.files;
-                    workflow.uploaded = true;
-                    this.setState({
-                        workflow: workflow
-                    });
-                } else {
-                    workflow.uploading = false;
-                    workflow.progressing = false;
-                    workflow.uploaded = true;
-                    this.setState({
-                        workflow: workflow
-                    });
-                    document.getElementById("message-gsm").innerHTML = result.msg;
-                    document.getElementById("message-gsm").nextSibling.innerHTML = ""
-                }
-                document.getElementById("btn-project-upload").disabled = true;
-                document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default";
-            }).catch(error => console.log(error));
-    } catch (error) {
-        workflow.uploading = false;
-        workflow.progressing = false;
-        workflow.uploaded = true;
-        this.setState({
-            workflow: workflow
-        });
-        document.getElementById("message-gsm").innerHTML = error;
-        document.getElementById("message-gsm").nextSibling.innerHTML = "";
-        document.getElementById("btn-project-upload").disabled = true;
-        document.getElementById("btn-project-upload").className = "ant-btn upload-start ant-btn-default";
-    }
-}
-assignGroup = (group_name, dataList_keys, handler, callback) => {
-    // validate group_name
-    let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g
-    if (group_name.match(pattern)) {
-        let workflow = Object.assign({}, this.state.workflow);
-        for (var key in dataList_keys) {
-            workflow.dataList[dataList_keys[key] - 1].groups = group_name;
-        }
-        document.getElementById("message-gsm-group").innerHTML = "";
-        this.setState({ workflow: workflow });
-        callback(true, handler);
-    } else {
-        document.getElementById("message-gsm-group").innerHTML = "The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 ";
-        callback(false, handler);
-    }
-}
-deleteGroup = (group_name) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    for (var key in workflow.dataList) {
-        if (workflow.dataList[key].groups == group_name) {
-            workflow.dataList[key].groups = ""
-        }
-    }
-    this.setState({ workflow: workflow });
-}
-handleErrors = (response) => {
-    if (!response.ok) {
-        //throw Error(response.statusText);
-        // Display fallback UI
-        this.resetWorkFlowProject();
-        if (response.statusText != "") {
-            document.getElementById("message-gsm").innerHTML = response.statusText;
-        } else {
-            let errorMessage = ""
-            if (httpErrorMessage[response.status]) errorMessage = httpErrorMessage[response.status];
-            document.getElementById("message-gsm").innerHTML = "Error Code : " + response.status + "  " + errorMessage;
-        }
-
-        document.getElementById("message-gsm").nextSibling.innerHTML = "";
-
-    } else {
-        return response;
-    }
-}
-hideWorkFlow = () => {
-    if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
-        document.getElementsByClassName("container-board-left")[0].style.display = 'none';
-    }
-    if (document.getElementsByClassName("container-board-right")[0].clientWidth > 600) {
-        // when user use mobile, container-board-right set to be 100% width
-        document.getElementsByClassName("container-board-right")[0].style.width = this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth - document.getElementsByClassName("container-board-left")[0].clientWidth - 80 + "px";
-    }
-    document.getElementById("panel-show").style.display = 'inherit';
-    document.getElementById("panel-hide").style.display = 'none';
-    this.resetBoxPlotAN();
-    this.resetRLE();
-    this.resetNUSE();
-    this.resetPCA();
-    this.resetBoxPlotBN();
-}
-showWorkFlow = () => {
-    document.getElementsByClassName("container-board-left")[0].style.display = 'block';
-    document.getElementsByClassName("container-board-right")[0].removeAttribute("style");
-    document.getElementById("panel-show").style.display = 'none';
-    document.getElementById("panel-hide").style.display = 'inherit';
-    this.resetBoxPlotAN();
-    this.resetRLE();
-    this.resetNUSE();
-    this.resetPCA();
-    this.resetBoxPlotBN();
-}
-resetPCA = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    let pcaPlotLayout = {
-        margin: workflow.PCA.layout.margin,
-        width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.8,
-        height: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.6,
-        scene: workflow.PCA.layout.scene
-    }
-    if (!workflow.PCA.data == "") {
-        workflow.PCA.plot = <div style={workflow.PCA.style}> <Plot 
-                             data={workflow.PCA.data} 
-                             layout={pcaPlotLayout}  
-                             /></div>;
-    }
-    this.setState({
-        workflow: workflow
-    });
-}
-resetBoxPlotAN = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.BoxplotAN.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
-    workflow.BoxplotAN.layout = {
-        showlegend: false,
-        autosize: true
-    };
-    if (!workflow.BoxplotAN.data == "") {
-        workflow.BoxplotAN.plot = <Plot 
-                             id="BoxplotAN" 
-                             data={workflow.BoxplotAN.data} 
-                             layout={workflow.BoxplotAN.layout}  
-                             style={workflow.BoxplotAN.style} 
-                             useResizeHandler={true}
-                             />
-    }
-
-    this.setState({
-        workflow: workflow
-    });
-}
-resetBoxPlotBN = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.BoxplotBN.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
-    workflow.BoxplotBN.layout = {
-        showlegend: false,
-        autosize: true
-    };
-    if (!workflow.BoxplotBN.data == "") {
-        workflow.BoxplotBN.plot = <Plot 
-                             id="BoxplotAN" 
-                             data={workflow.BoxplotBN.data} 
-                             layout={workflow.BoxplotBN.layout}  
-                             style={workflow.BoxplotBN.style} 
-                             useResizeHandler={true}
-                             />
-    }
-
-    this.setState({
-        workflow: workflow
-    });
-}
-resetRLE = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.RLE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
-    workflow.RLE.layout = { showlegend: false, autosize: true };
-    if (!workflow.RLE.data == "") {
-        workflow.RLE.plot = <Plot id="BoxplotAN" data={workflow.RLE.data} layout={workflow.RLE.layout}  style={workflow.RLE.style} useResizeHandler={true} />
-    }
-    this.setState({ workflow: workflow });
-}
-resetNUSE = () => {
-    let workflow = Object.assign({}, this.state.workflow);
-    workflow.NUSE.style = { width: document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth * 0.9 };
-    workflow.NUSE.layout = {
-        showlegend: false,
-        autosize: true
-    };
-    if (!workflow.NUSE.data == "") {
-        workflow.NUSE.plot = <Plot id="BoxplotAN" data={workflow.NUSE.data} layout={workflow.NUSE.layout} style={workflow.NUSE.style} useResizeHandler={true}/>
-    }
-    this.setState({
-        workflow: workflow
-    });
-}
-changeTab(tab) {
-    console.log(tab)
-    if (document.getElementById("li-about") != null) {
-        if (tab == "about") {
-            document.getElementById("li-about").className = "active"
-            document.getElementById("li-analysis").className = ""
-            document.getElementById("li-help").className = ""
-            document.getElementById("tab_about").className = ""
-            document.getElementById("tab_analysis").className = "hide"
-            document.getElementById("tab_help").className = "hide"
-        }
-        if (tab == "analysis") {
-            document.getElementById("li-about").className = ""
-            document.getElementById("li-analysis").className = "active"
-            document.getElementById("li-help").className = ""
-            document.getElementById("tab_about").className = "hide"
-            document.getElementById("tab_analysis").className = ""
-            document.getElementById("tab_help").className = "hide"
-        }
-        if (tab == "help") {
-            document.getElementById("tab_about").className = "hide"
-            document.getElementById("tab_analysis").className = "hide"
-            document.getElementById("tab_help").className = ""
-            document.getElementById("li-about").className = ""
-            document.getElementById("li-analysis").className = ""
-            document.getElementById("li-help").className = "active"
-        }
-    }
-}
-initWithCode = (code) => {
-    let workflow = Object.assign({}, this.state.workflow);
-    let reqBody = {};
-    reqBody.projectId = code;
-    workflow.uploaded = false;
-    workflow.progressing = true;
-    workflow.loading_info = "Running Contrast...";
-    workflow.diff_expr_genes = defaultState.workflow.diff_expr_genes;
-    workflow.ssGSEA = defaultState.workflow.ssGSEA;
-    workflow.pathways_up = defaultState.workflow.pathways_up;
-    workflow.pathways_down = defaultState.workflow.pathways_down;
-    workflow.preplots = defaultState.workflow.preplots;
-    workflow.postplot = defaultState.workflow.postplot;
-    workflow.volcanoPlot = "";
-    workflow.progressing = true;
-    workflow.loading_info = "Loading...";
-    this.setState({
-        workflow: workflow
-    });
-    try {
-        fetch('./api/analysis/getResultByProjectId', {
-                method: "POST",
-                body: JSON.stringify(reqBody),
                 credentials: "same-origin",
                 headers: {
                     'Content-Type': 'application/json'
@@ -2762,124 +2832,20 @@ initWithCode = (code) => {
             .then(function(response) {
                 if (!response.ok) {
                     throw Error(response.statusText);
-                    document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to complete, please contact admin or try again. ";
-                    document.getElementById("message-gsm").nextSibling.innerHTML = "";
                 }
                 return response.json();
             }).then(result => {
-                if (result.status == 200) {
-                    result = result.data;
-                    let workflow2 = Object.assign({}, this.state.workflow);
-                    if (result.gsm[0].gsm) {
-                        workflow2.dataList = result.gsm;
-                    } else {
-                        let tmp_gsms = []
-                        for (let i in result.gsm) {
-                            tmp_gsms.push({
-                                index: result.gsm[i].index,
-                                title: result.gsm[i].title,
-                                gsm: result.gsm[i]._row,
-                                groups: result.gsm[i].groups,
-                                colors: result.gsm[i].colors
-                            })
-                        }
-                        workflow2.dataList = tmp_gsms;
-                    }
-                    if (result.source && result.source == "upload") {
-                        // change analysis type
-                        workflow2.analysisType = "1";
-                        workflow2.uploaded = true;
-                    }
-                    workflow2.accessionCode = result.accessionCode;
-                    workflow2.projectID = result.projectId[0];
-                    workflow2.group_1 = result.group_1;
-                    workflow2.group_2 = result.group_2;
-                    workflow2.groups = result.groups;
-                    workflow2.normal = result.normal;
-                    // replace default group
-                    for (let i in workflow2.dataList) {
-                        if (result.groups[i].toLowerCase() == "others" || result.groups[i].toLowerCase() == 'clt') {
-                            workflow2.dataList[i].groups = "";
-                        } else {
-                            workflow2.dataList[i].groups = result.groups[i];
-                        }
-                    }
-                    if (result.mAplotBN) {
-                        workflow2.list_mAplotBN = result.mAplotBN;
-                    }
-                    if (result.mAplotAN) {
-                        workflow2.list_mAplotAN = result.mAplotAN;
-                    }
-                    workflow2.init = true;
-                    workflow2.volcanoPlot = "/volcano.html";
-                    workflow2.compared = true;
-                    workflow2.done_gsea = true;
-                    workflow2.progressing = false;
-                    workflow2.histplotBN_url = result.histplotBN;
-                    workflow2.histplotAN_url = result.histplotAN;
-                    workflow2.heatmapolt_url = result.heatmapolt;
-                    // disable the input , prevent user to change the access code
-                    document.getElementById("input-access-code").disabled = true;
-                    // change the word of load btn
-                    document.getElementById("btn-project-load-gse").disabled = true;
-                    //
-                    document.getElementById("analysisType_selection").disabled = true;
-                    //
-                    document.getElementById("btn-project-load-gse").classList.replace("ant-btn-primary", "ant-btn-default");
-
-                    this.setState({
-                        workflow: workflow2
-                    });
-                    this.getSSGSEAGeneHeatMap();
-                    this.hideWorkFlow();
-                } else {
-                    if (document.getElementById("message-gsm") != null) {
-                        document.getElementById("message-gsm").innerHTML = "Run Contrast has failed to complete, please contact admin or try again. ";
-                        document.getElementById("message-gsm").nextSibling.innerHTML = "";
-                    }
-                    workflow.progressing = false;
-                    this.setState({
-                        workflow: workflow
-                    });
-                }
-            });
-    } catch (err) {
-        workflow.uploading = false;
-        workflow.progressing = false;
-        if (document.getElementById("message-gsm") != null) {
-            document.getElementById("message-gsm").innerHTML = err;
-            document.getElementById("message-gsm").nextSibling.innerHTML = "";
-        }
-        this.setState({
-            workflow: workflow
-        });
+                result = result.data;
+                let workflow = Object.assign({}, this.state.workflow);
+                workflow.numberOfTasksInQueue = result;
+                this.setState({
+                    workflow: workflow
+                });
+            }).catch(error => console.log(error));
     }
-}
-getCurrentNumberOfJobsinQueue = () => {
-    fetch('./api/analysis/getCurrentNumberOfJobsinQueue', {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(this.handleErrors)
-        .then(function(response) {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-            return response.json();
-        }).then(result => {
-            result = result.data;
-            let workflow = Object.assign({}, this.state.workflow);
-            workflow.numberOfTasksInQueue = result;
-            this.setState({
-                workflow: workflow
-            });
-        }).catch(error => console.log(error));
-}
-render() {
-    // define group modal
-    let queueModal = <Modal key="queue_modal" visible={this.state.workflow.QueueModalvisible}  className="custom_modal" title="MicroArray Queue" onCancel={this.handleCancel}
+    render() {
+        // define group modal
+        let queueModal = <Modal key="queue_modal" visible={this.state.workflow.QueueModalvisible}  className="custom_modal" title="MicroArray Queue" onCancel={this.handleCancel}
         footer={[
             <Button key="back" type="primary"  onClick={this.handleCancel}>Close</Button>,
           ]}
@@ -2888,10 +2854,10 @@ render() {
           <p>Please note: Depending on model complexity and queue length it could be up to a day before you receive your results.</p>
           </div>
         </Modal>
-    // end  group modal
-    let modal = this.state.workflow.progressing ? "progress" : "progress-hidden";
-    const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin  />;
-    let workflow = <Workflow data={this.state.workflow}
+        // end  group modal
+        let modal = this.state.workflow.progressing ? "progress" : "progress-hidden";
+        const antIcon = <Icon type="loading" style={{ fontSize: 48, width:48,height:48 }} spin  />;
+        let workflow = <Workflow data={this.state.workflow}
                         handleNormalSelect ={this.handleNormalSelect}
                         resetWorkFlowProject={this.resetWorkFlowProject}  
                         changeCode={this.changeCode} 
@@ -2905,8 +2871,8 @@ render() {
                         handleGroup2Select={this.handleGroup2Select} 
                         runContrast={this.runContrast}
                         exportGSE={this.exportGSE}/>
-    let page_status = (this.props.location.search && this.props.location.search != "")
-    let tabs = <div> <div className="header-nav">
+        let page_status = (this.props.location.search && this.props.location.search != "")
+        let tabs = <div> <div className="header-nav">
             <div className="div-container">
                 <ul className="nav navbar-nav" id="header-navbar">
                     <li  onClick={() => {this.changeTab('about')}}  id="li-about" className={page_status?"":"active"}> <a href="#about" className="nav-link" >ABOUT</a></li>
@@ -2964,8 +2930,8 @@ render() {
             </div>
         </div>
 
-    return (<div>{tabs}{queueModal}</div>);
-}
+        return (<div>{tabs}{queueModal}</div>);
+    }
 }
 
 export default Analysis;
