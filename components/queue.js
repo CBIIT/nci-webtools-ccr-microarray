@@ -7,7 +7,14 @@ var logger = require('../components/queue_logger');
 var bucketName = config.bucketName;
 AWS.config.update({ region: 'us-east-1' });
 var awsHander = {};
-var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+// s3 connect timeout set to be 5 minutes
+if(!config.s3_timeout){ config.s3_timeout = 5*60000}
+var s3 = new AWS.S3({
+    apiVersion: '2006-03-01',
+    httpOptions: {
+        timeout: config.s3_timeout
+    }
+});
 var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 var AdmZip = require('adm-zip');
 
@@ -203,11 +210,11 @@ awsHander.download = (projectId, filePath, next) => {
                         logger.info(err)
                         next(false)
                     } else {
-                        saveFile(filePath,projectId,data,next);
+                        saveFile(filePath, projectId, data, next);
                     }
                 });
             } else { // if the directory exist
-                saveFile(filePath,projectId,data,next);
+                saveFile(filePath, projectId, data, next);
 
             }
         }
@@ -216,22 +223,22 @@ awsHander.download = (projectId, filePath, next) => {
 }
 
 
-function saveFile(filePath,projectId,data,next){
+function saveFile(filePath, projectId, data, next) {
     fs.writeFile(filePath + "/" + projectId + "/queue_upload.zip", data.Body, function(err) {
-                            if (err) {
-                                logger.info("write file to disk fails")
-                                logger.info(err)
-                                next(false)
-                            } else {
-                                let zip2 = new AdmZip(filePath + "/" + projectId + "/queue_upload.zip");
-                                //unzip 
-                                zip2.extractAllTo(filePath + "/" + projectId + "/", true);
-                                setTimeout(function() {
-                                    next(true)
-                                }, 2000);
+        if (err) {
+            logger.info("write file to disk fails")
+            logger.info(err)
+            next(false)
+        } else {
+            let zip2 = new AdmZip(filePath + "/" + projectId + "/queue_upload.zip");
+            //unzip 
+            zip2.extractAllTo(filePath + "/" + projectId + "/", true);
+            setTimeout(function() {
+                next(true)
+            }, 2000);
 
-                            }
-                        })
+        }
+    })
 }
 
 
