@@ -423,7 +423,11 @@ R.execute("wrapper.R", data, function(err, returnValue) {
                 }
             }
             if(return_data && return_data !=""){
-                return_data ="Error Message : " + return_data.replace(/\$/g, "").replace(/\[/g, "").replace(/\]/g, "").replace(/\"/g, "")  
+                if(return_data.includes("At least 2 ")){
+                    return_data ="Warning Message : " + return_data.replace(/\$/g, "").replace(/\[/g, "").replace(/\]/g, "").replace(/\"/g, "") 
+                }else{
+                    return_data ="Error Message : " + return_data.replace(/\$/g, "").replace(/\[/g, "").replace(/\]/g, "").replace(/\"/g, "")  
+                }
             }
             res.json({ status: 404, data: return_data });
         }
