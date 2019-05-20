@@ -1,9 +1,9 @@
 library(mpstr)
 
-workspace <-paste0("/Users/cheny39/Documents/GitHub/apps/microarray/tmp")
+workspace <-paste0("/Users/cheny39/Documents/GitHub/apps/microarray/tmp/tmp")
 access_code <-"GSE37874"
 projectId<-"testGSE37874"
-listGroups<-c("T1","T1","T1","T1","T1","T2","T2","T2","others","others","others","others")
+listGroups<-c("T1","T2","T3","T4")
 data_repo_path<-workspace
 config_path<-paste0("/Users/cheny39/Documents/GitHub/apps/microarray/data")
 
@@ -17,6 +17,8 @@ celfiles = processGEOfiles(projectId,access_code,listGroups,data_repo_path)
 
 celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
 
+
+celfiles = getCELfiles(projectId,listGroups,data_repo_path) 
 
 norm_celfiles = RMA_QCnorm(celfiles,data_repo_path,cons)
 

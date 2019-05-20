@@ -164,6 +164,14 @@ process = function(){
           # # #### 4) l2p pathway analysis function, takes DEGs and species as input, returns list of up and downregulated pathways for each contrast ####
           # # # Output should dynamically respond to user-selected contrast
           saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
+         
+
+          if(typeof(diff_expr_genes) == "character"){
+              write(toJSON(diff_expr_genes),paste0(data_repo_path,"/overall_error.txt",sep=""))
+              return(NULL)
+          }
+
+
           ## auto correct species
           species2<-"human"
           if(grepl("mouse",celfiles@annotation)){
@@ -180,8 +188,7 @@ process = function(){
 
           # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
           # # # Output should dynamically respond to user-selected contrast
-          write(c(species,geneSet,config_path), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""))
-
+         
            tryCatch({
              
               ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
@@ -190,24 +197,23 @@ process = function(){
                  # message(cond)
 
             },finally={
-                ss_result<-""
-                file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
-                write(c(file), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
+                  ss_result<-""
+                  file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
+                  write(c(file), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
 
-                 if (file.exists(file)) {
-                    ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
-                     write(toJSON(ss_result), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
-                  }else{
-                  write(c("no find"), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
-
-                 }
-                    if(typeof(ss_result)!="list"){
-                      ss_name_d= ""
-                      ss_data_d =""
-                     }else{
-                      ss_name_d=names(ss_result)
-                      ss_data_d=ss_result[2:length(ss_result[,1]),]
-                     }
+                   if (file.exists(file)) {
+                      ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
+                       write(toJSON(ss_result), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
+                    }else{
+                      write(c("no find"), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
+                   }
+                   if(typeof(ss_result)!="list"){
+                        ss_name_d= ""
+                        ss_data_d =""
+                    }else{
+                        ss_name_d=names(ss_result)
+                        ss_data_d=ss_result[2:length(ss_result[,1]),]
+                    }
                     re<-list(
                     normal=normal,
                     source=source,
