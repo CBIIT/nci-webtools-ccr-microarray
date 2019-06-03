@@ -1,11 +1,11 @@
 library(mpstr)
 
-workspace <-paste0("/Users/cheny39/Documents/GitHub/apps/microarray/tmp/tmp")
+workspace <-paste0("/analysistools/public_html/apps/microArray/tmp/tmp")
 access_code <-"GSE37874"
 projectId<-"testGSE37874"
 listGroups<-c("T1","T2","T3","T4")
 data_repo_path<-workspace
-config_path<-paste0("/Users/cheny39/Documents/GitHub/apps/microarray/data")
+config_path<-paste0("/analysistools/public_html/apps/microArray/data")
 
 cons<-"T1-T2"
 
@@ -48,8 +48,15 @@ diff_expr_genes2 = diffExprGenes(norm_celfiles2[[10]],cons,projectId,data_repo_p
           
 l2p_pathways = l2pPathways(diff_expr_genes2,species2,data_repo_path,projectId,config_path)
 
+
+
 species<-"human"
 geneSet<-"H: Hallmark Gene Sets"
 #
 ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
+
+ pic_name<-paste0("pathwaysHeapMap",sample(1:99999,1,replace=T),".jpg")
+ saveImageFileName<-pic_name
+
+geneHeatmap(diff_expr_genes, l2p_pathways, cons, "upregulated_pathways", "endoplasmic reticulum unfolded protein response",saveImageFileName,config_path,data_repo_path,species)
 
