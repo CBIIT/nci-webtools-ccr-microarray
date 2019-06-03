@@ -99,7 +99,7 @@ class PUGTable extends Component {
         reqBody.pathway_name = this.props.data.pathways_up.data[idx.index].Description;
         this.props.changeLoadingStatus(true, "loading HeatMap")
 
-        var importantStuff = window.open(window.location.protocol + "//" + window.location.host + "/microarray/assets/loading.html", '_blank');
+        var importantStuff = window.open(window.location.origin+"/assets/loading.html", '_blank');
 
         fetch('./api/analysis/pathwaysHeapMap', {
                 method: "POST",
@@ -115,17 +115,12 @@ class PUGTable extends Component {
                 this.props.changeLoadingStatus(false, "")
                 if (result.status == 200) {
                     if (Object.keys(result.data).length == 0 || result.data.constructor == Object) {
-
-                        importantStuff.location.href = window.location.protocol + "//" + window.location.host + "/microarray/assets/noheatmap.html";
-
-
+                        importantStuff.location.href = window.location.origin+"/assets/noheatmap.html";
                     } else {
                         let pic_link = JSON.parse(result.data).pic_name
                         var link = "images/" + this.props.data.projectID + "/" + pic_link
-                        importantStuff.location.href = window.location.protocol + "//" + window.location.host + "/microarray/" + link;
-
+                        importantStuff.location.href = window.location.origin+"/"+ link;
                     }
-
                 } else {
                     message.warning('no rows to aggregate');
                 }

@@ -109,7 +109,7 @@ process = function(){
           }
 
           cons <-c(paste0(cgroup1,"-",cgroup2))
-          #saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
+          saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
 
           if(normal=="RMA"){
              norm_celfiles = RMA_QCnorm(celfiles,data_repo_path,cons)
