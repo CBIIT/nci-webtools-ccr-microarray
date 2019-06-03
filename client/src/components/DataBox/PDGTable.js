@@ -125,7 +125,6 @@ class PUGTable extends Component {
                 if (result.status == 200) {
                     if (Object.keys(result.data).length == 0 || result.data.constructor == Object) {
 
-
                         importantStuff.location.href = window.location.origin+"/assets/noheatmap.html";
 
 
