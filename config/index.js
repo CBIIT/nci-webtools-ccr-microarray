@@ -56,4 +56,4 @@ var all = {
 
 
 
-module.exports = _.merge(all, require('./template.js'), configure,setting);
+module.exports = _.merge(all, configure,setting);
