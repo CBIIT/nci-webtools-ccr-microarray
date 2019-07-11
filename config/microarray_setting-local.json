@@ -20,6 +20,9 @@
         "host": "mailfwd.nih.gov",
         "port": 25,
         "web_admin_email": "NCIMicroArrayWebAdmin@mail.nih.gov",
-        "support_email": "yizhen.chen@nih.gov"
+        "support_email": "yizhen.chen@nih.gov",
+        "tls":{
+            "rejectUnauthorized": false
+        }
     }
 }
