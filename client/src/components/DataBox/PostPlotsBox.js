@@ -75,7 +75,7 @@ class PostPlotsBox extends Component {
 
         let tabs = [
             <div id="postHistogram" key="post_tag1" className="plot2" > <div> <p className="err-message" id="message-post-histogram"></p></div>   { this.props.data.postplot.histplotAN } </div>,
-            <div id="postMAplots" key="post_tag2"  className="plot2 hide"  > <div> <p className="err-message" id="message-post-maplot"></p></div><div > <MAPlot pics = {this.props.data.list_mAplotBN}  data = {this.props.data}/></div></div>,
+            <div id="postMAplots" key="post_tag2"  className="plot2 hide"  > <div> <p className="err-message" id="message-post-maplot"></p></div><div > <MAPlot pics = {this.props.data.list_mAplotAN}  data = {this.props.data}/></div></div>,
             <div id="postBoxplots" key="post_tag3"  className="plot2 hide">  <div> <p className="err-message" id="message-post-boxplot"></p></div>{this.props.data.BoxplotAN.plot}</div>,
             <div id="postPCA" key="post_tag4"  className="plot2 hide">  <div> <p className="err-message" id="message-post-pca"></p></div>{this.props.data.PCA.plot} </div>,
             <div id="postHeatmap" key="post_tag5"  className="plot2 hide">  <div> <p className="err-message" id="message-post-heatmap"></p></div>{this.props.data.postplot.Heatmapolt} </div>
