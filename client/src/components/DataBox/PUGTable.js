@@ -4,7 +4,6 @@ const Search = Input.Search;
 const minWidth = 110;
 
 const exponentialNum = 3;
-const exponentialNum2 = 6;
 
 class PUGTable extends Component {
 
@@ -308,9 +307,7 @@ class PUGTable extends Component {
             width: "7%",
             sorter: false,
             render: (text, record, index) => {
-                if (text.toString().length > 4) {
                     text = Number.parseFloat(text).toExponential(exponentialNum);
-                }
                 return <div className="single-line pathway_fdr" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -339,9 +336,7 @@ class PUGTable extends Component {
             width: "7%",
             sorter: false,
             render: (text, record, index) => {
-                if (text.toString().length > 7) {
-                    text = Number.parseFloat(text).toExponential(exponentialNum2);
-                }
+    
                 return <div className="single-line pathway_ratio" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -398,9 +393,7 @@ class PUGTable extends Component {
             width: "7%",
             sorter: false,
             render: (text, record, index) => {
-                if (text.toString().length > 7) {
-                    text = Number.parseFloat(text).toExponential(exponentialNum2);
-                }
+           
                 return <div className="single-line pathway_number_hits" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -430,9 +423,7 @@ class PUGTable extends Component {
             width: "7%",
             sorter: false,
             render: (text, record, index) => {
-                if (text.toString().length > 7) {
-                    text = Number.parseFloat(text).toExponential(exponentialNum2);
-                }
+             
                 return <div className="single-line pathway_number_genes_pathway" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -462,9 +453,7 @@ class PUGTable extends Component {
             width: "7%",
             sorter: false,
             render: (text, record, index) => {
-                if (text.toString().length > 7) {
-                    text = Number.parseFloat(text).toExponential(exponentialNum2);
-                }
+          
                 return <div className="single-line pathway_number_user_genes" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Menu, Dropdown, Button, Icon, Table, Input, Tooltip } from 'antd';
 const minWidth = 110;
 const exponentialNum = 3;
-const exponentialNum2 = 6;
 
 class SSGSEATable extends Component {
 
@@ -140,11 +139,8 @@ class SSGSEATable extends Component {
             sorter: false,
             width: "10%",
             render: (text, record, index) => {
-                 if(text.toString().length>7){
-                    text =Number.parseFloat(text).toExponential(exponentialNum2);
-                }
                 return <div className="single-line" >
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toFixed(3)}</span>
                                     </div>
 
             }
@@ -230,9 +226,7 @@ class SSGSEATable extends Component {
             sorter: false,
             width: "25%",
             render: (text, record, index) => {
-                if(text.toString().length>7){
-                    text =Number.parseFloat(text).toExponential(exponentialNum2);
-                }
+            
                 return <div className="single-line" style={{"minWidth":"130px"}} >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -262,7 +256,7 @@ class SSGSEATable extends Component {
             width: "10%",
             render: (text, record, index) => {
                 return <div className="single-line" >
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text)}</span>
                                     </div>
             }
         }, {
@@ -287,9 +281,7 @@ class SSGSEATable extends Component {
             sorter: false,
             width: "10%",
             render: (text, record, index) => {
-                if(text.toString().length>7){
-                    text =Number.parseFloat(text).toExponential(exponentialNum2);
-                }
+               
                 return <div className="single-line" >
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>

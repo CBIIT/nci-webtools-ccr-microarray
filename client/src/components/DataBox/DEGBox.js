@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DEGTable from './DEGTable'
 import PUGTable from './PUGTable'
 import PDGTable from './PDGTable'
+import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'antd';
 
 
 
@@ -51,12 +52,13 @@ class DEGBox extends Component {
         ]
 
 
-        let content = [ <label key="label-deg_select_option" htmlFor="deg_select_option"><span key="deg_select_option_title">DEG section selection </span></label>,<select   key="deg_select" className="ant-select-selection ant-select-selection--single" id="deg_select_option" defaultValue="deg_tag1" onChange={this.handleSelectionChange}>
+        let content = [ <label key="label-deg_select_option" htmlFor="deg_select_option"><span key="deg_select_option_title">DEG section selection </span></label>,
+                    <div><select   key="deg_select" className="ant-select-selection ant-select-selection--single" id="deg_select_option" defaultValue="deg_tag1" onChange={this.handleSelectionChange}>
                     <option key="deg_select_option_1" value="deg_tag1">Differentially Expressed Genes</option>
                     <option key="deg_select_option_2" value="deg_tag2">Pathways for Upregulated Genes</option>
                     <option key="deg_select_option_3" value="deg_tag3">Pathways for Downregulated Genes</option>
                     <option key="deg_select_option_4"  value="deg_tag4">Interactive Volcano Plot</option>
-                  </select>, tabs]
+                  </select></div>,  , tabs]
 
         return (
             <div>
