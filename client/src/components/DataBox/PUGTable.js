@@ -555,6 +555,7 @@ class PUGTable extends Component {
         content = <div>
                   <div> <p className="err-message" id="message-pug"></p></div>  
                    <div  className="div-export-pathwayUp"><Button   id="btn-pathwayUp-export"   type="primary" onClick={this.props.exportPathwayUp}> Export</Button> </div>
+                    <div  className="export-normal-all"><Button   id="btn-pathwayUp-normal-all-export" className="btn-normal-all-export"  type="primary" onClick={this.props.exportNormalAll}> Download Normalized Data for All Samples</Button> </div>
 
                         <div id="pathways-up-select">Display &nbsp;
                                 <Dropdown overlay={menu}>

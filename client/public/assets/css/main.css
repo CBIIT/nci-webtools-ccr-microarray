@@ -114,6 +114,7 @@ tr:nth-child(even) {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
 }
+
 #header-nci img {
     height: 60px;
 }
@@ -638,8 +639,7 @@ div.ant-collapse-header {
 
 
 
-#gsm-select {
-}
+#gsm-select {}
 
 #gsm-select button {
     margin-left: 8px;
@@ -761,27 +761,27 @@ div.ant-collapse-header {
 #deg_tag1 .ant-table-pagination {
     position: absolute;
     top: -58px;
-    right:87px;
+    right: 87px;
 }
 
 #deg_tag2 .ant-table-pagination {
     position: absolute;
     top: -58px;
-    right:87px;
+    right: 87px;
 }
 
 
 #deg_tag3 .ant-table-pagination {
     position: absolute;
     top: -58px;
-    right:87px;
+    right: 87px;
 }
 
 
 #ss_tag1 .ant-table-pagination {
     position: absolute;
     top: -58px;
-    right:87px;
+    right: 87px;
 }
 
 
@@ -791,11 +791,11 @@ select {
 }
 
 div#deg-select {
-     margin-top: 8px;
+    margin-top: 8px;
 }
 
 div#pathways-down-select {
-     margin-top: 8px;
+    margin-top: 8px;
 }
 
 div#pathways-up-select {
@@ -859,11 +859,18 @@ input#input_group_name {
     top: 115px;
 }
 
+.export-normal-all {
+    position: absolute;
+    right: 0px;
+    padding-right: 10px;
+    top: 75px;
+}
+
 .div-export-pathwayUp {
     position: absolute;
     right: 0px;
     padding-right: 10px;
-     top: 115px;
+    top: 115px;
 
 }
 
@@ -871,14 +878,14 @@ input#input_group_name {
     position: absolute;
     right: 0px;
     padding-right: 10px;
-     top: 115px;
+    top: 115px;
 }
 
 .div-export-ss {
     position: absolute;
     right: 0px;
     padding-right: 10px;
-     top: 115px;
+    top: 115px;
 }
 
 .div-export-gsm {
@@ -1176,12 +1183,12 @@ div.head-sorter>div {
     height: 10px;
 }
 
-#btn-controll-data-table-display{
+#btn-controll-data-table-display {
     float: left;
     margin-top: 24px;
 }
 
-.maplot-title{
+.maplot-title {
     width: 100%;
     text-align: center;
     margin: 0px 8px;
@@ -1189,7 +1196,7 @@ div.head-sorter>div {
 }
 
 .ant-tabs-tabpane-inactive {
-    display: none !important; 
+    display: none !important;
 }
 
 @media only screen and (max-width:768px) {
@@ -1264,8 +1271,18 @@ div.head-sorter>div {
         width: 100%
     }
 
+    .export-normal-all {
+        position: inherit;
+        padding: 5px 10px 5px 0px;
+        width: 100%
+    }
+
     #btn-deg-export {
         width: 100%;
+    }
+
+    .export-normal-all button{
+         width: 100%;
     }
 
     #deg_select_option {
@@ -1318,10 +1335,9 @@ div.head-sorter>div {
         right: auto;
     }
 
-    #deg_tag3>div>div:nth-child(4)>div {
-        padding-top: 91px;
+    #log {
+        width: 100%
     }
-
     #pathways-down-select {
         top: 155px !important;
         right: auto !important;
@@ -1464,7 +1480,7 @@ div.head-sorter>div {
         margin-left: 0px;
     }
 
-  .custom_modal {
+    .custom_modal {
         width: 60% !important;
         max-width: 800px !important;
         min-width: 500px !important;
@@ -1475,4 +1491,3 @@ div.head-sorter>div {
         min-height: 480px;
     }
 }
-

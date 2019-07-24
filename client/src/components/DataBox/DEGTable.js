@@ -438,7 +438,9 @@ class DEGTable extends Component {
         content = <div>
                   <div> <p className="err-message" id="message-deg"></p></div>  
                  <div  className="div-export-deg"><Button   id="btn-deg-export"   type="primary" onClick={this.props.exportDEG}> Export</Button> </div>
+                 <div  className="export-normal-all"><Button   id="btn-deg-normal-all-export" className="btn-normal-all-export"  type="primary" onClick={this.props.exportNormalAll}> Download Normalized Data for All Samples</Button> </div>
 
+              
                   <div id="deg-select">Display &nbsp;
                             <Dropdown overlay={menu}>
                                   <Button >
