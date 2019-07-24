@@ -214,6 +214,9 @@ process = function(){
                         ss_name_d=names(ss_result)
                         ss_data_d=ss_result[2:length(ss_result[,1]),]
                     }
+
+                    normalData<-list(data= norm_celfiles[[12]],col=colnames(norm_celfiles[[12]]),row=rownames(norm_celfiles[[12]]))
+
                     re<-list(
                     normal=normal,
                     source=source,
@@ -239,7 +242,8 @@ process = function(){
                     genSet=geneSet,
                     projectId=projectId,
                     GSM=celfiles@phenoData@data,
-                    colors=col2hex(celfiles@phenoData@data$colors)
+                    colors=col2hex(celfiles@phenoData@data$colors),
+                    normCelfiles=normalData
                     )
 
                   write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))

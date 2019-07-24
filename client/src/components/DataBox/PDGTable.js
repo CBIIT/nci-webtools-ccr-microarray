@@ -3,7 +3,6 @@ import { Menu, Dropdown, Icon, Table, Input, message, Modal, Button, Tooltip } f
 const Search = Input.Search;
 const minWidth = 110;
 const exponentialNum = 3;
-const exponentialNum2 = 6;
 
 class PUGTable extends Component {
 
@@ -358,9 +357,6 @@ class PUGTable extends Component {
                 key: 'Ratio',
                 sorter: false,
                 render: (text, record, index) => {
-                    if (text.toString().length > 7) {
-                        text = Number.parseFloat(text).toExponential(exponentialNum2);
-                    }
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -418,9 +414,7 @@ class PUGTable extends Component {
                 key: 'Number_Hits',
                 sorter: false,
                 render: (text, record, index) => {
-                    if (text.toString().length > 7) {
-                        text = Number.parseFloat(text).toExponential(exponentialNum2);
-                    }
+             
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -450,9 +444,7 @@ class PUGTable extends Component {
                 key: 'Number_Genes_Pathway',
                 sorter: false,
                 render: (text, record, index) => {
-                    if (text.toString().length > 7) {
-                        text = Number.parseFloat(text).toExponential(exponentialNum2);
-                    }
+        
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -483,9 +475,7 @@ class PUGTable extends Component {
                 key: 'Number_User_Genes',
                 sorter: false,
                 render: (text, record, index) => {
-                    if (text.toString().length > 7) {
-                        text = Number.parseFloat(text).toExponential(exponentialNum2);
-                    }
+                 
                     return <div className="single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -591,6 +581,7 @@ class PUGTable extends Component {
         content = <div>
                  <div> <p className="err-message" id="message-pdg"></p></div>  
                  <div  className="div-export-pathwayDown"><Button   id="btn-pathwayDown-export"   type="primary" onClick={this.props.exportPathwayDown}> Export</Button> </div>
+                  <div  className="export-normal-all"><Button   id="btn-pathwayDown-normal-all-export" className="btn-normal-all-export"  type="primary" onClick={this.props.exportNormalAll}> Download Normalized Data for All Samples</Button> </div>
 
                         <div>
                              <div id="pathways-down-select">Display &nbsp;

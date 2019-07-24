@@ -651,6 +651,22 @@ router.post('/getDEG', function(req, res) {
 });
 
 
+router.post('/getNormalAll', function(req, res) {
+    if (req.session && req.session[req.body.projectId]&& req.session[req.body.projectId].normCelfiles) {
+         res.json({
+            status: 200,
+            data: req.session[req.body.projectId].normCelfiles
+        });
+    } else {
+        res.json({
+            status: 404,
+            data: ""
+        });
+    }
+});
+
+
+
 function getUpPathWays(req) {
     return getPathWays(
         req.session[req.body.projectId].pathways_up, {},
@@ -1242,7 +1258,6 @@ function JsonToObject(returnValue) {
     if (returnValue.groups) {
         workflow.groups = returnValue.groups;
         // map color with groups 
-
     } else {
         workflow.groups = [];
     }
@@ -1268,6 +1283,7 @@ function JsonToObject(returnValue) {
     } else {
         workflow.group_2 = "";
     }
+
     if (returnValue.hisBefore) {
         workflow.listPlots = [returnValue.hisBefore[0],
             returnValue.maplotBN,
@@ -1282,20 +1298,34 @@ function JsonToObject(returnValue) {
         ];
         workflow.hisBefore = returnValue.hisBefore[0];
         workflow.hisAfter = returnValue.hisAfter[0];
+    }else{
+        workflow.hisBefore = ""
     }
 
     if (returnValue.normal) {
         workflow.normal = returnValue.normal;
+    }else{
+        workflow.normal = ""
     }
 
     if (returnValue.heatmapAfterNorm) {
         workflow.heatmapAfterNorm = returnValue.heatmapAfterNorm[0];
+    }else{
+        workflow.heatmapAfterNorm = ""
     }
 
     if (returnValue.source) {
         workflow.source = returnValue.source;
+    }else{
+        workflow.source = ""
     }
 
+
+    if(returnValue.normCelfiles){
+        workflow.normCelfiles=returnValue.normCelfiles;
+    }else{
+        workflow.normCelfiles="";
+    }
     return workflow;
 }
 

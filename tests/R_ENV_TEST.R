@@ -1,11 +1,11 @@
 library(mpstr)
 
-workspace <-paste0("/analysistools/public_html/apps/microArray/tmp/tmp")
+workspace <-paste0("/Users/cheny39/Documents/GitHub/apps/microarray/tmp")
 access_code <-"GSE37874"
 projectId<-"testGSE37874"
 listGroups<-c("T1","T2","T3","T4")
 data_repo_path<-workspace
-config_path<-paste0("/analysistools/public_html/apps/microArray/data")
+config_path<-paste0("/Users/cheny39/Documents/GitHub/apps/microarray/data")
 
 cons<-"T1-T2"
 

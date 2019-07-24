@@ -299,8 +299,8 @@ class Analysis extends Component {
         });
     }
 
-    updateSupportEmail=()=>{
-         fetch('./api/analysis/getConfiguration', {
+    updateSupportEmail = () => {
+        fetch('./api/analysis/getConfiguration', {
                 method: "POST",
                 credentials: "same-origin",
                 headers: {
@@ -312,10 +312,10 @@ class Analysis extends Component {
                 res => res.json()
             )
             .then(result => {
-                  if (result.status == 200) {
+                if (result.status == 200) {
                     // change 
-                     document.getElementById("support_email").href="mailto:"+result.data.mail.support_email+"?subject=MicroArray Support"; 
-                  }
+                    document.getElementById("support_email").href = "mailto:" + result.data.mail.support_email + "?subject=MicroArray Support";
+                }
             })
 
     }
@@ -1030,6 +1030,58 @@ class Analysis extends Component {
                     document.getElementById("message-deg").innerHTML = result.msg;
                 }
             }).catch(error => console.log(error));
+    }
+
+
+
+    exportNormalAll = (params = {}) => {
+
+        let workflow = Object.assign({}, this.state.workflow);
+        params = {
+            projectId: workflow.projectID,
+        }
+        workflow.progressing = true;
+        workflow.loading_info = "Export";
+        this.setState({ workflow: workflow });
+        fetch('./api/analysis/getNormalAll', {
+                method: "POST",
+                body: JSON.stringify(params),
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(this.handleErrors)
+            .then(
+                res => res.json()
+            )
+            .then(result => {
+                if (result.status == 200) {
+                    var wb = XLSX.utils.book_new();
+                    wb.Props = {
+                        Title: "Normalized Data for All Samples",
+                        Subject: "Normalized Data for All Samples",
+                        Author: "Microarray",
+                        CreatedDate: new Date()
+                    };
+                    wb.SheetNames.push("Data");
+                    var ws_data = [];
+                    if (result.data.data) {
+                        ws_data.push([""].concat(result.data.col));
+                        for (var i = 0; i < result.data.row.length; i++) {
+                            ws_data.push([result.data.row[i]].concat(result.data.data[i]))
+                        }
+
+                    }
+                    var ws = XLSX.utils.aoa_to_sheet(ws_data);
+                    wb.Sheets["Data"] = ws;
+                    XLSX.writeFile(wb, "DEG_Normalized_Data_for_All_Samples" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
+
+                }
+                workflow.progressing = false;
+                workflow.loading_info = "Loading";
+                this.setState({ workflow: workflow });
+            }).catch(error => document.getElementById("message-deg").innerHTML = error);
     }
     exportDEG = (params = {}) => {
 
@@ -2892,7 +2944,9 @@ class Analysis extends Component {
                         handleGroup1Select={this.handleGroup1Select}  
                         handleGroup2Select={this.handleGroup2Select} 
                         runContrast={this.runContrast}
-                        exportGSE={this.exportGSE}/>
+                        exportGSE={this.exportGSE}
+                        exportNormalAll={this.exportNormalAll}
+                        />
         let page_status = (this.props.location.search && this.props.location.search != "")
         let tabs = <div> <div className="header-nav">
             <div className="div-container">
@@ -2940,7 +2994,9 @@ class Analysis extends Component {
                             exportGSEA={this.exportGSEA}
                             exportPathwayUp={this.exportPathwayUp}
                             exportPathwayDown={this.exportPathwayDown}
-                            exportDEG={this.exportDEG} />
+                            exportDEG={this.exportDEG}
+                            exportNormalAll={this.exportNormalAll}
+                            />
                 </div>
                 <div className={modal}>
                     <div id="loading">

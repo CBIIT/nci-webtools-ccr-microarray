@@ -4,7 +4,6 @@ const Search = Input.Search;
 
 const minWidth = 110;
 const exponentialNum = 3;
-const exponentialNum2 = 6;
 
 class DEGTable extends Component {
     constructor(props) {
@@ -110,11 +109,8 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "6%",
                 render: (text, record, index) => {
-                    if (text.toString().length > 7) {
-                        text = Number.parseFloat(text).toExponential(exponentialNum2);
-                    }
                     return <div  className="deg_fc single-line"  style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.06>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.07:minWidth}}>
-                                    <span data-toggle="tooltip" data-placement="right" title={text}>{text}</span>
+                                    <span data-toggle="tooltip" data-placement="right" title={text}>{Number.parseFloat(text).toFixed(3)}</span>
                                     </div>
                 }
             }, {
@@ -197,9 +193,6 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "8%",
                 render: (text, record, index) => {
-                    if (text.toString().length > 7) {
-                        text = Number.parseFloat(text).toExponential(exponentialNum2);
-                    }
                     return <div  className="aveexpr single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.08:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -352,7 +345,7 @@ class DEGTable extends Component {
                 render: (text, record, index) => {
 
                     return <div className="deg_t  single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05:minWidth}}>
-                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</span>
+                                    <span data-toggle="tooltip" data-placement="left" title={text}>{Number.parseFloat(text)}</span>
                                     </div>
 
                 }
@@ -381,9 +374,6 @@ class DEGTable extends Component {
                 sorter: false,
                 width: "5%",
                 render: (text, record, index) => {
-                    if (text.toString().length > 7) {
-                        text = Number.parseFloat(text).toExponential(exponentialNum2);
-                    }
                     return <div  className="deg_b single-line" style={{"maxWidth":document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05>minWidth?document.getElementsByClassName("ant-tabs-tabpane-active")[0].offsetWidth*0.05:minWidth}}>
                                     <span data-toggle="tooltip" data-placement="left" title={text}>{text}</span>
                                     </div>
@@ -448,7 +438,9 @@ class DEGTable extends Component {
         content = <div>
                   <div> <p className="err-message" id="message-deg"></p></div>  
                  <div  className="div-export-deg"><Button   id="btn-deg-export"   type="primary" onClick={this.props.exportDEG}> Export</Button> </div>
+                 <div  className="export-normal-all"><Button   id="btn-deg-normal-all-export" className="btn-normal-all-export"  type="primary" onClick={this.props.exportNormalAll}> Download Normalized Data for All Samples</Button> </div>
 
+              
                   <div id="deg-select">Display &nbsp;
                             <Dropdown overlay={menu}>
                                   <Button >
