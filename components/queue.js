@@ -57,7 +57,7 @@ awsHander.upload = function(path, prex, next) {
             if (err) {
                 logger.info("uplad err:" + err);
                 logger.info("uplad err stack:" + err.stack);
-                next(false)
+                next(false);
             } else {
                 next(true);
             }

@@ -94,9 +94,15 @@ class DataBox extends Component {
                         this.props.getPCA();
                     }
                     break;
-                case "getHistplotBN":
+                case "getHeatmapolt":
                     if (this.props.data.postplot.Heatmapolt == "") {
-                        this.props.getHistplotBN();
+                        this.props.getHeatmapolt();
+                    }
+                    break;
+
+                case "getMAplotAN":
+                    if (this.props.data.postplot.list_mAplotAN == "") {
+                        this.props.getMAplotAN();
                     }
                     break;
 
@@ -139,7 +145,7 @@ class DataBox extends Component {
             }
         }
         if (key == "GSM_1") {
-           // do nothing
+            // do nothing
         }
         if (key == "ssGSEA_Results") {
             if (this.props.data.ssGSEA.data.length == 0) {

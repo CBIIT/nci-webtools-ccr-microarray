@@ -109,7 +109,7 @@ process = function(){
           }
 
           cons <-c(paste0(cgroup1,"-",cgroup2))
-          saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
+          #saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
 
           if(normal=="RMA"){
              norm_celfiles = RMA_QCnorm(celfiles,data_repo_path,cons)
@@ -163,7 +163,7 @@ process = function(){
           diff_expr_genes = diffExprGenes(norm_celfiles[[10]],cons,projectId,data_repo_path)       #Call function
           # # #### 4) l2p pathway analysis function, takes DEGs and species as input, returns list of up and downregulated pathways for each contrast ####
           # # # Output should dynamically respond to user-selected contrast
-          saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
+          #saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
          
 
           if(typeof(diff_expr_genes) == "character"){
@@ -184,7 +184,7 @@ process = function(){
           
           l2p_pathways = l2pPathways(diff_expr_genes,species2,data_repo_path,projectId,config_path)
 
-          saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
+          #saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
 
           # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
           # # # Output should dynamically respond to user-selected contrast
@@ -199,7 +199,7 @@ process = function(){
             },finally={
                   ss_result<-""
                   file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
-                  write(c(file), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
+                  #write(c(file), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
 
                    if (file.exists(file)) {
                       ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 

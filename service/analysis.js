@@ -14,6 +14,17 @@ var dateFormat = require('dateformat');
 var emailer = require('../components/mail');
 
 
+
+//use for generate UUID
+function uuidv4() {
+    return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+
 router.post('/upload', function(req, res) {
     logger.info("[start] upload files");
     // create an incoming form object
@@ -84,11 +95,11 @@ router.post('/upload', function(req, res) {
 
 
 router.post('/getConfiguration', function(req, res) {
-        if (config) {
-            res.json({ status: 200, data: config });
-        } else {
-            res.json({ status: 404, msg: "no configuration is avaliable." });
-        }
+    if (config) {
+        res.json({ status: 200, data: config });
+    } else {
+        res.json({ status: 404, msg: "no configuration is avaliable." });
+    }
 });
 
 
@@ -259,9 +270,11 @@ router.post("/qAnalysis", function(req, res) {
     logger.info("[S3]upload file to S3")
     logger.info("[S3]File Path:" + config.uploadPath + "/" + data.projectId)
     // // upload data
-    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + data.projectId + "/", function(flag) {
+    var tmp_project_id = uuidv4();   // using tmp_project id for creating different project for each qanalysis.  so when user run constrast (queue mode) based on one project multiple times. That allows to create project for each run constrast.  
+    queue.awsHander.upload(config.uploadPath + "/" + data.projectId, config.queue_input_path + "/" + tmp_project_id + "/", function(flag) {
         if (flag) {
             logger.info("[S3] upload files to S3 success");
+            data.projectId = tmp_project_id;
             send(data);
 
         } else {
@@ -339,24 +352,24 @@ router.post('/getResultByProjectId', function(req, res) {
 
 
 router.post('/runContrast', function(req, res) {
-req.setTimeout(0) // no timeout
-let data = [];
-//the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
-data.push("runContrast"); // action
-data.push(req.body.projectId);
-//data path
-data.push(config.uploadPath);
-data.push(req.body.code);
-data.push(req.body.groups);
-data.push(req.body.group_1);
-data.push(req.body.group_2);
-data.push(req.body.species);
-data.push(req.body.genSet);
-data.push(req.body.normal);
-data.push(req.body.source)
-data.push(config.configPath);
-logger.info("runContrast  R code ");
-R.execute("wrapper.R", data, function(err, returnValue) {
+    req.setTimeout(0) // no timeout
+    let data = [];
+    //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
+    data.push("runContrast"); // action
+    data.push(req.body.projectId);
+    //data path
+    data.push(config.uploadPath);
+    data.push(req.body.code);
+    data.push(req.body.groups);
+    data.push(req.body.group_1);
+    data.push(req.body.group_2);
+    data.push(req.body.species);
+    data.push(req.body.genSet);
+    data.push(req.body.normal);
+    data.push(req.body.source)
+    data.push(config.configPath);
+    logger.info("runContrast  R code ");
+    R.execute("wrapper.R", data, function(err, returnValue) {
         if (fs.existsSync(config.uploadPath + "/" + req.body.projectId + "/result.txt")) {
 
             fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
@@ -408,7 +421,7 @@ R.execute("wrapper.R", data, function(err, returnValue) {
             let paths = ["geneHeatmap.err", "getCELfiles.err", "getLocalGEOfiles.err", "l2pPathways.err", "loess_QCnorm.err", "processCELfiles.err", "processGEOfiles.err", "RMA_QCnorm.err", "ssgseaPathways.err", "diffExprGenes.err"]
             for (var i = paths.length - 1; i >= 0; i--) {
                 if (fs.existsSync(config.uploadPath + "/" + req.body.projectId + "/" + paths[i])) {
-                    let returnValue = fs.readFileSync(config.uploadPath + "/" + req.body.projectId + "/" + paths[i],'utf8');
+                    let returnValue = fs.readFileSync(config.uploadPath + "/" + req.body.projectId + "/" + paths[i], 'utf8');
                     if (returnValue.indexOf("halted") > 0) {
                         return_data = returnValue
                     }
@@ -416,24 +429,24 @@ R.execute("wrapper.R", data, function(err, returnValue) {
             }
             if (return_data == "R Internal Error") {
                 if (fs.existsSync(config.uploadPath + "/" + req.body.projectId + "/overall_error.txt")) {
-                    let returnValue = fs.readFileSync(config.uploadPath + "/" + req.body.projectId + "/overall_error.txt",'utf8');
+                    let returnValue = fs.readFileSync(config.uploadPath + "/" + req.body.projectId + "/overall_error.txt", 'utf8');
                     if (returnValue != "" && returnValue != []) {
                         return_data = returnValue;
                     }
                 }
             }
-            if(return_data && return_data !=""){
-                if(return_data.includes("At least 2 ")){
-                    return_data ="Warning Message : " + return_data.replace(/\$/g, "").replace(/\[/g, "").replace(/\]/g, "").replace(/\"/g, "") 
-                }else{
-                    return_data ="Error Message : " + return_data.replace(/\$/g, "").replace(/\[/g, "").replace(/\]/g, "").replace(/\"/g, "")  
+            if (return_data && return_data != "") {
+                if (return_data.includes("At least 2 ")) {
+                    return_data = "Warning Message : " + return_data.replace(/\$/g, "").replace(/\[/g, "").replace(/\]/g, "").replace(/\"/g, "")
+                } else {
+                    return_data = "Error Message : " + return_data.replace(/\$/g, "").replace(/\[/g, "").replace(/\]/g, "").replace(/\"/g, "")
                 }
             }
             res.json({ status: 404, data: return_data });
         }
 
 
-});
+    });
 
 });
 
@@ -652,8 +665,8 @@ router.post('/getDEG', function(req, res) {
 
 
 router.post('/getNormalAll', function(req, res) {
-    if (req.session && req.session[req.body.projectId]&& req.session[req.body.projectId].normCelfiles) {
-         res.json({
+    if (req.session && req.session[req.body.projectId] && req.session[req.body.projectId].normCelfiles) {
+        res.json({
             status: 200,
             data: req.session[req.body.projectId].normCelfiles
         });
@@ -1298,33 +1311,33 @@ function JsonToObject(returnValue) {
         ];
         workflow.hisBefore = returnValue.hisBefore[0];
         workflow.hisAfter = returnValue.hisAfter[0];
-    }else{
+    } else {
         workflow.hisBefore = ""
     }
 
     if (returnValue.normal) {
         workflow.normal = returnValue.normal;
-    }else{
+    } else {
         workflow.normal = ""
     }
 
     if (returnValue.heatmapAfterNorm) {
         workflow.heatmapAfterNorm = returnValue.heatmapAfterNorm[0];
-    }else{
+    } else {
         workflow.heatmapAfterNorm = ""
     }
 
     if (returnValue.source) {
         workflow.source = returnValue.source;
-    }else{
+    } else {
         workflow.source = ""
     }
 
 
-    if(returnValue.normCelfiles){
-        workflow.normCelfiles=returnValue.normCelfiles;
-    }else{
-        workflow.normCelfiles="";
+    if (returnValue.normCelfiles) {
+        workflow.normCelfiles = returnValue.normCelfiles;
+    } else {
+        workflow.normCelfiles = "";
     }
     return workflow;
 }

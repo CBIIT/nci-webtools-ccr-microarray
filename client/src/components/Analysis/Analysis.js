@@ -2414,6 +2414,7 @@ class Analysis extends Component {
                                     break;
                                 case "getMAplotAN":
                                     this.getMAplotAN();
+                                    this.getMAplotsBN();
                                     break;
                                 case "getPCA":
                                     this.getPCA();
@@ -2426,6 +2427,7 @@ class Analysis extends Component {
                                     break;
                                 case "getMAplotsBN":
                                     this.getMAplotsBN();
+                                    this.getMAplotAN();
                                     break;
                                 case "getBoxplotBN":
                                     this.getBoxplotBN();
