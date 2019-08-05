@@ -34,7 +34,7 @@ class PostPlotsBox extends Component {
         }
         if (value == "postMAplots") { // 
             this.props.upateCurrentWorkingTabAndObject("getMAplotAN");
-            if (this.props.data.postplot.list_mAplotAN == "") {
+            if (this.props.data.list_mAplotAN == "") {
                 this.props.getMAplotAN();
             }
 

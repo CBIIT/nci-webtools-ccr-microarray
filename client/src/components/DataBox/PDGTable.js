@@ -52,6 +52,15 @@ class PUGTable extends Component {
     }
 
 
+    handleExportMenuClick =(e)=>{
+        if(e.key ==1 ){
+            this.props.exportPathwayDown();
+        }else{
+            this.props.exportNormalAll();
+        }
+    }
+
+
     handleTableChange = (pagination, filters, sorter) => {
 
         this.props.getPathwayDown({
@@ -577,13 +586,28 @@ class PUGTable extends Component {
         );
 
 
+        const ExportMenu = (
+            <Menu onClick={this.handleExportMenuClick}>
+                    <Menu.Item key="1">Pathways for Downregulated Genes Table Results</Menu.Item>
+                    <Menu.Item key="2">Normalized Data</Menu.Item>
+            </Menu>
+        );
+
+
 
         content = <div>
-                 <div> <p className="err-message" id="message-pdg"></p></div>  
-                 <div  className="div-export-pathwayDown"><Button   id="btn-pathwayDown-export"   type="primary" onClick={this.props.exportPathwayDown}> Export</Button> </div>
-                  <div  className="export-normal-all"><Button   id="btn-pathwayDown-normal-all-export" className="btn-normal-all-export"  type="primary" onClick={this.props.exportNormalAll}> Download Normalized Data for All Samples</Button> </div>
+                     <div>
+                        <p className="err-message" id="message-pdg"></p>
+                    </div>  
+                     <div  className="div-export-pathwayDown">
+                           <Dropdown  overlay={ExportMenu}>
+                                          <Button type="primary" id="btn-pathwayDown-export" >
+                                            <span id="pd-export-drop-down">Export</span> <Icon type="down" />
+                                          </Button>
+                           </Dropdown>
+                    </div>
 
-                        <div>
+                    <div>
                              <div id="pathways-down-select">Display &nbsp;
                                 <Dropdown overlay={menu}>
                                       <Button >
@@ -593,17 +617,14 @@ class PUGTable extends Component {
 
                             </div>
                          
-                        </div>
+                    </div>
                   <div>
-                  <Table 
+                    <Table 
                         columns={columns}
                         dataSource={this.props.data.pathways_down.data}
                         pagination={this.props.data.pathways_down.pagination}
                         loading={this.props.data.pathways_down.loading}
                         onChange={this.handleTableChange}
-                         // onRow={(row, idx, event) => ({
-                         //            onClick: () => { this.showHeatMap(row, idx, event); }
-                         //      })}
                         scroll={{ x: 600}}
                         />
                     {modal}
