@@ -54,6 +54,14 @@ class PUGTable extends Component {
 
 
 
+    handleExportMenuClick =(e)=>{
+        if(e.key ==1 ){
+            this.props.exportPathwayDown();
+        }else{
+            this.props.exportNormalAll();
+        }
+    }
+
     sorter = (field, order) => {
 
         if (!field) {
@@ -552,10 +560,25 @@ class PUGTable extends Component {
                 </Menu>
         );
 
+
+          const ExportMenu = (
+            <Menu onClick={this.handleExportMenuClick}>
+                    <Menu.Item key="1">Pathways for Upregulated Genes Table Results</Menu.Item>
+                    <Menu.Item key="2">Normalized Data</Menu.Item>
+            </Menu>
+        );
+
+
         content = <div>
                   <div> <p className="err-message" id="message-pug"></p></div>  
-                   <div  className="div-export-pathwayUp"><Button   id="btn-pathwayUp-export"   type="primary" onClick={this.props.exportPathwayUp}> Export</Button> </div>
-                    <div  className="export-normal-all"><Button   id="btn-pathwayUp-normal-all-export" className="btn-normal-all-export"  type="primary" onClick={this.props.exportNormalAll}> Download Normalized Data for All Samples</Button> </div>
+                   <div  className="div-export-pathwayUp">
+                    <Dropdown   overlay={ExportMenu}>
+                                          <Button id="btn-pathwayUp-export"   type="primary">
+                                            <span id="pu-export-drop-down">Export</span> <Icon type="down" />
+                                          </Button>
+                           </Dropdown>
+                   </div>
+                  
 
                         <div id="pathways-up-select">Display &nbsp;
                                 <Dropdown overlay={menu}>
@@ -573,10 +596,6 @@ class PUGTable extends Component {
                         pagination={this.props.data.pathways_up.pagination}
                         loading={this.props.data.pathways_up.loading}
                         onChange={this.handleTableChange}
-                        // onRowClick={this.showHeatMap}
-                        // onRow={(row, idx, event) => ({
-                        //             onClick: () => { this.showHeatMap(row, idx, event); }
-                        //       })}
                         scroll={{ x: 600}}
                         />
                     {modal}

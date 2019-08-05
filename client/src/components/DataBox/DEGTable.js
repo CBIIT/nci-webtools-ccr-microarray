@@ -435,12 +435,24 @@ class DEGTable extends Component {
         );
 
 
+        const ExportMenu = (
+            <Menu onClick={this.handleExportMenuClick}>
+                    <Menu.Item key="1">DEG Table Results</Menu.Item>
+                    <Menu.Item key="2">Normalized Data</Menu.Item>
+            </Menu>
+        );
+
+
         content = <div>
                   <div> <p className="err-message" id="message-deg"></p></div>  
-                 <div  className="div-export-deg"><Button   id="btn-deg-export"   type="primary" onClick={this.props.exportDEG}> Export</Button> </div>
-                 <div  className="export-normal-all"><Button   id="btn-deg-normal-all-export" className="btn-normal-all-export"  type="primary" onClick={this.props.exportNormalAll}> Download Normalized Data for All Samples</Button> </div>
-
-              
+                 <div  className="div-export-deg">
+                      <Dropdown  overlay={ExportMenu}>
+                                          <Button id="btn-deg-export"  type="primary">
+                                            <span id="deg-export-drop-down">Export</span> <Icon type="down" />
+                                          </Button>
+                     </Dropdown>
+                 </div>
+                
                   <div id="deg-select">Display &nbsp;
                             <Dropdown overlay={menu}>
                                   <Button >

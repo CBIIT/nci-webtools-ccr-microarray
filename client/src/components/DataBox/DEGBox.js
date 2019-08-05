@@ -14,6 +14,9 @@ class DEGBox extends Component {
         this.state = { content: "No Data" };
     }
 
+ 
+
+
     handleSelectionChange(event) {
         let value = event.target.value;
         var list = document.getElementsByClassName("deg_plot");
