@@ -7,8 +7,8 @@ var logger = require('../components/queue_logger');
 var bucketName = config.bucketName;
 AWS.config.update({ region: 'us-east-1' });
 var awsHander = {};
-// s3 connect timeout set to be 5 minutes
-if(!config.s3_timeout){ config.s3_timeout = 5*60000}
+// s3 connect timeout set to be 30 minutes
+if(!config.s3_timeout){ config.s3_timeout = 30*60000}
 var s3 = new AWS.S3({
     apiVersion: '2006-03-01',
     httpOptions: {
