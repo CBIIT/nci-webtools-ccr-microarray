@@ -25,6 +25,16 @@ class DEGTable extends Component {
     }
 
 
+    handleExportMenuClick =(e)=>{
+        if(e.key ==1 ){
+            this.props.exportDEG();
+        }else{
+            this.props.exportNormalAll();
+        }
+    }
+
+
+
     handleTableChange = (pagination, filters, sorter) => {
         this.props.getDEG({
             page_size: pagination.pageSize,
