@@ -56,7 +56,7 @@ class PUGTable extends Component {
 
     handleExportMenuClick =(e)=>{
         if(e.key ==1 ){
-            this.props.exportPathwayDown();
+            this.props.exportPathwayUp();
         }else{
             this.props.exportNormalAll();
         }
