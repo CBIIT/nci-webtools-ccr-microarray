@@ -259,7 +259,7 @@ router.post("/qAnalysis", function(req, res) {
                 let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED) ";
                 let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
                 emailer.sendMail(config.mail.web_admin_email, data.email, subject, "text", html)
-                res.json({ status: 404, data: "Send Message to Queue fails" });
+                res.json({ status: 404, msg: "Send Message to Queue fails" });
             } else {
                 logger.info("[Queue] Send Message to Queue success");
                 res.json({ status: 200, data: "" });
@@ -282,7 +282,7 @@ router.post("/qAnalysis", function(req, res) {
             let subject = "MicroArray Contrast Results -" + dateFormat(now, "yyyy_mm_dd_h_MM") + "(FAILED) ";
             let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId)
             emailer.sendMail(config.mail.web_admin_email, data.email, subject, "text", html)
-            res.json({ status: 404, data: "upload files to S3 fails" });
+            res.json({ status: 404, msg: "upload files to S3 fails" });
         }
 
     })
@@ -295,7 +295,7 @@ router.post("/getCurrentNumberOfJobsinQueue", function(req, res) {
         if (result != -1) {
             res.json({ status: 200, data: result.Attributes.ApproximateNumberOfMessages });
         } else {
-            res.json({ status: 404, data: -1 });
+            res.json({ status: 404, msg: -1 });
         }
     });
 })
@@ -375,7 +375,7 @@ router.post('/runContrast', function(req, res) {
             fs.readFile(config.uploadPath + "/" + req.body.projectId + "/result.txt", 'utf8', function(err, returnValue) {
 
                 if (err) {
-                    res.json({ status: 404, data: err });
+                    res.json({ status: 404, msg: err });
                 } else {
 
                     let re = JSON.parse(returnValue)
@@ -410,7 +410,7 @@ router.post('/runContrast', function(req, res) {
                         logger.info("Get Contrast result success")
                         res.json({ status: 200, data: return_data });
                     } else {
-                        res.json({ status: 404, data: re });
+                        res.json({ status: 404, msg: re });
                     }
 
                 }
@@ -442,7 +442,7 @@ router.post('/runContrast', function(req, res) {
                     return_data = "Error Message : " + return_data.replace(/\$/g, "").replace(/\[/g, "").replace(/\]/g, "").replace(/\"/g, "")
                 }
             }
-            res.json({ status: 404, data: return_data });
+            res.json({ status: 404, msg: return_data });
         }
 
 
@@ -616,7 +616,7 @@ router.post('/getUpPathWays', function(req, res) {
     } else {
         res.json({
             status: 404,
-            data: ""
+             msg: "No data found in the session"
         });
     }
 });
@@ -630,7 +630,7 @@ router.post('/getDownPathWays', function(req, res) {
     } else {
         res.json({
             status: 404,
-            data: ""
+             msg: "No data found in the session"
         });
     }
 });
@@ -644,7 +644,7 @@ router.post('/getGSEA', function(req, res) {
     } else {
         res.json({
             status: 404,
-            data: ""
+             msg: "No data found in the session"
         });
     }
 });
@@ -658,7 +658,7 @@ router.post('/getDEG', function(req, res) {
     } else {
         res.json({
             status: 404,
-            data: ""
+             msg: "No data found in the session"
         });
     }
 });
@@ -673,7 +673,7 @@ router.post('/getNormalAll', function(req, res) {
     } else {
         res.json({
             status: 404,
-            data: ""
+            msg: "No data found in the session"
         });
     }
 });

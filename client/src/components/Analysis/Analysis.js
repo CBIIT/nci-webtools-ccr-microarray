@@ -2350,7 +2350,7 @@ class Analysis extends Component {
                             workflow.QueueModalvisible = true;
                         } else {
                             workflow.QueueModalvisible = false;
-                            document.getElementById("message-use-queue").innerHTML = result.data;
+                            document.getElementById("message-use-queue").innerHTML = result.msg;
                         }
                         workflow.uploading = false;
                         workflow.progressing = false;
@@ -2484,7 +2484,7 @@ class Analysis extends Component {
                             this.hideWorkFlow();
                         } else {
                             if (result) {
-                                document.getElementById("message-gsm").innerHTML = result.data
+                                document.getElementById("message-gsm").innerHTML = result.msg
                                 workflow.progressing = false;
                                 this.setState({
                                     workflow: workflow
