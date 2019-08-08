@@ -38,27 +38,31 @@ awsHander.getQueueUrl = function(next) {
 }
 
 awsHander.upload = function(path, prex, next) {
+    
     let zip = new AdmZip();
     fs.readdir(path, function(err, items) {
         for (var i = 0; i < items.length; i++) {
             let stat = fs.lstatSync(path + "/" + items[i]);
             if (stat.isFile()) {
-                zip.addLocalFile(path + "/" + items[i]);
+                if(items[i] != "queue_upload.zip"){
+                    zip.addLocalFile(path + "/" + items[i]);
+                }
             }
         }
         zip.writeZip(path + "/queue_upload.zip");
         let fileStream = fs.createReadStream(path + "/queue_upload.zip")
-        s3.putObject({
+        logger.info("uplad file :" + path);
+        s3.upload({
             Bucket: bucketName,
             Key: prex + "queue_upload.zip",
-            Body: fileStream,
-            CacheControl: 'no-cache',
+            Body: fileStream
         }, function(err, data) {
             if (err) {
                 logger.info("uplad err:" + err);
                 logger.info("uplad err stack:" + err.stack);
                 next(false);
             } else {
+                logger.info("uplad file success" );
                 next(true);
             }
 
