@@ -7,7 +7,7 @@ body {
 
 .ant-table-wrapper a {
     color: rgb(0, 0, 255);
-
+    
 }
 
 #tab_help a {
@@ -502,21 +502,6 @@ tr:nth-child(even) {
     width: 80%;
 }
 
-#message-deg {
-    display: none;
-}
-
-#message-ssgsea {
-    display: none;
-}
-
-#message-pug {
-    display: none;
-}
-
-#message-pdg {
-    display: none;
-}
 
 .filter_col {
     float: left;
@@ -856,21 +841,16 @@ input#input_group_name {
     position: absolute;
     right: 0px;
     padding-right: 10px;
-    top: 115px;
+    margin-top: -2px;
 }
 
-.export-normal-all {
-    position: absolute;
-    right: 0px;
-    padding-right: 10px;
-    top: 75px;
-}
+
 
 .div-export-pathwayUp {
     position: absolute;
     right: 0px;
     padding-right: 10px;
-    top: 115px;
+    margin-top: -2px;
 
 }
 
@@ -878,14 +858,14 @@ input#input_group_name {
     position: absolute;
     right: 0px;
     padding-right: 10px;
-    top: 115px;
+    margin-top: -2px;
 }
 
 .div-export-ss {
     position: absolute;
     right: 0px;
     padding-right: 10px;
-    top: 115px;
+    margin-top: -2px;
 }
 
 .div-export-gsm {
