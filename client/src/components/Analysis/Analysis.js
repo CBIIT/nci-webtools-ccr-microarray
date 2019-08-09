@@ -672,7 +672,7 @@ class Analysis extends Component {
             });
     }
     getPathwayUp = (params = {}) => {
-        document.getElementById("message-pug").innerHTML ="";
+        
         let workflow = Object.assign({}, this.state.workflow);
         // initialize
         if (params.sorting) {
@@ -748,7 +748,7 @@ class Analysis extends Component {
             });
     }
     getPathwayDown = (params = {}) => {
-        document.getElementById("message-pdg").innerHTML="";
+       
         let workflow = Object.assign({}, this.state.workflow);
         if (params.sorting) {
             params = {
@@ -797,6 +797,7 @@ class Analysis extends Component {
                 res => res.json()
             )
             .then(result => {
+                 document.getElementById("message-pdg").innerHTML="";
                 document.getElementById("message-pdg").innerHTML = "";
                 let workflow2 = Object.assign({}, this.state.workflow);
                 if (result.status == 200) {
@@ -968,7 +969,7 @@ class Analysis extends Component {
             }).catch(error => document.getElementById("message-pdg").innerHTML = JSON.stringify(error));
     }
     getDEG = (params = {}) => {
-        document.getElementById("message-deg").style.display = "none";
+      
         let workflow = Object.assign({}, this.state.workflow);
         if (params.sorting) {
             params = {
@@ -1040,7 +1041,7 @@ class Analysis extends Component {
 
 
     exportNormalAll = (params = {}) => {
-          document.getElementById("message-deg").style.display = "none";
+         
         let workflow = Object.assign({}, this.state.workflow);
         params = {
             projectId: workflow.projectID,
@@ -1061,6 +1062,7 @@ class Analysis extends Component {
                 res => res.json()
             )
             .then(result => {
+                document.getElementById("message-deg").innerHTML = "";
                 if (result.status == 200) {
                     var wb = XLSX.utils.book_new();
                     wb.Props = {
@@ -1092,7 +1094,7 @@ class Analysis extends Component {
                 });
     }
     exportDEG = (params = {}) => {
-         document.getElementById("message-deg").innerHTML="";
+        
         let workflow = Object.assign({}, this.state.workflow);
         params = {
             projectId: workflow.projectID,
@@ -1118,6 +1120,7 @@ class Analysis extends Component {
                 res => res.json()
             )
             .then(result => {
+                 document.getElementById("message-deg").innerHTML="";
                 if (result.status == 200) {
                     let workflow = Object.assign({}, this.state.workflow);
                     var wb = XLSX.utils.book_new();
@@ -1454,7 +1457,7 @@ class Analysis extends Component {
         this.setState({ workflow: workflow });
     }
     getMAplotAN = () => {
-        document.getElementById("message-post-maplot").innerHTML = "";
+       
         let workflow2 = Object.assign({}, this.state.workflow);
         if (workflow2.list_mAplotAN == "") {
             workflow2.progressing = true;
@@ -1475,7 +1478,7 @@ class Analysis extends Component {
                     .then(result => {
                         let workflow = Object.assign({}, this.state.workflow);
                         if (result.status == 200) {
-                          
+                           document.getElementById("message-post-maplot").innerHTML = "";
                             if (result.data != "") {
                                 workflow.list_mAplotAN = result.data;
                             } else {
@@ -1497,7 +1500,7 @@ class Analysis extends Component {
         }
     }
     getNUSE = () => {
-        document.getElementById("message-pre-nuse").innerHTML = "";
+        
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
         workflow2.loading_info = "Loading NUSE...";
@@ -1513,7 +1516,7 @@ class Analysis extends Component {
                     }
                 }).then(res => res.json())
                 .then(result => {
-                    
+                    document.getElementById("message-pre-nuse").innerHTML = "";
                     let workflow = Object.assign({}, this.state.workflow);
                     if (result.status == 200) {
                         let render_data = this.generateBOXPLOT(result, workflow);
@@ -1534,7 +1537,7 @@ class Analysis extends Component {
         }
     }
     getRLE = () => {
-          document.getElementById("message-pre-rle").innerHTML = "";
+          
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
         workflow2.loading_info = "Loading RLE...";
@@ -1551,6 +1554,7 @@ class Analysis extends Component {
                 }).then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
+                    document.getElementById("message-pre-rle").innerHTML = "";
                     if (result.status == 200) {
                         let workflow = Object.assign({}, this.state.workflow);
                         if (result.data != "") {
@@ -1666,7 +1670,7 @@ class Analysis extends Component {
         };
     }
     getBoxplotBN = () => {
-        document.getElementById("message-pre-boxplot").innerHTML = "";
+        
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.progressing = true;
         workflow2.loading_info = "Loading Plots...";
@@ -1683,6 +1687,7 @@ class Analysis extends Component {
                 }).then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
+                    document.getElementById("message-pre-boxplot").innerHTML = "";
                     if (result.status == 200) {
                         let workflow = Object.assign({}, this.state.workflow);
                         
@@ -1715,7 +1720,7 @@ class Analysis extends Component {
         }
     }
     getMAplotsBN = () => {
-         document.getElementById("message-pre-maplot").innerHTML = "";
+         
         let workflow2 = Object.assign({}, this.state.workflow);
         if (workflow2.list_mAplotBN == "") {
             workflow2.progressing = true;
@@ -1733,6 +1738,7 @@ class Analysis extends Component {
                     }).then(this.handleErrors)
                     .then(res => res.json())
                     .then(result => {
+                        document.getElementById("message-pre-maplot").innerHTML = "";
                         let workflow = Object.assign({}, this.state.workflow);
                         if (result.status == 200) {
                             if (result.data != "") {
@@ -1823,7 +1829,7 @@ class Analysis extends Component {
         this.setState({ workflow: workflow });
     }
     handleGeneChange = (event) => {
-        document.getElementById("message-ssgsea").style.display ="none";
+       
         let value = event.target.value;
         let workflow = Object.assign({}, this.state.workflow);
         let reqBody = {};
@@ -1848,6 +1854,7 @@ class Analysis extends Component {
                 .then(this.handleErrors)
                 .then(res => res.json())
                 .then(result => {
+                    document.getElementById("message-ssgsea").innerHTML ="";
                     workflow.progressing = false;
                     this.setState({ workflow: workflow });
                     if (result.status == 200) {
