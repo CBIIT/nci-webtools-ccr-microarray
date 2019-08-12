@@ -91,7 +91,7 @@ class SSGSEATable extends Component {
             title: (
                 <div style={{ textAlign: 'center' }}>
                        <label htmlFor={"input_ssg_name"}><span style={{display:"none"}}>input_ssg_name</span>
-                       <Input aria-label="input_ssg_name" onPressEnter={value=>search(value) }  placeholder="name"  id="input_ssg_name" defaultValue={this.props.data.ssGSEA.search_keyword.name}/></label>
+                       <Input aria-label="input_ssg_name" onPressEnter={value=>search(value) }  placeholder={this.props.data.ssGSEA.search_keyword.name==""?"NAME":this.props.data.ssGSEA.search_keyword.name}   id="input_ssg_name" defaultValue={this.props.data.ssGSEA.search_keyword.name}/></label>
                       <div>   
                             <div  className="head-title"> NAME</div>
                             <div className="head-sorter">
@@ -120,7 +120,7 @@ class SSGSEATable extends Component {
             title: (
                 <div style={{ textAlign: 'center' }}>
                        <label htmlFor="input_ssg_search_logFC"><span style={{display:"none"}}>input_ssg_search_logFC</span>
-                       <Input aria-label="input_ssg_search_logFC" onPressEnter={value=>search(value) }    placeholder="logfc"  id="input_ssg_search_logFC"/></label>
+                       <Input aria-label="input_ssg_search_logFC" onPressEnter={value=>search(value) }    placeholder={this.props.data.ssGSEA.search_keyword.search_logFC==""?"logFC":this.props.data.ssGSEA.search_keyword.search_logFC}   id="input_ssg_search_logFC"/></label>
                         <div>   
                             <div  className="head-title"> logFC</div>
                             <div className="head-sorter">
@@ -148,7 +148,7 @@ class SSGSEATable extends Component {
             title: (
                 <div style={{ textAlign: 'center' }}>
                         <label htmlFor="input_ssg_search_p_value"><span style={{display:"none"}}>input_ssg_search_p_value</span>
-                        <Input aria-label="input_ssg_search_p_value" onPressEnter={value=>search(value) }   placeholder="p value"  id="input_ssg_search_p_value"/></label>
+                        <Input aria-label="input_ssg_search_p_value" onPressEnter={value=>search(value) }     placeholder={this.props.data.ssGSEA.search_keyword.search_p_value==""?"P.Value":this.props.data.ssGSEA.search_keyword.search_p_value}   id="input_ssg_search_p_value"/></label>
                         <div>   
                             <div  className="head-title"> P.Value</div>
                             <div className="head-sorter">
@@ -178,7 +178,7 @@ class SSGSEATable extends Component {
             title: (
                 <div style={{ textAlign: 'center' }}>
                           <label htmlFor="input_ssg_search_adj_p_value"><span style={{display:"none"}}>input_ssg_search_adj_p_value</span>
-                          <Input aria-label="input_ssg_search_adj_p_value" onPressEnter={value=>search(value) }   placeholder="adj.P.val"  id="input_ssg_search_adj_p_value"/></label>
+                          <Input aria-label="input_ssg_search_adj_p_value" onPressEnter={value=>search(value) }   placeholder={this.props.data.ssGSEA.search_keyword.search_adj_p_value==""?"adj.P.Value":this.props.data.ssGSEA.search_keyword.search_adj_p_value}   id="input_ssg_search_adj_p_value"/></label>
                      <div>   
                             <div  className="head-title"> adj.P.Value</div>
                             <div className="head-sorter">
@@ -207,7 +207,7 @@ class SSGSEATable extends Component {
             title: (
                 <div style={{ textAlign: 'center', "width":"230px"}}>
                         <label htmlFor="input_ssg_search_Avg_Enrichment_Score"><span style={{display:"none"}}>input_ssg_search_Avg_Enrichment_Score</span>
-                        <Input aria-label="input_ssg_search_Avg_Enrichment_Score" onPressEnter={value=>search(value) }    placeholder="Avg.enrichment.Score"  id="input_ssg_search_Avg_Enrichment_Score"/></label>
+                        <Input aria-label="input_ssg_search_Avg_Enrichment_Score" onPressEnter={value=>search(value) }    placeholder={this.props.data.ssGSEA.search_keyword.search_Avg_Enrichment_Score==""?"Avg.Enrichment.Score":this.props.data.ssGSEA.search_keyword.search_Avg_Enrichment_Score}  id="input_ssg_search_Avg_Enrichment_Score"/></label>
                          <div>   
                             <div  className="head-title"> Avg.Enrichment.Score</div>
                             <div className="head-sorter">
@@ -236,7 +236,7 @@ class SSGSEATable extends Component {
             title: (
                 <div style={{ textAlign: 'center' }}>
                        <label htmlFor="input_ssg_search_t"><span style={{display:"none"}}>input_ssg_search_t</span>
-                       <Input aria-label="input_ssg_search_t" onPressEnter={value=>search(value) }   placeholder="t"  id="input_ssg_search_t"/></label>
+                       <Input aria-label="input_ssg_search_t" onPressEnter={value=>search(value) }     placeholder={this.props.data.ssGSEA.search_keyword.search_t==""?"t":this.props.data.ssGSEA.search_keyword.search_t} id="input_ssg_search_t"/></label>
                         <div>   
                             <div  className="head-title"> t</div>
                             <div className="head-sorter">
@@ -263,7 +263,7 @@ class SSGSEATable extends Component {
             title: (
                 <div style={{ textAlign: 'center' }}>
                          <label htmlFor="input_ssg_search_b"><span style={{display:"none"}}>input_ssg_search_b</span>
-                         <Input aria-label="input_ssg_search_b"  onPressEnter={value=>search(value) }   placeholder="B"  id="input_ssg_search_b"/></label>
+                         <Input aria-label="input_ssg_search_b"  onPressEnter={value=>search(value) }   placeholder={this.props.data.ssGSEA.search_keyword.search_b==""?"B":this.props.data.ssGSEA.search_keyword.search_b}  id="input_ssg_search_b"/></label>
                               <div>   
                             <div  className="head-title">B</div>
                             <div className="head-sorter">

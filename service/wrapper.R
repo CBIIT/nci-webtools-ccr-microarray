@@ -243,7 +243,7 @@ process = function(){
                     projectId=projectId,
                     GSM=celfiles@phenoData@data,
                     colors=col2hex(celfiles@phenoData@data$colors),
-                    normCelfiles=normalData
+                    normCelfiles=diff_expr_genes$norm_annotated
                     )
 
                   write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))
