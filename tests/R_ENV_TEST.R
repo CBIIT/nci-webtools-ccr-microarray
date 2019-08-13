@@ -48,8 +48,6 @@ diff_expr_genes2 = diffExprGenes(norm_celfiles2[[10]],cons,projectId,data_repo_p
           
 l2p_pathways = l2pPathways(diff_expr_genes2,species2,data_repo_path,projectId,config_path)
 
-
-
 species<-"human"
 geneSet<-"H: Hallmark Gene Sets"
 #

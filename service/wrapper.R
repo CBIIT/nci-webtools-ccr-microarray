@@ -163,7 +163,7 @@ process = function(){
           diff_expr_genes = diffExprGenes(norm_celfiles[[10]],cons,projectId,data_repo_path)       #Call function
           # # #### 4) l2p pathway analysis function, takes DEGs and species as input, returns list of up and downregulated pathways for each contrast ####
           # # # Output should dynamically respond to user-selected contrast
-          #saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
+          saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))
          
 
           if(typeof(diff_expr_genes) == "character"){
@@ -243,7 +243,7 @@ process = function(){
                     projectId=projectId,
                     GSM=celfiles@phenoData@data,
                     colors=col2hex(celfiles@phenoData@data$colors),
-                    normCelfiles=normalData
+                    normCelfiles=diff_expr_genes$norm_annotated
                     )
 
                   write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))

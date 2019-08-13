@@ -74,7 +74,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                     <label htmlFor="input_deg_search_symbol"><span style={{display:"none"}}>input_deg_search_symbol</span>
-                     <Input  aria-label="input_deg_search_symbol" onPressEnter={value=>search(value) }  placeholder="SYMBOL"  id="input_deg_search_symbol"/></label>
+                     <Input  aria-label="input_deg_search_symbol" onPressEnter={value=>search(value) }  placeholder={this.props.data.diff_expr_genes.search_keyword.search_symbol==""?"SYMBOL":this.props.data.diff_expr_genes.search_keyword.search_symbol}  id="input_deg_search_symbol"/></label>
                            <div>   
                         <div  className="head-title"> SYMBOL </div>
                             <div className="head-sorter">
@@ -100,7 +100,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                       <label htmlFor="input_deg_search_fc"><span style={{display:"none"}}>input_deg_search_fc</span>
-                      <Input  aria-label="input_deg_search_fc"  onPressEnter={value=>search(value) }  placeholder="FC"  id="input_deg_search_fc"/></label>
+                      <Input  aria-label="input_deg_search_fc"  onPressEnter={value=>search(value) }   placeholder={this.props.data.diff_expr_genes.search_keyword.search_fc==""?"FC":this.props.data.diff_expr_genes.search_keyword.search_fc}  id="input_deg_search_fc"/></label>
                     <div>   
                         <div  className="head-title"> FC </div>
                             <div className="head-sorter">
@@ -127,7 +127,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                           <label htmlFor="input_dge_search_p_value"><span style={{display:"none"}}>input_dge_search_p_value</span> 
-                          <Input  aria-label="input_dge_search_p_value"  onPressEnter={value=>search(value) }    placeholder="0.05"  id="input_dge_search_p_value"/></label>
+                          <Input  aria-label="input_dge_search_p_value"  onPressEnter={value=>search(value) }    placeholder={this.props.data.diff_expr_genes.search_keyword.search_p_value==""?"P.Value":this.props.data.diff_expr_genes.search_keyword.search_p_value}   id="input_dge_search_p_value"/></label>
                            <div>   
                             <div  className="head-title"> P.Value</div>
                             <div className="head-sorter">
@@ -157,7 +157,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                         <label htmlFor="input_deg_search_adj_p_value"><span style={{display:"none"}}>input_deg_search_adj_p_value</span>
-                        <Input  aria-label="input_deg_search_adj_p_value" onPressEnter={value=>search(value) }    placeholder="adj.p.val"  id="input_deg_search_adj_p_value"/></label>
+                        <Input  aria-label="input_deg_search_adj_p_value" onPressEnter={value=>search(value) }    placeholder={this.props.data.diff_expr_genes.search_keyword.search_adj_p_value==""?"adj.P.Val":this.props.data.diff_expr_genes.search_keyword.search_adj_p_value}   id="input_deg_search_adj_p_value"/></label>
                           <div>   
                             <div  className="head-title"> adj.P.Val</div>
                             <div className="head-sorter">
@@ -185,7 +185,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                          <label htmlFor="input_deg_search_aveexpr"><span style={{display:"none"}}>input_deg_search_aveexpr</span>
-                         <Input aria-label="input_deg_search_aveexpr" onPressEnter={value=>search(value) }   placeholder="AveExpr"  id="input_deg_search_aveexpr"/></label>
+                         <Input aria-label="input_deg_search_aveexpr" onPressEnter={value=>search(value) }   placeholder={this.props.data.diff_expr_genes.search_keyword.search_aveexpr==""?"AveExpr":this.props.data.diff_expr_genes.search_keyword.search_aveexpr}  id="input_deg_search_aveexpr"/></label>
                          <div>   
                             <div  className="head-title"> AveExpr</div>
                             <div className="head-sorter">
@@ -211,7 +211,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                              <label htmlFor="input_deg_search_input_deg_search_accnum"><span style={{display:"none"}}>input_deg_search_accnum</span>
-                             <Input aria-label="input_deg_search_accnum" onPressEnter={value=>search(value) }   placeholder="ACCNUM"  id="input_deg_search_accnum"/></label>
+                             <Input aria-label="input_deg_search_accnum" onPressEnter={value=>search(value) }   placeholder={this.props.data.diff_expr_genes.search_keyword.search_accnum==""?"ACCNUM":this.props.data.diff_expr_genes.search_keyword.search_accnum}     id="input_deg_search_accnum"/></label>
                           <div>   
                             <div  className="head-title"> ACCNUM</div>
                             <div className="head-sorter">
@@ -238,7 +238,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                             <label htmlFor="input_deg_search_desc"><span style={{display:"none"}}>input_deg_search_desc</span>
-                            <Input aria-label="input_deg_search_desc" onPressEnter={value=>search(value) }  placeholder="Desc"  id="input_deg_search_desc"/></label>
+                            <Input aria-label="input_deg_search_desc" onPressEnter={value=>search(value) }   placeholder={this.props.data.diff_expr_genes.search_keyword.search_desc==""?"DESC":this.props.data.diff_expr_genes.search_keyword.search_desc}      id="input_deg_search_desc"/></label>
                          <div>   
                             <div  className="head-title"> DESC</div>
                             <div className="head-sorter">
@@ -265,7 +265,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                      <label htmlFor="input_deg_search_entrez"><span style={{display:"none"}}>input_deg_search_entrez</span>
-                     <Input  aria-label="input_deg_search_entrez" onPressEnter={value=>search(value) } placeholder="ENTREZ"  id="input_deg_search_entrez"/></label>
+                     <Input  aria-label="input_deg_search_entrez" onPressEnter={value=>search(value) }   placeholder={this.props.data.diff_expr_genes.search_keyword.search_entrez==""?"ENTREZ":this.props.data.diff_expr_genes.search_keyword.search_entrez}   id="input_deg_search_entrez"/></label>
                         <div>   
                             <div  className="head-title"> ENTREZ</div>
                             <div className="head-sorter">
@@ -304,7 +304,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                        <label htmlFor="input_deg_search_probsetid"><span style={{display:"none"}}>input_deg_search_probsetid</span>
-                       <Input aria-label="input_deg_search_probsetid" onPressEnter={value=>search(value) }   placeholder="probsetID"  id="input_deg_search_probsetid"/></label>
+                       <Input aria-label="input_deg_search_probsetid" onPressEnter={value=>search(value) }  placeholder={this.props.data.diff_expr_genes.search_keyword.search_probsetid==""?"probsetID":this.props.data.diff_expr_genes.search_keyword.search_probsetid}  id="input_deg_search_probsetid"/></label>
                          <div>   
                             <div  className="head-title"> probsetID</div>
                             <div className="head-sorter">
@@ -334,7 +334,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                       <label htmlFor="input_deg_search_t"><span style={{display:"none"}}>input_deg_search_t</span>
-                      <Input aria-label="input_deg_search_t" onPressEnter={value=>search(value) }  placeholder="t"  id="input_deg_search_t"/></label>
+                      <Input aria-label="input_deg_search_t" onPressEnter={value=>search(value) }  placeholder={this.props.data.diff_expr_genes.search_keyword.search_t==""?"t":this.props.data.diff_expr_genes.search_keyword.search_t}   id="input_deg_search_t"/></label>
                        <div>   
                             <div  className="head-title"> t</div>
                             <div className="head-sorter">
@@ -365,7 +365,7 @@ class DEGTable extends Component {
                 title: (
                     <div style={{ textAlign: 'center' }}>
                        <label htmlFor="input_deg_search_b"><span style={{display:"none"}}>input_deg_search_b</span>
-                       <Input aria-label="input_deg_search_b"  onPressEnter={value=>search(value) }   placeholder="b"  id="input_deg_search_b"/></label>
+                       <Input aria-label="input_deg_search_b"  onPressEnter={value=>search(value) }    placeholder={this.props.data.diff_expr_genes.search_keyword.search_b==""?"b":this.props.data.diff_expr_genes.search_keyword.search_b}    id="input_deg_search_b"/></label>
                           <div>   
                             <div  className="head-title"> b</div>
                             <div className="head-sorter">
