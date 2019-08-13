@@ -1073,13 +1073,25 @@ class Analysis extends Component {
                     };
                     wb.SheetNames.push("Data");
                     var ws_data = [];
-                    if (result.data.data) {
-                        ws_data.push([""].concat(result.data.col));
-                        for (var i = 0; i < result.data.row.length; i++) {
-                            ws_data.push([result.data.row[i]].concat(result.data.data[i]))
+                   if (result.data&&result.data.length!=0) {
+                        // get col name 
+                        let cols = [];
+                        for(var j in result.data[0]){
+                            cols.push(j);
                         }
+                        ws_data.push(cols);
 
-                    }
+                        // get data 
+                        let d =[];
+                        for(var k in result.data){
+                           for(var col in cols){
+                            d.push(result.data[k][cols[col]])
+                           }
+                            ws_data.push(d);
+                            d =[];
+                        }
+                   }
+               
                     var ws = XLSX.utils.aoa_to_sheet(ws_data);
                     wb.Sheets["Data"] = ws;
                     XLSX.writeFile(wb, "DEG_Normalized_Data_for_All_Samples" + workflow.projectID + ".xlsx", { bookType: 'xlsx', type: 'binary' });
