@@ -2194,7 +2194,26 @@ class Analysis extends Component {
         for (var i in workflow.dataList) {
             reqBody.dataList.push(workflow.dataList[i].gsm);
             if (workflow.dataList[i].groups != "") {
+                // prohibit samples in both groups chosen for contrast.
+                if(workflow.dataList[i].groups.indexOf(workflow.group_1)!=-1&&workflow.dataList[i].groups.indexOf(workflow.group_2)!=-1){
+                    // stop process and show warnning.
+                    document.getElementById("message-gsm").innerHTML = workflow.dataList[i].gsm + "has both groups chosen for contrast" ;
+                    return;
+                }
+                if(workflow.dataList[i].groups.indexOf(workflow.group_1)!=-1){
+                    // stop process and show warnning.
+                    reqBody.groups.push(workflow.group_1);
+                    continue;
+
+                }
+                if(workflow.dataList[i].groups.indexOf(workflow.group_2)!=-1){
+                    // stop process and show warnning.
+                    reqBody.groups.push(workflow.group_2);  
+                    continue;
+                }
+                
                 reqBody.groups.push(workflow.dataList[i].groups);
+                
             } else {
                 // default value of the group is others
                 reqBody.groups.push("Others")
@@ -2632,7 +2651,12 @@ class Analysis extends Component {
         if (group_name.match(pattern)) {
             let workflow = Object.assign({}, this.state.workflow);
             for (var key in dataList_keys) {
-                workflow.dataList[dataList_keys[key] - 1].groups = group_name;
+                if(workflow.dataList[dataList_keys[key] - 1].groups==""){
+                    workflow.dataList[dataList_keys[key] - 1].groups = group_name;
+                }else{
+                    workflow.dataList[dataList_keys[key] - 1].groups = workflow.dataList[dataList_keys[key] - 1].groups + "," +group_name;
+                }
+                
             }
             document.getElementById("message-gsm-group").innerHTML = "";
             this.setState({ workflow: workflow });

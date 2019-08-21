@@ -24,7 +24,7 @@ class Contrast extends Component {
             let tmp_options = [];
             // find the unique value in grups 
             this.props.data.dataList.filter(function(v, i, self) {
-                if (tmp_options.indexOf(v['groups']) == -1 && v['groups'] != "") {
+                if (v['groups'].indexOf(",") == -1 &&tmp_options.indexOf(v['groups']) == -1 && v['groups'] != "") {
                     var d = <option key={v['groups']} value={v['groups']}>{v['groups']}</option>
                     options.unshift(d);
                     tmp_options.unshift(v['groups']);
