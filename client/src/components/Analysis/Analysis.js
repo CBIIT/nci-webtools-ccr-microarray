@@ -2197,7 +2197,7 @@ class Analysis extends Component {
                 // prohibit samples in both groups chosen for contrast.
                 if(workflow.dataList[i].groups.indexOf(workflow.group_1)!=-1&&workflow.dataList[i].groups.indexOf(workflow.group_2)!=-1){
                     // stop process and show warnning.
-                    document.getElementById("message-gsm").innerHTML = workflow.dataList[i].gsm + "has both groups chosen for contrast" ;
+                    document.getElementById("message-gsm").innerHTML = workflow.dataList[i].gsm + " has both groups chosen for contrast . " ;
                     return;
                 }
                 if(workflow.dataList[i].groups.indexOf(workflow.group_1)!=-1){
