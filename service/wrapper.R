@@ -95,7 +95,11 @@ process = function(){
           source<-toString(args[i])
            i<-i+1
           config_path<-toString(args[i])
-
+           i<-i+1
+          realGroups<-toString(args[i])
+    
+          write(args, paste0(data_repo_path,"/test123.txt",sep=""),append=TRUE)
+       
           #If user selects 'ANALYZE CEL FILES', call this function, input path of files (length of group assignments must match number of files for testing purposes):
           #celfiles = processCELfiles('/Users/valdezkm/Documents/2___Combined',c('Ctl_1','Ctl_1','Ctl_1','KO_1','KO_1','KO_1','Ctl_2','Ctl_2','Ctl_2','KO_2','KO_2','KO_2'))
 
@@ -236,7 +240,7 @@ process = function(){
                     pcaData=return_plot_data[[9]],
                     heatmapAfterNorm=return_plot_data[[10]],
                     accessionCode=access_code,
-                    groups=listGroups,
+                    groups=realGroups,
                     group_1=cgroup1,
                     group_2=cgroup2,
                     genSet=geneSet,
@@ -245,6 +249,7 @@ process = function(){
                     colors=col2hex(celfiles@phenoData@data$colors),
                     normCelfiles=diff_expr_genes$norm_annotated
                     )
+                 
 
                   write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))
             })
