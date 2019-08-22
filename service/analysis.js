@@ -235,6 +235,7 @@ router.post("/qAnalysis", function(req, res) {
     data.submit = dateFormat(now, "yyyy-mm-dd, h:MM:ss TT");
     data.dataList = req.body.dataList;
     data.normal = req.body.normal;
+    data.realGroup =req.body.realGroup.join("@");
     let CEL = ""
     for (let i in req.body.dataList) {
         CEL = req.body.dataList[i] + "," + CEL;
@@ -315,7 +316,14 @@ router.post('/getResultByProjectId', function(req, res) {
                     // store return value in session (deep copy)
                     req.session[req.body.projectId] = JsonToObject(re);
                     req.session[req.body.projectId].option = req.session[req.body.projectId].group_1 + req.session[req.body.projectId].group_2 + req.session[req.body.projectId].genSet;
-                    req.session[req.body.projectId].groups = req.session[req.body.projectId].groups;
+                    
+                    if(req.session[req.body.projectId].groups[0].indexOf("@")!=-1){
+                        req.session[req.body.projectId].groups = req.session[req.body.projectId].groups[0].split("@");
+                    }else{
+                        req.session[req.body.projectId].groups = req.session[req.body.projectId].groups;
+                    }
+
+                    
                     req.session[req.body.projectId].projectId = req.session[req.body.projectId].projectId;
                     logger.info("store data in req.session")
                     let return_data = "";
@@ -368,6 +376,7 @@ router.post('/runContrast', function(req, res) {
     data.push(req.body.normal);
     data.push(req.body.source)
     data.push(config.configPath);
+    data.push(req.body.realGroup.join("@"));
     logger.info("runContrast  R code ");
     R.execute("wrapper.R", data, function(err, returnValue) {
         if (fs.existsSync(config.uploadPath + "/" + req.body.projectId + "/result.txt")) {

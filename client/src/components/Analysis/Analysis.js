@@ -2186,6 +2186,7 @@ class Analysis extends Component {
         reqBody.group_1 = workflow.group_1;
         reqBody.group_2 = workflow.group_2;
         reqBody.dataList = [];
+        reqBody.realGroup=[];  // group without filter
         if (workflow.uploaded) {
             reqBody.source = "upload";
         } else {
@@ -2194,6 +2195,7 @@ class Analysis extends Component {
         for (var i in workflow.dataList) {
             reqBody.dataList.push(workflow.dataList[i].gsm);
             if (workflow.dataList[i].groups != "") {
+                 reqBody.realGroup.push(workflow.dataList[i].groups);  
                 // prohibit samples in both groups chosen for contrast.
                 if(workflow.dataList[i].groups.indexOf(workflow.group_1)!=-1&&workflow.dataList[i].groups.indexOf(workflow.group_2)!=-1){
                     // stop process and show warnning.
@@ -2211,8 +2213,8 @@ class Analysis extends Component {
                     reqBody.groups.push(workflow.group_2);  
                     continue;
                 }
-                
-                reqBody.groups.push(workflow.dataList[i].groups);
+
+                 reqBody.groups.push("Others")
                 
             } else {
                 // default value of the group is others

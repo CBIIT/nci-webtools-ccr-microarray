@@ -131,6 +131,7 @@ function r(data, endCallback) {
     d.push(data.normal);
     d.push(data.source);
     d.push(config.configPath);
+    d.push(data.realGroup);
 
     logger.info("[Queue] Run Analysis")
     logger.info("Input")
