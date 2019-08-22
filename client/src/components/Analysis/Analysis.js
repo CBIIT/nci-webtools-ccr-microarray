@@ -2217,6 +2217,7 @@ class Analysis extends Component {
                  reqBody.groups.push("Others")
                 
             } else {
+                reqBody.realGroup.push("Others");  
                 // default value of the group is others
                 reqBody.groups.push("Others")
             }
