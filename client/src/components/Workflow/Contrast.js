@@ -85,14 +85,17 @@ class Contrast extends Component {
             return (
                     <div>
                        <div className="block">
-                          <label className="title"  htmlFor="select-group-1">Choose Contrast To Show: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+                        <label className="title"  htmlFor="select-group-for-contrast">
+                         Choose Contrast To Show: <span style={{color:"red","paddingLeft":"5px"}}> *</span>
                           {group_1_content}
-                          <label className="title"  htmlFor="select-group-2">VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
+                         VS: <span style={{color:"red","paddingLeft":"5px"}}> *</span>
                           {group_2_content}
+                          </label>
                       </div>
                       <div className="block ">
-                         <label className="title" htmlFor="select-group-1">Choose Normalization Method:</label>
+                         <label className="title" htmlFor="choose normalization method">Choose Normalization Method:
                           {normalization_option}
+                          </label>
                       </div>
                      {queueBlock}
                       {button}
