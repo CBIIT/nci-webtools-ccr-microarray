@@ -46,12 +46,10 @@ class GSMData extends Component {
 
 
     isDataTableRendered(t) {
-        console.log(t)
         clean508();
 
 
         function clean508() {
-            console.log(t)
             let selectBox = document.getElementById("gsm-select")
             if (selectBox) {
                 let checkboxes = document.getElementsByClassName("ant-checkbox-wrapper");
@@ -82,7 +80,6 @@ class GSMData extends Component {
                             node.appendChild(textnode);
                             if (!isNaN(parseInt(i))) {
                                 document.getElementsByClassName("ant-checkbox-wrapper")[parseInt(i)].appendChild(node)
-                                console.log("508")
                             }
                         }
 
@@ -119,13 +116,11 @@ class GSMData extends Component {
 
 
     handleSelection = (key) => {
-        console.log(key)
         let selectedRowKeys = this.getCheckedBoxes("select-GSM")
     }
 
 
     handleMenuClick = (e) => {
-        console.log('click', e);
         let currentState = Object.assign({}, this.state);
         currentState.pagination.pageSize = parseInt(e.key);
         currentState.pagination.current = 1;
@@ -229,8 +224,6 @@ class GSMData extends Component {
             }
 
         }
-        // Return the array if it is non-empty, or null
-        console.log(Selections)
     }
 
 

@@ -1,4 +1,4 @@
-import { Spin, Icon, Button, Modal, Collapse } from 'antd';
+import { Spin, Icon, Button, Modal } from 'antd';
 import React, { Component } from 'react';
 import Workflow from '../Workflow/Workflow';
 import DataBox from '../DataBox/DataBox';
@@ -7,10 +7,8 @@ import Help from '../Help/Help';
 import Plot from 'react-plotly.js';
 import XLSX from 'xlsx';
 import imageExists from 'image-exists';
-import MAPlot from "../DataBox/MAPlot";
 import CIframe from "../DataBox/CIframe";
 
-const ButtonGroup = Button.Group;
 
 const httpErrorMessage = {
     400: "Bad Request",
@@ -744,7 +742,6 @@ class Analysis extends Component {
                 workflow2.pathways_up.loading = false;
                 this.setState({ workflow: workflow2 });
                 document.getElementById("message-pug").innerHTML = JSON.stringify(error);
-                console.log(error)
             });
     }
     getPathwayDown = (params = {}) => {
@@ -1792,7 +1789,7 @@ class Analysis extends Component {
             obj.pagination = workflow.pagination;
             workflow.pathways_up = obj;
         }
-        this.setState({ workflow: workflow }, () => { console.log("changePathways_up done"); });
+        this.setState({ workflow: workflow }, () => {  });
     }
     changePathways_down = (obj) => {
         let workflow = Object.assign({}, this.state.workflow);
@@ -2420,7 +2417,6 @@ class Analysis extends Component {
             } catch (err) {
                 workflow.uploading = false;
                 workflow.progressing = false;
-                console.log(err);
                 document.getElementById("message-use-queue").innerHTML = JSON.stringify(err);
                 this.setState({
                     workflow: workflow
@@ -2561,7 +2557,6 @@ class Analysis extends Component {
                 document.getElementById("message-gsm").innerHTML = JSON.stringify(err);
                 workflow.uploading = false;
                 workflow.progressing = false;
-                console.log(err);
                 this.setState({
                     workflow: workflow
                 });
@@ -2673,7 +2668,15 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         for (var key in workflow.dataList) {
             if (workflow.dataList[key].groups == group_name) {
-                workflow.dataList[key].groups = ""
+                workflow.dataList[key].groups = "";
+            }
+            // delet from multi-group
+            if (workflow.dataList[key].groups.indexOf(",")!=-1 &&  workflow.dataList[key].groups.indexOf(group_name)!=-1) {
+               if(workflow.dataList[key].groups.indexOf(group_name)==workflow.dataList[key].groups.length-group_name.length) {
+                    workflow.dataList[key].groups= workflow.dataList[key].groups.replace(group_name,"");
+                }else{
+                    workflow.dataList[key].groups= workflow.dataList[key].groups.replace(group_name+",","");
+                }
             }
         }
         this.setState({ workflow: workflow });
@@ -2808,7 +2811,6 @@ class Analysis extends Component {
         });
     }
     changeTab(tab) {
-        console.log(tab)
         if (document.getElementById("li-about") != null) {
             if (tab == "about") {
                 document.getElementById("li-about").className = "active"

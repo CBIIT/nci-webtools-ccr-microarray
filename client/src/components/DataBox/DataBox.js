@@ -221,7 +221,6 @@ class DataBox extends Component {
     }
 
     deleteTag = (event) => {
-        console.log("delete");
         var group_name = event.target.parentNode.parentNode.getElementsByTagName("td")[0].innerText;
         if (group_name == "" || typeof(group_name) == 'undefined') {
             document.getElementById("message-gsm-group-table").innerHTML = 'No group selected for deleting.'
@@ -323,13 +322,21 @@ class DataBox extends Component {
         var groups_data = new Map();
         for (var key in this.props.data.dataList) {
             if (this.props.data.dataList[key].groups != "") {
-                if (groups_data.has(this.props.data.dataList[key].groups)) {
-                    groups_data.set(this.props.data.dataList[key].groups, groups_data.get(this.props.data.dataList[key].groups) + this.props.data.dataList[key].gsm + ",")
-                } else {
-                    groups_data.set(
-                        this.props.data.dataList[key].groups,
-                        this.props.data.dataList[key].gsm + ","
-                    )
+                let gsm_groups = [];
+                if(this.props.data.dataList[key].groups.indexOf(",")!=-1){ 
+                    // A sample belongs to multi-group
+                    gsm_groups = this.props.data.dataList[key].groups.split(",");
+                }else{
+
+                    gsm_groups = [this.props.data.dataList[key].groups];
+                }
+
+                for(var index in gsm_groups){
+                     if (groups_data.has(gsm_groups[index])) {
+                         groups_data.set(gsm_groups[index], groups_data.get(gsm_groups[index]) + ","+this.props.data.dataList[key].gsm )
+                     } else {
+                        groups_data.set(gsm_groups[index],this.props.data.dataList[key].gsm )
+                    }
                 }
             }
         }
