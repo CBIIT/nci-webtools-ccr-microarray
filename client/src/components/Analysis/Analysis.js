@@ -2673,7 +2673,7 @@ class Analysis extends Component {
             // delet from multi-group
             if (workflow.dataList[key].groups.indexOf(",")!=-1 &&  workflow.dataList[key].groups.indexOf(group_name)!=-1) {
                if(workflow.dataList[key].groups.indexOf(group_name)==workflow.dataList[key].groups.length-group_name.length) {
-                    workflow.dataList[key].groups= workflow.dataList[key].groups.replace(group_name,"");
+                    workflow.dataList[key].groups= workflow.dataList[key].groups.replace(","+group_name,"");
                 }else{
                     workflow.dataList[key].groups= workflow.dataList[key].groups.replace(group_name+",","");
                 }
