@@ -2196,7 +2196,7 @@ class Analysis extends Component {
                 // prohibit samples in both groups chosen for contrast.
                 if(workflow.dataList[i].groups.indexOf(workflow.group_1)!=-1&&workflow.dataList[i].groups.indexOf(workflow.group_2)!=-1){
                     // stop process and show warnning.
-                    document.getElementById("message-gsm").innerHTML = workflow.dataList[i].gsm + " has both groups chosen for contrast . " ;
+                    document.getElementById("message-gsm").innerHTML = "Cannot run contrasts when same samples belong to both groups . Please re-configure your groups and try again. ";
                     return;
                 }
                 if(workflow.dataList[i].groups.indexOf(workflow.group_1)!=-1){
@@ -2612,6 +2612,8 @@ class Analysis extends Component {
                             list.files[i]["gsm"] = list.files[i]["_row"];
                             list.files[i]["groups"] = "";
                         }
+                        // clear warning message
+                        document.getElementById("message-gsm").innerHTML = "";
                         workflow.dataList = list.files;
                         workflow.uploaded = true;
                         this.setState({
