@@ -2613,7 +2613,7 @@ class Analysis extends Component {
                             list.files[i]["groups"] = "";
                         }
                         // clear warning message
-                        document.getElementById("message-gsm").innerHTML = error;
+                        document.getElementById("message-gsm").innerHTML = "";
                         workflow.dataList = list.files;
                         workflow.uploaded = true;
                         this.setState({
