@@ -190,7 +190,7 @@ class GSMData extends Component {
             }
         }
 
-     
+
         let start_index = currentState.pagination.pageSize * (currentState.pagination.current - 1)
         let end_index = currentState.pagination.pageSize * (currentState.pagination.current)
         if (end_index > renderData.length) {
@@ -313,9 +313,16 @@ class GSMData extends Component {
         this.setState(set)
     }
 
+
+
     render() {
 
         const { loading, selectedRowKeys } = this.state;
+        const filteredData = this.state.renderData.filter(searchFilter, this);
+        const minLength = 15;
+        if (filteredData.length < minLength) {
+
+        }
 
         let content = <div>
             <div className="err-message" id="message-gsm"></div>
@@ -387,7 +394,11 @@ class GSMData extends Component {
 
             const menu = (
                 <Menu onClick={this.handleMenuClick}>
-                     <Menu.Item key="15">15</Menu.Item>
+                    {filteredData.length < minLength &&
+                        <Menu.Item key={filteredData.length}>
+                            filteredData.length
+                        </Menu.Item>}
+                    <Menu.Item key="15">15</Menu.Item>
                     <Menu.Item key="25">25</Menu.Item>
                     <Menu.Item key="50">50</Menu.Item>
                     <Menu.Item key="100">100</Menu.Item>
@@ -400,9 +411,6 @@ class GSMData extends Component {
                 onChange: this.onSelectChange,
             };
 
-
-
-
             content = <div>
                         <div className="err-message" id="message-gsm"></div>
                         <div>
@@ -411,21 +419,22 @@ class GSMData extends Component {
                                     onSearch = { value => this.setState({ term: value ,renderData : this.props.data.dataList}) }
                             />
                         </div>
-                        <div id="gsm-select">Display  
+                        <div id="gsm-select">Display
                             <Dropdown overlay={menu}>
                                   <Button >
-                                    <span id="gsm-drop-down">25</span> <Icon type="down" />
+                                    <span id="gsm-drop-down">
+                                        {Math.min(25, filteredData.length)}
+                                    </span> <Icon type="down" />
                                   </Button>
-                            </Dropdown>of total { this.state.renderData.filter(searchFilter, this).length} records
-
+                            </Dropdown>of total {filteredData.length} records
                         </div>
-                        <div> 
-                        <Table 
-                            scroll={{ x: 600}} 
-                            pagination={this.state.pagination}  
-                            rowSelection = { rowSelection } 
-                            columns = { columns } 
-                            onChange={this.handlePageChange}    
+                        <div>
+                        <Table
+                            scroll={{ x: 600}}
+                            pagination={this.state.pagination}
+                            rowSelection = { rowSelection }
+                            columns = { columns }
+                            onChange={this.handlePageChange}
                             dataSource = { this.state.renderData.filter(searchFilter, this) }
                                 />
                         </div>
