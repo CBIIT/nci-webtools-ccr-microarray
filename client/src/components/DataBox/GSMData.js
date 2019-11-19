@@ -316,6 +316,17 @@ class GSMData extends Component {
 
 
     render() {
+        const searchFilter = (row) => {
+            if (this.state.term === "") {
+                return true;
+            }
+            if (row["gsm"] && row["gsm"].includes(this.state.term)) return true;
+            if (row["title"] && row["title"].includes(this.state.term)) return true;
+            if (row["description"] && row["description"].includes(this.state.term)) return true;
+
+            return false;
+        }
+
 
         const { loading, selectedRowKeys } = this.state;
         const filteredData = this.state.renderData.filter(searchFilter, this);
@@ -380,17 +391,6 @@ class GSMData extends Component {
 
 
 
-
-            const searchFilter = (row) => {
-                if (this.state.term === "") {
-                    return true;
-                }
-                if (row["gsm"] && row["gsm"].includes(this.state.term)) return true;
-                if (row["title"] && row["title"].includes(this.state.term)) return true;
-                if (row["description"] && row["description"].includes(this.state.term)) return true;
-
-                return false;
-            }
 
             const menu = (
                 <Menu onClick={this.handleMenuClick}>
