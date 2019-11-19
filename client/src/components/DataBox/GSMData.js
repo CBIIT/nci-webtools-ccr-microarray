@@ -389,15 +389,8 @@ class GSMData extends Component {
                 fl.key = count++;
             });
 
-
-
-
             const menu = (
                 <Menu onClick={this.handleMenuClick}>
-                    {filteredData.length < minLength &&
-                        <Menu.Item key={filteredData.length}>
-                            filteredData.length
-                        </Menu.Item>}
                     <Menu.Item key="15">15</Menu.Item>
                     <Menu.Item key="25">25</Menu.Item>
                     <Menu.Item key="50">50</Menu.Item>
@@ -419,15 +412,26 @@ class GSMData extends Component {
                                     onSearch = { value => this.setState({ term: value ,renderData : this.props.data.dataList}) }
                             />
                         </div>
-                        <div id="gsm-select">Display
+
+                        <div id="gsm-select"
+                            style={{
+                                display: filteredData.length < 15 ? 'none' : 'block'
+                            }}>
+                            Display
                             <Dropdown overlay={menu}>
-                                  <Button >
+                                <Button >
                                     <span id="gsm-drop-down">
                                         {Math.min(25, filteredData.length)}
                                     </span> <Icon type="down" />
-                                  </Button>
+                                </Button>
                             </Dropdown>of total {filteredData.length} records
                         </div>
+
+                        {filteredData.length < 15 &&
+                            <div>
+                                Displaying <b>{filteredData.length}</b> record(s)
+                            </div>
+                        }
                         <div>
                         <Table
                             scroll={{ x: 600}}
