@@ -73,8 +73,8 @@ module.exports = function (session) {
     this.options.dispose = options.dispose
     this.options.stale = options.stale
 
-    
-    this.store = LRU(this.options)
+
+    this.store = new LRU(this.options)
     debug('Init MemoryStore')
 
     this.startInterval()
