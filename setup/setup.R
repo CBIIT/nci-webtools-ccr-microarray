@@ -1,7 +1,7 @@
 library(devtools)
 
 install.packages(
-    c("jsonlite", "gplots", "rgl", "rglwidget", "DT", "getopt", "knitr",
+    c("jsonlite", "gplots", "rglwidget", "DT", "getopt", "knitr",
     "reshape", "RColorBrewer", "calibrate", "rmarkdown", "ggplot2", "ggfortify", 
     "shinyRGL", "plotly", "htmltools", "heatmaply", "pheatmap", "viridis", "dendsort", 
     "amap", "BiocManager"), 
