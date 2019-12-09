@@ -30,6 +30,16 @@ To install the R dependencies, navigate to /setup/setup.R and execute:
 
 <pre>$ Rscript setup.R</pre>
 
+### Configuartion
+
+Navigate to /config/index.js and update the setting variable path to `microarray_setting-local.json`, which is also found in the same folder.
+
+Modify server settings in `microarray_setting-local.json` if needed.
+
+From the project root, navigate one directory up to the /data folder. Create folder if it doesn't exist.
+
+Place files from https://github.com/CCBR/MicroArrayPipeline/tree/master/mpstr_configuration_files into the /data folder.
+
 ### Start
 
 To start server, navigate to root of project and execute:

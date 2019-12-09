@@ -1,13 +1,17 @@
 library(devtools)
 
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages(c('pheatmap', 'heatmaply', 'amap', 'jsonlite',
-     'BiocManager'), repos = c(CRAN="http://cran.r-project.org"))
+install.packages(
+    c("jsonlite", "gplots", "rgl", "rglwidget", "DT", "getopt", "knitr",
+    "reshape", "RColorBrewer", "calibrate", "rmarkdown", "ggplot2", "ggfortify", 
+    "shinyRGL", "plotly", "htmltools", "heatmaply", "pheatmap", "viridis", "dendsort", 
+    "amap", "BiocManager"), 
+    repos = c(CRAN="http://cran.r-project.org"))
 
 install.packages("rgl", repo="http://cran.r-project.org", configure.args="--disable-ftgl")
+install_version("mvtnorm", version = "1.0-8", repos = "http://cran.r-project.org")
 
-BiocManager::install(c(
-    "Biobase", "GEOquery", "GSEABase", "GSVA", "annotate",
+BiocManager::install(
+    c("Biobase", "GEOquery", "GSEABase", "GSVA", "annotate",
     "clariomshumanhttranscriptcluster.db", "clariomshumantranscriptcluster.db",
     "clariomsmousehttranscriptcluster.db", "clariomsmousetranscriptcluster.db",
     "clariomsrattranscriptcluster.db", "geneplotter", "hgu133a.db", "hgu133a2.db",
