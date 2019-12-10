@@ -24,13 +24,13 @@ Forever Module: Install the forever module globally:
 
 ### R Dependencies
 
-All required R dependencies are defiend in `setup.R`.
+All required R dependencies are defined in `setup.R`.
 
 To install the R dependencies, navigate to /setup/setup.R and execute:
 
 <pre>$ Rscript setup.R</pre>
 
-### Configuartion
+### Configuaration
 
 Navigate to /config/index.js and update the setting variable path to `microarray_setting-local.json`, which is also found in the same folder.
 
