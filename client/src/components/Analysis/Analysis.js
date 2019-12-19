@@ -197,9 +197,7 @@ const defaultState = {
             list_mAplotBN: "",
             NUSE: "",
             RLE: "",
-            Boxplots: "",
-            list_mAplotBN: "",
-            histplotBN: "",
+            Boxplots: ""
         },
         list_mAplotBN: "",
         list_mAplotAN: "",
@@ -221,8 +219,6 @@ const defaultState = {
             layout: {},
         },
         postplot: {
-            histplotAN: "",
-            list_mAplotAN: "",
             histplotAN: "",
             list_mAplotAN: "",
             Heatmapolt: "",
@@ -2374,6 +2370,15 @@ class Analysis extends Component {
             workflow: workflow
         });
         document.getElementById("message-gsm").innerHTML = "";
+
+        // reset view to GSM tab
+        if (this.state.workflow.tab_activeKey != "GSM_1") {
+            workflow.tab_activeKey = "GSM_1";
+            window.current_working_on_tag = "GSM_1";
+            this.upateCurrentWorkingTab("GSM_1");
+            this.setState({workflow: workflow})
+        }
+
         if (workflow.useQueue) {
             if (document.getElementById("input-email").value == "") {
                 document.getElementById("message-use-queue").innerHTML = "Email is required"
@@ -2438,6 +2443,18 @@ class Analysis extends Component {
                         }
                     }).then(result => {
                         if (result && result.status == 200) {
+                            workflow.volcanoPlot = this.getVolcanoPlot();
+                            workflow.groups = result.data.groups;
+                            workflow.compared = true;
+                            workflow.done_gsea = true;
+                            workflow.progressing = false;
+                            workflow.histplotBN_url = result.data.histplotBN;
+                            workflow.histplotAN_url = result.data.histplotAN;
+                            workflow.heatmapolt_url = result.data.heatmapolt;
+                            this.setState({
+                                workflow: workflow
+                            });
+
                             let type = window.current_working_on_object;
                             if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
                                 // open the GSM
@@ -2523,17 +2540,7 @@ class Analysis extends Component {
                                     this.getssGSEA();
                                     break;
                             }
-                            workflow.volcanoPlot = this.getVolcanoPlot();
-                            workflow.groups = result.data.groups;
-                            workflow.compared = true;
-                            workflow.done_gsea = true;
-                            workflow.progressing = false;
-                            workflow.histplotBN_url = result.data.histplotBN;
-                            workflow.histplotAN_url = result.data.histplotAN;
-                            workflow.heatmapolt_url = result.data.heatmapolt;
-                            this.setState({
-                                workflow: workflow
-                            });
+                            
                             this.getSSGSEAGeneHeatMap();
                             this.hideWorkFlow();
                         } else {
