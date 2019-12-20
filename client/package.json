@@ -3,17 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.26.3",
+    "antd": "^3.5.1",
     "async-polling": "^0.2.1",
     "babel-polyfill": "^6.26.0",
     "image-exists": "^1.1.0",
-    "plotly.js": "^1.51.3",
-    "react": "^16.12.0",
+    "react": "16.3.2",
     "react-dom": "^16.12.0",
-    "react-plotly.js": "^2.4.0",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.3.0",
-    "react-svg": "^11.0.3",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.1.4",
+    "react-svg": "^5.0.11",
     "xlsx": "^0.12.13"
   },
   "scripts": {
@@ -24,17 +22,5 @@
   },
   "homepage": ".",
   "//": "proxy attribute below is only for development purpose",
-  "proxy": "http://localhost:9220",
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "proxy": "http://localhost:9220"
 }
