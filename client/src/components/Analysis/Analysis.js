@@ -1814,7 +1814,7 @@ class Analysis extends Component {
             sessionStorage.setItem("tag_pre_plot_status", e);
             window.tag_pre_plot_status = e;
         }
-        if (e == "getHistplotAN" || e == "getBoxplotAN" || e == "getPCA" || e == "getHistplotBN") {
+        if (e == "getHistplotAN" || e == "getBoxplotAN" || e == "getPCA" || e == "getHeatmapolt") {
             sessionStorage.setItem("tag_post_plot_status", e);
             window.tag_post_plot_status = e;
         }
@@ -2455,91 +2455,90 @@ class Analysis extends Component {
                                 workflow: workflow
                             });
 
-                            let type = window.current_working_on_object;
-                            if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
-                                // open the GSM
-                            }
-                            if (window.current_working_on_tag == "Pre-normalization_QC_Plots") {
-                                // open the Pre-plot
-                                type = window.tag_pre_plot_status;
-                            }
-                            if (window.current_working_on_tag == "Post-normalization_Plots") {
-                                // open the Post-plot
-                                type = window.tag_post_plot_status;
-                            }
-                            if (window.current_working_on_tag == "DEG-Enrichments_Results") {
-                                // open the DEG
-                                type = window.tag_deg_plot_status;
-                            }
-                            if (window.current_working_on_tag == "ssGSEA_Results") {
-                                // open the ssGSEA_Results
-                                type = "ssGSEA_Results";
-                            }
-
-                            switch (type) {
-                                case "getHistplotAN":
-                                    this.getHistplotAN();
-                                    break;
-                                case "getBoxplotAN":
-                                    this.getBoxplotAN();
-                                    break;
-                                case "getMAplotAN":
-                                    this.getMAplotAN();
-                                    this.getMAplotsBN();
-                                    break;
-                                case "getPCA":
-                                    this.getPCA();
-                                    break;
-                                case "getHeatmapolt":
-                                    this.getHeatmapolt();
-                                    break;
-                                case "getHistplotBN":
-                                    this.getHistplotBN();
-                                    break;
-                                case "getMAplotsBN":
-                                    this.getMAplotsBN();
-                                    this.getMAplotAN();
-                                    break;
-                                case "getBoxplotBN":
-                                    this.getBoxplotBN();
-                                    break;
-                                case "getRLE":
-                                    this.getRLE();
-                                    break;
-                                case "getNUSE":
-                                    this.getNUSE();
-                                    break;
-                                case "pathwayHeatMap":
-                                    this.getSSGSEAGeneHeatMap();
-                                    break;
-                                case "pathways_up":
-                                    this.getPathwayUp()
-                                    break;
-                                case "pathways_down":
-                                    this.getPathwayDown();
-                                    break;
-                                case "ssGSEA":
-                                    this.getssGSEA();
-                                    break;
-                                case "deg":
-                                    this.getDEG();
-                                    break;
-                                case "Pre-normalization_QC_Plots":
-                                    this.getHistplotBN();
-                                    break;
-                                case "Post-normalization_Plots":
-                                    this.getHistplotAN();
-                                    break;
-                                case "DEG-Enrichments_Results":
-                                    this.getDEG();
-                                    break;
-                                case "GSM_1":
-                                    // do nothing
-                                    break;
-                                case "ssGSEA_Results":
-                                    this.getssGSEA();
-                                    break;
-                            }
+                            // let type = window.current_working_on_object;
+                            // if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
+                            //     // open the GSM
+                            // }
+                            // if (window.current_working_on_tag == "Pre-normalization_QC_Plots") {
+                            //     // open the Pre-plot
+                            //     type = window.tag_pre_plot_status;
+                            // }
+                            // if (window.current_working_on_tag == "Post-normalization_Plots") {
+                            //     // open the Post-plot
+                            //     type = window.tag_post_plot_status;
+                            // }
+                            // if (window.current_working_on_tag == "DEG-Enrichments_Results") {
+                            //     // open the DEG
+                            //     type = window.tag_deg_plot_status;
+                            // }
+                            // if (window.current_working_on_tag == "ssGSEA_Results") {
+                            //     // open the ssGSEA_Results
+                            //     type = "ssGSEA_Results";
+                            // }
+                            // switch (type) {
+                            //     case "getHistplotAN":
+                            //         this.getHistplotAN();
+                            //         break;
+                            //     case "getBoxplotAN":
+                            //         this.getBoxplotAN();
+                            //         break;
+                            //     case "getMAplotAN":
+                            //         this.getMAplotAN();
+                            //         this.getMAplotsBN();
+                            //         break;
+                            //     case "getPCA":
+                            //         this.getPCA();
+                            //         break;
+                            //     case "getHeatmapolt":
+                            //         this.getHeatmapolt();
+                            //         break;
+                            //     case "getHistplotBN":
+                            //         this.getHistplotBN();
+                            //         break;
+                            //     case "getMAplotsBN":
+                            //         this.getMAplotsBN();
+                            //         this.getMAplotAN();
+                            //         break;
+                            //     case "getBoxplotBN":
+                            //         this.getBoxplotBN();
+                            //         break;
+                            //     case "getRLE":
+                            //         this.getRLE();
+                            //         break;
+                            //     case "getNUSE":
+                            //         this.getNUSE();
+                            //         break;
+                            //     case "pathwayHeatMap":
+                            //         this.getSSGSEAGeneHeatMap();
+                            //         break;
+                            //     case "pathways_up":
+                            //         this.getPathwayUp()
+                            //         break;
+                            //     case "pathways_down":
+                            //         this.getPathwayDown();
+                            //         break;
+                            //     case "ssGSEA":
+                            //         this.getssGSEA();
+                            //         break;
+                            //     case "deg":
+                            //         this.getDEG();
+                            //         break;
+                            //     case "Pre-normalization_QC_Plots":
+                            //         this.getHistplotBN();
+                            //         break;
+                            //     case "Post-normalization_Plots":
+                            //         this.getHistplotAN();
+                            //         break;
+                            //     case "DEG-Enrichments_Results":
+                            //         this.getDEG();
+                            //         break;
+                            //     case "GSM_1":
+                            //         // do nothing
+                            //         break;
+                            //     case "ssGSEA_Results":
+                            //         this.getssGSEA();
+                            //         break;
+                            // }
                             
                             this.getSSGSEAGeneHeatMap();
                             this.hideWorkFlow();
