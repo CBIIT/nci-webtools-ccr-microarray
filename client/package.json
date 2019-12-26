@@ -3,20 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.5.1",
+    "antd": "^3.26.4",
     "async-polling": "^0.2.1",
     "babel-polyfill": "^6.26.0",
     "image-exists": "^1.1.0",
-    "react": "16.3.2",
+    "plotly.js": "^1.51.3",
+    "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.4",
-    "react-svg": "^5.0.11",
-    "xlsx": "^0.12.13"
+    "react-plotly.js": "^2.4.0",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "^1.1.5",
+    "react-svg": "^5.0.23",
+    "xlsx": "^0.15.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts --max_old_space_size=4096 start",
+    "build": "react-scripts --max_old_space_size=4096 build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
