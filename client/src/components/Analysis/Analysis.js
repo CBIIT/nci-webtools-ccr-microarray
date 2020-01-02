@@ -2304,12 +2304,18 @@ class Analysis extends Component {
       workflow: workflow
     });
   };
+
   getSSGSEAGeneHeatMap = async () => {
     let workflow = Object.assign({}, this.state.workflow);
     let link = './images/' + workflow.projectID + '/ssgseaHeatmap1.jpg?' + this.uuidv4();
+    const AbortController = window.AbortController;
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     const exists = async () => {
       try {
         const res = await fetch(link, {
+          signal,
           method: 'HEAD',
           cache: 'no-cache'
         });
@@ -2318,11 +2324,14 @@ class Analysis extends Component {
         return false;
       }
     };
+
+    setTimeout(() => controller.abort(), 10000);
     if (await exists()) {
       workflow.geneHeatmap = <img src={link} style={{ width: '100%' }} alt="Pathway Heatmap" />;
       this.setState({ workflow: workflow });
     }
   };
+
   runContrast = () => {
     let workflow = Object.assign({}, this.state.workflow);
     document.getElementById('message-use-queue').innerHTML = '';
@@ -2548,7 +2557,7 @@ class Analysis extends Component {
           x.dispatchEvent(change);
         }
       });
-      
+
       workflow.tab_activeKey = 'GSM_1';
       window.current_working_on_tag = 'GSM_1';
       this.setState({ workflow: workflow });

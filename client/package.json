@@ -25,10 +25,5 @@
   },
   "homepage": ".",
   "//": "proxy attribute below is only for development purpose",
-  "proxy": "http://localhost:9220",
-  "devDependencies": {
-    "@babel/cli": "^7.7.7",
-    "@babel/core": "^7.7.7",
-    "@babel/preset-env": "^7.7.7"
-  }
+  "proxy": "http://localhost:9220"
 }
