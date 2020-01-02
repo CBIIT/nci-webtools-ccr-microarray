@@ -2317,7 +2317,7 @@ class Analysis extends Component {
       } catch (error) {
         return false;
       }
-    }
+    };
     if (await exists()) {
       workflow.geneHeatmap = <img src={link} style={{ width: '100%' }} alt="Pathway Heatmap" />;
       this.setState({ workflow: workflow });
@@ -2535,6 +2535,20 @@ class Analysis extends Component {
 
     // reset view to GSM tab
     if (this.state.workflow.tab_activeKey != 'GSM_1') {
+      const change = new Event('change', { bubbles: true });
+      const preNorm = document.querySelector('#pre-normalization-plots-selection');
+      const postNorm = document.querySelector('#post-normalization-plots-selection');
+      const degSelect = document.querySelector('#deg_select_option');
+      const ssSelect = document.querySelector('#ss_select_option');
+      const geneSelect = document.querySelector('#ss_gene_set_select_option');
+
+      [preNorm, postNorm, degSelect, ssSelect, geneSelect].map(x => {
+        if (x.selectedIndex > 0) {
+          x.selectedIndex = 0;
+          x.dispatchEvent(change);
+        }
+      });
+      
       workflow.tab_activeKey = 'GSM_1';
       window.current_working_on_tag = 'GSM_1';
       this.setState({ workflow: workflow });
