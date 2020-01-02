@@ -6,7 +6,6 @@ import About from '../About/About';
 import Help from '../Help/Help';
 import Plot from 'react-plotly.js';
 import XLSX from 'xlsx';
-import imageExists from 'image-exists';
 import CIframe from '../DataBox/CIframe';
 
 const httpErrorMessage = {
@@ -1929,7 +1928,6 @@ class Analysis extends Component {
     this.setState({ workflow: workflow });
   };
   updateCurrentWorkingObject = e => {
-    // window.current_working_on_object = e;
     sessionStorage.setItem('current_working_on_object', e);
     if (
       e == 'getHistplotBN' ||
@@ -2306,16 +2304,21 @@ class Analysis extends Component {
       workflow: workflow
     });
   };
-  getSSGSEAGeneHeatMap = () => {
+  getSSGSEAGeneHeatMap = async () => {
     let workflow = Object.assign({}, this.state.workflow);
     let link = './images/' + workflow.projectID + '/ssgseaHeatmap1.jpg?' + this.uuidv4();
-    imageExists(link, this.buildgeneHeatmap);
-  };
-  buildgeneHeatmap = exists => {
-    let workflow = Object.assign({}, this.state.workflow);
-    let link = './images/' + workflow.projectID + '/ssgseaHeatmap1.jpg?' + this.uuidv4();
-
-    if (exists) {
+    const exists = async () => {
+      try {
+        const res = await fetch(link, {
+          method: 'HEAD',
+          cache: 'no-cache'
+        });
+        return res.status === 200;
+      } catch (error) {
+        return false;
+      }
+    }
+    if (await exists()) {
       workflow.geneHeatmap = <img src={link} style={{ width: '100%' }} alt="Pathway Heatmap" />;
       this.setState({ workflow: workflow });
     }
@@ -2534,7 +2537,6 @@ class Analysis extends Component {
     if (this.state.workflow.tab_activeKey != 'GSM_1') {
       workflow.tab_activeKey = 'GSM_1';
       window.current_working_on_tag = 'GSM_1';
-      this.updateCurrentWorkingTab('GSM_1');
       this.setState({ workflow: workflow });
     }
 
@@ -2618,92 +2620,6 @@ class Analysis extends Component {
                 workflow: workflow
               });
 
-              // let type = window.current_working_on_object;
-              // if (window.current_working_on_tag == "" || window.current_working_on_tag == "GSM_1") {
-              //     // open the GSM
-              // }
-              // if (window.current_working_on_tag == "Pre-normalization_QC_Plots") {
-              //     // open the Pre-plot
-              //     type = window.tag_pre_plot_status;
-              // }
-              // if (window.current_working_on_tag == "Post-normalization_Plots") {
-              //     // open the Post-plot
-              //     type = window.tag_post_plot_status;
-              // }
-              // if (window.current_working_on_tag == "DEG-Enrichments_Results") {
-              //     // open the DEG
-              //     type = window.tag_deg_plot_status;
-              // }
-              // if (window.current_working_on_tag == "ssGSEA_Results") {
-              //     // open the ssGSEA_Results
-              //     type = "ssGSEA_Results";
-              // }
-              // switch (type) {
-              //     case "getHistplotAN":
-              //         this.getHistplotAN();
-              //         break;
-              //     case "getBoxplotAN":
-              //         this.getBoxplotAN();
-              //         break;
-              //     case "getMAplotAN":
-              //         this.getMAplotAN();
-              //         this.getMAplotsBN();
-              //         break;
-              //     case "getPCA":
-              //         this.getPCA();
-              //         break;
-              //     case "getHeatmapolt":
-              //         this.getHeatmapolt();
-              //         break;
-              //     case "getHistplotBN":
-              //         this.getHistplotBN();
-              //         break;
-              //     case "getMAplotsBN":
-              //         this.getMAplotsBN();
-              //         this.getMAplotAN();
-              //         break;
-              //     case "getBoxplotBN":
-              //         this.getBoxplotBN();
-              //         break;
-              //     case "getRLE":
-              //         this.getRLE();
-              //         break;
-              //     case "getNUSE":
-              //         this.getNUSE();
-              //         break;
-              //     case "pathwayHeatMap":
-              //         this.getSSGSEAGeneHeatMap();
-              //         break;
-              //     case "pathways_up":
-              //         this.getPathwayUp()
-              //         break;
-              //     case "pathways_down":
-              //         this.getPathwayDown();
-              //         break;
-              //     case "ssGSEA":
-              //         this.getssGSEA();
-              //         break;
-              //     case "deg":
-              //         this.getDEG();
-              //         break;
-              //     case "Pre-normalization_QC_Plots":
-              //         this.getHistplotBN();
-              //         break;
-              //     case "Post-normalization_Plots":
-              //         this.getHistplotAN();
-              //         break;
-              //     case "DEG-Enrichments_Results":
-              //         this.getDEG();
-              //         break;
-              //     case "GSM_1":
-              //         // do nothing
-              //         break;
-              //     case "ssGSEA_Results":
-              //         this.getssGSEA();
-              //         break;
-              // }
-
-              this.getSSGSEAGeneHeatMap();
               this.hideWorkFlow();
             } else {
               if (result) {
