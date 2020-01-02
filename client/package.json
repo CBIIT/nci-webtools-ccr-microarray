@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/polyfill": "^7.7.0",
+    "acorn": "^6.4.0",
+    "ajv": "^6.10.2",
     "antd": "^3.26.4",
     "async-polling": "^0.2.1",
-    "babel-polyfill": "^6.26.0",
-    "image-exists": "^1.1.0",
     "plotly.js": "^1.51.3",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -24,5 +25,10 @@
   },
   "homepage": ".",
   "//": "proxy attribute below is only for development purpose",
-  "proxy": "http://localhost:9220"
+  "proxy": "http://localhost:9220",
+  "devDependencies": {
+    "@babel/cli": "^7.7.7",
+    "@babel/core": "^7.7.7",
+    "@babel/preset-env": "^7.7.7"
+  }
 }
