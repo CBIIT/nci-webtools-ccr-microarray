@@ -2552,7 +2552,7 @@ class Analysis extends Component {
       const geneSelect = document.querySelector('#ss_gene_set_select_option');
 
       [preNorm, postNorm, degSelect, ssSelect, geneSelect].map(x => {
-        if (x.selectedIndex > 0) {
+        if (x && x.selectedIndex > 0) {
           x.selectedIndex = 0;
           x.dispatchEvent(change);
         }
@@ -2560,6 +2560,7 @@ class Analysis extends Component {
 
       workflow.tab_activeKey = 'GSM_1';
       window.current_working_on_tag = 'GSM_1';
+      sessionStorage.setItem('current_working_on_tag', 'GSM_1');
       this.setState({ workflow: workflow });
     }
 
