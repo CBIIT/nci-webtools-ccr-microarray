@@ -2336,16 +2336,12 @@ class Analysis extends Component {
     let workflow = Object.assign({}, this.state.workflow);
     document.getElementById('message-use-queue').innerHTML = '';
     let reqBody = {};
-    reqBody.code = '';
-    reqBody.projectId = '';
-    reqBody.groups = '';
     reqBody.actions = '';
     reqBody.pPathways = '';
     reqBody.genSet = '';
     reqBody.pssGSEA = '';
     reqBody.foldssGSEA = '';
     reqBody.species = '';
-    reqBody.genSet = '';
     reqBody.code = workflow.accessionCode;
     reqBody.projectId = workflow.projectID;
     reqBody.groups = [];
@@ -2390,7 +2386,6 @@ class Analysis extends Component {
         reqBody.groups.push('Others');
       }
     }
-    reqBody.genSet = workflow.genSet;
     reqBody.pssGSEA = workflow.pssGSEA;
     reqBody.foldssGSEA = workflow.foldssGSEA;
     reqBody.pPathways = workflow.pPathways;
@@ -2544,25 +2539,31 @@ class Analysis extends Component {
 
     // reset view to GSM tab
     if (this.state.workflow.tab_activeKey != 'GSM_1') {
-      const change = new Event('change', { bubbles: true });
-      const preNorm = document.querySelector('#pre-normalization-plots-selection');
-      const postNorm = document.querySelector('#post-normalization-plots-selection');
-      const degSelect = document.querySelector('#deg_select_option');
-      const ssSelect = document.querySelector('#ss_select_option');
-      const geneSelect = document.querySelector('#ss_gene_set_select_option');
-
-      [preNorm, postNorm, degSelect, ssSelect, geneSelect].map(x => {
-        if (x && x.selectedIndex > 0) {
-          x.selectedIndex = 0;
-          x.dispatchEvent(change);
-        }
-      });
-
       workflow.tab_activeKey = 'GSM_1';
       window.current_working_on_tag = 'GSM_1';
       sessionStorage.setItem('current_working_on_tag', 'GSM_1');
-      this.setState({ workflow: workflow });
     }
+
+    // reset tabs
+    const change = new Event('change', { bubbles: true });
+    const preNorm = document.querySelector('#pre-normalization-plots-selection');
+    const postNorm = document.querySelector('#post-normalization-plots-selection');
+    const degSelect = document.querySelector('#deg_select_option');
+    const ssSelect = document.querySelector('#ss_select_option');
+    const geneSelect = document.querySelector('#ss_gene_set_select_option');
+
+    [preNorm, postNorm, degSelect, ssSelect, geneSelect].map(x => {
+      if (x && x.selectedIndex > 0) {
+        x.selectedIndex = 0;
+        if (x === geneSelect) {
+          workflow.genSet = 'H: Hallmark Gene Sets';
+        } else {
+          x.dispatchEvent(change);
+        }
+      }
+    });
+
+    this.setState({ workflow: workflow });
 
     if (workflow.useQueue) {
       if (document.getElementById('input-email').value == '') {
