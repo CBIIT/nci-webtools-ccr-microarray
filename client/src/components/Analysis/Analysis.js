@@ -228,9 +228,7 @@ const defaultState = {
     normal: 'RMA',
     histplotBN_url: '',
     histplotAN_url: '',
-    heatmapolt_url: '',
-    currentTab: '',
-    currentObject: ''
+    heatmapolt_url: ''
   }
 };
 
@@ -1970,6 +1968,8 @@ class Analysis extends Component {
     //change button style
     workflow.progressing = true;
     workflow.loading_info = 'Running Analysis...';
+    // remove old heatmap
+    workflow.geneHeatmap = 'Not enough significant pathways available with p-value < 0.05.';
     this.setState({
       workflow: workflow
     });
@@ -2563,6 +2563,8 @@ class Analysis extends Component {
       }
     });
 
+    // remove old heatmap
+    workflow.geneHeatmap = 'Not enough significant pathways available with p-value < 0.05.';
     this.setState({ workflow: workflow });
 
     if (workflow.useQueue) {
