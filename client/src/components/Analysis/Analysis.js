@@ -255,7 +255,7 @@ class Analysis extends Component {
     document.getElementById('message-gsm').nextSibling.innerHTML = '';
   }
   // release the listener
-  componentWillUnmount() {
+  UNSAFE_componentWillUnmount() {
     window.removeEventListener('resize', this.updateDimensions);
   }
   updateDimensions = () => {

@@ -449,7 +449,7 @@ class DataBox extends Component {
           </p>
           <p style={{ color: '#215a82' }}>
             <b>
-              Group Name<span style={{ color: 'red', paddingLeft: '5px' }}> *</span>
+              Group Name<span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
             </b>{' '}
             <span style={{ color: '#555' }}>(Must start with an ASCII letter,a-z or A-Z)</span>
           </p>

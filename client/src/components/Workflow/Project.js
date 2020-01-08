@@ -1,140 +1,157 @@
 import React, { Component } from 'react';
 import { Input, Upload, Button, Icon, message } from 'antd';
 
-
 class Project extends Component {
-    
-   
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
-    render() {
-        const { uploading } = this.props.data;
-        const properties = {
-            accept:'.gz,.cel,.CEL,.gz',
-            action: '-',
-            onRemove: (file) => {
-                this.props.fileRemove(file);
-            },
-            beforeUpload: (file, fl) => {
-                this.props.beforeUpload(fl);
-                return false;
-            },
-            multiple: true,
-            fileList: this.props.data.fileList
-        };
+  render() {
+    const { uploading } = this.props.data;
+    const properties = {
+      accept: '.gz,.cel,.CEL,.gz',
+      action: '-',
+      onRemove: file => {
+        this.props.fileRemove(file);
+      },
+      beforeUpload: (file, fl) => {
+        this.props.beforeUpload(fl);
+        return false;
+      },
+      multiple: true,
+      fileList: this.props.data.fileList
+    };
 
-        let type_content = (<div className="row"> <div className="col-sm-12"><select disabled={ this.props.data.fileList.length != 0}  id="analysisType_selection" className="ant-select-selection ant-select-selection--single" value={this.props.data.analysisType} style={{ width: "100%" }} onChange={this.props.handleSelectType}>
+    let type_content = (
+      <div className="row">
+        {' '}
+        <div className="col-sm-12">
+          <select
+            disabled={this.props.data.fileList.length != 0}
+            id="analysisType_selection"
+            className="ant-select-selection ant-select-selection--single"
+            value={this.props.data.analysisType}
+            style={{ width: '100%' }}
+            onChange={this.props.handleSelectType}
+          >
             <option value="0">GEO Data</option>
-            <option  value="1">CEL Files</option>
-          </select></div></div>);
-        let source = "";
-
-        if (  this.props.data.analysisType== "0") {
-            source = (
-                <div>
-                <div className="row">
-                    <div className="col-sm-12">
-                    
-                      <label className="title">Accession Code<span style={{color:"red","paddingLeft":"5px"}}> *</span></label>
-                       <span className="err-message" id="message-load-accession-code"></span>
-                      <Input  aria-label="input accessionCode"  id="input-access-code" disabled={ this.props.data.fileList.length !== 0} onChange={(e) => this.props.changeCode(e)} value={this.props.data.accessionCode}/>
-                      </div>
-                </div>
-                <div className="row">
-                      <div className="col-sm-6">
-                    
-                        <button id="btn-project-load-gse" type="button" disabled={ this.props.data.fileList.length !== 0}   className="ant-btn upload-start ant-btn-primary" onClick={this.props.loadGSE}>
-                          <span>{uploading ? 'Load' : 'Load' }</span>
-                        </button>
-
-                      
-                      </div>
-                      <div className="col-sm-6">
-                   
-                          <Button
-                                  className="upload-start"
-                                  type="primary"
-                                  onClick={this.props.resetWorkFlowProject}
-                                >
-                                Reset
-                                </Button>
-                       </div>
-                 
-                </div>
-              </div>
-            );
-        } else if (  this.props.data.analysisType == "1") {
-            source = (<div className="upload-block row">
-                   <div className="col-sm-12">
-                    <Upload {...properties}   disabled={this.props.data.uploaded}>
-                      <Button>
-                        <Icon type="upload" /> Select File
-                      </Button>
-                    </Upload>
-                    </div>  
-                     <div className="col-sm-6">
-                    <Button
-                      id="btn-project-upload"
-                      className="upload-start"
-                      type={this.props.data.fileList.length === 0? "default":"primary"}
-                      onClick={this.props.handleUpload}
-                      disabled={this.props.data.fileList.length === 0 }
-                      loading={uploading}
-                    >
-                    {uploading ? 'Load' : 'Load' }
-                    </Button>
-                  
-                   </div>
-
-                     <div className="col-sm-6">
-                         <Button
-                          className="upload-start"
-                          type="primary"
-                          onClick={this.props.resetWorkFlowProject}
-                        >
-                        Reset
-                        </Button>
-                    </div>
-                  </div>);
-        } else {
-            source = (<div className="upload-block row">
-                    <div className="col-sm-6">
-                        <Button
-                          className="upload-start"
-                          type="default"
-                       
-                          disabled
-                        >
-                        Load
-                        </Button>
-                    </div>
-                    <div className="col-sm-6">
-                         <Button
-                          className="upload-start"
-                          type="primary"
-                          onClick={this.props.resetWorkFlowProject}
-                        >
-                        Reset
-                        </Button>
-                    </div>
-                    
-
-                  </div>);;
-        }
-        return (
-            <div className="block">
-              <div className="row">
-                <div className="col-sm-12">
-                  <label className="title" htmlFor='analysisType_selection'>Choose Analysis Type</label>
-                </div>
-              </div>
-          {type_content}
-          {source}
+            <option value="1">CEL Files</option>
+          </select>
         </div>
-        );
+      </div>
+    );
+    let source = '';
+
+    if (this.props.data.analysisType == '0') {
+      source = (
+        <div>
+          <div className="row">
+            <div className="col-sm-12">
+              <label className="title" htmlFor="input-access-code">
+                Accession Code<span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
+              </label>
+              <span className="err-message" id="message-load-accession-code"></span>
+              <Input
+                aria-label="input accessionCode"
+                id="input-access-code"
+                disabled={this.props.data.fileList.length !== 0}
+                onChange={e => this.props.changeCode(e)}
+                value={this.props.data.accessionCode}
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-sm-6">
+              <button
+                id="btn-project-load-gse"
+                type="button"
+                disabled={this.props.data.fileList.length !== 0}
+                className="ant-btn upload-start ant-btn-primary"
+                onClick={this.props.loadGSE}
+              >
+                <span>{uploading ? 'Load' : 'Load'}</span>
+              </button>
+            </div>
+            <div className="col-sm-6">
+              <Button
+                className="upload-start"
+                type="primary"
+                onClick={this.props.resetWorkFlowProject}
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
+        </div>
+      );
+    } else if (this.props.data.analysisType == '1') {
+      source = (
+        <div className="upload-block row">
+          <div className="col-sm-12">
+            <Upload {...properties} disabled={this.props.data.uploaded}>
+              <Button>
+                <Icon type="upload" /> Select File
+              </Button>
+            </Upload>
+          </div>
+          <div className="col-sm-6">
+            <Button
+              id="btn-project-upload"
+              className="upload-start"
+              type={this.props.data.fileList.length === 0 ? 'default' : 'primary'}
+              onClick={this.props.handleUpload}
+              disabled={this.props.data.fileList.length === 0}
+              loading={uploading}
+            >
+              {uploading ? 'Load' : 'Load'}
+            </Button>
+          </div>
+
+          <div className="col-sm-6">
+            <Button
+              className="upload-start"
+              type="primary"
+              onClick={this.props.resetWorkFlowProject}
+            >
+              Reset
+            </Button>
+          </div>
+        </div>
+      );
+    } else {
+      source = (
+        <div className="upload-block row">
+          <div className="col-sm-6">
+            <Button className="upload-start" type="default" disabled>
+              Load
+            </Button>
+          </div>
+          <div className="col-sm-6">
+            <Button
+              className="upload-start"
+              type="primary"
+              onClick={this.props.resetWorkFlowProject}
+            >
+              Reset
+            </Button>
+          </div>
+        </div>
+      );
     }
+    return (
+      <div className="block">
+        <div className="row">
+          <div className="col-sm-12">
+            <label className="title" htmlFor="analysisType_selection">
+              Choose Analysis Type
+            </label>
+          </div>
+        </div>
+        {type_content}
+        {source}
+      </div>
+    );
+  }
 }
 
 export default Project;

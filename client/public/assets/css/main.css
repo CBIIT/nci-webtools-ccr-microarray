@@ -51,7 +51,20 @@ li {
 }
 
 .ant-pagination li {
+    color: #0050d8;
     font-size: 14px;
+}
+
+.ant-pagination-item-active {
+    border-color: #0050d8 !important;
+}
+
+.ant-pagination-item-active a {
+    color: #0050d8 !important;
+}
+
+a.sr-only.sr-only-focusable {
+    color: #0050d8;
 }
 
 .row {
