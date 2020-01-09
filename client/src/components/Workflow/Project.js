@@ -6,6 +6,12 @@ class Project extends Component {
     super(props);
   }
 
+  handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      this.props.loadGSE();
+    }
+  }
+
   render() {
     const { uploading } = this.props.data;
     const properties = {
@@ -56,6 +62,7 @@ class Project extends Component {
                 id="input-access-code"
                 disabled={this.props.data.fileList.length !== 0}
                 onChange={e => this.props.changeCode(e)}
+                onKeyDown={this.handleKeyDown}
                 value={this.props.data.accessionCode}
               />
             </div>
