@@ -1484,3 +1484,8 @@ div.head-sorter>div {
         min-height: 480px;
     }
 }
+
+video {
+    max-width: 100%;
+    width: 1280px;
+}
