@@ -315,13 +315,12 @@ router.post('/getResultByProjectId', function(req, res) {
         req.session[req.body.projectId].group_1 +
         req.session[req.body.projectId].group_2 +
         req.session[req.body.projectId].genSet;
+      req.session[req.body.projectId].groups = req.session[req.body.projectId].groups;
 
       if (req.session[req.body.projectId].groups[0].indexOf('@') != -1) {
         req.session[req.body.projectId].groups = req.session[req.body.projectId].groups[0].split(
           '@'
         );
-      } else {
-        req.session[req.body.projectId].groups = req.session[req.body.projectId].groups;
       }
 
       req.session[req.body.projectId].projectId = req.session[req.body.projectId].projectId;
@@ -390,6 +389,13 @@ router.post('/runContrast', function(req, res) {
           req.session[req.body.projectId].group_2 +
           req.session[req.body.projectId].genSet;
         req.session[req.body.projectId].groups = req.session[req.body.projectId].groups;
+
+        if (req.session[req.body.projectId].groups[0].indexOf('@') != -1) {
+          req.session[req.body.projectId].groups = req.session[req.body.projectId].groups[0].split(
+            '@'
+          );
+        }
+
         req.session[req.body.projectId].projectId = req.session[req.body.projectId].projectId;
         logger.info('store data in req.session');
         let return_data = '';
