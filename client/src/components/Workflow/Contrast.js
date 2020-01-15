@@ -141,6 +141,7 @@ class Contrast extends Component {
 
     let normalization_option = (
       <select
+        value={this.props.data.normal}
         id="select-normal"
         className="ant-select-selection ant-select-selection--single"
         style={{ width: '100%' }}
@@ -156,7 +157,8 @@ class Contrast extends Component {
       <div>
         <div className="block">
           <label className="title" htmlFor="select-group-1">
-            Choose Contrast To Show: <span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
+            Choose Contrast To Show:{' '}
+            <span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
           </label>
           {group_1_content}
           <label className="title" htmlFor="select-group-2">

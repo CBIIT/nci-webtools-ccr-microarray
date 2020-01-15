@@ -75,7 +75,7 @@ function restoreSession(req, path) {
       gsm: re.GSM,
       mAplotBN: re.maplotBN,
       mAplotAN: re.maplotAfter,
-      normal: req.body.normal,
+      normal: req.session[req.body.projectId].normal[0],
       heatmapolt: req.session[req.body.projectId].heatmapAfterNorm
     };
   }
