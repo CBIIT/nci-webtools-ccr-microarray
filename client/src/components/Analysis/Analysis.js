@@ -190,12 +190,16 @@ const defaultState = {
       }
     },
     preplots: {
+      selected: 'preHistogram',
       histplotBN: '',
       list_mAplotBN: '',
       NUSE: '',
       RLE: '',
       Boxplots: ''
     },
+    degSelected: 'deg_tag1',
+    ssSelect: 'ss_tag1',
+    geneSelect: 'human$H: Hallmark Gene Sets',
     list_mAplotBN: '',
     list_mAplotAN: '',
     BoxplotAN: {
@@ -216,6 +220,7 @@ const defaultState = {
       layout: {}
     },
     postplot: {
+      selected: 'postHistogram',
       histplotAN: '',
       list_mAplotAN: '',
       Heatmapolt: '',
@@ -1301,7 +1306,6 @@ class Analysis extends Component {
   getHeatmapolt = () => {
     document.getElementById('message-post-heatmap').innerHTML = '';
     let workflow = Object.assign({}, this.state.workflow);
-
     let link = './images/' + workflow.projectID + workflow.heatmapolt_url;
     let HeatMapIframe = (
       <CIframe
@@ -1315,7 +1319,7 @@ class Analysis extends Component {
     workflow.postplot.Heatmapolt = <div>{HeatMapIframe}</div>;
     this.setState({ workflow: workflow });
   };
-  getVolcanoPlot() {
+  getVolcanoPlot = () => {
     let workflow = Object.assign({}, this.state.workflow);
     let volcanoPlot = (
       <CIframe
@@ -1328,7 +1332,7 @@ class Analysis extends Component {
     );
     workflow.volcanoPlot = <div>{volcanoPlot}</div>;
     this.setState({ workflow: workflow });
-  }
+  };
   onLoadComplete = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.progressing = false;
@@ -1925,40 +1929,42 @@ class Analysis extends Component {
     }
     this.setState({ workflow: workflow });
   };
-  updateCurrentWorkingObject = e => {
-    sessionStorage.setItem('current_working_on_object', e);
-    if (
-      e == 'getHistplotBN' ||
-      e == 'getMAplotsBN' ||
-      e == 'getBoxplotBN' ||
-      e == 'getRLE' ||
-      e == 'getNUSE'
-    ) {
-      sessionStorage.setItem('tag_pre_plot_status', e);
-      window.tag_pre_plot_status = e;
+  updateCurrentWorkingObject = (e, dropdown, selected) => {
+    let workflow = Object.assign({}, this.state.workflow);
+
+    workflow.current_working_on_object = e;
+
+    if (dropdown == 'preplots') {
+      workflow.preplots.selected = selected;
+      workflow.tag_pre_plot_status = e;
+    } else if (dropdown == 'postplot') {
+      workflow.postplot.selected = selected;
+      workflow.tag_post_plot_status = e;
+    } else if (dropdown == 'deg') {
+      workflow.degSelected = selected;
+      workflow.tag_deg_plot_status = e;
+    } else if (dropdown == 'ssSelect') {
+      workflow.ssSelect = selected;
+    } else if (dropdown == 'geneSelect') {
+      workflow.geneSelect = selected;
     }
-    if (e == 'getHistplotAN' || e == 'getBoxplotAN' || e == 'getPCA' || e == 'getHeatmapolt') {
-      sessionStorage.setItem('tag_post_plot_status', e);
-      window.tag_post_plot_status = e;
-    }
-    if (e == 'pathways_up' || e == 'pathways_down' || e == 'deg') {
-      sessionStorage.setItem('tag_deg_plot_status', e);
-      window.tag_deg_plot_status = e;
-    }
-    if (e == 'volcanoPlot') {
-      this.getVolcanoPlot();
-    }
+
+    this.setState({ workflow: workflow }, () => {
+      if (e == 'volcanoPlot' && workflow.volcanoPlot == '') {
+        this.getVolcanoPlot();
+      }
+    });
   };
   updateCurrentWorkingTab = e => {
-    sessionStorage.setItem('current_working_on_tag', e);
-    window.current_working_on_tag = e;
     let workflow = Object.assign({}, this.state.workflow);
+    workflow.current_working_on_tag = e;
     workflow.tab_activeKey = e;
     this.setState({ workflow: workflow });
   };
   handleGeneChange = event => {
     let value = event.target.value;
     let workflow = Object.assign({}, this.state.workflow);
+    workflow.geneSelect = value;
     let reqBody = {};
     reqBody.projectId = workflow.projectID;
     reqBody.species = value.split('$')[0];
@@ -2513,6 +2519,7 @@ class Analysis extends Component {
     };
     reqBody.pathways_down = workflow.pathways_down;
     workflow.preplots = {
+      selected: 'preHistogram',
       histplotBN: '',
       list_mAplotBN: '',
       NUSE: '',
@@ -2520,12 +2527,16 @@ class Analysis extends Component {
       Boxplots: ''
     };
     workflow.postplot = {
+      selected: 'postHistogram',
       histplotAN: '',
       list_mAplotAN: '',
       Heatmapolt: '',
       Boxplots: '',
       PCA: ''
     };
+    workflow.degSelected = 'deg_tag1';
+    workflow.ssSelect = 'ss_tag1';
+    workflow.geneSelect = 'human$H: Hallmark Gene Sets';
     workflow.list_mAplotBN = '';
     workflow.list_mAplotAN = '';
     workflow.volcanoPlot = '';
@@ -2540,28 +2551,7 @@ class Analysis extends Component {
     // reset view to GSM tab
     if (this.state.workflow.tab_activeKey != 'GSM_1') {
       workflow.tab_activeKey = 'GSM_1';
-      window.current_working_on_tag = 'GSM_1';
-      sessionStorage.setItem('current_working_on_tag', 'GSM_1');
     }
-
-    // reset tabs
-    const change = new Event('change', { bubbles: true });
-    const preNorm = document.querySelector('#pre-normalization-plots-selection');
-    const postNorm = document.querySelector('#post-normalization-plots-selection');
-    const degSelect = document.querySelector('#deg_select_option');
-    const ssSelect = document.querySelector('#ss_select_option');
-    const geneSelect = document.querySelector('#ss_gene_set_select_option');
-
-    [preNorm, postNorm, degSelect, ssSelect, geneSelect].map(x => {
-      if (x && x.selectedIndex > 0) {
-        x.selectedIndex = 0;
-        if (x === geneSelect) {
-          workflow.genSet = 'H: Hallmark Gene Sets';
-        } else {
-          x.dispatchEvent(change);
-        }
-      }
-    });
 
     // remove old heatmap
     workflow.geneHeatmap = 'Not enough significant pathways available with p-value < 0.05.';
@@ -2635,7 +2625,6 @@ class Analysis extends Component {
           })
           .then(result => {
             if (result && result.status == 200) {
-              workflow.volcanoPlot = this.getVolcanoPlot();
               workflow.groups = result.data.groups;
               workflow.compared = true;
               workflow.done_gsea = true;
@@ -3092,7 +3081,7 @@ class Analysis extends Component {
               workflow2.list_mAplotAN = result.mAplotAN;
             }
             workflow2.init = true;
-            workflow2.volcanoPlot = '/volcano.html';
+            workflow2.volcanoPlot = '';
             workflow2.compared = true;
             workflow2.done_gsea = true;
             workflow2.progressing = false;
@@ -3316,6 +3305,7 @@ class Analysis extends Component {
                 getDEG={this.getDEG}
                 getPathwayUp={this.getPathwayUp}
                 getPathwayDown={this.getPathwayDown}
+                getVolcanoPlot={this.getVolcanoPlot}
                 getssGSEA={this.getssGSEA}
                 exportGSE={this.exportGSE}
                 exportGSEA={this.exportGSEA}

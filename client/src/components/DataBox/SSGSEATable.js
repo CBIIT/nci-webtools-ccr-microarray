@@ -39,19 +39,11 @@ class SSGSEATable extends Component {
   handleSelectionChange(event) {
     let value = event.target.value;
     if (value == 'ss_tag1') {
-      this.props.updateCurrentWorkingObject('ssGSEA');
+      this.props.updateCurrentWorkingObject('ssGSEA', 'ssSelect', value);
     }
     if (value == 'ss_tag2') {
-      this.props.updateCurrentWorkingObject('pathwayHeatMap');
+      this.props.updateCurrentWorkingObject('pathwayHeatMap', 'ssSelect', value);
     }
-
-    var list = document.getElementsByClassName('ss_plot');
-    for (var i = 0; i < list.length; i++) {
-      list[i].classList.add('hide');
-    }
-    document.getElementById(value).className = document
-      .getElementById(value)
-      .className.replace('hide', '');
   }
 
   sorter = (field, order) => {
@@ -585,6 +577,7 @@ class SSGSEATable extends Component {
           <span>ssGSEA Gene Sets selection </span>
         </label>{' '}
         <select
+          value={this.props.data.geneSelect}
           id="ss_gene_set_select_option"
           className="ant-select-selection ant-select-selection--single"
           defaultValue="human$H: Hallmark Gene Sets"
@@ -614,7 +607,12 @@ class SSGSEATable extends Component {
       </div>
     ];
     let tabs = [
-      <div key="ss_tag1" id="ss_tag1" className="ss_plot">
+      <div
+        key="ss_tag1"
+        id="ss_tag1"
+        className="ss_plot"
+        style={{ display: this.props.data.ssSelect == 'ss_tag1' ? 'block' : 'none' }}
+      >
         <div>
           <p className="err-message" id="message-ssgsea"></p>
         </div>
@@ -644,7 +642,12 @@ class SSGSEATable extends Component {
           />
         </div>
       </div>,
-      <div key="ss_tag2" id="ss_tag2" className="ss_plot hide">
+      <div
+        key="ss_tag2"
+        id="ss_tag2"
+        className="ss_plot"
+        style={{ display: this.props.data.ssSelect == 'ss_tag2' ? 'block' : 'none' }}
+      >
         <br />
         <br />
         {this.props.data.geneHeatmap}
@@ -655,6 +658,7 @@ class SSGSEATable extends Component {
         <span>ssGSEA section selection </span>
       </label>,
       <select
+        value={this.props.data.ssSelect}
         key="ss_select_option"
         id="ss_select_option"
         className="ant-select-selection ant-select-selection--single"

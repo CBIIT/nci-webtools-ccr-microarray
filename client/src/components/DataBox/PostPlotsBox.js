@@ -8,7 +8,6 @@ class PostPlotsBox extends Component {
   constructor(props) {
     super(props);
     this.state = { content: 'No Data' };
-
     this.handleSelectionChange = this.handleSelectionChange.bind(this);
   }
 
@@ -17,58 +16,50 @@ class PostPlotsBox extends Component {
       this.handleSelectionChange(null);
     }
   }
+
   handleSelectionChange(event) {
     let value = event == null ? 'postHistogram' : event.target.value;
-    var list = document.getElementsByClassName('plot2');
+
     if (value == 'postHistogram') {
-      //
-      this.props.updateCurrentWorkingObject('getHistplotAN');
+      this.props.updateCurrentWorkingObject('getHistplotAN', 'postplot', value);
       if (this.props.data.postplot.histplotAN == '') {
         this.props.getHistplotAN();
       }
     }
     if (value == 'postMAplots') {
-      //
-      this.props.updateCurrentWorkingObject('getMAplotAN');
+      this.props.updateCurrentWorkingObject('getMAplotAN', 'postplot', value);
       if (this.props.data.list_mAplotAN == '') {
         this.props.getMAplotAN();
       }
     }
-
     if (value == 'postBoxplots') {
-      //
-      this.props.updateCurrentWorkingObject('getBoxplotAN');
+      this.props.updateCurrentWorkingObject('getBoxplotAN', 'postplot', value);
       if (this.props.data.postplot.Boxplots == '') {
         this.props.getBoxplotAN();
       }
     }
-
     if (value == 'postPCA') {
-      //
-      this.props.updateCurrentWorkingObject('getPCA');
+      this.props.updateCurrentWorkingObject('getPCA', 'postplot', value);
       if (this.props.data.postplot.PCA == '') {
         this.props.getPCA();
       }
     }
     if (value == 'postHeatmap') {
-      //
-      this.props.updateCurrentWorkingObject('getHeatmapolt');
+      this.props.updateCurrentWorkingObject('getHeatmapolt', 'postplot', value);
       if (this.props.data.postplot.Heatmapolt == '') {
         this.props.getHeatmapolt();
       }
     }
-
-    for (var i = 0; i < list.length; i++) {
-      list[i].classList.add('hide');
-    }
-    document.getElementById(value).className = document
-      .getElementById(value)
-      .className.replace('hide', '');
   }
 
   render() {
     let tabs = [
-      <div id="postHistogram" key="post_tag1" className="plot2">
+      <div
+        id="postHistogram"
+        key="post_tag1"
+        className="plot2"
+        style={{ display: this.props.data.postplot.selected == 'postHistogram' ? 'block' : 'none' }}
+      >
         {' '}
         <div>
           {' '}
@@ -76,7 +67,12 @@ class PostPlotsBox extends Component {
         </div>{' '}
         {this.props.data.postplot.histplotAN}{' '}
       </div>,
-      <div id="postMAplots" key="post_tag2" className="plot2 hide">
+      <div
+        id="postMAplots"
+        key="post_tag2"
+        className="plot2"
+        style={{ display: this.props.data.postplot.selected == 'postMAplots' ? 'block' : 'none' }}
+      >
         {' '}
         <div>
           {' '}
@@ -87,7 +83,12 @@ class PostPlotsBox extends Component {
           <MAPlot pics={this.props.data.list_mAplotAN} data={this.props.data} />
         </div>
       </div>,
-      <div id="postBoxplots" key="post_tag3" className="plot2 hide">
+      <div
+        id="postBoxplots"
+        key="post_tag3"
+        className="plot2"
+        style={{ display: this.props.data.postplot.selected == 'postBoxplots' ? 'block' : 'none' }}
+      >
         {' '}
         <div>
           {' '}
@@ -95,7 +96,12 @@ class PostPlotsBox extends Component {
         </div>
         {this.props.data.BoxplotAN.plot}
       </div>,
-      <div id="postPCA" key="post_tag4" className="plot2 hide">
+      <div
+        id="postPCA"
+        key="post_tag4"
+        className="plot2"
+        style={{ display: this.props.data.postplot.selected == 'postPCA' ? 'block' : 'none' }}
+      >
         {' '}
         <div>
           {' '}
@@ -103,7 +109,12 @@ class PostPlotsBox extends Component {
         </div>
         {this.props.data.PCA.plot}{' '}
       </div>,
-      <div id="postHeatmap" key="post_tag5" className="plot2 hide">
+      <div
+        id="postHeatmap"
+        key="post_tag5"
+        className="plot2"
+        style={{ display: this.props.data.postplot.selected == 'postHeatmap' ? 'block' : 'none' }}
+      >
         {' '}
         <div>
           {' '}
@@ -121,6 +132,7 @@ class PostPlotsBox extends Component {
         Select Post-Normalization QC Plots
       </label>,
       <select
+        value={this.props.data.postplot.selected}
         key="select-post-normalization-plots-selection"
         id="post-normalization-plots-selection"
         className="ant-select-selection ant-select-selection--single"

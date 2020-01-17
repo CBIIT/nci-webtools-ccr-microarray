@@ -31,7 +31,7 @@ class DataBox extends Component {
 
   handleTabChange = key => {
     if (key == 'Pre-normalization_QC_Plots') {
-      let type = window.tag_pre_plot_status;
+      let type = this.props.data.tag_pre_plot_status;
       switch (type) {
         case '':
           if (this.props.data.preplots.histplotBN == '') {
@@ -70,7 +70,7 @@ class DataBox extends Component {
       }
     }
     if (key == 'Post-normalization_Plots') {
-      let type = window.tag_post_plot_status;
+      let type = this.props.data.tag_post_plot_status;
       switch (type) {
         case '':
           if (this.props.data.postplot.histplotAN == '') {
@@ -112,7 +112,7 @@ class DataBox extends Component {
     }
 
     if (key == 'DEG-Enrichments_Results') {
-      let type = window.tag_deg_plot_status;
+      let type = this.props.data.tag_deg_plot_status;
       switch (type) {
         case '':
           if (this.props.data.diff_expr_genes.data.length == 0) {
@@ -300,6 +300,7 @@ class DataBox extends Component {
             getDEG={this.props.getDEG}
             getPathwayUp={this.props.getPathwayUp}
             getPathwayDown={this.props.getPathwayDown}
+            getVolcanoPlot={this.props.getVolcanoPlot}
             exportPathwayUp={this.props.exportPathwayUp}
             exportPathwayDown={this.props.exportPathwayDown}
             exportDEG={this.props.exportDEG}

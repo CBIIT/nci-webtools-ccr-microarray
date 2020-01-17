@@ -7,6 +7,7 @@ import MAPlot from './MAPlot';
 class PrePlotsBox extends Component {
   constructor(props) {
     super(props);
+    this.state = { content: 'No Data' };
     this.handleSelectionChange = this.handleSelectionChange.bind(this);
   }
 
@@ -18,63 +19,61 @@ class PrePlotsBox extends Component {
 
   handleSelectionChange(event) {
     let value = event == null ? 'preHistogram' : event.target.value;
-    var list = document.getElementsByClassName('plot1');
 
     if (value == 'preHistogram') {
-      this.props.updateCurrentWorkingObject('getHistplotBN');
+      this.props.updateCurrentWorkingObject('getHistplotBN', 'preplots', value);
       if (this.props.data.preplots.histplotBN == '') {
         this.props.getHistplotBN();
       }
     }
     if (value == 'preMAplots') {
-      //
-      this.props.updateCurrentWorkingObject('getMAplotsBN');
+      this.props.updateCurrentWorkingObject('getMAplotsBN', 'preplots', value);
       if (this.props.data.preplots.list_mAplotBN == '') {
         this.props.getMAplotsBN();
       }
     }
     if (value == 'preBoxplots') {
-      //
-      this.props.updateCurrentWorkingObject('getBoxplotBN');
+      this.props.updateCurrentWorkingObject('getBoxplotBN', 'preplots', value);
       if (this.props.data.preplots.Boxplots == '') {
         this.props.getBoxplotBN();
       }
     }
     if (value == 'preRLE') {
-      //
-      this.props.updateCurrentWorkingObject('getRLE');
+      this.props.updateCurrentWorkingObject('getRLE', 'preplots', value);
       if (this.props.data.preplots.RLE == '') {
         this.props.getRLE();
       }
     }
     if (value == 'preNUSE') {
-      this.props.updateCurrentWorkingObject('getNUSE');
-
+      this.props.updateCurrentWorkingObject('getNUSE', 'preplots', value);
       if (this.props.data.preplots.NUSE == '') {
         this.props.getNUSE();
       }
     }
-
-    for (var i = 0; i < list.length; i++) {
-      list[i].classList.add('hide');
-    }
-    document.getElementById(value).className = document
-      .getElementById(value)
-      .className.replace('hide', '');
   }
 
   // HistplotBN,MAplotBN,BoxplotBN,RLEplotBN,NUSEplotBN,HistplotAN,MAplotAN,BoxplotAN,PCA,Heatmapolt,time_cost
 
   render() {
     let tabs = [
-      <div id="preHistogram" key="pre_tag1" className="plot1">
+      <div
+        id="preHistogram"
+        key="pre_tag1"
+        className="plot1"
+        style={{ display: this.props.data.preplots.selected == 'preHistogram' ? 'block' : 'none' }}
+      >
         <div>
           {' '}
           <p className="err-message" id="message-pre-histogram"></p>
         </div>{' '}
         {this.props.data.preplots.histplotBN}{' '}
       </div>,
-      <div id="preMAplots" key="pre_tag2" className="plot1  hide">
+      <div
+        id="preMAplots"
+        key="pre_tag2"
+        className="plot1"
+        style={{ display: this.props.data.preplots.selected == 'preMAplots' ? 'block' : 'none' }}
+      >
         {' '}
         <div>
           {' '}
@@ -85,7 +84,12 @@ class PrePlotsBox extends Component {
           <MAPlot pics={this.props.data.list_mAplotBN} data={this.props.data} />
         </div>{' '}
       </div>,
-      <div id="preBoxplots" key="pre_tag3" className="plot1 hide">
+      <div
+        id="preBoxplots"
+        key="pre_tag3"
+        className="plot1"
+        style={{ display: this.props.data.preplots.selected == 'preBoxplots' ? 'block' : 'none' }}
+      >
         {' '}
         <div>
           {' '}
@@ -93,7 +97,12 @@ class PrePlotsBox extends Component {
         </div>{' '}
         {this.props.data.BoxplotBN.plot}
       </div>,
-      <div id="preRLE" key="pre_tag4" className="plot1 hide">
+      <div
+        id="preRLE"
+        key="pre_tag4"
+        className="plot1"
+        style={{ display: this.props.data.preplots.selected == 'preRLE' ? 'block' : 'none' }}
+      >
         {' '}
         <div>
           {' '}
@@ -101,7 +110,12 @@ class PrePlotsBox extends Component {
         </div>{' '}
         {this.props.data.RLE.plot}{' '}
       </div>,
-      <div id="preNUSE" key="pre_tag5" className="plot1 hide">
+      <div
+        id="preNUSE"
+        key="pre_tag5"
+        className="plot1"
+        style={{ display: this.props.data.preplots.selected == 'preNUSE' ? 'block' : 'none' }}
+      >
         {' '}
         <div>
           {' '}
@@ -119,6 +133,7 @@ class PrePlotsBox extends Component {
         Select Pre-Normalization QC Plots
       </label>,
       <select
+        value={this.props.data.preplots.selected}
         key="pre-normalization-plots-selection"
         id="pre-normalization-plots-selection"
         className="ant-select-selection ant-select-selection--single"

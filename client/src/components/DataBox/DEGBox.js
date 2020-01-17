@@ -7,42 +7,44 @@ import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'ant
 class DEGBox extends Component {
   constructor(props) {
     super(props);
-    this.handleSelectionChange = this.handleSelectionChange.bind(this);
     this.state = { content: 'No Data' };
+    this.handleSelectionChange = this.handleSelectionChange.bind(this);
   }
 
   handleSelectionChange(event) {
     let value = event.target.value;
-    var list = document.getElementsByClassName('deg_plot');
-    for (var i = 0; i < list.length; i++) {
-      list[i].classList.add('hide');
-    }
-    document.getElementById(value).className = document
-      .getElementById(value)
-      .className.replace('hide', '');
+
     if (value == 'deg_tag1') {
-      this.props.updateCurrentWorkingObject('deg');
+      if (this.props.data.diff_expr_genes.data.length == 0) {
+        this.getDEG();
+      }
+      this.props.updateCurrentWorkingObject('deg', 'deg', value);
     }
     if (value == 'deg_tag2') {
-      this.props.updateCurrentWorkingObject('pathways_up');
       if (this.props.data.pathways_up.data.length == 0) {
         this.props.getPathwayUp();
       }
+      this.props.updateCurrentWorkingObject('pathways_up', 'deg', value);
     }
     if (value == 'deg_tag3') {
-      this.props.updateCurrentWorkingObject('pathways_down');
       if (this.props.data.pathways_down.data.length == 0) {
         this.props.getPathwayDown();
       }
+      this.props.updateCurrentWorkingObject('pathways_down', 'deg', value);
     }
     if (value == 'deg_tag4') {
-      this.props.updateCurrentWorkingObject('volcanoPlot');
+      this.props.updateCurrentWorkingObject('volcanoPlot', 'deg', value);
     }
   }
 
   render() {
     let tabs = [
-      <div key="deg_tag1" id="deg_tag1" className="deg_plot">
+      <div
+        key="deg_tag1"
+        id="deg_tag1"
+        className="deg_plot"
+        style={{ display: this.props.data.degSelected == 'deg_tag1' ? 'block' : 'none' }}
+      >
         <DEGTable
           exportNormalAll={this.props.exportNormalAll}
           exportDEG={this.props.exportDEG}
@@ -51,7 +53,12 @@ class DEGBox extends Component {
           getDEG={this.props.getDEG}
         />
       </div>,
-      <div key="deg_tag2_pathway_up" id="deg_tag2" className="deg_plot hide">
+      <div
+        key="deg_tag2_pathway_up"
+        id="deg_tag2"
+        className="deg_plot"
+        style={{ display: this.props.data.degSelected == 'deg_tag2' ? 'block' : 'none' }}
+      >
         <PUGTable
           exportNormalAll={this.props.exportNormalAll}
           exportPathwayUp={this.props.exportPathwayUp}
@@ -61,7 +68,12 @@ class DEGBox extends Component {
           getPathwayUp={this.props.getPathwayUp}
         />
       </div>,
-      <div key="deg_tag3_pathway_down" id="deg_tag3" className="deg_plot hide">
+      <div
+        key="deg_tag3_pathway_down"
+        id="deg_tag3"
+        className="deg_plot"
+        style={{ display: this.props.data.degSelected == 'deg_tag3' ? 'block' : 'none' }}
+      >
         <PDGTable
           exportNormalAll={this.props.exportNormalAll}
           exportPathwayDown={this.props.exportPathwayDown}
@@ -71,7 +83,12 @@ class DEGBox extends Component {
           getPathwayDown={this.props.getPathwayDown}
         />
       </div>,
-      <div key="deg_tag4_volcano" id="deg_tag4" className="deg_plot hide">
+      <div
+        key="deg_tag4_volcano"
+        id="deg_tag4"
+        className="deg_plot"
+        style={{ display: this.props.data.degSelected == 'deg_tag4' ? 'block' : 'none' }}
+      >
         {this.props.data.volcanoPlot}
       </div>
     ];
@@ -81,6 +98,7 @@ class DEGBox extends Component {
         <span key="deg_select_option_title">DEG section selection </span>
       </label>,
       <select
+        value={this.props.data.degSelected}
         key="deg_select"
         className="ant-select-selection ant-select-selection--single"
         id="deg_select_option"
