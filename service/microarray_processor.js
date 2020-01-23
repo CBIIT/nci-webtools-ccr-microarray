@@ -132,6 +132,7 @@ function r(data, endCallback) {
     d.push(data.source);
     d.push(config.configPath);
     d.push(data.realGroup);
+    d.push(data.index);
 
     logger.info("[Queue] Run Analysis")
     logger.info("Input")

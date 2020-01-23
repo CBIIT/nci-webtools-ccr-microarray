@@ -276,6 +276,7 @@ router.post('/qAnalysis', function(req, res) {
   data.dataList = req.body.dataList;
   data.normal = req.body.normal;
   data.realGroup = req.body.realGroup.join('@');
+  data.index = req.body.index;
   let CEL = '';
   for (let i in req.body.dataList) {
     CEL = req.body.dataList[i] + ',' + CEL;
@@ -376,6 +377,7 @@ router.post('/runContrast', function(req, res) {
   data.push(req.body.source);
   data.push(config.configPath);
   data.push(req.body.realGroup.join('@'));
+  data.push(req.body.index);
   removeGSEAheatmap(config.uploadPath, req.body.projectId);
   logger.info('runContrast  R code ');
   R.execute('wrapper.R', data, function(err, returnValue) {

@@ -72,31 +72,22 @@ process = function(){
         }
 
         if(action=="runContrast"){
-          i<-5
-          access_code<-toString(args[i])
-          i<-i+1
+          access_code<-toString(args[5])
           listGroups<-c()
-          if(args[i]!=""){
-            listGroups<-unlist((strsplit(args[i],",")))
+          if(args[6]!=""){
+            listGroups<-unlist((strsplit(args[6],",")))
           }else{
-            listGroups<-toString(args[i])
+            listGroups<-toString(args[6])
           }
-          i<-i+1
-          cgroup1<-toString(args[i])
-          i<-i+1
-          cgroup2<-toString(args[i])
-          i<-i+1
-          species<-toString(args[i])
-          i<-i+1
-          geneSet<-toString(args[i])
-          i<-i+1
-          normal<-toString(args[i])
-          i<-i+1
-          source<-toString(args[i])
-           i<-i+1
-          config_path<-toString(args[i])
-           i<-i+1
-          realGroups<-toString(args[i])
+          cgroup1 <- toString(args[7])
+          cgroup2 <- toString(args[8])
+          species <- toString(args[9])
+          geneSet <- toString(args[10])
+          normal <- toString(args[11])
+          source <- toString(args[12])
+          config_path <- toString(args[13])
+          realGroups <- toString(args[14])
+          index <- as.integer(unlist(strsplit(args[15], ",")))
     
           write(args, paste0(data_repo_path,"/test123.txt",sep=""),append=TRUE)
        
@@ -116,10 +107,10 @@ process = function(){
           #saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
 
           if(normal=="RMA"){
-             norm_celfiles = RMA_QCnorm(celfiles,data_repo_path,cons)
+             norm_celfiles = RMA_QCnorm(celfiles[,index],data_repo_path,cons)
              hisAfter <-"histAfterRMAnorm.html"
            }else{
-             norm_celfiles =loess_QCnorm(celfiles,data_repo_path,cons)
+             norm_celfiles =loess_QCnorm(celfiles[,index],data_repo_path,cons)
               hisAfter <-"histAfterLoessNorm.html"
           }
           # norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)

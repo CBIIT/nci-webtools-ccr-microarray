@@ -2338,6 +2338,16 @@ class Analysis extends Component {
     }
   };
 
+  index = groups => {
+    let index = [];
+    for (let i in groups) {
+      if (groups[i] != 'Others') {
+        index.push(++i);
+      }
+    }
+    return index;
+  };
+
   runContrast = () => {
     let workflow = Object.assign({}, this.state.workflow);
     document.getElementById('message-use-queue').innerHTML = '';
@@ -2392,6 +2402,7 @@ class Analysis extends Component {
         reqBody.groups.push('Others');
       }
     }
+    reqBody.index = this.index(reqBody.groups);
     reqBody.pssGSEA = workflow.pssGSEA;
     reqBody.foldssGSEA = workflow.foldssGSEA;
     reqBody.pPathways = workflow.pPathways;
