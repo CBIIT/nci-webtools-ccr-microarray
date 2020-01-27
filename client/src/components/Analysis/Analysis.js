@@ -1367,8 +1367,8 @@ class Analysis extends Component {
                 let color = pcaData.color[i];
 
                 if (
-                  pcaData.group_name[i].toLowerCase() == workflow2.group_2.toLowerCase() ||
-                  pcaData.group_name[i].toLowerCase() == workflow2.group_1.toLowerCase()
+                  element.split(',').indexOf(workflow2.group_2) > -1 ||
+                  element.split(',').indexOf(workflow2.group_1) > -1
                 ) {
                   if (group_data.hasOwnProperty(element)) {
                     group_data[element]['x'].push(pcaData.x[i]);
@@ -1391,8 +1391,8 @@ class Analysis extends Component {
               for (let element in group_data) {
                 let color = '';
                 if (
-                  element.toLowerCase() == workflow2.group_2.toLowerCase() ||
-                  element.toLowerCase() == workflow2.group_1.toLowerCase()
+                  element.split(',').indexOf(workflow2.group_2) > -1 ||
+                  element.split(',').indexOf(workflow2.group_1) > -1
                 ) {
                   color = group_data[element]['color'];
                   pcaPlotData.push({
@@ -1746,7 +1746,10 @@ class Analysis extends Component {
 
     for (let i = 0; i < result.data.col.length; i++) {
       let cMarker = '';
-      if (workflow.groups[i] == workflow.group_2 || workflow.groups[i] == workflow.group_1) {
+      if (
+        workflow.groups[i].split(',').indexOf(workflow.group_2) > -1 ||
+        workflow.groups[i].split(',').indexOf(workflow.group_1) > -1
+      ) {
         cMarker = {
           color: BoxplotsData.color[i]
         };
