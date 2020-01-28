@@ -337,45 +337,12 @@ tr:nth-child(even) {
 
 }
 
-.ant-table-thead {
-    /*font-size: 11px !important;*/
-}
-
-.input-search {
-    position: absolute !important;
-    top: 48px;
-    left: 180px;
-    width: 200px !important;
-    min-height: 15px;
-    height: 35px;
-}
-
-
 .input-search-gsm {
-    position: absolute !important;
-    top: 54px;
-    left: 150px;
+    position: static;
+    /* top: 54px;
+    left: 150px; */
     max-width: 400px;
     width: 200px;
-    min-height: 15px;
-    height: 35px;
-}
-
-.input-search-for-deg-path {
-    position: absolute !important;
-    top: 48px;
-    left: 260px;
-    width: 200px !important;
-    min-height: 15px;
-    height: 35px;
-}
-
-
-.input-search-for-ssgsea {
-    position: absolute !important;
-    top: 48px;
-    left: 260px;
-    width: 200px !important;
     min-height: 15px;
     height: 35px;
 }
@@ -632,7 +599,7 @@ div.ant-collapse-header {
 #tab_analysis .ant-table-pagination {
     position: absolute;
     top: -54px;
-    right: 87px;
+    right: 0;
 }
 
 
@@ -882,11 +849,8 @@ input#input_group_name {
 }
 
 .div-export-gsm {
-    position: absolute;
-    right: 0px;
+    margin-left: auto;
     padding-right: 10px;
-    top: 89px;
-
 }
 
 .div-group-gsm {
@@ -1222,12 +1186,6 @@ div.head-sorter>div {
 
         top: -58px !important;
         right: auto !important;
-    }
-
-    .div-export-gsm {
-        position: inherit;
-        padding-left: 10px;
-
     }
 
     /*Pre-Normal-Plots*/

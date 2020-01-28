@@ -28,7 +28,7 @@ const defaultState = {
     tab_activeKey: 'GSM_1',
     numberOfTasksInQueue: 0,
     QueueModalvisible: false,
-    useQueue: true,
+    useQueue: false,
     token: '',
     projectID: '',
     analysisType: '0',
@@ -2299,6 +2299,7 @@ class Analysis extends Component {
       document.getElementById('message-gsm').nextSibling.innerHTML = '';
     }
   };
+
   showModal = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.QueueModalvisible = true;
@@ -2772,15 +2773,21 @@ class Analysis extends Component {
     let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g;
     if (group_name.match(pattern)) {
       let workflow = Object.assign({}, this.state.workflow);
-      for (var key in dataList_keys) {
-        if (workflow.dataList[dataList_keys[key] - 1].groups == '') {
-          workflow.dataList[dataList_keys[key] - 1].groups = group_name;
+      for (var key of dataList_keys) {
+        if (typeof key == 'number') {
+          if (workflow.dataList[key - 1].groups === '')
+            workflow.dataList[key - 1].groups = group_name;
+          else
+            workflow.dataList[key - 1].groups = workflow.dataList[key - 1].groups += `,${group_name}`;
+          document.getElementById('message-gsm-group').innerHTML = '';
         } else {
-          workflow.dataList[dataList_keys[key] - 1].groups =
-            workflow.dataList[dataList_keys[key] - 1].groups + ',' + group_name;
+          for (let gsm of workflow.dataList) {
+            if (gsm.gsm === key) {
+              gsm.groups === '' ? (gsm.groups = group_name) : (gsm.groups += `,${group_name}`);
+            }
+          }
         }
       }
-      document.getElementById('message-gsm-group').innerHTML = '';
       this.setState({ workflow: workflow });
       callback(true, handler);
     } else {

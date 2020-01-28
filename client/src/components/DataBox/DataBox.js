@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Tabs, Table, Button, Input, Modal, message } from 'antd';
+import { Tabs, Table, Button, Input, Modal, message, Upload, Icon } from 'antd';
+import Papa from 'papaparse';
 import DEGBox from './DEGBox';
 import GSMData from './GSMData';
 import PrePlotsBox from './PrePlotsBox';
@@ -27,6 +28,27 @@ class DataBox extends Component {
 
   handleInputOnChange = e => {
     this.setState({ group_name: e.target.value });
+  };
+
+  handleCSV = e => {
+    if (e.file.status === 'done') {
+      Papa.parse(e.file.originFileObj, {
+        complete: results => {
+          let data = results.data;
+          for (let group of data) {
+            this.props.assignGroup(group.shift(), group, this, (flag, handler) => {
+              if (flag) {
+                let currentState = Object.assign({}, handler.state);
+                currentState.added = false;
+                handler.setState(currentState);
+              }
+            });
+          }
+        }
+      });
+    } else if (e.file.status === 'error') {
+      message.error(`${e.file.name} file upload failed.`);
+    }
   };
 
   handleTabChange = key => {
@@ -235,23 +257,33 @@ class DataBox extends Component {
     let degBox = '';
     let ssGSEABox = '';
     let define_group_click_btn = '';
+    const uploadOptions = {
+      accept: '.csv',
+      onChange: this.handleCSV,
+      customRequest: ({ file, onSuccess }) => {
+        setTimeout(() => {
+          onSuccess('ok');
+        }, 0);
+      }
+    };
 
     // define group btn
     if (this.props.data.dataList.length > 0) {
       define_group_click_btn = (
-        <div className="row">
+        <div className="row" style={{ display: 'flex' }}>
           <div className="div-group-gsm">
             <Button type="primary" onClick={this.showModal}>
               Manage Group
             </Button>{' '}
+            <Upload {...uploadOptions}>
+              <Button type="primary">
+                <Icon type="upload" />
+                Add Groups (CSV)
+              </Button>
+            </Upload>
           </div>
           <div className="div-export-gsm">
-            <Button
-              id="btn-project-export"
-              className="upload-start"
-              type="primary"
-              onClick={this.props.exportGSE}
-            >
+            <Button id="btn-project-export" type="primary" onClick={this.props.exportGSE}>
               {' '}
               Export
             </Button>{' '}
