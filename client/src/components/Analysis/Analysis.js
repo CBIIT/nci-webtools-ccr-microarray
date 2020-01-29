@@ -233,7 +233,8 @@ const defaultState = {
     normal: 'RMA',
     histplotBN_url: '',
     histplotAN_url: '',
-    heatmapolt_url: ''
+    heatmapolt_url: '',
+    batches: []
   }
 };
 
@@ -2146,9 +2147,6 @@ class Analysis extends Component {
   loadGSE = () => {
     let workflow = Object.assign({}, this.state.workflow);
     let reqBody = {};
-    reqBody.code = '';
-    reqBody.projectId = '';
-    reqBody.groups = '';
     if (workflow.accessionCode == '') {
       document.getElementById('message-load-accession-code').innerHTML =
         'Accession Code is required. ';
@@ -2166,16 +2164,18 @@ class Analysis extends Component {
     // this pid will be used to create a tmp folder to store the data.
     workflow.projectID = this.uuidv4();
     reqBody.projectId = workflow.projectID;
+    reqBody.groups = workflow.groups;
+    reqBody.batches = workflow.batches;
     // gruop info
-    var groups = [];
-    for (var i in workflow.dataList) {
-      if (workflow.dataList[i].group == '') {
-        groups.push('Others');
-      } else {
-        groups.push(workflow.dataList[i].group);
-      }
-    }
-    reqBody.groups = groups;
+    // var groups = [];
+    // for (var i in workflow.dataList) {
+    //   if (workflow.dataList[i].group == '') {
+    //     groups.push('Others');
+    //   } else {
+    //     groups.push(workflow.dataList[i].group);
+    //   }
+    // }
+    // reqBody.groups = groups;
     workflow.uploading = true;
     workflow.progressing = true;
     workflow.loading_info = 'Loading GEO Data...';
@@ -2369,6 +2369,7 @@ class Analysis extends Component {
     reqBody.group_2 = workflow.group_2;
     reqBody.dataList = [];
     reqBody.realGroup = []; // group without filter
+    reqBody.batches = [];
     if (workflow.uploaded) {
       reqBody.source = 'upload';
     } else {

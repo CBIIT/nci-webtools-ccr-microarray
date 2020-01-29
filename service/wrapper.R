@@ -39,6 +39,8 @@ process = function(){
         if(action == "loadGSE"){
             access_code<-toString(args[5])
             listGroups<-c()
+            listBatches<-c()
+
             if(args[6]!=""){
               listGroups<-unlist((strsplit(args[6],",")))
             }else{
@@ -47,8 +49,13 @@ process = function(){
             if(access_code==""||projectId==""){
               return ("Request field(s) is missing")
             }
+            if (args[7]!= "") {
+              listBatches<-unlist((strsplit(args[7], ",")))
+            } else {
+              listBatches<-NULL
+            }
 
-            celfiles = processGEOfiles(projectId,access_code,listGroups,data_repo_path)  
+            celfiles = processGEOfiles(projectId=projectId,id=access_code,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path)  
             # remove downloaded tar file
             fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
             if (file.exists(fn)) file.remove(fn)
@@ -67,7 +74,7 @@ process = function(){
             if(projectId==""||listGroups==""){
               return ("Request field(s) is missing")
             }
-          celfiles = processCELfiles(projectId,listGroups,data_repo_path) 
+          celfiles = processCELfiles(projectId=projectId,listGroups=listGroups,listBatches=NULL,workspace=data_repo_path) 
           return(celfiles)  
         }
 
@@ -88,6 +95,13 @@ process = function(){
           config_path <- toString(args[13])
           realGroups <- toString(args[14])
           index <- as.integer(unlist(strsplit(args[15], ",")))
+          listBatches <- c()
+
+          if (args[16]!= "") {
+            listBatches<-unlist((strsplit(args[16], ",")))
+          } else {
+            listBatches<-NULL
+          }
     
           write(args, paste0(data_repo_path,"/test123.txt",sep=""),append=TRUE)
        
@@ -98,21 +112,24 @@ process = function(){
 
           #celfiles = getLocalGEOfiles('pid','GSE37874', c('Ctl','Ctl','Ctl','Ctl','RNA_1','RNA_1','RNA_1','RNA_1','RNA_2','RNA_2','RNA_2','RNA_2'))    
           if(source=="upload"){
-                celfiles = getCELfiles(projectId,listGroups,data_repo_path) 
+                celfiles = getCELfiles(projectId=projectId,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path) 
              }else{
-                celfiles = getLocalGEOfiles(projectId,access_code,listGroups,data_repo_path) 
+                celfiles = getLocalGEOfiles(projectId=projectId,id=access_code,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path) 
           }
 
           cons <-c(paste0(cgroup1,"-",cgroup2))
           #saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
 
           if(normal=="RMA"){
-             norm_celfiles = RMA_QCnorm(celfiles[,index],data_repo_path,cons)
+             norm_celfiles = RMA_QCnorm(raw=celfiles[,index],path=data_repo_path,contrast=cons,listBatches=listBatches)
              hisAfter <-"histAfterRMAnorm.html"
            }else{
-             norm_celfiles =loess_QCnorm(celfiles[,index],data_repo_path,cons)
+             norm_celfiles =loess_QCnorm(raw=celfiles[,index],path=data_repo_path,contrast=cons,listBatches=listBatches)
               hisAfter <-"histAfterLoessNorm.html"
           }
+            
+          # saveRDS(norm_celfiles, file = paste0(data_repo_path,"/normCellFiles.rds"))
+
           # norm_celfiles = RMA_QCnorm(celfiles,data_repo_path)
           col_name<-pData(celfiles)$title
           boxplot_DataBN<-list(col=col_name,data=t(norm_celfiles@listData[[2]][[1]]),ylable=norm_celfiles@listData[[2]][[2]],color=pData(norm_celfiles[[10]])$colors)
@@ -155,7 +172,7 @@ process = function(){
           # # or if using processCELfiles() function for test example, create this contrasts variable:
           # #cons = c("KO_1-Ctl_1","KO_2-Ctl_2")
        
-          diff_expr_genes = diffExprGenes(norm_celfiles[[10]],cons,projectId,data_repo_path)       #Call function
+          diff_expr_genes = diffExprGenes(norm=norm_celfiles[[10]],norm_plots=norm_celfiles[[13]],cons=cons,projectId=projectId,workspace=data_repo_path)       #Call function
           # # #### 4) l2p pathway analysis function, takes DEGs and species as input, returns list of up and downregulated pathways for each contrast ####
           # # # Output should dynamically respond to user-selected contrast
           saveRDS(diff_expr_genes, file = paste0(data_repo_path,"/diff_expr_genes.rds"))

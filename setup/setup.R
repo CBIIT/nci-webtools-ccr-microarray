@@ -11,7 +11,7 @@ install.packages("rgl", repo="http://cran.r-project.org", configure.args="--disa
 install_version("mvtnorm", version = "1.0-8", repos = "http://cran.r-project.org")
 
 BiocManager::install(
-    c("Biobase", "GEOquery", "GSEABase", "GSVA", "annotate",
+    c("Biobase", "GEOquery", "GSEABase", "GSVA", "annotate", "sva",
     "clariomshumanhttranscriptcluster.db", "clariomshumantranscriptcluster.db",
     "clariomsmousehttranscriptcluster.db", "clariomsmousetranscriptcluster.db",
     "clariomsrattranscriptcluster.db", "geneplotter", "hgu133a.db", "hgu133a2.db",

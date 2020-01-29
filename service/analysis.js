@@ -165,12 +165,14 @@ router.post('/loadGSE', function(req, res) {
   data.push(config.uploadPath);
   data.push(req.body.code);
   data.push(req.body.groups);
+  data.push(req.body.batches)
   logger.info(
     'API:/loadGSE ',
     'code:',
     req.body.code,
     'groups:',
     req.body.groups,
+    req.body.batches,
     'projectId:',
     req.body.projectId,
     'data_repo_path:',
@@ -378,6 +380,7 @@ router.post('/runContrast', function(req, res) {
   data.push(config.configPath);
   data.push(req.body.realGroup.join('@'));
   data.push(req.body.index);
+  data.push(req.body.batches);
   removeGSEAheatmap(config.uploadPath, req.body.projectId);
   logger.info('runContrast  R code ');
   R.execute('wrapper.R', data, function(err, returnValue) {
