@@ -2375,8 +2375,15 @@ class Analysis extends Component {
     } else {
       reqBody.source = 'fetch';
     }
+    let batchCount = 0;
     for (var i in workflow.dataList) {
       reqBody.dataList.push(workflow.dataList[i].gsm);
+      if (workflow.dataList[i].batch) {
+        reqBody.batches.push(workflow.dataList[i].batch);
+      } else {
+        reqBody.batches.push('Others');
+        batchCount++;
+      }
       if (workflow.dataList[i].groups != '') {
         reqBody.realGroup.push(workflow.dataList[i].groups);
         // prohibit samples in both groups chosen for contrast.
@@ -2406,6 +2413,9 @@ class Analysis extends Component {
         // default value of the group is others
         reqBody.groups.push('Others');
       }
+    }
+    if (batchCount == workflow.dataList.length) {
+      reqBody.batches = [];
     }
     reqBody.index = this.index(reqBody.groups);
     reqBody.pssGSEA = workflow.pssGSEA;
@@ -2769,19 +2779,22 @@ class Analysis extends Component {
         'ant-btn upload-start ant-btn-default';
     }
   };
-  assignGroup = (group_name, dataList_keys, handler, callback) => {
+  assignGroup = (type, group_name, dataList_keys, callback) => {
     // validate group_name
     let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g;
     if (group_name.match(pattern)) {
       let workflow = Object.assign({}, this.state.workflow);
       for (var key of dataList_keys) {
         if (typeof key == 'number') {
-          if (workflow.dataList[key - 1].groups === '')
-            workflow.dataList[key - 1].groups = group_name;
-          else
-            workflow.dataList[key - 1].groups = workflow.dataList[key - 1].groups += `,${group_name}`;
-          document.getElementById('message-gsm-group').innerHTML = '';
+          if (type === 'group') {
+            if (workflow.dataList[key - 1].groups === '')
+              workflow.dataList[key - 1].groups = group_name;
+            else workflow.dataList[key - 1].groups += `,${group_name}`;
+          } else {
+            workflow.dataList[key - 1].batch = group_name;
+          }
         } else {
+          // csv upload
           for (let gsm of workflow.dataList) {
             if (gsm.gsm === key) {
               gsm.groups === '' ? (gsm.groups = group_name) : (gsm.groups += `,${group_name}`);
@@ -2790,42 +2803,35 @@ class Analysis extends Component {
         }
       }
       this.setState({ workflow: workflow });
-      callback(true, handler);
+      callback(true);
     } else {
-      document.getElementById('message-gsm-group').innerHTML =
-        'The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 ';
-      callback(false, handler);
+      callback(false);
     }
   };
-  deleteGroup = group_name => {
+  deleteGroup = (group_name, type) => {
     let workflow = Object.assign({}, this.state.workflow);
-    for (var key in workflow.dataList) {
-      if (workflow.dataList[key].groups == group_name) {
-        workflow.dataList[key].groups = '';
-      }
-      // delet from multi-group
-      if (
-        workflow.dataList[key].groups.indexOf(',') != -1 &&
-        workflow.dataList[key].groups.indexOf(group_name) != -1
-      ) {
-        if (
-          workflow.dataList[key].groups.indexOf(group_name) ==
-          workflow.dataList[key].groups.length - group_name.length
-        ) {
-          workflow.dataList[key].groups = workflow.dataList[key].groups.replace(
-            ',' + group_name,
-            ''
-          );
-        } else {
-          workflow.dataList[key].groups = workflow.dataList[key].groups.replace(
-            group_name + ',',
-            ''
-          );
+    for (let gsm of workflow.dataList) {
+      if (type === 'group') {
+        if (gsm.groups == group_name) {
+          gsm.groups = '';
+        }
+        // delet from multi-group
+        if (gsm.groups.indexOf(',') != -1 && gsm.groups.indexOf(group_name) != -1) {
+          if (gsm.groups.indexOf(group_name) == gsm.groups.length - group_name.length) {
+            gsm.groups = gsm.groups.replace(',' + group_name, '');
+          } else {
+            gsm.groups = gsm.groups.replace(group_name + ',', '');
+          }
+        }
+      } else if (type === 'batch') {
+        if (gsm.batch == group_name) {
+          gsm.batch = '';
         }
       }
     }
     this.setState({ workflow: workflow });
   };
+
   handleErrors = response => {
     if (!response.ok) {
       //throw Error(response.statusText);

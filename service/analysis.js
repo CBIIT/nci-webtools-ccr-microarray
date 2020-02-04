@@ -279,6 +279,7 @@ router.post('/qAnalysis', function(req, res) {
   data.normal = req.body.normal;
   data.realGroup = req.body.realGroup.join('@');
   data.index = req.body.index;
+  data.batches = req.body.batches;
   let CEL = '';
   for (let i in req.body.dataList) {
     CEL = req.body.dataList[i] + ',' + CEL;

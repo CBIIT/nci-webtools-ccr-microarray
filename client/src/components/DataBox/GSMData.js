@@ -412,6 +412,29 @@ class GSMData extends Component {
               </span>
             </div>
           )
+        },
+        {
+          title: 'BATCH',
+          dataIndex: 'batch',
+          width: '15%',
+          sorter: (a, b) => ('' + a.batches).localeCompare(b.batches),
+          render: (text, record, index) => (
+            <div
+              className="single-line"
+              style={{
+                maxWidth:
+                  document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.15 >
+                  minWidth
+                    ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth *
+                      0.15
+                    : minWidth
+              }}
+            >
+              <span data-toggle="tooltip" data-placement="left" title={text}>
+                {text}
+              </span>
+            </div>
+          )
         }
       ];
       let count = 1;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useRef } from 'react';
 import { Tabs, Table, Button, Input, Modal, message, Upload, Icon } from 'antd';
 import Papa from 'papaparse';
 import DEGBox from './DEGBox';
@@ -6,41 +6,56 @@ import GSMData from './GSMData';
 import PrePlotsBox from './PrePlotsBox';
 import PostPlotsBox from './PostPlotsBox';
 import SSGSEATable from './SSGSEATable';
+
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
 
-class DataBox extends Component {
-  constructor(props) {
-    super(props);
-    this.child = React.createRef();
-    this.state = {
-      group: '',
-      loading: false,
-      visible: false,
-      selected: [],
-      group_name: '',
-      added: false
-    };
-    this.createTag = this.createTag.bind(this);
-    this.showModal = this.showModal.bind(this);
-    this.handleTabChange = this.handleTabChange.bind(this);
+export default function DataBox(props) {
+  const [state, setState] = useState({
+    groupVisible: false,
+    batchVisible: false,
+    groupName: '',
+    batchName: '',
+    groupMessage: '',
+    batchMessage: '',
+    selected: [],
+    added: false
+  });
+
+  const {
+    groupVisible,
+    batchVisible,
+    groupName,
+    batchName,
+    groupMessage,
+    batchMessage,
+    selected,
+    added
+  } = state;
+
+  const child = useRef(null);
+
+  function mergeState(obj) {
+    setState({ ...state, ...obj });
   }
 
-  handleInputOnChange = e => {
-    this.setState({ group_name: e.target.value });
-  };
+  function groupOnChange(e) {
+    mergeState({ groupName: e.target.value });
+  }
 
-  handleCSV = e => {
+  function batchOnChange(e) {
+    mergeState({ batchName: e.target.value });
+  }
+
+  function handleCSV(e) {
     if (e.file.status === 'done') {
       Papa.parse(e.file.originFileObj, {
         complete: results => {
           let data = results.data;
           for (let group of data) {
-            this.props.assignGroup(group.shift(), group, this, (flag, handler) => {
+            props.assignGroup('group', group.shift(), group, flag => {
               if (flag) {
-                let currentState = Object.assign({}, handler.state);
-                currentState.added = false;
-                handler.setState(currentState);
+                mergeState({ added: false });
               }
             });
           }
@@ -49,117 +64,116 @@ class DataBox extends Component {
     } else if (e.file.status === 'error') {
       message.error(`${e.file.name} file upload failed.`);
     }
-  };
+  }
 
-  handleTabChange = key => {
+  function handleTabChange(key) {
     if (key == 'Pre-normalization_QC_Plots') {
-      let type = this.props.data.tag_pre_plot_status;
+      let type = props.data.tag_pre_plot_status;
       switch (type) {
         case '':
-          if (this.props.data.preplots.histplotBN == '') {
-            this.props.getHistplotBN();
+          if (props.data.preplots.histplotBN == '') {
+            props.getHistplotBN();
           }
           break;
         case 'getHistplotBN':
-          if (this.props.data.preplots.histplotBN == '') {
-            this.props.getHistplotBN();
+          if (props.data.preplots.histplotBN == '') {
+            props.getHistplotBN();
           }
           break;
-        case 'getMAplotsBN':
-          if (this.props.data.preplots.list_mAplotBN == '') {
-            this.props.getMAplotsBN();
-          }
-          break;
-        case 'getBoxplotBN':
-          if (this.props.data.preplots.Boxplots == '') {
-            this.props.getBoxplotBN();
-          }
-          break;
-        case 'getRLE':
-          if (this.props.data.preplots.RLE == '') {
-            this.props.getRLE();
-          }
-          break;
-        case 'getNUSE':
-          if (this.props.data.preplots.NUSE == '') {
-            this.props.getNUSE();
-          }
-          break;
+        // case 'getMAplotsBN':
+        //   if (props.data.preplots.list_mAplotBN == '') {
+        //     props.getMAplotsBN();
+        //   }
+        //   break;
+        // case 'getBoxplotBN':
+        //   if (props.data.preplots.Boxplots == '') {
+        //     props.getBoxplotBN();
+        //   }
+        //   break;
+        // case 'getRLE':
+        //   if (props.data.preplots.RLE == '') {
+        //     props.getRLE();
+        //   }
+        //   break;
+        // case 'getNUSE':
+        //   if (props.data.preplots.NUSE == '') {
+        //     props.getNUSE();
+        //   }
+        //   break;
         default:
-          if (this.props.data.preplots.histplotBN == '') {
-            this.props.getHistplotBN();
+          if (props.data.preplots.histplotBN == '') {
+            props.getHistplotBN();
           }
       }
     }
     if (key == 'Post-normalization_Plots') {
-      let type = this.props.data.tag_post_plot_status;
+      let type = props.data.tag_post_plot_status;
       switch (type) {
         case '':
-          if (this.props.data.postplot.histplotAN == '') {
-            this.props.getHistplotAN();
+          if (props.data.postplot.histplotAN == '') {
+            props.getHistplotAN();
           }
           break;
         case 'getHistplotAN':
-          if (this.props.data.postplot.histplotAN == '') {
-            this.props.getHistplotAN();
+          if (props.data.postplot.histplotAN == '') {
+            props.getHistplotAN();
           }
           break;
-        case 'getBoxplotAN':
-          if (this.props.data.postplot.Boxplots == '') {
-            this.props.getBoxplotAN();
-          }
-          break;
-        case 'getPCA':
-          if (this.props.data.postplot.PCA == '') {
-            this.props.getPCA();
-          }
-          break;
-        case 'getHeatmapolt':
-          if (this.props.data.postplot.Heatmapolt == '') {
-            this.props.getHeatmapolt();
-          }
-          break;
+        // case 'getBoxplotAN':
+        //   if (props.data.postplot.Boxplots == '') {
+        //     props.getBoxplotAN();
+        //   }
+        //   break;
+        // case 'getPCA':
+        //   if (props.data.postplot.PCA == '') {
+        //     props.getPCA();
+        //   }
+        //   break;
+        // case 'getHeatmapolt':
+        //   if (props.data.postplot.Heatmapolt == '') {
+        //     props.getHeatmapolt();
+        //   }
+        //   break;
 
-        case 'getMAplotAN':
-          if (this.props.data.postplot.list_mAplotAN == '') {
-            this.props.getMAplotAN();
-          }
-          break;
-
+        // case 'getMAplotAN':
+        //   if (props.data.postplot.list_mAplotAN == '') {
+        //     props.getMAplotAN();
+        //   }
+        //   break;
         default:
-          if (this.props.data.postplot.histplotAN == '') {
-            this.props.getHistplotAN();
+          if (props.data.postplot.histplotAN == '') {
+            props.getHistplotAN();
           }
       }
     }
 
     if (key == 'DEG-Enrichments_Results') {
-      let type = this.props.data.tag_deg_plot_status;
+      let type = props.data.tag_deg_plot_status;
       switch (type) {
         case '':
-          if (this.props.data.diff_expr_genes.data.length == 0) {
-            this.props.getDEG();
+          if (props.data.diff_expr_genes.data.length == 0) {
+            props.getDEG();
           }
           break;
-        case 'pathways_up':
-          if (this.props.data.pathways_up.data.length == 0) {
-            this.props.getPathwayUp();
-          }
-          break;
-        case 'pathways_down':
-          if (this.props.data.pathways_down.data.length == 0) {
-            this.props.getPathwayDown();
-          }
-          break;
+        // case 'pathways_up':
+        //   if (props.data.pathways_up.data.length == 0) {
+        //     props.getPathwayUp();
+        //   }
+        //   break;
+        // case 'pathways_down':
+        //   if (props.data.pathways_down.data.length == 0) {
+        //     props.getPathwayDown();
+        //   }
+        //   break;
         case 'deg':
-          if (this.props.data.diff_expr_genes.data.length == 0) {
-            this.props.getDEG();
+          if (props.data.diff_expr_genes.data.length == 0) {
+            props.getDEG();
           }
           break;
 
         default:
-          if (this.props.data.diff_expr_genes.data.length == 0) {
-            this.props.getDEG();
+          if (props.data.diff_expr_genes.data.length == 0) {
+            props.getDEG();
           }
       }
     }
@@ -167,223 +181,228 @@ class DataBox extends Component {
       // do nothing
     }
     if (key == 'ssGSEA_Results') {
-      if (this.props.data.ssGSEA.data.length == 0) {
-        this.props.getssGSEA();
+      if (props.data.ssGSEA.data.length == 0) {
+        props.getssGSEA();
       }
     }
-    this.props.updateCurrentWorkingTab(key);
-  };
+    props.updateCurrentWorkingTab(key);
+  }
 
-  showModal = () => {
-    let currentState = Object.assign({}, this.state);
-    currentState.visible = true;
-    currentState.group_name = '';
-    this.setState(currentState);
-  };
+  function selection(selectedRowKeys) {
+    mergeState({ selected: selectedRowKeys });
+  }
 
-  handleOk = () => {
-    let workflow = Object.assign({}, this.state);
-    workflow.loading = true;
-    this.setState(workflow);
-    setTimeout(() => {
-      let workflow = Object.assign({}, this.state);
-      workflow.loading = false;
-      workflow.visible = false;
-      this.setState(workflow);
-    }, 3000);
-  };
-
-  handleCancel = () => {
-    let workflow = Object.assign({}, this.state);
-    workflow.group = '';
-    document.getElementById('input_group_name').value = '';
-    document.getElementById('input_group_name').setAttribute('value', '');
-    document.getElementById('message-gsm-group').innerHTML = '';
-    workflow.visible = false;
-    let flag = workflow.added;
-    workflow.added = false;
-    if (flag) {
-      workflow.selected = [];
+  function createTag(type) {
+    let name = groupName;
+    if (type === 'batch') {
+      name = batchName;
     }
-    this.setState(workflow);
-    if (flag) {
-      this.child.current.unselect();
-    }
-  };
 
-  selection = selectedRowKeys => {
-    this.setState({ selected: selectedRowKeys });
-  };
-
-  createTag = () => {
-    if (document.getElementById('input_group_name').value == '') {
-      document.getElementById('message-gsm-group').innerHTML = 'tag name is required. ';
-    } else {
-      if (this.state.selected.length > 0) {
-        // if user select records in table
-        this.props.assignGroup(
-          document.getElementById('input_group_name').value,
-          this.state.selected,
-          this,
-          function(flag, handler) {
-            if (flag) {
-              handler.child.current.unselect(); // after create tag, previous selected record will unselect.
-              let currentState = Object.assign({}, handler.state);
-              currentState.added = true;
-              handler.setState(currentState);
-            }
-          }
-        );
+    if (name === '') {
+      if (type === 'batch') {
+        mergeState({ batchMessage: 'tag name is required.' });
       } else {
-        document.getElementById('message-gsm-group').innerHTML = 'Please select some gsm(s). ';
+        mergeState({ groupMessage: 'tag name is required.' });
       }
-    }
-  };
-
-  deleteTag = event => {
-    var group_name = event.target.parentNode.parentNode.getElementsByTagName('td')[0].innerText;
-    if (group_name == '' || typeof group_name == 'undefined') {
-      document.getElementById('message-gsm-group-table').innerHTML =
-        'No group selected for deleting.';
     } else {
-      this.props.deleteGroup(group_name.trim());
+      if (selected.length > 0) {
+        // if user select records in table
+        props.assignGroup(type, name, selected, function(flag) {
+          if (flag) {
+            mergeState({ added: true, groupMessage: '', batchMessage: '' });
+          } else {
+            let msg =
+              'The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 ';
+            mergeState({
+              groupMessage: msg,
+              batchMessage: msg
+            });
+          }
+        });
+      } else {
+        mergeState({
+          groupMessage: 'Please select some gsm(s).',
+          batchMessage: 'Please select some gsm(s).'
+        });
+      }
+    }
+  }
+
+  function deleteTag(event, type) {
+    var groupName = event.target.parentNode.parentNode.getElementsByTagName('td')[0].innerText;
+    if (!groupName) {
+      mergeState({
+        groupMessage: 'No group selected for deleting.',
+        batchMessage: 'No group selected for deleting.'
+      });
+    } else {
+      props.deleteGroup(groupName.trim(), type);
+    }
+  }
+
+  function handleOk() {
+    setTimeout(() => mergeState({ visible: false }), 3000);
+  }
+
+  function handleCancel() {
+    mergeState({
+      group: '',
+      groupName: '',
+      batchName: '',
+      groupMessage: '',
+      batchMessage: '',
+      groupVisible: false,
+      batchVisible: false,
+      added: false,
+      selected: state.added === true ? [] : state.selected
+    });
+    child.current.unselect();
+  }
+
+  function showModal(type) {
+    if (type === 'group') {
+      mergeState({ groupVisible: true, groupName: '' });
+    } else {
+      mergeState({ batchVisible: true, batchName: '' });
+    }
+  }
+
+  let prePlotsBox = '';
+  let postPlotsBox = '';
+  let degBox = '';
+  let ssGSEABox = '';
+  let define_group_click_btn = '';
+  const uploadOptions = {
+    accept: '.csv',
+    onChange: handleCSV,
+    customRequest: ({ file, onSuccess }) => {
+      setTimeout(() => {
+        onSuccess('ok');
+      }, 0);
     }
   };
 
-  render() {
-    const { visible, loading } = this.state;
-    let prePlotsBox = '';
-    let postPlotsBox = '';
-    let degBox = '';
-    let ssGSEABox = '';
-    let define_group_click_btn = '';
-    const uploadOptions = {
-      accept: '.csv',
-      onChange: this.handleCSV,
-      customRequest: ({ file, onSuccess }) => {
-        setTimeout(() => {
-          onSuccess('ok');
-        }, 0);
-      }
-    };
-
-    // define group btn
-    if (this.props.data.dataList.length > 0) {
-      define_group_click_btn = (
-        <div className="row" style={{ display: 'flex' }}>
-          <div className="div-group-gsm">
-            <Button type="primary" onClick={this.showModal}>
-              Manage Group
-            </Button>{' '}
+  // define group btn
+  if (props.data.dataList.length > 0) {
+    define_group_click_btn = (
+      <div className="row" style={{ display: 'flex' }}>
+        <div className="div-group-gsm">
+          <Button type="primary" onClick={() => showModal('group')}>
+            Manage Group
+          </Button>{' '}
+          <Button type="primary" onClick={() => showModal('batch')}>
+            Manage Batch
+          </Button>{' '}
+          <label style={{ display: 'inline' }}>
             <Upload {...uploadOptions}>
               <Button type="primary">
                 <Icon type="upload" />
                 Add Groups (CSV)
               </Button>
             </Upload>
-          </div>
-          <div className="div-export-gsm">
-            <Button id="btn-project-export" type="primary" onClick={this.props.exportGSE}>
-              {' '}
-              Export
-            </Button>{' '}
-          </div>
+          </label>
         </div>
-      );
-    }
+        <div className="div-export-gsm">
+          <Button id="btn-project-export" type="primary" onClick={props.exportGSE}>
+            {' '}
+            Export
+          </Button>{' '}
+        </div>
+      </div>
+    );
+  }
 
-    if (this.props.data.compared) {
-      // controll display fo tags[preplot,postplot,DEG]
-      prePlotsBox = (
-        <TabPane tab="Pre-Normalization QC Plots" key="Pre-normalization_QC_Plots">
-          <PrePlotsBox
-            key="prePlotsBox"
-            getHistplotBN={this.props.getHistplotBN}
-            getMAplotsBN={this.props.getMAplotsBN}
-            getBoxplotBN={this.props.getBoxplotBN}
-            getRLE={this.props.getRLE}
-            getNUSE={this.props.getNUSE}
-            data={this.props.data}
-            updateCurrentWorkingObject={this.props.updateCurrentWorkingObject}
-          />
-        </TabPane>
-      );
-      postPlotsBox = (
-        <TabPane tab="Post-Normalization Plots" key="Post-normalization_Plots">
-          <PostPlotsBox
-            key="postPlotsBox"
-            getBoxplotAN={this.props.getBoxplotAN}
-            getMAplotAN={this.props.getMAplotAN}
-            getHistplotAN={this.props.getHistplotAN}
-            getPCA={this.props.getPCA}
-            getHeatmapolt={this.props.getHeatmapolt}
-            data={this.props.data}
-            updateCurrentWorkingObject={this.props.updateCurrentWorkingObject}
-          />
-        </TabPane>
-      );
-      degBox = (
-        <TabPane tab="DEG-Enrichments Results" key="DEG-Enrichments_Results">
-          <DEGBox
-            key="degBox"
-            data={this.props.data}
-            exportNormalAll={this.props.exportNormalAll}
-            changeLoadingStatus={this.props.changeLoadingStatus}
-            getDEG={this.props.getDEG}
-            getPathwayUp={this.props.getPathwayUp}
-            getPathwayDown={this.props.getPathwayDown}
-            getVolcanoPlot={this.props.getVolcanoPlot}
-            exportPathwayUp={this.props.exportPathwayUp}
-            exportPathwayDown={this.props.exportPathwayDown}
-            exportDEG={this.props.exportDEG}
-            updateCurrentWorkingObject={this.props.updateCurrentWorkingObject}
-          />
-        </TabPane>
-      );
-    } else {
-      // controll display fo tags[preplot,postplot,DEG]
-      prePlotsBox = (
-        <TabPane tab="Pre-Normalization QC Plots" disabled key="Pre-normalization_QC_Plots">
-          {' '}
-        </TabPane>
-      );
-      postPlotsBox = (
-        <TabPane tab="Post-Normalization Plots" disabled key="Post-normalization_Plots"></TabPane>
-      );
-      degBox = (
-        <TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results"></TabPane>
-      );
-      ssGSEABox = <TabPane tab="ssGSEA Results" disabled key="ssGSEA_Results"></TabPane>;
-    }
-    // control tab  SSGSEA
-    if (this.props.data.done_gsea) {
-      ssGSEABox = (
-        <TabPane key="ssGSEA_Results" tab="ssGSEA Results">
-          <SSGSEATable
-            key="ssGSEA_Results_sstab_table"
-            exportGSEA={this.props.exportGSEA}
-            getssGSEA={this.props.getssGSEA}
-            handleGeneChange={this.props.handleGeneChange}
-            data={this.props.data}
-            updateCurrentWorkingObject={this.props.updateCurrentWorkingObject}
-          />
-        </TabPane>
-      );
-    }
+  if (props.data.compared) {
+    // controll display fo tags[preplot,postplot,DEG]
+    prePlotsBox = (
+      <TabPane tab="Pre-Normalization QC Plots" key="Pre-normalization_QC_Plots">
+        <PrePlotsBox
+          key="prePlotsBox"
+          getHistplotBN={props.getHistplotBN}
+          getMAplotsBN={props.getMAplotsBN}
+          getBoxplotBN={props.getBoxplotBN}
+          getRLE={props.getRLE}
+          getNUSE={props.getNUSE}
+          data={props.data}
+          updateCurrentWorkingObject={props.updateCurrentWorkingObject}
+        />
+      </TabPane>
+    );
+    postPlotsBox = (
+      <TabPane tab="Post-Normalization Plots" key="Post-normalization_Plots">
+        <PostPlotsBox
+          key="postPlotsBox"
+          getBoxplotAN={props.getBoxplotAN}
+          getMAplotAN={props.getMAplotAN}
+          getHistplotAN={props.getHistplotAN}
+          getPCA={props.getPCA}
+          getHeatmapolt={props.getHeatmapolt}
+          data={props.data}
+          updateCurrentWorkingObject={props.updateCurrentWorkingObject}
+        />
+      </TabPane>
+    );
+    degBox = (
+      <TabPane tab="DEG-Enrichments Results" key="DEG-Enrichments_Results">
+        <DEGBox
+          key="degBox"
+          data={props.data}
+          exportNormalAll={props.exportNormalAll}
+          changeLoadingStatus={props.changeLoadingStatus}
+          getDEG={props.getDEG}
+          getPathwayUp={props.getPathwayUp}
+          getPathwayDown={props.getPathwayDown}
+          getVolcanoPlot={props.getVolcanoPlot}
+          exportPathwayUp={props.exportPathwayUp}
+          exportPathwayDown={props.exportPathwayDown}
+          exportDEG={props.exportDEG}
+          updateCurrentWorkingObject={props.updateCurrentWorkingObject}
+        />
+      </TabPane>
+    );
+  } else {
+    // controll display fo tags[preplot,postplot,DEG]
+    prePlotsBox = (
+      <TabPane tab="Pre-Normalization QC Plots" disabled key="Pre-normalization_QC_Plots">
+        {' '}
+      </TabPane>
+    );
+    postPlotsBox = (
+      <TabPane tab="Post-Normalization Plots" disabled key="Post-normalization_Plots"></TabPane>
+    );
+    degBox = (
+      <TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results"></TabPane>
+    );
+    ssGSEABox = <TabPane tab="ssGSEA Results" disabled key="ssGSEA_Results"></TabPane>;
+  }
+  // control tab  SSGSEA
+  if (props.data.done_gsea) {
+    ssGSEABox = (
+      <TabPane key="ssGSEA_Results" tab="ssGSEA Results">
+        <SSGSEATable
+          key="ssGSEA_Results_sstab_table"
+          exportGSEA={props.exportGSEA}
+          getssGSEA={props.getssGSEA}
+          handleGeneChange={props.handleGeneChange}
+          data={props.data}
+          updateCurrentWorkingObject={props.updateCurrentWorkingObject}
+        />
+      </TabPane>
+    );
+  }
 
-    var selected_gsms = '';
-    let number_select = 0;
-    if (this.props.data.dataList.length > 0) {
-      for (var key in this.state.selected) {
-        number_select = number_select + 1;
-        selected_gsms =
-          selected_gsms + this.props.data.dataList[this.state.selected[key] - 1].gsm + ',';
-      }
+  var selected_gsms = '';
+  let number_select = 0;
+  if (props.data.dataList.length > 0) {
+    for (var key in selected) {
+      number_select = number_select + 1;
+      selected_gsms = selected_gsms + props.data.dataList[selected[key] - 1].gsm + ',';
     }
+  }
 
-    // define group list in the modal
-    const columns = [
-      // define table column names
+  // define group list in the modal
+  const columns = type => {
+    return [
       { title: 'GROUP', dataIndex: 'name', key: 'name', width: '30%' },
       { title: 'GMS(s)', dataIndex: 'gsms', key: 'gsms' },
       {
@@ -392,156 +411,255 @@ class DataBox extends Component {
         key: 'key',
         width: 90,
         render: e => (
-          <a href="javascript:;" onClick={e => this.deleteTag(e)}>
+          <a href="javascript:;" onClick={e => deleteTag(e, type)}>
             Delete
           </a>
         )
       }
     ];
+  };
 
-    // get group and gsm(s)  [{grupa: gsm1,gsm2,gsm3}]
-    var groups_data = new Map();
-    for (var key in this.props.data.dataList) {
-      if (this.props.data.dataList[key].groups != '') {
-        let gsm_groups = [];
-        if (this.props.data.dataList[key].groups.indexOf(',') != -1) {
-          // A sample belongs to multi-group
-          gsm_groups = this.props.data.dataList[key].groups.split(',');
+  // get group and gsm(s)  [{grupa: gsm1,gsm2,gsm3}]
+  var groups_data = new Map();
+  let batchData = new Map();
+
+  for (let gsm of props.data.dataList) {
+    if (gsm.groups != '') {
+      // A sample belongs to multi-group
+      for (let group of gsm.groups.split(',')) {
+        if (groups_data.has(group)) {
+          groups_data.set(group, groups_data.get(group) + ',' + gsm.gsm);
         } else {
-          gsm_groups = [this.props.data.dataList[key].groups];
+          groups_data.set(group, gsm.gsm);
         }
-
-        for (var index in gsm_groups) {
-          if (groups_data.has(gsm_groups[index])) {
-            groups_data.set(
-              gsm_groups[index],
-              groups_data.get(gsm_groups[index]) + ',' + this.props.data.dataList[key].gsm
-            );
-          } else {
-            groups_data.set(gsm_groups[index], this.props.data.dataList[key].gsm);
-          }
+      }
+      if (gsm.batch) {
+        if (batchData.has(gsm.batch)) {
+          batchData.set(gsm.batch, batchData.get(gsm.batch) + ',' + gsm.gsm);
+        } else {
+          batchData.set(gsm.batch, gsm.gsm);
         }
       }
     }
-
-    var groups_data_list = [];
-    groups_data.forEach(function(value, key, map) {
-      var d = { key: key, name: key, gsms: value };
-      groups_data_list.push(d);
-    });
-    let group_table = (
-      <Table
-        columns={columns}
-        scroll={{ x: 600 }}
-        dataSource={groups_data_list}
-        pagination={false}
-      />
-    );
-    let modal = '';
-
-    // define group modal
-    modal = (
-      <Modal
-        key="group_define_modal"
-        visible={visible}
-        className="custom_modal"
-        title="Manage GSM Group(s)"
-        onOk={this.handleOk}
-        onCancel={this.handleCancel}
-        footer={[
-          <Button key="back" type="primary" onClick={this.handleCancel}>
-            Close
-          </Button>
-        ]}
-      >
-        {' '}
-        <div style={{ display: this.state.added ? 'none' : 'block' }}>
-          <p style={{ color: '#215a82' }}>
-            <b>
-              <label htmlFor="textArea-group-selected">{number_select} Selected GSM(s)</label>
-            </b>
-          </p>
-          <p
-            style={{
-              display: selected_gsms == '' && this.state.visible == true ? 'block' : 'none'
-            }}
-            className="err-message"
-            id="message-unselect-gsm-group"
-          >
-            Please select some gsm(s) before add gsm(s) as a group{' '}
-          </p>
-          <p>
-            {' '}
-            <TextArea
-              id="textArea-group-selected"
-              autosize={false}
-              disabled
-              style={{ width: '100%', color: 'black' }}
-              value={selected_gsms}
-            />
-          </p>
-          <p style={{ color: '#215a82' }}>
-            <b>
-              Group Name<span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
-            </b>{' '}
-            <span style={{ color: '#555' }}>(Must start with an ASCII letter,a-z or A-Z)</span>
-          </p>
-          <p className="err-message" id="message-gsm-group"></p>
-          <p>
-            <label htmlFor="input-define-group">
-              <span style={{ display: 'none' }}>Define Grop</span>
-              <input
-                id="input-define-group"
-                disabled={this.state.selected == '' ? true : false}
-                aria-label="define group name"
-                className={
-                  this.state.selected == '' ? 'ant-input ant-input-disabled' : 'ant-input '
-                }
-                placeholder={'Group Name'}
-                id={'input_group_name'}
-                style={{ width: 'calc(100% - 68px)', color: 'black', fontSize: '16px' }}
-                onChange={this.handleInputOnChange}
-              />
-              &nbsp;
-              <Button
-                type={
-                  this.state.selected == '' || this.state.group_name == '' ? 'default' : 'primary'
-                }
-                disabled={this.state.selected == '' || this.state.group_name == '' ? true : false}
-                onClick={this.createTag}
-              >
-                Add
-              </Button>
-            </label>
-          </p>
-        </div>
-        <p>
-          <b style={{ color: '#215a82' }}>Saved Group(s) List</b>{' '}
-        </p>
-        <p className="err-message" id="message-gsm-group-table"></p>
-        {group_table}
-      </Modal>
-    );
-    // end  group modal
-    let content = (
-      <Tabs onChange={this.handleTabChange} type="card" activeKey={this.props.data.tab_activeKey}>
-        <TabPane tab="GSM Data" key="GSM_1">
-          {define_group_click_btn}
-          <GSMData ref={this.child} data={this.props.data} selected={this.selection} />
-        </TabPane>
-        {prePlotsBox}
-        {postPlotsBox}
-        {degBox}
-        {ssGSEABox}
-      </Tabs>
-    );
-    return (
-      <div className="container-board-right">
-        {content}
-        {modal}
-      </div>
-    );
   }
-}
 
-export default DataBox;
+  var groups_data_list = [];
+  groups_data.forEach((value, key) => {
+    groups_data_list.push({ key: key, name: key, gsms: value });
+  });
+
+  let batchDataList = [];
+  batchData.forEach((value, key) => {
+    if (value != 'Others')
+      batchDataList.push({ key: key, name: key, gsms: value });
+  });
+
+  let group_table = (
+    <Table
+      columns={columns('group')}
+      scroll={{ x: 600 }}
+      dataSource={groups_data_list}
+      pagination={false}
+    />
+  );
+
+  let batchTable = (
+    <Table
+      columns={columns('batch')}
+      scroll={{ x: 600 }}
+      dataSource={batchDataList}
+      pagination={false}
+    />
+  );
+
+  let modal = '';
+  // define group modal
+  modal = (
+    <Modal
+      key="group_define_modal"
+      visible={groupVisible}
+      className="custom_modal"
+      title="Manage GSM Group(s)"
+      onOk={handleOk}
+      onCancel={handleCancel}
+      footer={[
+        <Button key="back" type="primary" onClick={handleCancel}>
+          Close
+        </Button>
+      ]}
+    >
+      {' '}
+      <div style={{ display: added ? 'none' : 'block' }}>
+        <p style={{ color: '#215a82' }}>
+          <b>
+            <label htmlFor="textArea-group-selected">{number_select} Selected GSM(s)</label>
+          </b>
+        </p>
+        <p
+          style={{
+            display: selected_gsms == '' && groupVisible == true ? 'block' : 'none'
+          }}
+          className="err-message"
+          id="message-unselect-gsm-group"
+        >
+          Please select some gsm(s) before add gsm(s) as a group{' '}
+        </p>
+        <p>
+          {' '}
+          <TextArea
+            id="textArea-group-selected"
+            autosize={false}
+            disabled
+            style={{ width: '100%', color: 'black' }}
+            value={selected_gsms}
+          />
+        </p>
+        <p style={{ color: '#215a82' }}>
+          <b>
+            Group Name<span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
+          </b>{' '}
+          <span style={{ color: '#555' }}>(Must start with an ASCII letter,a-z or A-Z)</span>
+        </p>
+        <p className="err-message" id="message-gsm-group">
+          {groupMessage}
+        </p>
+        <p>
+          <label htmlFor="input-define-group">
+            <span style={{ display: 'none' }}>Define Group</span>
+            <input
+              type="text"
+              value={groupName}
+              id="input-define-group"
+              disabled={selected == '' ? true : false}
+              aria-label="define group name"
+              className={selected == '' ? 'ant-input ant-input-disabled' : 'ant-input '}
+              placeholder={'Group Name'}
+              id={'input_groupName'}
+              style={{ width: 'calc(100% - 68px)', color: 'black', fontSize: '16px' }}
+              onChange={e => groupOnChange(e)}
+            />
+            &nbsp;
+            <Button
+              type={selected == '' || groupName == '' ? 'default' : 'primary'}
+              disabled={selected == '' || groupName == '' ? true : false}
+              onClick={() => createTag('group')}
+            >
+              Add
+            </Button>
+          </label>
+        </p>
+      </div>
+      <p>
+        <b style={{ color: '#215a82' }}>Saved Group(s) List</b>{' '}
+      </p>
+      <p className="err-message" id="message-gsm-group-table"></p>
+      {group_table}
+    </Modal>
+  );
+
+  // define batch modal
+  let batchModal = '';
+
+  batchModal = (
+    <Modal
+      key="batchModal"
+      visible={batchVisible}
+      className="custom_modal"
+      title="Manage Batch"
+      onOk={handleOk}
+      onCancel={handleCancel}
+      footer={[
+        <Button key="back" type="primary" onClick={handleCancel}>
+          Close
+        </Button>
+      ]}
+    >
+      {' '}
+      <div style={{ display: added ? 'none' : 'block' }}>
+        <p style={{ color: '#215a82' }}>
+          <b>
+            <label htmlFor="textArea-group-selected">{number_select} Selected GSM(s)</label>
+          </b>
+        </p>
+        <p
+          style={{
+            display: selected_gsms == '' && groupVisible == true ? 'block' : 'none'
+          }}
+          className="err-message"
+          id="message-unselect-gsm-group"
+        >
+          Please select some gsm(s) before add gsm(s) as a batch{' '}
+        </p>
+        <p>
+          {' '}
+          <TextArea
+            id="textArea-group-selected"
+            autosize={false}
+            disabled
+            style={{ width: '100%', color: 'black' }}
+            value={selected_gsms}
+          />
+        </p>
+        <p style={{ color: '#215a82' }}>
+          <b>
+            Batch Name<span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
+          </b>{' '}
+          <span style={{ color: '#555' }}>(Must start with an ASCII letter,a-z or A-Z)</span>
+        </p>
+        <p className="err-message" id="message-gsm-group">
+          {batchMessage}
+        </p>
+        <p>
+          <label htmlFor="input-define-batch">
+            <span style={{ display: 'none' }}>Define Grop</span>
+            <input
+              type="text"
+              value={batchName}
+              id="input-define-batch"
+              disabled={selected == '' ? true : false}
+              aria-label="define batch name"
+              className={selected == '' ? 'ant-input ant-input-disabled' : 'ant-input '}
+              placeholder={'Batch Name'}
+              id={'input_batch_name'}
+              style={{ width: 'calc(100% - 68px)', color: 'black', fontSize: '16px' }}
+              onChange={e => batchOnChange(e)}
+            />
+            &nbsp;
+            <Button
+              type={selected == '' || batchName == '' ? 'default' : 'primary'}
+              disabled={selected == '' || batchName == '' ? true : false}
+              onClick={() => createTag('batch')}
+            >
+              Add
+            </Button>
+          </label>
+        </p>
+      </div>
+      <p>
+        <b style={{ color: '#215a82' }}>Saved Batch(s) List</b>{' '}
+      </p>
+      <p className="err-message" id="message-gsm-group-table"></p>
+      {batchTable}
+    </Modal>
+  );
+
+  let content = (
+    <Tabs onChange={handleTabChange} type="card" activeKey={props.data.tab_activeKey}>
+      <TabPane tab="GSM Data" key="GSM_1">
+        {define_group_click_btn}
+        <GSMData ref={child} data={props.data} selected={selection} />
+      </TabPane>
+      {prePlotsBox}
+      {postPlotsBox}
+      {degBox}
+      {ssGSEABox}
+    </Tabs>
+  );
+  return (
+    <div className="container-board-right">
+      {content}
+      {modal}
+      {batchModal}
+    </div>
+  );
+}
