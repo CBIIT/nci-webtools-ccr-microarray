@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 
-class CIframe  extends Component {
-  constructor(props) {
-    super(props);
-    this.props.showLoading("Loading Plot ...");
-  }
+export default function CIframe(props) {
+  useEffect(() => {
+    props.showLoading('Loading Plot ...');
+  });
 
-hideSpinner = () => {
-    this.props.onLoadComplete();
-  };
-render() {
-    return (
-      <div >
-         <iframe onLoad={this.hideSpinner} title={this.props.title}  src={this.props.link}  width={'100%'} height={'980px'} frameBorder={'0'} scrolling="yes" />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <iframe
+        onLoad={props.onLoadComplete}
+        title={props.title}
+        src={props.link}
+        width={'100%'}
+        height={'980px'}
+        frameBorder={'0'}
+        scrolling="yes"
+      />
+    </div>
+  );
 }
-
-export default CIframe;
