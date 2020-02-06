@@ -37,7 +37,7 @@ class Help extends Component {
                 of Affymetrix chip.
               </p>
               <p>
-                <video autoplay="true" loop controls>
+                <video loop controls>
                   <source src="./assets/img/loading-upload-file.webm" type="video/webm" />
                   <source src="./assets/img/loading-upload-file.mp4" type="video/mp4" />
                   Sorry, your browser doesn't support embedded videos.
@@ -52,7 +52,7 @@ class Help extends Component {
                 must include data in CEL file format from the same type of Affymetrix chip.
               </p>
               <p>
-                <video autoplay="true" loop controls>
+                <video loop controls>
                   <source src="./assets/img/loading-with-accession-data.webm" type="video/webm" />
                   <source src="./assets/img/loading-with-accession-data.mp4" type="video/mp4" />                  Sorry, your browser doesn't support embedded videos.
                 </video>
@@ -111,7 +111,7 @@ class Help extends Component {
             </span>
           </p>
           <p>
-            <video autoplay="true" loop controls>
+            <video loop controls>
               <source src="./assets/img/group.webm" type="video/webm" />
               <source src="./assets/img/group.mp4" type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
@@ -132,7 +132,7 @@ class Help extends Component {
                 2010).{' '}
               </p>
               <p>
-                <video autoplay="true" loop controls>
+                <video loop controls>
                   <source src="./assets/img/nuse.webm" type="video/webm" />
                   <source src="./assets/img/nuse.mp4" type="video/mp4" />
                   Sorry, your browser doesn't support embedded videos.
@@ -145,7 +145,7 @@ class Help extends Component {
                 to the median expression of that probeset across all samples.{' '}
               </p>
               <p>
-                <video autoplay="true" loop controls>
+                <video loop controls>
                   <source src="./assets/img/RLE.webm" type="video/webm" />
                   <source src="./assets/img/RLE.mp4" type="video/mp4" />
                   Sorry, your browser doesn't support embedded videos.
@@ -183,7 +183,7 @@ class Help extends Component {
             present.
           </p>
           <p>
-            <video autoplay="true" loop controls>
+            <video loop controls>
               <source src="./assets/img/histogram.webm" type="video/webm" />
               <source src="./assets/img/histogram.mp4" type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
@@ -196,7 +196,7 @@ class Help extends Component {
             sample line should be relatively equal to the blue median line.
           </p>
           <p>
-            <video autoplay="true" loop controls>
+            <video loop controls>
               <source src="./assets/img/MAplot.webm" type="video/webm" />
               <source src="./assets/img/MAplot.mp4" type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
@@ -208,7 +208,7 @@ class Help extends Component {
             distributions across all samples should be approximately the same.
           </p>
           <p>
-            <video autoplay="true" loop controls>
+            <video loop controls>
               <source src="./assets/img/boxplot.webm" type="video/webm" />
               <source src="./assets/img/boxplot.mp4" type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
@@ -231,7 +231,7 @@ class Help extends Component {
           </p>
           <h4>3D PCA:</h4>
           <p>
-            <video autoplay="true" loop controls>
+            <video loop controls>
               <source src="./assets/img/PCA.webm" type="video/webm" />
               <source src="./assets/img/PCA.mp4" type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
@@ -240,7 +240,7 @@ class Help extends Component {
           <h4>Sample Similarity Heatmap:</h4>
 
           <p>
-            <video autoplay="true" loop controls>
+            <video loop controls>
               <source src="./assets/img/heatmap.webm" type="video/webm" />
               <source src="./assets/img/heatmap.mp4" type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
@@ -262,7 +262,7 @@ class Help extends Component {
             </a>
           </p>
           <p>
-            <video autoplay="true" loop controls>
+            <video loop controls>
               <source src="./assets/img/deg.webm" type="video/webm" />
               <source src="./assets/img/deg.mp4" type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
@@ -283,7 +283,7 @@ class Help extends Component {
           </p>
 
           <p>
-            <video autoplay="true" loop controls>
+            <video loop controls>
               <source src="./assets/img/pathway.webm" type="video/webm" />
               <source src="./assets/img/pathway.mp4" type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
@@ -308,7 +308,7 @@ class Help extends Component {
             .
           </p>
           <p>
-            <video autoplay="true" loop controls>
+            <video loop controls>
               <source src="./assets/img/ssGSEA.webm" type="video/webm" />
               <source src="./assets/img/ssGSEA.mp4" type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
