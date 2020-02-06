@@ -36,49 +36,46 @@ class GSMData extends Component {
       currentState.pagination.total = nextProps.data.dataList.length;
       this.setState(currentState);
     }
-    this.isDataTableRendered('UNSAFE_componentWillReceiveProps');
   }
 
-  isDataTableRendered(t) {
-    clean508();
+  componentDidUpdate() {
+    this.isDataTableRendered();
+  }
 
-    function clean508() {
-      let selectBox = document.getElementById('gsm-select');
-      if (selectBox) {
-        let checkboxes = document.getElementsByClassName('ant-checkbox-wrapper');
-        if (checkboxes) {
-          if (checkboxes.length != 0) {
-            // clearInterval(isDataTableRendered_iv);
-            for (let i in checkboxes) {
-              if (i != 'length') {
-                if (checkboxes[i]) {
-                  if (checkboxes[i].firstElementChild) {
-                    if (checkboxes[i].firstElementChild.firstElementChild) {
-                      let inputC = checkboxes[i].firstElementChild.firstElementChild;
-                      inputC.setAttribute('id', 'select' + i);
-                      inputC.setAttribute('aria-label', 'select');
-                      let inputD = checkboxes[i];
-                      inputD.setAttribute('for', 'select' + i);
-                    }
+  isDataTableRendered() {
+    // clean 508
+    let selectBox = document.getElementById('gsm-select');
+    if (selectBox) {
+      let checkboxes = document.getElementsByClassName('ant-checkbox-wrapper');
+      if (checkboxes) {
+        if (checkboxes.length != 0) {
+          // clearInterval(isDataTableRendered_iv);
+          for (let i in checkboxes) {
+            if (i != 'length') {
+              if (checkboxes[i]) {
+                if (checkboxes[i].firstElementChild) {
+                  if (checkboxes[i].firstElementChild.firstElementChild) {
+                    let inputC = checkboxes[i].firstElementChild.firstElementChild;
+                    inputC.setAttribute('id', 'select' + i);
+                    inputC.setAttribute('aria-label', 'select');
+                    let inputD = checkboxes[i];
+                    inputD.setAttribute('for', 'select' + i);
                   }
                 }
               }
+            }
 
-              let node = document.createElement('span');
-
-              node.style.cssText = 'display:none';
-              let textnode = document.createTextNode('select groups');
-              node.appendChild(textnode);
-              if (!isNaN(parseInt(i))) {
-                document
-                  .getElementsByClassName('ant-checkbox-wrapper')
-                  [parseInt(i)].appendChild(node);
-              }
+            let node = document.createElement('span');
+            node.style.cssText = 'display:none';
+            let textnode = document.createTextNode('select groups');
+            node.appendChild(textnode);
+            if (!isNaN(parseInt(i))) {
+              document
+                .getElementsByClassName('ant-checkbox-wrapper')
+                [parseInt(i)].appendChild(node);
             }
           }
         }
-      } else {
-        // clearInterval(isDataTableRendered_iv);
       }
     }
   }
@@ -431,7 +428,7 @@ class GSMData extends Component {
               }}
             >
               <span data-toggle="tooltip" data-placement="left" title={text}>
-                {text != 'Others' ? text : ''} 
+                {text != 'Others' ? text : ''}
               </span>
             </div>
           )
