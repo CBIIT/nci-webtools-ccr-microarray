@@ -2796,8 +2796,11 @@ class Analysis extends Component {
         } else {
           // csv upload
           for (let gsm of workflow.dataList) {
-            if (gsm.gsm === key) {
-              gsm.groups === '' ? (gsm.groups = group_name) : (gsm.groups += `,${group_name}`);
+            if (type === 'group') {
+              if (gsm.gsm === key)
+                gsm.groups === '' ? (gsm.groups = group_name) : (gsm.groups += `,${group_name}`);
+            } else {
+              if (gsm.gsm === key) gsm.batch = group_name;
             }
           }
         }

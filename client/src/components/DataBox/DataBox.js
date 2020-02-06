@@ -47,13 +47,13 @@ export default function DataBox(props) {
     mergeState({ batchName: e.target.value });
   }
 
-  function handleCSV(e) {
+  function handleCSV(e, type) {
     if (e.file.status === 'done') {
       Papa.parse(e.file.originFileObj, {
         complete: results => {
           let data = results.data;
           for (let group of data) {
-            props.assignGroup('group', group.shift(), group, flag => {
+            props.assignGroup(type, group.shift(), group, flag => {
               if (flag) {
                 mergeState({ added: false });
               }
@@ -272,14 +272,16 @@ export default function DataBox(props) {
   let degBox = '';
   let ssGSEABox = '';
   let define_group_click_btn = '';
-  const uploadOptions = {
-    accept: '.csv',
-    onChange: handleCSV,
-    customRequest: ({ file, onSuccess }) => {
-      setTimeout(() => {
-        onSuccess('ok');
-      }, 0);
-    }
+  const uploadOptions = type => {
+    return {
+      accept: '.csv',
+      onChange: e => handleCSV(e, type),
+      customRequest: ({ file, onSuccess }) => {
+        setTimeout(() => {
+          onSuccess('ok');
+        }, 0);
+      }
+    };
   };
 
   // define group btn
@@ -293,14 +295,6 @@ export default function DataBox(props) {
           <Button type="primary" onClick={() => showModal('batch')}>
             Manage Batch
           </Button>{' '}
-          <label style={{ display: 'inline' }}>
-            <Upload {...uploadOptions}>
-              <Button type="primary">
-                <Icon type="upload" />
-                Add Groups (CSV)
-              </Button>
-            </Upload>
-          </label>
         </div>
         <div className="div-export-gsm">
           <Button id="btn-project-export" type="primary" onClick={props.exportGSE}>
@@ -450,8 +444,7 @@ export default function DataBox(props) {
 
   let batchDataList = [];
   batchData.forEach((value, key) => {
-    if (value != 'Others')
-      batchDataList.push({ key: key, name: key, gsms: value });
+    if (value != 'Others') batchDataList.push({ key: key, name: key, gsms: value });
   });
 
   let group_table = (
@@ -488,7 +481,14 @@ export default function DataBox(props) {
         </Button>
       ]}
     >
-      {' '}
+      <label>
+        <Upload {...uploadOptions('group')}>
+          <Button type="default">
+            <Icon type="upload" />
+            Add Groups (CSV)
+          </Button>
+        </Upload>
+      </label>{' '}
       <div style={{ display: added ? 'none' : 'block' }}>
         <p style={{ color: '#215a82' }}>
           <b>
@@ -574,7 +574,14 @@ export default function DataBox(props) {
         </Button>
       ]}
     >
-      {' '}
+      <label>
+        <Upload {...uploadOptions('batch')}>
+          <Button type="default">
+            <Icon type="upload" />
+            Add Batches (CSV)
+          </Button>
+        </Upload>
+      </label>{' '}
       <div style={{ display: added ? 'none' : 'block' }}>
         <p style={{ color: '#215a82' }}>
           <b>
