@@ -585,7 +585,7 @@ export default function DataBox(props) {
       <div style={{ display: added ? 'none' : 'block' }}>
         <p style={{ color: '#215a82' }}>
           <b>
-            <label htmlFor="textArea-group-selected">{number_select} Selected GSM(s)</label>
+            <label htmlFor="textArea-group-selected-batch">{number_select} Selected GSM(s)</label>
           </b>
         </p>
         <p
@@ -600,7 +600,7 @@ export default function DataBox(props) {
         <p>
           {' '}
           <TextArea
-            id="textArea-group-selected"
+            id="textArea-group-selected-batch"
             autosize={false}
             disabled
             style={{ width: '100%', color: 'black' }}
