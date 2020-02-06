@@ -431,7 +431,7 @@ class GSMData extends Component {
               }}
             >
               <span data-toggle="tooltip" data-placement="left" title={text}>
-                {text}
+                {text != 'Others' ? text : ''} 
               </span>
             </div>
           )
