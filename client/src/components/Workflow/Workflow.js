@@ -1,39 +1,37 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Project from './Project';
 import Contrast from './Contrast';
 
-class Workflow extends Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        let contrastBox = <Contrast data={this.props.data} 
-                                handleGroup1Select={this.props.handleGroup1Select}
-                                handleGroup2Select={this.props.handleGroup2Select}
-                                runContrast={this.props.runContrast}
-                                changeRunContrastMode={this.props.changeRunContrastMode}
-                                handleNormalSelect = {this.props.handleNormalSelect}
-                              />;
-        let project = <Project 
-                    data={this.props.data}  
-                    resetWorkFlowProject={this.props.resetWorkFlowProject} 
-                    changeCode={this.props.changeCode} 
-                    handleSelectType={this.props.handleSelectType} 
-                    fileRemove={this.props.fileRemove} 
-                    beforeUpload={this.props.beforeUpload} 
-                    handleUpload={this.props.handleUpload} 
-                    loadGSE={this.props.loadGSE}
-                    exportGSE={this.props.exportGSE}
-                    />
-        return (
-            <div className="container-board-left">
-                  <div className="blocks">
-                    {project}
-                    {contrastBox}
-                  </div>
-            </div>
-        );
-    }
+export default function Workflow(props) {
+  let contrastBox = (
+    <Contrast
+      data={props.data}
+      handleGroup1Select={props.handleGroup1Select}
+      handleGroup2Select={props.handleGroup2Select}
+      runContrast={props.runContrast}
+      changeRunContrastMode={props.changeRunContrastMode}
+      handleNormalSelect={props.handleNormalSelect}
+    />
+  );
+  let project = (
+    <Project
+      data={props.data}
+      resetWorkFlowProject={props.resetWorkFlowProject}
+      changeCode={props.changeCode}
+      handleSelectType={props.handleSelectType}
+      fileRemove={props.fileRemove}
+      beforeUpload={props.beforeUpload}
+      handleUpload={props.handleUpload}
+      loadGSE={props.loadGSE}
+      exportGSE={props.exportGSE}
+    />
+  );
+  return (
+    <div className="container-board-left">
+      <div className="blocks">
+        {project}
+        {contrastBox}
+      </div>
+    </div>
+  );
 }
-
-export default Workflow;
