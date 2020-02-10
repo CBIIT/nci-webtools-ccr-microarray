@@ -404,11 +404,7 @@ export default function DataBox(props) {
         dataIndex: 'name',
         key: 'key',
         width: 90,
-        render: e => (
-          <a href="javascript:;" onClick={e => deleteTag(e, type)}>
-            Delete
-          </a>
-        )
+        render: e => <a onClick={e => deleteTag(e, type)}>Delete</a>
       }
     ];
   };
