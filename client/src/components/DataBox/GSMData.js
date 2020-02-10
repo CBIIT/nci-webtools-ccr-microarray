@@ -442,6 +442,7 @@ class GSMData extends Component {
 
       const menu = (
         <Menu onClick={this.handleMenuClick}>
+          <Menu.Item key="10">10</Menu.Item>
           <Menu.Item key="15">15</Menu.Item>
           <Menu.Item key="25">25</Menu.Item>
           <Menu.Item key="50">50</Menu.Item>
@@ -458,7 +459,7 @@ class GSMData extends Component {
       content = (
         <div>
           <div className="err-message" id="message-gsm"></div>
-          <div>
+          <div style={{ display: 'flex' }}>
             <Search
               aria-label="search"
               placeholder="Search text"
@@ -467,29 +468,18 @@ class GSMData extends Component {
                 this.setState({ term: value, renderData: this.props.data.dataList })
               }
             />
-          </div>
-
-          <div
-            id="gsm-select"
-            style={{
-              display: filteredData.length < 15 ? 'none' : 'block'
-            }}
-          >
-            Display
-            <Dropdown overlay={menu}>
-              <Button>
-                <span id="gsm-drop-down">{Math.min(25, filteredData.length)}</span>{' '}
-                <Icon type="down" />
-              </Button>
-            </Dropdown>
-            of total {filteredData.length} records
-          </div>
-
-          {filteredData.length < 15 && (
-            <div>
-              Displaying <b>{filteredData.length}</b> record(s)
+            <div id="gsm-select" style={{ marginLeft: 'auto', marginRight: '14rem' }}>
+              Display
+              <Dropdown overlay={menu}>
+                <Button>
+                  <span id="gsm-drop-down">{Math.min(25, filteredData.length)}</span>{' '}
+                  <Icon type="down" />
+                </Button>
+              </Dropdown>
+              of total {filteredData.length} records
             </div>
-          )}
+          </div>
+
           <div>
             <Table
               scroll={{ x: 600 }}
