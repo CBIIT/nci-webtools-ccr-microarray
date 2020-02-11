@@ -164,7 +164,7 @@ const defaultState = {
       },
       layout: {
         showlegend: false,
-        autosize: true
+        autoSize: true
       }
     },
     RLE: {
@@ -175,7 +175,7 @@ const defaultState = {
       },
       layout: {
         showlegend: false,
-        autosize: true
+        autoSize: true
       }
     },
     NUSE: {
@@ -186,7 +186,7 @@ const defaultState = {
       },
       layout: {
         showlegend: false,
-        autosize: true
+        autoSize: true
       }
     },
     preplots: {
@@ -210,7 +210,7 @@ const defaultState = {
       },
       layout: {
         showlegend: false,
-        autosize: true
+        autoSize: true
       }
     },
     PCA: {
@@ -1397,7 +1397,7 @@ class Analysis extends Component {
                 ) {
                   color = group_data[element]['color'];
                   pcaPlotData.push({
-                    autosize: true,
+                    autoSize: true,
                     x: group_data[element]['x'],
                     y: group_data[element]['y'],
                     z: group_data[element]['z'],
@@ -2912,7 +2912,7 @@ class Analysis extends Component {
     };
     workflow.BoxplotAN.layout = {
       showlegend: false,
-      autosize: true
+      autoSize: true
     };
     if (!workflow.BoxplotAN.data == '') {
       workflow.BoxplotAN.plot = (
@@ -2937,7 +2937,7 @@ class Analysis extends Component {
     };
     workflow.BoxplotBN.layout = {
       showlegend: false,
-      autosize: true
+      autoSize: true
     };
     if (!workflow.BoxplotBN.data == '') {
       workflow.BoxplotBN.plot = (
@@ -2960,7 +2960,7 @@ class Analysis extends Component {
     workflow.RLE.style = {
       width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9
     };
-    workflow.RLE.layout = { showlegend: false, autosize: true };
+    workflow.RLE.layout = { showlegend: false, autoSize: true };
     if (!workflow.RLE.data == '') {
       workflow.RLE.plot = (
         <Plot
@@ -2981,7 +2981,7 @@ class Analysis extends Component {
     };
     workflow.NUSE.layout = {
       showlegend: false,
-      autosize: true
+      autoSize: true
     };
     if (!workflow.NUSE.data == '') {
       workflow.NUSE.plot = (

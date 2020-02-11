@@ -504,7 +504,7 @@ export default function DataBox(props) {
           {' '}
           <TextArea
             id="textArea-group-selected"
-            autosize={false}
+            autoSize={false}
             disabled
             style={{ width: '100%', color: 'black' }}
             value={selected_gsms}
@@ -597,7 +597,7 @@ export default function DataBox(props) {
           {' '}
           <TextArea
             id="textArea-group-selected-batch"
-            autosize={false}
+            autoSize={false}
             disabled
             style={{ width: '100%', color: 'black' }}
             value={selected_gsms}
