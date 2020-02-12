@@ -1364,31 +1364,32 @@ class Analysis extends Component {
               // break data in to groups
               let group_data = {};
               let color_for_others = '#000';
+              let index = 0;
               pcaData.group_name.forEach(function(element, i) {
-                let color = pcaData.color[i];
-
                 if (
                   element.split(',').indexOf(workflow2.group_2) > -1 ||
                   element.split(',').indexOf(workflow2.group_1) > -1
                 ) {
                   if (group_data.hasOwnProperty(element)) {
-                    group_data[element]['x'].push(pcaData.x[i]);
-                    group_data[element]['y'].push(pcaData.y[i]);
-                    group_data[element]['z'].push(pcaData.z[i]);
+                    group_data[element]['x'].push(pcaData.x[index]);
+                    group_data[element]['y'].push(pcaData.y[index]);
+                    group_data[element]['z'].push(pcaData.z[index]);
                     group_data[element]['color'].push(pcaData.color[i]);
                     group_data[element]['group_name'].push(pcaData.group_name[i]);
-                    group_data[element]['row'].push(pcaData.row[i]);
+                    group_data[element]['row'].push(pcaData.row[index]);
                   } else {
                     group_data[element] = {};
-                    group_data[element]['x'] = [pcaData.x[i]];
-                    group_data[element]['y'] = [pcaData.y[i]];
-                    group_data[element]['z'] = [pcaData.z[i]];
+                    group_data[element]['x'] = [pcaData.x[index]];
+                    group_data[element]['y'] = [pcaData.y[index]];
+                    group_data[element]['z'] = [pcaData.z[index]];
                     group_data[element]['color'] = [pcaData.color[i]];
                     group_data[element]['group_name'] = [pcaData.group_name[i]];
-                    group_data[element]['row'] = [pcaData.row[i]];
+                    group_data[element]['row'] = [pcaData.row[index]];
                   }
+                  index++;
                 }
               });
+              
               for (let element in group_data) {
                 let color = '';
                 if (
@@ -1453,6 +1454,7 @@ class Analysis extends Component {
                   }
                 }
               };
+              console.log('plotdata', pcaPlotData);
               var PCAIframe = (
                 <Plot data={pcaPlotData} layout={pcaPlotLayout} useResizeHandler={true} />
               );
@@ -1745,25 +1747,24 @@ class Analysis extends Component {
 
     let legend_settings = workflow.groups.reduce(reducer, []);
 
-    for (let i = 0; i < result.data.col.length; i++) {
+    this.index(workflow.groups).forEach((real, index) => {
       let cMarker = '';
-      if (
-        workflow.groups[i].split(',').indexOf(workflow.group_2) > -1 ||
-        workflow.groups[i].split(',').indexOf(workflow.group_1) > -1
-      ) {
-        cMarker = {
-          color: BoxplotsData.color[i]
-        };
-        let boxplotData = {
-          y: BoxplotsData.data[i],
-          type: 'box',
-          name: BoxplotsData.col[i],
-          marker: cMarker,
-          hovertext: result.data.col[i]
-        };
-        BoxplotRenderData.push(boxplotData);
-      }
-    }
+
+      cMarker = {
+        color: BoxplotsData.color[real - 1]
+      };
+
+      let boxplotData = {
+        y: BoxplotsData.data[index],
+        type: 'box',
+        name: BoxplotsData.col[real - 1],
+        marker: cMarker,
+        hovertext: BoxplotsData.col[real - 1]
+      };
+
+      BoxplotRenderData.push(boxplotData);
+    });
+
     // use annotations to show legend
     let plot_layout = {
       showlegend: false,
