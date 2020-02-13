@@ -9,20 +9,27 @@ export default function MAPlot(props) {
   let gsmGroups = data.groups.filter(group => group != 'Others');
   let group1 = data.group_1;
   let group2 = data.group_2;
+  let groupLength = 0;
   let dataList = data.dataList;
   let group1Pics = [];
   let group2Pics = [];
   let panels = [];
 
   if (dataList.length > 0 && pics != 'No Data' && pics != '') {
-    gsmGroups.forEach((g, i) => {
+    gsmGroups.forEach(g => {
       let group = g.split(',');
       if (group.indexOf(group1) > -1) {
-        group1Pics.push(pics[i]);
-      } else if (group.indexOf(group2) > -1) {
-        group2Pics.push(pics[i]);
+        groupLength++;
       }
     });
+
+    for (let i = 0; i < groupLength; i++) {
+      group1Pics.push(pics[i]);
+    }
+
+    for (let i = groupLength; i < pics.length; i++) {
+      group2Pics.push(pics[i]);
+    }
 
     [group1Pics, group2Pics].map(group => {
       let tmp = [];

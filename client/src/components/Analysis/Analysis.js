@@ -1365,6 +1365,7 @@ class Analysis extends Component {
               let group_data = {};
               let color_for_others = '#000';
               let index = 0;
+
               pcaData.group_name.forEach(function(element, i) {
                 if (
                   element.split(',').indexOf(workflow2.group_2) > -1 ||
@@ -1376,7 +1377,7 @@ class Analysis extends Component {
                     group_data[element]['z'].push(pcaData.z[index]);
                     group_data[element]['color'].push(pcaData.color[i]);
                     group_data[element]['group_name'].push(pcaData.group_name[i]);
-                    group_data[element]['row'].push(pcaData.row[index]);
+                    group_data[element]['row'].push(pcaData.row[i]);
                   } else {
                     group_data[element] = {};
                     group_data[element]['x'] = [pcaData.x[index]];
@@ -1384,12 +1385,12 @@ class Analysis extends Component {
                     group_data[element]['z'] = [pcaData.z[index]];
                     group_data[element]['color'] = [pcaData.color[i]];
                     group_data[element]['group_name'] = [pcaData.group_name[i]];
-                    group_data[element]['row'] = [pcaData.row[index]];
+                    group_data[element]['row'] = [pcaData.row[i]];
                   }
                   index++;
                 }
               });
-              
+
               for (let element in group_data) {
                 let color = '';
                 if (
@@ -1402,7 +1403,7 @@ class Analysis extends Component {
                     x: group_data[element]['x'],
                     y: group_data[element]['y'],
                     z: group_data[element]['z'],
-                    text: pcaData.row,
+                    text: group_data[element].row,
                     mode: 'markers',
                     marker: {
                       size: 10,
@@ -1454,7 +1455,7 @@ class Analysis extends Component {
                   }
                 }
               };
-              console.log('plotdata', pcaPlotData);
+
               var PCAIframe = (
                 <Plot data={pcaPlotData} layout={pcaPlotLayout} useResizeHandler={true} />
               );
@@ -1694,6 +1695,7 @@ class Analysis extends Component {
   generateBOXPLOT(result, workflow) {
     let BoxplotRenderData = [];
     let BoxplotsData = result.data;
+    console.log(BoxplotsData);
     //get max Y value
     let maxY = Math.max(...BoxplotsData.data[0]);
     let minY = Math.min(...BoxplotsData.data[0]);
