@@ -22,6 +22,9 @@ export default function DataBox(props) {
     added: false
   });
 
+  const [disableGroupCsv, setDisableGroupCsv] = useState(true);
+  const [disableBatchCsv, setDisableBatchCsv] = useState(true);
+
   const {
     groupVisible,
     batchVisible,
@@ -256,7 +259,7 @@ export default function DataBox(props) {
       added: false,
       selected: state.added === true ? [] : state.selected
     });
-    child.current.unselect();
+    if (added) child.current.unselect();
   }
 
   function showModal(type) {
@@ -276,6 +279,7 @@ export default function DataBox(props) {
     return {
       accept: '.csv',
       onChange: e => handleCSV(e, type),
+      showUploadList: false,
       customRequest: ({ file, onSuccess }) => {
         setTimeout(() => {
           onSuccess('ok');
@@ -477,15 +481,22 @@ export default function DataBox(props) {
         </Button>
       ]}
     >
-      <label>
-        <Upload {...uploadOptions('group')}>
-          <Button type="default">
-            <Icon type="upload" />
-            Add Groups (CSV)
-          </Button>
-        </Upload>
-      </label>{' '}
-      <div style={{ display: added ? 'none' : 'block' }}>
+      <div style={{ display: 'flex' }}>
+        <input
+          type="checkbox"
+          aria-label="enable csv upload"
+          onChange={() => setDisableGroupCsv(!disableGroupCsv)}
+        ></input>
+        <label style={{ marginLeft: '1rem' }}>
+          <Upload {...uploadOptions('group')}>
+            <Button type="default" disabled={disableGroupCsv}>
+              <Icon type="upload" />
+              Add Groups (CSV)
+            </Button>
+          </Upload>
+        </label>
+      </div>{' '}
+      <div style={{ display: added || !disableGroupCsv ? 'none' : 'block' }}>
         <p style={{ color: '#215a82' }}>
           <b>
             <label htmlFor="textArea-group-selected">{number_select} Selected GSM(s)</label>
@@ -570,15 +581,22 @@ export default function DataBox(props) {
         </Button>
       ]}
     >
-      <label>
-        <Upload {...uploadOptions('batch')}>
-          <Button type="default">
-            <Icon type="upload" />
-            Add Batches (CSV)
-          </Button>
-        </Upload>
-      </label>{' '}
-      <div style={{ display: added ? 'none' : 'block' }}>
+      <div style={{ display: 'flex' }}>
+        <input
+          type="checkbox"
+          aria-label="enable csv upload"
+          onChange={() => setDisableBatchCsv(!disableBatchCsv)}
+        ></input>
+        <label style={{ marginLeft: '1rem' }}>
+          <Upload {...uploadOptions('batch')}>
+            <Button type="default" disabled={disableBatchCsv}>
+              <Icon type="upload" />
+              Add Batches (CSV)
+            </Button>
+          </Upload>
+        </label>
+      </div>{' '}
+      <div style={{ display: added || !disableBatchCsv ? 'none' : 'block' }}>
         <p style={{ color: '#215a82' }}>
           <b>
             <label htmlFor="textArea-group-selected-batch">{number_select} Selected GSM(s)</label>
@@ -586,7 +604,7 @@ export default function DataBox(props) {
         </p>
         <p
           style={{
-            display: selected_gsms == '' && groupVisible == true ? 'block' : 'none'
+            display: selected_gsms == '' && batchVisible == true ? 'block' : 'none'
           }}
           className="err-message"
           id="message-unselect-gsm-group"
