@@ -487,13 +487,22 @@ export default function DataBox(props) {
           aria-label="enable csv upload"
           onChange={() => setDisableGroupCsv(!disableGroupCsv)}
         ></input>
-        <label style={{ marginLeft: '1rem' }}>
+        <label style={{ marginLeft: '1rem', width: 'auto' }}>
           <Upload {...uploadOptions('group')}>
             <Button type="default" disabled={disableGroupCsv}>
               <Icon type="upload" />
-              Add Groups (CSV)
+              Add Groups from .csv file
             </Button>
           </Upload>
+        </label>
+        <label style={{ width: 'auto' }}>
+          <a href="./assets/sample/groups_GSE37874.csv">
+            <Button type="link" style={{ color: '#005ea2' }}>
+              {' '}
+              <Icon type="download" />
+              Download Sample
+            </Button>
+          </a>
         </label>
       </div>{' '}
       <div style={{ display: added || !disableGroupCsv ? 'none' : 'block' }}>
@@ -587,13 +596,22 @@ export default function DataBox(props) {
           aria-label="enable csv upload"
           onChange={() => setDisableBatchCsv(!disableBatchCsv)}
         ></input>
-        <label style={{ marginLeft: '1rem' }}>
+        <label style={{ marginLeft: '1rem', width: 'auto' }}>
           <Upload {...uploadOptions('batch')}>
             <Button type="default" disabled={disableBatchCsv}>
               <Icon type="upload" />
-              Add Batches (CSV)
+              Add Batches from .csv file
             </Button>
           </Upload>
+        </label>
+        <label style={{ width: 'auto' }}>
+          <a href="./assets/sample/batch_GSE37874.csv">
+            <Button type="link" style={{ color: '#005ea2' }}>
+              {' '}
+              <Icon type="download" />
+              Download Sample
+            </Button>
+          </a>
         </label>
       </div>{' '}
       <div style={{ display: added || !disableBatchCsv ? 'none' : 'block' }}>
