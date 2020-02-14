@@ -7,6 +7,12 @@ import Help from '../Help/Help';
 import Plot from 'react-plotly.js';
 import XLSX from 'xlsx';
 import CIframe from '../DataBox/CIframe';
+import ReactGA from 'react-ga';
+
+ReactGA.initialize('UA-62346354-19', {
+  debug: true,
+  userId: 'nciwebtools'
+});
 
 const httpErrorMessage = {
   400: 'Bad Request',
@@ -249,6 +255,13 @@ class Analysis extends Component {
       this.state = Object.assign({}, defaultState);
       this.state.workflow.progressing = true;
       this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
+      if (window.location.search == '') {
+        ReactGA.pageview(window.location.pathname + '#about');
+        console.log('if');
+      } else {
+        ReactGA.pageview(window.location.pathname + window.location.search);
+        console.log();
+      }
     }
     // listen windows resize event
     window.addEventListener('resize', this.updateDimensions);
@@ -2156,6 +2169,11 @@ class Analysis extends Component {
       return;
     } else {
       document.getElementById('message-load-accession-code').innerHTML = '';
+      // ReactGA.event({
+      //   category: 'Load GSM',
+      //   action: 'Load accession code'
+      // });
+      ReactGA.ga('send', 'event', 'Load GSM', 'Loaded accession code');
     }
     document.getElementById('btn-project-load-gse').className =
       'ant-btn upload-start ant-btn-default';
@@ -2626,7 +2644,13 @@ class Analysis extends Component {
             this.setState({
               workflow: workflow
             });
-            this.getSSGSEAGeneHeatMap();
+            // this.getSSGSEAGeneHeatMap();
+            // ReactGA.event({
+            //   category: 'Run Contrast',
+            //   action: ''
+            // });
+            ReactGA.ga('send', 'event', 'Run Contrast', 'Run Contrast - Queued');
+
           });
       } catch (err) {
         workflow.uploading = false;
@@ -2666,6 +2690,13 @@ class Analysis extends Component {
               });
 
               this.hideWorkFlow();
+
+              // ReactGA.event({
+              //   category: 'Run Contrast',
+              //   action: 'Run Contrast - Live'
+              // });
+              ReactGA.ga('send', 'event', 'Run Contrast', 'Run Contrast - Live');
+
             } else {
               if (result) {
                 document.getElementById('message-gsm').innerHTML = JSON.stringify(result.msg);
@@ -2768,6 +2799,12 @@ class Analysis extends Component {
             'ant-btn upload-start ant-btn-default';
         })
         .catch(error => console.log(error));
+      // ReactGA.event({
+      //   category: 'Load GSM',
+      //   action: 'Upload CEL files'
+      // });
+      ReactGA.ga('send', 'event', 'Load GSM', 'Uploaded CEL files');
+
     } catch (error) {
       workflow.uploading = false;
       workflow.progressing = false;
@@ -3010,6 +3047,7 @@ class Analysis extends Component {
         document.getElementById('tab_about').className = '';
         document.getElementById('tab_analysis').className = 'hide';
         document.getElementById('tab_help').className = 'hide';
+        ReactGA.pageview(window.location.pathname + '#about');
       }
       if (tab == 'analysis') {
         document.getElementById('li-about').className = '';
@@ -3018,6 +3056,7 @@ class Analysis extends Component {
         document.getElementById('tab_about').className = 'hide';
         document.getElementById('tab_analysis').className = '';
         document.getElementById('tab_help').className = 'hide';
+        ReactGA.pageview(window.location.pathname + '#analysis');
       }
       if (tab == 'help') {
         document.getElementById('tab_about').className = 'hide';
@@ -3026,6 +3065,7 @@ class Analysis extends Component {
         document.getElementById('li-about').className = '';
         document.getElementById('li-analysis').className = '';
         document.getElementById('li-help').className = 'active';
+        ReactGA.pageview(window.location.pathname + '#help');
       }
     }
   }
