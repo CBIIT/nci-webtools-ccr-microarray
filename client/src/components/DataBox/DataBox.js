@@ -496,7 +496,7 @@ export default function DataBox(props) {
           </Upload>
         </label>
         <label style={{ width: 'auto' }}>
-          <a href="./assets/sample/groups_GSE37874.csv">
+          <a href="./assets/sample/GSMGroups-sample.csv">
             <Button type="link" style={{ color: '#005ea2' }}>
               {' '}
               <Icon type="download" />
@@ -605,7 +605,7 @@ export default function DataBox(props) {
           </Upload>
         </label>
         <label style={{ width: 'auto' }}>
-          <a href="./assets/sample/batch_GSE37874.csv">
+          <a href="./assets/sample/GSMBatches-sample.csv">
             <Button type="link" style={{ color: '#005ea2' }}>
               {' '}
               <Icon type="download" />
