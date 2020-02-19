@@ -292,9 +292,12 @@ class GSMData extends Component {
       if (this.state.term === '') {
         return true;
       }
-      if (row['gsm'] && row['gsm'].includes(this.state.term)) return true;
-      if (row['title'] && row['title'].includes(this.state.term)) return true;
-      if (row['description'] && row['description'].includes(this.state.term)) return true;
+
+      let re = new RegExp(this.state.term, 'i');
+
+      if (row['gsm'] && re.test(row['gsm'])) return true;
+      if (row['title'] && re.test(row['title'])) return true;
+      if (row['description'] && re.test(row['description'])) return true;
 
       return false;
     };
