@@ -1694,7 +1694,6 @@ class Analysis extends Component {
   generateBOXPLOT(result, workflow) {
     let BoxplotRenderData = [];
     let BoxplotsData = result.data;
-    console.log(BoxplotsData);
     //get max Y value
     let maxY = Math.max(...BoxplotsData.data[0]);
     let minY = Math.min(...BoxplotsData.data[0]);
@@ -2787,24 +2786,15 @@ class Analysis extends Component {
     if (group_name.match(pattern)) {
       let workflow = Object.assign({}, this.state.workflow);
       for (var key of dataList_keys) {
-        if (typeof key == 'number') {
-          if (type === 'group') {
-            if (workflow.dataList[key - 1].groups === '')
-              workflow.dataList[key - 1].groups = group_name;
-            else workflow.dataList[key - 1].groups += `,${group_name}`;
+        if (type === 'group') {
+          if (workflow.dataList[key - 1].groups === '') {
+            workflow.dataList[key - 1].groups = group_name;
           } else {
-            workflow.dataList[key - 1].batch = group_name;
+            if (workflow.dataList[key - 1].groups.split(',').indexOf(group_name) < 0)
+              workflow.dataList[key - 1].groups += `,${group_name}`;
           }
         } else {
-          // csv upload
-          for (let gsm of workflow.dataList) {
-            if (type === 'group') {
-              if (gsm.gsm === key)
-                gsm.groups === '' ? (gsm.groups = group_name) : (gsm.groups += `,${group_name}`);
-            } else {
-              if (gsm.gsm === key) gsm.batch = group_name;
-            }
-          }
+          workflow.dataList[key - 1].batch = group_name;
         }
       }
       this.setState({ workflow: workflow });
@@ -2813,6 +2803,43 @@ class Analysis extends Component {
       callback(false);
     }
   };
+
+  uploadGroup = csvData => {
+    let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g;
+    let workflow = Object.assign({}, this.state.workflow);
+
+    for (let row of csvData) {
+      let gsm = row.shift().toUpperCase();
+      let assignment = row;
+
+      if (assignment.length < 2) {
+        return `Error: Invalid format - 'group' and 'batch' columns required.`;
+      }
+      for (let data of workflow.dataList) {
+        if (data.gsm === gsm) {
+          if (assignment[0].length) {
+            if (assignment[0].match(pattern)) {
+              if (data.groups.split(',').indexOf(assignment[0]) < 0) {
+                data.groups === ''
+                  ? (data.groups = assignment[0])
+                  : (data.groups += `,${assignment[0]}`);
+              }
+            } else {
+              return `${gsm} Error: Group Name ${assignment[0]} is invalid`;
+            }
+          }
+          if (assignment[1].length) {
+            if (assignment[1].match(pattern)) data.batch = assignment[1];
+            else return `${gsm} Error: Batch Name ${assignment[1]} is invalid`;
+          }
+        }
+      }
+    }
+
+    this.setState({ workflow: workflow });
+    return true;
+  };
+
   deleteGroup = (group_name, type) => {
     let workflow = Object.assign({}, this.state.workflow);
     for (let gsm of workflow.dataList) {
@@ -3346,6 +3373,7 @@ class Analysis extends Component {
                 exportPathwayDown={this.exportPathwayDown}
                 exportDEG={this.exportDEG}
                 exportNormalAll={this.exportNormalAll}
+                uploadGroup={this.uploadGroup}
               />
             </div>
             <div className={modal}>
