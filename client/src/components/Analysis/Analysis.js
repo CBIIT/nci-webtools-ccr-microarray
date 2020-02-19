@@ -2017,7 +2017,7 @@ class Analysis extends Component {
   };
   changeCode = event => {
     let workflow = Object.assign({}, this.state.workflow);
-    workflow.accessionCode = event.target.value;
+    workflow.accessionCode = event.target.value.toUpperCase();
     this.setState({ workflow: workflow });
   };
   handleSelectType = event => {
