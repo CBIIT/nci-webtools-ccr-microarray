@@ -1363,32 +1363,30 @@ class Analysis extends Component {
               let pcaPlotData = [];
               // break data in to groups
               let group_data = {};
-              let color_for_others = '#000';
-              let index = 0;
 
-              pcaData.group_name.forEach(function(element, i) {
-                if (
-                  element.split(',').indexOf(workflow2.group_2) > -1 ||
-                  element.split(',').indexOf(workflow2.group_1) > -1
-                ) {
-                  if (group_data.hasOwnProperty(element)) {
-                    group_data[element]['x'].push(pcaData.x[index]);
-                    group_data[element]['y'].push(pcaData.y[index]);
-                    group_data[element]['z'].push(pcaData.z[index]);
-                    group_data[element]['color'].push(pcaData.color[i]);
-                    group_data[element]['group_name'].push(pcaData.group_name[i]);
-                    group_data[element]['row'].push(pcaData.row[i]);
-                  } else {
-                    group_data[element] = {};
-                    group_data[element]['x'] = [pcaData.x[index]];
-                    group_data[element]['y'] = [pcaData.y[index]];
-                    group_data[element]['z'] = [pcaData.z[index]];
-                    group_data[element]['color'] = [pcaData.color[i]];
-                    group_data[element]['group_name'] = [pcaData.group_name[i]];
-                    group_data[element]['row'] = [pcaData.row[i]];
+              let index = 0;
+              [workflow2.group_1, workflow2.group_2].map(group => {
+                pcaData.group_name.forEach(function(element, i) {
+                  if (element.split(',').indexOf(group) > -1) {
+                    if (element in group_data) {
+                      group_data[element]['x'].push(pcaData.x[index]);
+                      group_data[element]['y'].push(pcaData.y[index]);
+                      group_data[element]['z'].push(pcaData.z[index]);
+                      group_data[element]['color'].push(pcaData.color[i]);
+                      group_data[element]['group_name'].push(pcaData.group_name[i]);
+                      group_data[element]['row'].push(pcaData.row[i]);
+                    } else {
+                      group_data[element] = {};
+                      group_data[element]['x'] = [pcaData.x[index]];
+                      group_data[element]['y'] = [pcaData.y[index]];
+                      group_data[element]['z'] = [pcaData.z[index]];
+                      group_data[element]['color'] = [pcaData.color[i]];
+                      group_data[element]['group_name'] = [pcaData.group_name[i]];
+                      group_data[element]['row'] = [pcaData.row[i]];
+                    }
+                    index++;
                   }
-                  index++;
-                }
+                });
               });
 
               for (let element in group_data) {
@@ -1415,6 +1413,7 @@ class Analysis extends Component {
                   });
                 }
               }
+
               let pcaPlotLayout = {
                 showlegend: true,
                 margin: {
