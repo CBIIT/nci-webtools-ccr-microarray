@@ -480,7 +480,7 @@ export default function DataBox(props) {
           </Upload>
         </label>
         <label style={{ width: 'auto' }}>
-          <a href="./assets/sample/sample.csv">
+          <a href="./assets/sample/GSMGroupsBatches-sample.csv">
             <Button type="link" style={{ color: '#005ea2' }}>
               {' '}
               <Icon type="download" />
