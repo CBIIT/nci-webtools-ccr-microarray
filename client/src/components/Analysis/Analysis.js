@@ -10,7 +10,6 @@ import CIframe from '../DataBox/CIframe';
 import ReactGA from 'react-ga';
 
 ReactGA.initialize('UA-62346354-19', {
-  debug: true,
   userId: 'nciwebtools'
 });
 
@@ -257,10 +256,8 @@ class Analysis extends Component {
       this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
       if (window.location.search == '') {
         ReactGA.pageview(window.location.pathname + '#about');
-        console.log('if');
       } else {
         ReactGA.pageview(window.location.pathname + window.location.search);
-        console.log();
       }
     }
     // listen windows resize event
@@ -2167,11 +2164,10 @@ class Analysis extends Component {
       return;
     } else {
       document.getElementById('message-load-accession-code').innerHTML = '';
-      // ReactGA.event({
-      //   category: 'Load GSM',
-      //   action: 'Load accession code'
-      // });
-      ReactGA.ga('send', 'event', 'Load GSM', 'Loaded accession code');
+      ReactGA.event({
+        category: 'Load GSM',
+        action: 'Load accession code'
+      });
     }
     document.getElementById('btn-project-load-gse').className =
       'ant-btn upload-start ant-btn-default';
@@ -2642,13 +2638,11 @@ class Analysis extends Component {
             this.setState({
               workflow: workflow
             });
-            // this.getSSGSEAGeneHeatMap();
-            // ReactGA.event({
-            //   category: 'Run Contrast',
-            //   action: ''
-            // });
-            ReactGA.ga('send', 'event', 'Run Contrast', 'Run Contrast - Queued');
-
+            this.getSSGSEAGeneHeatMap();
+            ReactGA.event({
+              category: 'Run Contrast',
+              action: 'Run Contrast - Queued'
+            });
           });
       } catch (err) {
         workflow.uploading = false;
@@ -2689,12 +2683,10 @@ class Analysis extends Component {
 
               this.hideWorkFlow();
 
-              // ReactGA.event({
-              //   category: 'Run Contrast',
-              //   action: 'Run Contrast - Live'
-              // });
-              ReactGA.ga('send', 'event', 'Run Contrast', 'Run Contrast - Live');
-
+              ReactGA.event({
+                category: 'Run Contrast',
+                action: 'Run Contrast - Live'
+              });
             } else {
               if (result) {
                 document.getElementById('message-gsm').innerHTML = JSON.stringify(result.msg);
@@ -2797,12 +2789,10 @@ class Analysis extends Component {
             'ant-btn upload-start ant-btn-default';
         })
         .catch(error => console.log(error));
-      // ReactGA.event({
-      //   category: 'Load GSM',
-      //   action: 'Upload CEL files'
-      // });
-      ReactGA.ga('send', 'event', 'Load GSM', 'Uploaded CEL files');
-
+      ReactGA.event({
+        category: 'Load GSM',
+        action: 'Upload CEL files'
+      });
     } catch (error) {
       workflow.uploading = false;
       workflow.progressing = false;
