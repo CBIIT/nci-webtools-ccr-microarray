@@ -2809,28 +2809,30 @@ class Analysis extends Component {
     let workflow = Object.assign({}, this.state.workflow);
 
     for (let row of csvData) {
-      let gsm = row.shift().toUpperCase();
-      let assignment = row;
+      if (row.length > 2) {
+        let gsm = row.shift().toUpperCase();
+        let assignment = row;
 
-      if (assignment.length < 2) {
-        return `Error: Invalid format - 'group' and 'batch' columns required.`;
-      }
-      for (let data of workflow.dataList) {
-        if (data.gsm === gsm) {
-          if (assignment[0].length) {
-            if (assignment[0].match(pattern)) {
-              if (data.groups.split(',').indexOf(assignment[0]) < 0) {
-                data.groups === ''
-                  ? (data.groups = assignment[0])
-                  : (data.groups += `,${assignment[0]}`);
+        if (assignment.length < 2) {
+          return `Error: Invalid format - 'group' and 'batch' columns required.`;
+        }
+        for (let data of workflow.dataList) {
+          if (data.gsm === gsm) {
+            if (assignment[0].length) {
+              if (assignment[0].match(pattern)) {
+                if (data.groups.split(',').indexOf(assignment[0]) < 0) {
+                  data.groups === ''
+                    ? (data.groups = assignment[0])
+                    : (data.groups += `,${assignment[0]}`);
+                }
+              } else {
+                return `${gsm} Error: Group Name ${assignment[0]} is invalid`;
               }
-            } else {
-              return `${gsm} Error: Group Name ${assignment[0]} is invalid`;
             }
-          }
-          if (assignment[1].length) {
-            if (assignment[1].match(pattern)) data.batch = assignment[1];
-            else return `${gsm} Error: Batch Name ${assignment[1]} is invalid`;
+            if (assignment[1].length) {
+              if (assignment[1].match(pattern)) data.batch = assignment[1];
+              else return `${gsm} Error: Batch Name ${assignment[1]} is invalid`;
+            }
           }
         }
       }
