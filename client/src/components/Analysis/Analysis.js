@@ -1376,32 +1376,30 @@ class Analysis extends Component {
               let pcaPlotData = [];
               // break data in to groups
               let group_data = {};
-              let color_for_others = '#000';
-              let index = 0;
 
-              pcaData.group_name.forEach(function(element, i) {
-                if (
-                  element.split(',').indexOf(workflow2.group_2) > -1 ||
-                  element.split(',').indexOf(workflow2.group_1) > -1
-                ) {
-                  if (group_data.hasOwnProperty(element)) {
-                    group_data[element]['x'].push(pcaData.x[index]);
-                    group_data[element]['y'].push(pcaData.y[index]);
-                    group_data[element]['z'].push(pcaData.z[index]);
-                    group_data[element]['color'].push(pcaData.color[i]);
-                    group_data[element]['group_name'].push(pcaData.group_name[i]);
-                    group_data[element]['row'].push(pcaData.row[i]);
-                  } else {
-                    group_data[element] = {};
-                    group_data[element]['x'] = [pcaData.x[index]];
-                    group_data[element]['y'] = [pcaData.y[index]];
-                    group_data[element]['z'] = [pcaData.z[index]];
-                    group_data[element]['color'] = [pcaData.color[i]];
-                    group_data[element]['group_name'] = [pcaData.group_name[i]];
-                    group_data[element]['row'] = [pcaData.row[i]];
+              let index = 0;
+              [workflow2.group_1, workflow2.group_2].map(group => {
+                pcaData.group_name.forEach(function(element, i) {
+                  if (element.split(',').indexOf(group) > -1) {
+                    if (element in group_data) {
+                      group_data[element]['x'].push(pcaData.x[index]);
+                      group_data[element]['y'].push(pcaData.y[index]);
+                      group_data[element]['z'].push(pcaData.z[index]);
+                      group_data[element]['color'].push(pcaData.color[i]);
+                      group_data[element]['group_name'].push(pcaData.group_name[i]);
+                      group_data[element]['row'].push(pcaData.row[i]);
+                    } else {
+                      group_data[element] = {};
+                      group_data[element]['x'] = [pcaData.x[index]];
+                      group_data[element]['y'] = [pcaData.y[index]];
+                      group_data[element]['z'] = [pcaData.z[index]];
+                      group_data[element]['color'] = [pcaData.color[i]];
+                      group_data[element]['group_name'] = [pcaData.group_name[i]];
+                      group_data[element]['row'] = [pcaData.row[i]];
+                    }
+                    index++;
                   }
-                  index++;
-                }
+                });
               });
 
               for (let element in group_data) {
@@ -1428,6 +1426,7 @@ class Analysis extends Component {
                   });
                 }
               }
+
               let pcaPlotLayout = {
                 showlegend: true,
                 margin: {
@@ -1708,7 +1707,6 @@ class Analysis extends Component {
   generateBOXPLOT(result, workflow) {
     let BoxplotRenderData = [];
     let BoxplotsData = result.data;
-    console.log(BoxplotsData);
     //get max Y value
     let maxY = Math.max(...BoxplotsData.data[0]);
     let minY = Math.min(...BoxplotsData.data[0]);
@@ -2031,7 +2029,7 @@ class Analysis extends Component {
   };
   changeCode = event => {
     let workflow = Object.assign({}, this.state.workflow);
-    workflow.accessionCode = event.target.value;
+    workflow.accessionCode = event.target.value.toUpperCase();
     this.setState({ workflow: workflow });
   };
   handleSelectType = event => {
@@ -2825,24 +2823,15 @@ class Analysis extends Component {
     if (group_name.match(pattern)) {
       let workflow = Object.assign({}, this.state.workflow);
       for (var key of dataList_keys) {
-        if (typeof key == 'number') {
-          if (type === 'group') {
-            if (workflow.dataList[key - 1].groups === '')
-              workflow.dataList[key - 1].groups = group_name;
-            else workflow.dataList[key - 1].groups += `,${group_name}`;
+        if (type === 'group') {
+          if (workflow.dataList[key - 1].groups === '') {
+            workflow.dataList[key - 1].groups = group_name;
           } else {
-            workflow.dataList[key - 1].batch = group_name;
+            if (workflow.dataList[key - 1].groups.split(',').indexOf(group_name) < 0)
+              workflow.dataList[key - 1].groups += `,${group_name}`;
           }
         } else {
-          // csv upload
-          for (let gsm of workflow.dataList) {
-            if (type === 'group') {
-              if (gsm.gsm === key)
-                gsm.groups === '' ? (gsm.groups = group_name) : (gsm.groups += `,${group_name}`);
-            } else {
-              if (gsm.gsm === key) gsm.batch = group_name;
-            }
-          }
+          workflow.dataList[key - 1].batch = group_name;
         }
       }
       this.setState({ workflow: workflow });
@@ -2851,6 +2840,45 @@ class Analysis extends Component {
       callback(false);
     }
   };
+
+  uploadGroup = csvData => {
+    let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g;
+    let workflow = Object.assign({}, this.state.workflow);
+
+    for (let row of csvData) {
+      if (row.length > 2) {
+        let gsm = row.shift().toUpperCase();
+        let assignment = row;
+
+        if (assignment.length < 2) {
+          return `Error: Invalid format - 'group' and 'batch' columns required.`;
+        }
+        for (let data of workflow.dataList) {
+          if (data.gsm === gsm) {
+            if (assignment[0].length) {
+              if (assignment[0].match(pattern)) {
+                if (data.groups.split(',').indexOf(assignment[0]) < 0) {
+                  data.groups === ''
+                    ? (data.groups = assignment[0])
+                    : (data.groups += `,${assignment[0]}`);
+                }
+              } else {
+                return `${gsm} Error: Group Name ${assignment[0]} is invalid`;
+              }
+            }
+            if (assignment[1].length) {
+              if (assignment[1].match(pattern)) data.batch = assignment[1];
+              else return `${gsm} Error: Batch Name ${assignment[1]} is invalid`;
+            }
+          }
+        }
+      }
+    }
+
+    this.setState({ workflow: workflow });
+    return true;
+  };
+
   deleteGroup = (group_name, type) => {
     let workflow = Object.assign({}, this.state.workflow);
     for (let gsm of workflow.dataList) {
@@ -3387,6 +3415,7 @@ class Analysis extends Component {
                 exportPathwayDown={this.exportPathwayDown}
                 exportDEG={this.exportDEG}
                 exportNormalAll={this.exportNormalAll}
+                uploadGroup={this.uploadGroup}
               />
             </div>
             <div className={modal}>

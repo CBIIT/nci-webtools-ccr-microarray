@@ -13,28 +13,13 @@ const { TextArea } = Input;
 export default function DataBox(props) {
   const [state, setState] = useState({
     groupVisible: false,
-    batchVisible: false,
     groupName: '',
-    batchName: '',
     groupMessage: '',
-    batchMessage: '',
     selected: [],
     added: false
   });
-
-  const [disableGroupCsv, setDisableGroupCsv] = useState(true);
-  const [disableBatchCsv, setDisableBatchCsv] = useState(true);
-
-  const {
-    groupVisible,
-    batchVisible,
-    groupName,
-    batchName,
-    groupMessage,
-    batchMessage,
-    selected,
-    added
-  } = state;
+  const [modalOption, setOption] = useState('group');
+  const { groupVisible, groupName, groupMessage, selected, added } = state;
 
   const child = useRef(null);
 
@@ -46,22 +31,16 @@ export default function DataBox(props) {
     mergeState({ groupName: e.target.value });
   }
 
-  function batchOnChange(e) {
-    mergeState({ batchName: e.target.value });
-  }
-
-  function handleCSV(e, type) {
+  function handleCSV(e) {
     if (e.file.status === 'done') {
       Papa.parse(e.file.originFileObj, {
+        config: {
+          header: false
+        },
         complete: results => {
           let data = results.data;
-          for (let group of data) {
-            props.assignGroup(type, group.shift(), group, flag => {
-              if (flag) {
-                mergeState({ added: false });
-              }
-            });
-          }
+          let assign = props.uploadGroup(data);
+          assign === true ? mergeState({ added: false }) : message.error(assign);
         }
       });
     } else if (e.file.status === 'error') {
@@ -195,37 +174,28 @@ export default function DataBox(props) {
     mergeState({ selected: selectedRowKeys });
   }
 
-  function createTag(type) {
+  function createTag() {
     let name = groupName;
-    if (type === 'batch') {
-      name = batchName;
-    }
 
     if (name === '') {
-      if (type === 'batch') {
-        mergeState({ batchMessage: 'tag name is required.' });
-      } else {
-        mergeState({ groupMessage: 'tag name is required.' });
-      }
+      mergeState({ groupMessage: 'tag name is required.' });
     } else {
       if (selected.length > 0) {
         // if user select records in table
-        props.assignGroup(type, name, selected, function(flag) {
+        props.assignGroup(modalOption, name, selected, function(flag) {
           if (flag) {
-            mergeState({ added: true, groupMessage: '', batchMessage: '' });
+            mergeState({ added: true, groupMessage: '' });
           } else {
             let msg =
               'The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 ';
             mergeState({
-              groupMessage: msg,
-              batchMessage: msg
+              groupMessage: msg
             });
           }
         });
       } else {
         mergeState({
-          groupMessage: 'Please select some gsm(s).',
-          batchMessage: 'Please select some gsm(s).'
+          groupMessage: 'Please select some gsm(s).'
         });
       }
     }
@@ -235,8 +205,7 @@ export default function DataBox(props) {
     var groupName = event.target.parentNode.parentNode.getElementsByTagName('td')[0].innerText;
     if (!groupName) {
       mergeState({
-        groupMessage: 'No group selected for deleting.',
-        batchMessage: 'No group selected for deleting.'
+        groupMessage: 'No group selected for deleting.'
       });
     } else {
       props.deleteGroup(groupName.trim(), type);
@@ -251,23 +220,16 @@ export default function DataBox(props) {
     mergeState({
       group: '',
       groupName: '',
-      batchName: '',
       groupMessage: '',
-      batchMessage: '',
       groupVisible: false,
-      batchVisible: false,
       added: false,
       selected: state.added === true ? [] : state.selected
     });
     if (added) child.current.unselect();
   }
 
-  function showModal(type) {
-    if (type === 'group') {
-      mergeState({ groupVisible: true, groupName: '' });
-    } else {
-      mergeState({ batchVisible: true, batchName: '' });
-    }
+  function showModal() {
+    mergeState({ groupVisible: true, groupName: '' });
   }
 
   let prePlotsBox = '';
@@ -275,10 +237,10 @@ export default function DataBox(props) {
   let degBox = '';
   let ssGSEABox = '';
   let define_group_click_btn = '';
-  const uploadOptions = type => {
+  const uploadOptions = () => {
     return {
       accept: '.csv',
-      onChange: e => handleCSV(e, type),
+      onChange: e => handleCSV(e),
       showUploadList: false,
       customRequest: ({ file, onSuccess }) => {
         setTimeout(() => {
@@ -293,11 +255,8 @@ export default function DataBox(props) {
     define_group_click_btn = (
       <div className="row" style={{ display: 'flex' }}>
         <div className="div-group-gsm">
-          <Button type="primary" onClick={() => showModal('group')}>
-            Manage Group
-          </Button>{' '}
-          <Button type="primary" onClick={() => showModal('batch')}>
-            Manage Batch
+          <Button type="primary" onClick={() => showModal()}>
+            Manage Groups/Batches
           </Button>{' '}
         </div>
         <div className="div-export-gsm">
@@ -401,7 +360,7 @@ export default function DataBox(props) {
   // define group list in the modal
   const columns = type => {
     return [
-      { title: 'GROUP', dataIndex: 'name', key: 'name', width: '30%' },
+      { title: type === 'group' ? 'GROUP' : 'BATCH', dataIndex: 'name', key: 'name', width: '30%' },
       { title: 'GMS(s)', dataIndex: 'gsms', key: 'gsms' },
       {
         title: 'ACTION',
@@ -427,12 +386,12 @@ export default function DataBox(props) {
           groups_data.set(group, gsm.gsm);
         }
       }
-      if (gsm.batch) {
-        if (batchData.has(gsm.batch)) {
-          batchData.set(gsm.batch, batchData.get(gsm.batch) + ',' + gsm.gsm);
-        } else {
-          batchData.set(gsm.batch, gsm.gsm);
-        }
+    }
+    if (gsm.batch) {
+      if (batchData.has(gsm.batch)) {
+        batchData.set(gsm.batch, batchData.get(gsm.batch) + ',' + gsm.gsm);
+      } else {
+        batchData.set(gsm.batch, gsm.gsm);
       }
     }
   }
@@ -472,7 +431,7 @@ export default function DataBox(props) {
       key="group_define_modal"
       visible={groupVisible}
       className="custom_modal"
-      title="Manage GSM Group(s)"
+      title="Manage GSM Group(s)/Batch(es)"
       onOk={handleOk}
       onCancel={handleCancel}
       footer={[
@@ -482,21 +441,46 @@ export default function DataBox(props) {
       ]}
     >
       <div style={{ display: 'flex' }}>
-        <input
-          type="checkbox"
-          aria-label="enable csv upload"
-          onChange={() => setDisableGroupCsv(!disableGroupCsv)}
-        ></input>
+        <label>
+          <input
+            type="radio"
+            aria-label="add group"
+            value="addGroup"
+            checked={modalOption === 'group'}
+            onChange={() => setOption('group')}
+          ></input>{' '}
+          Add Group
+        </label>
+        <label>
+          <input
+            type="radio"
+            aria-label="add batch"
+            value="addBatch"
+            checked={modalOption === 'batch'}
+            onChange={() => setOption('batch')}
+          ></input>{' '}
+          Add Batch
+        </label>
+        <label>
+          <input
+            type="radio"
+            aria-label="enable csv upload"
+            value="upload"
+            checked={modalOption === 'upload'}
+            onChange={() => setOption('upload')}
+          ></input>{' '}
+          Add from file
+        </label>
         <label style={{ marginLeft: '1rem', width: 'auto' }}>
-          <Upload {...uploadOptions('group')}>
-            <Button type="default" disabled={disableGroupCsv}>
+          <Upload {...uploadOptions()}>
+            <Button type="default" disabled={modalOption != 'upload'}>
               <Icon type="upload" />
               Add Groups from .csv file
             </Button>
           </Upload>
         </label>
         <label style={{ width: 'auto' }}>
-          <a href="./assets/sample/groups_GSE37874.csv">
+          <a href="./assets/sample/GSMGroupsBatches-sample.csv">
             <Button type="link" style={{ color: '#005ea2' }}>
               {' '}
               <Icon type="download" />
@@ -504,8 +488,9 @@ export default function DataBox(props) {
             </Button>
           </a>
         </label>
-      </div>{' '}
-      <div style={{ display: added || !disableGroupCsv ? 'none' : 'block' }}>
+      </div>
+      <hr></hr>
+      <div style={{ display: added || modalOption === 'upload' ? 'none' : 'block' }}>
         <p style={{ color: '#215a82' }}>
           <b>
             <label htmlFor="textArea-group-selected">{number_select} Selected GSM(s)</label>
@@ -532,9 +517,8 @@ export default function DataBox(props) {
         </p>
         <p style={{ color: '#215a82' }}>
           <b>
-            Group Name<span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
+            Name<span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
           </b>{' '}
-          <span style={{ color: '#555' }}>(Must start with an ASCII letter,a-z or A-Z)</span>
         </p>
         <p className="err-message" id="message-gsm-group">
           {groupMessage}
@@ -549,7 +533,7 @@ export default function DataBox(props) {
               disabled={selected == '' ? true : false}
               aria-label="define group name"
               className={selected == '' ? 'ant-input ant-input-disabled' : 'ant-input '}
-              placeholder={'Group Name'}
+              placeholder={'Name (Must start with an ASCII letter,a-z or A-Z)'}
               id={'input_groupName'}
               style={{ width: 'calc(100% - 68px)', color: 'black', fontSize: '16px' }}
               onChange={e => groupOnChange(e)}
@@ -558,7 +542,7 @@ export default function DataBox(props) {
             <Button
               type={selected == '' || groupName == '' ? 'default' : 'primary'}
               disabled={selected == '' || groupName == '' ? true : false}
-              onClick={() => createTag('group')}
+              onClick={() => createTag(modalOption)}
             >
               Add
             </Button>
@@ -566,116 +550,12 @@ export default function DataBox(props) {
         </p>
       </div>
       <p>
-        <b style={{ color: '#215a82' }}>Saved Group(s) List</b>{' '}
+        <b style={{ color: '#215a82' }}>Saved Group(s)</b>{' '}
       </p>
       <p className="err-message" id="message-gsm-group-table"></p>
-      {group_table}
-    </Modal>
-  );
-
-  // define batch modal
-  let batchModal = '';
-
-  batchModal = (
-    <Modal
-      key="batchModal"
-      visible={batchVisible}
-      className="custom_modal"
-      title="Manage Batch"
-      onOk={handleOk}
-      onCancel={handleCancel}
-      footer={[
-        <Button key="back" type="primary" onClick={handleCancel}>
-          Close
-        </Button>
-      ]}
-    >
-      <div style={{ display: 'flex' }}>
-        <input
-          type="checkbox"
-          aria-label="enable csv upload"
-          onChange={() => setDisableBatchCsv(!disableBatchCsv)}
-        ></input>
-        <label style={{ marginLeft: '1rem', width: 'auto' }}>
-          <Upload {...uploadOptions('batch')}>
-            <Button type="default" disabled={disableBatchCsv}>
-              <Icon type="upload" />
-              Add Batches from .csv file
-            </Button>
-          </Upload>
-        </label>
-        <label style={{ width: 'auto' }}>
-          <a href="./assets/sample/batch_GSE37874.csv">
-            <Button type="link" style={{ color: '#005ea2' }}>
-              {' '}
-              <Icon type="download" />
-              Download Sample
-            </Button>
-          </a>
-        </label>
-      </div>{' '}
-      <div style={{ display: added || !disableBatchCsv ? 'none' : 'block' }}>
-        <p style={{ color: '#215a82' }}>
-          <b>
-            <label htmlFor="textArea-group-selected-batch">{number_select} Selected GSM(s)</label>
-          </b>
-        </p>
-        <p
-          style={{
-            display: selected_gsms == '' && batchVisible == true ? 'block' : 'none'
-          }}
-          className="err-message"
-          id="message-unselect-gsm-group"
-        >
-          Please select some gsm(s) before add gsm(s) as a batch{' '}
-        </p>
-        <p>
-          {' '}
-          <TextArea
-            id="textArea-group-selected-batch"
-            autoSize={false}
-            disabled
-            style={{ width: '100%', color: 'black' }}
-            value={selected_gsms}
-          />
-        </p>
-        <p style={{ color: '#215a82' }}>
-          <b>
-            Batch Name<span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
-          </b>{' '}
-          <span style={{ color: '#555' }}>(Must start with an ASCII letter,a-z or A-Z)</span>
-        </p>
-        <p className="err-message" id="message-gsm-group">
-          {batchMessage}
-        </p>
-        <p>
-          <label htmlFor="input-define-batch">
-            <span style={{ display: 'none' }}>Define Grop</span>
-            <input
-              type="text"
-              value={batchName}
-              id="input-define-batch"
-              disabled={selected == '' ? true : false}
-              aria-label="define batch name"
-              className={selected == '' ? 'ant-input ant-input-disabled' : 'ant-input '}
-              placeholder={'Batch Name'}
-              id={'input_batch_name'}
-              style={{ width: 'calc(100% - 68px)', color: 'black', fontSize: '16px' }}
-              onChange={e => batchOnChange(e)}
-            />
-            &nbsp;
-            <Button
-              type={selected == '' || batchName == '' ? 'default' : 'primary'}
-              disabled={selected == '' || batchName == '' ? true : false}
-              onClick={() => createTag('batch')}
-            >
-              Add
-            </Button>
-          </label>
-        </p>
-      </div>
+      {group_table}{' '}
       <p>
-        <b style={{ color: '#215a82' }}>Saved Batch(s) List</b>{' '}
+        <b style={{ color: '#215a82' }}>Saved Batch(es)</b>{' '}
       </p>
       <p className="err-message" id="message-gsm-group-table"></p>
       {batchTable}
@@ -698,7 +578,6 @@ export default function DataBox(props) {
     <div className="container-board-right">
       {content}
       {modal}
-      {batchModal}
     </div>
   );
 }
