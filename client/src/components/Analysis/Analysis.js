@@ -2391,10 +2391,21 @@ class Analysis extends Component {
       reqBody.source = 'fetch';
     }
     let batchCount = 0;
+    let batchSamples = {};
+
     for (var i in workflow.dataList) {
       reqBody.dataList.push(workflow.dataList[i].gsm);
       if (workflow.dataList[i].batch) {
-        reqBody.batches.push(workflow.dataList[i].batch);
+        let batch = workflow.dataList[i].batch;
+        reqBody.batches.push(batch);
+        if (!batchSamples[batch]) {
+          batchSamples[batch] = [false, false];
+        }
+        if (workflow.dataList[i].groups.indexOf(workflow.group_1) > -1) {
+          batchSamples[batch] = [true, batchSamples[batch][1]];
+        } else if (workflow.dataList[i].groups.indexOf(workflow.group_2) > -1) {
+          batchSamples[batch] = [batchSamples[batch][0], true];
+        }
       } else {
         reqBody.batches.push('Others');
         batchCount++;
@@ -2412,12 +2423,10 @@ class Analysis extends Component {
           return;
         }
         if (workflow.dataList[i].groups.indexOf(workflow.group_1) != -1) {
-          // stop process and show warnning.
           reqBody.groups.push(workflow.group_1);
           continue;
         }
         if (workflow.dataList[i].groups.indexOf(workflow.group_2) != -1) {
-          // stop process and show warnning.
           reqBody.groups.push(workflow.group_2);
           continue;
         }
@@ -2429,6 +2438,18 @@ class Analysis extends Component {
         reqBody.groups.push('Others');
       }
     }
+
+    // validate that each batch contains at least one sample per group
+    let valid = true;
+    Object.keys(batchSamples).forEach(batch => {
+      if (!batchSamples[batch][0] || !batchSamples[batch][1]) {
+        document.getElementById('message-gsm').innerHTML =
+          'Cannot run contrasts when batches do not contain samples from each group. Please re-configure your batches and try again. ';
+        valid = false;
+      }
+    });
+    if (!valid) return;
+
     if (batchCount == workflow.dataList.length) {
       reqBody.batches = [];
     }
