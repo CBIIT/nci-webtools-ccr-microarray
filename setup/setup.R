@@ -29,6 +29,7 @@ BiocManager::install(
     "pd.hg.u95av2", "pd.hta.2.0", "pd.huex.1.0.st.v2", "pd.hugene.1.0.st.v1",
     "pd.hugene.1.1.st.v1", "pd.hugene.2.0.st", "pd.hugene.2.1.st",
     "pd.mg.u74av2", "pd.moe430a", "pd.moex.1.0.st.v1", "pd.mogene.1.0.st.v1", 
-    "pd.mogene.1.1.st.v1", "pd.mogene.2.0.st", "pd.mouse430.2", "pd.mouse430a.2"))
+    "pd.mogene.1.1.st.v1", "pd.mogene.2.0.st", "pd.mouse430.2", "pd.mouse430a.2",
+    "pd.ht.hg.u133a", "hthgu133a.db"))
     
 install_github("CCBR/MicroArrayPipeline/mpstr")
