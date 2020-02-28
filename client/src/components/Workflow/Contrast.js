@@ -13,33 +13,43 @@ export default function Contrast(props) {
   let options = [];
   let tmp_options = [];
   // find the unique value in grups
-  props.data.dataList.filter(function(v, i, self) {
-    if (tmp_options.indexOf(v['groups']) == -1 && v['groups'] != '') {
-      // multi-group
-      if (v['groups'].indexOf(',') != -1) {
-        let groups = v['groups'].split(',');
-        groups.forEach(function(group) {
-          if (tmp_options.indexOf(group) == -1 && group != '') {
-            let d1 = (
-              <option key={group} value={group}>
-                {group}
+  function findUnique(data) {
+    data.filter(gsm => {
+      if (tmp_options.indexOf(gsm['groups']) == -1 && gsm['groups'] != '') {
+        // multi-group
+        if (gsm['groups'] && gsm['groups'].indexOf(',') != -1) {
+          let groups = gsm['groups'].split(',');
+          groups.forEach(function(group) {
+            if (tmp_options.indexOf(group) == -1 && group != '') {
+              let d1 = (
+                <option key={group} value={group}>
+                  {group}
+                </option>
+              );
+              options.unshift(d1);
+              tmp_options.unshift(group);
+            }
+          });
+        } else {
+          if (gsm.groups) {
+            var d2 = (
+              <option key={gsm['groups']} value={gsm['groups']}>
+                {gsm['groups']}
               </option>
             );
-            options.unshift(d1);
-            tmp_options.unshift(group);
+            options.unshift(d2);
+            tmp_options.unshift(gsm['groups']);
           }
-        });
-      } else {
-        var d2 = (
-          <option key={v['groups']} value={v['groups']}>
-            {v['groups']}
-          </option>
-        );
-        options.unshift(d2);
-        tmp_options.unshift(v['groups']);
+        }
       }
-    }
-  });
+    });
+  }
+
+  if (props.data.multichip === true) {
+    findUnique(props.data.dataList[props.data.chip]);
+  } else {
+    findUnique(props.data.dataList);
+  }
 
   let queueBlock = (
     <div className="block ">

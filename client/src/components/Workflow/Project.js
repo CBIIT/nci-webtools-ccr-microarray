@@ -63,6 +63,21 @@ export default function Project(props) {
           </div>
         </div>
         <div className="row">
+          <div className="col-sm-12">
+            <label className="title" htmlFor="chip">
+              Chip
+            </label>
+            <Input
+              aria-label="input chip"
+              id="chip"
+              disabled={props.data.dataList.length > 0 || props.data.multichip}
+              onChange={e => props.changeChip(e)}
+              value={props.data.chip}
+              placeholder="Optional"
+            />
+          </div>
+        </div>
+        <div className="row">
           <div className="col-sm-6">
             <button
               id="btn-project-load-gse"

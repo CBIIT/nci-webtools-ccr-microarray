@@ -76,7 +76,8 @@ function restoreSession(req, path) {
       mAplotBN: re.maplotBN,
       mAplotAN: re.maplotAfter,
       normal: req.session[req.body.projectId].normal[0],
-      heatmapolt: req.session[req.body.projectId].heatmapAfterNorm
+      heatmapolt: req.session[req.body.projectId].heatmapAfterNorm,
+      chip: re.chip
     };
   }
 }
@@ -165,7 +166,8 @@ router.post('/loadGSE', function(req, res) {
   data.push(config.uploadPath);
   data.push(req.body.code);
   data.push(req.body.groups);
-  data.push(req.body.batches)
+  data.push(req.body.batches);
+  data.push(req.body.chip);
   logger.info(
     'API:/loadGSE ',
     'code:',
@@ -280,6 +282,7 @@ router.post('/qAnalysis', function(req, res) {
   data.realGroup = req.body.realGroup.join('@');
   data.index = req.body.index;
   data.batches = req.body.batches;
+  data.chip = req.body.chip;
   let CEL = '';
   for (let i in req.body.dataList) {
     CEL = req.body.dataList[i] + ',' + CEL;
@@ -382,6 +385,7 @@ router.post('/runContrast', function(req, res) {
   data.push(req.body.realGroup.join('@'));
   data.push(req.body.index);
   data.push(req.body.batches);
+  data.push(req.body.chip || '');
   removeGSEAheatmap(config.uploadPath, req.body.projectId);
   logger.info('runContrast  R code ');
   R.execute('wrapper.R', data, function(err, returnValue) {

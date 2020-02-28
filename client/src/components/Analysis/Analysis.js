@@ -239,7 +239,9 @@ const defaultState = {
     histplotBN_url: '',
     histplotAN_url: '',
     heatmapolt_url: '',
-    batches: []
+    batches: [],
+    chip: '',
+    multichip: false
   }
 };
 
@@ -2029,6 +2031,11 @@ class Analysis extends Component {
     workflow.accessionCode = event.target.value.toUpperCase();
     this.setState({ workflow: workflow });
   };
+  changeChip = event => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.chip = event.target.value.toUpperCase();
+    this.setState({ workflow: workflow });
+  };
   handleSelectType = event => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.analysisType = event.target.value;
@@ -2155,6 +2162,25 @@ class Analysis extends Component {
       this.setState({ workflow: workflow });
     }
   };
+
+  loadError = data => {
+    let workflow = Object.assign({}, this.state.workflow);
+
+    document.getElementById('btn-project-load-gse').className =
+      'ant-btn upload-start ant-btn-primary';
+    workflow.uploading = false;
+    workflow.progressing = false;
+    document.getElementById('message-gsm').innerHTML = data
+      .replace('\\n', ' ')
+      .replace(/"/g, '')
+      .replace('[1] +++loadGSE+++', ' ')
+      .replace('files Please', 'files. Please');
+    document.getElementById('message-gsm').nextSibling.innerHTML = '';
+    this.setState({
+      workflow: workflow
+    });
+  };
+
   loadGSE = () => {
     let workflow = Object.assign({}, this.state.workflow);
     let reqBody = {};
@@ -2181,6 +2207,7 @@ class Analysis extends Component {
     reqBody.projectId = workflow.projectID;
     reqBody.groups = workflow.groups;
     reqBody.batches = workflow.batches;
+    reqBody.chip = workflow.chip;
     // gruop info
     // var groups = [];
     // for (var i in workflow.dataList) {
@@ -2213,71 +2240,63 @@ class Analysis extends Component {
           if (result.status == 200) {
             let workflow = Object.assign({}, this.state.workflow);
 
-            if (
-              result.data === 'undefined' ||
-              Object.keys(result.data).length === 0 ||
-              result.data.indexOf('{"files":') < 0
-            ) {
-              document.getElementById('btn-project-load-gse').className =
-                'ant-btn upload-start ant-btn-primary';
-              workflow.uploading = false;
-              workflow.progressing = false;
-              document.getElementById('message-gsm').innerHTML = result.data
-                .replace('\\n', ' ')
-                .replace(/"/g, '')
-                .replace('[1] +++loadGSE+++', ' ')
-                .replace('files Please', 'files. Please');
-              document.getElementById('message-gsm').nextSibling.innerHTML = '';
-              this.setState({
-                workflow: workflow
-              });
+            if (result.data === 'undefined' || Object.keys(result.data).length === 0) {
+              this.loadError(result.data);
               return;
             }
-            var data = result.data.substr(result.data.indexOf('{"files":'), result.data.length);
-            if (typeof data === 'undefined' || data == '') {
-              document.getElementById('btn-project-load-gse').className =
-                'ant-btn upload-start ant-btn-primary';
-              workflow.uploading = false;
-              workflow.progressing = false;
-              document.getElementById('message-gsm').innerHTML = result.data
-                .replace('\\n', ' ')
-                .replace(/"/g, '')
-                .replace('[1] +++loadGSE+++', ' ');
-              document.getElementById('message-gsm').nextSibling.innerHTML = '';
-              this.setState({
-                workflow: workflow
-              });
-              return;
+            if (result.data.indexOf('{"files":') > -1) {
+              var data = result.data.substr(result.data.indexOf('{"files":'), result.data.length);
+              let list = JSON.parse(decodeURIComponent(data));
+              if (
+                typeof list == 'undefined' ||
+                list == null ||
+                list.files == null ||
+                typeof list.files == 'undefined' ||
+                list.files.length == 0
+              ) {
+                this.loadError(result.data);
+                return;
+              }
+              workflow.dataList = list.files;
+              // init group with default value
+              workflow.groups = new Array(list.files.length).fill('Others');
+            } else {
+              // multichip
+              try {
+                let parse = JSON.parse(result.data);
+                if (Object.entries(parse).length) {
+                  workflow.dataList = parse;
+                  let chips = Object.keys(workflow.dataList);
+
+                  chips.forEach(chip => {
+                    workflow.dataList[chip].forEach(gsm => {
+                      gsm.groups = '';
+                      gsm.color = '';
+                    });
+                  });
+                  workflow.chip = chips[0];
+                  workflow.multichip = true;
+                  workflow.groups = {};
+                  chips.map(
+                    key =>
+                      (workflow.groups.key = new Array(workflow.dataList[key].length).fill(
+                        'Others'
+                      ))
+                  );
+                } else {
+                  this.loadError(
+                    `No data found. GEO database may be down for maintenance or ${workflow.accessionCode} may be an invalid accession code`
+                  );
+                  return;
+                }
+              } catch (e) {
+                this.loadError(result.data);
+              }
             }
-            let list = JSON.parse(decodeURIComponent(data));
-            if (
-              typeof list == 'undefined' ||
-              list == null ||
-              list.files == null ||
-              typeof list.files == 'undefined' ||
-              list.files.length == 0
-            ) {
-              document.getElementById('btn-project-load-gse').className =
-                'ant-btn upload-start ant-btn-primary';
-              workflow.uploading = false;
-              workflow.progressing = false;
-              document.getElementById('message-gsm').innerHTML = result.data
-                .replace('\\n', ' ')
-                .replace(/"/g, '')
-                .replace('[1] +++loadGSE+++', ' ')
-                .replace('files Please', 'files. Please');
-              document.getElementById('message-gsm').nextSibling.innerHTML = '';
-              this.setState({
-                workflow: workflow
-              });
-              return;
-            }
+
             document.getElementById('message-gsm').innerHTML = '';
             workflow.uploading = false;
             workflow.progressing = false;
-            workflow.dataList = list.files;
-            // init group with default value
-            workflow.groups = new Array(list.files.length).fill('Others');
 
             // disable the input , prevent user to change the access code
             document.getElementById('input-access-code').disabled = true;
@@ -2385,6 +2404,7 @@ class Analysis extends Component {
     reqBody.dataList = [];
     reqBody.realGroup = []; // group without filter
     reqBody.batches = [];
+    reqBody.chip = workflow.chip;
     if (workflow.uploaded) {
       reqBody.source = 'upload';
     } else {
@@ -2392,41 +2412,42 @@ class Analysis extends Component {
     }
     let batchCount = 0;
     let batchSamples = {};
+    let dataList = workflow.multichip ? workflow.dataList[workflow.chip] : workflow.dataList;
 
-    for (var i in workflow.dataList) {
-      reqBody.dataList.push(workflow.dataList[i].gsm);
-      if (workflow.dataList[i].batch) {
-        let batch = workflow.dataList[i].batch;
+    for (var gsm of dataList) {
+      reqBody.dataList.push(gsm.gsm);
+      if (gsm.batch) {
+        let batch = gsm.batch;
         reqBody.batches.push(batch);
         if (!batchSamples[batch]) {
           batchSamples[batch] = [false, false];
         }
-        if (workflow.dataList[i].groups.indexOf(workflow.group_1) > -1) {
+        if (gsm.groups.indexOf(workflow.group_1) > -1) {
           batchSamples[batch] = [true, batchSamples[batch][1]];
-        } else if (workflow.dataList[i].groups.indexOf(workflow.group_2) > -1) {
+        } else if (gsm.groups.indexOf(workflow.group_2) > -1) {
           batchSamples[batch] = [batchSamples[batch][0], true];
         }
       } else {
         reqBody.batches.push('Others');
         batchCount++;
       }
-      if (workflow.dataList[i].groups != '') {
-        reqBody.realGroup.push(workflow.dataList[i].groups);
+      if (gsm.groups && gsm.groups != '') {
+        reqBody.realGroup.push(gsm.groups);
         // prohibit samples in both groups chosen for contrast.
         if (
-          workflow.dataList[i].groups.indexOf(workflow.group_1) != -1 &&
-          workflow.dataList[i].groups.indexOf(workflow.group_2) != -1
+          gsm.groups.indexOf(workflow.group_1) != -1 &&
+          gsm.groups.indexOf(workflow.group_2) != -1
         ) {
           // stop process and show warnning.
           document.getElementById('message-gsm').innerHTML =
             'Cannot run contrasts when same samples belong to both groups . Please re-configure your groups and try again. ';
           return;
         }
-        if (workflow.dataList[i].groups.indexOf(workflow.group_1) != -1) {
+        if (gsm.groups.indexOf(workflow.group_1) != -1) {
           reqBody.groups.push(workflow.group_1);
           continue;
         }
-        if (workflow.dataList[i].groups.indexOf(workflow.group_2) != -1) {
+        if (gsm.groups.indexOf(workflow.group_2) != -1) {
           reqBody.groups.push(workflow.group_2);
           continue;
         }
@@ -2450,7 +2471,7 @@ class Analysis extends Component {
     });
     if (!valid) return;
 
-    if (batchCount == workflow.dataList.length) {
+    if (batchCount == dataList.length) {
       reqBody.batches = [];
     }
     reqBody.index = this.index(reqBody.groups);
@@ -2833,16 +2854,20 @@ class Analysis extends Component {
     let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g;
     if (group_name.match(pattern)) {
       let workflow = Object.assign({}, this.state.workflow);
+      let dataList = workflow.multichip ? workflow.dataList[workflow.chip] : workflow.dataList;
       for (var key of dataList_keys) {
         if (type === 'group') {
-          if (workflow.dataList[key - 1].groups === '') {
-            workflow.dataList[key - 1].groups = group_name;
+          if (dataList[key - 1].groups) {
+            if (dataList[key - 1].groups === '') {
+              dataList[key - 1].groups = group_name;
+            } else if (dataList[key - 1].groups.split(',').indexOf(group_name) < 0) {
+              dataList[key - 1].groups += `,${group_name}`;
+            }
           } else {
-            if (workflow.dataList[key - 1].groups.split(',').indexOf(group_name) < 0)
-              workflow.dataList[key - 1].groups += `,${group_name}`;
+            dataList[key - 1].groups = group_name;
           }
         } else {
-          workflow.dataList[key - 1].batch = group_name;
+          dataList[key - 1].batch = group_name;
         }
       }
       this.setState({ workflow: workflow });
@@ -2864,14 +2889,20 @@ class Analysis extends Component {
         if (assignment.length < 2) {
           return `Error: Invalid format - 'group' and 'batch' columns required.`;
         }
-        for (let data of workflow.dataList) {
+        let dataList = workflow.multichip ? workflow.dataList[workflow.chip] : workflow.dataList;
+
+        for (let data of dataList) {
           if (data.gsm === gsm) {
             if (assignment[0].length) {
               if (assignment[0].match(pattern)) {
-                if (data.groups.split(',').indexOf(assignment[0]) < 0) {
-                  data.groups === ''
-                    ? (data.groups = assignment[0])
-                    : (data.groups += `,${assignment[0]}`);
+                if (data.groups) {
+                  if (data.groups.split(',').indexOf(assignment[0]) < 0) {
+                    data.groups === ''
+                      ? (data.groups = assignment[0])
+                      : (data.groups += `,${assignment[0]}`);
+                  }
+                } else {
+                  data.groups = assignment[0];
                 }
               } else {
                 return `${gsm} Error: Group Name ${assignment[0]} is invalid`;
@@ -2885,20 +2916,23 @@ class Analysis extends Component {
         }
       }
     }
-
     this.setState({ workflow: workflow });
     return true;
   };
 
   deleteGroup = (group_name, type) => {
     let workflow = Object.assign({}, this.state.workflow);
-    for (let gsm of workflow.dataList) {
+    let dataList = workflow.multichip ? workflow.dataList[workflow.chip] : workflow.dataList;
+
+    for (let gsm of dataList) {
       if (type === 'group') {
-        if (gsm.groups == group_name) {
+        if (gsm.groups && gsm.groups == group_name) {
           gsm.groups = '';
-        }
-        // delet from multi-group
-        if (gsm.groups.indexOf(',') != -1 && gsm.groups.indexOf(group_name) != -1) {
+        } else if (
+          gsm.groups &&
+          gsm.groups.indexOf(',') != -1 &&
+          gsm.groups.indexOf(group_name) != -1
+        ) {
           if (gsm.groups.indexOf(group_name) == gsm.groups.length - group_name.length) {
             gsm.groups = gsm.groups.replace(',' + group_name, '');
           } else {
@@ -2906,7 +2940,7 @@ class Analysis extends Component {
           }
         }
       } else if (type === 'batch') {
-        if (gsm.batch == group_name) {
+        if (gsm.batch && gsm.batch == group_name) {
           gsm.batch = '';
         }
       }
@@ -3176,6 +3210,7 @@ class Analysis extends Component {
             workflow2.group_2 = result.group_2;
             workflow2.groups = result.groups;
             workflow2.normal = result.normal;
+            workflow2.chip = Object.entries(result.chip).length > 0 ? result.chip : '';
             // replace default group
             for (let i in workflow2.dataList) {
               if (
@@ -3304,6 +3339,7 @@ class Analysis extends Component {
         handleNormalSelect={this.handleNormalSelect}
         resetWorkFlowProject={this.resetWorkFlowProject}
         changeCode={this.changeCode}
+        changeChip={this.changeChip}
         handleSelectType={this.handleSelectType}
         changeRunContrastMode={this.changeRunContrastMode}
         fileRemove={this.fileRemove}
@@ -3427,6 +3463,7 @@ class Analysis extends Component {
                 exportDEG={this.exportDEG}
                 exportNormalAll={this.exportNormalAll}
                 uploadGroup={this.uploadGroup}
+                changeChip={this.changeChip}
               />
             </div>
             <div className={modal}>

@@ -54,8 +54,12 @@ process = function(){
             } else {
               listBatches<-NULL
             }
+            chip <- toString(args[8])
+            if (chip == "") {
+              chip <- NULL 
+            }
 
-            celfiles = processGEOfiles(projectId=projectId,id=access_code,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path)  
+            celfiles = processGEOfiles(projectId=projectId,id=access_code,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path, chip=chip)  
             # remove downloaded tar file
             fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
             if (file.exists(fn)) file.remove(fn)
@@ -96,13 +100,16 @@ process = function(){
           realGroups <- toString(args[14])
           index <- as.integer(unlist(strsplit(args[15], ",")))
           listBatches <- c()
-
           if (args[16]!= "") {
             listBatches<-unlist((strsplit(args[16], ",")))
           } else {
             listBatches<-NULL
           }
-    
+          chip <- toString(args[17])
+          if (chip == "") {
+            chip <- NULL
+          }
+          
           write(args, paste0(data_repo_path,"/test123.txt",sep=""),append=TRUE)
        
           #If user selects 'ANALYZE CEL FILES', call this function, input path of files (length of group assignments must match number of files for testing purposes):
@@ -114,7 +121,7 @@ process = function(){
           if(source=="upload"){
                 celfiles = getCELfiles(projectId=projectId,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path) 
              }else{
-                celfiles = getLocalGEOfiles(projectId=projectId,id=access_code,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path) 
+                celfiles = getLocalGEOfiles(projectId=projectId,id=access_code,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path, chip=chip) 
           }
 
           cons <-c(paste0(cgroup1,"-",cgroup2))
@@ -255,7 +262,8 @@ process = function(){
                     projectId=projectId,
                     GSM=celfiles@phenoData@data,
                     colors=col2hex(celfiles@phenoData@data$colors),
-                    normCelfiles=diff_expr_genes$norm_annotated
+                    normCelfiles=diff_expr_genes$norm_annotated,
+                    chip=chip
                     )
                  
 

@@ -18,6 +18,7 @@ export default function Workflow(props) {
       data={props.data}
       resetWorkFlowProject={props.resetWorkFlowProject}
       changeCode={props.changeCode}
+      changeChip={props.changeChip}
       handleSelectType={props.handleSelectType}
       fileRemove={props.fileRemove}
       beforeUpload={props.beforeUpload}

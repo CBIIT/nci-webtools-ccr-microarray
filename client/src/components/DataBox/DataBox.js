@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Tabs, Table, Button, Input, Modal, message, Upload, Icon } from 'antd';
 import Papa from 'papaparse';
 import DEGBox from './DEGBox';
@@ -16,16 +16,23 @@ export default function DataBox(props) {
     groupName: '',
     groupMessage: '',
     selected: [],
-    added: false
+    added: false,
+    dataList: props.data.multichip ? props.data.dataList[props.data.chip] : props.data.dataList
   });
   const [modalOption, setOption] = useState('group');
-  const { groupVisible, groupName, groupMessage, selected, added } = state;
+  const { groupVisible, groupName, groupMessage, selected, added, dataList } = state;
 
   const child = useRef(null);
 
   function mergeState(obj) {
     setState({ ...state, ...obj });
   }
+
+  useEffect(() => {
+    mergeState({
+      dataList: props.data.multichip ? props.data.dataList[props.data.chip] : props.data.dataList
+    });
+  }, [props.data.dataList]);
 
   function groupOnChange(e) {
     mergeState({ groupName: e.target.value });
@@ -46,6 +53,11 @@ export default function DataBox(props) {
     } else if (e.file.status === 'error') {
       message.error(`${e.file.name} file upload failed.`);
     }
+  }
+
+  function handleSelectChip(e) {
+    props.changeChip(e);
+    mergeState({ dataList: props.data.dataList[e.target.value] });
   }
 
   function handleTabChange(key) {
@@ -251,7 +263,36 @@ export default function DataBox(props) {
   };
 
   // define group btn
-  if (props.data.dataList.length > 0) {
+  if (dataList && dataList.length > 0) {
+    let chipOptions = '';
+    let chipDropdown = '';
+    if (props.data.multichip) {
+      chipOptions = Object.keys(props.data.dataList).map((chip, i) => {
+        return (
+          <option key={i} value={chip}>
+            {chip}
+          </option>
+        );
+      });
+
+      chipDropdown = (
+        <div>
+          <label>
+            <select
+              id="selectChip"
+              aria-label="select chip"
+              className="ant-select-selection ant-select-selection--single"
+              value={props.data.chip}
+              style={{ marginLeft: '1rem' }}
+              onChange={e => handleSelectChip(e)}
+            >
+              {chipOptions}
+            </select>
+          </label>{' '}
+        </div>
+      );
+    }
+
     define_group_click_btn = (
       <div className="row" style={{ display: 'flex' }}>
         <div className="div-group-gsm">
@@ -259,6 +300,7 @@ export default function DataBox(props) {
             Manage Groups/Batches
           </Button>{' '}
         </div>
+        {chipDropdown}
         <div className="div-export-gsm">
           <Button id="btn-project-export" type="primary" onClick={props.exportGSE}>
             {' '}
@@ -350,10 +392,10 @@ export default function DataBox(props) {
 
   var selected_gsms = '';
   let number_select = 0;
-  if (props.data.dataList.length > 0) {
+  if (dataList && dataList.length > 0) {
     for (var key in selected) {
       number_select = number_select + 1;
-      selected_gsms = selected_gsms + props.data.dataList[selected[key] - 1].gsm + ',';
+      selected_gsms = selected_gsms + dataList[selected[key] - 1].gsm + ',';
     }
   }
 
@@ -376,8 +418,8 @@ export default function DataBox(props) {
   var groups_data = new Map();
   let batchData = new Map();
 
-  for (let gsm of props.data.dataList) {
-    if (gsm.groups != '') {
+  for (let gsm of dataList) {
+    if (gsm.groups) {
       // A sample belongs to multi-group
       for (let group of gsm.groups.split(',')) {
         if (groups_data.has(group)) {
@@ -566,7 +608,7 @@ export default function DataBox(props) {
     <Tabs onChange={handleTabChange} type="card" activeKey={props.data.tab_activeKey}>
       <TabPane tab="GSM Data" key="GSM_1">
         {define_group_click_btn}
-        <GSMData ref={child} data={props.data} selected={selection} />
+        <GSMData ref={child} data={props.data} dataList={dataList} selected={selection} />
       </TabPane>
       {prePlotsBox}
       {postPlotsBox}

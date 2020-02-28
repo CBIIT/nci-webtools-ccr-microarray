@@ -777,7 +777,7 @@ div#ss-select {
     margin-top: 8px;
 }
 
-input#input-access-code {
+input#input-access-code, input#chip {
     font-size: 18px;
 }
 

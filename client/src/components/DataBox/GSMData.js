@@ -24,16 +24,16 @@ class GSMData extends Component {
   };
   constructor(props) {
     super(props);
-    this.state.renderData = this.props.data.dataList;
-    this.state.data = this.props.data.dataList;
+    this.state.renderData = this.props.dataList;
+    this.state.data = this.props.dataList;
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     let currentState = Object.assign({}, this.state);
-    if (nextProps.data.dataList.length != currentState.data.length) {
-      currentState.data = nextProps.data.dataList;
-      currentState.renderData = nextProps.data.dataList;
-      currentState.pagination.total = nextProps.data.dataList.length;
+    if (JSON.stringify(nextProps.dataList) != JSON.stringify(currentState.data)) {
+      currentState.data = nextProps.dataList;
+      currentState.renderData = nextProps.dataList;
+      currentState.pagination.total = nextProps.dataList.length;
       this.setState(currentState);
     }
   }
@@ -318,7 +318,7 @@ class GSMData extends Component {
       </div>
     );
 
-    if (this.props.data.dataList.length > 0) {
+    if (this.props.dataList.length > 0) {
       const columns = [
         {
           title: 'GSM',
@@ -439,7 +439,7 @@ class GSMData extends Component {
       ];
       let count = 1;
 
-      this.props.data.dataList.forEach(function(fl) {
+      this.props.dataList.forEach(function(fl) {
         fl.key = count++;
       });
 
@@ -467,11 +467,9 @@ class GSMData extends Component {
               aria-label="search"
               placeholder="Search text"
               className="input-search-gsm"
-              onSearch={value =>
-                this.setState({ term: value, renderData: this.props.data.dataList })
-              }
+              onSearch={value => this.setState({ term: value, renderData: this.props.dataList })}
             />
-            <div id="gsm-select" style={{ marginLeft: 'auto', marginRight: '14rem' }}>
+            <div id="gsm-select" style={{ marginLeft: '1rem', marginRight: 'auto' }}>
               Display
               <Dropdown overlay={menu}>
                 <Button>
