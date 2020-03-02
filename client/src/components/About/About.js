@@ -38,6 +38,7 @@ export default function About() {
             <li>GeneChip Human Genome U95 Version 2</li>
             <li>GeneChip™ Human Transcriptome Array 2.0</li>
             <li>Human Exon 1.0 ST Array</li>
+            <li>HT Human Genome U133 Array</li>
           </ul>
 
           <h3>Mouse</h3>
