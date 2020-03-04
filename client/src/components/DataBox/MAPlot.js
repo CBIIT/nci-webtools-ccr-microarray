@@ -10,7 +10,7 @@ export default function MAPlot(props) {
   let group1 = data.group_1;
   let group2 = data.group_2;
   let groupLength = 0;
-  let dataList = data.dataList;
+  let dataList = data.multichip ? data.dataListChip : data.dataList;
   let group1Pics = [];
   let group2Pics = [];
   let panels = [];

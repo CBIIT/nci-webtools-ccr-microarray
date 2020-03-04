@@ -241,7 +241,8 @@ const defaultState = {
     heatmapolt_url: '',
     batches: [],
     chip: '',
-    multichip: false
+    multichip: false,
+    dataListChip: []
   }
 };
 
@@ -2036,6 +2037,12 @@ class Analysis extends Component {
     workflow.chip = event.target.value.toUpperCase();
     this.setState({ workflow: workflow });
   };
+  handleSelectChip = e => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.chip = e.target.value;
+    workflow.dataListChip = workflow.dataList[e.target.value];
+    this.setState({ workflow: workflow });
+  };
   handleSelectType = event => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.analysisType = event.target.value;
@@ -2275,6 +2282,7 @@ class Analysis extends Component {
                     });
                   });
                   workflow.chip = chips[0];
+                  workflow.dataListChip = workflow.dataList[chips[0]];
                   workflow.multichip = true;
                   workflow.groups = {};
                   chips.map(
@@ -3340,6 +3348,7 @@ class Analysis extends Component {
         resetWorkFlowProject={this.resetWorkFlowProject}
         changeCode={this.changeCode}
         changeChip={this.changeChip}
+        handleSelectChip={this.handleSelectChip}
         handleSelectType={this.handleSelectType}
         changeRunContrastMode={this.changeRunContrastMode}
         fileRemove={this.fileRemove}
@@ -3463,7 +3472,6 @@ class Analysis extends Component {
                 exportDEG={this.exportDEG}
                 exportNormalAll={this.exportNormalAll}
                 uploadGroup={this.uploadGroup}
-                changeChip={this.changeChip}
               />
             </div>
             <div className={modal}>

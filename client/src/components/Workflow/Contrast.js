@@ -157,9 +157,41 @@ export default function Contrast(props) {
     </select>
   );
 
+  // define chip dropdown
+  let chipOptions = '';
+  let chipDropdown = '';
+  if (props.data.multichip) {
+    chipOptions = Object.keys(props.data.dataList).map((chip, i) => {
+      return (
+        <option key={i} value={chip}>
+          {chip}
+        </option>
+      );
+    });
+
+    chipDropdown = (
+      <div>
+        <label className="title" htmlFor="selectChip">
+          Chip: <span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
+        </label>
+        <select
+          id="selectChip"
+          aria-label="select chip"
+          className="ant-select-selection ant-select-selection--single"
+          value={props.data.chip}
+          style={{ width: '100%' }}
+          onChange={e => props.handleSelectChip(e)}
+        >
+          {chipOptions}
+        </select>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="block">
+        {chipDropdown}
         <label className="title" htmlFor="select-group-1">
           Choose Contrast To Show: <span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
         </label>

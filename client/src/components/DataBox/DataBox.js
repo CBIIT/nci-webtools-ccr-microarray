@@ -17,7 +17,7 @@ export default function DataBox(props) {
     groupMessage: '',
     selected: [],
     added: false,
-    dataList: props.data.multichip ? props.data.dataList[props.data.chip] : props.data.dataList
+    dataList: props.data.multichip ? props.data.dataListChip : props.data.dataList
   });
   const [modalOption, setOption] = useState('group');
   const { groupVisible, groupName, groupMessage, selected, added, dataList } = state;
@@ -30,9 +30,15 @@ export default function DataBox(props) {
 
   useEffect(() => {
     mergeState({
-      dataList: props.data.multichip ? props.data.dataList[props.data.chip] : props.data.dataList
+      dataList: props.data.multichip ? props.data.dataListChip : props.data.dataList
     });
   }, [props.data.dataList]);
+
+  useEffect(() => {
+    mergeState({
+      dataList: props.data.dataListChip
+    });
+  }, [props.data.dataListChip]);
 
   function groupOnChange(e) {
     mergeState({ groupName: e.target.value });
@@ -53,11 +59,6 @@ export default function DataBox(props) {
     } else if (e.file.status === 'error') {
       message.error(`${e.file.name} file upload failed.`);
     }
-  }
-
-  function handleSelectChip(e) {
-    props.changeChip(e);
-    mergeState({ dataList: props.data.dataList[e.target.value] });
   }
 
   function handleTabChange(key) {
@@ -264,35 +265,6 @@ export default function DataBox(props) {
 
   // define group btn
   if (dataList && dataList.length > 0) {
-    let chipOptions = '';
-    let chipDropdown = '';
-    if (props.data.multichip) {
-      chipOptions = Object.keys(props.data.dataList).map((chip, i) => {
-        return (
-          <option key={i} value={chip}>
-            {chip}
-          </option>
-        );
-      });
-
-      chipDropdown = (
-        <div>
-          <label>
-            <select
-              id="selectChip"
-              aria-label="select chip"
-              className="ant-select-selection ant-select-selection--single"
-              value={props.data.chip}
-              style={{ marginLeft: '1rem' }}
-              onChange={e => handleSelectChip(e)}
-            >
-              {chipOptions}
-            </select>
-          </label>{' '}
-        </div>
-      );
-    }
-
     define_group_click_btn = (
       <div className="row" style={{ display: 'flex' }}>
         <div className="div-group-gsm">
@@ -300,7 +272,6 @@ export default function DataBox(props) {
             Manage Groups/Batches
           </Button>{' '}
         </div>
-        {chipDropdown}
         <div className="div-export-gsm">
           <Button id="btn-project-export" type="primary" onClick={props.exportGSE}>
             {' '}

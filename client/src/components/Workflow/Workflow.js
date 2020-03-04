@@ -11,6 +11,7 @@ export default function Workflow(props) {
       runContrast={props.runContrast}
       changeRunContrastMode={props.changeRunContrastMode}
       handleNormalSelect={props.handleNormalSelect}
+      handleSelectChip={props.handleSelectChip}
     />
   );
   let project = (

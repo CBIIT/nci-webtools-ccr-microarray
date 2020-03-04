@@ -65,7 +65,7 @@ export default function Project(props) {
         <div className="row">
           <div className="col-sm-12">
             <label className="title" htmlFor="chip">
-              Chip
+              Include Chip(s)
             </label>
             <Input
               aria-label="input chip"
@@ -73,7 +73,7 @@ export default function Project(props) {
               disabled={props.data.dataList.length > 0 || props.data.multichip}
               onChange={e => props.changeChip(e)}
               value={props.data.chip}
-              placeholder="Optional"
+              placeholder="<All Chips>"
             />
           </div>
         </div>
