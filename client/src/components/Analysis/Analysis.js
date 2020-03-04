@@ -2426,14 +2426,16 @@ class Analysis extends Component {
       reqBody.dataList.push(gsm.gsm);
       if (gsm.batch) {
         let batch = gsm.batch;
-        reqBody.batches.push(batch);
-        if (!batchSamples[batch]) {
-          batchSamples[batch] = [false, false];
-        }
-        if (gsm.groups.indexOf(workflow.group_1) > -1) {
-          batchSamples[batch] = [true, batchSamples[batch][1]];
-        } else if (gsm.groups.indexOf(workflow.group_2) > -1) {
-          batchSamples[batch] = [batchSamples[batch][0], true];
+        if (batch != 'Others') {
+          reqBody.batches.push(batch);
+          if (!batchSamples[batch]) {
+            batchSamples[batch] = [false, false];
+          }
+          if (gsm.groups.indexOf(workflow.group_1) > -1) {
+            batchSamples[batch] = [true, batchSamples[batch][1]];
+          } else if (gsm.groups.indexOf(workflow.group_2) > -1) {
+            batchSamples[batch] = [batchSamples[batch][0], true];
+          }
         }
       } else {
         reqBody.batches.push('Others');
