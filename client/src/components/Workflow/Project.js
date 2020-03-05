@@ -1,5 +1,6 @@
 import React from 'react';
-import { Input, Upload, Button, Icon } from 'antd';
+import { Input, Upload, Button, Icon, Tooltip, Select } from 'antd';
+const { Option } = Select;
 
 export default function Project(props) {
   function handleKeyDown(e) {
@@ -27,7 +28,7 @@ export default function Project(props) {
     <div className="row">
       {' '}
       <div className="col-sm-12">
-        <select
+        <Select
           disabled={props.data.fileList.length != 0}
           id="analysisType_selection"
           className="ant-select-selection ant-select-selection--single"
@@ -35,9 +36,9 @@ export default function Project(props) {
           style={{ width: '100%' }}
           onChange={props.handleSelectType}
         >
-          <option value="0">GEO Data</option>
-          <option value="1">CEL Files</option>
-        </select>
+          <Option value="0">GEO Data</Option>
+          <Option value="1">CEL Files</Option>
+        </Select>
       </div>
     </div>
   );
@@ -91,9 +92,11 @@ export default function Project(props) {
             </button>
           </div>
           <div className="col-sm-6">
-            <Button className="upload-start" type="primary" onClick={props.resetWorkFlowProject}>
-              Reset
-            </Button>
+            <Tooltip placement="right" title="Reset to start a new GEO analysis">
+              <Button className="upload-start" type="primary" onClick={props.resetWorkFlowProject}>
+                Reset
+              </Button>
+            </Tooltip>
           </div>
         </div>
       </div>
