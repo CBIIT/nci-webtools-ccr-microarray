@@ -243,7 +243,8 @@ const defaultState = {
     loadChip: '',
     chip: '',
     multichip: false,
-    dataListChip: []
+    dataListChip: [],
+    disableContrast: false
   }
 };
 
@@ -2028,6 +2029,26 @@ class Analysis extends Component {
       });
     }
   };
+
+  // disable contrast fields
+  disableContrast = () => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.disableContrast = true;
+    this.setState({ workflow: workflow }, console.log(this.state.workflow.disableContrast));
+  };
+  // clear and enable contrast fields, disable results tabs
+  resetContrast = () => {
+    let workflow = Object.assign({}, this.state.workflow);
+    workflow.disableContrast = false;
+    workflow.group_1 = '-1';
+    workflow.group_2 = '-1';
+    workflow.normal = 'RMA';
+    workflow.compared = false;
+    workflow.done_gsea = false;
+    workflow.tab_activeKey = 'GSM_1';
+    this.setState({ workflow: workflow });
+  };
+
   changeCode = event => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.accessionCode = event.target.value.toUpperCase();
@@ -2038,30 +2059,30 @@ class Analysis extends Component {
     workflow.loadChip = event.target.value.toUpperCase();
     this.setState({ workflow: workflow });
   };
-  handleSelectChip = e => {
+  handleSelectChip = value => {
     let workflow = Object.assign({}, this.state.workflow);
-    workflow.chip = e.target.value;
-    workflow.dataListChip = workflow.dataList[e.target.value];
+    workflow.chip = value;
+    workflow.dataListChip = workflow.dataList[value];
     this.setState({ workflow: workflow });
   };
-  handleSelectType = event => {
+  handleSelectType = value => {
     let workflow = Object.assign({}, this.state.workflow);
-    workflow.analysisType = event.target.value;
+    workflow.analysisType = value;
     this.setState({ workflow: workflow });
   };
-  handleGroup1Select = event => {
+  handleGroup1Select = value => {
     let workflow = Object.assign({}, this.state.workflow);
-    workflow.group_1 = event.target.value;
+    workflow.group_1 = value;
     this.setState({ workflow: workflow });
   };
-  handleNormalSelect = event => {
+  handleNormalSelect = value => {
     let workflow = Object.assign({}, this.state.workflow);
-    workflow.normal = event.target.value;
+    workflow.normal = value;
     this.setState({ workflow: workflow });
   };
-  handleGroup2Select = event => {
+  handleGroup2Select = value => {
     let workflow = Object.assign({}, this.state.workflow);
-    workflow.group_2 = event.target.value;
+    workflow.group_2 = value;
     this.setState({ workflow: workflow });
   };
   fileRemove = file => {
@@ -2730,6 +2751,7 @@ class Analysis extends Component {
               workflow.histplotBN_url = result.data.histplotBN;
               workflow.histplotAN_url = result.data.histplotAN;
               workflow.heatmapolt_url = result.data.heatmapolt;
+              workflow.disableContrast = true;
               this.setState({
                 workflow: workflow
               });
@@ -3247,6 +3269,8 @@ class Analysis extends Component {
             workflow2.histplotBN_url = result.histplotBN;
             workflow2.histplotAN_url = result.histplotAN;
             workflow2.heatmapolt_url = result.heatmapolt;
+            workflow2.disableContrast = true;
+
             // disable the input , prevent user to change the access code
             document.getElementById('input-access-code').disabled = true;
             // change the word of load btn
@@ -3363,6 +3387,7 @@ class Analysis extends Component {
         runContrast={this.runContrast}
         exportGSE={this.exportGSE}
         exportNormalAll={this.exportNormalAll}
+        resetContrast={this.resetContrast}
       />
     );
     let page_status = this.props.location.search && this.props.location.search != '';

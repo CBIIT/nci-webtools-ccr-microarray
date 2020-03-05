@@ -1,5 +1,6 @@
 import React from 'react';
-import { Checkbox, Input, Button } from 'antd';
+import { Checkbox, Input, Button, Tooltip, Select } from 'antd';
+const { Option } = Select;
 
 export default function Contrast(props) {
   function handleSwitchChange(e) {
@@ -22,9 +23,9 @@ export default function Contrast(props) {
           groups.forEach(function(group) {
             if (tmp_options.indexOf(group) == -1 && group != '') {
               let d1 = (
-                <option key={group} value={group}>
+                <Option key={group} value={group}>
                   {group}
-                </option>
+                </Option>
               );
               options.unshift(d1);
               tmp_options.unshift(group);
@@ -33,9 +34,9 @@ export default function Contrast(props) {
         } else {
           if (gsm.groups) {
             var d2 = (
-              <option key={gsm['groups']} value={gsm['groups']}>
+              <Option key={gsm['groups']} value={gsm['groups']}>
                 {gsm['groups']}
-              </option>
+              </Option>
             );
             options.unshift(d2);
             tmp_options.unshift(gsm['groups']);
@@ -86,75 +87,76 @@ export default function Contrast(props) {
     </div>
   );
 
-  let button = '';
-  if (
+  let validContrast =
     props.data.group_1 != '-1' &&
     props.data.group_2 != '-1' &&
-    props.data.group_1 != props.data.group_2
-  ) {
-    button = (
-      <div style={{ padding: '8px 5px 10px 5px', margin: '10px' }}>
+    props.data.group_1 != props.data.group_2;
+
+  let button = '';
+
+  button = (
+    <div className="row" style={{ marginLeft: '-10px', marginRight: '0px' }}>
+      <div className="col-sm-6">
         <Button
           id="btn-run-contrast"
-          className="ant-btn upload-start ant-btn-primary"
+          type={props.data.disableContrast ? 'default' : validContrast ? 'primary' : 'default'}
           onClick={props.runContrast}
+          disabled={props.data.disableContrast ? true : validContrast ? false : true}
         >
           <span>Run Contrast </span>
         </Button>
       </div>
-    );
-  } else {
-    button = (
-      <div style={{ padding: '8px 5px 10px 5px', margin: '10px' }}>
-        <Button
-          id="btn-run-contrast"
-          className="ant-btn upload-start ant-btn-default"
-          onClick={props.runContrast}
-          disabled
-        >
-          <span>Run Contrast</span>
-        </Button>
+      <div className="col-sm-6">
+        <Tooltip placement="right" title="Reset to start a new contrast analysis">
+          <Button
+            id="btnResetContrast"
+            className="ant-btn upload-start ant-btn-primary"
+            onClick={props.resetContrast}
+          >
+            <span>Reset</span>
+          </Button>
+        </Tooltip>
       </div>
-    );
-  }
+    </div>
+  );
 
   let group_1_content = (
-    <select
+    <Select
       id="select-group-1"
-      className="ant-select-selection ant-select-selection--single"
       value={props.data.group_1}
       style={{ width: '100%' }}
       onChange={props.handleGroup1Select}
+      disabled={props.data.disableContrast}
     >
-      <option value="-1">---select Group---</option>
+      <Option value="-1">---select Group---</Option>
       {options}
-    </select>
+    </Select>
   );
   let group_2_content = (
-    <select
+    <Select
       id="select-group-2"
-      className="ant-select-selection ant-select-selection--single"
       value={props.data.group_2}
       style={{ width: '100%' }}
       onChange={props.handleGroup2Select}
+      disabled={props.data.disableContrast}
     >
-      <option value="-1">---select Group---</option>
+      <Option value="-1">---select Group---</Option>
       {options}
-    </select>
+    </Select>
   );
 
   let normalization_option = (
-    <select
+    <Select
       value={props.data.normal}
       id="select-normal"
-      className="ant-select-selection ant-select-selection--single"
       style={{ width: '100%' }}
       value={props.data.normal}
       onChange={props.handleNormalSelect}
+      disabled={props.data.disableContrast}
     >
-      <option value="RMA">RMA</option>
-      <option value="RMA_Loess">RMA plus Cyclic Loess</option>
-    </select>
+      <Option value="RMA">RMA</Option>
+      <Option value="RMA_Loess">RMA plus Cyclic Loess</Option>
+    </Select>
   );
 
   // define chip dropdown
@@ -163,9 +165,9 @@ export default function Contrast(props) {
   if (props.data.multichip) {
     chipOptions = Object.keys(props.data.dataList).map((chip, i) => {
       return (
-        <option key={i} value={chip}>
+        <Option key={i} value={chip}>
           {chip}
-        </option>
+        </Option>
       );
     });
 
@@ -174,16 +176,16 @@ export default function Contrast(props) {
         <label className="title" htmlFor="selectChip">
           Chip: <span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
         </label>
-        <select
+        <Select
           id="selectChip"
           aria-label="select chip"
-          className="ant-select-selection ant-select-selection--single"
           value={props.data.chip}
           style={{ width: '100%' }}
-          onChange={e => props.handleSelectChip(e)}
+          onChange={props.handleSelectChip}
+          disabled={props.data.disableContrast}
         >
           {chipOptions}
-        </select>
+        </Select>
       </div>
     );
   }
