@@ -240,6 +240,7 @@ const defaultState = {
     histplotAN_url: '',
     heatmapolt_url: '',
     batches: [],
+    loadChip: '',
     chip: '',
     multichip: false,
     dataListChip: []
@@ -2034,7 +2035,7 @@ class Analysis extends Component {
   };
   changeChip = event => {
     let workflow = Object.assign({}, this.state.workflow);
-    workflow.chip = event.target.value.toUpperCase();
+    workflow.loadChip = event.target.value.toUpperCase();
     this.setState({ workflow: workflow });
   };
   handleSelectChip = e => {
@@ -2214,7 +2215,7 @@ class Analysis extends Component {
     reqBody.projectId = workflow.projectID;
     reqBody.groups = workflow.groups;
     reqBody.batches = workflow.batches;
-    reqBody.chip = workflow.chip;
+    reqBody.chip = workflow.loadChip;
     // gruop info
     // var groups = [];
     // for (var i in workflow.dataList) {
@@ -2412,7 +2413,7 @@ class Analysis extends Component {
     reqBody.dataList = [];
     reqBody.realGroup = []; // group without filter
     reqBody.batches = [];
-    reqBody.chip = workflow.chip;
+    reqBody.chip = workflow.loadChip || workflow.chip;
     if (workflow.uploaded) {
       reqBody.source = 'upload';
     } else {
@@ -3220,7 +3221,7 @@ class Analysis extends Component {
             workflow2.group_2 = result.group_2;
             workflow2.groups = result.groups;
             workflow2.normal = result.normal;
-            workflow2.chip = Object.entries(result.chip).length > 0 ? result.chip : '';
+            workflow2.loadChip = Object.entries(result.chip).length > 0 ? result.chip : '';
             // replace default group
             for (let i in workflow2.dataList) {
               if (

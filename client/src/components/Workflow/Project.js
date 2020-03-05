@@ -72,7 +72,8 @@ export default function Project(props) {
               id="chip"
               disabled={props.data.dataList.length > 0 || props.data.multichip}
               onChange={e => props.changeChip(e)}
-              value={props.data.chip}
+              onKeyDown={handleKeyDown}
+              value={props.data.loadChip}
               placeholder="<All Chips>"
             />
           </div>
