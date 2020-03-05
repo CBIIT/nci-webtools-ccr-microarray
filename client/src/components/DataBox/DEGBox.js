@@ -94,7 +94,6 @@ export default function DEGBox(props) {
       key="deg_select"
       className="ant-select-selection ant-select-selection--single"
       id="deg_select_option"
-      defaultValue="deg_tag1"
       onChange={e => handleSelectionChange(e)}
     >
       <option key="deg_select_option_1" value="deg_tag1">

@@ -580,7 +580,6 @@ class SSGSEATable extends Component {
           value={this.props.data.geneSelect}
           id="ss_gene_set_select_option"
           className="ant-select-selection ant-select-selection--single"
-          defaultValue="human$H: Hallmark Gene Sets"
           onChange={e => this.props.handleGeneChange(e)}
           aria-label="Gene Set For ssGSEA"
         >
