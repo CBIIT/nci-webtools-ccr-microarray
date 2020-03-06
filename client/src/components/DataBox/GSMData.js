@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip } from 'antd';
+import { Menu, Dropdown, Button, Icon, Table, Select, Input, Pagination } from 'antd';
 import ReactSVG from 'react-svg';
 
 const Search = Input.Search;
@@ -15,10 +15,16 @@ class GSMData extends Component {
     term: '',
     boxplot: '',
     pagination: {
+      position: 'top',
       current: 1,
-      pageSize: 25
+      pageSize: 25,
+      onChange: (page, pageSize) => {
+        this.handlePageChange(
+          { ...this.state.pagination, current: page, pageSize: pageSize },
+          this.state.sorter
+        );
+      }
     },
-    data: { totalCount: 0, records: [] },
     renderData: { totalCount: 0, records: [] },
     sorter: { field: 'gsm', order: 'ascend' }
   };
@@ -34,6 +40,8 @@ class GSMData extends Component {
       currentState.data = nextProps.dataList;
       currentState.renderData = nextProps.dataList;
       currentState.pagination.total = nextProps.dataList.length;
+      currentState.pagination.pageSize = 25;
+      currentState.pagination.current = 1;
       this.setState(currentState);
     }
   }
@@ -98,6 +106,53 @@ class GSMData extends Component {
     let selectedRowKeys = this.getCheckedBoxes('select-GSM');
   };
 
+  sort = (sorter, renderData) => {
+    if (sorter.field == 'gsm') {
+      if (sorter.order == 'descend') {
+        renderData.sort(function(a, b) {
+          return ('' + b.gsm).localeCompare(a.gsm);
+        });
+      } else {
+        renderData.sort(function(a, b) {
+          return ('' + a.gsm).localeCompare(b.gsm);
+        });
+      }
+    }
+    if (sorter.field == 'title') {
+      if (sorter.order == 'descend') {
+        renderData.sort(function(a, b) {
+          return ('' + b.title).localeCompare(a.title);
+        });
+      } else {
+        renderData.sort(function(a, b) {
+          return ('' + a.title).localeCompare(b.title);
+        });
+      }
+    }
+    if (sorter.field == 'description') {
+      if (sorter.order == 'descend') {
+        renderData.sort(function(a, b) {
+          return a.description.length > b.description.length;
+        });
+      } else {
+        renderData.sort(function(a, b) {
+          return !a.description.length > b.description.length;
+        });
+      }
+    }
+    if (sorter.field == 'groups') {
+      if (sorter.order == 'descend') {
+        renderData.sort(function(a, b) {
+          return a.groups.length > b.groups.length;
+        });
+      } else {
+        renderData.sort(function(a, b) {
+          return !a.groups.length > b.groups.length;
+        });
+      }
+    }
+  };
+
   handleMenuClick = e => {
     let currentState = Object.assign({}, this.state);
     currentState.pagination.pageSize = parseInt(e.key);
@@ -117,57 +172,7 @@ class GSMData extends Component {
       }
     }
 
-    // sort data
-    if (currentState.sorter.field == 'gsm') {
-      if (currentState.sorter.order == 'descend') {
-        renderData.sort(function(a, b) {
-          return ('' + b.gsm).localeCompare(a.gsm);
-        });
-      } else {
-        renderData.sort(function(a, b) {
-          return ('' + a.gsm).localeCompare(b.gsm);
-        });
-      }
-    }
-
-    // sort data
-    if (currentState.sorter.field == 'title') {
-      if (currentState.sorter.order == 'descend') {
-        renderData.sort(function(a, b) {
-          return ('' + b.title).localeCompare(a.title);
-        });
-      } else {
-        renderData.sort(function(a, b) {
-          return ('' + a.title).localeCompare(b.title);
-        });
-      }
-    }
-
-    // sort data
-    if (currentState.sorter.field == 'description') {
-      if (currentState.sorter.order == 'descend') {
-        renderData.sort(function(a, b) {
-          return a.description.length > b.description.length;
-        });
-      } else {
-        renderData.sort(function(a, b) {
-          return !a.description.length > b.description.length;
-        });
-      }
-    }
-
-    if (currentState.sorter.field == 'groups') {
-      if (currentState.sorter.order == 'descend') {
-        renderData.sort(function(a, b) {
-          return a.groups.length > b.groups.length;
-        });
-      } else {
-        renderData.sort(function(a, b) {
-          return !a.groups.length > b.groups.length;
-        });
-      }
-    }
-
+    this.sort(currentState.sorter, renderData);
     let start_index = currentState.pagination.pageSize * (currentState.pagination.current - 1);
     let end_index = currentState.pagination.pageSize * currentState.pagination.current;
     if (end_index > renderData.length) {
@@ -203,16 +208,12 @@ class GSMData extends Component {
     }
   }
 
-  handlePageChange = (pagination, filters, sorter) => {
+  handlePageChange = (pagination, sorter) => {
     let set = Object.assign({}, this.state);
-
-    set.pagination = {
-      pageSize: pagination.pageSize,
-      current: pagination.current ? pagination.current : 1
-    };
     let renderData = set.data;
-    set.sorter.field = sorter.field;
-    set.sorter.order = sorter.order;
+
+    set.pagination = { ...pagination };
+    set.sorter = { ...sorter.field };
 
     if (this.state.term != '') {
       renderData = [];
@@ -227,57 +228,7 @@ class GSMData extends Component {
       }
     }
 
-    // sort data
-    if (sorter.field == 'gsm') {
-      if (sorter.order == 'descend') {
-        renderData.sort(function(a, b) {
-          return ('' + b.gsm).localeCompare(a.gsm);
-        });
-      } else {
-        renderData.sort(function(a, b) {
-          return ('' + a.gsm).localeCompare(b.gsm);
-        });
-      }
-    }
-
-    // sort data
-    if (sorter.field == 'title') {
-      if (sorter.order == 'descend') {
-        renderData.sort(function(a, b) {
-          return ('' + b.title).localeCompare(a.title);
-        });
-      } else {
-        renderData.sort(function(a, b) {
-          return ('' + a.title).localeCompare(b.title);
-        });
-      }
-    }
-
-    // sort data
-    if (sorter.field == 'description') {
-      if (sorter.order == 'descend') {
-        renderData.sort(function(a, b) {
-          return a.description.length > b.description.length;
-        });
-      } else {
-        renderData.sort(function(a, b) {
-          return !(a.description.length > b.description.length);
-        });
-      }
-    }
-
-    if (sorter.field == 'groups') {
-      if (sorter.order == 'descend') {
-        renderData.sort(function(a, b) {
-          return a.groups.length > b.groups.length;
-        });
-      } else {
-        renderData.sort(function(a, b) {
-          return !(a.groups.length > b.groups.length);
-        });
-      }
-    }
-
+    this.sort(sorter, renderData);
     let start_index = pagination.pageSize * (pagination.current - 1);
     let end_index = pagination.pageSize * pagination.current;
     if (end_index > renderData.length) {
@@ -302,7 +253,7 @@ class GSMData extends Component {
       return false;
     };
 
-    const { loading, selectedRowKeys } = this.state;
+    const { selectedRowKeys, pagination, renderData } = this.state;
     const filteredData = this.state.renderData.filter(searchFilter, this);
     const minLength = 15;
     if (filteredData.length < minLength) {
@@ -458,37 +409,49 @@ class GSMData extends Component {
         selectedRowKeys,
         onChange: this.onSelectChange
       };
-
       content = (
         <div>
           <div className="err-message" id="message-gsm"></div>
-          <div style={{ display: 'flex' }}>
-            <Search
-              aria-label="search"
-              placeholder="Search text"
-              className="input-search-gsm"
-              onSearch={value => this.setState({ term: value, renderData: this.props.dataList })}
-            />
-            <div id="gsm-select" style={{ marginLeft: '1rem', marginRight: 'auto' }}>
-              Display
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="col">
+              <Search
+                aria-label="search"
+                placeholder="Search text"
+                className="input-search-gsm"
+                onSearch={value => this.setState({ term: value, renderData: this.props.dataList })}
+              />
+            </div>
+            <div
+              className="col"
+              id="gsm-select"
+              style={{ marginLeft: '1rem', marginRight: 'auto' }}
+            >
               <Dropdown overlay={menu}>
                 <Button>
-                  <span id="gsm-drop-down">{Math.min(25, filteredData.length)}</span>{' '}
-                  <Icon type="down" />
+                  <span id="gsm-drop-down">{pagination.pageSize}</span> <Icon type="down" />
                 </Button>
               </Dropdown>
-              of total {filteredData.length} records
+              rows per page
+            </div>
+
+            <div className="col" style={{ marginRight: '1rem' }}>
+              <span>
+                Showing {1 + (pagination.current - 1) * pagination.pageSize}-
+                {(pagination.current - 1) * pagination.pageSize + renderData.length} of{' '}
+                {this.state.data.length} records
+              </span>
+            </div>
+            <div className="col">
+              <Pagination {...pagination} />
             </div>
           </div>
-
           <div>
             <Table
               scroll={{ x: 600 }}
-              pagination={this.state.pagination}
+              pagination={false}
               rowSelection={rowSelection}
               columns={columns}
-              onChange={this.handlePageChange}
-              dataSource={this.state.renderData.filter(searchFilter, this)}
+              dataSource={renderData.filter(searchFilter, this)}
             />
           </div>
         </div>

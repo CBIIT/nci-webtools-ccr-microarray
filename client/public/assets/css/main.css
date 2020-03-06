@@ -595,11 +595,11 @@ div.ant-collapse-header {
 }
 
 
-#tab_analysis .ant-table-pagination {
+/* #tab_analysis .ant-table-pagination {
     position: absolute;
     top: -54px;
     right: 0;
-}
+} */
 
 
 
@@ -1181,11 +1181,11 @@ div.head-sorter>div {
         padding-top: 50px;
     }
 
-    .ant-pagination {
+    /* .ant-pagination {
 
         top: -58px !important;
         right: auto !important;
-    }
+    } */
 
     /*Pre-Normal-Plots*/
     #pre-normalization-plots-selection {
