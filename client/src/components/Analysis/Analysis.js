@@ -487,7 +487,9 @@ class Analysis extends Component {
         current: params.page_number,
         pageSize: params.page_size
       };
-      workflow.ssGSEA.search_keyword = params.search_keyword;
+      workflow.ssGSEA.search_keyword = params.search_keyword
+        ? params.search_keyword
+        : workflow.ssGSEA.search_keyword;
     } else {
       params = {
         projectId: workflow.projectID,
