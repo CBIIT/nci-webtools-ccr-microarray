@@ -29,9 +29,8 @@ export default function Project(props) {
       {' '}
       <div className="col-sm-12">
         <Select
-          disabled={props.data.fileList.length != 0}
+          disabled={Object.keys(props.data.dataList).length != 0}
           id="analysisType_selection"
-          className="ant-select-selection ant-select-selection--single"
           value={props.data.analysisType}
           style={{ width: '100%' }}
           onChange={props.handleSelectType}
@@ -81,15 +80,16 @@ export default function Project(props) {
         </div>
         <div className="row">
           <div className="col-sm-6">
-            <button
+            <Button
               id="btn-project-load-gse"
-              type="button"
+              type={Object.keys(props.data.dataList).length === 0 ? 'primary' : 'default'}
               disabled={props.data.fileList.length !== 0}
-              className="ant-btn upload-start ant-btn-primary"
+              className="upload-start"
               onClick={props.loadGSE}
+              loading={uploading}
             >
-              <span>{uploading ? 'Load' : 'Load'}</span>
-            </button>
+              Load
+            </Button>
           </div>
           <div className="col-sm-6">
             <Tooltip placement="right" title="Reset to start a new GEO analysis">
@@ -103,31 +103,34 @@ export default function Project(props) {
     );
   } else if (props.data.analysisType == '1') {
     source = (
-      <div className="upload-block row">
-        <div className="col-sm-12">
-          <Upload {...properties} disabled={props.data.uploaded}>
-            <Button>
-              <Icon type="upload" /> Select File
+      <div>
+        <div className="upload-block row">
+          <div className="col-sm-12">
+            <Upload {...properties} disabled={Object.keys(props.data.dataList).length != 0}>
+              <Button disabled={Object.keys(props.data.dataList).length != 0}>
+                <Icon type="upload" /> Select File
+              </Button>
+            </Upload>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-6">
+            <Button
+              id="btn-project-upload"
+              className="upload-start"
+              type={props.data.fileList.length === 0 ? 'default' : 'primary'}
+              onClick={props.handleUpload}
+              disabled={props.data.fileList.length === 0}
+              loading={uploading}
+            >
+              Load
             </Button>
-          </Upload>
-        </div>
-        <div className="col-sm-6">
-          <Button
-            id="btn-project-upload"
-            className="upload-start"
-            type={props.data.fileList.length === 0 ? 'default' : 'primary'}
-            onClick={props.handleUpload}
-            disabled={props.data.fileList.length === 0}
-            loading={uploading}
-          >
-            {uploading ? 'Load' : 'Load'}
-          </Button>
-        </div>
-
-        <div className="col-sm-6">
-          <Button className="upload-start" type="primary" onClick={props.resetWorkFlowProject}>
-            Reset
-          </Button>
+          </div>
+          <div className="col-sm-6">
+            <Button className="upload-start" type="primary" onClick={props.resetWorkFlowProject}>
+              Reset
+            </Button>
+          </div>
         </div>
       </div>
     );
