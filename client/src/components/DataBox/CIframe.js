@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 export default function CIframe(props) {
   useEffect(() => {
     props.showLoading('Loading Plot ...');
-  });
+  }, []);
 
   return (
     <div>
