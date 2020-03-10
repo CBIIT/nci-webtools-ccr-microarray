@@ -95,7 +95,10 @@ export default function Contrast(props) {
   let button = '';
 
   button = (
-    <div className="row" style={{ marginLeft: '-10px', marginRight: '0px' }}>
+    <div
+      className="row"
+      style={{ marginLeft: '-10px', marginRight: '-10px', marginBottom: '10px' }}
+    >
       <div className="col-sm-6">
         <Button
           id="btn-run-contrast"
@@ -128,7 +131,7 @@ export default function Contrast(props) {
       onChange={props.handleGroup1Select}
       disabled={props.data.disableContrast}
     >
-      <Option value="-1">---select Group---</Option>
+      <Option value="-1">-- Select Group 1 --</Option>
       {options}
     </Select>
   );
@@ -140,7 +143,7 @@ export default function Contrast(props) {
       onChange={props.handleGroup2Select}
       disabled={props.data.disableContrast}
     >
-      <Option value="-1">---select Group---</Option>
+      <Option value="-1">-- Select Group 2 --</Option>
       {options}
     </Select>
   );
@@ -149,7 +152,7 @@ export default function Contrast(props) {
     <Select
       value={props.data.normal}
       id="select-normal"
-      style={{ width: '100%' }}
+      style={{ width: '100%', fontWeight: 'normal' }}
       value={props.data.normal}
       onChange={props.handleNormalSelect}
       disabled={props.data.disableContrast}
@@ -198,9 +201,7 @@ export default function Contrast(props) {
           Choose Contrast To Show: <span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
         </label>
         {group_1_content}
-        <label className="title" htmlFor="select-group-2">
-          VS: <span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
-        </label>
+        <label className="title" htmlFor="select-group-2"></label>
         {group_2_content}
       </div>
       <div className="block ">
@@ -211,7 +212,6 @@ export default function Contrast(props) {
       </div>
       {queueBlock}
       {button}
-      <br />
     </div>
   );
 }

@@ -106,7 +106,11 @@ export default function Project(props) {
       <div>
         <div className="upload-block row">
           <div className="col-sm-12">
-            <Upload {...properties} disabled={Object.keys(props.data.dataList).length != 0}>
+            <Upload
+              {...properties}
+              disabled={Object.keys(props.data.dataList).length != 0}
+              style={{ width: '100%' }}
+            >
               <Button disabled={Object.keys(props.data.dataList).length != 0}>
                 <Icon type="upload" /> Select File
               </Button>

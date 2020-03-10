@@ -31,7 +31,6 @@ canvas {
 
 p {
     font-size: 18px;
-
 }
 
 .ant-select-disabled {
@@ -94,11 +93,11 @@ tr:nth-child(even) {
 }
 
 .ant-select-selection__rendered {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .ant-input {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
     color: black;
 }
@@ -276,7 +275,8 @@ tr:nth-child(even) {
 }
 
 .block .title {
-    font-size: 0.85em;
+    font-size: .90em;
+    font-weight: bold;
     margin-top: 5px;
 }
 
@@ -413,9 +413,7 @@ tr:nth-child(even) {
 
 .ant-tabs-nav .ant-tabs-tab-active {
     color: #2971A5 !important;
-    font-weight: 600 !important;
 }
-
 
 .ant-modal-header {
     background: #2971A5 !important;
@@ -773,11 +771,6 @@ div#deg-select button {
 div#ss-select {
     margin-top: 8px;
 }
-
-input#input-access-code, input#chip {
-    font-size: 18px;
-}
-
 
 input#input_group_name {
     width: calc(100%-68px);
