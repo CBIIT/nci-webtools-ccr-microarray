@@ -767,9 +767,7 @@ div#pathways-up-select {
 }
 
 div#deg-select button {
-    margin-left: 10px;
     margin-right: 10px;
-
 }
 
 div#ss-select {
@@ -814,37 +812,6 @@ input#input_group_name {
 #tab_help img {
     max-width: 1250px;
     width: 100%;
-}
-
-.div-export-deg {
-    position: absolute;
-    right: 0px;
-    padding-right: 10px;
-    margin-top: -2px;
-}
-
-
-
-.div-export-pathwayUp {
-    position: absolute;
-    right: 0px;
-    padding-right: 10px;
-    margin-top: -2px;
-
-}
-
-.div-export-pathwayDown {
-    position: absolute;
-    right: 0px;
-    padding-right: 10px;
-    margin-top: -2px;
-}
-
-.div-export-ss {
-    position: absolute;
-    right: 0px;
-    padding-right: 10px;
-    margin-top: -2px;
 }
 
 .div-export-gsm {
@@ -915,12 +882,6 @@ input#input_group_name {
 
 #input-define-group {
     width: calc(100% - 68px);
-}
-
-#ss_genset_select {
-    position: absolute;
-    left: 233px;
-    top: 50px;
 }
 
 .plot1 img {

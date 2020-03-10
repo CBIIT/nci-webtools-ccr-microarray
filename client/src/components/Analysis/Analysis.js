@@ -60,6 +60,7 @@ const defaultState = {
     tag_deg_plot_status: '',
     tag_ssgea_plot_status: '',
     diff_expr_genes: {
+      message: '',
       data: [],
       pagination: {
         current: 1,
@@ -87,6 +88,7 @@ const defaultState = {
       }
     },
     ssGSEA: {
+      message: '',
       data: [],
       pagination: {
         current: 1,
@@ -110,6 +112,7 @@ const defaultState = {
       }
     },
     pathways_up: {
+      message: '',
       data: [],
       pagination: {
         current: 1,
@@ -136,6 +139,7 @@ const defaultState = {
       }
     },
     pathways_down: {
+      message: '',
       data: [],
       pagination: {
         current: 1,
@@ -455,7 +459,7 @@ class Analysis extends Component {
             });
           }
         } else {
-          document.getElementById('message-ssgsea').innerHTML = result.msg;
+          workflow.ssGSEA.message = result.msg;
         }
         workflow.progressing = false;
         workflow.loading_info = 'Loading';
@@ -465,8 +469,8 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = false;
         workflow.loading_info = 'Loading';
+        workflow.ssGSEA.message = err;
         this.setState({ workflow: workflow });
-        document.getElementById('message-ssgsea').innerHTML = err;
       });
   };
   getssGSEA = (params = {}) => {
@@ -516,8 +520,8 @@ class Analysis extends Component {
       .then(this.handleErrors)
       .then(res => res.json())
       .then(result => {
-        document.getElementById('message-ssgsea').innerHTML = '';
         let workflow2 = Object.assign({}, this.state.workflow);
+        workflow2.ssGSEA.message = '';
         if (result.status == 200) {
           const pagination = { ...workflow2.ssGSEA.pagination };
           pagination.total = result.data.totalCount;
@@ -527,17 +531,17 @@ class Analysis extends Component {
           workflow2.ssGSEA.loading = false;
           workflow2.ssGSEA.data = result.data.records;
           workflow2.ssGSEA.pagination = pagination;
-          this.setState({ workflow: workflow2 });
-          this.getSSGSEAGeneHeatMap();
         } else {
-          document.getElementById('message-ssgsea').innerHTML = result.msg;
+          workflow.ssGSEA.message = result.msg;
         }
+        this.setState({ workflow: workflow2 });
+        this.getSSGSEAGeneHeatMap();
       })
       .catch(error => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.ssGSEA.loading = false;
+        workflow.ssGSEA.message = error;
         this.setState({ workflow: workflow });
-        document.getElementById('message-ssgsea').innerHTML = error;
       });
   };
   exportPathwayUp = (params = {}) => {
@@ -702,7 +706,7 @@ class Analysis extends Component {
             });
           }
         } else {
-          document.getElementById('message-pug').innerHTML = 'export PathwayUp fails';
+          workflow.pathways_up.message = 'export PathwayUp fails';
         }
         workflow.progressing = false;
         workflow.loading_info = 'Loading';
@@ -712,8 +716,8 @@ class Analysis extends Component {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = false;
         workflow.loading_info = 'Loading';
+        workflow.pathways_up.message = error;
         this.setState({ workflow: workflow });
-        document.getElementById('message-pug').innerHTML = error;
       });
   };
   getPathwayUp = (params = {}) => {
@@ -762,8 +766,8 @@ class Analysis extends Component {
       .then(this.handleErrors)
       .then(res => res.json())
       .then(result => {
-        document.getElementById('message-pug').innerHTML = '';
         let workflow2 = Object.assign({}, this.state.workflow);
+        workflow2.pathways_up.message = '';
         if (result.status == 200) {
           const pagination = { ...workflow.pathways_up.pagination };
           pagination.total = result.data.totalCount;
@@ -776,15 +780,15 @@ class Analysis extends Component {
           this.setState({ workflow: workflow2 });
         } else {
           workflow2.pathways_up.loading = false;
+          workflow2.pathways_up.message = JSON.stringify(result.msg);
           this.setState({ workflow: workflow2 });
-          document.getElementById('message-pug').innerHTML = JSON.stringify(result.msg);
         }
       })
       .catch(error => {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.pathways_up.loading = false;
+        workflow2.pathways_up.message = JSON.stringify(error);
         this.setState({ workflow: workflow2 });
-        document.getElementById('message-pug').innerHTML = JSON.stringify(error);
       });
   };
   getPathwayDown = (params = {}) => {
@@ -832,9 +836,8 @@ class Analysis extends Component {
       .then(this.handleErrors)
       .then(res => res.json())
       .then(result => {
-        document.getElementById('message-pdg').innerHTML = '';
-        document.getElementById('message-pdg').innerHTML = '';
         let workflow2 = Object.assign({}, this.state.workflow);
+        workflow2.pathways_down.message = '';
         if (result.status == 200) {
           const pagination = { ...workflow.pathways_down.pagination };
           // Read total count from server
@@ -847,17 +850,20 @@ class Analysis extends Component {
           workflow2.pathways_down.loading = false;
           workflow2.pathways_down.data = result.data.records;
           workflow2.pathways_down.pagination = pagination;
-
-          this.setState({ workflow: workflow2 });
         } else {
-          document.getElementById('message-pdg').innerHTML = JSON.stringify(result.msg);
+          workflow2.pathways_down.message = JSON.stringify(result.msg);
         }
+        this.setState({ workflow: workflow2 });
       })
-      .catch(error => (document.getElementById('message-pdg').innerHTML = JSON.stringify(error)));
+      .catch(error => {
+        let workflow2 = Object.assign({}, this.state.workflow);
+        workflow2.pathways_down.loading = JSON.stringify(error);
+        this.setState({ workflow: workflow2 });
+      });
   };
   exportPathwayDown = (params = {}) => {
-    document.getElementById('message-pdg').innerHTML = '';
     let workflow = Object.assign({}, this.state.workflow);
+    workflow.pathways_down.message = '';
     // initialize
     params = {
       projectId: workflow.projectID,
@@ -881,8 +887,8 @@ class Analysis extends Component {
       .then(this.handleErrors)
       .then(res => res.json())
       .then(result => {
-        document.getElementById('message-pdg').innerHTML = '';
         let workflow = Object.assign({}, this.state.workflow);
+        workflow.pathways_down.message = '';
         if (result.status == 200) {
           let workflow = Object.assign({}, this.state.workflow);
           var wb = XLSX.utils.book_new();
@@ -1025,10 +1031,16 @@ class Analysis extends Component {
             });
           }
         } else {
-          document.getElementById('message-pdg').innerHTML = JSON.stringify(result.msg);
+          let workflow = Object.assign({}, this.state.workflow);
+          workflow.pathways_down.message = JSON.stringify(result.msg);
+          this.setState({ workflow: workflow });
         }
       })
-      .catch(error => (document.getElementById('message-pdg').innerHTML = JSON.stringify(error)));
+      .catch(error => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.pathways_down.message = JSON.stringify(error);
+        this.setState({ workflow: workflow });
+      });
   };
   getDEG = (params = {}) => {
     let workflow = Object.assign({}, this.state.workflow);
@@ -1075,8 +1087,8 @@ class Analysis extends Component {
       .then(this.handleErrors)
       .then(res => res.json())
       .then(result => {
-        document.getElementById('message-deg').innerHTML = '';
         let workflow2 = Object.assign({}, this.state.workflow);
+        workflow2.diff_expr_genes.message = '';
         if (result.status == 200) {
           const pagination = { ...workflow2.diff_expr_genes.pagination };
           // Read total count from server
@@ -1088,11 +1100,10 @@ class Analysis extends Component {
           workflow2.diff_expr_genes.loading = false;
           workflow2.diff_expr_genes.data = result.data.records;
           workflow2.diff_expr_genes.pagination = pagination;
-          this.setState({ workflow: workflow2 });
         } else {
-          document.getElementById('message-deg').style.display = 'block';
-          document.getElementById('message-deg').innerHTML = JSON.stringify(result.msg);
+          workflow2.diff_expr_genes.message = JSON.stringify(result.msg);
         }
+        this.setState({ workflow: workflow2 });
       })
       .catch(error => console.log(error));
   };
@@ -1116,7 +1127,7 @@ class Analysis extends Component {
       .then(this.handleErrors)
       .then(res => res.json())
       .then(result => {
-        document.getElementById('message-deg').innerHTML = '';
+        workflow.diff_expr_genes.message = '';
         if (result.status == 200) {
           var wb = XLSX.utils.book_new();
           wb.Props = {
@@ -1158,8 +1169,9 @@ class Analysis extends Component {
         this.setState({ workflow: workflow });
       })
       .catch(error => {
-        document.getElementById('message-deg').style.display = 'block';
-        document.getElementById('message-deg').innerHTML = JSON.stringify(error);
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.diff_expr_genes.message = JSON.stringify(error);
+        this.setState({ workflow: workflow });
       });
   };
   exportDEG = (params = {}) => {
@@ -1186,9 +1198,9 @@ class Analysis extends Component {
       .then(this.handleErrors)
       .then(res => res.json())
       .then(result => {
-        document.getElementById('message-deg').innerHTML = '';
         if (result.status == 200) {
           let workflow = Object.assign({}, this.state.workflow);
+          workflow.diff_expr_genes.message = '';
           var wb = XLSX.utils.book_new();
           wb.Props = {
             Title: 'Export Deg Data',
@@ -1310,15 +1322,16 @@ class Analysis extends Component {
             });
           }
         } else {
-          document.getElementById('message-deg').innerHTML = JSON.stringify(result.msg);
+          workflow.diff_expr_genes.message = JSON.stringify(result.msg);
         }
         workflow.progressing = false;
         workflow.loading_info = 'Loading';
         this.setState({ workflow: workflow });
       })
       .catch(error => {
-        document.getElementById('message-deg').style.display = 'block';
-        document.getElementById('message-deg').innerHTML = JSON.stringify(error);
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.diff_expr_genes.message = JSON.stringify(error);
+        this.setState({ workflow: workflow });
       });
   };
   getHeatmapolt = () => {
@@ -2011,21 +2024,20 @@ class Analysis extends Component {
         .then(this.handleErrors)
         .then(res => res.json())
         .then(result => {
-          document.getElementById('message-ssgsea').innerHTML = '';
+          workflow.ssGSEA.message = '';
           workflow.progressing = false;
           this.setState({ workflow: workflow });
           if (result.status == 200) {
+            this.setState({ workflow: workflow });
             this.getssGSEA();
           } else {
-            document.getElementById('message-ssgsea').style.display = 'block';
-            document.getElementById('message-ssgsea').innerHTML = JSON.stringify(result.msg);
+            workflow.ssGSEA.message = JSON.stringify(result.msg);
+            this.setState({ workflow: workflow });
           }
         });
     } catch (err) {
-      document.getElementById('message-ssgsea').style.display = 'block';
-      document.getElementById('message-ssgsea').innerHTML = JSON.stringify(err);
-      //change button style
       workflow.progressing = false;
+      workflow.ssGSEA.message = JSON.stringify(err);
       this.setState({
         workflow: workflow
       });
@@ -2349,7 +2361,6 @@ class Analysis extends Component {
             });
             document.getElementById('message-gsm').innerHTML = result.msg;
             document.getElementById('message-gsm').nextSibling.innerHTML = '';
-            //message.error('load data fails.');
           }
         });
     } catch (err) {
