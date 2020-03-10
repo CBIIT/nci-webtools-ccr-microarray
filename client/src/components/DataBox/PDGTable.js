@@ -1137,7 +1137,7 @@ export default function PUGTable(props) {
           <Pagination
             {...props.data.pathways_down.pagination}
             onChange={(page, pageSize) =>
-              props.getPathwayUp({
+              props.getPathwayDown({
                 page_size: pageSize,
                 page_number: page,
                 sorting: props.data.pathways_down.sorting,
