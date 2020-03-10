@@ -416,7 +416,7 @@ export default function DataBox(props) {
 
   let batchDataList = [];
   batchData.forEach((value, key) => {
-    if (value != 'Others') batchDataList.push({ key: key, name: key, gsms: value });
+    if (key != 'Others') batchDataList.push({ key: key, name: key, gsms: value });
   });
 
   let group_table = (
@@ -453,7 +453,7 @@ export default function DataBox(props) {
         </Button>
       ]}
     >
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <label>
           <input
             type="radio"
@@ -474,7 +474,7 @@ export default function DataBox(props) {
           ></input>{' '}
           Add Batch
         </label>
-        <label>
+        <label style={{ whiteSpace: 'nowrap' }}>
           <input
             type="radio"
             aria-label="enable csv upload"
@@ -482,24 +482,25 @@ export default function DataBox(props) {
             checked={modalOption === 'upload'}
             onChange={() => setOption('upload')}
           ></input>{' '}
-          Add from file
+          Add Group/Batch from file
         </label>
         <label style={{ marginLeft: '1rem', width: 'auto' }}>
           <Upload {...uploadOptions()}>
             <Button type="default" disabled={modalOption != 'upload'}>
               <Icon type="upload" />
-              Add Groups from .csv file
+              Select File (.csv)
             </Button>
           </Upload>
         </label>
         <label style={{ width: 'auto' }}>
-          <a href="./assets/sample/GSMGroupsBatches-sample.csv">
-            <Button type="link" style={{ color: '#005ea2' }}>
-              {' '}
-              <Icon type="download" />
-              Download Sample
-            </Button>
-          </a>
+          <Button
+            type="link"
+            href="./assets/sample/GSMGroupsBatches-sample.csv"
+            style={{ color: '#005ea2' }}
+          >
+            <Icon type="download" />
+            Download Sample
+          </Button>
         </label>
       </div>
       <hr></hr>
