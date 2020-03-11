@@ -2540,128 +2540,16 @@ class Analysis extends Component {
     }
     // define action
     reqBody.actions = 'runContrast';
-    workflow.diff_expr_genes = {
-      data: [],
-      pagination: {
-        current: 1,
-        pageSize: 25
-      },
-      loading: true,
-      page_number: 1,
-      page_size: 25,
-      sorting: {
-        name: 'P.Value',
-        order: 'ascend'
-      },
-      search_keyword: {
-        search_symbol: '',
-        search_fc: '1.5',
-        search_p_value: '0.05',
-        search_adj_p_value: '',
-        search_aveexpr: '',
-        search_accnum: '',
-        search_desc: '',
-        search_entrez: '',
-        search_probsetid: '',
-        search_t: '',
-        search_b: ''
-      }
-    };
+    workflow.diff_expr_genes = defaultState.workflow.diff_expr_genes;
     reqBody.deg = workflow.diff_expr_genes;
-    workflow.ssGSEA = {
-      data: [],
-      pagination: {
-        current: 1,
-        pageSize: 25
-      },
-      loading: true,
-      page_size: 25,
-      page_number: 1,
-      sorting: {
-        name: 'P.Value',
-        order: 'ascend'
-      },
-      search_keyword: {
-        name: '',
-        search_logFC: '',
-        search_Avg_Enrichment_Score: '',
-        search_t: '',
-        search_p_value: '',
-        search_adj_p_value: '',
-        search_b: ''
-      }
-    };
+    workflow.ssGSEA = defaultState.workflow.ssGSEA;
     reqBody.ssGSEA = workflow.ssGSEA;
-    workflow.pathways_up = {
-      data: [],
-      pagination: {
-        current: 1,
-        pageSize: 25
-      },
-      sorting: {
-        name: 'P_Value',
-        order: 'ascend'
-      },
-      loading: true,
-      search_keyword: {
-        search_PATHWAY_ID: '',
-        search_SOURCE: '',
-        search_DESCRIPTION: '',
-        search_TYPE: '',
-        search_p_value: '0.05',
-        search_fdr: '',
-        search_RATIO: '',
-        search_GENE_LIST: '',
-        search_NUMBER_HITS: '',
-        search_NUMBER_GENES_PATHWAY: '',
-        search_NUMBER_USER_GENES: '',
-        search_TOTAL_NUMBER_GENES: ''
-      }
-    };
+    workflow.pathways_up = defaultState.workflow.pathways_up;
     reqBody.pathways_up = workflow.pathways_up;
-    workflow.pathways_down = {
-      data: [],
-      pagination: {
-        current: 1,
-        pageSize: 25
-      },
-      loading: true,
-      sorting: {
-        name: 'P_Value',
-        order: 'ascend'
-      },
-      search_keyword: {
-        search_PATHWAY_ID: '',
-        search_SOURCE: '',
-        search_DESCRIPTION: '',
-        search_TYPE: '',
-        search_p_value: '0.05',
-        search_fdr: '',
-        search_RATIO: '',
-        search_GENE_LIST: '',
-        search_NUMBER_HITS: '',
-        search_NUMBER_GENES_PATHWAY: '',
-        search_NUMBER_USER_GENES: '',
-        search_TOTAL_NUMBER_GENES: ''
-      }
-    };
+    workflow.pathways_down = defaultState.workflow.pathways_down;
     reqBody.pathways_down = workflow.pathways_down;
-    workflow.preplots = {
-      selected: 'preHistogram',
-      histplotBN: '',
-      list_mAplotBN: '',
-      NUSE: '',
-      RLE: '',
-      Boxplots: ''
-    };
-    workflow.postplot = {
-      selected: 'postHistogram',
-      histplotAN: '',
-      list_mAplotAN: '',
-      Heatmapolt: '',
-      Boxplots: '',
-      PCA: ''
-    };
+    workflow.preplots = defaultState.workflow.preplots;
+    workflow.postplot = defaultState.workflow.postplot
     workflow.degSelected = 'deg_tag1';
     workflow.ssSelect = 'ss_tag1';
     workflow.geneSelect = 'human$H: Hallmark Gene Sets';
