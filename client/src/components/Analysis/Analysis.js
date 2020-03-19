@@ -2284,7 +2284,7 @@ class Analysis extends Component {
             let workflow = Object.assign({}, this.state.workflow);
 
             if (result.data === 'undefined' || Object.keys(result.data).length === 0) {
-              this.loadError(result.data);
+              this.loadError('No data recieved');
               return;
             }
             if (result.data.indexOf('{"files":') > -1) {
@@ -2327,6 +2327,9 @@ class Analysis extends Component {
                         'Others'
                       ))
                   );
+                } else if (parse.length === 0) {
+                  this.loadError('GEO FTP server is offline. Please try again at a later time.');
+                  return;
                 } else {
                   this.loadError(
                     `No data found. GEO database may be down for maintenance or ${workflow.accessionCode} may be an invalid accession code`
@@ -2549,7 +2552,7 @@ class Analysis extends Component {
     workflow.pathways_down = defaultState.workflow.pathways_down;
     reqBody.pathways_down = workflow.pathways_down;
     workflow.preplots = defaultState.workflow.preplots;
-    workflow.postplot = defaultState.workflow.postplot
+    workflow.postplot = defaultState.workflow.postplot;
     workflow.degSelected = 'deg_tag1';
     workflow.ssSelect = 'ss_tag1';
     workflow.geneSelect = 'human$H: Hallmark Gene Sets';

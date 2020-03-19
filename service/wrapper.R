@@ -12,7 +12,19 @@ library(reshape2)
 library(plotly)
 library(reshape2)
 library(amap)
+library(RCurl)
 
+# get directory list of server as string and evaluate if README.txt exists 
+ftpServerUp <- function() {
+    server <- 'ftp://ftp.ncbi.nlm.nih.gov/geo/'
+    
+    tryCatch({
+        dirlist <- strsplit(getURL(server, ftp.use.epsv = FALSE, dirlistonly = TRUE), '\n')
+        return(is.element('README.txt', dirlist[[1]]))
+    }, error = function(e) {
+        return(FALSE)
+    })
+}
 
 process = function(){
  tryCatch({
@@ -59,10 +71,14 @@ process = function(){
               chip <- NULL 
             }
 
-            celfiles = processGEOfiles(projectId=projectId,id=access_code,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path, chip=chip)  
-            # remove downloaded tar file
-            fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
-            if (file.exists(fn)) file.remove(fn)
+            celfiles = ''
+            if (ftpServerUp()) {
+              celfiles = processGEOfiles(projectId=projectId,id=access_code,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path, chip=chip)  
+              # remove downloaded tar file
+              fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
+              if (file.exists(fn)) file.remove(fn)
+            }
+            
             return(celfiles)  
         }
         if(action =="loadCEL"){
