@@ -4,7 +4,7 @@ install.packages(
     c("jsonlite", "gplots", "rglwidget", "DT", "getopt", "knitr",
     "reshape", "RColorBrewer", "calibrate", "rmarkdown", "ggplot2", "ggfortify", 
     "shinyRGL", "plotly", "htmltools", "heatmaply", "pheatmap", "viridis", "dendsort", 
-    "amap", "BiocManager"), 
+    "amap", "RCurl", "BiocManager"), 
     repos = c(CRAN="http://cran.r-project.org"))
 
 install.packages("rgl", repo="http://cran.r-project.org", configure.args="--disable-ftgl")
@@ -30,6 +30,7 @@ BiocManager::install(
     "pd.hugene.1.1.st.v1", "pd.hugene.2.0.st", "pd.hugene.2.1.st",
     "pd.mg.u74av2", "pd.moe430a", "pd.moex.1.0.st.v1", "pd.mogene.1.0.st.v1", 
     "pd.mogene.1.1.st.v1", "pd.mogene.2.0.st", "pd.mouse430.2", "pd.mouse430a.2",
-    "pd.ht.hg.u133a", "hthgu133a.db"))
+    "pd.ht.hg.u133a", "hthgu133a.db", "pd.clariom.d.human", 
+    "clariomdhumantranscriptcluster.db"))
     
 install_github("CCBR/MicroArrayPipeline/mpstr")
