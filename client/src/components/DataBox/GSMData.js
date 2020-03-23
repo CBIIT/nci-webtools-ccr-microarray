@@ -38,7 +38,10 @@ class GSMData extends Component {
     let currentState = Object.assign({}, this.state);
     if (JSON.stringify(nextProps.dataList) != JSON.stringify(currentState.data)) {
       currentState.data = nextProps.dataList;
-      currentState.renderData = nextProps.dataList;
+      currentState.renderData = nextProps.dataList.slice(
+        0,
+        nextProps.dataList.length > 25 ? 25 : nextProps.dataList.length
+      );
       currentState.pagination.total = nextProps.dataList.length;
       currentState.pagination.pageSize = 25;
       currentState.pagination.current = 1;
