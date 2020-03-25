@@ -72,7 +72,7 @@ export default function Contrast(props) {
         id="email"
         aria-label="input email"
         id="input-email"
-        placeholder="email"
+        placeholder="-- Enter Email --"
       />
       <span className="queueMessage">
         Note: if sending to queue, when computation is completed, a notification will be sent to the
