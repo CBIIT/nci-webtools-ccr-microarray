@@ -2283,10 +2283,6 @@ class Analysis extends Component {
           if (result.status == 200) {
             let workflow = Object.assign({}, this.state.workflow);
 
-            if (result.data === 'undefined' || Object.keys(result.data).length === 0) {
-              this.loadError('No data recieved');
-              return;
-            }
             if (result.data.indexOf('{"files":') > -1) {
               var data = result.data.substr(result.data.indexOf('{"files":'), result.data.length);
               let list = JSON.parse(decodeURIComponent(data));
@@ -2307,7 +2303,7 @@ class Analysis extends Component {
               // multichip
               try {
                 let parse = JSON.parse(result.data);
-                if (Object.entries(parse).length) {
+                if (typeof parse === 'object' && Object.entries(parse).length) {
                   workflow.dataList = parse;
                   let chips = Object.keys(workflow.dataList);
 
@@ -2330,14 +2326,16 @@ class Analysis extends Component {
                 } else if (parse.length === 0) {
                   this.loadError('GEO FTP server is offline. Please try again at a later time.');
                   return;
+                } else if (typeof parse === 'string') {
+                  this.loadError(parse);
+                  return;
                 } else {
-                  this.loadError(
-                    `No data found. GEO database may be down for maintenance or ${workflow.accessionCode} may be an invalid accession code`
-                  );
+                  this.loadError(`Error:\n${parse}`);
                   return;
                 }
               } catch (e) {
                 this.loadError(result.data);
+                return;
               }
             }
 
