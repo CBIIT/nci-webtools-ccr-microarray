@@ -2282,18 +2282,12 @@ class Analysis extends Component {
         .then(result => {
           if (result.status == 200) {
             let workflow = Object.assign({}, this.state.workflow);
+            let data = result.data.substr(result.data.indexOf('wrapperReturn') + 15, result.data.length);
 
-            if (result.data.indexOf('{"files":') > -1) {
-              var data = result.data.substr(result.data.indexOf('{"files":'), result.data.length);
+            if (data.indexOf('{"files":') > -1) {
               let list = JSON.parse(decodeURIComponent(data));
-              if (
-                typeof list == 'undefined' ||
-                list == null ||
-                list.files == null ||
-                typeof list.files == 'undefined' ||
-                list.files.length == 0
-              ) {
-                this.loadError(result.data);
+              if (!list || !list.files || list.files.length == 0) {
+                this.loadError(data);
                 return;
               }
               workflow.dataList = list.files;
@@ -2302,7 +2296,7 @@ class Analysis extends Component {
             } else {
               // multichip
               try {
-                let parse = JSON.parse(result.data);
+                let parse = JSON.parse(decodeURIComponent(data));
                 if (typeof parse === 'object' && Object.entries(parse).length) {
                   workflow.dataList = parse;
                   let chips = Object.keys(workflow.dataList);
@@ -2323,18 +2317,15 @@ class Analysis extends Component {
                         'Others'
                       ))
                   );
-                } else if (parse.length === 0) {
-                  this.loadError('GEO FTP server is offline. Please try again at a later time.');
-                  return;
-                } else if (typeof parse === 'string') {
+                } else if (typeof parse === 'string' && parse.length) {
                   this.loadError(parse);
                   return;
                 } else {
-                  this.loadError(`Error:\n${parse}`);
+                  this.loadError(`An error has occured\n${parse}`);
                   return;
                 }
               } catch (e) {
-                this.loadError(result.data);
+                this.loadError(`Caught Exception:\n${e}\n${data}`);
                 return;
               }
             }

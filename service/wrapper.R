@@ -71,14 +71,14 @@ process = function(){
               chip <- NULL 
             }
 
-            celfiles = ''
+            celfiles = 'The GEO FTP server is currently unavailable. Please try again at a later time.'
             if (ftpServerUp()) {
               celfiles = processGEOfiles(projectId=projectId,id=access_code,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path, chip=chip)  
               # remove downloaded tar file
               fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
               if (file.exists(fn)) file.remove(fn)
             }
-            
+            print('wrapperReturn')
             return(celfiles)  
         }
         if(action =="loadCEL"){
