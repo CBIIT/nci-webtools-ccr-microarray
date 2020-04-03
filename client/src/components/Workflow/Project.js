@@ -1,8 +1,29 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Input, Upload, Button, Icon, Tooltip, Select } from 'antd';
 const { Option } = Select;
 
 export default function Project(props) {
+  const didMountRef = useRef(false);
+
+  useEffect(() => {
+    if (didMountRef.current) {
+      fix508();
+    } else didMountRef.current = true;
+  });
+
+  function fix508() {
+    const type = document.querySelector(
+      '#analysisType_selection > .ant-select-selection.ant-select-selection--single'
+    );
+    const typeOption = document.querySelector(
+      '#analysisType_selection > .ant-select-selection.ant-select-selection--single > .ant-select-selection__rendered'
+    );
+
+    type.setAttribute('aria-label', 'Select Group 1');
+    type.removeAttribute('aria-autocomplete');
+    typeOption.setAttribute('role', 'option');
+  }
+
   function handleKeyDown(e) {
     if (e.key === 'Enter') {
       props.loadGSE();
@@ -34,6 +55,7 @@ export default function Project(props) {
           value={props.data.analysisType}
           style={{ width: '100%' }}
           onChange={props.handleSelectType}
+          role="listbox"
         >
           <Option value="0">GEO Data</Option>
           <Option value="1">CEL Files</Option>

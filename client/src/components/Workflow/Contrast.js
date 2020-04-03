@@ -1,8 +1,49 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Checkbox, Input, Button, Tooltip, Select } from 'antd';
 const { Option } = Select;
 
 export default function Contrast(props) {
+  const didMountRef = useRef(false);
+
+  useEffect(() => {
+    if (didMountRef.current) {
+      fix508();
+    } else didMountRef.current = true;
+  });
+
+  function fix508() {
+    const group1 = document.querySelector(
+      '#select-group-1 > .ant-select-selection.ant-select-selection--single'
+    );
+    const group1option = document.querySelector(
+      '#select-group-1 > .ant-select-selection.ant-select-selection--single > .ant-select-selection__rendered'
+    );
+    const group2 = document.querySelector(
+      '#select-group-2 > .ant-select-selection.ant-select-selection--single'
+    );
+    const group2option = document.querySelector(
+      '#select-group-2 > .ant-select-selection.ant-select-selection--single > .ant-select-selection__rendered'
+    );
+    const type = document.querySelector(
+      '#select-normal > .ant-select-selection.ant-select-selection--single'
+    );
+    const typeOption = document.querySelector(
+      '#select-normal > .ant-select-selection.ant-select-selection--single > .ant-select-selection__rendered'
+    );
+
+    group1.setAttribute('aria-label', 'Select Group 1');
+    group1.removeAttribute('aria-autocomplete');
+    group1option.setAttribute('role', 'option');
+
+    group2.setAttribute('aria-label', 'Select Group 2');
+    group2.removeAttribute('aria-autocomplete');
+    group2option.setAttribute('role', 'option');
+
+    type.setAttribute('aria-label', 'Choose Normalization Method');
+    type.removeAttribute('aria-autocomplete');
+    typeOption.setAttribute('role', 'option');
+  }
+
   function handleSwitchChange(e) {
     if (e.target.checked) {
       props.changeRunContrastMode(true);
@@ -130,6 +171,7 @@ export default function Contrast(props) {
       style={{ width: '100%' }}
       onChange={props.handleGroup1Select}
       disabled={props.data.disableContrast}
+      role="listbox"
     >
       <Option value="-1">-- Select Group 1 --</Option>
       {options}
@@ -142,6 +184,7 @@ export default function Contrast(props) {
       style={{ width: '100%' }}
       onChange={props.handleGroup2Select}
       disabled={props.data.disableContrast}
+      role="listbox"
     >
       <Option value="-1">-- Select Group 2 --</Option>
       {options}
@@ -156,6 +199,7 @@ export default function Contrast(props) {
       value={props.data.normal}
       onChange={props.handleNormalSelect}
       disabled={props.data.disableContrast}
+      role="listbox"
     >
       <Option value="RMA">RMA</Option>
       <Option value="RMA_Loess">RMA plus Cyclic Loess</Option>
@@ -201,7 +245,7 @@ export default function Contrast(props) {
           Choose Contrast To Show: <span style={{ color: '#e41d3d', paddingLeft: '5px' }}> *</span>
         </label>
         {group_1_content}
-        <label className="title" htmlFor="select-group-2"></label>
+        <div className="title"></div>
         {group_2_content}
       </div>
       <div className="block ">
