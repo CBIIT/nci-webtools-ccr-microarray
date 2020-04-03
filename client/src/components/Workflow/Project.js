@@ -19,7 +19,7 @@ export default function Project(props) {
       '#analysisType_selection > .ant-select-selection.ant-select-selection--single > .ant-select-selection__rendered'
     );
 
-    type.setAttribute('aria-label', 'Select Group 1');
+    type.setAttribute('aria-label', 'Select Analyis Type');
     type.removeAttribute('aria-autocomplete');
     typeOption.setAttribute('role', 'option');
   }
