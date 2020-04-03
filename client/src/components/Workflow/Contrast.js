@@ -30,6 +30,12 @@ export default function Contrast(props) {
     const typeOption = document.querySelector(
       '#select-normal > .ant-select-selection.ant-select-selection--single > .ant-select-selection__rendered'
     );
+    const chip = document.querySelector(
+      '#selectChip > .ant-select-selection.ant-select-selection--single'
+    );
+    const chipOption = document.querySelector(
+      '#selectChip > .ant-select-selection.ant-select-selection--single > .ant-select-selection__rendered'
+    );
 
     group1.setAttribute('aria-label', 'Select Group 1');
     group1.removeAttribute('aria-autocomplete');
@@ -42,6 +48,12 @@ export default function Contrast(props) {
     type.setAttribute('aria-label', 'Choose Normalization Method');
     type.removeAttribute('aria-autocomplete');
     typeOption.setAttribute('role', 'option');
+
+    if (chip) {
+      chip.setAttribute('aria-label', 'Choose Chip');
+      chip.removeAttribute('aria-autocomplete');
+      chipOption.setAttribute('role', 'option');
+    }
   }
 
   function handleSwitchChange(e) {
@@ -230,6 +242,7 @@ export default function Contrast(props) {
           style={{ width: '100%' }}
           onChange={props.handleSelectChip}
           disabled={props.data.disableContrast}
+          role="listbox"
         >
           {chipOptions}
         </Select>
