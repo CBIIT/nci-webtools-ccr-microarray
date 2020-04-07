@@ -10,7 +10,7 @@ import {
   Modal,
   Button,
   Tooltip,
-  Pagination
+  Pagination,
 } from 'antd';
 const Search = Input.Search;
 const minWidth = 110;
@@ -23,7 +23,7 @@ export default function PUGTable(props) {
     term: '',
     heapMap: '',
     visible: false,
-    table_content: ''
+    table_content: '',
   });
 
   function handleMenuClick(e) {
@@ -33,9 +33,9 @@ export default function PUGTable(props) {
       page_number: 1,
       sorting: {
         name: props.data.pathways_up.sorting.name,
-        order: props.data.pathways_up.sorting.order
+        order: props.data.pathways_up.sorting.order,
       },
-      search_keyword: props.data.pathways_up.search_keyword
+      search_keyword: props.data.pathways_up.search_keyword,
     });
   }
 
@@ -61,9 +61,9 @@ export default function PUGTable(props) {
       page_number: props.data.pathways_up.pagination.current,
       sorting: {
         name: field,
-        order: order
+        order: order,
       },
-      search_keyword: props.data.pathways_up.search_keyword
+      search_keyword: props.data.pathways_up.search_keyword,
     });
   }
 
@@ -95,11 +95,11 @@ export default function PUGTable(props) {
       body: JSON.stringify(reqBody),
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         props.changeLoadingStatus(false, '');
         if (result.status == 200) {
           if (Object.keys(result.data).length == 0 || result.data.constructor == Object) {
@@ -121,12 +121,12 @@ export default function PUGTable(props) {
   const columns = [
     {
       title: (
-        <div className="pathway_up_pathways_id_head">
+        <div className="pathway_pathways_id_head">
           <label htmlFor="input_pathway_up_search_PATHWAY_ID">
             <span style={{ display: 'none' }}>input_pathway_up_search_PATHWAY_ID</span>
             <Input
               aria-label="input_pathway_up_search_PATHWAY_ID"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.pathways_up.search_keyword.search_PATHWAY_ID == ''
                   ? 'PATHWAY_ID'
@@ -145,7 +145,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Pathway_ID' &&
                       props.data.pathways_up.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Pathway_ID', 'ascend')}
                 >
@@ -159,7 +159,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Pathway_ID' &&
                       props.data.pathways_up.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Pathway_ID', 'descend')}
                 >
@@ -184,7 +184,7 @@ export default function PUGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.12 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
-                  : minWidth
+                  : minWidth,
             }}
           >
             <span
@@ -199,16 +199,16 @@ export default function PUGTable(props) {
             </span>
           </div>
         );
-      }
+      },
     },
     {
       title: (
-        <div className="pathway_up_source_head">
+        <div className="pathway_source_head">
           <label htmlFor="input_pathway_up_search_SOURCE">
             <span style={{ display: 'none' }}>input_pathway_up_search_SOURCE</span>
             <Input
               aria-label="input_pathway_up_search_SOURCE"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.pathways_up.search_keyword.search_SOURCE == ''
                   ? 'SOURCE'
@@ -227,7 +227,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Source' &&
                       props.data.pathways_up.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Source', 'ascend')}
                 >
@@ -241,7 +241,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Source' &&
                       props.data.pathways_up.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Source', 'descend')}
                 >
@@ -253,7 +253,7 @@ export default function PUGTable(props) {
         </div>
       ),
       dataIndex: 'Source',
-      width: '9%',
+      width: '8%',
       sorter: false,
       render: (text, record, index) => {
         return (
@@ -264,7 +264,7 @@ export default function PUGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.09 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.09
-                  : minWidth
+                  : minWidth,
             }}
           >
             <span data-toggle="tooltip" data-placement="left" title={text}>
@@ -272,16 +272,16 @@ export default function PUGTable(props) {
             </span>
           </div>
         );
-      }
+      },
     },
     {
       title: (
-        <div className="pathway_up_desc_head">
+        <div className="pathway_desc_head">
           <label htmlFor="input_pathway_up_search_DESCRIPTION">
             <span style={{ display: 'none' }}>input_pathway_up_search_DESCRIPTION</span>
             <Input
               aria-label="input_pathway_up_search_DESCRIPTION"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.pathways_up.search_keyword.search_DESCRIPTION == ''
                   ? 'DESC'
@@ -300,7 +300,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Description' &&
                       props.data.pathways_up.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Description', 'ascend')}
                 >
@@ -314,7 +314,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Description' &&
                       props.data.pathways_up.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Description', 'descend')}
                 >
@@ -326,7 +326,7 @@ export default function PUGTable(props) {
         </div>
       ),
       dataIndex: 'Description',
-      width: '10%',
+      width: '12%',
       sorter: false,
       render: (text, record, index) => (
         <div
@@ -336,96 +336,23 @@ export default function PUGTable(props) {
               document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1 >
               minWidth
                 ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
-                : minWidth
+                : minWidth,
           }}
         >
           <span data-toggle="tooltip" data-placement="left" title={text}>
             {text}
           </span>
         </div>
-      )
-    },
-    {
-      title: (
-        <div className="pathway_up_type_head">
-          <label htmlFor="input_pathway_up_search_TYPE">
-            <span style={{ display: 'none' }}>input_pathway_up_search_TYPE</span>
-            <Input
-              aria-label="input_pathway_up_search_TYPE"
-              onPressEnter={value => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_TYPE == ''
-                  ? 'TYPE'
-                  : props.data.pathways_up.search_keyword.search_TYPE
-              }
-              id="input_pathway_up_search_TYPE"
-            />
-          </label>
-          <div>
-            <div className="head-title"> TYPE</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Type' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc'
-                  }}
-                  onClick={() => sorter('Type', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Type' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc'
-                  }}
-                  onClick={() => sorter('Type', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
       ),
-      dataIndex: 'Type',
-      width: '10%',
-      sorter: false,
-      render: (text, record, index) => {
-        return (
-          <div
-            className="single-line pathway_type"
-            style={{
-              maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
-                minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
-                  : minWidth
-            }}
-          >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
-              {text}
-            </span>
-          </div>
-        );
-      }
     },
     {
       title: (
-        <div className="pathway_up_p_value_head">
+        <div className="pathway_p_value_head">
           <label htmlFor="input_pathway_up_search_p_value">
             <span style={{ display: 'none' }}>input_pathway_up_search_p_value</span>
             <Input
               aria-label="input_pathway_up_search_p_value"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.pathways_up.search_keyword.search_p_value == ''
                   ? 'P_Value'
@@ -444,7 +371,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'P_Value' &&
                       props.data.pathways_up.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('P_Value', 'ascend')}
                 >
@@ -458,7 +385,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'P_Value' &&
                       props.data.pathways_up.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('P_Value', 'descend')}
                 >
@@ -482,7 +409,7 @@ export default function PUGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08
-                  : minWidth
+                  : minWidth,
             }}
           >
             <span data-toggle="tooltip" data-placement="left" title={text}>
@@ -490,16 +417,16 @@ export default function PUGTable(props) {
             </span>
           </div>
         );
-      }
+      },
     },
     {
       title: (
-        <div className="pathway_up_fdr_head">
+        <div className="pathway_fdr_head">
           <label htmlFor="input_pathway_up_search_fdr">
             <span style={{ display: 'none' }}>input_pathway_up_search_fdr</span>
             <Input
               aria-label="input_pathway_up_search_fdr"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.pathways_up.search_keyword.search_fdr == ''
                   ? 'FDR'
@@ -518,7 +445,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'FDR' &&
                       props.data.pathways_up.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('FDR', 'ascend')}
                 >
@@ -532,7 +459,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'FDR' &&
                       props.data.pathways_up.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('FDR', 'descend')}
                 >
@@ -544,7 +471,7 @@ export default function PUGTable(props) {
         </div>
       ),
       dataIndex: 'FDR',
-      width: '7%',
+      width: '8%',
       sorter: false,
       render: (text, record, index) => {
         text = Number.parseFloat(text).toExponential(exponentialNum);
@@ -556,7 +483,7 @@ export default function PUGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
-                  : minWidth
+                  : minWidth,
             }}
           >
             <span data-toggle="tooltip" data-placement="left" title={text}>
@@ -564,16 +491,16 @@ export default function PUGTable(props) {
             </span>
           </div>
         );
-      }
+      },
     },
     {
       title: (
-        <div className="pathway_up_ratio_head">
+        <div className="pathway_ratio_head">
           <label htmlFor="input_pathway_up_search_RATIO">
             <span style={{ display: 'none' }}>input_pathway_up_search_RATIO</span>
             <Input
               aria-label="input_pathway_up_search_RATIO"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.pathways_up.search_keyword.search_RATIO == ''
                   ? 'RATIO'
@@ -592,7 +519,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Ratio' &&
                       props.data.pathways_up.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Ratio', 'ascend')}
                 >
@@ -606,7 +533,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Ratio' &&
                       props.data.pathways_up.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Ratio', 'descend')}
                 >
@@ -618,7 +545,7 @@ export default function PUGTable(props) {
         </div>
       ),
       dataIndex: 'Ratio',
-      width: '7%',
+      width: '8%',
       sorter: false,
       render: (text, record, index) => {
         return (
@@ -629,7 +556,7 @@ export default function PUGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
-                  : minWidth
+                  : minWidth,
             }}
           >
             <span data-toggle="tooltip" data-placement="left" title={text}>
@@ -637,87 +564,16 @@ export default function PUGTable(props) {
             </span>
           </div>
         );
-      }
+      },
     },
     {
       title: (
-        <div className="pathway_up_gene_list_head">
-          <label htmlFor="input_pathway_up_search_GENE_LIST">
-            <span style={{ display: 'none' }}>input_pathway_up_search_GENE_LIST</span>
-            <Input
-              aria-label="input_pathway_up_search_GENE_LIST"
-              onPressEnter={value => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_GENE_LIST == ''
-                  ? 'GENE_LIST'
-                  : props.data.pathways_up.search_keyword.search_GENE_LIST
-              }
-              id="input_pathway_up_search_GENE_LIST"
-            />
-          </label>
-          <div>
-            <div className="head-title"> GENE_LIST</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'GENE_LIST' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc'
-                  }}
-                  onClick={() => sorter('Gene_List', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'GENE_LIST' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc'
-                  }}
-                  onClick={() => sorter('Gene_List', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      ),
-      dataIndex: 'Gene_List',
-      width: '10%',
-      sorter: false,
-      render: (text, record, index) => (
-        <div
-          className="single-line pathway_gene_list"
-          style={{
-            maxWidth:
-              document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1 >
-              minWidth
-                ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
-                : minWidth
-          }}
-        >
-          <span data-toggle="tooltip" data-placement="left" title={text}>
-            {text}
-          </span>
-        </div>
-      )
-    },
-    {
-      title: (
-        <div className="pathway_up_number_hits_head">
+        <div className="pathway_number_hits_head">
           <label htmlFor="input_pathway_up_search_NUMBER_HITS">
             <span style={{ display: 'none' }}>input_pathway_up_search_NUMBER_HITS</span>
             <Input
               aria-label="input_pathway_up_search_NUMBER_HITS"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.pathways_up.search_keyword.search_NUMBER_HITS == ''
                   ? 'HITS'
@@ -736,7 +592,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Number_Hits' &&
                       props.data.pathways_up.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Number_Hits', 'ascend')}
                 >
@@ -750,7 +606,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Number_Hits' &&
                       props.data.pathways_up.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Number_Hits', 'descend')}
                 >
@@ -762,7 +618,7 @@ export default function PUGTable(props) {
         </div>
       ),
       dataIndex: 'Number_Hits',
-      width: '7%',
+      width: '8%',
       sorter: false,
       render: (text, record, index) => {
         return (
@@ -773,7 +629,7 @@ export default function PUGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
-                  : minWidth
+                  : minWidth,
             }}
           >
             <span data-toggle="tooltip" data-placement="left" title={text}>
@@ -781,37 +637,37 @@ export default function PUGTable(props) {
             </span>
           </div>
         );
-      }
+      },
     },
     {
       title: (
-        <div className="pathway_up_number_genes_pathway_head">
-          <label htmlFor="input_pathway_up_search_NUMBER_GENES_PATHWAY">
-            <span style={{ display: 'none' }}>input_pathway_up_search_NUMBER_GENES_PATHWAY</span>
+        <div className="pathway_number_hits_head">
+          <label htmlFor="input_pathway_up_search_NUMBER_MISSES">
+            <span style={{ display: 'none' }}>input_pathway_up_search_NUMBER_MISSES</span>
             <Input
-              aria-label="input_pathway_up_search_NUMBER_GENES_PATHWAY"
-              onPressEnter={value => search(value)}
+              aria-label="input_pathway_up_search_NUMBER_MISSES"
+              onPressEnter={(value) => search(value)}
               placeholder={
-                props.data.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY == ''
-                  ? 'GENES_PATHWAY'
-                  : props.data.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY
+                props.data.pathways_up.search_keyword.search_NUMBER_MISSES == ''
+                  ? 'MISSES'
+                  : props.data.pathways_up.search_keyword.search_NUMBER_MISSES
               }
-              id="input_pathway_up_search_NUMBER_GENES_PATHWAY"
+              id="input_pathway_up_search_NUMBER_MISSES"
             />
           </label>
           <div>
-            <div className="head-title"> NUMBER_GENES_PATHWAY</div>
+            <div className="head-title"> NUMBER_MISSES</div>
             <div className="head-sorter">
               <div>
                 <a
                   style={{
                     color:
-                      props.data.pathways_up.sorting.name == 'Number_Genes_Pathway' &&
+                      props.data.pathways_up.sorting.name == 'Number_Misses' &&
                       props.data.pathways_up.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
-                  onClick={() => sorter('Number_Genes_Pathway', 'ascend')}
+                  onClick={() => sorter('Number_Misses', 'ascend')}
                 >
                   <i className="fas fa-angle-up"></i>
                 </a>
@@ -820,12 +676,12 @@ export default function PUGTable(props) {
                 <a
                   style={{
                     color:
-                      props.data.pathways_up.sorting.name == 'Number_Genes_Pathway' &&
+                      props.data.pathways_up.sorting.name == 'Number_Misses' &&
                       props.data.pathways_up.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
-                  onClick={() => sorter('Number_Genes_Pathway', 'descend')}
+                  onClick={() => sorter('Number_Misses', 'descend')}
                 >
                   <i className="fas fa-angle-down"></i>
                 </a>
@@ -834,19 +690,19 @@ export default function PUGTable(props) {
           </div>
         </div>
       ),
-      dataIndex: 'Number_Genes_Pathway',
-      width: '7%',
+      dataIndex: 'Number_Misses',
+      width: '8%',
       sorter: false,
       render: (text, record, index) => {
         return (
           <div
-            className="single-line pathway_number_genes_pathway"
+            className="single-line pathway_number_misses"
             style={{
               maxWidth:
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
-                  : minWidth
+                  : minWidth,
             }}
           >
             <span data-toggle="tooltip" data-placement="left" title={text}>
@@ -854,16 +710,16 @@ export default function PUGTable(props) {
             </span>
           </div>
         );
-      }
+      },
     },
     {
       title: (
-        <div className="pathway_up_number_user_genes_head">
+        <div className="pathway_number_user_genes_head">
           <label htmlFor="input_pathway_up_search_NUMBER_USER_GENES">
             <span style={{ display: 'none' }}>input_pathway_up_search_NUMBER_USER_GENES</span>
             <Input
               aria-label="input_pathway_up_search_NUMBER_USER_GENES"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.pathways_up.search_keyword.search_NUMBER_USER_GENES == ''
                   ? 'USER_GENES'
@@ -882,7 +738,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Number_User_Genes' &&
                       props.data.pathways_up.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Number_User_Genes', 'ascend')}
                 >
@@ -896,7 +752,7 @@ export default function PUGTable(props) {
                       props.data.pathways_up.sorting.name == 'Number_User_Genes' &&
                       props.data.pathways_up.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Number_User_Genes', 'descend')}
                 >
@@ -908,7 +764,7 @@ export default function PUGTable(props) {
         </div>
       ),
       dataIndex: 'Number_User_Genes',
-      width: '7%',
+      width: '8%',
       sorter: false,
       render: (text, record, index) => {
         return (
@@ -919,7 +775,7 @@ export default function PUGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
-                  : minWidth
+                  : minWidth,
             }}
           >
             <span data-toggle="tooltip" data-placement="left" title={text}>
@@ -927,38 +783,37 @@ export default function PUGTable(props) {
             </span>
           </div>
         );
-      }
+      },
     },
     {
       title: (
-        <div className="pathway_up_total_number_genes_head">
-          <label htmlFor="input_pathway_up_search_TOTAL_NUMBER_GENES">
-            <span style={{ display: 'none' }}>input_pathway_up_search_TOTAL_NUMBER_GENES</span>
+        <div className="pathway_total_number_genes_head">
+          <label htmlFor="input_pathway_up_search_TOTAL_GENES_MINUS_INPUT">
+            <span style={{ display: 'none' }}>input_pathway_up_search_TOTAL_GENES_MINUS_INPUT</span>
             <Input
-              aria-label="input_pathway_up_search_TOTAL_NUMBER_GENES"
-              onPressEnter={value => search(value)}
-              placeholder="GENES"
+              aria-label="input_pathway_up_search_TOTAL_GENES_MINUS_INPUT"
+              onPressEnter={(value) => search(value)}
               placeholder={
-                props.data.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES == ''
+                props.data.pathways_up.search_keyword.search_TOTAL_GENES_MINUS_INPUT == ''
                   ? 'GENES'
-                  : props.data.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES
+                  : props.data.pathways_up.search_keyword.search_TOTAL_GENES_MINUS_INPUT
               }
-              id="input_pathway_up_search_TOTAL_NUMBER_GENES"
+              id="input_pathway_up_search_TOTAL_GENES_MINUS_INPUT"
             />
           </label>
           <div>
-            <div className="head-title"> TOTAL_NUMBER_GENES</div>
+            <div className="head-title"> TOTAL_GENES_MINUS_INPUT</div>
             <div className="head-sorter">
               <div>
                 <a
                   style={{
                     color:
-                      props.data.pathways_up.sorting.name == 'Total_Number_Genes' &&
+                      props.data.pathways_up.sorting.name == 'Total_Genes_Minus_Input' &&
                       props.data.pathways_up.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
-                  onClick={() => sorter('Total_Number_Genes', 'ascend')}
+                  onClick={() => sorter('Total_Genes_Minus_Input', 'ascend')}
                 >
                   <i className="fas fa-angle-up"></i>
                 </a>
@@ -967,12 +822,12 @@ export default function PUGTable(props) {
                 <a
                   style={{
                     color:
-                      props.data.pathways_up.sorting.name == 'Total_Number_Genes' &&
+                      props.data.pathways_up.sorting.name == 'Total_Genes_Minus_Input' &&
                       props.data.pathways_up.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
-                  onClick={() => sorter('Total_Number_Genes', 'descend')}
+                  onClick={() => sorter('Total_Genes_Minus_Input', 'descend')}
                 >
                   <i className="fas fa-angle-down"></i>
                 </a>
@@ -981,19 +836,19 @@ export default function PUGTable(props) {
           </div>
         </div>
       ),
-      dataIndex: 'Total_Number_Genes',
-      width: '8%',
+      dataIndex: 'Total_Genes_Minus_Input',
+      width: '12%',
       sorter: false,
       render: (text, record, index) => {
         return (
           <div
-            className="single-line pathway_total_number_genes"
+            className="single-line pathway_total_genes_minus_input"
             style={{
               maxWidth:
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08
-                  : minWidth
+                  : minWidth,
             }}
           >
             <span data-toggle="tooltip" data-placement="left" title={text}>
@@ -1001,28 +856,98 @@ export default function PUGTable(props) {
             </span>
           </div>
         );
-      }
-    }
+      },
+    },
+    {
+      title: (
+        <div className="pathway_gene_list_head">
+          <label htmlFor="input_pathway_up_search_GENE_LIST">
+            <span style={{ display: 'none' }}>input_pathway_up_search_GENE_LIST</span>
+            <Input
+              aria-label="input_pathway_up_search_GENE_LIST"
+              onPressEnter={(value) => search(value)}
+              placeholder={
+                props.data.pathways_up.search_keyword.search_GENE_LIST == ''
+                  ? 'GENE_LIST'
+                  : props.data.pathways_up.search_keyword.search_GENE_LIST
+              }
+              id="input_pathway_up_search_GENE_LIST"
+            />
+          </label>
+          <div>
+            <div className="head-title"> GENE_LIST</div>
+            <div className="head-sorter">
+              <div>
+                <a
+                  style={{
+                    color:
+                      props.data.pathways_up.sorting.name == 'GENE_LIST' &&
+                      props.data.pathways_up.sorting.order == 'ascend'
+                        ? 'blue'
+                        : '#ccc',
+                  }}
+                  onClick={() => sorter('Gene_List', 'ascend')}
+                >
+                  <i className="fas fa-angle-up"></i>
+                </a>
+              </div>
+              <div>
+                <a
+                  style={{
+                    color:
+                      props.data.pathways_up.sorting.name == 'GENE_LIST' &&
+                      props.data.pathways_up.sorting.order == 'descend'
+                        ? 'blue'
+                        : '#ccc',
+                  }}
+                  onClick={() => sorter('Gene_List', 'descend')}
+                >
+                  <i className="fas fa-angle-down"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+      dataIndex: 'Gene_List',
+      width: '10%',
+      sorter: false,
+
+      render: (text, record, index) => (
+        <div
+          className="single-line pathway_gene_list"
+          style={{
+            maxWidth:
+              document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1 >
+              minWidth
+                ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
+                : minWidth,
+          }}
+        >
+          <span data-toggle="tooltip" data-placement="left" title={text}>
+            {text}
+          </span>
+        </div>
+      ),
+    },
   ];
 
-  const search = e => {
+  const search = (e) => {
     var search_PATHWAY_ID = document.getElementById('input_pathway_up_search_PATHWAY_ID').value;
     var search_SOURCE = document.getElementById('input_pathway_up_search_SOURCE').value;
     var search_DESCRIPTION = document.getElementById('input_pathway_up_search_DESCRIPTION').value;
-    var search_TYPE = document.getElementById('input_pathway_up_search_TYPE').value;
     var search_p_value = document.getElementById('input_pathway_up_search_p_value').value;
     var search_fdr = document.getElementById('input_pathway_up_search_fdr').value;
     var search_RATIO = document.getElementById('input_pathway_up_search_RATIO').value;
     var search_GENE_LIST = document.getElementById('input_pathway_up_search_GENE_LIST').value;
     var search_NUMBER_HITS = document.getElementById('input_pathway_up_search_NUMBER_HITS').value;
-    var search_NUMBER_GENES_PATHWAY = document.getElementById(
-      'input_pathway_up_search_NUMBER_GENES_PATHWAY'
-    ).value;
+    var search_NUMBER_MISSES = document.getElementById('input_pathway_up_search_NUMBER_MISSES')
+      .value;
     var search_NUMBER_USER_GENES = document.getElementById(
       'input_pathway_up_search_NUMBER_USER_GENES'
     ).value;
-    var search_TOTAL_NUMBER_GENES = document.getElementById(
-      'input_pathway_up_search_TOTAL_NUMBER_GENES'
+    var search_TOTAL_GENES_MINUS_INPUT = document.getElementById(
+      'input_pathway_up_search_TOTAL_GENES_MINUS_INPUT'
     ).value;
 
     props.getPathwayUp({
@@ -1030,22 +955,21 @@ export default function PUGTable(props) {
       page_number: 1,
       sorting: {
         name: 'P_Value',
-        order: 'ascend'
+        order: 'ascend',
       },
       search_keyword: {
         search_PATHWAY_ID: search_PATHWAY_ID,
         search_SOURCE: search_SOURCE,
         search_DESCRIPTION: search_DESCRIPTION,
-        search_TYPE: search_TYPE,
         search_p_value: Number(search_p_value),
         search_fdr: Number(search_fdr),
         search_RATIO: Number(search_RATIO),
         search_GENE_LIST: search_GENE_LIST,
         search_NUMBER_HITS: Number(search_NUMBER_HITS),
-        search_NUMBER_GENES_PATHWAY: Number(search_NUMBER_GENES_PATHWAY),
+        search_NUMBER_MISSES: Number(search_NUMBER_MISSES),
         search_NUMBER_USER_GENES: Number(search_NUMBER_USER_GENES),
-        search_TOTAL_NUMBER_GENES: Number(search_TOTAL_NUMBER_GENES)
-      }
+        search_TOTAL_GENES_MINUS_INPUT: Number(search_TOTAL_GENES_MINUS_INPUT),
+      },
     });
   };
 
@@ -1059,7 +983,7 @@ export default function PUGTable(props) {
       footer={[
         <Button key="back" onClick={handleCancel}>
           Close
-        </Button>
+        </Button>,
       ]}
     >
       <img src={state.heapMap} style={{ width: '100%' }} alt="heatMap" />
@@ -1126,7 +1050,7 @@ export default function PUGTable(props) {
                 page_size: pageSize,
                 page_number: page,
                 sorting: props.data.pathways_up.sorting,
-                search_keyword: props.data.pathways_up.search_keyword
+                search_keyword: props.data.pathways_up.search_keyword,
               })
             }
           />
@@ -1147,7 +1071,7 @@ export default function PUGTable(props) {
           dataSource={props.data.pathways_up.data}
           pagination={false}
           loading={props.data.pathways_up.loading}
-          scroll={{ x: 600 }}
+          scroll={{ x: true }}
         />
         {modal}
       </div>

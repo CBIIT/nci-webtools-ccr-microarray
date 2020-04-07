@@ -1018,67 +1018,6 @@ input#input_group_name {
     min-width: 100px;
 }
 
-
-
-.pathway_up_source_head {
-    margin-top: -46px;
-    min-width: 100px;
-}
-
-.pathway_up_desc_head {
-    margin-top: -46px;
-    min-width: 130px;
-}
-
-.pathway_up_pathways_id_head {
-    margin-top: -46px;
-    min-width: 125px;
-}
-
-.pathway_up_type_head {
-    margin-top: -46px;
-    min-width: 100px;
-}
-
-.pathway_up_p_value_head {
-    margin-top: -46px;
-    min-width: 100px;
-}
-
-.pathway_up_fdr_head {
-    margin-top: -46px;
-    min-width: 80px;
-}
-
-.pathway_up_ratio_head {
-    margin-top: -46px;
-    min-width: 80px;
-}
-
-.pathway_up_gene_list_head {
-    margin-top: -46px;
-}
-
-.pathway_up_number_hits_head {
-    margin-top: -25px;
-    min-width: 120px;
-}
-
-.pathway_up_number_genes_pathway_head {
-    min-width: 120px;
-
-}
-
-.pathway_up_number_user_genes_head {
-    margin-top: 0px;
-    min-width: 90px;
-}
-
-.pathway_up_total_number_genes_head {
-    margin-top: 0px;
-    min-width: 100px;
-}
-
 div.head-title {
     float: left;
     width: calc(100% - 25px);

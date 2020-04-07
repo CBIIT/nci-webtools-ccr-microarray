@@ -10,7 +10,7 @@ import CIframe from '../DataBox/CIframe';
 import ReactGA from 'react-ga';
 
 ReactGA.initialize('UA-62346354-19', {
-  userId: 'nciwebtools'
+  userId: 'nciwebtools',
 });
 
 const httpErrorMessage = {
@@ -25,7 +25,7 @@ const httpErrorMessage = {
   502: 'Bad Gateway',
   503: 'Service Unavailable',
   504: 'Gateway Timeout',
-  505: 'HTTP Version Not Supported'
+  505: 'HTTP Version Not Supported',
 };
 
 const defaultState = {
@@ -64,14 +64,14 @@ const defaultState = {
       data: [],
       pagination: {
         current: 1,
-        pageSize: 25
+        pageSize: 25,
       },
       loading: true,
       page_number: 1,
       page_size: 25,
       sorting: {
         name: 'P.Value',
-        order: 'ascend'
+        order: 'ascend',
       },
       search_keyword: {
         search_symbol: '',
@@ -84,22 +84,22 @@ const defaultState = {
         search_entrez: '',
         search_probsetid: '',
         search_t: '',
-        search_b: ''
-      }
+        search_b: '',
+      },
     },
     ssGSEA: {
       message: '',
       data: [],
       pagination: {
         current: 1,
-        pageSize: 25
+        pageSize: 25,
       },
       loading: true,
       page_size: 25,
       page_number: 1,
       sorting: {
         name: 'P.Value',
-        order: 'ascend'
+        order: 'ascend',
       },
       search_keyword: {
         name: '',
@@ -108,95 +108,93 @@ const defaultState = {
         search_t: '',
         search_p_value: '',
         search_adj_p_value: '',
-        search_b: ''
-      }
+        search_b: '',
+      },
     },
     pathways_up: {
       message: '',
       data: [],
       pagination: {
         current: 1,
-        pageSize: 25
+        pageSize: 25,
       },
       sorting: {
         name: 'P_Value',
-        order: 'ascend'
+        order: 'ascend',
       },
       loading: true,
       search_keyword: {
         search_PATHWAY_ID: '',
         search_SOURCE: '',
         search_DESCRIPTION: '',
-        search_TYPE: '',
         search_p_value: '0.05',
         search_fdr: '',
         search_RATIO: '',
         search_GENE_LIST: '',
         search_NUMBER_HITS: '',
-        search_NUMBER_GENES_PATHWAY: '',
+        search_NUMBER_MISSES: '',
         search_NUMBER_USER_GENES: '',
-        search_TOTAL_NUMBER_GENES: ''
-      }
+        search_TOTAL_GENES_MINUS_INPUT: '',
+      },
     },
     pathways_down: {
       message: '',
       data: [],
       pagination: {
         current: 1,
-        pageSize: 25
+        pageSize: 25,
       },
       loading: true,
       sorting: {
         name: 'P_Value',
-        order: 'ascend'
+        order: 'ascend',
       },
       search_keyword: {
         search_PATHWAY_ID: '',
         search_SOURCE: '',
         search_DESCRIPTION: '',
-        search_TYPE: '',
         search_p_value: '0.05',
         search_fdr: '',
         search_RATIO: '',
         search_GENE_LIST: '',
         search_NUMBER_HITS: '',
-        search_NUMBER_GENES_PATHWAY: '',
+        search_NUMBER_MISSES: '',
         search_NUMBER_USER_GENES: '',
-        search_TOTAL_NUMBER_GENES: ''
-      }
+        search_TOTAL_GENES_MINUS_INPUT: '',
+      },
     },
     BoxplotBN: {
       data: '',
       plot: '',
       style: {
-        width: '800'
+        width: '800',
       },
       layout: {
         showlegend: false,
-        autoSize: true
-      }
+        autoSize: true,
+      },
     },
     RLE: {
       data: '',
       plot: '',
       style: {
-        width: '800'
+        width: '800',
       },
       layout: {
         showlegend: false,
-        autoSize: true
-      }
+        autoSize: true,
+      },
     },
     NUSE: {
       data: '',
       plot: '',
       style: {
-        width: '800'
+        width: '800',
       },
       layout: {
         showlegend: false,
-        autoSize: true
-      }
+        autoSize: true,
+      },
     },
     preplots: {
       selected: 'preHistogram',
@@ -204,7 +202,7 @@ const defaultState = {
       list_mAplotBN: '',
       NUSE: '',
       RLE: '',
-      Boxplots: ''
+      Boxplots: '',
     },
     degSelected: 'deg_tag1',
     ssSelect: 'ss_tag1',
@@ -215,18 +213,18 @@ const defaultState = {
       data: '',
       plot: '',
       style: {
-        width: '800'
+        width: '800',
       },
       layout: {
         showlegend: false,
-        autoSize: true
-      }
+        autoSize: true,
+      },
     },
     PCA: {
       data: '',
       plot: '',
       style: {},
-      layout: {}
+      layout: {},
     },
     postplot: {
       selected: 'postHistogram',
@@ -234,7 +232,7 @@ const defaultState = {
       list_mAplotAN: '',
       Heatmapolt: '',
       Boxplots: '',
-      PCA: ''
+      PCA: '',
     },
     geneHeatmap: 'Not enough significant pathways available with p-value < 0.05.',
     volcanoPlot: 'No Data',
@@ -248,8 +246,8 @@ const defaultState = {
     chip: '',
     multichip: false,
     dataListChip: [],
-    disableContrast: false
-  }
+    disableContrast: false,
+  },
 };
 
 class Analysis extends Component {
@@ -301,7 +299,7 @@ class Analysis extends Component {
         'px';
     }
   };
-  getElementByXpath = path => {
+  getElementByXpath = (path) => {
     return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
       .singleNodeValue;
   };
@@ -316,7 +314,7 @@ class Analysis extends Component {
   };
   //use for generate UUID
   uuidv4() {
-    return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = (Math.random() * 16) | 0,
         v = c == 'x' ? r : (r & 0x3) | 0x8;
       return v.toString(16);
@@ -328,12 +326,12 @@ class Analysis extends Component {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         if (result.status == 200) {
           // change
           document.getElementById('support_email').href =
@@ -349,9 +347,9 @@ class Analysis extends Component {
       page_number: 1,
       sorting: {
         name: workflow.ssGSEA.sorting.name,
-        order: workflow.ssGSEA.sorting.order
+        order: workflow.ssGSEA.sorting.order,
       },
-      search_keyword: workflow.ssGSEA.search_keyword
+      search_keyword: workflow.ssGSEA.search_keyword,
     };
     workflow.progressing = true;
     workflow.loading_info = 'Export';
@@ -361,12 +359,12 @@ class Analysis extends Component {
       body: JSON.stringify(params),
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         if (result.status == 200) {
           let workflow = Object.assign({}, this.state.workflow);
           var wb = XLSX.utils.book_new();
@@ -374,7 +372,7 @@ class Analysis extends Component {
             Title: 'Export ssGSEA Data',
             Subject: 'ssGSEA Data',
             Author: 'Microarray',
-            CreatedDate: new Date()
+            CreatedDate: new Date(),
           };
           if (workflow.dataList.length != 0) {
             wb.SheetNames.push('Settings');
@@ -423,7 +421,7 @@ class Analysis extends Component {
             if (workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score != '') {
               ws_data.push([
                 'Avg.Enrichment.Score',
-                workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score
+                workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score,
               ]);
             }
             if (workflow.ssGSEA.search_keyword.search_b != '') {
@@ -438,7 +436,7 @@ class Analysis extends Component {
             // export data
             let degData = result.data.records;
             let exportData = [
-              ['NAME', 'logFC', 'Avg.Enrichment.Score', 't', 'P.Value', 'adj.P.Val', 'B']
+              ['NAME', 'logFC', 'Avg.Enrichment.Score', 't', 'P.Value', 'adj.P.Val', 'B'],
             ];
             for (let i in degData) {
               exportData.push([
@@ -448,14 +446,14 @@ class Analysis extends Component {
                 degData[i]['V4'],
                 degData[i]['V5'],
                 degData[i]['V6'],
-                degData[i]['V7']
+                degData[i]['V7'],
               ]);
             }
             var ws2 = XLSX.utils.aoa_to_sheet(exportData);
             wb.Sheets['Results'] = ws2;
             var wbout = XLSX.writeFile(wb, 'ssGSEA_' + workflow.projectID + '.xlsx', {
               bookType: 'xlsx',
-              type: 'binary'
+              type: 'binary',
             });
           }
         } else {
@@ -465,7 +463,7 @@ class Analysis extends Component {
         workflow.loading_info = 'Loading';
         this.setState({ workflow: workflow });
       })
-      .catch(function(err) {
+      .catch(function (err) {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = false;
         workflow.loading_info = 'Loading';
@@ -482,14 +480,14 @@ class Analysis extends Component {
         page_number: params.page_number,
         sorting: {
           name: params.sorting.name,
-          order: params.sorting.order
+          order: params.sorting.order,
         },
-        search_keyword: params.search_keyword
+        search_keyword: params.search_keyword,
       };
       workflow.ssGSEA.sorting = params.sorting;
       workflow.ssGSEA.pagination = {
         current: params.page_number,
-        pageSize: params.page_size
+        pageSize: params.page_size,
       };
       workflow.ssGSEA.search_keyword = params.search_keyword
         ? params.search_keyword
@@ -498,13 +496,13 @@ class Analysis extends Component {
       params = {
         projectId: workflow.projectID,
         page_number: workflow.ssGSEA.pagination.current,
-        page_size: workflow.ssGSEA.pagination.pageSize
+        page_size: workflow.ssGSEA.pagination.pageSize,
       };
       params.sorting = workflow.ssGSEA.sorting;
       params.search_keyword = workflow.ssGSEA.search_keyword;
       workflow.ssGSEA.pagination = {
         current: workflow.ssGSEA.pagination.current,
-        pageSize: workflow.ssGSEA.pagination.pageSize
+        pageSize: workflow.ssGSEA.pagination.pageSize,
       };
     }
     workflow.ssGSEA.loading = true;
@@ -514,12 +512,12 @@ class Analysis extends Component {
       body: JSON.stringify(params),
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.ssGSEA.message = '';
         if (result.status == 200) {
@@ -537,7 +535,7 @@ class Analysis extends Component {
         this.setState({ workflow: workflow2 });
         this.getSSGSEAGeneHeatMap();
       })
-      .catch(error => {
+      .catch((error) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.ssGSEA.loading = false;
         workflow.ssGSEA.message = error;
@@ -552,9 +550,9 @@ class Analysis extends Component {
       page_number: 1,
       sorting: {
         name: workflow.pathways_up.sorting.name,
-        order: workflow.pathways_up.sorting.order
+        order: workflow.pathways_up.sorting.order,
       },
-      search_keyword: workflow.pathways_up.search_keyword
+      search_keyword: workflow.pathways_up.search_keyword,
     };
     workflow.progressing = true;
     workflow.loading_info = 'Export';
@@ -564,12 +562,12 @@ class Analysis extends Component {
       body: JSON.stringify(params),
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         if (result.status == 200) {
           let workflow = Object.assign({}, this.state.workflow);
           var wb = XLSX.utils.book_new();
@@ -577,7 +575,7 @@ class Analysis extends Component {
             Title: 'Export Pathways For Upregulated Genes Data',
             Subject: 'Pathways For Upregulated Genes Data',
             Author: 'Microarray',
-            CreatedDate: new Date()
+            CreatedDate: new Date(),
           };
           if (workflow.dataList.length != 0) {
             wb.SheetNames.push('Settings');
@@ -625,9 +623,6 @@ class Analysis extends Component {
             if (workflow.pathways_up.search_keyword.search_DESCRIPTION != '') {
               ws_data.push(['Description', workflow.pathways_up.search_keyword.search_DESCRIPTION]);
             }
-            if (workflow.pathways_up.search_keyword.search_TYPE != '') {
-              ws_data.push(['Type', workflow.pathways_up.search_keyword.search_TYPE]);
-            }
             if (workflow.pathways_up.search_keyword.search_p_value != '') {
               ws_data.push(['P.value', workflow.pathways_up.search_keyword.search_p_value]);
             }
@@ -640,22 +635,22 @@ class Analysis extends Component {
             if (workflow.pathways_up.search_keyword.search_NUMBER_HITS != '') {
               ws_data.push(['Number_Hits', workflow.pathways_up.search_keyword.search_NUMBER_HITS]);
             }
-            if (workflow.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY != '') {
+            if (workflow.pathways_up.search_keyword.search_NUMBER_MISSES != '') {
               ws_data.push([
-                'Number_Genes_Pathway',
-                workflow.pathways_up.search_keyword.search_NUMBER_GENES_PATHWAY
+                'Number_Misses',
+                workflow.pathways_up.search_keyword.search_NUMBER_MISSES,
               ]);
             }
             if (workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES != '') {
               ws_data.push([
                 'Number_User_Genes',
-                workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES
+                workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES,
               ]);
             }
-            if (workflow.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES != '') {
+            if (workflow.pathways_up.search_keyword.search_TOTAL_GENES_MINUS_INPUT != '') {
               ws_data.push([
                 'Total_Number_Genes',
-                workflow.pathways_up.search_keyword.search_TOTAL_NUMBER_GENES
+                workflow.pathways_up.search_keyword.search_TOTAL_GENES_MINUS_INPUT,
               ]);
             }
             if (workflow.pathways_up.search_keyword.search_GENE_LIST != '') {
@@ -671,38 +666,36 @@ class Analysis extends Component {
                 'Pathway_ID',
                 'Source',
                 'Description',
-                'Type',
                 'P.Value',
                 'FDR',
                 'Ratio',
                 'Gene_List',
                 'Number_Hits',
-                'Number_Genes_Pathway',
+                'Number_Misses',
                 'Number_User_Genes',
-                'Total_Number_Genes'
-              ]
+                'Total_Genes_Minus_Input',
+              ],
             ];
             for (let i in degData) {
               exportData.push([
                 degData[i]['Pathway_ID'],
                 degData[i]['Source'],
                 degData[i]['Description'],
-                degData[i]['Type'],
                 degData[i]['P_Value'],
                 degData[i]['FDR'],
                 degData[i]['Ratio'],
                 degData[i]['Gene_List'],
                 degData[i]['Number_Hits'],
-                degData[i]['Number_Genes_Pathway'],
+                degData[i]['Number_Misses'],
                 degData[i]['Number_User_Genes'],
-                degData[i]['Total_Number_Genes']
+                degData[i]['Total_Genes_Minus_Input'],
               ]);
             }
             var ws2 = XLSX.utils.aoa_to_sheet(exportData);
             wb.Sheets['Results'] = ws2;
             var wbout = XLSX.writeFile(wb, 'DEG_' + workflow.projectID + '.xlsx', {
               bookType: 'xlsx',
-              type: 'binary'
+              type: 'binary',
             });
           }
         } else {
@@ -712,7 +705,7 @@ class Analysis extends Component {
         workflow.loading_info = 'Loading';
         this.setState({ workflow: workflow });
       })
-      .catch(error => {
+      .catch((error) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = false;
         workflow.loading_info = 'Loading';
@@ -730,27 +723,27 @@ class Analysis extends Component {
         page_number: params.page_number,
         sorting: {
           name: params.sorting.name,
-          order: params.sorting.order
+          order: params.sorting.order,
         },
-        search_keyword: params.search_keyword
+        search_keyword: params.search_keyword,
       };
       workflow.pathways_up.sorting = params.sorting;
       workflow.pathways_up.pagination = {
         current: params.page_number,
-        pageSize: params.page_size
+        pageSize: params.page_size,
       };
       workflow.pathways_up.search_keyword = params.search_keyword;
     } else {
       params = {
         projectId: workflow.projectID,
         page_number: workflow.pathways_up.pagination.current,
-        page_size: workflow.pathways_up.pagination.pageSize
+        page_size: workflow.pathways_up.pagination.pageSize,
       };
       params.sorting = workflow.pathways_up.sorting;
       params.search_keyword = workflow.pathways_up.search_keyword;
       workflow.pathways_up.pagination = {
         current: workflow.pathways_up.pagination.current,
-        pageSize: workflow.pathways_up.pagination.pageSize
+        pageSize: workflow.pathways_up.pagination.pageSize,
       };
     }
     workflow.pathways_up.loading = true;
@@ -760,12 +753,12 @@ class Analysis extends Component {
       body: JSON.stringify(params),
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.pathways_up.message = '';
         if (result.status == 200) {
@@ -784,7 +777,7 @@ class Analysis extends Component {
           this.setState({ workflow: workflow2 });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.pathways_up.loading = false;
         workflow2.pathways_up.message = JSON.stringify(error);
@@ -800,13 +793,13 @@ class Analysis extends Component {
         page_number: params.page_number,
         sorting: {
           name: params.sorting.name,
-          order: params.sorting.order
+          order: params.sorting.order,
         },
-        search_keyword: params.search_keyword
+        search_keyword: params.search_keyword,
       };
       workflow.pathways_down.pagination = {
         current: params.page_number,
-        pageSize: params.page_size
+        pageSize: params.page_size,
       };
       workflow.pathways_down.sorting = params.sorting;
       workflow.pathways_down.search_keyword = params.search_keyword;
@@ -814,13 +807,13 @@ class Analysis extends Component {
       params = {
         projectId: workflow.projectID,
         page_number: workflow.pathways_down.pagination.current,
-        page_size: workflow.pathways_down.pagination.pageSize
+        page_size: workflow.pathways_down.pagination.pageSize,
       };
       params.sorting = workflow.pathways_down.sorting;
       params.search_keyword = workflow.pathways_down.search_keyword;
       workflow.pathways_down.pagination = {
         current: workflow.pathways_down.pagination.current,
-        pageSize: workflow.pathways_down.pagination.pageSize
+        pageSize: workflow.pathways_down.pagination.pageSize,
       };
     }
     workflow.pathways_down.loading = true;
@@ -830,12 +823,12 @@ class Analysis extends Component {
       body: JSON.stringify(params),
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.pathways_down.message = '';
         if (result.status == 200) {
@@ -855,7 +848,7 @@ class Analysis extends Component {
         }
         this.setState({ workflow: workflow2 });
       })
-      .catch(error => {
+      .catch((error) => {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.pathways_down.loading = JSON.stringify(error);
         this.setState({ workflow: workflow2 });
@@ -871,9 +864,9 @@ class Analysis extends Component {
       page_number: 1,
       sorting: {
         name: workflow.pathways_down.sorting.name,
-        order: workflow.pathways_down.sorting.order
+        order: workflow.pathways_down.sorting.order,
       },
-      search_keyword: workflow.pathways_down.search_keyword
+      search_keyword: workflow.pathways_down.search_keyword,
     };
 
     fetch('./api/analysis/getDownPathWays', {
@@ -881,12 +874,12 @@ class Analysis extends Component {
       body: JSON.stringify(params),
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.pathways_down.message = '';
         if (result.status == 200) {
@@ -896,7 +889,7 @@ class Analysis extends Component {
             Title: 'Export Pathways For Downregulated Genes Data',
             Subject: 'Pathways For Downregulated Genes Data',
             Author: 'Microarray',
-            CreatedDate: new Date()
+            CreatedDate: new Date(),
           };
           if (workflow.dataList.length != 0) {
             wb.SheetNames.push('Settings');
@@ -942,11 +935,8 @@ class Analysis extends Component {
             if (workflow.pathways_down.search_keyword.search_DESCRIPTION != '') {
               ws_data.push([
                 'Description',
-                workflow.pathways_down.search_keyword.search_DESCRIPTION
+                workflow.pathways_down.search_keyword.search_DESCRIPTION,
               ]);
-            }
-            if (workflow.pathways_down.search_keyword.search_TYPE != '') {
-              ws_data.push(['Type', workflow.pathways_down.search_keyword.search_TYPE]);
             }
             if (workflow.pathways_down.search_keyword.search_p_value != '') {
               ws_data.push(['P.value', workflow.pathways_down.search_keyword.search_p_value]);
@@ -960,25 +950,25 @@ class Analysis extends Component {
             if (workflow.pathways_down.search_keyword.search_NUMBER_HITS != '') {
               ws_data.push([
                 'Number_Hits',
-                workflow.pathways_down.search_keyword.search_NUMBER_HITS
+                workflow.pathways_down.search_keyword.search_NUMBER_HITS,
               ]);
             }
-            if (workflow.pathways_down.search_keyword.search_NUMBER_GENES_PATHWAY != '') {
+            if (workflow.pathways_down.search_keyword.search_NUMBER_MISSES != '') {
               ws_data.push([
-                'Number_Genes_Pathway',
-                workflow.pathways_down.search_keyword.search_NUMBER_GENES_PATHWAY
+                'Number_Misses',
+                workflow.pathways_down.search_keyword.search_NUMBER_MISSES,
               ]);
             }
             if (workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES != '') {
               ws_data.push([
                 'Number_User_Genes',
-                workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES
+                workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES,
               ]);
             }
-            if (workflow.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES != '') {
+            if (workflow.pathways_down.search_keyword.search_TOTAL_GENES_MINUS_INPUT != '') {
               ws_data.push([
                 'Total_Number_Genes',
-                workflow.pathways_down.search_keyword.search_TOTAL_NUMBER_GENES
+                workflow.pathways_down.search_keyword.search_TOTAL_GENES_MINUS_INPUT,
               ]);
             }
             if (workflow.pathways_down.search_keyword.search_GENE_LIST != '') {
@@ -995,31 +985,29 @@ class Analysis extends Component {
                 'Pathway_ID',
                 'Source',
                 'Description',
-                'Type',
                 'P.Value',
                 'FDR',
                 'Ratio',
                 'Gene_List',
                 'Number_Hits',
-                'Number_Genes_Pathway',
+                'Number_Misses',
                 'Number_User_Genes',
-                'Total_Number_Genes'
-              ]
+                'Total_Genes_Minus_Input',
+              ],
             ];
             for (let i in degData) {
               exportData.push([
                 degData[i]['Pathway_ID'],
                 degData[i]['Source'],
                 degData[i]['Description'],
-                degData[i]['Type'],
                 degData[i]['P_Value'],
                 degData[i]['FDR'],
                 degData[i]['Ratio'],
                 degData[i]['Gene_List'],
                 degData[i]['Number_Hits'],
-                degData[i]['Number_Genes_Pathway'],
+                degData[i]['Number_Misses'],
                 degData[i]['Number_User_Genes'],
-                degData[i]['Total_Number_Genes']
+                degData[i]['Total_Genes_Minus_Input'],
               ]);
             }
 
@@ -1027,7 +1015,7 @@ class Analysis extends Component {
             wb.Sheets['Results'] = ws2;
             var wbout = XLSX.writeFile(wb, 'DEG_' + workflow.projectID + '.xlsx', {
               bookType: 'xlsx',
-              type: 'binary'
+              type: 'binary',
             });
           }
         } else {
@@ -1036,7 +1024,7 @@ class Analysis extends Component {
           this.setState({ workflow: workflow });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.pathways_down.message = JSON.stringify(error);
         this.setState({ workflow: workflow });
@@ -1051,13 +1039,13 @@ class Analysis extends Component {
         page_number: params.page_number,
         sorting: {
           name: params.sorting.name,
-          order: params.sorting.order
+          order: params.sorting.order,
         },
-        search_keyword: params.search_keyword
+        search_keyword: params.search_keyword,
       };
       workflow.diff_expr_genes.pagination = {
         current: params.page_number,
-        pageSize: params.page_size
+        pageSize: params.page_size,
       };
       workflow.diff_expr_genes.sorting = params.sorting;
       workflow.diff_expr_genes.search_keyword = params.search_keyword;
@@ -1065,13 +1053,13 @@ class Analysis extends Component {
       params = {
         projectId: workflow.projectID,
         page_number: workflow.diff_expr_genes.pagination.current,
-        page_size: workflow.diff_expr_genes.pagination.pageSize
+        page_size: workflow.diff_expr_genes.pagination.pageSize,
       };
       params.sorting = workflow.diff_expr_genes.sorting;
       params.search_keyword = workflow.diff_expr_genes.search_keyword;
       workflow.diff_expr_genes.pagination = {
         current: workflow.diff_expr_genes.pagination.current,
-        pageSize: workflow.diff_expr_genes.pagination.pageSize
+        pageSize: workflow.diff_expr_genes.pagination.pageSize,
       };
     }
     workflow.diff_expr_genes.loading = true;
@@ -1081,12 +1069,12 @@ class Analysis extends Component {
       body: JSON.stringify(params),
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         let workflow2 = Object.assign({}, this.state.workflow);
         workflow2.diff_expr_genes.message = '';
         if (result.status == 200) {
@@ -1105,13 +1093,13 @@ class Analysis extends Component {
         }
         this.setState({ workflow: workflow2 });
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
 
   exportNormalAll = (params = {}) => {
     let workflow = Object.assign({}, this.state.workflow);
     params = {
-      projectId: workflow.projectID
+      projectId: workflow.projectID,
     };
     workflow.progressing = true;
     workflow.loading_info = 'Export';
@@ -1121,12 +1109,12 @@ class Analysis extends Component {
       body: JSON.stringify(params),
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         workflow.diff_expr_genes.message = '';
         if (result.status == 200) {
           var wb = XLSX.utils.book_new();
@@ -1134,7 +1122,7 @@ class Analysis extends Component {
             Title: 'Normalized Data for All Samples',
             Subject: 'Normalized Data for All Samples',
             Author: 'Microarray',
-            CreatedDate: new Date()
+            CreatedDate: new Date(),
           };
           wb.SheetNames.push('Data');
           var ws_data = [];
@@ -1161,14 +1149,14 @@ class Analysis extends Component {
           wb.Sheets['Data'] = ws;
           XLSX.writeFile(wb, 'DEG_Normalized_Data_for_All_Samples' + workflow.projectID + '.xlsx', {
             bookType: 'xlsx',
-            type: 'binary'
+            type: 'binary',
           });
         }
         workflow.progressing = false;
         workflow.loading_info = 'Loading';
         this.setState({ workflow: workflow });
       })
-      .catch(error => {
+      .catch((error) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.diff_expr_genes.message = JSON.stringify(error);
         this.setState({ workflow: workflow });
@@ -1181,7 +1169,7 @@ class Analysis extends Component {
       page_size: 99999999,
       page_number: 1,
       sorting: workflow.diff_expr_genes.sorting,
-      search_keyword: workflow.diff_expr_genes.search_keyword
+      search_keyword: workflow.diff_expr_genes.search_keyword,
     };
 
     workflow.progressing = true;
@@ -1192,12 +1180,12 @@ class Analysis extends Component {
       body: JSON.stringify(params),
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(res => res.json())
-      .then(result => {
+      .then((res) => res.json())
+      .then((result) => {
         if (result.status == 200) {
           let workflow = Object.assign({}, this.state.workflow);
           workflow.diff_expr_genes.message = '';
@@ -1206,7 +1194,7 @@ class Analysis extends Component {
             Title: 'Export Deg Data',
             Subject: 'Deg Data',
             Author: 'Microarray',
-            CreatedDate: new Date()
+            CreatedDate: new Date(),
           };
           if (workflow.dataList.length != 0) {
             wb.SheetNames.push('Settings');
@@ -1253,7 +1241,7 @@ class Analysis extends Component {
             if (workflow.diff_expr_genes.search_keyword.search_adj_p_value != '') {
               ws_data.push([
                 'adj.P.value',
-                workflow.diff_expr_genes.search_keyword.search_adj_p_value
+                workflow.diff_expr_genes.search_keyword.search_adj_p_value,
               ]);
             }
             if (workflow.diff_expr_genes.search_keyword.search_aveexpr != '') {
@@ -1295,8 +1283,8 @@ class Analysis extends Component {
                 'ENTREZ',
                 'probsetID',
                 't',
-                'B'
-              ]
+                'B',
+              ],
             ];
             for (let i in degData) {
               exportData.push([
@@ -1311,14 +1299,14 @@ class Analysis extends Component {
                 degData[i]['ENTREZ'],
                 degData[i]['probsetID'],
                 degData[i]['t'],
-                degData[i]['B']
+                degData[i]['B'],
               ]);
             }
             var ws2 = XLSX.utils.aoa_to_sheet(exportData);
             wb.Sheets['Results'] = ws2;
             var wbout = XLSX.writeFile(wb, 'DEG_' + workflow.projectID + '.xlsx', {
               bookType: 'xlsx',
-              type: 'binary'
+              type: 'binary',
             });
           }
         } else {
@@ -1328,7 +1316,7 @@ class Analysis extends Component {
         workflow.loading_info = 'Loading';
         this.setState({ workflow: workflow });
       })
-      .catch(error => {
+      .catch((error) => {
         let workflow = Object.assign({}, this.state.workflow);
         workflow.diff_expr_genes.message = JSON.stringify(error);
         this.setState({ workflow: workflow });
@@ -1381,12 +1369,12 @@ class Analysis extends Component {
         body: JSON.stringify(params),
         credentials: 'same-origin',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
         .then(this.handleErrors)
-        .then(res => res.json())
-        .then(result => {
+        .then((res) => res.json())
+        .then((result) => {
           if (result.status == 200) {
             if (result.data != '') {
               let pcaData = result.data;
@@ -1395,8 +1383,8 @@ class Analysis extends Component {
               let group_data = {};
 
               let index = 0;
-              [workflow2.group_1, workflow2.group_2].map(group => {
-                pcaData.group_name.forEach(function(element, i) {
+              [workflow2.group_1, workflow2.group_2].map((group) => {
+                pcaData.group_name.forEach(function (element, i) {
                   if (element.split(',').indexOf(group) > -1) {
                     if (element in group_data) {
                       group_data[element]['x'].push(pcaData.x[index]);
@@ -1435,11 +1423,11 @@ class Analysis extends Component {
                     mode: 'markers',
                     marker: {
                       size: 10,
-                      color: color
+                      color: color,
                     },
                     legendgroup: element,
                     name: element,
-                    type: 'scatter3d'
+                    type: 'scatter3d',
                   });
                 }
               }
@@ -1451,7 +1439,7 @@ class Analysis extends Component {
                   r: 25,
                   t: -50,
                   b: 0,
-                  pd: 2
+                  pd: 2,
                 },
                 width:
                   document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.8,
@@ -1459,30 +1447,30 @@ class Analysis extends Component {
                   document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.6,
                 scene: {
                   camera: {
-                    eye: { x: 0, y: 2, z: 1 }
+                    eye: { x: 0, y: 2, z: 1 },
                   },
                   xaxis: {
                     title: pcaData.col[0] + ' (' + pcaData.xlable + '%)',
                     backgroundcolor: '#DDDDDD',
                     gridcolor: 'rgb(255, 255, 255)',
                     showbackground: true,
-                    zerolinecolor: 'rgb(255, 255, 255)'
+                    zerolinecolor: 'rgb(255, 255, 255)',
                   },
                   yaxis: {
                     title: pcaData.col[2] + ' (' + pcaData.ylable + '%)',
                     backgroundcolor: '#EEEEEE',
                     gridcolor: 'rgb(255, 255, 255)',
                     showbackground: true,
-                    zerolinecolor: 'rgb(255, 255, 255)'
+                    zerolinecolor: 'rgb(255, 255, 255)',
                   },
                   zaxis: {
                     title: pcaData.col[1] + ' (' + pcaData.zlable + '%)',
                     backgroundcolor: '#cccccc',
                     gridcolor: 'rgb(255, 255, 255)',
                     showbackground: true,
-                    zerolinecolor: 'rgb(255, 255, 255)'
-                  }
-                }
+                    zerolinecolor: 'rgb(255, 255, 255)',
+                  },
+                },
               };
 
               var PCAIframe = (
@@ -1494,7 +1482,7 @@ class Analysis extends Component {
                 display: 'block',
                 marginLeft: 'auto',
                 marginRight: 'auto',
-                width: '80%'
+                width: '80%',
               };
               workflow.PCA.plot = <div style={plot_style}> {PCAIframe}</div>;
               workflow.PCA.data = pcaPlotData;
@@ -1516,7 +1504,7 @@ class Analysis extends Component {
             this.setState({ workflow: workflow });
           }
         })
-        .catch(error => console.log(error));
+        .catch((error) => console.log(error));
     } catch (error) {
       document.getElementById('message-post-pca').innerHTML = error;
       let workflow = Object.assign({}, this.state.workflow);
@@ -1536,12 +1524,12 @@ class Analysis extends Component {
         body: JSON.stringify(params),
         credentials: 'same-origin',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
         .then(this.handleErrors)
-        .then(res => res.json())
-        .then(result => {
+        .then((res) => res.json())
+        .then((result) => {
           if (result.status == 200) {
             if (result.data != '') {
               let workflow = Object.assign({}, this.state.workflow);
@@ -1565,7 +1553,7 @@ class Analysis extends Component {
             this.setState({ workflow: workflow });
           }
         })
-        .catch(error => console.log(error));
+        .catch((error) => console.log(error));
     } catch (error) {
       document.getElementById('message-post-boxplot').innerHTML = error;
       let workflow = Object.assign({}, this.state.workflow);
@@ -1589,7 +1577,7 @@ class Analysis extends Component {
     workflow.postplot.histplotAN = histplotAN;
     this.setState({ workflow: workflow });
   };
-  showLoading = title => {
+  showLoading = (title) => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.progressing = true;
     workflow.loading_info = title;
@@ -1608,12 +1596,12 @@ class Analysis extends Component {
           body: JSON.stringify(params),
           credentials: 'same-origin',
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
           .then(this.handleErrors)
-          .then(res => res.json())
-          .then(result => {
+          .then((res) => res.json())
+          .then((result) => {
             let workflow = Object.assign({}, this.state.workflow);
             if (result.status == 200) {
               document.getElementById('message-post-maplot').innerHTML = '';
@@ -1649,11 +1637,11 @@ class Analysis extends Component {
         body: JSON.stringify(params),
         credentials: 'same-origin',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
-        .then(res => res.json())
-        .then(result => {
+        .then((res) => res.json())
+        .then((result) => {
           document.getElementById('message-pre-nuse').innerHTML = '';
           let workflow = Object.assign({}, this.state.workflow);
           if (result.status == 200) {
@@ -1686,12 +1674,12 @@ class Analysis extends Component {
         body: JSON.stringify(params),
         credentials: 'same-origin',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
         .then(this.handleErrors)
-        .then(res => res.json())
-        .then(result => {
+        .then((res) => res.json())
+        .then((result) => {
           document.getElementById('message-pre-rle').innerHTML = '';
           if (result.status == 200) {
             let workflow = Object.assign({}, this.state.workflow);
@@ -1767,7 +1755,7 @@ class Analysis extends Component {
               '</span>',
             showarrow: false,
             width: text_max_width,
-            align: 'left'
+            align: 'left',
           });
         }
       }
@@ -1781,7 +1769,7 @@ class Analysis extends Component {
       let cMarker = '';
 
       cMarker = {
-        color: BoxplotsData.color[real - 1]
+        color: BoxplotsData.color[real - 1],
       };
 
       let boxplotData = {
@@ -1789,7 +1777,7 @@ class Analysis extends Component {
         type: 'box',
         name: BoxplotsData.col[real - 1],
         marker: cMarker,
-        hovertext: BoxplotsData.col[real - 1]
+        hovertext: BoxplotsData.col[real - 1],
       };
 
       BoxplotRenderData.push(boxplotData);
@@ -1801,11 +1789,11 @@ class Analysis extends Component {
       annotations: legend_settings,
       yaxis: {
         title: BoxplotsData.ylable[0],
-        zeroline: false
-      }
+        zeroline: false,
+      },
     };
     let plot_style = {
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9
+      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
     };
 
     return {
@@ -1820,7 +1808,7 @@ class Analysis extends Component {
             useResizeHandler={true}
           />
         </div>
-      )
+      ),
     };
   }
   getBoxplotBN = () => {
@@ -1835,12 +1823,12 @@ class Analysis extends Component {
         body: JSON.stringify(params),
         credentials: 'same-origin',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
         .then(this.handleErrors)
-        .then(res => res.json())
-        .then(result => {
+        .then((res) => res.json())
+        .then((result) => {
           document.getElementById('message-pre-boxplot').innerHTML = '';
           if (result.status == 200) {
             let workflow = Object.assign({}, this.state.workflow);
@@ -1886,12 +1874,12 @@ class Analysis extends Component {
           body: JSON.stringify(params),
           credentials: 'same-origin',
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
           .then(this.handleErrors)
-          .then(res => res.json())
-          .then(result => {
+          .then((res) => res.json())
+          .then((result) => {
             document.getElementById('message-pre-maplot').innerHTML = '';
             let workflow = Object.assign({}, this.state.workflow);
             if (result.status == 200) {
@@ -1934,7 +1922,7 @@ class Analysis extends Component {
     workflow.preplots.histplotBN = histplotBN;
     this.setState({ workflow: workflow });
   };
-  changePathways_up = obj => {
+  changePathways_up = (obj) => {
     let workflow = Object.assign({}, this.state.workflow);
     if (obj.pagination) {
       workflow.pathways_up = obj;
@@ -1944,7 +1932,7 @@ class Analysis extends Component {
     }
     this.setState({ workflow: workflow }, () => {});
   };
-  changePathways_down = obj => {
+  changePathways_down = (obj) => {
     let workflow = Object.assign({}, this.state.workflow);
     if (obj.pagination) {
       workflow.pathways_down = obj;
@@ -1954,7 +1942,7 @@ class Analysis extends Component {
     }
     this.setState({ workflow: workflow });
   };
-  changessGSEA = obj => {
+  changessGSEA = (obj) => {
     let workflow = Object.assign({}, this.state.workflow);
     if (obj.pagination) {
       workflow.ssGSEA = obj;
@@ -1990,13 +1978,13 @@ class Analysis extends Component {
       }
     });
   };
-  updateCurrentWorkingTab = e => {
+  updateCurrentWorkingTab = (e) => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.current_working_on_tag = e;
     workflow.tab_activeKey = e;
     this.setState({ workflow: workflow });
   };
-  handleGeneChange = event => {
+  handleGeneChange = (event) => {
     let value = event.target.value;
     let workflow = Object.assign({}, this.state.workflow);
     workflow.geneSelect = value;
@@ -2012,18 +2000,18 @@ class Analysis extends Component {
     // remove old heatmap
     workflow.geneHeatmap = 'Not enough significant pathways available with p-value < 0.05.';
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
     try {
       fetch('./api/analysis/getssGSEAWithDiffGenSet', {
         method: 'POST',
         body: JSON.stringify(reqBody),
         credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       })
         .then(this.handleErrors)
-        .then(res => res.json())
-        .then(result => {
+        .then((res) => res.json())
+        .then((result) => {
           workflow.ssGSEA.message = '';
           workflow.progressing = false;
           this.setState({ workflow: workflow });
@@ -2039,7 +2027,7 @@ class Analysis extends Component {
       workflow.progressing = false;
       workflow.ssGSEA.message = JSON.stringify(err);
       this.setState({
-        workflow: workflow
+        workflow: workflow,
       });
     }
   };
@@ -2063,43 +2051,43 @@ class Analysis extends Component {
     this.setState({ workflow: workflow });
   };
 
-  changeCode = event => {
+  changeCode = (event) => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.accessionCode = event.target.value.toUpperCase();
     this.setState({ workflow: workflow });
   };
-  changeChip = event => {
+  changeChip = (event) => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.loadChip = event.target.value.toUpperCase();
     this.setState({ workflow: workflow });
   };
-  handleSelectChip = value => {
+  handleSelectChip = (value) => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.chip = value;
     workflow.dataListChip = workflow.dataList[value];
     this.setState({ workflow: workflow });
   };
-  handleSelectType = value => {
+  handleSelectType = (value) => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.analysisType = value;
     this.setState({ workflow: workflow });
   };
-  handleGroup1Select = value => {
+  handleGroup1Select = (value) => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.group_1 = value;
     this.setState({ workflow: workflow });
   };
-  handleNormalSelect = value => {
+  handleNormalSelect = (value) => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.normal = value;
     this.setState({ workflow: workflow });
   };
-  handleGroup2Select = value => {
+  handleGroup2Select = (value) => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.group_2 = value;
     this.setState({ workflow: workflow });
   };
-  fileRemove = file => {
+  fileRemove = (file) => {
     let workflow = Object.assign({}, this.state.workflow);
     const index = workflow.fileList.indexOf(file);
     const newFileList = workflow.fileList.slice();
@@ -2107,13 +2095,13 @@ class Analysis extends Component {
     workflow.fileList = newFileList;
     this.setState({ workflow: workflow });
   };
-  beforeUpload = fl => {
+  beforeUpload = (fl) => {
     let workflow = Object.assign({}, this.state.workflow);
     let names = [];
-    workflow.fileList.forEach(function(f) {
+    workflow.fileList.forEach(function (f) {
       names.push(f.name);
     });
-    fl.forEach(function(file) {
+    fl.forEach(function (file) {
       if (names.indexOf(file.name) == -1) {
         workflow.fileList = [...workflow.fileList, file];
       }
@@ -2161,7 +2149,7 @@ class Analysis extends Component {
       Title: 'Export GSM Data',
       Subject: 'GSM Data',
       Author: 'Microarray',
-      CreatedDate: new Date()
+      CreatedDate: new Date(),
     };
     if (workflow.dataList.length != 0) {
       wb.SheetNames.push('Settings');
@@ -2191,14 +2179,14 @@ class Analysis extends Component {
           rawData[i].gsm,
           rawData[i].title,
           rawData[i].description,
-          rawData[i].groups
+          rawData[i].groups,
         ]);
       }
       var ws2 = XLSX.utils.aoa_to_sheet(gsm);
       wb.Sheets['Results'] = ws2;
       var wbout = XLSX.writeFile(wb, 'GSM_' + workflow.projectID + '.xlsx', {
         bookType: 'xlsx',
-        type: 'binary'
+        type: 'binary',
       });
       workflow.progressing = false;
       workflow.loading_info = 'loading';
@@ -2206,7 +2194,7 @@ class Analysis extends Component {
     }
   };
 
-  loadError = data => {
+  loadError = (data) => {
     let workflow = Object.assign({}, this.state.workflow);
 
     document.getElementById('btn-project-load-gse').className =
@@ -2220,7 +2208,7 @@ class Analysis extends Component {
       .replace('files Please', 'files. Please');
     document.getElementById('message-gsm').nextSibling.innerHTML = '';
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
   };
 
@@ -2235,7 +2223,7 @@ class Analysis extends Component {
       document.getElementById('message-load-accession-code').innerHTML = '';
       ReactGA.event({
         category: 'Load GSM',
-        action: 'Load accession code'
+        action: 'Load accession code',
       });
     }
     document.getElementById('btn-project-load-gse').className =
@@ -2265,7 +2253,7 @@ class Analysis extends Component {
     workflow.progressing = true;
     workflow.loading_info = 'Loading GEO Data...';
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
 
     try {
@@ -2274,15 +2262,18 @@ class Analysis extends Component {
         body: JSON.stringify(reqBody),
         credentials: 'same-origin',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
         .then(this.handleErrors)
-        .then(res => res.json())
-        .then(result => {
+        .then((res) => res.json())
+        .then((result) => {
           if (result.status == 200) {
             let workflow = Object.assign({}, this.state.workflow);
-            let data = result.data.substr(result.data.indexOf('wrapperReturn') + 15, result.data.length);
+            let data = result.data.substr(
+              result.data.indexOf('wrapperReturn') + 15,
+              result.data.length
+            );
 
             if (data.indexOf('{"files":') > -1) {
               let list = JSON.parse(decodeURIComponent(data));
@@ -2301,8 +2292,8 @@ class Analysis extends Component {
                   workflow.dataList = parse;
                   let chips = Object.keys(workflow.dataList);
 
-                  chips.forEach(chip => {
-                    workflow.dataList[chip].forEach(gsm => {
+                  chips.forEach((chip) => {
+                    workflow.dataList[chip].forEach((gsm) => {
                       gsm.groups = '';
                       gsm.color = '';
                     });
@@ -2312,7 +2303,7 @@ class Analysis extends Component {
                   workflow.multichip = true;
                   workflow.groups = {};
                   chips.map(
-                    key =>
+                    (key) =>
                       (workflow.groups.key = new Array(workflow.dataList[key].length).fill(
                         'Others'
                       ))
@@ -2341,7 +2332,7 @@ class Analysis extends Component {
 
             document.getElementById('analysisType_selection').disabled = true;
             this.setState({
-              workflow: workflow
+              workflow: workflow,
             });
           } else {
             document.getElementById('btn-project-load-gse').className =
@@ -2349,7 +2340,7 @@ class Analysis extends Component {
             workflow.uploading = false;
             workflow.progressing = false;
             this.setState({
-              workflow: workflow
+              workflow: workflow,
             });
             document.getElementById('message-gsm').innerHTML = result.msg;
             document.getElementById('message-gsm').nextSibling.innerHTML = '';
@@ -2362,7 +2353,7 @@ class Analysis extends Component {
       workflow.uploading = false;
       workflow.progressing = false;
       this.setState({
-        workflow: workflow
+        workflow: workflow,
       });
       document.getElementById('message-gsm').innerHTML = err;
       document.getElementById('message-gsm').nextSibling.innerHTML = '';
@@ -2373,14 +2364,14 @@ class Analysis extends Component {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.QueueModalvisible = true;
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
   };
   handleCancel = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.QueueModalvisible = false;
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
   };
 
@@ -2396,7 +2387,7 @@ class Analysis extends Component {
         const res = await fetch(link, {
           signal,
           method: 'HEAD',
-          cache: 'no-cache'
+          cache: 'no-cache',
         });
         return res.status === 200;
       } catch (error) {
@@ -2411,7 +2402,7 @@ class Analysis extends Component {
     }
   };
 
-  index = groups => {
+  index = (groups) => {
     let index = [];
     for (let i in groups) {
       if (groups[i] != 'Others') {
@@ -2499,7 +2490,7 @@ class Analysis extends Component {
 
     // validate that each batch contains at least one sample per group
     let valid = true;
-    Object.keys(batchSamples).forEach(batch => {
+    Object.keys(batchSamples).forEach((batch) => {
       if (!batchSamples[batch][0] || !batchSamples[batch][1]) {
         document.getElementById('message-gsm').innerHTML =
           'Cannot run contrasts when batches do not contain samples from each group. Please re-configure your batches and try again. ';
@@ -2552,7 +2543,7 @@ class Analysis extends Component {
     workflow.histplotAN_url = '';
     workflow.heatmapolt_url = '';
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
     document.getElementById('message-gsm').innerHTML = '';
 
@@ -2571,7 +2562,7 @@ class Analysis extends Component {
         workflow.uploading = false;
         workflow.progressing = false;
         this.setState({
-          workflow: workflow
+          workflow: workflow,
         });
         return;
       } else {
@@ -2583,17 +2574,17 @@ class Analysis extends Component {
           body: JSON.stringify(reqBody),
           credentials: 'same-origin',
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
           .then(this.handleErrors)
-          .then(function(response) {
+          .then(function (response) {
             if (!response.ok) {
               throw Error(response.statusText);
             }
             return response.json();
           })
-          .then(result => {
+          .then((result) => {
             if (result.status == 200) {
               workflow.QueueModalvisible = true;
             } else {
@@ -2603,12 +2594,12 @@ class Analysis extends Component {
             workflow.uploading = false;
             workflow.progressing = false;
             this.setState({
-              workflow: workflow
+              workflow: workflow,
             });
             this.getSSGSEAGeneHeatMap();
             ReactGA.event({
               category: 'Run Contrast',
-              action: 'Run Contrast - Queued'
+              action: 'Run Contrast - Queued',
             });
           });
       } catch (err) {
@@ -2616,7 +2607,7 @@ class Analysis extends Component {
         workflow.progressing = false;
         document.getElementById('message-use-queue').innerHTML = JSON.stringify(err);
         this.setState({
-          workflow: workflow
+          workflow: workflow,
         });
       }
     } else {
@@ -2626,16 +2617,16 @@ class Analysis extends Component {
           body: JSON.stringify(reqBody),
           credentials: 'same-origin',
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         })
           .then(this.handleErrors)
-          .then(function(response) {
+          .then(function (response) {
             if (response) {
               return response.json();
             }
           })
-          .then(result => {
+          .then((result) => {
             if (result && result.status == 200) {
               workflow.groups = result.data.groups;
               workflow.compared = true;
@@ -2646,32 +2637,32 @@ class Analysis extends Component {
               workflow.heatmapolt_url = result.data.heatmapolt;
               workflow.disableContrast = true;
               this.setState({
-                workflow: workflow
+                workflow: workflow,
               });
 
               this.hideWorkFlow();
 
               ReactGA.event({
                 category: 'Run Contrast',
-                action: 'Run Contrast - Live'
+                action: 'Run Contrast - Live',
               });
             } else {
               if (result) {
                 document.getElementById('message-gsm').innerHTML = JSON.stringify(result.msg);
                 workflow.progressing = false;
                 this.setState({
-                  workflow: workflow
+                  workflow: workflow,
                 });
               }
             }
           })
           .catch(
-            function(error) {
+            function (error) {
               document.getElementById('message-gsm').innerHTML = JSON.stringify(error);
               workflow.uploading = false;
               workflow.progressing = false;
               this.setState({
-                workflow: workflow
+                workflow: workflow,
               });
             }.bind(this)
           );
@@ -2680,7 +2671,7 @@ class Analysis extends Component {
         workflow.uploading = false;
         workflow.progressing = false;
         this.setState({
-          workflow: workflow
+          workflow: workflow,
         });
       }
     }
@@ -2693,13 +2684,13 @@ class Analysis extends Component {
     workflow.projectID = this.uuidv4();
     formData.append('projectId', workflow.projectID);
 
-    fileList.forEach(file => {
+    fileList.forEach((file) => {
       formData.append('cels', file);
     });
     workflow.uploading = true;
     workflow.progressing = true;
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
     document.getElementById('btn-project-upload').className =
       'ant-btn upload-start ant-btn-default';
@@ -2708,11 +2699,11 @@ class Analysis extends Component {
         method: 'POST',
         body: formData,
         processData: false,
-        contentType: false
+        contentType: false,
       })
         .then(this.handleErrors)
-        .then(res => res.json())
-        .then(result => {
+        .then((res) => res.json())
+        .then((result) => {
           if (result.status == 200) {
             var data = result.data.split('+++getCELfiles+++"')[1];
             if (typeof data === 'undefined' || data == '') {
@@ -2740,14 +2731,14 @@ class Analysis extends Component {
             workflow.dataList = list.files;
             workflow.uploaded = true;
             this.setState({
-              workflow: workflow
+              workflow: workflow,
             });
           } else {
             workflow.uploading = false;
             workflow.progressing = false;
             workflow.uploaded = true;
             this.setState({
-              workflow: workflow
+              workflow: workflow,
             });
             document.getElementById('message-gsm').innerHTML = JSON.stringify(result.msg);
             document.getElementById('message-gsm').nextSibling.innerHTML = '';
@@ -2756,17 +2747,17 @@ class Analysis extends Component {
           document.getElementById('btn-project-upload').className =
             'ant-btn upload-start ant-btn-default';
         })
-        .catch(error => console.log(error));
+        .catch((error) => console.log(error));
       ReactGA.event({
         category: 'Load GSM',
-        action: 'Upload CEL files'
+        action: 'Upload CEL files',
       });
     } catch (error) {
       workflow.uploading = false;
       workflow.progressing = false;
       workflow.uploaded = true;
       this.setState({
-        workflow: workflow
+        workflow: workflow,
       });
       document.getElementById('message-gsm').innerHTML = error;
       document.getElementById('message-gsm').nextSibling.innerHTML = '';
@@ -2803,7 +2794,7 @@ class Analysis extends Component {
     }
   };
 
-  uploadGroup = csvData => {
+  uploadGroup = (csvData) => {
     let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g;
     let workflow = Object.assign({}, this.state.workflow);
 
@@ -2874,7 +2865,7 @@ class Analysis extends Component {
     this.setState({ workflow: workflow });
   };
 
-  handleErrors = response => {
+  handleErrors = (response) => {
     if (!response.ok) {
       //throw Error(response.statusText);
       // Display fallback UI
@@ -2930,7 +2921,7 @@ class Analysis extends Component {
       margin: workflow.PCA.layout.margin,
       width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.8,
       height: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.6,
-      scene: workflow.PCA.layout.scene
+      scene: workflow.PCA.layout.scene,
     };
     if (!workflow.PCA.data == '') {
       workflow.PCA.plot = (
@@ -2941,17 +2932,17 @@ class Analysis extends Component {
       );
     }
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
   };
   resetBoxPlotAN = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.BoxplotAN.style = {
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9
+      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
     };
     workflow.BoxplotAN.layout = {
       showlegend: false,
-      autoSize: true
+      autoSize: true,
     };
     if (!workflow.BoxplotAN.data == '') {
       workflow.BoxplotAN.plot = (
@@ -2966,17 +2957,17 @@ class Analysis extends Component {
     }
 
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
   };
   resetBoxPlotBN = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.BoxplotBN.style = {
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9
+      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
     };
     workflow.BoxplotBN.layout = {
       showlegend: false,
-      autoSize: true
+      autoSize: true,
     };
     if (!workflow.BoxplotBN.data == '') {
       workflow.BoxplotBN.plot = (
@@ -2991,13 +2982,13 @@ class Analysis extends Component {
     }
 
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
   };
   resetRLE = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.RLE.style = {
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9
+      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
     };
     workflow.RLE.layout = { showlegend: false, autoSize: true };
     if (!workflow.RLE.data == '') {
@@ -3016,11 +3007,11 @@ class Analysis extends Component {
   resetNUSE = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.NUSE.style = {
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9
+      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
     };
     workflow.NUSE.layout = {
       showlegend: false,
-      autoSize: true
+      autoSize: true,
     };
     if (!workflow.NUSE.data == '') {
       workflow.NUSE.plot = (
@@ -3034,7 +3025,7 @@ class Analysis extends Component {
       );
     }
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
   };
   changeTab(tab) {
@@ -3068,7 +3059,7 @@ class Analysis extends Component {
       }
     }
   }
-  initWithCode = code => {
+  initWithCode = (code) => {
     let workflow = Object.assign({}, this.state.workflow);
     let reqBody = {};
     reqBody.projectId = code;
@@ -3085,7 +3076,7 @@ class Analysis extends Component {
     workflow.progressing = true;
     workflow.loading_info = 'Loading...';
     this.setState({
-      workflow: workflow
+      workflow: workflow,
     });
     try {
       fetch('./api/analysis/getResultByProjectId', {
@@ -3093,11 +3084,11 @@ class Analysis extends Component {
         body: JSON.stringify(reqBody),
         credentials: 'same-origin',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
         .then(this.handleErrors)
-        .then(function(response) {
+        .then(function (response) {
           if (!response.ok) {
             throw Error(response.statusText);
             document.getElementById('message-gsm').innerHTML =
@@ -3106,7 +3097,7 @@ class Analysis extends Component {
           }
           return response.json();
         })
-        .then(result => {
+        .then((result) => {
           if (result.status == 200) {
             result = result.data;
             let workflow2 = Object.assign({}, this.state.workflow);
@@ -3120,7 +3111,7 @@ class Analysis extends Component {
                   title: result.gsm[i].title,
                   gsm: result.gsm[i]._row,
                   groups: result.gsm[i].groups,
-                  colors: result.gsm[i].colors
+                  colors: result.gsm[i].colors,
                 });
               }
               workflow2.dataList = tmp_gsms;
@@ -3176,7 +3167,7 @@ class Analysis extends Component {
               .classList.replace('ant-btn-primary', 'ant-btn-default');
 
             this.setState({
-              workflow: workflow2
+              workflow: workflow2,
             });
             this.getSSGSEAGeneHeatMap();
             this.hideWorkFlow();
@@ -3188,7 +3179,7 @@ class Analysis extends Component {
             }
             workflow.progressing = false;
             this.setState({
-              workflow: workflow
+              workflow: workflow,
             });
           }
         });
@@ -3200,7 +3191,7 @@ class Analysis extends Component {
         document.getElementById('message-gsm').nextSibling.innerHTML = '';
       }
       this.setState({
-        workflow: workflow
+        workflow: workflow,
       });
     }
   };
@@ -3209,25 +3200,25 @@ class Analysis extends Component {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     })
       .then(this.handleErrors)
-      .then(function(response) {
+      .then(function (response) {
         if (!response.ok) {
           throw Error(response.statusText);
         }
         return response.json();
       })
-      .then(result => {
+      .then((result) => {
         result = result.data;
         let workflow = Object.assign({}, this.state.workflow);
         workflow.numberOfTasksInQueue = result;
         this.setState({
-          workflow: workflow
+          workflow: workflow,
         });
       })
-      .catch(error => console.log(error));
+      .catch((error) => console.log(error));
   };
   render() {
     // define group modal
@@ -3241,7 +3232,7 @@ class Analysis extends Component {
         footer={[
           <Button key="back" type="primary" onClick={this.handleCancel}>
             Close
-          </Button>
+          </Button>,
         ]}
       >
         {' '}

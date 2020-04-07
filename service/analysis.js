@@ -15,7 +15,7 @@ var emailer = require('../components/mail');
 
 //use for generate UUID
 function uuidv4() {
-  return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     var r = (Math.random() * 16) | 0,
       v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
@@ -29,7 +29,7 @@ function removeGSEAheatmap(uploadPath, projectId) {
   const plot = path.resolve(localPath + '/ssgseaHeatmap1.jpg');
   const txt = path.resolve(localPath + '/ss_result.txt');
 
-  [plot, txt].map(file => {
+  [plot, txt].map((file) => {
     if (fs.existsSync(file)) fs.unlinkSync(file);
   });
 }
@@ -77,12 +77,12 @@ function restoreSession(req, path) {
       mAplotAN: re.maplotAfter,
       normal: req.session[req.body.projectId].normal[0],
       heatmapolt: req.session[req.body.projectId].heatmapAfterNorm,
-      chip: re.chip
+      chip: re.chip,
     };
   }
 }
 
-router.post('/upload', function(req, res) {
+router.post('/upload', function (req, res) {
   logger.info('[start] upload files');
   // create an incoming form object
   var form = new formidable.IncomingForm();
@@ -90,14 +90,14 @@ router.post('/upload', function(req, res) {
   form.multiples = true;
   var pid = '';
   // Emitted whenever a field / value pair has been received.
-  form.on('field', function(name, value) {
+  form.on('field', function (name, value) {
     if (name == 'projectId') {
       pid = value;
       form.uploadDir = path.join(config.uploadPath, '/' + value);
       if (!fs.existsSync(form.uploadDir)) {
         fs.mkdirSync(form.uploadDir);
       } else {
-        rimraf(form.uploadDir, function() {
+        rimraf(form.uploadDir, function () {
           fs.mkdirSync(form.uploadDir);
         });
       }
@@ -106,40 +106,40 @@ router.post('/upload', function(req, res) {
   var number_of_files = 0;
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
-  form.on('file', function(field, file) {
+  form.on('file', function (field, file) {
     number_of_files = number_of_files + 1;
-    fs.rename(file.path, path.join(form.uploadDir, file.name), err => {
+    fs.rename(file.path, path.join(form.uploadDir, file.name), (err) => {
       if (err) throw logger.info('Rename  file name err' + err);
     });
   });
   // log any errors that occur
-  form.on('error', function(err) {
+  form.on('error', function (err) {
     res.json({
       status: 500,
-      data: 'An error has occured: \n' + err
+      data: 'An error has occured: \n' + err,
     });
   });
   // once all the files have been uploaded, send a response to the client
-  form.on('end', function() {
+  form.on('end', function () {
     let data = [];
     data.push('loadCEL'); // action
     data.push(pid);
     //data path
     data.push(config.uploadPath);
     data.push(new Array(number_of_files).fill('Others'));
-    R.execute('wrapper.R', data, function(err, returnValue) {
+    R.execute('wrapper.R', data, function (err, returnValue) {
       if (err) {
         logger.info('API:/upload result ', 'status 404 ');
         logger.warn('API:/upload result ', 'status 404 ', err);
         res.json({
           status: 404,
-          msg: err
+          msg: err,
         });
       } else {
         logger.info('API:/upload result ', 'status 200 ');
         res.json({
           status: 200,
-          data: returnValue
+          data: returnValue,
         });
       }
     });
@@ -148,7 +148,7 @@ router.post('/upload', function(req, res) {
   form.parse(req);
 });
 
-router.post('/getConfiguration', function(req, res) {
+router.post('/getConfiguration', function (req, res) {
   if (config) {
     res.json({ status: 200, data: config });
   } else {
@@ -156,7 +156,7 @@ router.post('/getConfiguration', function(req, res) {
   }
 });
 
-router.post('/loadGSE', function(req, res) {
+router.post('/loadGSE', function (req, res) {
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   // action
@@ -180,7 +180,7 @@ router.post('/loadGSE', function(req, res) {
     'data_repo_path:',
     config.uploadPath
   );
-  R.execute('wrapper.R', data, function(err, returnValue) {
+  R.execute('wrapper.R', data, function (err, returnValue) {
     if (err) {
       logger.info('API:/loadGSE result ', 'status 404 ');
       res.json({ status: 404, msg: returnValue });
@@ -191,7 +191,7 @@ router.post('/loadGSE', function(req, res) {
   });
 });
 
-router.post('/pathwaysHeapMap', function(req, res) {
+router.post('/pathwaysHeapMap', function (req, res) {
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push('pathwaysHeapMap');
@@ -222,7 +222,7 @@ router.post('/pathwaysHeapMap', function(req, res) {
     config.configPath
   );
 
-  R.execute('wrapper.R', data, function(err, returnValue) {
+  R.execute('wrapper.R', data, function (err, returnValue) {
     if (err) {
       res.json({ status: 404, msg: err });
     } else {
@@ -231,7 +231,7 @@ router.post('/pathwaysHeapMap', function(req, res) {
   });
 });
 
-router.post('/getssGSEAWithDiffGenSet', function(req, res) {
+router.post('/getssGSEAWithDiffGenSet', function (req, res) {
   if (!validate(req.body.projectId)) res.json({ status: 404, msg: 'Invalid project ID' });
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
@@ -245,7 +245,7 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
   data.push(req.body.group2);
   data.push(config.configPath);
   removeGSEAheatmap(config.uploadPath, req.body.projectId);
-  R.execute('wrapper.R', data, function(err, returnValue) {
+  R.execute('wrapper.R', data, function (err, returnValue) {
     returnValue = fs.readFileSync(
       config.uploadPath + '/' + req.body.projectId + '/ss_result.txt',
       'utf8'
@@ -263,7 +263,7 @@ router.post('/getssGSEAWithDiffGenSet', function(req, res) {
   });
 });
 
-router.post('/qAnalysis', function(req, res) {
+router.post('/qAnalysis', function (req, res) {
   var now = new Date();
   let data = {};
   data.projectId = req.body.projectId;
@@ -299,7 +299,7 @@ router.post('/qAnalysis', function(req, res) {
 
   function send(d) {
     logger.info('[Queue] Send Message to Queue', JSON.stringify(d));
-    queue.awsHander.sender(JSON.stringify(d), d.email, function(flag, err, data) {
+    queue.awsHander.sender(JSON.stringify(d), d.email, function (flag, err, data) {
       if (flag) {
         logger.info('[Queue] Send Message to Queue fails', JSON.stringify(err));
         logger.info('[Queue] Send fails message  to client ', data.email);
@@ -321,7 +321,7 @@ router.post('/qAnalysis', function(req, res) {
   queue.awsHander.upload(
     config.uploadPath + '/' + data.projectId,
     config.queue_input_path + '/' + tmp_project_id + '/',
-    function(flag) {
+    function (flag) {
       if (flag) {
         logger.info('[S3] upload files to S3 success');
         data.projectId = tmp_project_id;
@@ -338,8 +338,8 @@ router.post('/qAnalysis', function(req, res) {
   );
 });
 
-router.post('/getCurrentNumberOfJobsinQueue', function(req, res) {
-  let d = queue.awsHander.getQueueAttributes(['ApproximateNumberOfMessages'], function(result) {
+router.post('/getCurrentNumberOfJobsinQueue', function (req, res) {
+  let d = queue.awsHander.getQueueAttributes(['ApproximateNumberOfMessages'], function (result) {
     if (result != -1) {
       res.json({ status: 200, data: result.Attributes.ApproximateNumberOfMessages });
     } else {
@@ -348,9 +348,9 @@ router.post('/getCurrentNumberOfJobsinQueue', function(req, res) {
   });
 });
 
-router.post('/getResultByProjectId', function(req, res) {
+router.post('/getResultByProjectId', function (req, res) {
   logger.info('[Get contrast result from file]', 'projectId:', req.body.projectId);
-  queue.awsHander.download(req.body.projectId, config.uploadPath, function(flag) {
+  queue.awsHander.download(req.body.projectId, config.uploadPath, function (flag) {
     if (flag) {
       let return_data = restoreSession(
         req,
@@ -364,7 +364,7 @@ router.post('/getResultByProjectId', function(req, res) {
   });
 });
 
-router.post('/runContrast', function(req, res) {
+router.post('/runContrast', function (req, res) {
   if (!validate(req.body.projectId)) res.json({ status: 404, msg: 'Invalid project ID' });
   req.setTimeout(0); // no timeout
   let data = [];
@@ -388,7 +388,7 @@ router.post('/runContrast', function(req, res) {
   data.push(req.body.chip || '');
   removeGSEAheatmap(config.uploadPath, req.body.projectId);
   logger.info('runContrast  R code ');
-  R.execute('wrapper.R', data, function(err, returnValue) {
+  R.execute('wrapper.R', data, function (err, returnValue) {
     if (fs.existsSync(config.uploadPath + '/' + req.body.projectId + '/result.txt')) {
       let return_data = restoreSession(
         req,
@@ -412,7 +412,7 @@ router.post('/runContrast', function(req, res) {
         'processGEOfiles.err',
         'RMA_QCnorm.err',
         'ssgseaPathways.err',
-        'diffExprGenes.err'
+        'diffExprGenes.err',
       ];
       for (var i = paths.length - 1; i >= 0; i--) {
         if (fs.existsSync(config.uploadPath + '/' + req.body.projectId + '/' + paths[i])) {
@@ -440,19 +440,11 @@ router.post('/runContrast', function(req, res) {
         if (return_data.includes('At least 2 ')) {
           return_data =
             'Warning Message : ' +
-            return_data
-              .replace(/\$/g, '')
-              .replace(/\[/g, '')
-              .replace(/\]/g, '')
-              .replace(/\"/g, '');
+            return_data.replace(/\$/g, '').replace(/\[/g, '').replace(/\]/g, '').replace(/\"/g, '');
         } else {
           return_data =
             'Error Message : ' +
-            return_data
-              .replace(/\$/g, '')
-              .replace(/\[/g, '')
-              .replace(/\]/g, '')
-              .replace(/\"/g, '');
+            return_data.replace(/\$/g, '').replace(/\[/g, '').replace(/\]/g, '').replace(/\"/g, '');
         }
       }
       res.json({ status: 404, msg: return_data });
@@ -578,107 +570,107 @@ function getPlots(req, res, type) {
   res.json({ status: 200, data: return_data });
 }
 
-router.post('/getHistplotBN', function(req, res) {
+router.post('/getHistplotBN', function (req, res) {
   getPlots(req, res, 'getHistplotBN');
 });
 
-router.post('/getHistplotAN', function(req, res) {
+router.post('/getHistplotAN', function (req, res) {
   getPlots(req, res, 'getHistplotAN');
 });
 
-router.post('/getBoxplotAN', function(req, res) {
+router.post('/getBoxplotAN', function (req, res) {
   getPlots(req, res, 'getBoxplotAN');
 });
 
-router.post('/getMAplotAN', function(req, res) {
+router.post('/getMAplotAN', function (req, res) {
   getPlots(req, res, 'getMAplotAN');
 });
 
-router.post('/getPCA', function(req, res) {
+router.post('/getPCA', function (req, res) {
   getPlots(req, res, 'getPCA');
 });
 
-router.post('/getHeatmapolt', function(req, res) {
+router.post('/getHeatmapolt', function (req, res) {
   getPlots(req, res, 'getHeatmapolt');
 });
 
-router.post('/getBoxplotAN', function(req, res) {
+router.post('/getBoxplotAN', function (req, res) {
   getPlots(req, res, 'getBoxplotAN');
 });
 
-router.post('/getMAplotsBN', function(req, res) {
+router.post('/getMAplotsBN', function (req, res) {
   getPlots(req, res, 'getMAplotsBN');
 });
 
-router.post('/getBoxplotBN', function(req, res) {
+router.post('/getBoxplotBN', function (req, res) {
   getPlots(req, res, 'getBoxplotBN');
 });
 
-router.post('/getRLE', function(req, res) {
+router.post('/getRLE', function (req, res) {
   getPlots(req, res, 'getRLE');
 });
 
-router.post('/getNUSE', function(req, res) {
+router.post('/getNUSE', function (req, res) {
   getPlots(req, res, 'getNUSE');
 });
 
-router.post('/getUpPathWays', function(req, res) {
+router.post('/getUpPathWays', function (req, res) {
   if (req.session && req.session[req.body.projectId]) {
     res.json({
       status: 200,
-      data: getUpPathWays(req)
+      data: getUpPathWays(req),
     });
   } else {
     res.json({
       status: 404,
-      msg: 'No data found in the session'
+      msg: 'No data found in the session',
     });
   }
 });
 
-router.post('/getDownPathWays', function(req, res) {
+router.post('/getDownPathWays', function (req, res) {
   if (req.session && req.session[req.body.projectId]) {
     res.json({
       status: 200,
-      data: getDownPathWays(req)
+      data: getDownPathWays(req),
     });
   } else {
     res.json({
       status: 404,
-      msg: 'No data found in the session'
+      msg: 'No data found in the session',
     });
   }
 });
 
-router.post('/getGSEA', function(req, res) {
+router.post('/getGSEA', function (req, res) {
   if (req.session && req.session[req.body.projectId]) {
     res.json({
       status: 200,
-      data: getGSEA(req)
+      data: getGSEA(req),
     });
   } else {
     res.json({
       status: 404,
-      msg: 'No data found in the session'
+      msg: 'No data found in the session',
     });
   }
 });
 
-router.post('/getDEG', function(req, res) {
+router.post('/getDEG', function (req, res) {
   if (req.session && req.session[req.body.projectId]) {
     res.json({
       status: 200,
-      data: getDEG(req)
+      data: getDEG(req),
     });
   } else {
     res.json({
       status: 404,
-      msg: 'No data found in the session'
+      msg: 'No data found in the session',
     });
   }
 });
 
-router.post('/getNormalAll', function(req, res) {
+router.post('/getNormalAll', function (req, res) {
   if (
     req.session &&
     req.session[req.body.projectId] &&
@@ -686,12 +678,12 @@ router.post('/getNormalAll', function(req, res) {
   ) {
     res.json({
       status: 200,
-      data: req.session[req.body.projectId].normCelfiles
+      data: req.session[req.body.projectId].normCelfiles,
     });
   } else {
     res.json({
       status: 404,
-      msg: 'No data found in the session'
+      msg: 'No data found in the session',
     });
   }
 });
@@ -760,7 +752,6 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
           search_keyword.search_PATHWAY_ID &&
         req.session[req.body.projectId].pathway_up_tmp.search_SOURCE ==
           search_keyword.search_SOURCE &&
-        req.session[req.body.projectId].pathway_up_tmp.search_TYPE == search_keyword.search_TYPE &&
         req.session[req.body.projectId].pathway_up_tmp.search_DESCRIPTION ==
           search_keyword.search_DESCRIPTION &&
         req.session[req.body.projectId].pathway_up_tmp.search_p_value ==
@@ -770,14 +761,14 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
           search_keyword.search_RATIO &&
         req.session[req.body.projectId].pathway_up_tmp.search_NUMBER_HITS ==
           search_keyword.search_NUMBER_HITS &&
+        req.session[req.body.projectId].pathway_up_tmp.search_NUMBER_MISSES ==
+          search_keyword.search_NUMBER_MISSES &&
         req.session[req.body.projectId].pathway_up_tmp.search_GENE_LIST ==
           search_keyword.search_GENE_LIST &&
-        req.session[req.body.projectId].pathway_up_tmp.search_NUMBER_GENES_PATHWAY ==
-          search_keyword.search_NUMBER_GENES_PATHWAY &&
         req.session[req.body.projectId].pathway_up_tmp.search_NUMBER_USER_GENES ==
           search_keyword.search_NUMBER_USER_GENES &&
-        req.session[req.body.projectId].pathway_up_tmp.search_TOTAL_NUMBER_GENES ==
-          search_keyword.search_TOTAL_NUMBER_GENES
+        req.session[req.body.projectId].pathway_up_tmp.search_TOTAL_GENES_MINUS_INPUT ==
+          search_keyword.search_TOTAL_GENES_MINUS_INPUT
       ) {
         // return index
         let output = {
@@ -785,7 +776,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
           records: req.session[req.body.projectId].pathway_up_tmp.data.slice(
             page_size * (page_number - 1),
             page_size * (page_number - 1) + page_size
-          )
+          ),
         };
         return output;
       }
@@ -801,8 +792,6 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
           search_keyword.search_PATHWAY_ID &&
         req.session[req.body.projectId].pathway_down_tmp.search_SOURCE ==
           search_keyword.search_SOURCE &&
-        req.session[req.body.projectId].pathway_down_tmp.search_TYPE ==
-          search_keyword.search_TYPE &&
         req.session[req.body.projectId].pathway_down_tmp.search_DESCRIPTION ==
           search_keyword.search_DESCRIPTION &&
         req.session[req.body.projectId].pathway_down_tmp.search_p_value ==
@@ -812,14 +801,14 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
           search_keyword.search_RATIO &&
         req.session[req.body.projectId].pathway_down_tmp.search_NUMBER_HITS ==
           search_keyword.search_NUMBER_HITS &&
+        req.session[req.body.projectId].pathway_down_tmp.search_NUMBER_MISSES ==
+          search_keyword.search_NUMBER_MISSES &&
         req.session[req.body.projectId].pathway_down_tmp.search_GENE_LIST ==
           search_keyword.search_GENE_LIST &&
-        req.session[req.body.projectId].pathway_down_tmp.search_NUMBER_GENES_PATHWAY ==
-          search_keyword.search_NUMBER_GENES_PATHWAY &&
         req.session[req.body.projectId].pathway_down_tmp.search_NUMBER_USER_GENES ==
           search_keyword.search_NUMBER_USER_GENES &&
-        req.session[req.body.projectId].pathway_down_tmp.search_TOTAL_NUMBER_GENES ==
-          search_keyword.search_TOTAL_NUMBER_GENES
+        req.session[req.body.projectId].pathway_down_tmp.search_TOTAL_GENES_MINUS_INPUT ==
+          search_keyword.search_TOTAL_GENES_MINUS_INPUT
       ) {
         // return index
         let output = {
@@ -827,7 +816,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
           records: req.session[req.body.projectId].pathway_down_tmp.data.slice(
             page_size * (page_number - 1),
             page_size * (page_number - 1) + page_size
-          )
+          ),
         };
         return output;
       }
@@ -839,19 +828,18 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
       !(
         search_keyword.search_PATHWAY_ID == '' &&
         search_keyword.search_SOURCE == '' &&
-        search_keyword.search_TYPE == '' &&
         search_keyword.search_DESCRIPTION == '' &&
         search_keyword.search_p_value == '' &&
         search_keyword.search_fdr == '' &&
         search_keyword.search_RATIO == '' &&
         search_keyword.search_NUMBER_HITS == '' &&
+        search_keyword.search_NUMBER_MISSES == '' &&
         search_keyword.search_GENE_LIST == '' &&
-        search_keyword.search_NUMBER_GENES_PATHWAY == '' &&
         search_keyword.search_NUMBER_USER_GENES == '' &&
-        search_keyword.search_TOTAL_NUMBER_GENES == ''
+        search_keyword.search_TOTAL_GENES_MINUS_INPUT == ''
       )
     ) {
-      result = result.filter(function(r) {
+      result = result.filter(function (r) {
         var flag = false;
         if (search_keyword.search_PATHWAY_ID != '') {
           if (
@@ -874,13 +862,6 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             r.Description.toLowerCase().indexOf(search_keyword.search_DESCRIPTION.toLowerCase()) !=
             -1
           ) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        if (search_keyword.search_TYPE != '') {
-          if (r.Type.toLowerCase().indexOf(search_keyword.search_TYPE.toLowerCase()) != -1) {
             flag = true;
           } else {
             return false;
@@ -914,19 +895,16 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             return false;
           }
         }
-        if (search_keyword.search_GENE_LIST != '') {
-          if (
-            r.Gene_List.toLowerCase().indexOf(search_keyword.search_GENE_LIST.toLowerCase()) != -1
-          ) {
+        if (search_keyword.search_NUMBER_MISSES != '') {
+          if (parseFloat(r['Number_Misses']) <= parseFloat(search_keyword.search_NUMBER_MISSES)) {
             flag = true;
           } else {
             return false;
           }
         }
-        if (search_keyword.search_NUMBER_GENES_PATHWAY != '') {
+        if (search_keyword.search_GENE_LIST != '') {
           if (
-            parseFloat(r['Number_Genes_Pathway']) <=
-            parseFloat(search_keyword.search_NUMBER_GENES_PATHWAY)
+            r.Gene_List.toLowerCase().indexOf(search_keyword.search_GENE_LIST.toLowerCase()) != -1
           ) {
             flag = true;
           } else {
@@ -943,10 +921,10 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
             return false;
           }
         }
-        if (search_keyword.search_TOTAL_NUMBER_GENES != '') {
+        if (search_keyword.search_TOTAL_GENES_MINUS_INPUT != '') {
           if (
-            parseFloat(r['Total_Number_Genes']) <=
-            parseFloat(search_keyword.search_TOTAL_NUMBER_GENES)
+            parseFloat(r['Total_Genes_Minus_Input']) <=
+            parseFloat(search_keyword.search_TOTAL_GENES_MINUS_INPUT)
           ) {
             flag = true;
           } else {
@@ -960,12 +938,12 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
   // sorting
   if (sorting != null) {
     if (sorting.order == 'descend') {
-      result.sort(function(e1, e2) {
+      result.sort(function (e1, e2) {
         return e1[sorting.name] < e2[sorting.name] ? 1 : -1;
       });
     }
     if (sorting.order == 'ascend') {
-      result.sort(function(e1, e2) {
+      result.sort(function (e1, e2) {
         return e1[sorting.name] < e2[sorting.name] ? -1 : 1;
       });
     }
@@ -977,17 +955,16 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
       sorting_name: sorting.name,
       search_PATHWAY_ID: search_keyword.search_PATHWAY_ID,
       search_SOURCE: search_keyword.search_SOURCE,
-      search_TYPE: search_keyword.search_TYPE,
       search_DESCRIPTION: search_keyword.search_DESCRIPTION,
       search_p_value: search_keyword.search_p_value,
       search_fdr: search_keyword.search_fdr,
       search_RATIO: search_keyword.search_RATIO,
       search_NUMBER_HITS: search_keyword.search_NUMBER_HITS,
+      search_NUMBER_MISSES: search_keyword.search_NUMBER_MISSES,
       search_GENE_LIST: search_keyword.search_GENE_LIST,
-      search_NUMBER_GENES_PATHWAY: search_keyword.search_NUMBER_GENES_PATHWAY,
       search_NUMBER_USER_GENES: search_keyword.search_NUMBER_USER_GENES,
-      search_TOTAL_NUMBER_GENES: search_keyword.search_TOTAL_NUMBER_GENES,
-      data: result
+      search_TOTAL_GENES_MINUS_INPUT: search_keyword.search_TOTAL_GENES_MINUS_INPUT,
+      data: result,
     };
   }
   if (type == 'pathways_down') {
@@ -997,22 +974,21 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
       sorting_name: sorting.name,
       search_PATHWAY_ID: search_keyword.search_PATHWAY_ID,
       search_SOURCE: search_keyword.search_SOURCE,
-      search_TYPE: search_keyword.search_TYPE,
       search_DESCRIPTION: search_keyword.search_DESCRIPTION,
       search_p_value: search_keyword.search_p_value,
       search_fdr: search_keyword.search_fdr,
       search_RATIO: search_keyword.search_RATIO,
       search_NUMBER_HITS: search_keyword.search_NUMBER_HITS,
+      search_NUMBER_MISSES: search_keyword.search_NUMBER_MISSES,
       search_GENE_LIST: search_keyword.search_GENE_LIST,
-      search_NUMBER_GENES_PATHWAY: search_keyword.search_NUMBER_GENES_PATHWAY,
       search_NUMBER_USER_GENES: search_keyword.search_NUMBER_USER_GENES,
-      search_TOTAL_NUMBER_GENES: search_keyword.search_TOTAL_NUMBER_GENES,
-      data: result
+      search_TOTAL_GENES_MINUS_INPUT: search_keyword.search_TOTAL_GENES_MINUS_INPUT,
+      data: result,
     };
   }
   let output = {
     totalCount: result.length,
-    records: result.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size)
+    records: result.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
   };
   return output;
 }
@@ -1022,12 +998,12 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
   // sorting
   if (sorting != null) {
     if (sorting.order == 'descend') {
-      result.sort(function(e1, e2) {
+      result.sort(function (e1, e2) {
         return e1[sorting.name] < e2[sorting.name] ? 1 : -1;
       });
     }
     if (sorting.order == 'ascend') {
-      result.sort(function(e1, e2) {
+      result.sort(function (e1, e2) {
         return e1[sorting.name] < e2[sorting.name] ? -1 : 1;
       });
     }
@@ -1045,7 +1021,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
         search_keyword.search_logFC == ''
       )
     ) {
-      result = result.filter(function(r) {
+      result = result.filter(function (r) {
         var flag = false;
         if (search_keyword.name != '') {
           if (r['V1'].toLowerCase().indexOf(search_keyword.name.toLowerCase()) != -1) {
@@ -1104,7 +1080,7 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
   // return index
   let output = {
     totalCount: result.length,
-    records: result.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size)
+    records: result.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
   };
   return output;
 }
@@ -1136,7 +1112,7 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
         records: req.session[req.body.projectId].deg_tmp.data.slice(
           page_size * (page_number - 1),
           page_size * (page_number - 1) + page_size
-        )
+        ),
       };
       return output;
     } else {
@@ -1146,12 +1122,12 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
   if (sorting != null) {
     logger.info('Sort Deg data ');
     if (sorting.order == 'descend') {
-      result.sort(function(e1, e2) {
+      result.sort(function (e1, e2) {
         return e1[sorting.name] < e2[sorting.name] ? 1 : -1;
       });
     }
     if (sorting.order == 'ascend') {
-      result.sort(function(e1, e2) {
+      result.sort(function (e1, e2) {
         return e1[sorting.name] < e2[sorting.name] ? -1 : 1;
       });
     }
@@ -1174,7 +1150,7 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
         search_keyword.search_t == ''
       )
     ) {
-      result = result.filter(function(r) {
+      result = result.filter(function (r) {
         var flag = false;
         if (search_keyword.search_accnum != '') {
           if (r.ACCNUM.toLowerCase().indexOf(search_keyword.search_accnum.toLowerCase()) != -1) {
@@ -1276,12 +1252,12 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
     search_probsetid: search_keyword.search_probsetid,
     search_t: search_keyword.search_t,
     search_b: search_keyword.search_b,
-    data: result
+    data: result,
   };
   // return index
   let output = {
     totalCount: result.length,
-    records: result.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size)
+    records: result.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
   };
   return output;
 }
@@ -1402,7 +1378,7 @@ function JsonToObject(returnValue) {
       returnValue.maplotAfter,
       returnValue.boxplotDataAN,
       returnValue.pcaData,
-      returnValue.heatmapAfterNorm
+      returnValue.heatmapAfterNorm,
     ];
     workflow.hisBefore = returnValue.hisBefore[0];
     workflow.hisAfter = returnValue.hisAfter[0];
