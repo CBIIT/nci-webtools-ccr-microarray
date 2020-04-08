@@ -1,3 +1,4 @@
+# R version 3.4.4
 library(devtools)
 
 install.packages(
@@ -9,6 +10,14 @@ install.packages(
 
 install.packages("rgl", repo="http://cran.r-project.org", configure.args="--disable-ftgl")
 install_version("mvtnorm", version = "1.0-8", repos = "http://cran.r-project.org")
+install_github("CCBR/MicroArrayPipeline/mpstr")
+
+# Use latest version from https://github.com/CCBR/l2p
+tryCatch({
+    install.packages("https://github.com/CCBR/l2p/raw/master/l2p_0.0-1.tar.gz", repos=NULL) 
+}, error = function(e) {
+    print('L2P install failed. Make sure URL is up-to-date')
+})
 
 BiocManager::install(
     c("Biobase", "GEOquery", "GSEABase", "GSVA", "annotate", "sva",
@@ -32,5 +41,3 @@ BiocManager::install(
     "pd.mogene.1.1.st.v1", "pd.mogene.2.0.st", "pd.mouse430.2", "pd.mouse430a.2",
     "pd.ht.hg.u133a", "hthgu133a.db", "pd.clariom.d.human", 
     "clariomdhumantranscriptcluster.db"))
-    
-install_github("CCBR/MicroArrayPipeline/mpstr")
