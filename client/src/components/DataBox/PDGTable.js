@@ -662,12 +662,12 @@ export default function PUGTable(props) {
                 <a
                   style={{
                     color:
-                      props.data.pathways_down.sorting.name == 'Number_Hits' &&
+                      props.data.pathways_down.sorting.name == 'Number_Misses' &&
                       props.data.pathways_down.sorting.order == 'ascend'
                         ? 'blue'
                         : '#ccc',
                   }}
-                  onClick={() => sorter('Number_Hits', 'ascend')}
+                  onClick={() => sorter('Number_Misses', 'ascend')}
                 >
                   <i className="fas fa-angle-up"></i>
                 </a>
@@ -676,12 +676,12 @@ export default function PUGTable(props) {
                 <a
                   style={{
                     color:
-                      props.data.pathways_down.sorting.name == 'Number_Hits' &&
+                      props.data.pathways_down.sorting.name == 'Number_Misses' &&
                       props.data.pathways_down.sorting.order == 'descend'
                         ? 'blue'
                         : '#ccc',
                   }}
-                  onClick={() => sorter('Number_Hits', 'descend')}
+                  onClick={() => sorter('Number_Misses', 'descend')}
                 >
                   <i className="fas fa-angle-down"></i>
                 </a>
@@ -690,9 +690,9 @@ export default function PUGTable(props) {
           </div>
         </div>
       ),
-      dataIndex: 'Number_Hits',
+      dataIndex: 'Number_Misses',
       width: '8%',
-      key: 'Number_Hits',
+      key: 'Number_Misses',
       sorter: false,
       render: (text, record, index) => {
         return (
