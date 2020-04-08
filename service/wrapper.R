@@ -141,7 +141,7 @@ process = function(){
           }
 
           cons <-c(paste0(cgroup1,"-",cgroup2))
-          #saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
+          saveRDS(celfiles, file = paste0(data_repo_path,"/celfiles.rds"))
 
           if(normal=="RMA"){
              norm_celfiles = RMA_QCnorm(raw=celfiles[,index],path=data_repo_path,contrast=cons,listBatches=listBatches)
@@ -219,7 +219,7 @@ process = function(){
           
           l2p_pathways = l2pPathways(diff_expr_genes,species2,data_repo_path,projectId,config_path)
 
-          #saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
+          saveRDS(l2p_pathways, file = paste0(data_repo_path,"/l2p_pathways.rds"))
 
           # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
           # # # Output should dynamically respond to user-selected contrast
