@@ -13,6 +13,24 @@ body {
   color: rgb(33, 90, 130) !important;
 }
 
+ol {
+  counter-reset: list;
+}
+ol > li {
+  list-style: none;
+  position: relative;
+}
+ol > li:before {
+  counter-increment: list;
+  content: counter(list) ') ';
+  position: absolute;
+  left: -1.4em;
+}
+
+video {
+  margin-bottom: 1em;
+}
+
 a {
   text-decoration: none;
 }
