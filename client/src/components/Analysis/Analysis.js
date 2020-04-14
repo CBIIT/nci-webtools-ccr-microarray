@@ -2201,11 +2201,17 @@ class Analysis extends Component {
       'ant-btn upload-start ant-btn-primary';
     workflow.uploading = false;
     workflow.progressing = false;
-    document.getElementById('message-gsm').innerHTML = data
-      .replace('\\n', ' ')
-      .replace(/"/g, '')
-      .replace('[1] +++loadGSE+++', ' ')
-      .replace('files Please', 'files. Please');
+    const linkify = (data) => {
+      let splitData = data.split(' ');
+      const style = 'color:#b22222;text-decoration:underline;';
+      splitData.forEach((link, i) => {
+        if (link.includes('https')) {
+          splitData[i] = `<a href=${link} style=${style}>${link}</a>`;
+        }
+      });
+      return splitData.join(' ');
+    };
+    document.getElementById('message-gsm').innerHTML = linkify(data);
     document.getElementById('message-gsm').nextSibling.innerHTML = '';
     this.setState({
       workflow: workflow,
