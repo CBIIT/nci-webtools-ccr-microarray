@@ -1383,7 +1383,7 @@ class Analysis extends Component {
               let group_data = {};
 
               let index = 0;
-              [workflow2.group_1, workflow2.group_2].map((group) => {
+              [workflow2.group_1, workflow2.group_2].forEach((group) => {
                 pcaData.group_name.forEach(function (element, i) {
                   if (element.split(',').indexOf(group) > -1) {
                     if (element in group_data) {
@@ -1765,19 +1765,24 @@ class Analysis extends Component {
 
     let legend_settings = workflow.groups.reduce(reducer, []);
 
-    this.index(workflow.groups).forEach((real, index) => {
-      let cMarker = '';
+    let names = [];
+    let colors = [];
+    [workflow.group_1, workflow.group_2].forEach((group) => {
+      workflow.groups.forEach((name, i) => {
+        if (name === group) {
+          names.push(BoxplotsData.col[i]);
+          colors.push(BoxplotsData.color[i]);
+        }
+      });
+    });
 
-      cMarker = {
-        color: BoxplotsData.color[real - 1],
-      };
-
+    BoxplotsData.data.forEach((data, i) => {
       let boxplotData = {
-        y: BoxplotsData.data[index],
+        y: data,
         type: 'box',
-        name: BoxplotsData.col[real - 1],
-        marker: cMarker,
-        hovertext: BoxplotsData.col[real - 1],
+        name: names[i],
+        marker: { color: colors[i] },
+        hovertext: names[i],
       };
 
       BoxplotRenderData.push(boxplotData);
@@ -2308,7 +2313,7 @@ class Analysis extends Component {
                   workflow.dataListChip = workflow.dataList[chips[0]];
                   workflow.multichip = true;
                   workflow.groups = {};
-                  chips.map(
+                  chips.forEach(
                     (key) =>
                       (workflow.groups.key = new Array(workflow.dataList[key].length).fill(
                         'Others'
@@ -2411,7 +2416,7 @@ class Analysis extends Component {
   index = (groups) => {
     let index = [];
     for (let i in groups) {
-      if (groups[i] != 'Others') {
+      if (groups[i] === this.state.workflow.group_1 || groups[i] === this.state.workflow.group_2) {
         index.push(++i);
       }
     }
