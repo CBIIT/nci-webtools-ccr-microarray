@@ -110,10 +110,12 @@ export default function Help() {
           effects will be corrected for differential gene expression analysis by incorporating
           batches into the linear model. For plots based on normalized gene expression and before
           ssGSEA analysis, normalized gene expression is corrected for batch effects with the ComBat
-          function from the sva package (Leek, Johnson, Parker, Jaffe, & Storey, 2012).
+          function from the sva package (Leek, Johnson, Parker, Jaffe, & Storey, 2012). For an
+          example showing how to identify batch effects in an experiment, find the section below
+          titled <a href="#qualityControl"><b>Sample Quality Control.</b></a>
         </p>
 
-        <h4>Manually Add Groups and Batches:</h4>
+        <h4 id="manualGroups">Manually Add Groups and Batches:</h4>
         <video preload="metadata" controls>
           <source src="./assets/img/manualGroup.mp4" type="video/mp4" />
           <p>Sorry, your browser doesn't support embedded videos.</p>
@@ -218,18 +220,43 @@ export default function Help() {
           </a>
         </p>
 
-        <h3>Sample Quality Control</h3>
+        <h3 id="qualityControl">Sample Quality Control</h3>
         <p>
           Two plots, the sample similarity heatmap and 3D PCA, provide information about the quality
-          of replicates in the groups. In general, samples in the same group should cluster
-          together, and groups of samples should cluster separately from other groups.{' '}
+          of replicates in the groups.{' '}
         </p>
         <h4>3D PCA:</h4>
+        <p>
+          In general, samples in the same group should cluster together, and groups of samples
+          should cluster separately from other groups. If batch effects are present, re-run the
+          analysis and assign samples to respective batches for correction. For example, the dataset
+          below has batch effects. The first principal component, PC1, separates replicates 1 and 2
+          (rep1 and rep2) from replicates 3 and 4 (rep3 and rep4):
+        </p>
 
         <video preload="metadata" controls>
           <source src="./assets/img/pca.mp4" type="video/mp4" />
           Sorry, your browser doesn't support embedded videos.
         </video>
+
+        <p>
+          Assign samples to batches and re-run MAAPster to correct for the batch effects, resulting
+          in the PCA plot below. PC1 now separates group t3660 from group b62360:
+        </p>
+
+        <video preload="metadata" controls>
+          <source src="./assets/img/pcaCorrected.mp4" type="video/mp4" />
+          Sorry, your browser doesn't support embedded videos.
+        </video>
+
+        <p>
+          Find the section{' '}
+          <a href="#manualGroups">
+            <b>Analysis/Manually Add Groups and Batches</b>
+          </a>{' '}
+          to see how to assign samples to batches, and for details regarding how batch correction is
+          implemented.
+        </p>
 
         <h4>Sample Similarity Heatmap:</h4>
 
