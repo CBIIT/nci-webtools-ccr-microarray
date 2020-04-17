@@ -73,6 +73,8 @@ process = function(){
 
             celfiles = 'The GEO FTP server is currently unavailable. Please try again at a later time.'
             if (ftpServerUp()) {
+              # change library path to work around write permissions for temporary install of affy chips
+              .libPaths(getwd())
               celfiles = processGEOfiles(projectId=projectId,id=access_code,listGroups=listGroups,listBatches=listBatches,workspace=data_repo_path, chip=chip)  
               # remove downloaded tar file
               fn<-paste0(data_repo_path,"/",access_code,"/",access_code, '_RAW.tar',sep="")
