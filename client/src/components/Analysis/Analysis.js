@@ -33,7 +33,7 @@ const defaultState = {
     tab_activeKey: 'GSM_1',
     numberOfTasksInQueue: 0,
     QueueModalvisible: false,
-    useQueue: false,
+    useQueue: true,
     token: '',
     projectID: '',
     analysisType: '0',
