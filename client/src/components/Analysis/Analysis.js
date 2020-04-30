@@ -1712,66 +1712,35 @@ class Analysis extends Component {
   generateBOXPLOT(result, workflow) {
     let BoxplotRenderData = [];
     let BoxplotsData = result.data;
-    //get max Y value
-    let maxY = Math.max(...BoxplotsData.data[0]);
-    let minY = Math.min(...BoxplotsData.data[0]);
-    let gap = maxY - minY;
-    // get max x value
-    let maxX = workflow.groups.length + 0.1 * workflow.groups.length;
-    // x,y value use to positiion the legend.
 
-    // get group with max word length
-    let color_for_others = '#000';
-    const reducer2 = (accumulator, v, i, array) => {
-      if (accumulator.length <= v.length) {
-        accumulator = v;
-      }
-      return accumulator;
-    };
-    let max_text_length = workflow.groups.reduce(reducer2, 'a'); // max text length
-
-    // use max text length to calculate the max text width.
-    let text_max_width = max_text_length.length * 15;
-
-    let flag_other = false; // this flag uses for check if annotation has Others or not
-
-    // pick trace show legend. Only one trace in a group of trace need to show legend.
-    const reducer = (accumulator, v, i, array) => {
-      let cMarker = '';
-      let v2 = '';
+    // Create an empty trace with the contrast group name to use for legend
+    let legend = workflow.groups.reduce((acc, v, i, array) => {
       if (v == workflow.group_2 || v == workflow.group_1) {
-        cMarker = BoxplotsData.color[i];
         if (array.indexOf(v) === i) {
-          accumulator.push({
-            x: maxX,
-            y: maxY - (accumulator.length * gap) / 10,
-            xref: 'x',
-            yref: 'y',
-            text:
-              '<span style="text-align:right"><span style="color:' +
-              cMarker +
-              '">O</span>   ' +
-              v +
-              '</span>',
-            showarrow: false,
-            width: text_max_width,
-            align: 'left',
+          acc.push({
+            y: [null],
+            type: 'box',
+            name: v,
+            marker: { color: BoxplotsData.color[i] },
+            showlegend: true,
+            legendgroup: v,
           });
         }
       }
+      return acc;
+    }, []);
 
-      return accumulator;
-    };
-
-    let legend_settings = workflow.groups.reduce(reducer, []);
+    BoxplotRenderData.push(...legend);
 
     let names = [];
     let colors = [];
+    let legendgroup = [];
     [workflow.group_1, workflow.group_2].forEach((group) => {
       workflow.groups.forEach((name, i) => {
         if (name === group) {
           names.push(BoxplotsData.col[i]);
           colors.push(BoxplotsData.color[i]);
+          legendgroup.push(name);
         }
       });
     });
@@ -1783,20 +1752,26 @@ class Analysis extends Component {
         name: names[i],
         marker: { color: colors[i] },
         hovertext: names[i],
+        showlegend: false,
+        legendgroup: legendgroup[i],
       };
 
       BoxplotRenderData.push(boxplotData);
     });
 
-    // use annotations to show legend
     let plot_layout = {
-      showlegend: false,
-      annotations: legend_settings,
       yaxis: {
         title: BoxplotsData.ylable[0],
         zeroline: false,
       },
+      legend: {
+        x: 1,
+        y: 1,
+        yanchor: 'top',
+        xanchor: 'center',
+      },
     };
+
     let plot_style = {
       width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
     };
@@ -1805,7 +1780,6 @@ class Analysis extends Component {
       data: BoxplotRenderData,
       plot: (
         <div>
-          {' '}
           <Plot
             data={BoxplotRenderData}
             layout={plot_layout}
