@@ -12,7 +12,7 @@ export default function DEGTable(props) {
       page_size: parseInt(e.key),
       page_number: 1,
       sorting: props.data.diff_expr_genes.sorting,
-      search_keyword: props.data.diff_expr_genes.search_keyword
+      search_keyword: props.data.diff_expr_genes.search_keyword,
     });
   }
 
@@ -36,9 +36,9 @@ export default function DEGTable(props) {
       page_number: props.data.diff_expr_genes.pagination.current,
       sorting: {
         name: field,
-        order: order
+        order: order,
       },
-      search_keyword: props.data.diff_expr_genes.search_keyword
+      search_keyword: props.data.diff_expr_genes.search_keyword,
     });
   }
 
@@ -51,7 +51,7 @@ export default function DEGTable(props) {
             <span style={{ display: 'none' }}>input_deg_search_symbol</span>
             <Input
               aria-label="input_deg_search_symbol"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_symbol == ''
                   ? 'SYMBOL'
@@ -70,7 +70,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'SYMBOL' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('SYMBOL', 'ascend')}
                 >
@@ -84,7 +84,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'SYMBOL' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('SYMBOL', 'descend')}
                 >
@@ -107,15 +107,15 @@ export default function DEGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
-                  : minWidth
+                  : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -124,7 +124,7 @@ export default function DEGTable(props) {
             <span style={{ display: 'none' }}>input_deg_search_fc</span>
             <Input
               aria-label="input_deg_search_fc"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_fc == ''
                   ? 'FC'
@@ -143,7 +143,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'FC' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('FC', 'ascend')}
                 >
@@ -157,7 +157,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'FC' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('FC', 'descend')}
                 >
@@ -180,24 +180,24 @@ export default function DEGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.06 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
-                  : minWidth
+                  : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="right" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {Number.parseFloat(text).toFixed(3)}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ text: 'center' }}>
           <label htmlFor="input_dge_search_p_value">
             <span style={{ display: 'none' }}>input_dge_search_p_value</span>
             <Input
               aria-label="input_dge_search_p_value"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_p_value == ''
                   ? 'P.Value'
@@ -216,7 +216,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'P.Value' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('P.Value', 'ascend')}
                 >
@@ -230,7 +230,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'P.Value' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('P.Value', 'descend')}
                 >
@@ -254,15 +254,15 @@ export default function DEGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
-                  : minWidth
+                  : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {Number.parseFloat(text).toExponential(exponentialNum)}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -271,7 +271,7 @@ export default function DEGTable(props) {
             <span style={{ display: 'none' }}>input_deg_search_adj_p_value</span>
             <Input
               aria-label="input_deg_search_adj_p_value"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_adj_p_value == ''
                   ? 'adj.P.Val'
@@ -290,7 +290,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'adj.P.Val' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('adj.P.Val', 'ascend')}
                 >
@@ -304,7 +304,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'adj.P.Val' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('adj.P.Val', 'descend')}
                 >
@@ -327,15 +327,15 @@ export default function DEGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
-                  : minWidth
+                  : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {Number.parseFloat(text).toExponential(exponentialNum)}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -344,7 +344,7 @@ export default function DEGTable(props) {
             <span style={{ display: 'none' }}>input_deg_search_aveexpr</span>
             <Input
               aria-label="input_deg_search_aveexpr"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_aveexpr == ''
                   ? 'AveExpr'
@@ -363,7 +363,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'AveExpr' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('AveExpr', 'ascend')}
                 >
@@ -377,7 +377,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'AveExpr' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('AveExpr', 'descend')}
                 >
@@ -400,15 +400,15 @@ export default function DEGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08
-                  : minWidth
+                  : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -417,7 +417,7 @@ export default function DEGTable(props) {
             <span style={{ display: 'none' }}>input_deg_search_accnum</span>
             <Input
               aria-label="input_deg_search_accnum"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_accnum == ''
                   ? 'ACCNUM'
@@ -436,7 +436,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'ACCNUM' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('ACCNUM', 'ascend')}
                 >
@@ -450,7 +450,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'ACCNUM' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('ACCNUM', 'descend')}
                 >
@@ -473,15 +473,15 @@ export default function DEGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.09 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.12
-                  : minWidth + 50
+                  : minWidth + 50,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -490,7 +490,7 @@ export default function DEGTable(props) {
             <span style={{ display: 'none' }}>input_deg_search_desc</span>
             <Input
               aria-label="input_deg_search_desc"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_desc == ''
                   ? 'DESC'
@@ -509,7 +509,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'DESC' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('DESC', 'ascend')}
                 >
@@ -523,7 +523,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'DESC' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('DESC', 'descend')}
                 >
@@ -546,15 +546,15 @@ export default function DEGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.15 >
                 150
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.15
-                  : 150
+                  : 150,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -563,7 +563,7 @@ export default function DEGTable(props) {
             <span style={{ display: 'none' }}>input_deg_search_entrez</span>
             <Input
               aria-label="input_deg_search_entrez"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_entrez == ''
                   ? 'ENTREZ'
@@ -582,7 +582,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'ENTREZ' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('ENTREZ', 'ascend')}
                 >
@@ -596,7 +596,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'ENTREZ' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('ENTREZ', 'descend')}
                 >
@@ -622,7 +622,7 @@ export default function DEGTable(props) {
                   minWidth
                     ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth *
                       0.11
-                    : minWidth
+                    : minWidth,
               }}
             >
               <span data-toggle="tooltip" data-placement="left" title={text}>
@@ -643,16 +643,16 @@ export default function DEGTable(props) {
                   minWidth
                     ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth *
                       0.11
-                    : minWidth
+                    : minWidth,
               }}
             >
-              <span data-toggle="tooltip" data-placement="left" title={text}>
+              <Tooltip placement="bottomLeft" title={text}>
                 {text}
-              </span>
+              </Tooltip>
             </div>
           );
         }
-      }
+      },
     },
     {
       title: (
@@ -661,7 +661,7 @@ export default function DEGTable(props) {
             <span style={{ display: 'none' }}>input_deg_search_probsetid</span>
             <Input
               aria-label="input_deg_search_probsetid"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_probsetid == ''
                   ? 'probsetID'
@@ -680,7 +680,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'probsetID' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('probsetID', 'ascend')}
                 >
@@ -694,7 +694,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'probsetID' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('probsetID', 'descend')}
                 >
@@ -717,15 +717,15 @@ export default function DEGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08
-                  : minWidth
+                  : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -734,7 +734,7 @@ export default function DEGTable(props) {
             <span style={{ display: 'none' }}>input_deg_search_t</span>
             <Input
               aria-label="input_deg_search_t"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_t == ''
                   ? 't'
@@ -753,7 +753,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 't' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('t', 'ascend')}
                 >
@@ -767,7 +767,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 't' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('t', 'descend')}
                 >
@@ -790,15 +790,15 @@ export default function DEGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.05 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.05
-                  : minWidth
+                  : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {Number.parseFloat(text)}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -807,7 +807,7 @@ export default function DEGTable(props) {
             <span style={{ display: 'none' }}>input_deg_search_b</span>
             <Input
               aria-label="input_deg_search_b"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.diff_expr_genes.search_keyword.search_b == ''
                   ? 'b'
@@ -826,7 +826,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'b' &&
                       props.data.diff_expr_genes.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('b', 'ascend')}
                 >
@@ -840,7 +840,7 @@ export default function DEGTable(props) {
                       props.data.diff_expr_genes.sorting.name == 'b' &&
                       props.data.diff_expr_genes.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('b', 'descend')}
                 >
@@ -863,19 +863,19 @@ export default function DEGTable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.05 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.05
-                  : minWidth
+                  : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
-    }
+      },
+    },
   ];
 
-  const search = e => {
+  const search = (e) => {
     var search_symbol = document.getElementById('input_deg_search_symbol').value;
     var search_fc = document.getElementById('input_deg_search_fc').value;
     var search_p_value = document.getElementById('input_dge_search_p_value').value;
@@ -893,7 +893,7 @@ export default function DEGTable(props) {
       page_number: 1,
       sorting: {
         name: 'P.Value',
-        order: 'ascend'
+        order: 'ascend',
       },
       search_keyword: {
         search_symbol: search_symbol,
@@ -906,8 +906,8 @@ export default function DEGTable(props) {
         search_entrez: search_entrez,
         search_probsetid: search_probsetid,
         search_t: Number(search_t),
-        search_b: Number(search_b)
-      }
+        search_b: Number(search_b),
+      },
     });
   };
 
@@ -969,7 +969,7 @@ export default function DEGTable(props) {
                 page_size: pageSize,
                 page_number: page,
                 sorting: props.data.diff_expr_genes.sorting,
-                search_keyword: props.data.diff_expr_genes.search_keyword
+                search_keyword: props.data.diff_expr_genes.search_keyword,
               })
             }
           />

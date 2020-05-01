@@ -263,9 +263,9 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
       },
@@ -336,9 +336,9 @@ export default function PUGTable(props) {
                 : minWidth,
           }}
         >
-          <span data-toggle="tooltip" data-placement="left" title={text}>
+          <Tooltip placement="bottomLeft" title={text}>
             {text}
-          </span>
+          </Tooltip>
         </div>
       ),
     },
@@ -410,9 +410,11 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
-              {Number.parseFloat(text).toExponential(exponentialNum)}
-            </span>
+            <Tooltip placement="bottomLeft" title={text}>
+              {Number.parseFloat(text) != 0
+                ? Number.parseFloat(text).toExponential(exponentialNum)
+                : Number.parseFloat(text)}{' '}
+            </Tooltip>
           </div>
         );
       },
@@ -484,9 +486,11 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
-              {Number.parseFloat(text).toExponential(exponentialNum)}
-            </span>
+            <Tooltip placement="bottomLeft" title={text}>
+              {Number.parseFloat(text) != 0
+                ? Number.parseFloat(text).toExponential(exponentialNum)
+                : Number.parseFloat(text)}{' '}
+            </Tooltip>
           </div>
         );
       },
@@ -558,9 +562,9 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
       },
@@ -632,9 +636,9 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
       },
@@ -706,9 +710,9 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
       },
@@ -780,9 +784,9 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
       },
@@ -856,9 +860,9 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip placement="bottomLeft" title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
       },
@@ -929,9 +933,9 @@ export default function PUGTable(props) {
                 : minWidth,
           }}
         >
-          <span data-toggle="tooltip" data-placement="left" title={text}>
+          <Tooltip placement="bottomLeft" title={text}>
             {text}
-          </span>
+          </Tooltip>
         </div>
       ),
     },
