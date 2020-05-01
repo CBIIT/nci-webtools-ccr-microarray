@@ -4,7 +4,6 @@ import {
   Dropdown,
   Icon,
   Table,
-  Select,
   Input,
   message,
   Modal,
@@ -194,6 +193,7 @@ export default function PUGTable(props) {
               title={text}
             >
               <a style={{ color: 'rgb(0, 0, 255)' }} onClick={() => showHeatMap({ index })}>
+                <Icon type="area-chart" />{' '}
                 {text}
               </a>
             </span>
