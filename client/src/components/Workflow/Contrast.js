@@ -68,12 +68,12 @@ export default function Contrast(props) {
   let tmp_options = [];
   // find the unique value in grups
   function findUnique(data) {
-    data.filter(gsm => {
+    data.filter((gsm) => {
       if (tmp_options.indexOf(gsm['groups']) == -1 && gsm['groups'] != '') {
         // multi-group
         if (gsm['groups'] && gsm['groups'].indexOf(',') != -1) {
           let groups = gsm['groups'].split(',');
-          groups.forEach(function(group) {
+          groups.forEach(function (group) {
             if (tmp_options.indexOf(group) == -1 && group != '') {
               let d1 = (
                 <Option key={group} value={group}>
@@ -107,13 +107,12 @@ export default function Contrast(props) {
 
   let queueBlock = (
     <div className="block ">
-      <div id="checkbox_queue">
-        {' '}
+      <div id="checkbox_queue" style={{ display: 'none' }}>
         <Checkbox checked={props.data.useQueue} onChange={handleSwitchChange}>
           Submit this job to a Queue
         </Checkbox>
       </div>
-      <div className="queueMessage" style={{ paddingLeft: '23px' }}>
+      <div className="queueMessage">
         (Jobs currently enqueued: {props.data.numberOfTasksInQueue})
       </div>
       <label className="title">
