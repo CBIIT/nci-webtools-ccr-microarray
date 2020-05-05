@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Menu, Dropdown, Button, Icon, Table, Select, Input, Pagination } from 'antd';
+import { Tooltip } from '../Tooltip/Tooltip';
 import ReactSVG from 'react-svg';
 
 const Search = Input.Search;
@@ -292,9 +293,9 @@ class GSMData extends Component {
                     : minWidth
               }}
             >
-              <span data-toggle="tooltip" data-placement="left" title={text}>
+              <Tooltip title={text}>
                 {text}
-              </span>
+              </Tooltip>
             </div>
           )
         },
@@ -315,9 +316,9 @@ class GSMData extends Component {
                     : minWidth
               }}
             >
-              <span data-toggle="tooltip" data-placement="left" title={text}>
+              <Tooltip title={text}>
                 {text}
-              </span>
+              </Tooltip>
             </div>
           )
         },
@@ -338,9 +339,9 @@ class GSMData extends Component {
                     : minWidth
               }}
             >
-              <span data-toggle="tooltip" data-placement="left" title={text}>
+              <Tooltip title={text}>
                 {text}
-              </span>
+              </Tooltip>
             </div>
           )
         },
@@ -361,9 +362,9 @@ class GSMData extends Component {
                     : minWidth
               }}
             >
-              <span data-toggle="tooltip" data-placement="left" title={text}>
+              <Tooltip title={text}>
                 {text}
-              </span>
+              </Tooltip>
             </div>
           )
         },
@@ -384,9 +385,9 @@ class GSMData extends Component {
                     : minWidth
               }}
             >
-              <span data-toggle="tooltip" data-placement="left" title={text}>
+              <Tooltip title={text}>
                 {text != 'Others' ? text : ''}
-              </span>
+              </Tooltip>
             </div>
           )
         }

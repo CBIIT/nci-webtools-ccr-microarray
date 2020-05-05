@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Checkbox, Input, Button, Tooltip, Select } from 'antd';
+import { Checkbox, Input, Button, Select } from 'antd';
+import { Tooltip } from '../Tooltip/Tooltip';
 const { Option } = Select;
 
 export default function Contrast(props) {

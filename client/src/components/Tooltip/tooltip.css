@@ -1,0 +1,10 @@
+.ant-tooltip-inner {
+  background-color: white;
+  color: black;
+}
+
+.ant-tooltip-placement-bottom .ant-tooltip-arrow:before,
+.ant-tooltip-placement-bottomLeft .ant-tooltip-arrow:before,
+.ant-tooltip-placement-bottomRight .ant-tooltip-arrow:before {
+  background-color: white;
+}

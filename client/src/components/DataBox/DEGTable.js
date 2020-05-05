@@ -1,5 +1,6 @@
 import React from 'react';
-import { Menu, Dropdown, Button, Icon, Table, Select, Input, Tooltip, Pagination } from 'antd';
+import { Menu, Dropdown, Button, Icon, Table, Input, Pagination } from 'antd';
+import { Tooltip } from '../Tooltip/Tooltip';
 const Search = Input.Search;
 
 const minWidth = 110;
@@ -110,7 +111,7 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {text}
             </Tooltip>
           </div>
@@ -183,7 +184,7 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {Number.parseFloat(text).toFixed(3)}
             </Tooltip>
           </div>
@@ -257,7 +258,7 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {Number.parseFloat(text).toExponential(exponentialNum)}
             </Tooltip>
           </div>
@@ -330,7 +331,7 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {Number.parseFloat(text).toExponential(exponentialNum)}
             </Tooltip>
           </div>
@@ -403,7 +404,7 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {text}
             </Tooltip>
           </div>
@@ -476,7 +477,7 @@ export default function DEGTable(props) {
                   : minWidth + 50,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {text}
             </Tooltip>
           </div>
@@ -549,7 +550,7 @@ export default function DEGTable(props) {
                   : 150,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {text}
             </Tooltip>
           </div>
@@ -646,7 +647,7 @@ export default function DEGTable(props) {
                     : minWidth,
               }}
             >
-              <Tooltip placement="bottomLeft" title={text}>
+              <Tooltip title={text}>
                 {text}
               </Tooltip>
             </div>
@@ -720,7 +721,7 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {text}
             </Tooltip>
           </div>
@@ -793,7 +794,7 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {Number.parseFloat(text)}
             </Tooltip>
           </div>
@@ -866,7 +867,7 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {text}
             </Tooltip>
           </div>

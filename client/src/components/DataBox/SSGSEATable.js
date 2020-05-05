@@ -1,5 +1,6 @@
 import React from 'react';
-import { Menu, Dropdown, Button, Icon, Table, Input, Tooltip, Pagination } from 'antd';
+import { Menu, Dropdown, Button, Icon, Table, Input, Pagination } from 'antd';
+import { Tooltip } from '../Tooltip/Tooltip';
 const minWidth = 110;
 const exponentialNum = 3;
 
@@ -11,9 +12,9 @@ export default function SSGSEATable(props) {
       page_number: 1,
       sorting: {
         name: props.data.ssGSEA.sorting.name,
-        order: props.data.ssGSEA.sorting.order
+        order: props.data.ssGSEA.sorting.order,
       },
-      search_keyword: props.data.ssGSEA.search_keywordƒ
+      search_keyword: props.data.ssGSEA.search_keywordƒ,
     });
   }
 
@@ -41,9 +42,9 @@ export default function SSGSEATable(props) {
       page_number: props.data.ssGSEA.pagination.current,
       sorting: {
         name: field,
-        order: order
+        order: order,
       },
-      search_keyword: props.data.ssGSEA.search_keyword
+      search_keyword: props.data.ssGSEA.search_keyword,
     });
   }
 
@@ -57,7 +58,7 @@ export default function SSGSEATable(props) {
             <span style={{ display: 'none' }}>input_ssg_name</span>
             <Input
               aria-label="input_ssg_name"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.ssGSEA.search_keyword.name == ''
                   ? 'NAME'
@@ -77,7 +78,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'NAME' &&
                       props.data.ssGSEA.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('NAME', 'ascend')}
                 >
@@ -91,7 +92,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'NAME' &&
                       props.data.ssGSEA.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('NAME', 'descend')}
                 >
@@ -114,15 +115,15 @@ export default function SSGSEATable(props) {
                 document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.25 >
                 minWidth
                   ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.25
-                  : minWidth
+                  : minWidth,
             }}
           >
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -131,7 +132,7 @@ export default function SSGSEATable(props) {
             <span style={{ display: 'none' }}>input_ssg_search_logFC</span>
             <Input
               aria-label="input_ssg_search_logFC"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.ssGSEA.search_keyword.search_logFC == ''
                   ? 'logFC'
@@ -150,7 +151,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'logFC' &&
                       props.data.ssGSEA.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('logFC', 'ascend')}
                 >
@@ -164,7 +165,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'logFC' &&
                       props.data.ssGSEA.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('logFC', 'descend')}
                 >
@@ -181,12 +182,12 @@ export default function SSGSEATable(props) {
       render: (text, record, index) => {
         return (
           <div className="single-line">
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip title={text}>
               {Number.parseFloat(text).toFixed(3)}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -195,7 +196,7 @@ export default function SSGSEATable(props) {
             <span style={{ display: 'none' }}>input_ssg_search_p_value</span>
             <Input
               aria-label="input_ssg_search_p_value"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.ssGSEA.search_keyword.search_p_value == ''
                   ? 'P.Value'
@@ -214,7 +215,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'P.Value' &&
                       props.data.ssGSEA.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('P.Value', 'ascend')}
                 >
@@ -228,7 +229,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'P.Value' &&
                       props.data.ssGSEA.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('P.Value', 'descend')}
                 >
@@ -246,12 +247,12 @@ export default function SSGSEATable(props) {
       render: (text, record, index) => {
         return (
           <div className="single-line" style={{ minWidth: '130px' }}>
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip title={text}>
               {Number.parseFloat(text).toExponential(exponentialNum)}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -260,7 +261,7 @@ export default function SSGSEATable(props) {
             <span style={{ display: 'none' }}>input_ssg_search_adj_p_value</span>
             <Input
               aria-label="input_ssg_search_adj_p_value"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.ssGSEA.search_keyword.search_adj_p_value == ''
                   ? 'adj.P.Value'
@@ -279,7 +280,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'adj.P.Val' &&
                       props.data.ssGSEA.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('adj.P.Val', 'ascend')}
                 >
@@ -293,7 +294,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'adj.P.Val' &&
                       props.data.ssGSEA.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('adj.P.Val', 'descend')}
                 >
@@ -310,12 +311,12 @@ export default function SSGSEATable(props) {
       render: (text, record, index) => {
         return (
           <div className="single-line" style={{ minWidth: '130px' }}>
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip title={text}>
               {Number.parseFloat(text).toExponential(exponentialNum)}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -324,7 +325,7 @@ export default function SSGSEATable(props) {
             <span style={{ display: 'none' }}>input_ssg_search_Avg_Enrichment_Score</span>
             <Input
               aria-label="input_ssg_search_Avg_Enrichment_Score"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.ssGSEA.search_keyword.search_Avg_Enrichment_Score == ''
                   ? 'Avg.Enrichment.Score'
@@ -343,7 +344,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'Avg.Enrichment.Score' &&
                       props.data.ssGSEA.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Avg.Enrichment.Score', 'ascend')}
                 >
@@ -357,7 +358,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'Avg.Enrichment.Score' &&
                       props.data.ssGSEA.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('Avg.Enrichment.Score', 'descend')}
                 >
@@ -374,12 +375,12 @@ export default function SSGSEATable(props) {
       render: (text, record, index) => {
         return (
           <div className="single-line" style={{ minWidth: '130px' }}>
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -388,7 +389,7 @@ export default function SSGSEATable(props) {
             <span style={{ display: 'none' }}>input_ssg_search_t</span>
             <Input
               aria-label="input_ssg_search_t"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.ssGSEA.search_keyword.search_t == ''
                   ? 't'
@@ -407,7 +408,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 't' &&
                       props.data.ssGSEA.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('t', 'ascend')}
                 >
@@ -421,7 +422,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 't' &&
                       props.data.ssGSEA.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('t', 'descend')}
                 >
@@ -438,12 +439,12 @@ export default function SSGSEATable(props) {
       render: (text, record, index) => {
         return (
           <div className="single-line">
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip title={text}>
               {Number.parseFloat(text)}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
+      },
     },
     {
       title: (
@@ -452,7 +453,7 @@ export default function SSGSEATable(props) {
             <span style={{ display: 'none' }}>input_ssg_search_b</span>
             <Input
               aria-label="input_ssg_search_b"
-              onPressEnter={value => search(value)}
+              onPressEnter={(value) => search(value)}
               placeholder={
                 props.data.ssGSEA.search_keyword.search_b == ''
                   ? 'B'
@@ -471,7 +472,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'B' &&
                       props.data.ssGSEA.sorting.order == 'ascend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('B', 'ascend')}
                 >
@@ -485,7 +486,7 @@ export default function SSGSEATable(props) {
                       props.data.ssGSEA.sorting.name == 'B' &&
                       props.data.ssGSEA.sorting.order == 'descend'
                         ? 'blue'
-                        : '#ccc'
+                        : '#ccc',
                   }}
                   onClick={() => sorter('B', 'descend')}
                 >
@@ -502,13 +503,13 @@ export default function SSGSEATable(props) {
       render: (text, record, index) => {
         return (
           <div className="single-line">
-            <span data-toggle="tooltip" data-placement="left" title={text}>
+            <Tooltip title={text}>
               {text}
-            </span>
+            </Tooltip>
           </div>
         );
-      }
-    }
+      },
+    },
   ];
 
   function search(e) {
@@ -526,7 +527,7 @@ export default function SSGSEATable(props) {
       page_number: 1,
       sorting: {
         name: 'P.Value',
-        order: 'ascend'
+        order: 'ascend',
       },
       search_keyword: {
         name: search_name,
@@ -535,8 +536,8 @@ export default function SSGSEATable(props) {
         search_t: Number(search_t),
         search_p_value: Number(search_p_value),
         search_adj_p_value: Number(search_adj_p_value),
-        search_b: Number(search_b)
-      }
+        search_b: Number(search_b),
+      },
     });
   }
   const menu = (
@@ -559,7 +560,7 @@ export default function SSGSEATable(props) {
         value={props.data.geneSelect}
         id="ss_gene_set_select_option"
         className="ant-select-selection ant-select-selection--single"
-        onChange={e => props.handleGeneChange(e)}
+        onChange={(e) => props.handleGeneChange(e)}
         aria-label="Gene Set For ssGSEA"
       >
         <optgroup label="Human">
@@ -582,7 +583,7 @@ export default function SSGSEATable(props) {
           <option value="mouse$Location">Location</option>
         </optgroup>
       </select>
-    </div>
+    </div>,
   ];
   let tabs = [
     <div
@@ -628,7 +629,7 @@ export default function SSGSEATable(props) {
                 page_size: pageSize,
                 page_number: page,
                 sorting: props.data.ssGSEA.sorting,
-                search_keyword: props.data.ssGSEA.search_keyword
+                search_keyword: props.data.ssGSEA.search_keyword,
               })
             }
           />
@@ -654,7 +655,7 @@ export default function SSGSEATable(props) {
       <br />
       <br />
       {props.data.geneHeatmap}
-    </div>
+    </div>,
   ];
   content = [
     <div style={{ display: 'flex' }}>
@@ -681,7 +682,7 @@ export default function SSGSEATable(props) {
         </Button>
       </div>
     </div>,
-    tabs
+    tabs,
   ];
   return content;
 }

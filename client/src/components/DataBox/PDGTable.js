@@ -1,16 +1,6 @@
 import React, { useState } from 'react';
-import {
-  Menu,
-  Dropdown,
-  Icon,
-  Table,
-  Input,
-  message,
-  Modal,
-  Button,
-  Tooltip,
-  Pagination,
-} from 'antd';
+import { Menu, Dropdown, Icon, Table, Input, message, Modal, Button, Pagination } from 'antd';
+import { Tooltip } from '../Tooltip/Tooltip';
 const Search = Input.Search;
 const minWidth = 110;
 const exponentialNum = 3;
@@ -182,16 +172,11 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <span
-              style={{ color: 'rgb(0, 0, 255)' }}
-              data-toggle="tooltip"
-              data-placement="left"
-              title={text}
-            >
+            <Tooltip title={'Heatmap for ' + text}>
               <a style={{ color: 'rgb(0, 0, 255)' }} onClick={() => showHeatMap({ index })}>
                 <Icon type="area-chart" /> {text}
               </a>
-            </span>
+            </Tooltip>
           </div>
         );
       },
@@ -263,9 +248,7 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
@@ -336,9 +319,7 @@ export default function PUGTable(props) {
                 : minWidth,
           }}
         >
-          <Tooltip placement="bottomLeft" title={text}>
-            {text}
-          </Tooltip>
+          <Tooltip title={text}>{text}</Tooltip>
         </div>
       ),
     },
@@ -410,7 +391,7 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {Number.parseFloat(text) != 0
                 ? Number.parseFloat(text).toExponential(exponentialNum)
                 : Number.parseFloat(text)}{' '}
@@ -486,7 +467,7 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
+            <Tooltip title={text}>
               {Number.parseFloat(text) != 0
                 ? Number.parseFloat(text).toExponential(exponentialNum)
                 : Number.parseFloat(text)}{' '}
@@ -562,9 +543,7 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
@@ -636,9 +615,7 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
@@ -710,9 +687,7 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
@@ -784,9 +759,7 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
@@ -860,9 +833,7 @@ export default function PUGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip placement="bottomLeft" title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
@@ -933,9 +904,7 @@ export default function PUGTable(props) {
                 : minWidth,
           }}
         >
-          <Tooltip placement="bottomLeft" title={text}>
-            {text}
-          </Tooltip>
+          <Tooltip title={text}>{text}</Tooltip>
         </div>
       ),
     },
