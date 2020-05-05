@@ -441,6 +441,7 @@ export default function DataBox(props) {
   // define group modal
   modal = (
     <Modal
+      width={'100%'}
       key="group_define_modal"
       visible={groupVisible}
       className="custom_modal"
@@ -453,8 +454,8 @@ export default function DataBox(props) {
         </Button>,
       ]}
     >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <label>
+      <div className="row">
+        <label className="text-nowrap col-xs-12 col-sm-2">
           <input
             type="radio"
             aria-label="add group"
@@ -464,7 +465,7 @@ export default function DataBox(props) {
           ></input>{' '}
           Add Group
         </label>
-        <label>
+        <label className="text-nowrap col-xs-12 col-sm-2">
           <input
             type="radio"
             aria-label="add batch"
@@ -474,7 +475,7 @@ export default function DataBox(props) {
           ></input>{' '}
           Add Batch
         </label>
-        <label style={{ whiteSpace: 'nowrap' }}>
+        <label className="text-nowrap col-xs-12 col-sm-4">
           <input
             type="radio"
             aria-label="enable csv upload"
@@ -484,7 +485,7 @@ export default function DataBox(props) {
           ></input>{' '}
           Add Group/Batch from file
         </label>
-        <label style={{ marginLeft: '1rem', width: 'auto' }}>
+        <label className="col-xs-12 col-sm-4">
           <Upload {...uploadOptions()}>
             <Button type="default" disabled={modalOption != 'upload'}>
               <Icon type="upload" />
@@ -492,7 +493,7 @@ export default function DataBox(props) {
             </Button>
           </Upload>
         </label>
-        <label style={{ width: 'auto' }}>
+        <label className="col-xs-12 col-sm-3 col-sm-offset-8" style={{}}>
           <Button
             type="link"
             href="./assets/sample/GSMGroupsBatches-sample.csv"
@@ -503,7 +504,6 @@ export default function DataBox(props) {
           </Button>
         </label>
       </div>
-      <hr></hr>
       <div style={{ display: added || modalOption === 'upload' ? 'none' : 'block' }}>
         <p style={{ color: '#215a82' }}>
           <b>

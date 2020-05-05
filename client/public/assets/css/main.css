@@ -467,10 +467,6 @@ tr:nth-child(even) {
   background: transparent;
 }
 
-.custom_modal {
-  width: 80%;
-}
-
 .filter_col {
   float: left;
   padding-left: 5px;
@@ -1295,7 +1291,6 @@ div.head-sorter > div {
   }
 
   .custom_modal {
-    width: 60% !important;
     max-width: 800px !important;
     min-width: 500px !important;
   }

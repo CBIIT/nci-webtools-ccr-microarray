@@ -3209,6 +3209,7 @@ class Analysis extends Component {
     // define group modal
     let queueModal = (
       <Modal
+        width={'75%'}
         key="queue_modal"
         visible={this.state.workflow.QueueModalvisible}
         className="custom_modal"
