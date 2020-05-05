@@ -17,7 +17,7 @@ export default function DataBox(props) {
     groupMessage: '',
     selected: [],
     added: false,
-    dataList: props.data.multichip ? props.data.dataListChip : props.data.dataList
+    dataList: props.data.multichip ? props.data.dataListChip : props.data.dataList,
   });
   const [modalOption, setOption] = useState('group');
   const { groupVisible, groupName, groupMessage, selected, added, dataList } = state;
@@ -30,13 +30,13 @@ export default function DataBox(props) {
 
   useEffect(() => {
     mergeState({
-      dataList: props.data.multichip ? props.data.dataListChip : props.data.dataList
+      dataList: props.data.multichip ? props.data.dataListChip : props.data.dataList,
     });
   }, [props.data.dataList]);
 
   useEffect(() => {
     mergeState({
-      dataList: props.data.dataListChip
+      dataList: props.data.dataListChip,
     });
   }, [props.data.dataListChip]);
 
@@ -48,13 +48,13 @@ export default function DataBox(props) {
     if (e.file.status === 'done') {
       Papa.parse(e.file.originFileObj, {
         config: {
-          header: false
+          header: false,
         },
-        complete: results => {
+        complete: (results) => {
           let data = results.data;
           let assign = props.uploadGroup(data);
           assign === true ? mergeState({ added: false }) : message.error(assign);
-        }
+        },
       });
     } else if (e.file.status === 'error') {
       message.error(`${e.file.name} file upload failed.`);
@@ -195,20 +195,20 @@ export default function DataBox(props) {
     } else {
       if (selected.length > 0) {
         // if user select records in table
-        props.assignGroup(modalOption, name, selected, function(flag) {
+        props.assignGroup(modalOption, name, selected, function (flag) {
           if (flag) {
             mergeState({ added: true, groupMessage: '' });
           } else {
             let msg =
               'The group name only allows ASCII or numbers or underscore and it cannot start with numbers. Valid Group Name Example : RNA_1 ';
             mergeState({
-              groupMessage: msg
+              groupMessage: msg,
             });
           }
         });
       } else {
         mergeState({
-          groupMessage: 'Please select some gsm(s).'
+          groupMessage: 'Please select some gsm(s).',
         });
       }
     }
@@ -218,7 +218,7 @@ export default function DataBox(props) {
     var groupName = event.target.parentNode.parentNode.getElementsByTagName('td')[0].innerText;
     if (!groupName) {
       mergeState({
-        groupMessage: 'No group selected for deleting.'
+        groupMessage: 'No group selected for deleting.',
       });
     } else {
       props.deleteGroup(groupName.trim(), type);
@@ -236,7 +236,7 @@ export default function DataBox(props) {
       groupMessage: '',
       groupVisible: false,
       added: false,
-      selected: state.added === true ? [] : state.selected
+      selected: state.added === true ? [] : state.selected,
     });
     if (added) child.current.unselect();
   }
@@ -253,13 +253,13 @@ export default function DataBox(props) {
   const uploadOptions = () => {
     return {
       accept: '.csv',
-      onChange: e => handleCSV(e),
+      onChange: (e) => handleCSV(e),
       showUploadList: false,
       customRequest: ({ file, onSuccess }) => {
         setTimeout(() => {
           onSuccess('ok');
         }, 0);
-      }
+      },
     };
   };
 
@@ -371,7 +371,7 @@ export default function DataBox(props) {
   }
 
   // define group list in the modal
-  const columns = type => {
+  const columns = (type) => {
     return [
       { title: type === 'group' ? 'GROUP' : 'BATCH', dataIndex: 'name', key: 'name', width: '30%' },
       { title: 'GMS(s)', dataIndex: 'gsms', key: 'gsms' },
@@ -380,8 +380,8 @@ export default function DataBox(props) {
         dataIndex: 'name',
         key: 'key',
         width: 90,
-        render: e => <a onClick={e => deleteTag(e, type)}>Delete</a>
-      }
+        render: (e) => <a onClick={(e) => deleteTag(e, type)}>Delete</a>,
+      },
     ];
   };
 
@@ -450,7 +450,7 @@ export default function DataBox(props) {
       footer={[
         <Button key="back" type="primary" onClick={handleCancel}>
           Close
-        </Button>
+        </Button>,
       ]}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -512,7 +512,7 @@ export default function DataBox(props) {
         </p>
         <p
           style={{
-            display: selected_gsms == '' && groupVisible == true ? 'block' : 'none'
+            display: selected_gsms == '' && groupVisible == true ? 'block' : 'none',
           }}
           className="err-message"
           id="message-unselect-gsm-group"
@@ -550,7 +550,7 @@ export default function DataBox(props) {
               placeholder={'Name (Must start with an ASCII letter,a-z or A-Z)'}
               id={'input_groupName'}
               style={{ width: 'calc(100% - 68px)', color: 'black', fontSize: '16px' }}
-              onChange={e => groupOnChange(e)}
+              onChange={(e) => groupOnChange(e)}
             />
             &nbsp;
             <Button
