@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Menu, Dropdown, Icon, Table, Input, message, Modal, Button, Pagination } from 'antd';
 import { Tooltip } from '../Tooltip/Tooltip';
-const Search = Input.Search;
-const minWidth = 110;
+import { TableHeader } from '../TableHeader/TableHeader';
 
+const minWidth = 110;
 const exponentialNum = 3;
 
 export default function PUGTable(props) {
@@ -111,52 +111,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_pathways_id_head">
-          <label htmlFor="input_pathway_up_search_PATHWAY_ID">
-            <span style={{ display: 'none' }}>input_pathway_up_search_PATHWAY_ID</span>
-            <Input
-              aria-label="input_pathway_up_search_PATHWAY_ID"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_PATHWAY_ID == ''
-                  ? 'PATHWAY_ID'
-                  : props.data.pathways_up.search_keyword.search_PATHWAY_ID
-              }
-              id="input_pathway_up_search_PATHWAY_ID"
-            />
-          </label>
-          <div>
-            <div className="head-title"> PATHWAY_ID</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Pathway_ID' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Pathway_ID', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Pathway_ID' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Pathway_ID', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_PATHWAY_ID"
+            field="Pathway_ID"
+            settings={props.data.pathways_up}
+            searchKey="search_PATHWAY_ID"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'Pathway_ID',
@@ -188,52 +150,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_source_head">
-          <label htmlFor="input_pathway_up_search_SOURCE">
-            <span style={{ display: 'none' }}>input_pathway_up_search_SOURCE</span>
-            <Input
-              aria-label="input_pathway_up_search_SOURCE"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_SOURCE == ''
-                  ? 'SOURCE'
-                  : props.data.pathways_up.search_keyword.search_SOURCE
-              }
-              id="input_pathway_up_search_SOURCE"
-            />
-          </label>
-          <div>
-            <div className="head-title"> SOURCE</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Source' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Source', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Source' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Source', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_SOURCE"
+            field="Source"
+            settings={props.data.pathways_up}
+            searchKey="search_SOURCE"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'Source',
@@ -259,52 +183,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_desc_head">
-          <label htmlFor="input_pathway_up_search_DESCRIPTION">
-            <span style={{ display: 'none' }}>input_pathway_up_search_DESCRIPTION</span>
-            <Input
-              aria-label="input_pathway_up_search_DESCRIPTION"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_DESCRIPTION == ''
-                  ? 'DESC'
-                  : props.data.pathways_up.search_keyword.search_DESCRIPTION
-              }
-              id="input_pathway_up_search_DESCRIPTION"
-            />
-          </label>
-          <div>
-            <div className="head-title"> DESCRIPTION</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Description' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Description', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Description' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Description', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_DESCRIPTION"
+            field="Description"
+            settings={props.data.pathways_up}
+            searchKey="search_DESCRIPTION"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'Description',
@@ -328,52 +214,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_p_value_head">
-          <label htmlFor="input_pathway_up_search_p_value">
-            <span style={{ display: 'none' }}>input_pathway_up_search_p_value</span>
-            <Input
-              aria-label="input_pathway_up_search_p_value"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_p_value == ''
-                  ? 'P_Value'
-                  : props.data.pathways_up.search_keyword.search_p_value
-              }
-              id="input_pathway_up_search_p_value"
-            />
-          </label>
-          <div>
-            <div className="head-title"> P_VALUE</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'P_Value' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('P_Value', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'P_Value' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('P_Value', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_p_value"
+            field="P_Value"
+            settings={props.data.pathways_up}
+            searchKey="search_p_value"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'P_Value',
@@ -404,52 +252,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_fdr_head">
-          <label htmlFor="input_pathway_up_search_fdr">
-            <span style={{ display: 'none' }}>input_pathway_up_search_fdr</span>
-            <Input
-              aria-label="input_pathway_up_search_fdr"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_fdr == ''
-                  ? 'FDR'
-                  : props.data.pathways_up.search_keyword.search_fdr
-              }
-              id="input_pathway_up_search_fdr"
-            />
-          </label>
-          <div>
-            <div className="head-title"> FDR</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'FDR' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('FDR', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'FDR' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('FDR', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_fdr"
+            field="FDR"
+            settings={props.data.pathways_up}
+            searchKey="search_fdr"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'FDR',
@@ -479,52 +289,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_ratio_head">
-          <label htmlFor="input_pathway_up_search_RATIO">
-            <span style={{ display: 'none' }}>input_pathway_up_search_RATIO</span>
-            <Input
-              aria-label="input_pathway_up_search_RATIO"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_RATIO == ''
-                  ? 'RATIO'
-                  : props.data.pathways_up.search_keyword.search_RATIO
-              }
-              id="input_pathway_up_search_RATIO"
-            />
-          </label>
-          <div>
-            <div className="head-title"> RATIO</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Ratio' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Ratio', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Ratio' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Ratio', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_RATIO"
+            field="Ratio"
+            settings={props.data.pathways_up}
+            searchKey="search_RATIO"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'Ratio',
@@ -550,52 +322,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_number_hits_head">
-          <label htmlFor="input_pathway_up_search_NUMBER_HITS">
-            <span style={{ display: 'none' }}>input_pathway_up_search_NUMBER_HITS</span>
-            <Input
-              aria-label="input_pathway_up_search_NUMBER_HITS"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_NUMBER_HITS == ''
-                  ? 'HITS'
-                  : props.data.pathways_up.search_keyword.search_NUMBER_HITS
-              }
-              id="input_pathway_up_search_NUMBER_HITS"
-            />
-          </label>
-          <div>
-            <div className="head-title"> NUMBER_HITS</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Number_Hits' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Number_Hits', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Number_Hits' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Number_Hits', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_NUMBER_HITS"
+            field="Number_Hits"
+            settings={props.data.pathways_up}
+            searchKey="search_NUMBER_HITS"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'Number_Hits',
@@ -621,52 +355,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_number_hits_head">
-          <label htmlFor="input_pathway_up_search_NUMBER_MISSES">
-            <span style={{ display: 'none' }}>input_pathway_up_search_NUMBER_MISSES</span>
-            <Input
-              aria-label="input_pathway_up_search_NUMBER_MISSES"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_NUMBER_MISSES == ''
-                  ? 'MISSES'
-                  : props.data.pathways_up.search_keyword.search_NUMBER_MISSES
-              }
-              id="input_pathway_up_search_NUMBER_MISSES"
-            />
-          </label>
-          <div>
-            <div className="head-title"> NUMBER_MISSES</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Number_Misses' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Number_Misses', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Number_Misses' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Number_Misses', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_NUMBER_MISSES"
+            field="Number_Misses"
+            settings={props.data.pathways_up}
+            searchKey="search_NUMBER_MISSES"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'Number_Misses',
@@ -692,52 +388,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_number_user_genes_head">
-          <label htmlFor="input_pathway_up_search_NUMBER_USER_GENES">
-            <span style={{ display: 'none' }}>input_pathway_up_search_NUMBER_USER_GENES</span>
-            <Input
-              aria-label="input_pathway_up_search_NUMBER_USER_GENES"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_NUMBER_USER_GENES == ''
-                  ? 'USER_GENES'
-                  : props.data.pathways_up.search_keyword.search_NUMBER_USER_GENES
-              }
-              id="input_pathway_up_search_NUMBER_USER_GENES"
-            />
-          </label>
-          <div>
-            <div className="head-title"> NUMBER_USER_GENES</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Number_User_Genes' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Number_User_Genes', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Number_User_Genes' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Number_User_Genes', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_NUMBER_USER_GENES"
+            field="Number_User_Genes"
+            settings={props.data.pathways_up}
+            searchKey="search_NUMBER_USER_GENES"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'Number_User_Genes',
@@ -763,52 +421,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_total_number_genes_head">
-          <label htmlFor="input_pathway_up_search_TOTAL_GENES_MINUS_INPUT">
-            <span style={{ display: 'none' }}>input_pathway_up_search_TOTAL_GENES_MINUS_INPUT</span>
-            <Input
-              aria-label="input_pathway_up_search_TOTAL_GENES_MINUS_INPUT"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_TOTAL_GENES_MINUS_INPUT == ''
-                  ? 'GENES'
-                  : props.data.pathways_up.search_keyword.search_TOTAL_GENES_MINUS_INPUT
-              }
-              id="input_pathway_up_search_TOTAL_GENES_MINUS_INPUT"
-            />
-          </label>
-          <div>
-            <div className="head-title"> TOTAL_GENES_MINUS_INPUT</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Total_Genes_Minus_Input' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Total_Genes_Minus_Input', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'Total_Genes_Minus_Input' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Total_Genes_Minus_Input', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_TOTAL_GENES_MINUS_INPUT"
+            field="Total_Genes_Minus_Input"
+            settings={props.data.pathways_up}
+            searchKey="search_TOTAL_GENES_MINUS_INPUT"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'Total_Genes_Minus_Input',
@@ -834,52 +454,14 @@ export default function PUGTable(props) {
     {
       title: (
         <div className="pathway_gene_list_head">
-          <label htmlFor="input_pathway_up_search_GENE_LIST">
-            <span style={{ display: 'none' }}>input_pathway_up_search_GENE_LIST</span>
-            <Input
-              aria-label="input_pathway_up_search_GENE_LIST"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.pathways_up.search_keyword.search_GENE_LIST == ''
-                  ? 'GENE_LIST'
-                  : props.data.pathways_up.search_keyword.search_GENE_LIST
-              }
-              id="input_pathway_up_search_GENE_LIST"
-            />
-          </label>
-          <div>
-            <div className="head-title"> GENE_LIST</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'GENE_LIST' &&
-                      props.data.pathways_up.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Gene_List', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.pathways_up.sorting.name == 'GENE_LIST' &&
-                      props.data.pathways_up.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('Gene_List', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
+          <TableHeader
+            id="input_pathway_up_search_GENE_LIST"
+            field="Gene_List"
+            settings={props.data.pathways_up}
+            searchKey="search_GENE_LIST"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          ></TableHeader>
         </div>
       ),
       dataIndex: 'Gene_List',
@@ -903,44 +485,12 @@ export default function PUGTable(props) {
     },
   ];
 
-  const search = (e) => {
-    var search_PATHWAY_ID = document.getElementById('input_pathway_up_search_PATHWAY_ID').value;
-    var search_SOURCE = document.getElementById('input_pathway_up_search_SOURCE').value;
-    var search_DESCRIPTION = document.getElementById('input_pathway_up_search_DESCRIPTION').value;
-    var search_p_value = document.getElementById('input_pathway_up_search_p_value').value;
-    var search_fdr = document.getElementById('input_pathway_up_search_fdr').value;
-    var search_RATIO = document.getElementById('input_pathway_up_search_RATIO').value;
-    var search_GENE_LIST = document.getElementById('input_pathway_up_search_GENE_LIST').value;
-    var search_NUMBER_HITS = document.getElementById('input_pathway_up_search_NUMBER_HITS').value;
-    var search_NUMBER_MISSES = document.getElementById('input_pathway_up_search_NUMBER_MISSES')
-      .value;
-    var search_NUMBER_USER_GENES = document.getElementById(
-      'input_pathway_up_search_NUMBER_USER_GENES'
-    ).value;
-    var search_TOTAL_GENES_MINUS_INPUT = document.getElementById(
-      'input_pathway_up_search_TOTAL_GENES_MINUS_INPUT'
-    ).value;
-
+  const search = (key, val) => {
     props.getPathwayUp({
-      page_size: 25,
+      page_size: props.data.pathways_up.pagination.pageSize,
       page_number: 1,
-      sorting: {
-        name: 'P_Value',
-        order: 'ascend',
-      },
-      search_keyword: {
-        search_PATHWAY_ID: search_PATHWAY_ID,
-        search_SOURCE: search_SOURCE,
-        search_DESCRIPTION: search_DESCRIPTION,
-        search_p_value: Number(search_p_value),
-        search_fdr: Number(search_fdr),
-        search_RATIO: Number(search_RATIO),
-        search_GENE_LIST: search_GENE_LIST,
-        search_NUMBER_HITS: Number(search_NUMBER_HITS),
-        search_NUMBER_MISSES: Number(search_NUMBER_MISSES),
-        search_NUMBER_USER_GENES: Number(search_NUMBER_USER_GENES),
-        search_TOTAL_GENES_MINUS_INPUT: Number(search_TOTAL_GENES_MINUS_INPUT),
-      },
+      sorting: { ...props.data.pathways_up.sorting },
+      search_keyword: { ...props.data.pathways_up.search_keyword, ...{ [key]: val } },
     });
   };
 

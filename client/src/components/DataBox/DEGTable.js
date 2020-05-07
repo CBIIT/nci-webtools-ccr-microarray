@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, Dropdown, Button, Icon, Table, Input, Pagination } from 'antd';
 import { Tooltip } from '../Tooltip/Tooltip';
-const Search = Input.Search;
+import { TableHeader } from '../TableHeader/TableHeader';
 
 const minWidth = 110;
 const exponentialNum = 3;
@@ -47,54 +47,14 @@ export default function DEGTable(props) {
   const columns = [
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
-          <label htmlFor="input_deg_search_symbol">
-            <span style={{ display: 'none' }}>input_deg_search_symbol</span>
-            <Input
-              aria-label="input_deg_search_symbol"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_symbol == ''
-                  ? 'SYMBOL'
-                  : props.data.diff_expr_genes.search_keyword.search_symbol
-              }
-              id="input_deg_search_symbol"
-            />
-          </label>
-          <div>
-            <div className="head-title"> SYMBOL </div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'SYMBOL' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('SYMBOL', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'SYMBOL' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('SYMBOL', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_symbol"
+          field="SYMBOL"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_symbol"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 'SYMBOL',
       sorter: false,
@@ -111,63 +71,21 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
     },
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
-          <label htmlFor="input_deg_search_fc">
-            <span style={{ display: 'none' }}>input_deg_search_fc</span>
-            <Input
-              aria-label="input_deg_search_fc"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_fc == ''
-                  ? 'FC'
-                  : props.data.diff_expr_genes.search_keyword.search_fc
-              }
-              id="input_deg_search_fc"
-            />
-          </label>
-          <div>
-            <div className="head-title"> FC </div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'FC' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('FC', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'FC' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('FC', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_fc"
+          field="FC"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_fc"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 'FC',
       sorter: false,
@@ -184,63 +102,21 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip title={text}>
-              {Number.parseFloat(text).toFixed(3)}
-            </Tooltip>
+            <Tooltip title={text}>{Number.parseFloat(text).toFixed(3)}</Tooltip>
           </div>
         );
       },
     },
     {
       title: (
-        <div style={{ text: 'center' }}>
-          <label htmlFor="input_dge_search_p_value">
-            <span style={{ display: 'none' }}>input_dge_search_p_value</span>
-            <Input
-              aria-label="input_dge_search_p_value"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_p_value == ''
-                  ? 'P.Value'
-                  : props.data.diff_expr_genes.search_keyword.search_p_value
-              }
-              id="input_dge_search_p_value"
-            />
-          </label>
-          <div>
-            <div className="head-title"> P.Value</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'P.Value' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('P.Value', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'P.Value' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('P.Value', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_p_value"
+          field="P.Value"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_p_value"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 'P.Value',
       sorter: false,
@@ -258,63 +134,21 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip title={text}>
-              {Number.parseFloat(text).toExponential(exponentialNum)}
-            </Tooltip>
+            <Tooltip title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</Tooltip>
           </div>
         );
       },
     },
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
-          <label htmlFor="input_deg_search_adj_p_value">
-            <span style={{ display: 'none' }}>input_deg_search_adj_p_value</span>
-            <Input
-              aria-label="input_deg_search_adj_p_value"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_adj_p_value == ''
-                  ? 'adj.P.Val'
-                  : props.data.diff_expr_genes.search_keyword.search_adj_p_value
-              }
-              id="input_deg_search_adj_p_value"
-            />
-          </label>
-          <div>
-            <div className="head-title"> adj.P.Val</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'adj.P.Val' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('adj.P.Val', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'adj.P.Val' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('adj.P.Val', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_adj_p_value"
+          field="adj.P.val"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_adj_p_value"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 'adj.P.Val',
       sorter: false,
@@ -331,63 +165,21 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip title={text}>
-              {Number.parseFloat(text).toExponential(exponentialNum)}
-            </Tooltip>
+            <Tooltip title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</Tooltip>
           </div>
         );
       },
     },
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
-          <label htmlFor="input_deg_search_aveexpr">
-            <span style={{ display: 'none' }}>input_deg_search_aveexpr</span>
-            <Input
-              aria-label="input_deg_search_aveexpr"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_aveexpr == ''
-                  ? 'AveExpr'
-                  : props.data.diff_expr_genes.search_keyword.search_aveexpr
-              }
-              id="input_deg_search_aveexpr"
-            />
-          </label>
-          <div>
-            <div className="head-title"> AveExpr</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'AveExpr' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('AveExpr', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'AveExpr' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('AveExpr', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_aveexpr"
+          field="AveExpr"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_aveexpr"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 'AveExpr',
       sorter: false,
@@ -404,63 +196,21 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
     },
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
-          <label htmlFor="input_deg_search_input_deg_search_accnum">
-            <span style={{ display: 'none' }}>input_deg_search_accnum</span>
-            <Input
-              aria-label="input_deg_search_accnum"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_accnum == ''
-                  ? 'ACCNUM'
-                  : props.data.diff_expr_genes.search_keyword.search_accnum
-              }
-              id="input_deg_search_accnum"
-            />
-          </label>
-          <div>
-            <div className="head-title"> ACCNUM</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'ACCNUM' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('ACCNUM', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'ACCNUM' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('ACCNUM', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_input_deg_search_accnum"
+          field="ACCNUM"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_accnum"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 'ACCNUM',
       sorter: false,
@@ -477,63 +227,21 @@ export default function DEGTable(props) {
                   : minWidth + 50,
             }}
           >
-            <Tooltip title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
     },
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
-          <label htmlFor="input_deg_search_desc">
-            <span style={{ display: 'none' }}>input_deg_search_desc</span>
-            <Input
-              aria-label="input_deg_search_desc"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_desc == ''
-                  ? 'DESC'
-                  : props.data.diff_expr_genes.search_keyword.search_desc
-              }
-              id="input_deg_search_desc"
-            />
-          </label>
-          <div>
-            <div className="head-title"> DESC</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'DESC' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('DESC', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'DESC' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('DESC', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_desc"
+          field="DESC"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_desc"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 'DESC',
       sorter: false,
@@ -550,63 +258,21 @@ export default function DEGTable(props) {
                   : 150,
             }}
           >
-            <Tooltip title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
     },
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
-          <label htmlFor="input_deg_search_entrez">
-            <span style={{ display: 'none' }}>input_deg_search_entrez</span>
-            <Input
-              aria-label="input_deg_search_entrez"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_entrez == ''
-                  ? 'ENTREZ'
-                  : props.data.diff_expr_genes.search_keyword.search_entrez
-              }
-              id="input_deg_search_entrez"
-            />
-          </label>
-          <div>
-            <div className="head-title"> ENTREZ</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'ENTREZ' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('ENTREZ', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'ENTREZ' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('ENTREZ', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_entrez"
+          field="ENTREZ"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_entrez"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 'ENTREZ',
       sorter: false,
@@ -647,9 +313,7 @@ export default function DEGTable(props) {
                     : minWidth,
               }}
             >
-              <Tooltip title={text}>
-                {text}
-              </Tooltip>
+              <Tooltip title={text}>{text}</Tooltip>
             </div>
           );
         }
@@ -657,54 +321,14 @@ export default function DEGTable(props) {
     },
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
-          <label htmlFor="input_deg_search_probsetid">
-            <span style={{ display: 'none' }}>input_deg_search_probsetid</span>
-            <Input
-              aria-label="input_deg_search_probsetid"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_probsetid == ''
-                  ? 'probsetID'
-                  : props.data.diff_expr_genes.search_keyword.search_probsetid
-              }
-              id="input_deg_search_probsetid"
-            />
-          </label>
-          <div>
-            <div className="head-title"> probsetID</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'probsetID' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('probsetID', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'probsetID' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('probsetID', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_probsetid"
+          field="probsetID"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_probsetid"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 'probsetID',
       sorter: false,
@@ -721,63 +345,21 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
     },
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
-          <label htmlFor="input_deg_search_t">
-            <span style={{ display: 'none' }}>input_deg_search_t</span>
-            <Input
-              aria-label="input_deg_search_t"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_t == ''
-                  ? 't'
-                  : props.data.diff_expr_genes.search_keyword.search_t
-              }
-              id="input_deg_search_t"
-            />
-          </label>
-          <div>
-            <div className="head-title"> t</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 't' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('t', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 't' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('t', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_t"
+          field="t"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_t"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 't',
       sorter: false,
@@ -794,63 +376,21 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip title={text}>
-              {Number.parseFloat(text)}
-            </Tooltip>
+            <Tooltip title={text}>{Number.parseFloat(text)}</Tooltip>
           </div>
         );
       },
     },
     {
       title: (
-        <div style={{ textAlign: 'center' }}>
-          <label htmlFor="input_deg_search_b">
-            <span style={{ display: 'none' }}>input_deg_search_b</span>
-            <Input
-              aria-label="input_deg_search_b"
-              onPressEnter={(value) => search(value)}
-              placeholder={
-                props.data.diff_expr_genes.search_keyword.search_b == ''
-                  ? 'b'
-                  : props.data.diff_expr_genes.search_keyword.search_b
-              }
-              id="input_deg_search_b"
-            />
-          </label>
-          <div>
-            <div className="head-title"> b</div>
-            <div className="head-sorter">
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'b' &&
-                      props.data.diff_expr_genes.sorting.order == 'ascend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('b', 'ascend')}
-                >
-                  <i className="fas fa-angle-up"></i>
-                </a>
-              </div>
-              <div>
-                <a
-                  style={{
-                    color:
-                      props.data.diff_expr_genes.sorting.name == 'b' &&
-                      props.data.diff_expr_genes.sorting.order == 'descend'
-                        ? 'blue'
-                        : '#ccc',
-                  }}
-                  onClick={() => sorter('b', 'descend')}
-                >
-                  <i className="fas fa-angle-down"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <TableHeader
+          id="input_deg_search_b"
+          field="B"
+          settings={props.data.diff_expr_genes}
+          searchKey="search_b"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        ></TableHeader>
       ),
       dataIndex: 'B',
       sorter: false,
@@ -867,48 +407,19 @@ export default function DEGTable(props) {
                   : minWidth,
             }}
           >
-            <Tooltip title={text}>
-              {text}
-            </Tooltip>
+            <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
       },
     },
   ];
 
-  const search = (e) => {
-    var search_symbol = document.getElementById('input_deg_search_symbol').value;
-    var search_fc = document.getElementById('input_deg_search_fc').value;
-    var search_p_value = document.getElementById('input_dge_search_p_value').value;
-    var search_adj_p_value = document.getElementById('input_deg_search_adj_p_value').value;
-    var search_aveexpr = document.getElementById('input_deg_search_aveexpr').value;
-    var search_accnum = document.getElementById('input_deg_search_accnum').value;
-    var search_desc = document.getElementById('input_deg_search_desc').value;
-    var search_entrez = document.getElementById('input_deg_search_entrez').value;
-    var search_probsetid = document.getElementById('input_deg_search_probsetid').value;
-    var search_t = document.getElementById('input_deg_search_t').value;
-    var search_b = document.getElementById('input_deg_search_b').value;
-
+  const search = (keyword, value) => {
     props.getDEG({
-      page_size: 25,
+      page_size: props.data.diff_expr_genes.pagination.pageSize,
       page_number: 1,
-      sorting: {
-        name: 'P.Value',
-        order: 'ascend',
-      },
-      search_keyword: {
-        search_symbol: search_symbol,
-        search_fc: Number(search_fc),
-        search_p_value: Number(search_p_value),
-        search_adj_p_value: Number(search_adj_p_value),
-        search_aveexpr: Number(search_aveexpr),
-        search_accnum: search_accnum,
-        search_desc: search_desc,
-        search_entrez: search_entrez,
-        search_probsetid: search_probsetid,
-        search_t: Number(search_t),
-        search_b: Number(search_b),
-      },
+      sorting: { ...props.data.diff_expr_genes.sorting },
+      search_keyword: { ...props.data.diff_expr_genes.search_keyword, ...{ [keyword]: value } },
     });
   };
 
