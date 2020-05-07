@@ -108,11 +108,16 @@ export default function Contrast(props) {
 
   let queueBlock = (
     <div className="block ">
-      <div id="checkbox_queue" style={{ display: 'none' }}>
-        <Checkbox checked={props.data.useQueue} onChange={handleSwitchChange}>
-          Submit this job to a Queue
-        </Checkbox>
-      </div>
+      <Tooltip
+        placement="top"
+        title="Note: Contrasts against many GSMs may timeout and not complete in the browser."
+      >
+        <div id="checkbox_queue">
+          <Checkbox checked={props.data.useQueue} onChange={handleSwitchChange}>
+            Submit this job to a Queue
+          </Checkbox>
+        </div>
+      </Tooltip>
       <div className="queueMessage">
         (Jobs currently enqueued: {props.data.numberOfTasksInQueue})
       </div>
