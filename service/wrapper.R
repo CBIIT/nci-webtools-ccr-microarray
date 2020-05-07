@@ -210,13 +210,10 @@ process = function(){
 
 
           ## auto correct species
-          species2<-"human"
-          if(grepl("mouse",celfiles@annotation)){
-              species2<-"mouse"
-            }
-
-          if(grepl("human",celfiles@annotation)){
-              species2<-"human"
+          if (grepl("mo", celfiles@annotation) || grepl("mg", celfiles@annotation)) {
+            species2 = "mouse"
+          } else {
+            species2 = "human"
           }
           
           l2p_pathways = l2pPathways(diff_expr_genes,species2,data_repo_path,projectId,config_path)
@@ -322,7 +319,6 @@ process = function(){
         }
 
         if(action=="pathwaysHeapMap"){
-         
           diff_expr_genes<-readRDS(file = paste0(data_repo_path,"/diff_expr_genes.rds"))
 
           l2p_pathways<-readRDS(file = paste0(data_repo_path,"/l2p_pathways.rds"))
@@ -340,18 +336,15 @@ process = function(){
 
           #write(saveImageFileName, "saveImageFileName.txt", sep="\t")
 
-          #print("test  console")
           celfiles<-readRDS(file = paste0(data_repo_path,"/celfiles.rds"))
 
-          if(grepl("mouse",celfiles@annotation)){
-            species<-"mouse"
+          if (grepl("mo", celfiles@annotation) || grepl("mg", celfiles@annotation)) {
+            species = "mouse"
+          } else {
+            species = "human"
           }
 
-          if(grepl("human",celfiles@annotation)){
-            species<-"human"
-          }
           write(species, "species", sep="\t")
-
           geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,config_path,data_repo_path,species)
 
           return(list(pic_name=pic_name))
