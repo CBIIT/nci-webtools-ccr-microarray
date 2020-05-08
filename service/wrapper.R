@@ -222,68 +222,64 @@ process = function(){
 
           # # #### 6) ssGSEA function, takes as input: output from deg function, species, and gene set modules(.gmt). Outputs one table of enrichment scores and tables of diff expr pathways per contrast. Prints ssGSEA heatmap ####
           # # # Output should dynamically respond to user-selected contrast
-         
-           tryCatch({
-             
-              ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
 
-            },error =function(cond){
-                 # message(cond)
+          tryCatch({
+            ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
+          },error = function(e){
+            print(e)
+          },finally={
+            ss_result<-""
+            file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
+            #write(c(file), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
 
-            },finally={
-                  ss_result<-""
-                  file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
-                  #write(c(file), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
+            if (file.exists(file)) {
+              ss_result<-read.table(file, header = FALSE, sep = "", dec = ".")
+                write(toJSON(ss_result), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
+            }else{
+              write(c("no find"), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
+            }
+            if(typeof(ss_result)!="list"){
+                ss_name_d= ""
+                ss_data_d =""
+            }else{
+                ss_name_d=names(ss_result)
+                ss_data_d=ss_result[2:length(ss_result[,1]),]
+            }
 
-                   if (file.exists(file)) {
-                      ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
-                       write(toJSON(ss_result), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
-                    }else{
-                      write(c("no find"), paste0(data_repo_path,"/save_ssgsea_input.txt",sep=""),append=TRUE)
-                   }
-                   if(typeof(ss_result)!="list"){
-                        ss_name_d= ""
-                        ss_data_d =""
-                    }else{
-                        ss_name_d=names(ss_result)
-                        ss_data_d=ss_result[2:length(ss_result[,1]),]
-                    }
+            normalData<-list(data= norm_celfiles[[12]],col=colnames(norm_celfiles[[12]]),row=rownames(norm_celfiles[[12]]))
 
-                    normalData<-list(data= norm_celfiles[[12]],col=colnames(norm_celfiles[[12]]),row=rownames(norm_celfiles[[12]]))
-
-                    re<-list(
-                    normal=normal,
-                    source=source,
-                    ss_name=ss_name_d,
-                    ss_data= ss_data_d,
-                    uppath=l2p_pathways[[1]][[1]],
-                    downpath=l2p_pathways[[1]][[2]],
-                    deg=diff_expr_genes$listDEGs[[1]],
-                    maplotBN=return_plot_data[[2]],
-                    hisBefore=return_plot_data[[1]],
-                    boxplotDataBN=return_plot_data[[3]],
-                    RLE=return_plot_data[[4]],
-                    NUSE=return_plot_data[[5]],
-                    hisAfter=return_plot_data[[6]],
-                    maplotAfter=return_plot_data[[7]],
-                    boxplotDataAN=return_plot_data[[8]],
-                    pcaData=return_plot_data[[9]],
-                    heatmapAfterNorm=return_plot_data[[10]],
-                    accessionCode=access_code,
-                    groups=realGroups,
-                    group_1=cgroup1,
-                    group_2=cgroup2,
-                    genSet=geneSet,
-                    projectId=projectId,
-                    GSM=celfiles@phenoData@data,
-                    colors=col2hex(celfiles@phenoData@data$colors),
-                    normCelfiles=diff_expr_genes$norm_annotated,
-                    chip=chip
-                    )
-                 
-
-                  write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))
-            })
+            re<-list(
+              normal=normal,
+              source=source,
+              ss_name=ss_name_d,
+              ss_data= ss_data_d,
+              uppath=l2p_pathways[[1]][[1]],
+              downpath=l2p_pathways[[1]][[2]],
+              deg=diff_expr_genes$listDEGs[[1]],
+              maplotBN=return_plot_data[[2]],
+              hisBefore=return_plot_data[[1]],
+              boxplotDataBN=return_plot_data[[3]],
+              RLE=return_plot_data[[4]],
+              NUSE=return_plot_data[[5]],
+              hisAfter=return_plot_data[[6]],
+              maplotAfter=return_plot_data[[7]],
+              boxplotDataAN=return_plot_data[[8]],
+              pcaData=return_plot_data[[9]],
+              heatmapAfterNorm=return_plot_data[[10]],
+              accessionCode=access_code,
+              groups=realGroups,
+              group_1=cgroup1,
+              group_2=cgroup2,
+              genSet=geneSet,
+              projectId=projectId,
+              GSM=celfiles@phenoData@data,
+              colors=col2hex(celfiles@phenoData@data$colors),
+              normCelfiles=diff_expr_genes$norm_annotated,
+              chip=chip
+            )
+            
+            write(toJSON(re),paste0(data_repo_path,"/result.txt",sep=""))
+          })
         }
 
 
