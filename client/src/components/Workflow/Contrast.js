@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { Checkbox, Input, Button, Select } from 'antd';
+import { Checkbox, Input, Button, Select, Modal, Icon } from 'antd';
 import { Tooltip } from '../Tooltip/Tooltip';
 const { Option } = Select;
+const { confirm } = Modal;
 
 export default function Contrast(props) {
   const didMountRef = useRef(false);
@@ -57,11 +58,24 @@ export default function Contrast(props) {
     }
   }
 
-  function handleSwitchChange(e) {
+  function handleQueueToggle(e) {
     if (e.target.checked) {
       props.changeRunContrastMode(true);
     } else {
-      props.changeRunContrastMode(false);
+      confirm({
+        title: <h4>Enabling Interactive Mode</h4>,
+        icon: <Icon type="exclamation-circle" />,
+        maskClosable: true,
+        content: (
+          <div>
+            <p>Contrasts with large data sets may timeout and not complete in the browser.</p>{' '}
+            <p>Click OK to enable Interactive mode.</p>
+          </div>
+        ),
+        onOk() {
+          props.changeRunContrastMode(false);
+        },
+      });
     }
   }
 
@@ -108,16 +122,11 @@ export default function Contrast(props) {
 
   let queueBlock = (
     <div className="block ">
-      <Tooltip
-        placement="top"
-        title="Note: Contrasts against many GSMs may timeout and not complete in the browser."
-      >
-        <div id="checkbox_queue">
-          <Checkbox checked={props.data.useQueue} onChange={handleSwitchChange}>
-            Submit this job to a Queue
-          </Checkbox>
-        </div>
-      </Tooltip>
+      <div id="checkbox_queue">
+        <Checkbox checked={props.data.useQueue} onChange={handleQueueToggle}>
+          Submit this job to a Queue
+        </Checkbox>
+      </div>
       <div className="queueMessage">
         (Jobs currently enqueued: {props.data.numberOfTasksInQueue})
       </div>
@@ -150,9 +159,7 @@ export default function Contrast(props) {
     props.data.group_2 != '-1' &&
     props.data.group_1 != props.data.group_2;
 
-  let button = '';
-
-  button = (
+  let button = (
     <div
       className="row"
       style={{ marginLeft: '-10px', marginRight: '-10px', marginBottom: '10px' }}
