@@ -1256,7 +1256,7 @@ div.head-sorter > div {
   }
 }
 
-@media (min-width: 365px) {
+@media (min-width: 365) {
   .container-board-left {
     width: 100%;
     padding-top: 15px;
@@ -1274,9 +1274,10 @@ div.head-sorter > div {
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 825px) {
   .container-board-left {
-    width: 21%;
+    width: 270px;
+    max-width: 270px;
     float: left;
     margin-top: 0px;
     margin-right: 10px;

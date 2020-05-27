@@ -34,7 +34,7 @@ export default function Project(props) {
   const properties = {
     accept: '.gz,.cel,.CEL,.gz',
     action: '-',
-    onRemove: file => {
+    onRemove: (file) => {
       props.fileRemove(file);
     },
     beforeUpload: (file, fl) => {
@@ -42,7 +42,7 @@ export default function Project(props) {
       return false;
     },
     multiple: true,
-    fileList: props.data.fileList
+    fileList: props.data.fileList,
   };
 
   let type_content = (
@@ -78,7 +78,7 @@ export default function Project(props) {
               aria-label="input accessionCode"
               id="input-access-code"
               disabled={props.data.fileList.length !== 0}
-              onChange={e => props.changeCode(e)}
+              onChange={(e) => props.changeCode(e)}
               onKeyDown={handleKeyDown}
               value={props.data.accessionCode}
             />
@@ -93,7 +93,7 @@ export default function Project(props) {
               aria-label="input chip"
               id="chip"
               disabled={props.data.dataList.length > 0 || props.data.multichip}
-              onChange={e => props.changeChip(e)}
+              onChange={(e) => props.changeChip(e)}
               onKeyDown={handleKeyDown}
               value={props.data.loadChip}
               placeholder="<All Chips>"
@@ -101,7 +101,7 @@ export default function Project(props) {
           </div>
         </div>
         <div className="row">
-          <div className="col-sm-6">
+          <div className="col-xs-12">
             <Button
               id="btn-project-load-gse"
               type={Object.keys(props.data.dataList).length === 0 ? 'primary' : 'default'}
@@ -113,7 +113,9 @@ export default function Project(props) {
               Load
             </Button>
           </div>
-          <div className="col-sm-6">
+        </div>
+        <div className="row">
+          <div className="col-xs-12">
             <Tooltip placement="right" title="Reset to start a new GEO analysis">
               <Button className="upload-start" type="primary" onClick={props.resetWorkFlowProject}>
                 Reset

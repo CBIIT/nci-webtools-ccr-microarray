@@ -160,30 +160,35 @@ export default function Contrast(props) {
     props.data.group_1 != props.data.group_2;
 
   let button = (
-    <div
-      className="row"
-      style={{ marginLeft: '-10px', marginRight: '-10px', marginBottom: '10px' }}
-    >
-      <div className="col-sm-6">
-        <Button
-          id="btn-run-contrast"
-          type={props.data.disableContrast ? 'default' : validContrast ? 'primary' : 'default'}
-          onClick={props.runContrast}
-          disabled={props.data.disableContrast ? true : validContrast ? false : true}
-        >
-          <span>Run Contrast </span>
-        </Button>
-      </div>
-      <div className="col-sm-6">
-        <Tooltip placement="right" title="Reset to start a new contrast analysis">
+    <div>
+      <div className="row" style={{ marginLeft: '-10px', marginRight: '-10px' }}>
+        <div className="col-xs-12">
           <Button
-            id="btnResetContrast"
-            className="ant-btn upload-start ant-btn-primary"
-            onClick={props.resetContrast}
+            id="btn-run-contrast"
+            type={props.data.disableContrast ? 'default' : validContrast ? 'primary' : 'default'}
+            onClick={props.runContrast}
+            disabled={props.data.disableContrast ? true : validContrast ? false : true}
+            style={{ width: '100%' }}
           >
-            <span>Reset</span>
+            <span>Run Contrast</span>
           </Button>
-        </Tooltip>
+        </div>
+      </div>
+      <div
+        className="row"
+        style={{ marginLeft: '-10px', marginRight: '-10px', marginBottom: '10px' }}
+      >
+        <div className="col-xs-12">
+          <Tooltip placement="right" title="Reset to start a new contrast analysis">
+            <Button
+              id="btnResetContrast"
+              className="ant-btn upload-start ant-btn-primary"
+              onClick={props.resetContrast}
+            >
+              <span>Reset</span>
+            </Button>
+          </Tooltip>
+        </div>
       </div>
     </div>
   );
