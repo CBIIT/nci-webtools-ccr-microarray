@@ -2563,12 +2563,7 @@ class Analysis extends Component {
           },
         })
           .then(this.handleErrors)
-          .then(function (response) {
-            if (!response.ok) {
-              throw Error(response.statusText);
-            }
-            return response.json();
-          })
+          .then((res) => res.json())
           .then((result) => {
             if (result.status == 200) {
               workflow.QueueModalvisible = true;
@@ -2606,10 +2601,8 @@ class Analysis extends Component {
           },
         })
           .then(this.handleErrors)
-          .then(function (response) {
-            if (response) {
-              return response.json();
-            }
+          .then((res) => {
+            if (res) return res.json();
           })
           .then((result) => {
             if (result && result.status == 200) {
@@ -2632,18 +2625,16 @@ class Analysis extends Component {
                 action: 'Run Contrast - Live',
               });
             } else {
-              if (result) {
-                document.getElementById('message-gsm').innerHTML = JSON.stringify(result.msg);
-                workflow.progressing = false;
-                this.setState({
-                  workflow: workflow,
-                });
-              }
+              document.getElementById('message-gsm').innerHTML = JSON.stringify(result.msg);
+              workflow.progressing = false;
+              this.setState({
+                workflow: workflow,
+              });
             }
           })
           .catch(
             function (error) {
-              document.getElementById('message-gsm').innerHTML = JSON.stringify(error);
+              document.getElementById('message-gsm').innerHTML = error;
               workflow.uploading = false;
               workflow.progressing = false;
               this.setState({
@@ -2651,8 +2642,8 @@ class Analysis extends Component {
               });
             }.bind(this)
           );
-      } catch (err) {
-        document.getElementById('message-gsm').innerHTML = JSON.stringify(err);
+      } catch (error) {
+        document.getElementById('message-gsm').innerHTML = error;
         workflow.uploading = false;
         workflow.progressing = false;
         this.setState({
@@ -2852,9 +2843,8 @@ class Analysis extends Component {
 
   handleErrors = (response) => {
     if (!response.ok) {
-      //throw Error(response.statusText);
       // Display fallback UI
-      this.resetWorkFlowProject();
+      // this.resetWorkFlowProject();
       if (response.statusText != '') {
         document.getElementById('message-gsm').innerHTML = response.statusText;
       } else {
@@ -2865,6 +2855,7 @@ class Analysis extends Component {
       }
 
       document.getElementById('message-gsm').nextSibling.innerHTML = '';
+      throw Error(response.statusText);
     } else {
       return response;
     }
@@ -3073,15 +3064,7 @@ class Analysis extends Component {
         },
       })
         .then(this.handleErrors)
-        .then(function (response) {
-          if (!response.ok) {
-            throw Error(response.statusText);
-            document.getElementById('message-gsm').innerHTML =
-              'Run Contrast has failed to complete, please contact admin or try again. ';
-            document.getElementById('message-gsm').nextSibling.innerHTML = '';
-          }
-          return response.json();
-        })
+        .then((response) => response.json())
         .then((result) => {
           if (result.status == 200) {
             result = result.data;
@@ -3189,12 +3172,7 @@ class Analysis extends Component {
       },
     })
       .then(this.handleErrors)
-      .then(function (response) {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
-      })
+      .then((res) => res.json())
       .then((result) => {
         result = result.data;
         let workflow = Object.assign({}, this.state.workflow);
