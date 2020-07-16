@@ -26,7 +26,7 @@
     "express-session-cache-manager": "^1.0.2",
     "formidable": "^1.2.1",
     "jslint": "^0.12.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "md5": "^2.2.1",
     "method-override": "^2.3.9",
     "minimist": "^1.2.0",
