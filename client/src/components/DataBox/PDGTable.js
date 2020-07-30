@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { Menu, Dropdown, Icon, Table, Input, message, Modal, Button, Pagination } from 'antd';
+import {
+  Menu,
+  Dropdown,
+  Icon,
+  Table,
+  Input,
+  message,
+  Modal,
+  Button,
+  Pagination,
+} from 'antd';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { TableHeader } from '../TableHeader/TableHeader';
 
@@ -75,7 +85,10 @@ export default function PUGTable(props) {
     reqBody.upOrDown = 'downregulated_pathways';
     reqBody.pathway_name = props.data.pathways_down.data[idx.index].Description;
     props.changeLoadingStatus(true, 'loading HeatMap');
-    var importantStuff = window.open(window.location.origin + '/assets/loading.html', '_blank');
+    var importantStuff = window.open(
+      window.location.origin + '/assets/loading.html',
+      '_blank'
+    );
 
     fetch('./api/analysis/pathwaysHeapMap', {
       method: 'POST',
@@ -89,8 +102,12 @@ export default function PUGTable(props) {
       .then((result) => {
         props.changeLoadingStatus(false, '');
         if (result.status == 200) {
-          if (Object.keys(result.data).length == 0 || result.data.constructor == Object) {
-            importantStuff.location.href = window.location.origin + '/assets/noheatmap.html';
+          if (
+            Object.keys(result.data).length == 0 ||
+            result.data.constructor == Object
+          ) {
+            importantStuff.location.href =
+              window.location.origin + '/assets/noheatmap.html';
           } else {
             let pic_link = JSON.parse(result.data).pic_name;
             var link = 'images/' + props.data.projectID + '/' + pic_link;
@@ -129,14 +146,21 @@ export default function PUGTable(props) {
             className="single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.1 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.1
                   : minWidth,
             }}
           >
             <Tooltip title={'Heatmap for ' + text}>
-              <a style={{ color: 'rgb(0, 0, 255)' }} onClick={() => showHeatMap({ index })}>
+              <a
+                style={{ color: 'rgb(0, 0, 255)' }}
+                onClick={() => showHeatMap({ index })}
+              >
                 <Icon type="area-chart" /> {text}
               </a>
             </Tooltip>
@@ -167,9 +191,13 @@ export default function PUGTable(props) {
             className="single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.09 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.09 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.09
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.09
                   : minWidth,
             }}
           >
@@ -200,9 +228,12 @@ export default function PUGTable(props) {
           className="single-line"
           style={{
             maxWidth:
-              document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1 >
+              document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                .offsetWidth *
+                0.1 >
               minWidth
-                ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
+                ? document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                    .offsetWidth * 0.1
                 : minWidth,
           }}
         >
@@ -234,9 +265,13 @@ export default function PUGTable(props) {
             className="single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.08 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.08
                   : minWidth,
             }}
           >
@@ -272,9 +307,13 @@ export default function PUGTable(props) {
             className="single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.07 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.07
                   : minWidth,
             }}
           >
@@ -310,9 +349,13 @@ export default function PUGTable(props) {
             className="single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.07 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.07
                   : minWidth,
             }}
           >
@@ -344,9 +387,13 @@ export default function PUGTable(props) {
             className="single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.07 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.07
                   : minWidth,
             }}
           >
@@ -378,9 +425,13 @@ export default function PUGTable(props) {
             className="single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.07 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.07
                   : minWidth,
             }}
           >
@@ -412,9 +463,13 @@ export default function PUGTable(props) {
             className="single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.07 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.07
                   : minWidth,
             }}
           >
@@ -446,9 +501,13 @@ export default function PUGTable(props) {
             className="single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.08 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.08
                   : minWidth,
             }}
           >
@@ -479,9 +538,12 @@ export default function PUGTable(props) {
           className="single-line"
           style={{
             maxWidth:
-              document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1 >
+              document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                .offsetWidth *
+                0.1 >
               minWidth
-                ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
+                ? document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                    .offsetWidth * 0.1
                 : minWidth,
           }}
         >
@@ -514,7 +576,10 @@ export default function PUGTable(props) {
       page_size: props.data.pathways_down.pagination.pageSize,
       page_number: 1,
       sorting: { ...props.data.pathways_down.sorting },
-      search_keyword: { ...props.data.pathways_down.search_keyword, ...{ [key]: val } },
+      search_keyword: {
+        ...props.data.pathways_down.search_keyword,
+        ...{ [key]: val },
+      },
     });
   };
 
@@ -530,7 +595,9 @@ export default function PUGTable(props) {
 
   const ExportMenu = (
     <Menu onClick={handleExportMenuClick}>
-      <Menu.Item key="1">Pathways for Downregulated Genes Table Results</Menu.Item>
+      <Menu.Item key="1">
+        Pathways for Downregulated Genes Table Results
+      </Menu.Item>
       <Menu.Item key="2">Normalized Data</Menu.Item>
     </Menu>
   );
@@ -546,7 +613,11 @@ export default function PUGTable(props) {
         </div>
       )}
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div id="pathways-down-select" className="col" style={{ marginRight: 'auto' }}>
+        <div
+          id="pathways-down-select"
+          className="col"
+          style={{ marginRight: 'auto' }}
+        >
           <Dropdown overlay={menu}>
             <Button style={{ marginRight: '10px' }}>
               <span id="pd-drop-down">25</span> <Icon type="down" />

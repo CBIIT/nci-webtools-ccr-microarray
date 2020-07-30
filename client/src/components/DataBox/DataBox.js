@@ -17,10 +17,19 @@ export default function DataBox(props) {
     groupMessage: '',
     selected: [],
     added: false,
-    dataList: props.data.multichip ? props.data.dataListChip : props.data.dataList,
+    dataList: props.data.multichip
+      ? props.data.dataListChip
+      : props.data.dataList,
   });
   const [modalOption, setOption] = useState('group');
-  const { groupVisible, groupName, groupMessage, selected, added, dataList } = state;
+  const {
+    groupVisible,
+    groupName,
+    groupMessage,
+    selected,
+    added,
+    dataList,
+  } = state;
 
   const child = useRef(null);
 
@@ -30,7 +39,9 @@ export default function DataBox(props) {
 
   useEffect(() => {
     mergeState({
-      dataList: props.data.multichip ? props.data.dataListChip : props.data.dataList,
+      dataList: props.data.multichip
+        ? props.data.dataListChip
+        : props.data.dataList,
     });
   }, [props.data.dataList]);
 
@@ -53,7 +64,9 @@ export default function DataBox(props) {
         complete: (results) => {
           let data = results.data;
           let assign = props.uploadGroup(data);
-          assign === true ? mergeState({ added: false }) : message.error(assign);
+          assign === true
+            ? mergeState({ added: false })
+            : message.error(assign);
         },
       });
     } else if (e.file.status === 'error') {
@@ -215,7 +228,9 @@ export default function DataBox(props) {
   }
 
   function deleteTag(event, type) {
-    var groupName = event.target.parentNode.parentNode.getElementsByTagName('td')[0].innerText;
+    var groupName = event.target.parentNode.parentNode.getElementsByTagName(
+      'td'
+    )[0].innerText;
     if (!groupName) {
       mergeState({
         groupMessage: 'No group selected for deleting.',
@@ -273,7 +288,11 @@ export default function DataBox(props) {
           </Button>{' '}
         </div>
         <div className="div-export-gsm">
-          <Button id="btn-project-export" type="primary" onClick={props.exportGSE}>
+          <Button
+            id="btn-project-export"
+            type="primary"
+            onClick={props.exportGSE}
+          >
             {' '}
             Export
           </Button>{' '}
@@ -285,7 +304,10 @@ export default function DataBox(props) {
   if (props.data.compared) {
     // controll display fo tags[preplot,postplot,DEG]
     prePlotsBox = (
-      <TabPane tab="Pre-Normalization QC Plots" key="Pre-normalization_QC_Plots">
+      <TabPane
+        tab="Pre-Normalization QC Plots"
+        key="Pre-normalization_QC_Plots"
+      >
         <PrePlotsBox
           key="prePlotsBox"
           getHistplotBN={props.getHistplotBN}
@@ -333,17 +355,31 @@ export default function DataBox(props) {
   } else {
     // controll display fo tags[preplot,postplot,DEG]
     prePlotsBox = (
-      <TabPane tab="Pre-Normalization QC Plots" disabled key="Pre-normalization_QC_Plots">
+      <TabPane
+        tab="Pre-Normalization QC Plots"
+        disabled
+        key="Pre-normalization_QC_Plots"
+      >
         {' '}
       </TabPane>
     );
     postPlotsBox = (
-      <TabPane tab="Post-Normalization Plots" disabled key="Post-normalization_Plots"></TabPane>
+      <TabPane
+        tab="Post-Normalization Plots"
+        disabled
+        key="Post-normalization_Plots"
+      ></TabPane>
     );
     degBox = (
-      <TabPane tab="DEG-Enrichments Results" disabled key="DEG-Enrichments_Results"></TabPane>
+      <TabPane
+        tab="DEG-Enrichments Results"
+        disabled
+        key="DEG-Enrichments_Results"
+      ></TabPane>
     );
-    ssGSEABox = <TabPane tab="ssGSEA Results" disabled key="ssGSEA_Results"></TabPane>;
+    ssGSEABox = (
+      <TabPane tab="ssGSEA Results" disabled key="ssGSEA_Results"></TabPane>
+    );
   }
   // control tab  SSGSEA
   if (props.data.done_gsea) {
@@ -373,7 +409,12 @@ export default function DataBox(props) {
   // define group list in the modal
   const columns = (type) => {
     return [
-      { title: type === 'group' ? 'GROUP' : 'BATCH', dataIndex: 'name', key: 'name', width: '30%' },
+      {
+        title: type === 'group' ? 'GROUP' : 'BATCH',
+        dataIndex: 'name',
+        key: 'name',
+        width: '30%',
+      },
       { title: 'GMS(s)', dataIndex: 'gsms', key: 'gsms' },
       {
         title: 'ACTION',
@@ -416,7 +457,8 @@ export default function DataBox(props) {
 
   let batchDataList = [];
   batchData.forEach((value, key) => {
-    if (key != 'Others') batchDataList.push({ key: key, name: key, gsms: value });
+    if (key != 'Others')
+      batchDataList.push({ key: key, name: key, gsms: value });
   });
 
   let group_table = (
@@ -504,15 +546,22 @@ export default function DataBox(props) {
           </Button>
         </label>
       </div>
-      <div style={{ display: added || modalOption === 'upload' ? 'none' : 'block' }}>
+      <div
+        style={{
+          display: added || modalOption === 'upload' ? 'none' : 'block',
+        }}
+      >
         <p style={{ color: '#215a82' }}>
           <b>
-            <label htmlFor="textArea-group-selected">{number_select} Selected GSM(s)</label>
+            <label htmlFor="textArea-group-selected">
+              {number_select} Selected GSM(s)
+            </label>
           </b>
         </p>
         <p
           style={{
-            display: selected_gsms == '' && groupVisible == true ? 'block' : 'none',
+            display:
+              selected_gsms == '' && groupVisible == true ? 'block' : 'none',
           }}
           className="err-message"
           id="message-unselect-gsm-group"
@@ -546,10 +595,16 @@ export default function DataBox(props) {
               id="input-define-group"
               disabled={selected == '' ? true : false}
               aria-label="define group name"
-              className={selected == '' ? 'ant-input ant-input-disabled' : 'ant-input '}
+              className={
+                selected == '' ? 'ant-input ant-input-disabled' : 'ant-input '
+              }
               placeholder={'Name (Must start with an ASCII letter,a-z or A-Z)'}
               id={'input_groupName'}
-              style={{ width: 'calc(100% - 68px)', color: 'black', fontSize: '16px' }}
+              style={{
+                width: 'calc(100% - 68px)',
+                color: 'black',
+                fontSize: '16px',
+              }}
               onChange={(e) => groupOnChange(e)}
             />
             &nbsp;
@@ -577,10 +632,19 @@ export default function DataBox(props) {
   );
 
   let content = (
-    <Tabs onChange={handleTabChange} type="card" activeKey={props.data.tab_activeKey}>
+    <Tabs
+      onChange={handleTabChange}
+      type="card"
+      activeKey={props.data.tab_activeKey}
+    >
       <TabPane tab="GSM Data" key="GSM_1">
         {define_group_click_btn}
-        <GSMData ref={child} data={props.data} dataList={dataList} selected={selection} />
+        <GSMData
+          ref={child}
+          data={props.data}
+          dataList={dataList}
+          selected={selection}
+        />
       </TabPane>
       {prePlotsBox}
       {postPlotsBox}

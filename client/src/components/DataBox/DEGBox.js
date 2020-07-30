@@ -35,7 +35,9 @@ export default function DEGBox(props) {
       key="deg_tag1"
       id="deg_tag1"
       className="deg_plot"
-      style={{ display: props.data.degSelected == 'deg_tag1' ? 'block' : 'none' }}
+      style={{
+        display: props.data.degSelected == 'deg_tag1' ? 'block' : 'none',
+      }}
     >
       <DEGTable
         exportNormalAll={props.exportNormalAll}
@@ -49,7 +51,9 @@ export default function DEGBox(props) {
       key="deg_tag2_pathway_up"
       id="deg_tag2"
       className="deg_plot"
-      style={{ display: props.data.degSelected == 'deg_tag2' ? 'block' : 'none' }}
+      style={{
+        display: props.data.degSelected == 'deg_tag2' ? 'block' : 'none',
+      }}
     >
       <PUGTable
         exportNormalAll={props.exportNormalAll}
@@ -64,7 +68,9 @@ export default function DEGBox(props) {
       key="deg_tag3_pathway_down"
       id="deg_tag3"
       className="deg_plot"
-      style={{ display: props.data.degSelected == 'deg_tag3' ? 'block' : 'none' }}
+      style={{
+        display: props.data.degSelected == 'deg_tag3' ? 'block' : 'none',
+      }}
     >
       <PDGTable
         exportNormalAll={props.exportNormalAll}
@@ -79,10 +85,12 @@ export default function DEGBox(props) {
       key="deg_tag4_volcano"
       id="deg_tag4"
       className="deg_plot"
-      style={{ display: props.data.degSelected == 'deg_tag4' ? 'block' : 'none' }}
+      style={{
+        display: props.data.degSelected == 'deg_tag4' ? 'block' : 'none',
+      }}
     >
       {props.data.volcanoPlot}
-    </div>
+    </div>,
   ];
 
   let content = [
@@ -94,7 +102,7 @@ export default function DEGBox(props) {
       key="deg_select"
       className="ant-select-selection ant-select-selection--single"
       id="deg_select_option"
-      onChange={e => handleSelectionChange(e)}
+      onChange={(e) => handleSelectionChange(e)}
     >
       <option key="deg_select_option_1" value="deg_tag1">
         Differentially Expressed Genes
@@ -109,7 +117,7 @@ export default function DEGBox(props) {
         Interactive Volcano Plot
       </option>
     </select>,
-    tabs
+    tabs,
   ];
 
   return <div>{content}</div>;

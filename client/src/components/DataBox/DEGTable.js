@@ -65,9 +65,13 @@ export default function DEGTable(props) {
             className="single-line deg_SYMBOL"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.08 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.1
                   : minWidth,
             }}
           >
@@ -96,9 +100,13 @@ export default function DEGTable(props) {
             className="deg_fc single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.06 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.06 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.07
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.07
                   : minWidth,
             }}
           >
@@ -128,13 +136,19 @@ export default function DEGTable(props) {
             className="p_value single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.08 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.1
                   : minWidth,
             }}
           >
-            <Tooltip title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</Tooltip>
+            <Tooltip title={text}>
+              {Number.parseFloat(text).toExponential(exponentialNum)}
+            </Tooltip>
           </div>
         );
       },
@@ -159,13 +173,19 @@ export default function DEGTable(props) {
             className="adj_p_value single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.08 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.1
                   : minWidth,
             }}
           >
-            <Tooltip title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</Tooltip>
+            <Tooltip title={text}>
+              {Number.parseFloat(text).toExponential(exponentialNum)}
+            </Tooltip>
           </div>
         );
       },
@@ -190,9 +210,13 @@ export default function DEGTable(props) {
             className="aveexpr single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.08 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.08
                   : minWidth,
             }}
           >
@@ -221,9 +245,13 @@ export default function DEGTable(props) {
             className="accnum single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.09 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.09 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.12
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.12
                   : minWidth + 50,
             }}
           >
@@ -252,9 +280,13 @@ export default function DEGTable(props) {
             className="deg_desc single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.15 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.15 >
                 150
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.15
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.15
                   : 150,
             }}
           >
@@ -285,10 +317,13 @@ export default function DEGTable(props) {
               className="deg_entrez single-line"
               style={{
                 maxWidth:
-                  document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1 >
+                  document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                    .offsetWidth *
+                    0.1 >
                   minWidth
-                    ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth *
-                      0.11
+                    ? document.getElementsByClassName(
+                        'ant-tabs-tabpane-active'
+                      )[0].offsetWidth * 0.11
                     : minWidth,
               }}
             >
@@ -306,10 +341,13 @@ export default function DEGTable(props) {
               className="deg_entrez single-line"
               style={{
                 maxWidth:
-                  document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.1 >
+                  document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                    .offsetWidth *
+                    0.1 >
                   minWidth
-                    ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth *
-                      0.11
+                    ? document.getElementsByClassName(
+                        'ant-tabs-tabpane-active'
+                      )[0].offsetWidth * 0.11
                     : minWidth,
               }}
             >
@@ -339,9 +377,13 @@ export default function DEGTable(props) {
             className="deg_probsetid single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.08 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.08
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.08
                   : minWidth,
             }}
           >
@@ -370,9 +412,13 @@ export default function DEGTable(props) {
             className="deg_t  single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.05 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.05 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.05
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.05
                   : minWidth,
             }}
           >
@@ -401,9 +447,13 @@ export default function DEGTable(props) {
             className="deg_b single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.05 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.05 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.05
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.05
                   : minWidth,
             }}
           >
@@ -419,7 +469,10 @@ export default function DEGTable(props) {
       page_size: props.data.diff_expr_genes.pagination.pageSize,
       page_number: 1,
       sorting: { ...props.data.diff_expr_genes.sorting },
-      search_keyword: { ...props.data.diff_expr_genes.search_keyword, ...{ [keyword]: value } },
+      search_keyword: {
+        ...props.data.diff_expr_genes.search_keyword,
+        ...{ [keyword]: value },
+      },
     });
   };
 

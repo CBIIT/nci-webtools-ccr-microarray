@@ -234,7 +234,8 @@ const defaultState = {
       Boxplots: '',
       PCA: '',
     },
-    geneHeatmap: 'Not enough significant pathways available with p-value < 0.05.',
+    geneHeatmap:
+      'Not enough significant pathways available with p-value < 0.05.',
     volcanoPlot: 'No Data',
     volcanoPlotName: '/volcano.html',
     normal: 'RMA',
@@ -260,7 +261,12 @@ class Analysis extends Component {
     if (this.props.location.search && this.props.location.search != '') {
       this.state = Object.assign({}, defaultState);
       this.state.workflow.progressing = true;
-      this.initWithCode(this.props.location.search.substring(1, this.props.location.search.length));
+      this.initWithCode(
+        this.props.location.search.substring(
+          1,
+          this.props.location.search.length
+        )
+      );
       if (window.location.search == '') {
         ReactGA.pageview(window.location.pathname + '#about');
       } else {
@@ -290,7 +296,8 @@ class Analysis extends Component {
     ) {
       // mobile model
       document.getElementsByClassName('container-board-right')[0].style.width =
-        document.getElementsByClassName('container-board-left')[0].clientWidth + 'px';
+        document.getElementsByClassName('container-board-left')[0].clientWidth +
+        'px';
     } else {
       document.getElementsByClassName('container-board-right')[0].style.width =
         this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth -
@@ -300,8 +307,13 @@ class Analysis extends Component {
     }
   };
   getElementByXpath = (path) => {
-    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-      .singleNodeValue;
+    return document.evaluate(
+      path,
+      document,
+      null,
+      XPathResult.FIRST_ORDERED_NODE_TYPE,
+      null
+    ).singleNodeValue;
   };
   changeRunContrastMode = (params = false) => {
     let workflow = Object.assign({}, this.state.workflow);
@@ -335,7 +347,9 @@ class Analysis extends Component {
         if (result.status == 200) {
           // change
           document.getElementById('support_email').href =
-            'mailto:' + result.data.mail.support_email + '?subject=MicroArray Support';
+            'mailto:' +
+            result.data.mail.support_email +
+            '?subject=MicroArray Support';
         }
       });
   };
@@ -390,7 +404,10 @@ class Analysis extends Component {
               ws_data.push(['Analysis Type', 'GEO Data']);
               ws_data.push(['Accession Code', workflow.accessionCode]);
             }
-            ws_data.push(['Contrasts', workflow.group_1 + ' vs ' + workflow.group_2]);
+            ws_data.push([
+              'Contrasts',
+              workflow.group_1 + ' vs ' + workflow.group_2,
+            ]);
             let group_1_gsm = '';
             let group_2_gsm = '';
             for (var i in workflow.dataList) {
@@ -410,15 +427,26 @@ class Analysis extends Component {
               ws_data.push(['sorting.order', workflow.ssGSEA.sorting.order]);
             }
             if (workflow.ssGSEA.search_keyword.search_logFC != '') {
-              ws_data.push(['logFC', workflow.ssGSEA.search_keyword.search_logFC]);
+              ws_data.push([
+                'logFC',
+                workflow.ssGSEA.search_keyword.search_logFC,
+              ]);
             }
             if (workflow.ssGSEA.search_keyword.search_p_value != '') {
-              ws_data.push(['P.Value', workflow.ssGSEA.search_keyword.search_p_value]);
+              ws_data.push([
+                'P.Value',
+                workflow.ssGSEA.search_keyword.search_p_value,
+              ]);
             }
             if (workflow.ssGSEA.search_keyword.search_adj_p_value != '') {
-              ws_data.push(['adj.P.value', workflow.ssGSEA.search_keyword.search_adj_p_value]);
+              ws_data.push([
+                'adj.P.value',
+                workflow.ssGSEA.search_keyword.search_adj_p_value,
+              ]);
             }
-            if (workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score != '') {
+            if (
+              workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score != ''
+            ) {
               ws_data.push([
                 'Avg.Enrichment.Score',
                 workflow.ssGSEA.search_keyword.search_Avg_Enrichment_Score,
@@ -436,7 +464,15 @@ class Analysis extends Component {
             // export data
             let degData = result.data.records;
             let exportData = [
-              ['NAME', 'logFC', 'Avg.Enrichment.Score', 't', 'P.Value', 'adj.P.Val', 'B'],
+              [
+                'NAME',
+                'logFC',
+                'Avg.Enrichment.Score',
+                't',
+                'P.Value',
+                'adj.P.Val',
+                'B',
+              ],
             ];
             for (let i in degData) {
               exportData.push([
@@ -451,10 +487,14 @@ class Analysis extends Component {
             }
             var ws2 = XLSX.utils.aoa_to_sheet(exportData);
             wb.Sheets['Results'] = ws2;
-            var wbout = XLSX.writeFile(wb, 'ssGSEA_' + workflow.projectID + '.xlsx', {
-              bookType: 'xlsx',
-              type: 'binary',
-            });
+            var wbout = XLSX.writeFile(
+              wb,
+              'ssGSEA_' + workflow.projectID + '.xlsx',
+              {
+                bookType: 'xlsx',
+                type: 'binary',
+              }
+            );
           }
         } else {
           workflow.ssGSEA.message = result.msg;
@@ -596,7 +636,10 @@ class Analysis extends Component {
               ws_data.push(['Accession Code', workflow.accessionCode]);
             }
 
-            ws_data.push(['Contrasts', workflow.group_1 + ' vs ' + workflow.group_2]);
+            ws_data.push([
+              'Contrasts',
+              workflow.group_1 + ' vs ' + workflow.group_2,
+            ]);
             let group_1_gsm = '';
             let group_2_gsm = '';
             for (var i in workflow.dataList) {
@@ -615,46 +658,78 @@ class Analysis extends Component {
             ws_data.push(['Filters', '']);
 
             if (workflow.pathways_up.search_keyword.search_PATHWAY_ID != '') {
-              ws_data.push(['Pathway_ID', workflow.pathways_up.search_keyword.search_PATHWAY_ID]);
+              ws_data.push([
+                'Pathway_ID',
+                workflow.pathways_up.search_keyword.search_PATHWAY_ID,
+              ]);
             }
             if (workflow.pathways_up.search_keyword.search_SOURCE != '') {
-              ws_data.push(['Source', workflow.pathways_up.search_keyword.search_SOURCE]);
+              ws_data.push([
+                'Source',
+                workflow.pathways_up.search_keyword.search_SOURCE,
+              ]);
             }
             if (workflow.pathways_up.search_keyword.search_DESCRIPTION != '') {
-              ws_data.push(['Description', workflow.pathways_up.search_keyword.search_DESCRIPTION]);
+              ws_data.push([
+                'Description',
+                workflow.pathways_up.search_keyword.search_DESCRIPTION,
+              ]);
             }
             if (workflow.pathways_up.search_keyword.search_p_value != '') {
-              ws_data.push(['P.value', workflow.pathways_up.search_keyword.search_p_value]);
+              ws_data.push([
+                'P.value',
+                workflow.pathways_up.search_keyword.search_p_value,
+              ]);
             }
             if (workflow.pathways_up.search_keyword.search_fdr != '') {
-              ws_data.push(['FDR', workflow.pathways_up.search_keyword.search_fdr]);
+              ws_data.push([
+                'FDR',
+                workflow.pathways_up.search_keyword.search_fdr,
+              ]);
             }
             if (workflow.pathways_up.search_keyword.search_RATIO != '') {
-              ws_data.push(['Ratio', workflow.pathways_up.search_keyword.search_RATIO]);
+              ws_data.push([
+                'Ratio',
+                workflow.pathways_up.search_keyword.search_RATIO,
+              ]);
             }
             if (workflow.pathways_up.search_keyword.search_NUMBER_HITS != '') {
-              ws_data.push(['Number_Hits', workflow.pathways_up.search_keyword.search_NUMBER_HITS]);
+              ws_data.push([
+                'Number_Hits',
+                workflow.pathways_up.search_keyword.search_NUMBER_HITS,
+              ]);
             }
-            if (workflow.pathways_up.search_keyword.search_NUMBER_MISSES != '') {
+            if (
+              workflow.pathways_up.search_keyword.search_NUMBER_MISSES != ''
+            ) {
               ws_data.push([
                 'Number_Misses',
                 workflow.pathways_up.search_keyword.search_NUMBER_MISSES,
               ]);
             }
-            if (workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES != '') {
+            if (
+              workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES != ''
+            ) {
               ws_data.push([
                 'Number_User_Genes',
                 workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES,
               ]);
             }
-            if (workflow.pathways_up.search_keyword.search_TOTAL_GENES_MINUS_INPUT != '') {
+            if (
+              workflow.pathways_up.search_keyword
+                .search_TOTAL_GENES_MINUS_INPUT != ''
+            ) {
               ws_data.push([
                 'Total_Number_Genes',
-                workflow.pathways_up.search_keyword.search_TOTAL_GENES_MINUS_INPUT,
+                workflow.pathways_up.search_keyword
+                  .search_TOTAL_GENES_MINUS_INPUT,
               ]);
             }
             if (workflow.pathways_up.search_keyword.search_GENE_LIST != '') {
-              ws_data.push(['Gene_List', workflow.pathways_up.search_keyword.search_GENE_LIST]);
+              ws_data.push([
+                'Gene_List',
+                workflow.pathways_up.search_keyword.search_GENE_LIST,
+              ]);
             }
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets['Settings'] = ws;
@@ -693,10 +768,14 @@ class Analysis extends Component {
             }
             var ws2 = XLSX.utils.aoa_to_sheet(exportData);
             wb.Sheets['Results'] = ws2;
-            var wbout = XLSX.writeFile(wb, 'DEG_' + workflow.projectID + '.xlsx', {
-              bookType: 'xlsx',
-              type: 'binary',
-            });
+            var wbout = XLSX.writeFile(
+              wb,
+              'DEG_' + workflow.projectID + '.xlsx',
+              {
+                bookType: 'xlsx',
+                type: 'binary',
+              }
+            );
           }
         } else {
           workflow.pathways_up.message = 'export PathwayUp fails';
@@ -907,7 +986,10 @@ class Analysis extends Component {
               ws_data.push(['Analysis Type', 'GEO Data']);
               ws_data.push(['Accession Code', workflow.accessionCode]);
             }
-            ws_data.push(['Contrasts', workflow.group_1 + ' vs ' + workflow.group_2]);
+            ws_data.push([
+              'Contrasts',
+              workflow.group_1 + ' vs ' + workflow.group_2,
+            ]);
             let group_1_gsm = '';
             let group_2_gsm = '';
             for (var i in workflow.dataList) {
@@ -926,53 +1008,84 @@ class Analysis extends Component {
             ws_data.push(['Filters', '']);
 
             if (workflow.pathways_down.search_keyword.search_PATHWAY_ID != '') {
-              ws_data.push(['Pathway_ID', workflow.pathways_down.search_keyword.search_PATHWAY_ID]);
+              ws_data.push([
+                'Pathway_ID',
+                workflow.pathways_down.search_keyword.search_PATHWAY_ID,
+              ]);
             }
 
             if (workflow.pathways_down.search_keyword.search_SOURCE != '') {
-              ws_data.push(['Source', workflow.pathways_down.search_keyword.search_SOURCE]);
+              ws_data.push([
+                'Source',
+                workflow.pathways_down.search_keyword.search_SOURCE,
+              ]);
             }
-            if (workflow.pathways_down.search_keyword.search_DESCRIPTION != '') {
+            if (
+              workflow.pathways_down.search_keyword.search_DESCRIPTION != ''
+            ) {
               ws_data.push([
                 'Description',
                 workflow.pathways_down.search_keyword.search_DESCRIPTION,
               ]);
             }
             if (workflow.pathways_down.search_keyword.search_p_value != '') {
-              ws_data.push(['P.value', workflow.pathways_down.search_keyword.search_p_value]);
+              ws_data.push([
+                'P.value',
+                workflow.pathways_down.search_keyword.search_p_value,
+              ]);
             }
             if (workflow.pathways_down.search_keyword.search_fdr != '') {
-              ws_data.push(['FDR', workflow.pathways_down.search_keyword.search_fdr]);
+              ws_data.push([
+                'FDR',
+                workflow.pathways_down.search_keyword.search_fdr,
+              ]);
             }
             if (workflow.pathways_down.search_keyword.search_RATIO != '') {
-              ws_data.push(['Ratio', workflow.pathways_down.search_keyword.search_RATIO]);
+              ws_data.push([
+                'Ratio',
+                workflow.pathways_down.search_keyword.search_RATIO,
+              ]);
             }
-            if (workflow.pathways_down.search_keyword.search_NUMBER_HITS != '') {
+            if (
+              workflow.pathways_down.search_keyword.search_NUMBER_HITS != ''
+            ) {
               ws_data.push([
                 'Number_Hits',
                 workflow.pathways_down.search_keyword.search_NUMBER_HITS,
               ]);
             }
-            if (workflow.pathways_down.search_keyword.search_NUMBER_MISSES != '') {
+            if (
+              workflow.pathways_down.search_keyword.search_NUMBER_MISSES != ''
+            ) {
               ws_data.push([
                 'Number_Misses',
                 workflow.pathways_down.search_keyword.search_NUMBER_MISSES,
               ]);
             }
-            if (workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES != '') {
+            if (
+              workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES !=
+              ''
+            ) {
               ws_data.push([
                 'Number_User_Genes',
                 workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES,
               ]);
             }
-            if (workflow.pathways_down.search_keyword.search_TOTAL_GENES_MINUS_INPUT != '') {
+            if (
+              workflow.pathways_down.search_keyword
+                .search_TOTAL_GENES_MINUS_INPUT != ''
+            ) {
               ws_data.push([
                 'Total_Number_Genes',
-                workflow.pathways_down.search_keyword.search_TOTAL_GENES_MINUS_INPUT,
+                workflow.pathways_down.search_keyword
+                  .search_TOTAL_GENES_MINUS_INPUT,
               ]);
             }
             if (workflow.pathways_down.search_keyword.search_GENE_LIST != '') {
-              ws_data.push(['Gene_List', workflow.pathways_down.search_keyword.search_GENE_LIST]);
+              ws_data.push([
+                'Gene_List',
+                workflow.pathways_down.search_keyword.search_GENE_LIST,
+              ]);
             }
 
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
@@ -1013,10 +1126,14 @@ class Analysis extends Component {
 
             var ws2 = XLSX.utils.aoa_to_sheet(exportData);
             wb.Sheets['Results'] = ws2;
-            var wbout = XLSX.writeFile(wb, 'DEG_' + workflow.projectID + '.xlsx', {
-              bookType: 'xlsx',
-              type: 'binary',
-            });
+            var wbout = XLSX.writeFile(
+              wb,
+              'DEG_' + workflow.projectID + '.xlsx',
+              {
+                bookType: 'xlsx',
+                type: 'binary',
+              }
+            );
           }
         } else {
           let workflow = Object.assign({}, this.state.workflow);
@@ -1147,10 +1264,16 @@ class Analysis extends Component {
 
           var ws = XLSX.utils.aoa_to_sheet(ws_data);
           wb.Sheets['Data'] = ws;
-          XLSX.writeFile(wb, 'DEG_Normalized_Data_for_All_Samples' + workflow.projectID + '.xlsx', {
-            bookType: 'xlsx',
-            type: 'binary',
-          });
+          XLSX.writeFile(
+            wb,
+            'DEG_Normalized_Data_for_All_Samples' +
+              workflow.projectID +
+              '.xlsx',
+            {
+              bookType: 'xlsx',
+              type: 'binary',
+            }
+          );
         }
         workflow.progressing = false;
         workflow.loading_info = 'Loading';
@@ -1212,7 +1335,10 @@ class Analysis extends Component {
               ws_data.push(['Analysis Type', 'GEO Data']);
               ws_data.push(['Accession Code', workflow.accessionCode]);
             }
-            ws_data.push(['Contrasts', workflow.group_1 + ' vs ' + workflow.group_2]);
+            ws_data.push([
+              'Contrasts',
+              workflow.group_1 + ' vs ' + workflow.group_2,
+            ]);
             let group_1_gsm = '';
             let group_2_gsm = '';
             for (var i in workflow.dataList) {
@@ -1230,40 +1356,74 @@ class Analysis extends Component {
             ws_data.push(['Filters', '']);
 
             if (workflow.diff_expr_genes.search_keyword.search_symbol != '') {
-              ws_data.push(['SYMBOL', workflow.diff_expr_genes.search_keyword.search_symbol]);
+              ws_data.push([
+                'SYMBOL',
+                workflow.diff_expr_genes.search_keyword.search_symbol,
+              ]);
             }
             if (workflow.diff_expr_genes.search_keyword.search_fc != '') {
-              ws_data.push(['fc', workflow.diff_expr_genes.search_keyword.search_fc]);
+              ws_data.push([
+                'fc',
+                workflow.diff_expr_genes.search_keyword.search_fc,
+              ]);
             }
             if (workflow.diff_expr_genes.search_keyword.search_p_value != '') {
-              ws_data.push(['P.Value', workflow.diff_expr_genes.search_keyword.search_p_value]);
+              ws_data.push([
+                'P.Value',
+                workflow.diff_expr_genes.search_keyword.search_p_value,
+              ]);
             }
-            if (workflow.diff_expr_genes.search_keyword.search_adj_p_value != '') {
+            if (
+              workflow.diff_expr_genes.search_keyword.search_adj_p_value != ''
+            ) {
               ws_data.push([
                 'adj.P.value',
                 workflow.diff_expr_genes.search_keyword.search_adj_p_value,
               ]);
             }
             if (workflow.diff_expr_genes.search_keyword.search_aveexpr != '') {
-              ws_data.push(['AveExpr', workflow.diff_expr_genes.search_keyword.search_aveexpr]);
+              ws_data.push([
+                'AveExpr',
+                workflow.diff_expr_genes.search_keyword.search_aveexpr,
+              ]);
             }
             if (workflow.pathways_down.search_keyword.search_fdr != '') {
-              ws_data.push(['ACCNUM', workflow.diff_expr_genes.search_keyword.search_accnum]);
+              ws_data.push([
+                'ACCNUM',
+                workflow.diff_expr_genes.search_keyword.search_accnum,
+              ]);
             }
             if (workflow.diff_expr_genes.search_keyword.search_desc != '') {
-              ws_data.push(['DESC', workflow.diff_expr_genes.search_keyword.search_desc]);
+              ws_data.push([
+                'DESC',
+                workflow.diff_expr_genes.search_keyword.search_desc,
+              ]);
             }
             if (workflow.diff_expr_genes.search_keyword.search_entrez != '') {
-              ws_data.push(['ENTREZ', workflow.diff_expr_genes.search_keyword.search_entrez]);
+              ws_data.push([
+                'ENTREZ',
+                workflow.diff_expr_genes.search_keyword.search_entrez,
+              ]);
             }
-            if (workflow.diff_expr_genes.search_keyword.search_probsetid != '') {
-              ws_data.push(['probsetID', workflow.diff_expr_genes.search_keyword.search_probsetid]);
+            if (
+              workflow.diff_expr_genes.search_keyword.search_probsetid != ''
+            ) {
+              ws_data.push([
+                'probsetID',
+                workflow.diff_expr_genes.search_keyword.search_probsetid,
+              ]);
             }
             if (workflow.diff_expr_genes.search_keyword.search_t != '') {
-              ws_data.push(['t', workflow.diff_expr_genes.search_keyword.search_t]);
+              ws_data.push([
+                't',
+                workflow.diff_expr_genes.search_keyword.search_t,
+              ]);
             }
             if (workflow.diff_expr_genes.search_keyword.search_b != '') {
-              ws_data.push(['b', workflow.diff_expr_genes.search_keyword.search_b]);
+              ws_data.push([
+                'b',
+                workflow.diff_expr_genes.search_keyword.search_b,
+              ]);
             }
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets['Settings'] = ws;
@@ -1304,10 +1464,14 @@ class Analysis extends Component {
             }
             var ws2 = XLSX.utils.aoa_to_sheet(exportData);
             wb.Sheets['Results'] = ws2;
-            var wbout = XLSX.writeFile(wb, 'DEG_' + workflow.projectID + '.xlsx', {
-              bookType: 'xlsx',
-              type: 'binary',
-            });
+            var wbout = XLSX.writeFile(
+              wb,
+              'DEG_' + workflow.projectID + '.xlsx',
+              {
+                bookType: 'xlsx',
+                type: 'binary',
+              }
+            );
           }
         } else {
           workflow.diff_expr_genes.message = JSON.stringify(result.msg);
@@ -1343,7 +1507,13 @@ class Analysis extends Component {
     let volcanoPlot = (
       <CIframe
         title={'volcanoPlot'}
-        link={'./images/' + workflow.projectID + workflow.volcanoPlotName + '?' + this.uuidv4()}
+        link={
+          './images/' +
+          workflow.projectID +
+          workflow.volcanoPlotName +
+          '?' +
+          this.uuidv4()
+        }
         data={this.state.workflow}
         onLoadComplete={this.onLoadComplete}
         showLoading={this.showLoading}
@@ -1391,7 +1561,9 @@ class Analysis extends Component {
                       group_data[element]['y'].push(pcaData.y[index]);
                       group_data[element]['z'].push(pcaData.z[index]);
                       group_data[element]['color'].push(pcaData.color[i]);
-                      group_data[element]['group_name'].push(pcaData.group_name[i]);
+                      group_data[element]['group_name'].push(
+                        pcaData.group_name[i]
+                      );
                       group_data[element]['row'].push(pcaData.row[i]);
                     } else {
                       group_data[element] = {};
@@ -1399,7 +1571,9 @@ class Analysis extends Component {
                       group_data[element]['y'] = [pcaData.y[index]];
                       group_data[element]['z'] = [pcaData.z[index]];
                       group_data[element]['color'] = [pcaData.color[i]];
-                      group_data[element]['group_name'] = [pcaData.group_name[i]];
+                      group_data[element]['group_name'] = [
+                        pcaData.group_name[i],
+                      ];
                       group_data[element]['row'] = [pcaData.row[i]];
                     }
                     index++;
@@ -1442,9 +1616,11 @@ class Analysis extends Component {
                   pd: 2,
                 },
                 width:
-                  document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.8,
+                  document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                    .offsetWidth * 0.8,
                 height:
-                  document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.6,
+                  document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                    .offsetWidth * 0.6,
                 scene: {
                   camera: {
                     eye: { x: 0, y: 2, z: 1 },
@@ -1474,7 +1650,11 @@ class Analysis extends Component {
               };
 
               var PCAIframe = (
-                <Plot data={pcaPlotData} layout={pcaPlotLayout} useResizeHandler={true} />
+                <Plot
+                  data={pcaPlotData}
+                  layout={pcaPlotLayout}
+                  useResizeHandler={true}
+                />
               );
               let workflow = Object.assign({}, this.state.workflow);
               workflow.progressing = false;
@@ -1497,7 +1677,9 @@ class Analysis extends Component {
             }
             document.getElementById('message-post-pca').innerHTML = '';
           } else {
-            document.getElementById('message-post-pca').innerHTML = JSON.stringify(result.msg);
+            document.getElementById(
+              'message-post-pca'
+            ).innerHTML = JSON.stringify(result.msg);
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
             workflow.PCA = 'No Data';
@@ -1546,7 +1728,9 @@ class Analysis extends Component {
             }
             document.getElementById('message-post-boxplot').innerHTML = '';
           } else {
-            document.getElementById('message-post-boxplot').innerHTML = JSON.stringify(result.msg);
+            document.getElementById(
+              'message-post-boxplot'
+            ).innerHTML = JSON.stringify(result.msg);
             let workflow = Object.assign({}, this.state.workflow);
             workflow.progressing = false;
             workflow.BoxplotAN.plot = 'No Data';
@@ -1564,7 +1748,8 @@ class Analysis extends Component {
   };
   getHistplotAN = () => {
     let workflow = Object.assign({}, this.state.workflow);
-    let histplotANLink = './images/' + workflow.projectID + '/' + workflow.histplotAN_url;
+    let histplotANLink =
+      './images/' + workflow.projectID + '/' + workflow.histplotAN_url;
     let histplotAN = (
       <CIframe
         title={'HistplotAN'}
@@ -1612,13 +1797,17 @@ class Analysis extends Component {
               }
             } else {
               workflow.list_mAplotAN = 'No Data';
-              document.getElementById('message-post-maplot').innerHTML = JSON.stringify(result.msg);
+              document.getElementById(
+                'message-post-maplot'
+              ).innerHTML = JSON.stringify(result.msg);
             }
             workflow.progressing = false;
             this.setState({ workflow: workflow });
           });
       } catch (error) {
-        document.getElementById('message-post-maplot').innerHTML = JSON.stringify(error);
+        document.getElementById(
+          'message-post-maplot'
+        ).innerHTML = JSON.stringify(error);
         let workflow = Object.assign({}, this.state.workflow);
         workflow.progressing = false;
         this.setState({ workflow: workflow });
@@ -1650,13 +1839,17 @@ class Analysis extends Component {
             workflow.NUSE.data = render_data.data;
             workflow.NUSE.plot = render_data.plot;
           } else {
-            document.getElementById('message-pre-nuse').innerHTML = JSON.stringify(result.msg);
+            document.getElementById(
+              'message-pre-nuse'
+            ).innerHTML = JSON.stringify(result.msg);
             workflow.progressing = false;
           }
           this.setState({ workflow: workflow });
         });
     } catch (error) {
-      document.getElementById('message-pre-nuse').innerHTML = JSON.stringify(error);
+      document.getElementById('message-pre-nuse').innerHTML = JSON.stringify(
+        error
+      );
       let workflow = Object.assign({}, this.state.workflow);
       workflow.progressing = false;
       this.setState({ workflow: workflow });
@@ -1694,7 +1887,9 @@ class Analysis extends Component {
             }
             this.setState({ workflow: workflow });
           } else {
-            document.getElementById('message-pre-rle').innerHTML = JSON.stringify(result.msg);
+            document.getElementById(
+              'message-pre-rle'
+            ).innerHTML = JSON.stringify(result.msg);
             let workflow = Object.assign({}, this.state.workflow);
             workflow.RLE.plot = 'No Data';
             workflow.progressing = false;
@@ -1702,7 +1897,9 @@ class Analysis extends Component {
           }
         });
     } catch (error) {
-      document.getElementById('message-pre-rle').innerHTML = JSON.stringify(error);
+      document.getElementById('message-pre-rle').innerHTML = JSON.stringify(
+        error
+      );
       let workflow = Object.assign({}, this.state.workflow);
       workflow.RLE.plot = 'No Data';
       workflow.progressing = false;
@@ -1773,7 +1970,9 @@ class Analysis extends Component {
     };
 
     let plot_style = {
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
+      width:
+        document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+          .offsetWidth * 0.9,
     };
 
     return {
@@ -1825,7 +2024,9 @@ class Analysis extends Component {
               this.setState({ workflow: workflow });
             }
           } else {
-            document.getElementById('message-pre-boxplot').innerHTML = JSON.stringify(result.msg);
+            document.getElementById(
+              'message-pre-boxplot'
+            ).innerHTML = JSON.stringify(result.msg);
             let workflow = Object.assign({}, this.state.workflow);
             workflow.preplots.Boxplots = 'No Data';
             workflow.progressing = false;
@@ -1833,7 +2034,9 @@ class Analysis extends Component {
           }
         });
     } catch (error) {
-      document.getElementById('message-pre-boxplot').innerHTML = JSON.stringify(error);
+      document.getElementById('message-pre-boxplot').innerHTML = JSON.stringify(
+        error
+      );
       let workflow = Object.assign({}, this.state.workflow);
       workflow.preplots.Boxplots = 'No Data';
       workflow.progressing = false;
@@ -1866,9 +2069,9 @@ class Analysis extends Component {
                 workflow.list_mAplotBN = result.data;
               } else {
                 workflow.list_mAplotBN = 'No Data';
-                document.getElementById('message-pre-maplot').innerHTML = JSON.stringify(
-                  result.msg
-                );
+                document.getElementById(
+                  'message-pre-maplot'
+                ).innerHTML = JSON.stringify(result.msg);
               }
             } else {
               workflow.list_mAplotBN = 'No Data';
@@ -1877,7 +2080,9 @@ class Analysis extends Component {
             this.setState({ workflow: workflow });
           });
       } catch (error) {
-        document.getElementById('message-pre-maplot').innerHTML = JSON.stringify(error);
+        document.getElementById(
+          'message-pre-maplot'
+        ).innerHTML = JSON.stringify(error);
         let workflow = Object.assign({}, this.state.workflow);
         workflow.list_mAplotBN = 'No Data';
         workflow.progressing = false;
@@ -1888,7 +2093,8 @@ class Analysis extends Component {
 
   getHistplotBN = () => {
     let workflow = Object.assign({}, this.state.workflow);
-    let histplotBNLink = './images/' + workflow.projectID + '/' + workflow.histplotBN_url;
+    let histplotBNLink =
+      './images/' + workflow.projectID + '/' + workflow.histplotBN_url;
     let histplotBN = (
       <CIframe
         title={'histplotBN'}
@@ -1977,7 +2183,8 @@ class Analysis extends Component {
     workflow.progressing = true;
     workflow.loading_info = 'Running Analysis...';
     // remove old heatmap
-    workflow.geneHeatmap = 'Not enough significant pathways available with p-value < 0.05.';
+    workflow.geneHeatmap =
+      'Not enough significant pathways available with p-value < 0.05.';
     this.setState({
       workflow: workflow,
     });
@@ -2015,7 +2222,10 @@ class Analysis extends Component {
   disableContrast = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.disableContrast = true;
-    this.setState({ workflow: workflow }, console.log(this.state.workflow.disableContrast));
+    this.setState(
+      { workflow: workflow },
+      console.log(this.state.workflow.disableContrast)
+    );
   };
   // clear and enable contrast fields, disable results tabs
   resetContrast = () => {
@@ -2289,9 +2499,9 @@ class Analysis extends Component {
                   workflow.groups = {};
                   chips.forEach(
                     (key) =>
-                      (workflow.groups.key = new Array(workflow.dataList[key].length).fill(
-                        'Others'
-                      ))
+                      (workflow.groups.key = new Array(
+                        workflow.dataList[key].length
+                      ).fill('Others'))
                   );
                 } else if (typeof parse === 'string' && parse.length) {
                   this.loadError(parse);
@@ -2362,7 +2572,8 @@ class Analysis extends Component {
 
   getSSGSEAGeneHeatMap = async () => {
     let workflow = Object.assign({}, this.state.workflow);
-    let link = './images/' + workflow.projectID + '/ssgseaHeatmap1.jpg?' + this.uuidv4();
+    let link =
+      './images/' + workflow.projectID + '/ssgseaHeatmap1.jpg?' + this.uuidv4();
     const AbortController = window.AbortController;
     const controller = new AbortController();
     const signal = controller.signal;
@@ -2382,7 +2593,9 @@ class Analysis extends Component {
 
     setTimeout(() => controller.abort(), 10000);
     if (await exists()) {
-      workflow.geneHeatmap = <img src={link} style={{ width: '100%' }} alt="Pathway Heatmap" />;
+      workflow.geneHeatmap = (
+        <img src={link} style={{ width: '100%' }} alt="Pathway Heatmap" />
+      );
       this.setState({ workflow: workflow });
     }
   };
@@ -2390,7 +2603,10 @@ class Analysis extends Component {
   index = (groups) => {
     let index = [];
     for (let i in groups) {
-      if (groups[i] === this.state.workflow.group_1 || groups[i] === this.state.workflow.group_2) {
+      if (
+        groups[i] === this.state.workflow.group_1 ||
+        groups[i] === this.state.workflow.group_2
+      ) {
         index.push(++i);
       }
     }
@@ -2423,7 +2639,9 @@ class Analysis extends Component {
     }
     let batchCount = 0;
     let batchSamples = {};
-    let dataList = workflow.multichip ? workflow.dataList[workflow.chip] : workflow.dataList;
+    let dataList = workflow.multichip
+      ? workflow.dataList[workflow.chip]
+      : workflow.dataList;
 
     for (var gsm of dataList) {
       reqBody.dataList.push(gsm.gsm);
@@ -2538,12 +2756,14 @@ class Analysis extends Component {
     }
 
     // remove old heatmap
-    workflow.geneHeatmap = 'Not enough significant pathways available with p-value < 0.05.';
+    workflow.geneHeatmap =
+      'Not enough significant pathways available with p-value < 0.05.';
     this.setState({ workflow: workflow });
 
     if (workflow.useQueue) {
       if (document.getElementById('input-email').value == '') {
-        document.getElementById('message-use-queue').innerHTML = 'Email is required';
+        document.getElementById('message-use-queue').innerHTML =
+          'Email is required';
         workflow.uploading = false;
         workflow.progressing = false;
         this.setState({
@@ -2569,7 +2789,9 @@ class Analysis extends Component {
               workflow.QueueModalvisible = true;
             } else {
               workflow.QueueModalvisible = false;
-              document.getElementById('message-use-queue').innerHTML = JSON.stringify(result.msg);
+              document.getElementById(
+                'message-use-queue'
+              ).innerHTML = JSON.stringify(result.msg);
             }
             workflow.uploading = false;
             workflow.progressing = false;
@@ -2585,7 +2807,9 @@ class Analysis extends Component {
       } catch (err) {
         workflow.uploading = false;
         workflow.progressing = false;
-        document.getElementById('message-use-queue').innerHTML = JSON.stringify(err);
+        document.getElementById('message-use-queue').innerHTML = JSON.stringify(
+          err
+        );
         this.setState({
           workflow: workflow,
         });
@@ -2625,7 +2849,9 @@ class Analysis extends Component {
                 action: 'Run Contrast - Live',
               });
             } else {
-              document.getElementById('message-gsm').innerHTML = JSON.stringify(result.msg);
+              document.getElementById('message-gsm').innerHTML = JSON.stringify(
+                result.msg
+              );
               workflow.progressing = false;
               this.setState({
                 workflow: workflow,
@@ -2693,8 +2919,13 @@ class Analysis extends Component {
             let list = JSON.parse(decodeURIComponent(data));
             workflow.uploading = false;
             workflow.progressing = false;
-            if (list.files == null || typeof list.files == 'undefined' || list.files.length == 0) {
-              document.getElementById('message-gsm').innerHTML = 'load data fails.';
+            if (
+              list.files == null ||
+              typeof list.files == 'undefined' ||
+              list.files.length == 0
+            ) {
+              document.getElementById('message-gsm').innerHTML =
+                'load data fails.';
               document.getElementById('message-gsm').nextSibling.innerHTML = '';
               return;
             }
@@ -2716,7 +2947,9 @@ class Analysis extends Component {
             this.setState({
               workflow: workflow,
             });
-            document.getElementById('message-gsm').innerHTML = JSON.stringify(result.msg);
+            document.getElementById('message-gsm').innerHTML = JSON.stringify(
+              result.msg
+            );
             document.getElementById('message-gsm').nextSibling.innerHTML = '';
           }
           document.getElementById('btn-project-upload').disabled = true;
@@ -2747,13 +2980,17 @@ class Analysis extends Component {
     let pattern = /^[a-zA-Z]+\_?[a-zA-Z0-9]*$|^[a-zA-Z]+[0-9]*$/g;
     if (group_name.match(pattern)) {
       let workflow = Object.assign({}, this.state.workflow);
-      let dataList = workflow.multichip ? workflow.dataList[workflow.chip] : workflow.dataList;
+      let dataList = workflow.multichip
+        ? workflow.dataList[workflow.chip]
+        : workflow.dataList;
       for (var key of dataList_keys) {
         if (type === 'group') {
           if (dataList[key - 1].groups) {
             if (dataList[key - 1].groups === '') {
               dataList[key - 1].groups = group_name;
-            } else if (dataList[key - 1].groups.split(',').indexOf(group_name) < 0) {
+            } else if (
+              dataList[key - 1].groups.split(',').indexOf(group_name) < 0
+            ) {
               dataList[key - 1].groups += `,${group_name}`;
             }
           } else {
@@ -2782,7 +3019,9 @@ class Analysis extends Component {
         if (assignment.length < 2) {
           return `Error: Invalid format - 'group' and 'batch' columns required.`;
         }
-        let dataList = workflow.multichip ? workflow.dataList[workflow.chip] : workflow.dataList;
+        let dataList = workflow.multichip
+          ? workflow.dataList[workflow.chip]
+          : workflow.dataList;
 
         for (let data of dataList) {
           if (data.gsm === gsm) {
@@ -2803,7 +3042,8 @@ class Analysis extends Component {
             }
             if (assignment[1].length) {
               if (assignment[1].match(pattern)) data.batch = assignment[1];
-              else return `${gsm} Error: Batch Name ${assignment[1]} is invalid`;
+              else
+                return `${gsm} Error: Batch Name ${assignment[1]} is invalid`;
             }
           }
         }
@@ -2815,7 +3055,9 @@ class Analysis extends Component {
 
   deleteGroup = (group_name, type) => {
     let workflow = Object.assign({}, this.state.workflow);
-    let dataList = workflow.multichip ? workflow.dataList[workflow.chip] : workflow.dataList;
+    let dataList = workflow.multichip
+      ? workflow.dataList[workflow.chip]
+      : workflow.dataList;
 
     for (let gsm of dataList) {
       if (type === 'group') {
@@ -2826,7 +3068,10 @@ class Analysis extends Component {
           gsm.groups.indexOf(',') != -1 &&
           gsm.groups.indexOf(group_name) != -1
         ) {
-          if (gsm.groups.indexOf(group_name) == gsm.groups.length - group_name.length) {
+          if (
+            gsm.groups.indexOf(group_name) ==
+            gsm.groups.length - group_name.length
+          ) {
             gsm.groups = gsm.groups.replace(',' + group_name, '');
           } else {
             gsm.groups = gsm.groups.replace(group_name + ',', '');
@@ -2849,7 +3094,8 @@ class Analysis extends Component {
         document.getElementById('message-gsm').innerHTML = response.statusText;
       } else {
         let errorMessage = '';
-        if (httpErrorMessage[response.status]) errorMessage = httpErrorMessage[response.status];
+        if (httpErrorMessage[response.status])
+          errorMessage = httpErrorMessage[response.status];
         document.getElementById('message-gsm').innerHTML =
           'Error Code : ' + response.status + '  ' + errorMessage;
       }
@@ -2861,10 +3107,17 @@ class Analysis extends Component {
     }
   };
   hideWorkFlow = () => {
-    if (document.getElementsByClassName('container-board-right')[0].clientWidth > 600) {
-      document.getElementsByClassName('container-board-left')[0].style.display = 'none';
+    if (
+      document.getElementsByClassName('container-board-right')[0].clientWidth >
+      600
+    ) {
+      document.getElementsByClassName('container-board-left')[0].style.display =
+        'none';
     }
-    if (document.getElementsByClassName('container-board-right')[0].clientWidth > 600) {
+    if (
+      document.getElementsByClassName('container-board-right')[0].clientWidth >
+      600
+    ) {
       // when user use mobile, container-board-right set to be 100% width
       document.getElementsByClassName('container-board-right')[0].style.width =
         this.getElementByXpath('//*[@id="tab_analysis"]/div[1]').clientWidth -
@@ -2881,8 +3134,11 @@ class Analysis extends Component {
     this.resetBoxPlotBN();
   };
   showWorkFlow = () => {
-    document.getElementsByClassName('container-board-left')[0].style.display = 'block';
-    document.getElementsByClassName('container-board-right')[0].removeAttribute('style');
+    document.getElementsByClassName('container-board-left')[0].style.display =
+      'block';
+    document
+      .getElementsByClassName('container-board-right')[0]
+      .removeAttribute('style');
     document.getElementById('panel-show').style.display = 'none';
     document.getElementById('panel-hide').style.display = 'inherit';
     this.resetBoxPlotAN();
@@ -2895,8 +3151,12 @@ class Analysis extends Component {
     let workflow = Object.assign({}, this.state.workflow);
     let pcaPlotLayout = {
       margin: workflow.PCA.layout.margin,
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.8,
-      height: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.6,
+      width:
+        document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+          .offsetWidth * 0.8,
+      height:
+        document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+          .offsetWidth * 0.6,
       scene: workflow.PCA.layout.scene,
     };
     if (!workflow.PCA.data == '') {
@@ -2914,7 +3174,9 @@ class Analysis extends Component {
   resetBoxPlotAN = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.BoxplotAN.style = {
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
+      width:
+        document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+          .offsetWidth * 0.9,
     };
     workflow.BoxplotAN.layout = {
       showlegend: false,
@@ -2939,7 +3201,9 @@ class Analysis extends Component {
   resetBoxPlotBN = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.BoxplotBN.style = {
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
+      width:
+        document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+          .offsetWidth * 0.9,
     };
     workflow.BoxplotBN.layout = {
       showlegend: false,
@@ -2964,7 +3228,9 @@ class Analysis extends Component {
   resetRLE = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.RLE.style = {
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
+      width:
+        document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+          .offsetWidth * 0.9,
     };
     workflow.RLE.layout = { showlegend: false, autoSize: true };
     if (!workflow.RLE.data == '') {
@@ -2983,7 +3249,9 @@ class Analysis extends Component {
   resetNUSE = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.NUSE.style = {
-      width: document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.9,
+      width:
+        document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+          .offsetWidth * 0.9,
     };
     workflow.NUSE.layout = {
       showlegend: false,
@@ -3095,7 +3363,8 @@ class Analysis extends Component {
             workflow2.group_2 = result.group_2;
             workflow2.groups = result.groups;
             workflow2.normal = result.normal;
-            workflow2.loadChip = Object.entries(result.chip).length > 0 ? result.chip : '';
+            workflow2.loadChip =
+              Object.entries(result.chip).length > 0 ? result.chip : '';
             // replace default group
             for (let i in workflow2.dataList) {
               if (
@@ -3203,19 +3472,27 @@ class Analysis extends Component {
         <div>
           <p>
             {' '}
-            Your job will be sent to the queuing system for processing. Results will be sent to you
-            via email when all model runs are completed{' '}
+            Your job will be sent to the queuing system for processing. Results
+            will be sent to you via email when all model runs are completed{' '}
           </p>
           <p>
-            Please note: Depending on model complexity and queue length it could be up to a day
-            before you receive your results.
+            Please note: Depending on model complexity and queue length it could
+            be up to a day before you receive your results.
           </p>
         </div>
       </Modal>
     );
     // end  group modal
-    let modal = this.state.workflow.progressing ? 'progress' : 'progress-hidden';
-    const antIcon = <Icon type="loading" style={{ fontSize: 48, width: 48, height: 48 }} spin />;
+    let modal = this.state.workflow.progressing
+      ? 'progress'
+      : 'progress-hidden';
+    const antIcon = (
+      <Icon
+        type="loading"
+        style={{ fontSize: 48, width: 48, height: 48 }}
+        spin
+      />
+    );
     let workflow = (
       <Workflow
         data={this.state.workflow}
@@ -3238,7 +3515,8 @@ class Analysis extends Component {
         resetContrast={this.resetContrast}
       />
     );
-    let page_status = this.props.location.search && this.props.location.search != '';
+    let page_status =
+      this.props.location.search && this.props.location.search != '';
     let tabs = (
       <div>
         {' '}
@@ -3352,7 +3630,11 @@ class Analysis extends Component {
             </div>
             <div className={modal}>
               <div id="loading">
-                <Spin indicator={antIcon} style={{ color: 'black' }} aria-label="loading" />
+                <Spin
+                  indicator={antIcon}
+                  style={{ color: 'black' }}
+                  aria-label="loading"
+                />
                 <label className="loading-info" aria-label="loading-info">
                   {this.state.workflow.loading_info}
                 </label>
