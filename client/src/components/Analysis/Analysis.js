@@ -2304,6 +2304,13 @@ class Analysis extends Component {
     workflow.compared = false;
     workflow.done_gsea = false;
     workflow.tab_activeKey = 'GSM_1';
+    document.getElementById('message-gsm').innerHTML = '';
+    document.getElementById('input-email').value == '';
+    document.getElementById('message-success-use-queue').innerHTML = '';
+    let err_message = document.getElementsByClassName('err-message');
+    for (let node of err_message) {
+      node.innerHTML = '';
+    }
     this.setState({ workflow: workflow });
   };
 
