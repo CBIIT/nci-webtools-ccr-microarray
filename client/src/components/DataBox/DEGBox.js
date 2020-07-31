@@ -41,6 +41,7 @@ export default function DEGBox(props) {
     >
       <DEGTable
         exportNormalAll={props.exportNormalAll}
+        exportNormalTSV={props.exportNormalTSV}
         exportDEG={props.exportDEG}
         changeDeg={props.changeDeg}
         data={props.data}
@@ -57,6 +58,7 @@ export default function DEGBox(props) {
     >
       <PUGTable
         exportNormalAll={props.exportNormalAll}
+        exportNormalTSV={props.exportNormalTSV}
         exportPathwayUp={props.exportPathwayUp}
         changeLoadingStatus={props.changeLoadingStatus}
         changePathways_up={props.changePathways_up}
@@ -74,6 +76,7 @@ export default function DEGBox(props) {
     >
       <PDGTable
         exportNormalAll={props.exportNormalAll}
+        exportNormalTSV={props.exportNormalTSV}
         exportPathwayDown={props.exportPathwayDown}
         changeLoadingStatus={props.changeLoadingStatus}
         changePathways_down={props.changePathways_down}

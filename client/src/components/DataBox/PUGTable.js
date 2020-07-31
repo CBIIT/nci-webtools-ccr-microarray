@@ -41,8 +41,10 @@ export default function PUGTable(props) {
   function handleExportMenuClick(e) {
     if (e.key == 1) {
       props.exportPathwayUp();
-    } else {
+    } else if (e.key == 2) {
       props.exportNormalAll();
+    } else {
+      props.exportNormalTSV();
     }
   }
 
@@ -590,9 +592,10 @@ export default function PUGTable(props) {
   const ExportMenu = (
     <Menu onClick={handleExportMenuClick}>
       <Menu.Item key="1">
-        Pathways for Upregulated Genes Table Results
+        Pathways for Upregulated Genes Table Results (.xlsx)
       </Menu.Item>
-      <Menu.Item key="2">Normalized Data</Menu.Item>
+      <Menu.Item key="2">Normalized Data (.xlsx)</Menu.Item>
+      <Menu.Item key="3">Normalized Data (.tsv)</Menu.Item>
     </Menu>
   );
 

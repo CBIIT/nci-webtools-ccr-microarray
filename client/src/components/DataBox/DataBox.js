@@ -340,6 +340,7 @@ export default function DataBox(props) {
           key="degBox"
           data={props.data}
           exportNormalAll={props.exportNormalAll}
+          exportNormalTSV={props.exportNormalTSV}
           changeLoadingStatus={props.changeLoadingStatus}
           getDEG={props.getDEG}
           getPathwayUp={props.getPathwayUp}

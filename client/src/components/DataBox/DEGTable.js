@@ -20,8 +20,10 @@ export default function DEGTable(props) {
   function handleExportMenuClick(e) {
     if (e.key == 1) {
       props.exportDEG();
-    } else {
+    } else if (e.key == 2) {
       props.exportNormalAll();
+    } else {
+      props.exportNormalTSV();
     }
   }
 
@@ -488,8 +490,9 @@ export default function DEGTable(props) {
 
   const ExportMenu = (
     <Menu onClick={handleExportMenuClick}>
-      <Menu.Item key="1">DEG Table Results</Menu.Item>
-      <Menu.Item key="2">Normalized Data</Menu.Item>
+      <Menu.Item key="1">DEG Table Results (.xlsx)</Menu.Item>
+      <Menu.Item key="2">Normalized Data (.xlsx)</Menu.Item>
+      <Menu.Item key="3">Normalized Data (.tsv)</Menu.Item>
     </Menu>
   );
 

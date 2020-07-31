@@ -1249,7 +1249,6 @@ class Analysis extends Component {
             for (var j in result.data[0]) {
               cols.push(j);
             }
-            ws_data.push(cols);
 
             // get data
             let d = [];
@@ -1260,6 +1259,10 @@ class Analysis extends Component {
               ws_data.push(d);
               d = [];
             }
+
+            // remove new line from col names
+            cols = cols.map((col) => col.replace(/\n+/g, ''));
+            ws_data = [cols, ...ws_data];
           }
 
           var ws = XLSX.utils.aoa_to_sheet(ws_data);
@@ -1285,6 +1288,70 @@ class Analysis extends Component {
         this.setState({ workflow: workflow });
       });
   };
+
+  exportNormalTSV = (params = {}) => {
+    let workflow = Object.assign({}, this.state.workflow);
+    params = {
+      projectId: workflow.projectID,
+    };
+    workflow.progressing = true;
+    workflow.loading_info = 'Export';
+    this.setState({ workflow: workflow });
+    fetch('./api/analysis/getNormalAll', {
+      method: 'POST',
+      body: JSON.stringify(params),
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(this.handleErrors)
+      .then((res) => res.json())
+      .then((result) => {
+        workflow.diff_expr_genes.message = '';
+        if (result.status == 200) {
+          let wb = XLSX.utils.book_new();
+          let ws_data = [];
+          if (result.data && result.data.length != 0) {
+            // get col name
+            let cols = [];
+            for (let j in result.data[0]) {
+              cols.push(j);
+            }
+
+            // get data
+            let d = [];
+            for (var k in result.data) {
+              for (var col in cols) {
+                d.push(result.data[k][cols[col]]);
+              }
+              ws_data.push(d);
+              d = [];
+            }
+
+            // remove new line from col names
+            cols = cols.map((col) => col.replace(/\n+/g, ''));
+            ws_data = [cols, ...ws_data];
+          }
+          let ws = XLSX.utils.aoa_to_sheet(ws_data);
+          XLSX.utils.book_append_sheet(wb, ws);
+          XLSX.writeFile(
+            wb,
+            'DEG_Normalized_Data_for_All_Samples' + workflow.projectID + '.tsv',
+            { bookType: 'csv', FS: '\t', type: 'binary' }
+          );
+        }
+        workflow.progressing = false;
+        workflow.loading_info = 'Loading';
+        this.setState({ workflow: workflow });
+      })
+      .catch((error) => {
+        let workflow = Object.assign({}, this.state.workflow);
+        workflow.diff_expr_genes.message = JSON.stringify(error);
+        this.setState({ workflow: workflow });
+      });
+  };
+
   exportDEG = (params = {}) => {
     let workflow = Object.assign({}, this.state.workflow);
     params = {
@@ -3625,6 +3692,7 @@ class Analysis extends Component {
                 exportPathwayDown={this.exportPathwayDown}
                 exportDEG={this.exportDEG}
                 exportNormalAll={this.exportNormalAll}
+                exportNormalTSV={this.exportNormalTSV}
                 uploadGroup={this.uploadGroup}
               />
             </div>
