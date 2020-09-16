@@ -988,10 +988,10 @@ div.head-title {
   width: calc(100% - 25px);
 }
 
-div.head-sorter {
+/* div.head-sorter {
   float: left;
   clear: right;
-}
+} */
 
 div.head-sorter > div {
   height: 10px;

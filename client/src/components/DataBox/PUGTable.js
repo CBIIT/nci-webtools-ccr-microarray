@@ -727,7 +727,7 @@ export default function PUGTable(props) {
           dataSource={props.data.pathways_up.data}
           pagination={false}
           loading={props.data.pathways_up.loading}
-          // scroll={{ x: 1500 }}
+          scroll={{ x: 600 }}
         />
         {modal}
       </div>
