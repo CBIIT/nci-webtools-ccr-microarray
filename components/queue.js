@@ -58,6 +58,7 @@ awsHander.upload = function (path, prex, next) {
         Key: prex + 'queue_upload.zip',
         Body: fileStream,
       },
+      { queueSize: 20 },
       function (err, data) {
         if (err) {
           logger.info('uplad err:' + err);
