@@ -50,7 +50,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_symbol"
+          id="SYMBOL"
           field="SYMBOL"
           settings={props.data.diff_expr_genes}
           searchKey="search_symbol"
@@ -85,7 +85,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_fc"
+          id="FC"
           field="FC"
           settings={props.data.diff_expr_genes}
           searchKey="search_fc"
@@ -120,7 +120,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_p_value"
+          id="P.Value"
           field="P.Value"
           settings={props.data.diff_expr_genes}
           searchKey="search_p_value"
@@ -158,7 +158,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_adj_p_value"
+          id="adj.P.val"
           field="adj.P.val"
           settings={props.data.diff_expr_genes}
           searchKey="search_adj_p_value"
@@ -195,7 +195,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_aveexpr"
+          id="AveExpr"
           field="AveExpr"
           settings={props.data.diff_expr_genes}
           searchKey="search_aveexpr"
@@ -230,7 +230,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_input_deg_search_accnum"
+          id="ACCNUM"
           field="ACCNUM"
           settings={props.data.diff_expr_genes}
           searchKey="search_accnum"
@@ -265,7 +265,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_desc"
+          id="DESC"
           field="DESC"
           settings={props.data.diff_expr_genes}
           searchKey="search_desc"
@@ -300,7 +300,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_entrez"
+          id="ENTREZ"
           field="ENTREZ"
           settings={props.data.diff_expr_genes}
           searchKey="search_entrez"
@@ -362,7 +362,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_probsetid"
+          id="probsetID"
           field="probsetID"
           settings={props.data.diff_expr_genes}
           searchKey="search_probsetid"
@@ -397,7 +397,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_t"
+          id="t"
           field="t"
           settings={props.data.diff_expr_genes}
           searchKey="search_t"
@@ -432,7 +432,7 @@ export default function DEGTable(props) {
     {
       title: (
         <TableHeader
-          id="input_deg_search_b"
+          id="B"
           field="B"
           settings={props.data.diff_expr_genes}
           searchKey="search_b"

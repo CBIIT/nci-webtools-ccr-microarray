@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Input } from 'antd';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export const TableHeader = ({
   id,
@@ -24,7 +25,7 @@ export const TableHeader = ({
         />
       </label>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div className="">{field}</div>
+        <Tooltip title={id}>{field}</Tooltip>
         <div style={{ marginLeft: '1rem' }}>
           {settings.sorting.name == field ? (
             settings.sorting.order == 'ascend' ? (

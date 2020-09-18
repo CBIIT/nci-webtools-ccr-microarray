@@ -56,7 +56,7 @@ export default function SSGSEATable(props) {
     {
       title: (
         <TableHeader
-          id="input_ssg_name"
+          id="name"
           field="V1"
           settings={props.data.ssGSEA}
           searchKey="name"
@@ -73,9 +73,13 @@ export default function SSGSEATable(props) {
             className="single-line"
             style={{
               maxWidth:
-                document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.25 >
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.25 >
                 minWidth
-                  ? document.getElementsByClassName('ant-tabs-tabpane-active')[0].offsetWidth * 0.25
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.25
                   : minWidth,
             }}
           >
@@ -87,7 +91,7 @@ export default function SSGSEATable(props) {
     {
       title: (
         <TableHeader
-          id="input_ssg_search_logFC"
+          id="logFC"
           field="V2"
           settings={props.data.ssGSEA}
           searchKey="search_logFC"
@@ -109,7 +113,7 @@ export default function SSGSEATable(props) {
     {
       title: (
         <TableHeader
-          id="input_ssg_search_p_value"
+          id="p_value"
           field="V5"
           settings={props.data.ssGSEA}
           searchKey="search_p_value"
@@ -124,7 +128,9 @@ export default function SSGSEATable(props) {
       render: (text, record, index) => {
         return (
           <div className="single-line" style={{ minWidth: '130px' }}>
-            <Tooltip title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</Tooltip>
+            <Tooltip title={text}>
+              {Number.parseFloat(text).toExponential(exponentialNum)}
+            </Tooltip>
           </div>
         );
       },
@@ -132,7 +138,7 @@ export default function SSGSEATable(props) {
     {
       title: (
         <TableHeader
-          id="input_ssg_search_adj_p_value"
+          id="adj_p_value"
           field="V6"
           settings={props.data.ssGSEA}
           searchKey="search_adj_p_value"
@@ -146,7 +152,9 @@ export default function SSGSEATable(props) {
       render: (text, record, index) => {
         return (
           <div className="single-line" style={{ minWidth: '130px' }}>
-            <Tooltip title={text}>{Number.parseFloat(text).toExponential(exponentialNum)}</Tooltip>
+            <Tooltip title={text}>
+              {Number.parseFloat(text).toExponential(exponentialNum)}
+            </Tooltip>
           </div>
         );
       },
@@ -154,7 +162,7 @@ export default function SSGSEATable(props) {
     {
       title: (
         <TableHeader
-          id="input_ssg_search_Avg_Enrichment_Score"
+          id="Avg_Enrichment_Score"
           field="V3"
           settings={props.data.ssGSEA}
           searchKey="search_Avg_Enrichment_Score"
@@ -176,7 +184,7 @@ export default function SSGSEATable(props) {
     {
       title: (
         <TableHeader
-          id="input_ssg_search_t"
+          id="t"
           field="V4"
           settings={props.data.ssGSEA}
           searchKey="search_t"
@@ -198,7 +206,7 @@ export default function SSGSEATable(props) {
     {
       title: (
         <TableHeader
-          id="input_ssg_search_b"
+          id="b"
           field="V7"
           settings={props.data.ssGSEA}
           searchKey="search_b"
@@ -224,7 +232,10 @@ export default function SSGSEATable(props) {
       page_size: props.data.ssGSEA.pagination.pageSize,
       page_number: 1,
       sorting: { ...props.data.ssGSEA.sorting },
-      search_keyword: { ...props.data.ssGSEA.search_keyword, ...{ [key]: val } },
+      search_keyword: {
+        ...props.data.ssGSEA.search_keyword,
+        ...{ [key]: val },
+      },
     });
   };
   const menu = (
@@ -251,14 +262,26 @@ export default function SSGSEATable(props) {
         aria-label="Gene Set For ssGSEA"
       >
         <optgroup label="Human">
-          <option value="human$H: Hallmark Gene Sets">H: Hallmark Gene Sets</option>
-          <option value="human$C1: Positional Gene Sets">C1: Positional Gene Sets</option>
-          <option value="human$C2: Curated Gene Sets">C2: Curated Gene Sets</option>
+          <option value="human$H: Hallmark Gene Sets">
+            H: Hallmark Gene Sets
+          </option>
+          <option value="human$C1: Positional Gene Sets">
+            C1: Positional Gene Sets
+          </option>
+          <option value="human$C2: Curated Gene Sets">
+            C2: Curated Gene Sets
+          </option>
           <option value="human$C3: Motif Gene Sets">C3: Motif Gene Sets</option>
-          <option value="human$C4: Computational Gene Sets">C4: Computational Gene Sets</option>
+          <option value="human$C4: Computational Gene Sets">
+            C4: Computational Gene Sets
+          </option>
           <option value="human$C5: GO gene sets">C5: GO gene sets</option>
-          <option value="human$C6: Oncogenic Signatures">C6: Oncogenic Signatures</option>
-          <option value="human$C7: Immunologic Signatures">C7: Immunologic Signatures</option>
+          <option value="human$C6: Oncogenic Signatures">
+            C6: Oncogenic Signatures
+          </option>
+          <option value="human$C7: Immunologic Signatures">
+            C7: Immunologic Signatures
+          </option>
         </optgroup>
         <optgroup label="Mouse">
           <option value="mouse$Co-expression">Co-expression</option>
@@ -300,9 +323,12 @@ export default function SSGSEATable(props) {
         <div className="col" style={{ marginRight: '1rem' }}>
           <span>
             Showing{' '}
-            {1 + (props.data.ssGSEA.pagination.current - 1) * props.data.ssGSEA.pagination.pageSize}
+            {1 +
+              (props.data.ssGSEA.pagination.current - 1) *
+                props.data.ssGSEA.pagination.pageSize}
             -
-            {(props.data.ssGSEA.pagination.current - 1) * props.data.ssGSEA.pagination.pageSize +
+            {(props.data.ssGSEA.pagination.current - 1) *
+              props.data.ssGSEA.pagination.pageSize +
               props.data.ssGSEA.data.length}{' '}
             of {props.data.ssGSEA.pagination.total} records
           </span>

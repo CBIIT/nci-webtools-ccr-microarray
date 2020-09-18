@@ -127,16 +127,14 @@ export default function PUGTable(props) {
   const columns = [
     {
       title: (
-        <div className="d-flex">
-          <TableHeader
-            id="Pathway_Name"
-            field="Pathway_Name"
-            settings={props.data.pathways_down}
-            searchKey="Pathway_Name"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Pathway_Name"
+          field="Pathway_Name"
+          settings={props.data.pathways_down}
+          searchKey="Pathway_Name"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Pathway_Name',
       width: 150,
@@ -152,16 +150,14 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="Category"
-            field="Category"
-            settings={props.data.pathways_down}
-            searchKey="Category"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Category"
+          field="Category"
+          settings={props.data.pathways_down}
+          searchKey="Category"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Category',
       // width: '12%',
@@ -174,16 +170,14 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="P_Value"
-            field="P_Value"
-            settings={props.data.pathways_down}
-            searchKey="P_Value"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="P_Value"
+          field="P_Value"
+          settings={props.data.pathways_down}
+          searchKey="P_Value"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'P_Value',
       //width: '8%',
@@ -203,16 +197,14 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="Permutation_P-Value"
-            field="Permutation_P-Value"
-            settings={props.data.pathways_down}
-            searchKey="Permutation_P-Value"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Permutation_P-Value"
+          field="Perm_P-Val"
+          settings={props.data.pathways_down}
+          searchKey="Permutation_P-Value"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Permutation_P-Value',
       //width: '8%',
@@ -231,16 +223,15 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="Enrichment_Score"
-            field="Enrichment_Score"
-            settings={props.data.pathways_down}
-            searchKey="Enrichment_Score"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Enrichment_Score"
+          field="Enrich_Score"
+          tooltip="Enrichment_Score"
+          settings={props.data.pathways_down}
+          searchKey="Enrichment_Score"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Enrichment_Score',
       //width: '8%',
@@ -255,16 +246,14 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="Percent_Gene_Hits_per_Pathway"
-            field="Percent_Gene_Hits_per_Pathway"
-            settings={props.data.pathways_down}
-            searchKey="Percent_Gene_Hits_per_Pathway"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Percent_Gene_Hits_per_Pathway"
+          field="%_Genes"
+          settings={props.data.pathways_down}
+          searchKey="Percent_Gene_Hits_per_Pathway"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Percent_Gene_Hits_per_Pathway',
       //width: '8%',
@@ -279,16 +268,14 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="Significant_Genes_IN_Pathway"
-            field="Significant_Genes_IN_Pathway"
-            settings={props.data.pathways_down}
-            searchKey="Significant_Genes_IN_Pathway"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Significant_Genes_IN_Pathway"
+          field="Sig_IN"
+          settings={props.data.pathways_down}
+          searchKey="Significant_Genes_IN_Pathway"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Significant_Genes_IN_Pathway',
       //width: '8%',
@@ -303,16 +290,14 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="Non-Significant_genes_IN_Pathway"
-            field="Non-Significant_genes_IN_Pathway"
-            settings={props.data.pathways_down}
-            searchKey="Non-Significant_genes_IN_Pathway"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Non-Significant_genes_IN_Pathway"
+          field="Nonsig_IN"
+          settings={props.data.pathways_down}
+          searchKey="Non-Significant_genes_IN_Pathway"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Non-Significant_genes_IN_Pathway',
       //width: '8%',
@@ -327,16 +312,14 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="Significant_genes_NOT_IN_Pathway"
-            field="Significant_genes_NOT_IN_Pathway"
-            settings={props.data.pathways_down}
-            searchKey="Significant_genes_NOT_IN_Pathway"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Significant_genes_NOT_IN_Pathway"
+          field="Sig_NOT_IN"
+          settings={props.data.pathways_down}
+          searchKey="Significant_genes_NOT_IN_Pathway"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Significant_genes_NOT_IN_Pathway',
       //width: '12%',
@@ -351,16 +334,14 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="Non-Significant_Genes_NOT_IN_Pathway"
-            field="Non-Significant_Genes_NOT_IN_Pathway"
-            settings={props.data.pathways_down}
-            searchKey="Non-Significant_Genes_NOT_IN_Pathway"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Non-Significant_Genes_NOT_IN_Pathway"
+          field="Nonsig_NOT_IN"
+          settings={props.data.pathways_down}
+          searchKey="Non-Significant_Genes_NOT_IN_Pathway"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Non-Significant_Genes_NOT_IN_Pathway',
       //width: '12%',
@@ -375,16 +356,14 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="input_pathway_up_search_PATHWAY_ID"
-            field="Pathway_ID"
-            settings={props.data.pathways_down}
-            searchKey="search_PATHWAY_ID"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Pathway_ID"
+          field="Pathway_ID"
+          settings={props.data.pathways_down}
+          searchKey="Pathway_ID"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Pathway_ID',
       width: 120,
@@ -407,16 +386,14 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <div>
-          <TableHeader
-            id="input_pathway_up_search_GENE_LIST"
-            field="Gene_List"
-            settings={props.data.pathways_down}
-            searchKey="search_GENE_LIST"
-            searchFn={(key, val) => search(key, val)}
-            sorter={(field, order) => sorter(field, order)}
-          ></TableHeader>
-        </div>
+        <TableHeader
+          id="Gene_List"
+          field="Gene_List"
+          settings={props.data.pathways_down}
+          searchKey="search_GENE_LIST"
+          searchFn={(key, val) => search(key, val)}
+          sorter={(field, order) => sorter(field, order)}
+        />
       ),
       dataIndex: 'Gene_List',
       width: 110,
@@ -485,7 +462,7 @@ export default function PUGTable(props) {
         <div>
           {' '}
           <p className="err-message" id="message-pdg">
-            {props.data.pathways_down.message}
+            {props.data.pathways_down.message + ''}
           </p>
         </div>
       )}
@@ -546,7 +523,7 @@ export default function PUGTable(props) {
           dataSource={props.data.pathways_down.data}
           pagination={false}
           loading={props.data.pathways_down.loading}
-          scroll={{ x: 600 }}
+          scroll={{ x: 1300 }}
         />
         {modal}
       </div>
