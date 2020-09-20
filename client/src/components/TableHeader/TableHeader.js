@@ -10,7 +10,7 @@ export const TableHeader = ({
   searchFn,
   sorter,
 }) => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(settings.search_keyword[searchKey]);
 
   return (
     <div>

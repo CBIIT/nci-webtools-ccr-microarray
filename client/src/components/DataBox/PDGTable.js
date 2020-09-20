@@ -460,7 +460,6 @@ export default function PUGTable(props) {
     <div>
       {props.data.pathways_down.message && (
         <div>
-          {' '}
           <p className="err-message" id="message-pdg">
             {props.data.pathways_down.message + ''}
           </p>

@@ -49,13 +49,17 @@ function restoreSession(req, path) {
       req.session[req.body.projectId].group_1 +
       req.session[req.body.projectId].group_2 +
       req.session[req.body.projectId].genSet;
-    req.session[req.body.projectId].groups = req.session[req.body.projectId].groups;
+    req.session[req.body.projectId].groups =
+      req.session[req.body.projectId].groups;
 
     if (req.session[req.body.projectId].groups[0].indexOf('@') != -1) {
-      req.session[req.body.projectId].groups = req.session[req.body.projectId].groups[0].split('@');
+      req.session[req.body.projectId].groups = req.session[
+        req.body.projectId
+      ].groups[0].split('@');
     }
 
-    req.session[req.body.projectId].projectId = req.session[req.body.projectId].projectId;
+    req.session[req.body.projectId].projectId =
+      req.session[req.body.projectId].projectId;
     logger.info('store data in req.session');
     logger.info('req.session[req.body.projectId].hisBefore');
     logger.info(req.session[req.body.projectId].hisBefore);
@@ -232,7 +236,8 @@ router.post('/pathwaysHeapMap', function (req, res) {
 });
 
 router.post('/getssGSEAWithDiffGenSet', function (req, res) {
-  if (!validate(req.body.projectId)) res.json({ status: 404, msg: 'Invalid project ID' });
+  if (!validate(req.body.projectId))
+    res.json({ status: 404, msg: 'Invalid project ID' });
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push('runSSGSEA'); // action
@@ -299,14 +304,31 @@ router.post('/qAnalysis', function (req, res) {
 
   function send(d) {
     logger.info('[Queue] Send Message to Queue', JSON.stringify(d));
-    queue.awsHander.sender(JSON.stringify(d), d.email, function (flag, err, data) {
+    queue.awsHander.sender(JSON.stringify(d), d.email, function (
+      flag,
+      err,
+      data
+    ) {
       if (flag) {
         logger.info('[Queue] Send Message to Queue fails', JSON.stringify(err));
         logger.info('[Queue] Send fails message  to client ', data.email);
         let subject =
-          'MicroArray Contrast Results -' + dateFormat(now, 'yyyy_mm_dd_h_MM') + '(FAILED) ';
-        let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId);
-        emailer.sendMail(config.mail.web_admin_email, data.email, subject, 'text', html);
+          'MicroArray Contrast Results -' +
+          dateFormat(now, 'yyyy_mm_dd_h_MM') +
+          '(FAILED) ';
+        let html = emailer.emailFailedTemplate(
+          code,
+          0,
+          data.submit,
+          data.projectId
+        );
+        emailer.sendMail(
+          config.mail.web_admin_email,
+          data.email,
+          subject,
+          'text',
+          html
+        );
         res.json({ status: 404, msg: 'Send Message to Queue fails' });
       } else {
         logger.info('[Queue] Send Message to Queue success');
@@ -329,9 +351,22 @@ router.post('/qAnalysis', function (req, res) {
       } else {
         logger.info('[S3] upload files to S3 fails');
         let subject =
-          'MicroArray Contrast Results -' + dateFormat(now, 'yyyy_mm_dd_h_MM') + '(FAILED) ';
-        let html = emailer.emailFailedTemplate(code, 0, data.submit, data.projectId);
-        emailer.sendMail(config.mail.web_admin_email, data.email, subject, 'text', html);
+          'MicroArray Contrast Results -' +
+          dateFormat(now, 'yyyy_mm_dd_h_MM') +
+          '(FAILED) ';
+        let html = emailer.emailFailedTemplate(
+          code,
+          0,
+          data.submit,
+          data.projectId
+        );
+        emailer.sendMail(
+          config.mail.web_admin_email,
+          data.email,
+          subject,
+          'text',
+          html
+        );
         res.json({ status: 404, msg: 'upload files to S3 fails' });
       }
     }
@@ -339,18 +374,30 @@ router.post('/qAnalysis', function (req, res) {
 });
 
 router.post('/getCurrentNumberOfJobsinQueue', function (req, res) {
-  let d = queue.awsHander.getQueueAttributes(['ApproximateNumberOfMessages'], function (result) {
-    if (result != -1) {
-      res.json({ status: 200, data: result.Attributes.ApproximateNumberOfMessages });
-    } else {
-      res.json({ status: 404, msg: -1 });
+  let d = queue.awsHander.getQueueAttributes(
+    ['ApproximateNumberOfMessages'],
+    function (result) {
+      if (result != -1) {
+        res.json({
+          status: 200,
+          data: result.Attributes.ApproximateNumberOfMessages,
+        });
+      } else {
+        res.json({ status: 404, msg: -1 });
+      }
     }
-  });
+  );
 });
 
 router.post('/getResultByProjectId', function (req, res) {
-  logger.info('[Get contrast result from file]', 'projectId:', req.body.projectId);
-  queue.awsHander.download(req.body.projectId, config.uploadPath, function (flag) {
+  logger.info(
+    '[Get contrast result from file]',
+    'projectId:',
+    req.body.projectId
+  );
+  queue.awsHander.download(req.body.projectId, config.uploadPath, function (
+    flag
+  ) {
     if (flag) {
       let return_data = restoreSession(
         req,
@@ -365,7 +412,8 @@ router.post('/getResultByProjectId', function (req, res) {
 });
 
 router.post('/runContrast', function (req, res) {
-  if (!validate(req.body.projectId)) res.json({ status: 404, msg: 'Invalid project ID' });
+  if (!validate(req.body.projectId))
+    res.json({ status: 404, msg: 'Invalid project ID' });
   req.setTimeout(0); // no timeout
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
@@ -389,7 +437,11 @@ router.post('/runContrast', function (req, res) {
   removeGSEAheatmap(config.uploadPath, req.body.projectId);
   logger.info('runContrast  R code ');
   R.execute('wrapper.R', data, function (err, returnValue) {
-    if (fs.existsSync(config.uploadPath + '/' + req.body.projectId + '/result.txt')) {
+    if (
+      fs.existsSync(
+        config.uploadPath + '/' + req.body.projectId + '/result.txt'
+      )
+    ) {
       let return_data = restoreSession(
         req,
         config.uploadPath + '/' + req.body.projectId + '/result.txt'
@@ -415,7 +467,11 @@ router.post('/runContrast', function (req, res) {
         'diffExprGenes.err',
       ];
       for (var i = paths.length - 1; i >= 0; i--) {
-        if (fs.existsSync(config.uploadPath + '/' + req.body.projectId + '/' + paths[i])) {
+        if (
+          fs.existsSync(
+            config.uploadPath + '/' + req.body.projectId + '/' + paths[i]
+          )
+        ) {
           let returnValue = fs.readFileSync(
             config.uploadPath + '/' + req.body.projectId + '/' + paths[i],
             'utf8'
@@ -426,7 +482,11 @@ router.post('/runContrast', function (req, res) {
         }
       }
       if (return_data == 'R Internal Error') {
-        if (fs.existsSync(config.uploadPath + '/' + req.body.projectId + '/overall_error.txt')) {
+        if (
+          fs.existsSync(
+            config.uploadPath + '/' + req.body.projectId + '/overall_error.txt'
+          )
+        ) {
           let returnValue = fs.readFileSync(
             config.uploadPath + '/' + req.body.projectId + '/overall_error.txt',
             'utf8'
@@ -440,11 +500,19 @@ router.post('/runContrast', function (req, res) {
         if (return_data.includes('At least 2 ')) {
           return_data =
             'Warning Message : ' +
-            return_data.replace(/\$/g, '').replace(/\[/g, '').replace(/\]/g, '').replace(/\"/g, '');
+            return_data
+              .replace(/\$/g, '')
+              .replace(/\[/g, '')
+              .replace(/\]/g, '')
+              .replace(/\"/g, '');
         } else {
           return_data =
             'Error Message : ' +
-            return_data.replace(/\$/g, '').replace(/\[/g, '').replace(/\]/g, '').replace(/\"/g, '');
+            return_data
+              .replace(/\$/g, '')
+              .replace(/\[/g, '')
+              .replace(/\]/g, '')
+              .replace(/\"/g, '');
         }
       }
       res.json({ status: 404, msg: return_data });
@@ -465,7 +533,10 @@ function getPlots(req, res, type) {
       break;
     case 'getBoxplotAN':
       if (req.session && req.session[req.body.projectId]) {
-        if (typeof req.session[req.body.projectId].listPlots[7].color[0] == 'number') {
+        if (
+          typeof req.session[req.body.projectId].listPlots[7].color[0] ==
+          'number'
+        ) {
           req.session[req.body.projectId].listPlots[7].color = req.session[
             req.body.projectId
           ].listPlots[7].color = req.session[req.body.projectId].colors;
@@ -485,14 +556,21 @@ function getPlots(req, res, type) {
       break;
     case 'getPCA':
       if (req.session && req.session[req.body.projectId]) {
-        if (typeof req.session[req.body.projectId].listPlots[8].color[0] == 'number') {
+        if (
+          typeof req.session[req.body.projectId].listPlots[8].color[0] ==
+          'number'
+        ) {
           req.session[req.body.projectId].listPlots[8].color = req.session[
             req.body.projectId
           ].listPlots[8].color = req.session[req.body.projectId].colors;
         }
         let groups = [];
         if (req.session[req.body.projectId].groups) {
-          for (var i = 0; i <= req.session[req.body.projectId].groups.length - 1; i++) {
+          for (
+            var i = 0;
+            i <= req.session[req.body.projectId].groups.length - 1;
+            i++
+          ) {
             if (req.session[req.body.projectId].groups[i] != 'Ctl') {
               groups.push(req.session[req.body.projectId].groups[i]);
             } else {
@@ -529,7 +607,10 @@ function getPlots(req, res, type) {
       break;
     case 'getBoxplotBN':
       if (req.session && req.session[req.body.projectId]) {
-        if (typeof req.session[req.body.projectId].listPlots[2].color[0] == 'number') {
+        if (
+          typeof req.session[req.body.projectId].listPlots[2].color[0] ==
+          'number'
+        ) {
           req.session[req.body.projectId].listPlots[2].color = req.session[
             req.body.projectId
           ].listPlots[2].color = req.session[req.body.projectId].colors;
@@ -541,7 +622,10 @@ function getPlots(req, res, type) {
       break;
     case 'getRLE':
       if (req.session && req.session[req.body.projectId]) {
-        if (typeof req.session[req.body.projectId].listPlots[3].color[0] == 'number') {
+        if (
+          typeof req.session[req.body.projectId].listPlots[3].color[0] ==
+          'number'
+        ) {
           req.session[req.body.projectId].listPlots[3].color = req.session[
             req.body.projectId
           ].listPlots[3].color = req.session[req.body.projectId].colors;
@@ -553,7 +637,10 @@ function getPlots(req, res, type) {
       break;
     case 'getNUSE':
       if (req.session && req.session[req.body.projectId]) {
-        if (typeof req.session[req.body.projectId].listPlots[4].color[0] == 'number') {
+        if (
+          typeof req.session[req.body.projectId].listPlots[4].color[0] ==
+          'number'
+        ) {
           req.session[req.body.projectId].listPlots[4].color = req.session[
             req.body.projectId
           ].listPlots[4].color = req.session[req.body.projectId].colors;
@@ -740,39 +827,43 @@ function getDEG(req) {
   );
 }
 
-function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_number, req, type) {
+function getPathWays(
+  data,
+  threadhold,
+  sorting,
+  search_keyword,
+  page_size,
+  page_number,
+  req,
+  type
+) {
   let result = data;
+  const keys = Object.keys(search_keyword);
+  const searchFilters = () => {
+    let search = {};
+    keys.forEach((key) => {
+      search[key] = search_keyword[key];
+    });
+    return search;
+  };
+
   if (type == 'pathways_up') {
     // store
-    if (req.session[req.body.projectId].pathway_up_tmp) {
+    let tmp = req.session[req.body.projectId].pathway_up_tmp;
+    if (tmp) {
       if (
-        req.session[req.body.projectId].pathway_up_tmp.sorting_order == sorting.order &&
-        req.session[req.body.projectId].pathway_up_tmp.sorting_name == sorting.name &&
-        req.session[req.body.projectId].pathway_up_tmp.search_PATHWAY_ID ==
-          search_keyword.search_PATHWAY_ID &&
-        req.session[req.body.projectId].pathway_up_tmp.search_SOURCE ==
-          search_keyword.search_SOURCE &&
-        req.session[req.body.projectId].pathway_up_tmp.search_DESCRIPTION ==
-          search_keyword.search_DESCRIPTION &&
-        req.session[req.body.projectId].pathway_up_tmp.search_p_value ==
-          search_keyword.search_p_value &&
-        req.session[req.body.projectId].pathway_up_tmp.search_fdr == search_keyword.search_fdr &&
-        req.session[req.body.projectId].pathway_up_tmp.search_RATIO ==
-          search_keyword.search_RATIO &&
-        req.session[req.body.projectId].pathway_up_tmp.search_NUMBER_HITS ==
-          search_keyword.search_NUMBER_HITS &&
-        req.session[req.body.projectId].pathway_up_tmp.search_NUMBER_MISSES ==
-          search_keyword.search_NUMBER_MISSES &&
-        req.session[req.body.projectId].pathway_up_tmp.search_GENE_LIST ==
-          search_keyword.search_GENE_LIST &&
-        req.session[req.body.projectId].pathway_up_tmp.search_NUMBER_USER_GENES ==
-          search_keyword.search_NUMBER_USER_GENES &&
-        req.session[req.body.projectId].pathway_up_tmp.search_TOTAL_GENES_MINUS_INPUT ==
-          search_keyword.search_TOTAL_GENES_MINUS_INPUT
+        tmp.sorting_order == sorting.order &&
+        tmp.sorting_name == sorting.name &&
+        !keys
+          .map((key) => {
+            return tmp[key] == search_keyword[key];
+          })
+          .includes(false)
       ) {
         // return index
         let output = {
-          totalCount: req.session[req.body.projectId].pathway_up_tmp.data.length,
+          totalCount:
+            req.session[req.body.projectId].pathway_up_tmp.data.length,
           records: req.session[req.body.projectId].pathway_up_tmp.data.slice(
             page_size * (page_number - 1),
             page_size * (page_number - 1) + page_size
@@ -784,35 +875,21 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
   }
   if (type == 'pathways_down') {
     // store
-    if (req.session[req.body.projectId].pathway_down_tmp) {
+    let tmp = req.session[req.body.projectId].pathway_down_tmp;
+    if (tmp) {
       if (
-        req.session[req.body.projectId].pathway_down_tmp.sorting_order == sorting.order &&
-        req.session[req.body.projectId].pathway_down_tmp.sorting_name == sorting.name &&
-        req.session[req.body.projectId].pathway_down_tmp.search_PATHWAY_ID ==
-          search_keyword.search_PATHWAY_ID &&
-        req.session[req.body.projectId].pathway_down_tmp.search_SOURCE ==
-          search_keyword.search_SOURCE &&
-        req.session[req.body.projectId].pathway_down_tmp.search_DESCRIPTION ==
-          search_keyword.search_DESCRIPTION &&
-        req.session[req.body.projectId].pathway_down_tmp.search_p_value ==
-          search_keyword.search_p_value &&
-        req.session[req.body.projectId].pathway_down_tmp.search_fdr == search_keyword.search_fdr &&
-        req.session[req.body.projectId].pathway_down_tmp.search_RATIO ==
-          search_keyword.search_RATIO &&
-        req.session[req.body.projectId].pathway_down_tmp.search_NUMBER_HITS ==
-          search_keyword.search_NUMBER_HITS &&
-        req.session[req.body.projectId].pathway_down_tmp.search_NUMBER_MISSES ==
-          search_keyword.search_NUMBER_MISSES &&
-        req.session[req.body.projectId].pathway_down_tmp.search_GENE_LIST ==
-          search_keyword.search_GENE_LIST &&
-        req.session[req.body.projectId].pathway_down_tmp.search_NUMBER_USER_GENES ==
-          search_keyword.search_NUMBER_USER_GENES &&
-        req.session[req.body.projectId].pathway_down_tmp.search_TOTAL_GENES_MINUS_INPUT ==
-          search_keyword.search_TOTAL_GENES_MINUS_INPUT
+        tmp.sorting_order == sorting.order &&
+        tmp.sorting_name == sorting.name &&
+        !keys
+          .map((key) => {
+            return tmp[key] == search_keyword[key];
+          })
+          .includes(false)
       ) {
         // return index
         let output = {
-          totalCount: req.session[req.body.projectId].pathway_down_tmp.data.length,
+          totalCount:
+            req.session[req.body.projectId].pathway_down_tmp.data.length,
           records: req.session[req.body.projectId].pathway_down_tmp.data.slice(
             page_size * (page_number - 1),
             page_size * (page_number - 1) + page_size
@@ -824,114 +901,21 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
   }
   // search
   if (search_keyword) {
-    if (
-      !(
-        search_keyword.search_PATHWAY_ID == '' &&
-        search_keyword.search_SOURCE == '' &&
-        search_keyword.search_DESCRIPTION == '' &&
-        search_keyword.search_p_value == '' &&
-        search_keyword.search_fdr == '' &&
-        search_keyword.search_RATIO == '' &&
-        search_keyword.search_NUMBER_HITS == '' &&
-        search_keyword.search_NUMBER_MISSES == '' &&
-        search_keyword.search_GENE_LIST == '' &&
-        search_keyword.search_NUMBER_USER_GENES == '' &&
-        search_keyword.search_TOTAL_GENES_MINUS_INPUT == ''
-      )
-    ) {
-      result = result.filter(function (r) {
-        var flag = false;
-        if (search_keyword.search_PATHWAY_ID != '') {
-          if (
-            r.Pathway_ID.toLowerCase().indexOf(search_keyword.search_PATHWAY_ID.toLowerCase()) != -1
-          ) {
-            flag = true;
+    const queries = Object.keys(search_keyword).filter((key) => {
+      if (search_keyword[key]) return key;
+    });
+    if (queries.length) {
+      result = result.filter((r) => {
+        for (let key of queries) {
+          if (!isNaN(parseFloat(r[key]))) {
+            return parseFloat(r[key]) <= parseFloat(search_keyword[key]);
           } else {
-            return false;
+            return (
+              r[key].toLowerCase().indexOf(search_keyword[key].toLowerCase()) !=
+              -1
+            );
           }
         }
-        if (search_keyword.search_SOURCE != '') {
-          if (r.Source.toLowerCase().indexOf(search_keyword.search_SOURCE.toLowerCase()) != -1) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        if (search_keyword.search_DESCRIPTION != '') {
-          if (
-            r.Description.toLowerCase().indexOf(search_keyword.search_DESCRIPTION.toLowerCase()) !=
-            -1
-          ) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        if (search_keyword.search_p_value != '') {
-          if (parseFloat(r['P_Value']) <= parseFloat(search_keyword.search_p_value)) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        if (search_keyword.search_fdr != '') {
-          if (parseFloat(r['FDR']) <= parseFloat(search_keyword.search_fdr)) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        if (search_keyword.search_RATIO != '') {
-          if (parseFloat(r['Ratio']) <= parseFloat(search_keyword.search_RATIO)) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        if (search_keyword.search_NUMBER_HITS != '') {
-          if (parseFloat(r['Number_Hits']) <= parseFloat(search_keyword.search_NUMBER_HITS)) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        if (search_keyword.search_NUMBER_MISSES != '') {
-          if (parseFloat(r['Number_Misses']) <= parseFloat(search_keyword.search_NUMBER_MISSES)) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        if (search_keyword.search_GENE_LIST != '') {
-          if (
-            r.Gene_List.toLowerCase().indexOf(search_keyword.search_GENE_LIST.toLowerCase()) != -1
-          ) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        if (search_keyword.search_NUMBER_USER_GENES != '') {
-          if (
-            parseFloat(r['Number_User_Genes']) <=
-            parseFloat(search_keyword.search_NUMBER_USER_GENES)
-          ) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        if (search_keyword.search_TOTAL_GENES_MINUS_INPUT != '') {
-          if (
-            parseFloat(r['Total_Genes_Minus_Input']) <=
-            parseFloat(search_keyword.search_TOTAL_GENES_MINUS_INPUT)
-          ) {
-            flag = true;
-          } else {
-            return false;
-          }
-        }
-        return flag;
       });
     }
   }
@@ -953,17 +937,7 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     req.session[req.body.projectId].pathway_up_tmp = {
       sorting_order: sorting.order,
       sorting_name: sorting.name,
-      search_PATHWAY_ID: search_keyword.search_PATHWAY_ID,
-      search_SOURCE: search_keyword.search_SOURCE,
-      search_DESCRIPTION: search_keyword.search_DESCRIPTION,
-      search_p_value: search_keyword.search_p_value,
-      search_fdr: search_keyword.search_fdr,
-      search_RATIO: search_keyword.search_RATIO,
-      search_NUMBER_HITS: search_keyword.search_NUMBER_HITS,
-      search_NUMBER_MISSES: search_keyword.search_NUMBER_MISSES,
-      search_GENE_LIST: search_keyword.search_GENE_LIST,
-      search_NUMBER_USER_GENES: search_keyword.search_NUMBER_USER_GENES,
-      search_TOTAL_GENES_MINUS_INPUT: search_keyword.search_TOTAL_GENES_MINUS_INPUT,
+      ...searchFilters(),
       data: result,
     };
   }
@@ -972,28 +946,29 @@ function getPathWays(data, threadhold, sorting, search_keyword, page_size, page_
     req.session[req.body.projectId].pathway_down_tmp = {
       sorting_order: sorting.order,
       sorting_name: sorting.name,
-      search_PATHWAY_ID: search_keyword.search_PATHWAY_ID,
-      search_SOURCE: search_keyword.search_SOURCE,
-      search_DESCRIPTION: search_keyword.search_DESCRIPTION,
-      search_p_value: search_keyword.search_p_value,
-      search_fdr: search_keyword.search_fdr,
-      search_RATIO: search_keyword.search_RATIO,
-      search_NUMBER_HITS: search_keyword.search_NUMBER_HITS,
-      search_NUMBER_MISSES: search_keyword.search_NUMBER_MISSES,
-      search_GENE_LIST: search_keyword.search_GENE_LIST,
-      search_NUMBER_USER_GENES: search_keyword.search_NUMBER_USER_GENES,
-      search_TOTAL_GENES_MINUS_INPUT: search_keyword.search_TOTAL_GENES_MINUS_INPUT,
+      ...searchFilters(),
       data: result,
     };
   }
   let output = {
     totalCount: result.length,
-    records: result.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+    records: result.slice(
+      page_size * (page_number - 1),
+      page_size * (page_number - 1) + page_size
+    ),
   };
   return output;
 }
 
-function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, page_number, req) {
+function getGSEA_filter(
+  data,
+  threadhold,
+  sorting,
+  search_keyword,
+  page_size,
+  page_number,
+  req
+) {
   let result = data;
   // sorting
   if (sorting != null) {
@@ -1024,7 +999,10 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
       result = result.filter(function (r) {
         var flag = false;
         if (search_keyword.name != '') {
-          if (r['V1'].toLowerCase().indexOf(search_keyword.name.toLowerCase()) != -1) {
+          if (
+            r['V1'].toLowerCase().indexOf(search_keyword.name.toLowerCase()) !=
+            -1
+          ) {
             flag = true;
           } else {
             return false;
@@ -1045,21 +1023,28 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
           }
         }
         if (search_keyword.search_p_value != '') {
-          if (parseFloat(r['V5']) <= parseFloat(search_keyword.search_p_value)) {
+          if (
+            parseFloat(r['V5']) <= parseFloat(search_keyword.search_p_value)
+          ) {
             flag = true;
           } else {
             return false;
           }
         }
         if (search_keyword.search_Avg_Enrichment_Score != '') {
-          if (parseFloat(r['V3']) <= parseFloat(search_keyword.search_Avg_Enrichment_Score)) {
+          if (
+            parseFloat(r['V3']) <=
+            parseFloat(search_keyword.search_Avg_Enrichment_Score)
+          ) {
             flag = true;
           } else {
             return false;
           }
         }
         if (search_keyword.search_adj_p_value != '') {
-          if (parseFloat(r['V6']) <= parseFloat(search_keyword.search_adj_p_value)) {
+          if (
+            parseFloat(r['V6']) <= parseFloat(search_keyword.search_adj_p_value)
+          ) {
             flag = true;
           } else {
             return false;
@@ -1080,12 +1065,23 @@ function getGSEA_filter(data, threadhold, sorting, search_keyword, page_size, pa
   // return index
   let output = {
     totalCount: result.length,
-    records: result.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+    records: result.slice(
+      page_size * (page_number - 1),
+      page_size * (page_number - 1) + page_size
+    ),
   };
   return output;
 }
 
-function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, page_number, req) {
+function getDEG_filter(
+  data,
+  threadhold,
+  sorting,
+  search_keyword,
+  page_size,
+  page_number,
+  req
+) {
   let result = data;
   // store
   if (req.session[req.body.projectId].deg_tmp) {
@@ -1093,18 +1089,28 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
     if (
       req.session[req.body.projectId].deg_tmp.sorting_order == sorting.order &&
       req.session[req.body.projectId].deg_tmp.sorting_name == sorting.name &&
-      req.session[req.body.projectId].deg_tmp.search_symbol == search_keyword.search_symbol &&
-      req.session[req.body.projectId].deg_tmp.search_fc == search_keyword.search_fc &&
-      req.session[req.body.projectId].deg_tmp.search_p_value == search_keyword.search_p_value &&
+      req.session[req.body.projectId].deg_tmp.search_symbol ==
+        search_keyword.search_symbol &&
+      req.session[req.body.projectId].deg_tmp.search_fc ==
+        search_keyword.search_fc &&
+      req.session[req.body.projectId].deg_tmp.search_p_value ==
+        search_keyword.search_p_value &&
       req.session[req.body.projectId].deg_tmp.search_adj_p_value ==
         search_keyword.search_adj_p_value &&
-      req.session[req.body.projectId].deg_tmp.search_aveexpr == search_keyword.search_aveexpr &&
-      req.session[req.body.projectId].deg_tmp.search_accnum == search_keyword.search_accnum &&
-      req.session[req.body.projectId].deg_tmp.search_desc == search_keyword.search_desc &&
-      req.session[req.body.projectId].deg_tmp.search_entrez == search_keyword.search_entrez &&
-      req.session[req.body.projectId].deg_tmp.search_probsetid == search_keyword.search_probsetid &&
-      req.session[req.body.projectId].deg_tmp.search_t == search_keyword.search_t &&
-      req.session[req.body.projectId].deg_tmp.search_b == search_keyword.search_b
+      req.session[req.body.projectId].deg_tmp.search_aveexpr ==
+        search_keyword.search_aveexpr &&
+      req.session[req.body.projectId].deg_tmp.search_accnum ==
+        search_keyword.search_accnum &&
+      req.session[req.body.projectId].deg_tmp.search_desc ==
+        search_keyword.search_desc &&
+      req.session[req.body.projectId].deg_tmp.search_entrez ==
+        search_keyword.search_entrez &&
+      req.session[req.body.projectId].deg_tmp.search_probsetid ==
+        search_keyword.search_probsetid &&
+      req.session[req.body.projectId].deg_tmp.search_t ==
+        search_keyword.search_t &&
+      req.session[req.body.projectId].deg_tmp.search_b ==
+        search_keyword.search_b
     ) {
       logger.info('Get Deg data from session success');
       let output = {
@@ -1153,21 +1159,30 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
       result = result.filter(function (r) {
         var flag = false;
         if (search_keyword.search_accnum != '') {
-          if (r.ACCNUM.toLowerCase().indexOf(search_keyword.search_accnum.toLowerCase()) != -1) {
+          if (
+            r.ACCNUM.toLowerCase().indexOf(
+              search_keyword.search_accnum.toLowerCase()
+            ) != -1
+          ) {
             flag = true;
           } else {
             return false;
           }
         }
         if (search_keyword.search_adj_p_value != '') {
-          if (parseFloat(r['adj.P.Val']) <= parseFloat(search_keyword.search_adj_p_value)) {
+          if (
+            parseFloat(r['adj.P.Val']) <=
+            parseFloat(search_keyword.search_adj_p_value)
+          ) {
             flag = true;
           } else {
             return false;
           }
         }
         if (search_keyword.search_aveexpr != '') {
-          if (parseFloat(r.AveExpr) <= parseFloat(search_keyword.search_aveexpr)) {
+          if (
+            parseFloat(r.AveExpr) <= parseFloat(search_keyword.search_aveexpr)
+          ) {
             flag = true;
           } else {
             return false;
@@ -1181,21 +1196,32 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
           }
         }
         if (search_keyword.search_p_value != '') {
-          if (parseFloat(r['P.Value']) <= parseFloat(search_keyword.search_p_value)) {
+          if (
+            parseFloat(r['P.Value']) <=
+            parseFloat(search_keyword.search_p_value)
+          ) {
             flag = true;
           } else {
             return false;
           }
         }
         if (search_keyword.search_desc != '') {
-          if (r.DESC.toLowerCase().indexOf(search_keyword.search_desc.toLowerCase()) != -1) {
+          if (
+            r.DESC.toLowerCase().indexOf(
+              search_keyword.search_desc.toLowerCase()
+            ) != -1
+          ) {
             flag = true;
           } else {
             return false;
           }
         }
         if (search_keyword.search_entrez != '') {
-          if (r.ENTREZ.toLowerCase().indexOf(search_keyword.search_entrez.toLowerCase()) != -1) {
+          if (
+            r.ENTREZ.toLowerCase().indexOf(
+              search_keyword.search_entrez.toLowerCase()
+            ) != -1
+          ) {
             flag = true;
           } else {
             return false;
@@ -1210,7 +1236,9 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
         }
         if (search_keyword.search_probsetid != '') {
           if (
-            r.probsetID.toLowerCase().indexOf(search_keyword.search_probsetid.toLowerCase()) != -1
+            r.probsetID
+              .toLowerCase()
+              .indexOf(search_keyword.search_probsetid.toLowerCase()) != -1
           ) {
             flag = true;
           } else {
@@ -1218,7 +1246,11 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
           }
         }
         if (search_keyword.search_symbol != '') {
-          if (r.SYMBOL.toLowerCase().indexOf(search_keyword.search_symbol.toLowerCase()) != -1) {
+          if (
+            r.SYMBOL.toLowerCase().indexOf(
+              search_keyword.search_symbol.toLowerCase()
+            ) != -1
+          ) {
             flag = true;
           } else {
             return false;
@@ -1257,7 +1289,10 @@ function getDEG_filter(data, threadhold, sorting, search_keyword, page_size, pag
   // return index
   let output = {
     totalCount: result.length,
-    records: result.slice(page_size * (page_number - 1), page_size * (page_number - 1) + page_size),
+    records: result.slice(
+      page_size * (page_number - 1),
+      page_size * (page_number - 1) + page_size
+    ),
   };
   return output;
 }

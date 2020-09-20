@@ -124,17 +124,16 @@ const defaultState = {
       },
       loading: true,
       search_keyword: {
-        search_PATHWAY_ID: '',
-        search_SOURCE: '',
-        search_DESCRIPTION: '',
-        search_p_value: '0.05',
-        search_fdr: '',
-        search_RATIO: '',
-        search_GENE_LIST: '',
-        search_NUMBER_HITS: '',
-        search_NUMBER_MISSES: '',
-        search_NUMBER_USER_GENES: '',
-        search_TOTAL_GENES_MINUS_INPUT: '',
+        Pathway_Name: '',
+        Category: '',
+        P_Value: '0.05',
+        Enrichment_Score: '',
+        Percent_Gene_Hits_per_Pathway: '',
+        Significant_Genes_IN_Pathway: '',
+        'Non-Significant_genes_IN_Pathway': '',
+        'Non-Significant_Genes_NOT_IN_Pathway': '',
+        Pathway_ID: '',
+        Gene_List: '',
       },
     },
     pathways_down: {
@@ -150,17 +149,16 @@ const defaultState = {
         order: 'ascend',
       },
       search_keyword: {
-        search_PATHWAY_ID: '',
-        search_SOURCE: '',
-        search_DESCRIPTION: '',
-        search_p_value: '0.05',
-        search_fdr: '',
-        search_RATIO: '',
-        search_GENE_LIST: '',
-        search_NUMBER_HITS: '',
-        search_NUMBER_MISSES: '',
-        search_NUMBER_USER_GENES: '',
-        search_TOTAL_GENES_MINUS_INPUT: '',
+        Pathway_Name: '',
+        Category: '',
+        P_Value: '0.05',
+        Enrichment_Score: '',
+        Percent_Gene_Hits_per_Pathway: '',
+        Significant_Genes_IN_Pathway: '',
+        'Non-Significant_genes_IN_Pathway': '',
+        'Non-Significant_Genes_NOT_IN_Pathway': '',
+        Pathway_ID: '',
+        Gene_List: '',
       },
     },
     BoxplotBN: {
@@ -657,115 +655,25 @@ class Analysis extends Component {
 
             ws_data.push(['Filters', '']);
 
-            if (workflow.pathways_up.search_keyword.search_PATHWAY_ID != '') {
-              ws_data.push([
-                'Pathway_ID',
-                workflow.pathways_up.search_keyword.search_PATHWAY_ID,
-              ]);
+            for (let key in workflow.pathways_up.search_keyword) {
+              if (workflow.pathways_up.search_keyword[key])
+                ws_data.push([key, workflow.pathways_up.search_keyword[key]]);
             }
-            if (workflow.pathways_up.search_keyword.search_SOURCE != '') {
-              ws_data.push([
-                'Source',
-                workflow.pathways_up.search_keyword.search_SOURCE,
-              ]);
-            }
-            if (workflow.pathways_up.search_keyword.search_DESCRIPTION != '') {
-              ws_data.push([
-                'Description',
-                workflow.pathways_up.search_keyword.search_DESCRIPTION,
-              ]);
-            }
-            if (workflow.pathways_up.search_keyword.search_p_value != '') {
-              ws_data.push([
-                'P.value',
-                workflow.pathways_up.search_keyword.search_p_value,
-              ]);
-            }
-            if (workflow.pathways_up.search_keyword.search_fdr != '') {
-              ws_data.push([
-                'FDR',
-                workflow.pathways_up.search_keyword.search_fdr,
-              ]);
-            }
-            if (workflow.pathways_up.search_keyword.search_RATIO != '') {
-              ws_data.push([
-                'Ratio',
-                workflow.pathways_up.search_keyword.search_RATIO,
-              ]);
-            }
-            if (workflow.pathways_up.search_keyword.search_NUMBER_HITS != '') {
-              ws_data.push([
-                'Number_Hits',
-                workflow.pathways_up.search_keyword.search_NUMBER_HITS,
-              ]);
-            }
-            if (
-              workflow.pathways_up.search_keyword.search_NUMBER_MISSES != ''
-            ) {
-              ws_data.push([
-                'Number_Misses',
-                workflow.pathways_up.search_keyword.search_NUMBER_MISSES,
-              ]);
-            }
-            if (
-              workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES != ''
-            ) {
-              ws_data.push([
-                'Number_User_Genes',
-                workflow.pathways_up.search_keyword.search_NUMBER_USER_GENES,
-              ]);
-            }
-            if (
-              workflow.pathways_up.search_keyword
-                .search_TOTAL_GENES_MINUS_INPUT != ''
-            ) {
-              ws_data.push([
-                'Total_Number_Genes',
-                workflow.pathways_up.search_keyword
-                  .search_TOTAL_GENES_MINUS_INPUT,
-              ]);
-            }
-            if (workflow.pathways_up.search_keyword.search_GENE_LIST != '') {
-              ws_data.push([
-                'Gene_List',
-                workflow.pathways_up.search_keyword.search_GENE_LIST,
-              ]);
-            }
+
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets['Settings'] = ws;
             wb.SheetNames.push('Results');
             // export data
-            let degData = result.data.records;
-            let exportData = [
-              [
-                'Pathway_ID',
-                'Source',
-                'Description',
-                'P.Value',
-                'FDR',
-                'Ratio',
-                'Gene_List',
-                'Number_Hits',
-                'Number_Misses',
-                'Number_User_Genes',
-                'Total_Genes_Minus_Input',
-              ],
-            ];
-            for (let i in degData) {
-              exportData.push([
-                degData[i]['Pathway_ID'],
-                degData[i]['Source'],
-                degData[i]['Description'],
-                degData[i]['P_Value'],
-                degData[i]['FDR'],
-                degData[i]['Ratio'],
-                degData[i]['Gene_List'],
-                degData[i]['Number_Hits'],
-                degData[i]['Number_Misses'],
-                degData[i]['Number_User_Genes'],
-                degData[i]['Total_Genes_Minus_Input'],
-              ]);
+            let pugData = result.data.records;
+            let exportData = [Object.keys(workflow.pathways_up.search_keyword)];
+            for (let data of pugData) {
+              exportData.push(
+                Object.keys(workflow.pathways_up.search_keyword).map((key) => {
+                  return data[key];
+                })
+              );
             }
+
             var ws2 = XLSX.utils.aoa_to_sheet(exportData);
             wb.Sheets['Results'] = ws2;
             var wbout = XLSX.writeFile(
@@ -826,42 +734,43 @@ class Analysis extends Component {
       };
     }
     workflow.pathways_up.loading = true;
-    this.setState({ workflow: workflow });
-    fetch('./api/analysis/getUpPathWays', {
-      method: 'POST',
-      body: JSON.stringify(params),
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(this.handleErrors)
-      .then((res) => res.json())
-      .then((result) => {
-        let workflow2 = Object.assign({}, this.state.workflow);
-        workflow2.pathways_up.message = '';
-        if (result.status == 200) {
-          const pagination = { ...workflow.pathways_up.pagination };
-          pagination.total = result.data.totalCount;
-          for (let i = 0; i < result.data.records.length; i++) {
-            result.data.records[i].key = 'pathway_up' + i;
-          }
-          workflow2.pathways_up.loading = false;
-          workflow2.pathways_up.data = result.data.records;
-          workflow2.pathways_up.pagination = pagination;
-          this.setState({ workflow: workflow2 });
-        } else {
-          workflow2.pathways_up.loading = false;
-          workflow2.pathways_up.message = JSON.stringify(result.msg);
-          this.setState({ workflow: workflow2 });
-        }
+    this.setState({ workflow: workflow }, () => {
+      fetch('./api/analysis/getUpPathWays', {
+        method: 'POST',
+        body: JSON.stringify(params),
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-      .catch((error) => {
-        let workflow2 = Object.assign({}, this.state.workflow);
-        workflow2.pathways_up.loading = false;
-        workflow2.pathways_up.message = JSON.stringify(error);
-        this.setState({ workflow: workflow2 });
-      });
+        .then(this.handleErrors)
+        .then((res) => res.json())
+        .then((result) => {
+          let workflow2 = Object.assign({}, this.state.workflow);
+          workflow2.pathways_up.message = '';
+          if (result.status == 200) {
+            const pagination = { ...workflow.pathways_up.pagination };
+            pagination.total = result.data.totalCount;
+            for (let i = 0; i < result.data.records.length; i++) {
+              result.data.records[i].key = 'pathway_up' + i;
+            }
+            workflow2.pathways_up.loading = false;
+            workflow2.pathways_up.data = result.data.records;
+            workflow2.pathways_up.pagination = pagination;
+            this.setState({ workflow: workflow2 });
+          } else {
+            workflow2.pathways_up.loading = false;
+            workflow2.pathways_up.message = JSON.stringify(result.msg);
+            this.setState({ workflow: workflow2 });
+          }
+        })
+        .catch((error) => {
+          let workflow2 = Object.assign({}, this.state.workflow);
+          workflow2.pathways_up.loading = false;
+          workflow2.pathways_up.message = JSON.stringify(error);
+          this.setState({ workflow: workflow2 });
+        });
+    });
   };
   getPathwayDown = (params = {}) => {
     let workflow = Object.assign({}, this.state.workflow);
@@ -1007,121 +916,27 @@ class Analysis extends Component {
 
             ws_data.push(['Filters', '']);
 
-            if (workflow.pathways_down.search_keyword.search_PATHWAY_ID != '') {
-              ws_data.push([
-                'Pathway_ID',
-                workflow.pathways_down.search_keyword.search_PATHWAY_ID,
-              ]);
-            }
-
-            if (workflow.pathways_down.search_keyword.search_SOURCE != '') {
-              ws_data.push([
-                'Source',
-                workflow.pathways_down.search_keyword.search_SOURCE,
-              ]);
-            }
-            if (
-              workflow.pathways_down.search_keyword.search_DESCRIPTION != ''
-            ) {
-              ws_data.push([
-                'Description',
-                workflow.pathways_down.search_keyword.search_DESCRIPTION,
-              ]);
-            }
-            if (workflow.pathways_down.search_keyword.search_p_value != '') {
-              ws_data.push([
-                'P.value',
-                workflow.pathways_down.search_keyword.search_p_value,
-              ]);
-            }
-            if (workflow.pathways_down.search_keyword.search_fdr != '') {
-              ws_data.push([
-                'FDR',
-                workflow.pathways_down.search_keyword.search_fdr,
-              ]);
-            }
-            if (workflow.pathways_down.search_keyword.search_RATIO != '') {
-              ws_data.push([
-                'Ratio',
-                workflow.pathways_down.search_keyword.search_RATIO,
-              ]);
-            }
-            if (
-              workflow.pathways_down.search_keyword.search_NUMBER_HITS != ''
-            ) {
-              ws_data.push([
-                'Number_Hits',
-                workflow.pathways_down.search_keyword.search_NUMBER_HITS,
-              ]);
-            }
-            if (
-              workflow.pathways_down.search_keyword.search_NUMBER_MISSES != ''
-            ) {
-              ws_data.push([
-                'Number_Misses',
-                workflow.pathways_down.search_keyword.search_NUMBER_MISSES,
-              ]);
-            }
-            if (
-              workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES !=
-              ''
-            ) {
-              ws_data.push([
-                'Number_User_Genes',
-                workflow.pathways_down.search_keyword.search_NUMBER_USER_GENES,
-              ]);
-            }
-            if (
-              workflow.pathways_down.search_keyword
-                .search_TOTAL_GENES_MINUS_INPUT != ''
-            ) {
-              ws_data.push([
-                'Total_Number_Genes',
-                workflow.pathways_down.search_keyword
-                  .search_TOTAL_GENES_MINUS_INPUT,
-              ]);
-            }
-            if (workflow.pathways_down.search_keyword.search_GENE_LIST != '') {
-              ws_data.push([
-                'Gene_List',
-                workflow.pathways_down.search_keyword.search_GENE_LIST,
-              ]);
+            for (let key in workflow.pathways_down.search_keyword) {
+              if (workflow.pathways_down.search_keyword[key])
+                ws_data.push([key, workflow.pathways_down.search_keyword[key]]);
             }
 
             var ws = XLSX.utils.aoa_to_sheet(ws_data);
             wb.Sheets['Settings'] = ws;
             wb.SheetNames.push('Results');
             // export data
-            let degData = result.data.records;
+            let pdgData = result.data.records;
             let exportData = [
-              [
-                'Pathway_ID',
-                'Source',
-                'Description',
-                'P.Value',
-                'FDR',
-                'Ratio',
-                'Gene_List',
-                'Number_Hits',
-                'Number_Misses',
-                'Number_User_Genes',
-                'Total_Genes_Minus_Input',
-              ],
+              Object.keys(workflow.pathways_down.search_keyword),
             ];
-            for (let i in degData) {
-              exportData.push([
-                degData[i]['Pathway_ID'],
-                degData[i]['Source'],
-                degData[i]['Description'],
-                degData[i]['P_Value'],
-                degData[i]['FDR'],
-                degData[i]['Ratio'],
-                degData[i]['Gene_List'],
-                degData[i]['Number_Hits'],
-                degData[i]['Number_Misses'],
-                degData[i]['Number_User_Genes'],
-                degData[i]['Total_Genes_Minus_Input'],
-              ]);
+            for (let data of pdgData) {
+              exportData.push(
+                Object.keys(workflow.pathways_down.search_keyword).map(
+                  (key) => {
+                    return data[key];
+                  }
+                )
+              );
             }
 
             var ws2 = XLSX.utils.aoa_to_sheet(exportData);
@@ -2289,10 +2104,7 @@ class Analysis extends Component {
   disableContrast = () => {
     let workflow = Object.assign({}, this.state.workflow);
     workflow.disableContrast = true;
-    this.setState(
-      { workflow: workflow },
-      console.log(this.state.workflow.disableContrast)
-    );
+    this.setState({ workflow: workflow });
   };
   // clear and enable contrast fields, disable results tabs
   resetContrast = () => {
