@@ -926,61 +926,8 @@ input#input_group_name {
   min-width: 70px;
 }
 
-.pathway_source_head {
-  margin-top: -48px;
-  min-width: 100px;
-}
-
-.pathway_desc_head {
-  margin-top: -48px;
-  min-width: 130px;
-}
-
-.pathway_pathways_id_head {
-  margin-top: -50px;
-  min-width: 125px;
-}
-
-.pathway_type_head {
-  margin-top: -48px;
-  min-width: 100px;
-}
-
-.pathway_p_value_head {
-  margin-top: -48px;
-  min-width: 100px;
-}
-
-.pathway_fdr_head {
-  margin-top: -48px;
-  min-width: 80px;
-}
-
-.pathway_ratio_head {
-  margin-top: -48px;
-  min-width: 80px;
-}
-
-.pathway_gene_list_head {
-  margin-top: -48px;
-  min-width: 80px;
-}
-
-.pathway_number_hits_head {
+.mt-fixheader {
   margin-top: -24px;
-  min-width: 90px;
-}
-
-.pathway_number_genes_pathway_head {
-  min-width: 120px;
-}
-
-.pathway_number_user_genes_head {
-  min-width: 90px;
-}
-
-.pathway_total_number_genes_head {
-  min-width: 100px;
 }
 
 div.head-title {

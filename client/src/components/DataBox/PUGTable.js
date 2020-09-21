@@ -129,14 +129,16 @@ export default function PUGTable(props) {
   const columns = [
     {
       title: (
-        <TableHeader
-          id="Pathway_Name"
-          field="Pathway_Name"
-          settings={props.data.pathways_up}
-          searchKey="Pathway_Name"
-          searchFn={(key, val) => search(key, val)}
-          sorter={(field, order) => sorter(field, order)}
-        />
+        <div className="mt-fixheader">
+          <TableHeader
+            id="Pathway_Name"
+            field="Pathway_Name"
+            settings={props.data.pathways_up}
+            searchKey="Pathway_Name"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          />
+        </div>
       ),
       dataIndex: 'Pathway_Name',
       width: 150,
@@ -144,7 +146,20 @@ export default function PUGTable(props) {
       sorter: false,
       render: (text, record, index) => {
         return (
-          <div>
+          <div
+            className="single-line"
+            style={{
+              maxWidth:
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.1 >
+                minWidth
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.1
+                  : minWidth,
+            }}
+          >
             <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
@@ -152,14 +167,16 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <TableHeader
-          id="Category"
-          field="Category"
-          settings={props.data.pathways_up}
-          searchKey="Category"
-          searchFn={(key, val) => search(key, val)}
-          sorter={(field, order) => sorter(field, order)}
-        />
+        <div className="mt-fixheader">
+          <TableHeader
+            id="Category"
+            field="Category"
+            settings={props.data.pathways_up}
+            searchKey="Category"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          />
+        </div>
       ),
       dataIndex: 'Category',
       // width: '12%',
@@ -172,14 +189,16 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <TableHeader
-          id="P_Value"
-          field="P_Value"
-          settings={props.data.pathways_up}
-          searchKey="P_Value"
-          searchFn={(key, val) => search(key, val)}
-          sorter={(field, order) => sorter(field, order)}
-        />
+        <div className="mt-fixheader">
+          <TableHeader
+            id="P_Value"
+            field="P_Value"
+            settings={props.data.pathways_up}
+            searchKey="P_Value"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          />
+        </div>
       ),
       dataIndex: 'P_Value',
       //width: '8%',
@@ -248,14 +267,16 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <TableHeader
-          id="Percent_Gene_Hits_per_Pathway"
-          field="%_Genes"
-          settings={props.data.pathways_up}
-          searchKey="Percent_Gene_Hits_per_Pathway"
-          searchFn={(key, val) => search(key, val)}
-          sorter={(field, order) => sorter(field, order)}
-        />
+        <div className="mt-fixheader">
+          <TableHeader
+            id="Percent_Gene_Hits_per_Pathway"
+            field="%_Genes"
+            settings={props.data.pathways_up}
+            searchKey="Percent_Gene_Hits_per_Pathway"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          />
+        </div>
       ),
       dataIndex: 'Percent_Gene_Hits_per_Pathway',
       //width: '8%',
@@ -270,14 +291,16 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <TableHeader
-          id="Significant_Genes_IN_Pathway"
-          field="Sig_IN"
-          settings={props.data.pathways_up}
-          searchKey="Significant_Genes_IN_Pathway"
-          searchFn={(key, val) => search(key, val)}
-          sorter={(field, order) => sorter(field, order)}
-        />
+        <div className="mt-fixheader">
+          <TableHeader
+            id="Significant_Genes_IN_Pathway"
+            field="Sig_IN"
+            settings={props.data.pathways_up}
+            searchKey="Significant_Genes_IN_Pathway"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          />
+        </div>
       ),
       dataIndex: 'Significant_Genes_IN_Pathway',
       //width: '8%',
@@ -292,14 +315,16 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <TableHeader
-          id="Non-Significant_genes_IN_Pathway"
-          field="Nonsig_IN"
-          settings={props.data.pathways_up}
-          searchKey="Non-Significant_genes_IN_Pathway"
-          searchFn={(key, val) => search(key, val)}
-          sorter={(field, order) => sorter(field, order)}
-        />
+        <div className="mt-fixheader">
+          <TableHeader
+            id="Non-Significant_genes_IN_Pathway"
+            field="Nonsig_IN"
+            settings={props.data.pathways_up}
+            searchKey="Non-Significant_genes_IN_Pathway"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          />
+        </div>
       ),
       dataIndex: 'Non-Significant_genes_IN_Pathway',
       //width: '8%',
@@ -358,14 +383,16 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <TableHeader
-          id="Pathway_ID"
-          field="Pathway_ID"
-          settings={props.data.pathways_up}
-          searchKey="Pathway_ID"
-          searchFn={(key, val) => search(key, val)}
-          sorter={(field, order) => sorter(field, order)}
-        />
+        <div className="mt-fixheader">
+          <TableHeader
+            id="Pathway_ID"
+            field="Pathway_ID"
+            settings={props.data.pathways_up}
+            searchKey="Pathway_ID"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          />
+        </div>
       ),
       dataIndex: 'Pathway_ID',
       width: 120,
@@ -373,7 +400,20 @@ export default function PUGTable(props) {
       className: 'table_th',
       render: (text, record, index) => {
         return (
-          <div>
+          <div
+            className="single-line"
+            style={{
+              maxWidth:
+                document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                  .offsetWidth *
+                  0.1 >
+                minWidth
+                  ? document.getElementsByClassName(
+                      'ant-tabs-tabpane-active'
+                    )[0].offsetWidth * 0.1
+                  : minWidth,
+            }}
+          >
             <Tooltip title={'Heatmap for ' + text}>
               <a
                 style={{ color: 'rgb(0, 0, 255)' }}
@@ -388,20 +428,34 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <TableHeader
-          id="Gene_List"
-          field="Gene_List"
-          settings={props.data.pathways_up}
-          searchKey="search_GENE_LIST"
-          searchFn={(key, val) => search(key, val)}
-          sorter={(field, order) => sorter(field, order)}
-        />
+        <div className="mt-fixheader">
+          <TableHeader
+            id="Gene_List"
+            field="Gene_List"
+            settings={props.data.pathways_up}
+            searchKey="search_GENE_LIST"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          />
+        </div>
       ),
       dataIndex: 'Gene_List',
       width: 110,
       sorter: false,
       render: (text, record, index) => (
-        <div>
+        <div
+          className="single-line"
+          style={{
+            maxWidth:
+              document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                .offsetWidth *
+                0.1 >
+              minWidth
+                ? document.getElementsByClassName('ant-tabs-tabpane-active')[0]
+                    .offsetWidth * 0.1
+                : minWidth,
+          }}
+        >
           <Tooltip title={text}>{text}</Tooltip>
         </div>
       ),
