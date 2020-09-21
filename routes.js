@@ -11,9 +11,7 @@ var config = require('./config');
 var path = require('path');
 
 
-var compression = require('compression');
 var bodyParser = require('body-parser');
-var methodOverride = require('method-override');
 var cookieParser = require('cookie-parser');
 var session = require('./components/session');
 //var session =require("express-session");
@@ -49,8 +47,6 @@ module.exports = function(app) {
 
 
     //app.use(cookieParser());
-    //app.use(compression());
-    //app.use(methodOverride());
 
     // app.use((req, res, next) => {
     //     req.session = locals;

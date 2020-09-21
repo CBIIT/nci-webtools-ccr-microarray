@@ -4,7 +4,6 @@ var express = require('express');
 var config = require('./config');
 var app = express();
 var logger = require('./components/logger');
-var ncp = require('ncp').ncp;
 var fs = require('fs');
 const AWS = require('aws-sdk');
 var queue = require('./components/queue');
