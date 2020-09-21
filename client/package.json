@@ -5,16 +5,16 @@
   "homepage": ".",
   "proxy": "http://localhost:9220",
   "dependencies": {
-    "@babel/polyfill": "^7.10.4",
     "antd": "^3.26.18",
-    "papaparse": "^5.2.0",
-    "plotly.js": "^1.54.7",
+    "core-js": "^3.6.5",
+    "papaparse": "^5.3.0",
+    "plotly.js": "^1.55.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
-    "react-plotly.js": "^2.4.0",
+    "react-plotly.js": "^2.5.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.8",
+    "react-scripts": "^3.4.3",
     "react-svg": "^5.0.23",
     "xlsx": "^0.15.6"
   },
@@ -29,8 +29,12 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not ie <= 11",
       "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }
