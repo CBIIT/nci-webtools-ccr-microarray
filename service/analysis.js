@@ -329,10 +329,9 @@ router.post('/qAnalysis', function (req, res) {
           'text',
           html
         );
-        res.json({ status: 404, msg: 'Send Message to Queue fails' });
+        // res.json({ status: 404, msg: 'Send Message to Queue fails' });
       } else {
         logger.info('[Queue] Send Message to Queue success');
-        res.json({ status: 200, data: '' });
       }
     });
   }
@@ -367,10 +366,11 @@ router.post('/qAnalysis', function (req, res) {
           'text',
           html
         );
-        res.json({ status: 404, msg: 'upload files to S3 fails' });
+        // res.json({ status: 404, msg: 'upload files to S3 fails' });
       }
     }
   );
+  res.json({ status: 200 });
 });
 
 router.post('/getCurrentNumberOfJobsinQueue', function (req, res) {
