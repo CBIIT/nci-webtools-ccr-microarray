@@ -57,7 +57,7 @@ export default function SSGSEATable(props) {
       title: (
         <TableHeader
           id="name"
-          field="V1"
+          field="NAME"
           settings={props.data.ssGSEA}
           searchKey="name"
           searchFn={(key, val) => search(key, val)}
@@ -66,7 +66,7 @@ export default function SSGSEATable(props) {
       ),
       dataIndex: 'V1',
       sorter: false,
-      width: '10%',
+      width: '25%',
       render: (text, record, index) => {
         return (
           <div
@@ -92,7 +92,8 @@ export default function SSGSEATable(props) {
       title: (
         <TableHeader
           id="logFC"
-          field="V2"
+          field="logFC"
+          h
           settings={props.data.ssGSEA}
           searchKey="search_logFC"
           searchFn={(key, val) => search(key, val)}
@@ -104,7 +105,10 @@ export default function SSGSEATable(props) {
       width: '10%',
       render: (text, record, index) => {
         return (
-          <div className="single-line">
+          <div
+            className="single-line"
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
             <Tooltip title={text}>{Number.parseFloat(text).toFixed(3)}</Tooltip>
           </div>
         );
@@ -114,7 +118,7 @@ export default function SSGSEATable(props) {
       title: (
         <TableHeader
           id="p_value"
-          field="V5"
+          field="P.Value"
           settings={props.data.ssGSEA}
           searchKey="search_p_value"
           searchFn={(key, val) => search(key, val)}
@@ -127,7 +131,14 @@ export default function SSGSEATable(props) {
       defaultSortOrder: 'ascend',
       render: (text, record, index) => {
         return (
-          <div className="single-line" style={{ minWidth: '130px' }}>
+          <div
+            className="single-line"
+            style={{
+              minWidth: '130px',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
             <Tooltip title={text}>
               {Number.parseFloat(text).toExponential(exponentialNum)}
             </Tooltip>
@@ -139,7 +150,7 @@ export default function SSGSEATable(props) {
       title: (
         <TableHeader
           id="adj_p_value"
-          field="V6"
+          field="adj.P.Value"
           settings={props.data.ssGSEA}
           searchKey="search_adj_p_value"
           searchFn={(key, val) => search(key, val)}
@@ -151,7 +162,14 @@ export default function SSGSEATable(props) {
       width: '10%',
       render: (text, record, index) => {
         return (
-          <div className="single-line" style={{ minWidth: '130px' }}>
+          <div
+            className="single-line"
+            style={{
+              minWidth: '130px',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
             <Tooltip title={text}>
               {Number.parseFloat(text).toExponential(exponentialNum)}
             </Tooltip>
@@ -163,7 +181,7 @@ export default function SSGSEATable(props) {
       title: (
         <TableHeader
           id="Avg_Enrichment_Score"
-          field="V3"
+          field="Avg.Enrichment.Score"
           settings={props.data.ssGSEA}
           searchKey="search_Avg_Enrichment_Score"
           searchFn={(key, val) => search(key, val)}
@@ -175,7 +193,14 @@ export default function SSGSEATable(props) {
       width: '25%',
       render: (text, record, index) => {
         return (
-          <div className="single-line" style={{ minWidth: '130px' }}>
+          <div
+            className="single-line"
+            style={{
+              minWidth: '130px',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
             <Tooltip title={text}>{text}</Tooltip>
           </div>
         );
@@ -185,7 +210,7 @@ export default function SSGSEATable(props) {
       title: (
         <TableHeader
           id="t"
-          field="V4"
+          field="t"
           settings={props.data.ssGSEA}
           searchKey="search_t"
           searchFn={(key, val) => search(key, val)}
@@ -207,7 +232,7 @@ export default function SSGSEATable(props) {
       title: (
         <TableHeader
           id="b"
-          field="V7"
+          field="b"
           settings={props.data.ssGSEA}
           searchKey="search_b"
           searchFn={(key, val) => search(key, val)}
