@@ -905,8 +905,8 @@ function getPathWays(
       if (search_keyword[key]) return key;
     });
     if (queries.length) {
-      result = result.filter((r) => {
-        for (let key of queries) {
+      for (let key of queries) {
+        result = result.filter((r) => {
           if (!isNaN(parseFloat(r[key]))) {
             return parseFloat(r[key]) <= parseFloat(search_keyword[key]);
           } else {
@@ -915,8 +915,8 @@ function getPathWays(
               -1
             );
           }
-        }
-      });
+        });
+      }
     }
   }
   // sorting
