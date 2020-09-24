@@ -383,8 +383,8 @@ export default function PUGTable(props) {
       title: (
         <div className="mt-fixheader">
           <TableHeader
-            id="Pathway ID"
-            field="Pathway_ID"
+            id="Pathway_ID"
+            field="Pathway ID"
             settings={props.data.pathways_down}
             searchKey="Pathway_ID"
             searchFn={(key, val) => search(key, val)}
@@ -431,7 +431,7 @@ export default function PUGTable(props) {
             id="Gene_List"
             field="Gene List"
             settings={props.data.pathways_down}
-            searchKey="search_GENE_LIST"
+            searchKey="Gene_List"
             searchFn={(key, val) => search(key, val)}
             sorter={(field, order) => sorter(field, order)}
           />

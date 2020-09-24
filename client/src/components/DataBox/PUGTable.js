@@ -433,7 +433,7 @@ export default function PUGTable(props) {
             id="Gene_List"
             field="Gene List"
             settings={props.data.pathways_up}
-            searchKey="search_GENE_LIST"
+            searchKey="Gene_List"
             searchFn={(key, val) => search(key, val)}
             sorter={(field, order) => sorter(field, order)}
           />
