@@ -216,16 +216,18 @@ export default function PUGTable(props) {
     },
     {
       title: (
-        <TableHeader
-          id="Permutation_P-Value"
-          field="Perm. P-Value"
-          settings={props.data.pathways_down}
-          searchKey="Permutation_P-Value"
-          searchFn={(key, val) => search(key, val)}
-          sorter={(field, order) => sorter(field, order)}
-        />
+        <div className="mt-fixheader">
+          <TableHeader
+            id="FDR"
+            field="FDR"
+            settings={props.data.pathways_down}
+            searchKey="FDR"
+            searchFn={(key, val) => search(key, val)}
+            sorter={(field, order) => sorter(field, order)}
+          />
+        </div>
       ),
-      dataIndex: 'Permutation_P-Value',
+      dataIndex: 'FDR',
       //width: '8%',
       sorter: false,
       render: (text, record, index) => {

@@ -27,12 +27,12 @@ export const TableHeader = ({
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Tooltip title={id}>{field}</Tooltip>
         <div style={{ marginLeft: '1rem' }}>
-          {settings.sorting.name == field ? (
+          {settings.sorting.name == searchKey ? (
             settings.sorting.order == 'ascend' ? (
               <div>
                 <a
                   style={{ color: 'blue' }}
-                  onClick={() => sorter(field, 'descend')}
+                  onClick={() => sorter(searchKey, 'descend')}
                 >
                   <i className="fas fa-angle-up"></i>
                 </a>
@@ -41,7 +41,7 @@ export const TableHeader = ({
               <div>
                 <a
                   style={{ color: 'blue' }}
-                  onClick={() => sorter(field, 'ascend')}
+                  onClick={() => sorter(searchKey, 'ascend')}
                 >
                   <i className="fas fa-angle-down"></i>
                 </a>
@@ -52,7 +52,7 @@ export const TableHeader = ({
               <div>
                 <a
                   style={{ color: '#ccc' }}
-                  onClick={() => sorter(field, 'ascend')}
+                  onClick={() => sorter(searchKey, 'ascend')}
                 >
                   <i className="fas fa-angle-up"></i>
                 </a>
@@ -60,7 +60,7 @@ export const TableHeader = ({
               <div>
                 <a
                   style={{ color: '#ccc' }}
-                  onClick={() => sorter(field, 'descend')}
+                  onClick={() => sorter(searchKey, 'descend')}
                 >
                   <i className="fas fa-angle-down"></i>
                 </a>
