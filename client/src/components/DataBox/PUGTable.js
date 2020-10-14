@@ -86,7 +86,7 @@ export default function PUGTable(props) {
     reqBody.group1 = props.data.group_1;
     reqBody.group2 = props.data.group_2;
     reqBody.upOrDown = 'upregulated_pathways';
-    reqBody.pathway_name = props.data.pathways_up.data[idx.index].Description;
+    reqBody.pathway_name = props.data.pathways_up.data[idx.index].Pathway_Name;
     props.changeLoadingStatus(true, 'loading HeatMap');
 
     var importantStuff = window.open(

@@ -326,11 +326,7 @@ process = function(){
           config_path<-toString(args[9])
 
           contrast <-c(paste0(cgroup1,"-",cgroup2))
-          
           pic_name<-paste0("pathwaysHeapMap",sample(1:99999,1,replace=T),".jpg")
-          saveImageFileName<-pic_name
-
-          #write(saveImageFileName, "saveImageFileName.txt", sep="\t")
 
           celfiles<-readRDS(file = paste0(data_repo_path,"/celfiles.rds"))
 
@@ -340,8 +336,8 @@ process = function(){
             species = "human"
           }
 
-          write(species, "species", sep="\t")
-          geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name,saveImageFileName,config_path,data_repo_path,species)
+          # write(species, "species", sep="\t")
+          geneHeatmap(diff_expr_genes, l2p_pathways, contrast, upOrDown, pathway_name, pic_name, config_path, data_repo_path, species)
 
           return(list(pic_name=pic_name))
         }
