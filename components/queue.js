@@ -2,7 +2,6 @@ const AWS = require('aws-sdk');
 var uuid = require('uuid');
 const fs = require('fs');
 var config = require('../config');
-var lib_path = require('path');
 var logger = require('../components/queue_logger');
 var bucketName = config.bucketName;
 AWS.config.update({ region: 'us-east-1' });
@@ -126,8 +125,8 @@ awsHander.receiver = function (next, endCallback, errHandler) {
     QueueUrl: global.queue_url,
     MaxNumberOfMessages: 1,
     ReceiveRequestAttemptId: uuid(),
-    VisibilityTimeout: 60,
-    WaitTimeSeconds: 0,
+    VisibilityTimeout: config.visibility_timeout || 30,
+    WaitTimeSeconds: config.queue_long_pull_time || 20,
   };
   let re = sqs.receiveMessage(params, function (err, data) {
     // once get message , del message from queue

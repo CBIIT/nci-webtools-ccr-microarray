@@ -6,7 +6,6 @@
 var express = require('express');
 var m_analysis = require('./service/analysis');
 var m_ping = require('./service/ping');
-var m_common = require('./service/common');
 var config = require('./config');
 var path = require('path');
 
