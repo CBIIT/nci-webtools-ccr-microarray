@@ -1,28 +1,28 @@
 {
-    "timeout": 300000,
-    "queue_request_interval": 3,
-    "bucketName": "nci-cbiit-analysistools",
-    "queue_input_path": "microarray/local",
-    "queue_output_path": "microarray/local",
-    "queue_name": "nci-cbiit-ss-microarray-dev.fifo",
-    "microarray_link": "https://analysistools-qa.nci.nih.gov/microarray/",
-    "queue_msg_fitting_timeout":43200,
-    "visibility_timeout":90,
-    "queue_long_pull_time":45,
-    "development":
-    {
-        "log_dir": "log",
-        "upload_path": "tmp",
-        "config_path": "data"
-    },
-    "mail":
-    {
-        "host": "mailfwd.nih.gov",
-        "port": 25,
-        "web_admin_email": "NCIMicroArrayWebAdmin@mail.nih.gov",
-        "support_email": "yizhen.chen@nih.gov",
-        "tls":{
-            "rejectUnauthorized": false
-        }
+  "timeout": 300000,
+  "bucketName": "nci-cbiit-ss-analysistools-sandbox",
+  "queue_name": "nci-cbiit-ss-microarray-sbox.fifo",
+  "queue_input_path": "microarray/dev",
+  "queue_output_path": "microarray/dev",
+  "queue_request_interval": 3,
+  "queue_msg_fitting_timeout": 43200,
+  "queue_msg_retention_seconds": 604800,
+  "pull_delay": 5,
+  "visibility_timeout": 30,
+  "queue_long_pull_time": 20,
+  "microarray_link": "https://maap-dev.ccr.cancer.gov/",
+  "development": {
+    "log_dir": "log",
+    "upload_path": "tmp",
+    "config_path": "data"
+  },
+  "mail": {
+    "host": "mailfwd.nih.gov",
+    "port": 25,
+    "web_admin_email": "NCIMicroArrayWebAdmin@mail.nih.gov",
+    "support_email": "kai-ling.chen@nih.gov",
+    "tls": {
+      "rejectUnauthorized": false
     }
+  }
 }
