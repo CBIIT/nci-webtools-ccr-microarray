@@ -96,7 +96,6 @@ awsHander.sender = function (message, to, errHandler) {
       MessageBody: message,
       QueueUrl: global.queue_url,
       DelaySeconds: 0,
-      MessageRetentionPeriod: config.queue_msg_retention_seconds,
       MessageDeduplicationId: uuid(),
       MessageGroupId: uuid(),
     };
@@ -126,7 +125,6 @@ awsHander.receiver = function (next, endCallback, errHandler) {
     QueueUrl: global.queue_url,
     MaxNumberOfMessages: 1,
     ReceiveRequestAttemptId: uuid(),
-    DelaySeconds: config.pull_delay || 5,
     VisibilityTimeout: config.visibility_timeout || 30,
     WaitTimeSeconds: config.queue_long_pull_time || 20,
   };
