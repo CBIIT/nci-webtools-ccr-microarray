@@ -1,0 +1,172 @@
+---
+- name: Deploy {{ app }}.
+  hosts: all
+  become: yes
+  become_method: sudo
+  environment:
+    PATH: '{{ ansible_env.PATH }}:/usr/local/bin'
+  vars:
+    - app: microArray
+    - app_git_url_tools: https://github.com/CBIIT/nci-webtools-ccr-microarray.git
+    - app_git_root_tools: /tmp/nci-webtools-ccr-microarray
+    - microarray_r_package_url: https://github.com/CCBR/MicroArrayPipeline
+    - l2p_r_package_url: https://github.com/CCBR/l2p/raw/master
+    - pipeline_package: mpstr
+    - l2p_package: l2p
+    - app_port: 9220
+    - web_command: /usr/bin/node
+    - web_script: index.js
+    - web_script_params: -p {{ app_port}} -o {{ app }}.log
+    - processor_command: '{{ web_command }}'
+    - processor_folder: service
+    - processor_script: microarray_processor.js
+
+  tasks:
+    - name: Update {{ app }} R packages
+      include_role:
+        name: install-R-package-from-url
+      vars:
+        - package: '{{ pipeline_package }}'
+        - url: '{{ microarray_r_package_url }}'
+        - package_subfolder: '{{ pipeline_package }}'
+        - use_git: yes
+        - force: yes
+      when: update_microArray_R_package == 'true'
+
+    - name: Update {{ l2p_package }} R package
+      include_role:
+        name: install-R-package-from-url
+      vars:
+        - package: '{{ l2p_package }}'
+        - url: '{{ l2p_r_package_url }}/{{ l2p_version }}'
+        - use_git: no
+        - force: yes
+      when: update_l2p_r_package == 'true'
+
+    - name: Stop {{ web_service }} service
+      vars:
+        service_name: '{{ web_service }}'
+      block:
+        - name: Setup web service files
+          include_role:
+            name: setup-service-files
+          vars:
+            script_params: '{{ web_script_params }}'
+            main_script: '{{ web_script }}'
+            command: '{{ web_command }}'
+
+        - name: Stop {{ web_service }} service
+          service:
+            name: '{{ service_name }}'
+            state: stopped
+      when: inventory_hostname in groups['web']
+
+    - name: Stop {{ processor_service }} service
+      vars:
+        service_name: '{{ processor_service }}'
+      block:
+        - name: Setup processor service files
+          include_role:
+            name: setup-service-files
+          vars:
+            main_script: '{{ processor_script }}'
+            working_folder: '{{ processor_folder }}'
+            command: '{{ processor_command }}'
+
+        - name: Stop {{ service_name }} service
+          service:
+            name: '{{ service_name }}'
+            state: stopped
+      when: inventory_hostname in groups['processor']
+
+    - name: Backup {{ app }}
+      include_role:
+        name: backup
+
+    - name: Git checkout
+      include_role:
+        name: git-checkout
+
+    - name: Copy application to {{ app_code_root }}
+      include_role:
+        name: copy-app
+
+    - name: remove the data directory
+      file:
+        path: '{{ app_root }}/data'
+        state: absent
+      when: update_microArray_R_package == 'true'
+
+    - name: copy data files
+      block:
+        - name: Copy mpstr_configuration_files to {{ app }}/data
+          synchronize:
+            src: '/tmp/{{ pipeline_package }}/mpstr_configuration_files/'
+            dest: '{{ app_root }}/data/'
+          delegate_to: '{{ inventory_hostname }}'
+      when: update_microArray_R_package == 'true'
+      become: yes
+      become_user: '{{ ncianalysis_user }}'
+
+    - name: Copy configuration file from config/ to app/
+      copy:
+        src: '{{ app_config_root}}/microarray_setting.json'
+        dest: '{{ app_code_root}}/config'
+        remote_src: yes
+        owner: '{{ ncianalysis_user }}'
+
+    - name: Build {{ app }} backend
+      shell: umask 0022; npm install
+      args:
+        chdir: '{{ app_root }}/app'
+      become: yes
+      become_user: '{{ ncianalysis_user }}'
+
+    - name: prepare web folders
+      block:
+        - name: Copy common and build.sh
+          include_role:
+            name: copy-common-build
+
+        - name: Build {{ app }} frontend
+          shell: umask 0022; npm install; npm run-script build
+          args:
+            chdir: '{{ app_root }}/app/client'
+          become: yes
+          become_user: '{{ ncianalysis_user }}'
+          async: 1000
+          poll: 0
+          register: npm_build
+
+        - name: Check Build Status
+          async_status:
+            jid: '{{ npm_build.ansible_job_id }}'
+          register: build_result
+          until: build_result.finished
+          retries: 100
+          become: yes
+          become_user: '{{ ncianalysis_user }}'
+
+        - name: Rename client/build folder to client/www
+          command: mv build www
+          args:
+            chdir: '{{ app_root }}/app/client'
+          become: yes
+          become_user: '{{ ncianalysis_user }}'
+
+        - name: Reset group to apache
+          include_role:
+            name: set-group-to-apache
+      when: inventory_hostname in groups['web']
+
+    - name: start {{ web_service }} service
+      service:
+        name: '{{ web_service }}'
+        state: started
+      when: inventory_hostname in groups['web']
+
+    - name: Start {{ processor_service }} service
+      service:
+        name: '{{ processor_service }}'
+        state: started
+      when: inventory_hostname in groups['processor']
