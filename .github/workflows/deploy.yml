@@ -1,0 +1,262 @@
+name: Deploy MicroArray
+on:
+    workflow_dispatch:
+        inputs:
+            tier:
+                description: "Deployment Tier"
+                required: true
+                default: "dev"
+                type: choice
+                options:
+                    - dev
+                    - qa
+                    - stage
+                    - prod
+            update_r_packages:
+                description: "Update R packages (mpstr and l2p)"
+                required: false
+                default: false
+                type: boolean
+
+env:
+    APP: microarray
+    TZ: America/New_York
+    AWS_REGION: us-east-1
+    AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+    APP_ROOT: /local/content/microarray
+    APP_PORT: 9220
+
+jobs:
+    Deploy:
+        runs-on: ubuntu-latest
+        environment: ${{ inputs.tier }}
+        permissions:
+            id-token: write
+            contents: read
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v5
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v5.1.0
+              with:
+                role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/ec2-role-analysistools-${{ inputs.tier }}-role
+                aws-region: ${{ env.AWS_REGION }}
+
+            - name: Get EC2 instance ID
+              id: get-instance
+              run: |
+                INSTANCE_ID=$(aws ec2 describe-instances \
+                  --filters "Name=tag:Name,Values=${{ secrets.EC2_INSTANCE_NAME }}" \
+                            "Name=instance-state-name,Values=running" \
+                  --query "Reservations[0].Instances[0].InstanceId" \
+                  --output text)
+                
+                if [ "$INSTANCE_ID" == "None" ] || [ -z "$INSTANCE_ID" ]; then
+                  echo "Error: Could not find running EC2 instance with name ${{ secrets.EC2_INSTANCE_NAME }}"
+                  exit 1
+                fi
+                
+                echo "instance_id=$INSTANCE_ID" >> $GITHUB_OUTPUT
+                echo "Found EC2 instance: $INSTANCE_ID"
+
+            - name: Deploy to EC2 via SSM
+              run: |
+                # Create deployment commands as JSON
+                cat > commands.json << 'EOF'
+                {
+                  "Parameters": {
+                    "commands": [
+                      "set -e",
+                      "echo '=== Starting MicroArray deployment ==='",
+                      "echo '=== Stopping services ==='",
+                      "sudo systemctl stop microarray-web || echo 'Web service not running'",
+                      "sudo systemctl stop microarray-processor || echo 'Processor service not running'",
+                      "echo '=== Creating backup ==='",
+                      "cd ${{ env.APP_ROOT }}",
+                      "BACKUP_DIR=\"${{ env.APP_ROOT }}/backup/$(date +%Y%m%d_%H%M%S)\"",
+                      "sudo mkdir -p \"$BACKUP_DIR\"",
+                      "sudo cp -r app \"$BACKUP_DIR/\" || echo 'No existing app to backup'",
+                      "echo '=== Cloning/updating repository ==='",
+                      "if [ -d \"${{ env.APP_ROOT }}/temp-repo\" ]; then sudo rm -rf \"${{ env.APP_ROOT }}/temp-repo\"; fi",
+                      "cd ${{ env.APP_ROOT }}",
+                      "git clone --depth 1 --branch ${{ github.ref_name }} https://github.com/${{ github.repository }}.git temp-repo",
+                      "echo '=== Removing old app directory ==='",
+                      "sudo rm -rf app",
+                      "echo '=== Moving new code to app directory ==='",
+                      "sudo mv temp-repo app",
+                      "sudo chown -R ncianalysis:ncianalysis app",
+                      "echo '=== Copying configuration file ==='",
+                      "sudo cp ${{ env.APP_ROOT }}/config/microarray_setting.json ${{ env.APP_ROOT }}/app/config/ || echo 'Config file not found'",
+                      "echo '=== Installing backend dependencies ==='",
+                      "cd ${{ env.APP_ROOT }}/app",
+                      "sudo -u ncianalysis npm install",
+                      "echo '=== Installing frontend dependencies ==='",
+                      "cd ${{ env.APP_ROOT }}/app/client",
+                      "sudo -u ncianalysis npm install",
+                      "echo '=== Building frontend ==='",
+                      "sudo -u ncianalysis npm run-script build",
+                      "echo '=== Renaming build folder to www ==='",
+                      "if [ -d www ]; then sudo rm -rf www; fi",
+                      "sudo -u ncianalysis mv build www",
+                      "echo '=== Setting Apache group permissions ==='",
+                      "sudo chgrp -R apache ${{ env.APP_ROOT }}/app",
+                      "sudo chmod -R g+rw ${{ env.APP_ROOT }}/app",
+                      "echo '=== Starting services ==='",
+                      "sudo systemctl start microarray-web",
+                      "sudo systemctl start microarray-processor",
+                      "echo '=== Checking service status ==='",
+                      "sleep 3",
+                      "sudo systemctl status microarray-web --no-pager || true",
+                      "sudo systemctl status microarray-processor --no-pager || true",
+                      "echo '=== Verifying deployment ==='",
+                      "curl -f http://localhost:${{ env.APP_PORT }}/ping || echo 'Warning: Health check failed'",
+                      "echo '=== Deployment completed successfully ==='"
+                    ]
+                  }
+                }
+                EOF
+                
+                # Send command to EC2 and execute
+                COMMAND_ID=$(aws ssm send-command \
+                  --instance-ids "${{ steps.get-instance.outputs.instance_id }}" \
+                  --document-name "AWS-RunShellScript" \
+                  --cli-input-json file://commands.json \
+                  --query "Command.CommandId" \
+                  --output text)
+                
+                echo "SSM Command ID: $COMMAND_ID"
+                
+                # Wait for the command to finish
+                echo "Waiting for deployment to complete..."
+                for i in {1..120}; do
+                  STATUS=$(aws ssm get-command-invocation \
+                    --command-id "$COMMAND_ID" \
+                    --instance-id "${{ steps.get-instance.outputs.instance_id }}" \
+                    --query "Status" \
+                    --output text)
+                  
+                  echo "Status: $STATUS (attempt $i/120)"
+                  
+                  if [[ "$STATUS" == "Success" ]]; then
+                    echo "✅ Deployment successful!"
+                    break
+                  elif [[ "$STATUS" =~ ^(Failed|Cancelled|TimedOut)$ ]]; then
+                    echo "❌ Deployment failed with status: $STATUS"
+                    
+                    # Print error details before exiting
+                    echo ""
+                    echo "=== Deployment Output ==="
+                    aws ssm get-command-invocation \
+                      --command-id "$COMMAND_ID" \
+                      --instance-id "${{ steps.get-instance.outputs.instance_id }}" \
+                      --query "StandardOutputContent" \
+                      --output text
+                    
+                    echo ""
+                    echo "=== Deployment Errors ==="
+                    aws ssm get-command-invocation \
+                      --command-id "$COMMAND_ID" \
+                      --instance-id "${{ steps.get-instance.outputs.instance_id }}" \
+                      --query "StandardErrorContent" \
+                      --output text
+                    
+                    exit 1
+                  fi
+                  
+                  sleep 5
+                done
+                
+                # Get the output on success
+                echo ""
+                echo "=== Deployment Output ==="
+                aws ssm get-command-invocation \
+                  --command-id "$COMMAND_ID" \
+                  --instance-id "${{ steps.get-instance.outputs.instance_id }}" \
+                  --query "StandardOutputContent" \
+                  --output text
+
+            - name: Update R packages
+              if: ${{ inputs.update_r_packages }}
+              run: |
+                echo "Updating R packages via SSM..."
+                cat > r-update-commands.json << 'EOF'
+                {
+                  "Parameters": {
+                    "commands": [
+                      "set -e",
+                      "echo '=== Updating MicroArray R packages ==='",
+                      "echo '=== Installing mpstr package ==='",
+                      "sudo R -e \"devtools::install_github('CCBR/MicroArrayPipeline', subdir='mpstr', force=TRUE)\"",
+                      "echo '=== Installing l2p package ==='",
+                      "sudo R -e \"install.packages('https://github.com/CCBR/l2p/raw/master/l2p_latest.tar.gz', repos=NULL, type='source', force=TRUE)\"",
+                      "echo '=== Copying mpstr configuration files ==='",
+                      "sudo rm -rf ${{ env.APP_ROOT }}/data",
+                      "sudo mkdir -p ${{ env.APP_ROOT }}/data",
+                      "sudo cp -r /usr/local/lib/R/site-library/mpstr/mpstr_configuration_files/* ${{ env.APP_ROOT }}/data/",
+                      "sudo chown -R ncianalysis:ncianalysis ${{ env.APP_ROOT }}/data",
+                      "echo '=== Restarting services after R package update ==='",
+                      "sudo systemctl restart microarray-web",
+                      "sudo systemctl restart microarray-processor",
+                      "echo '=== R packages updated successfully ==='"
+                    ]
+                  }
+                }
+                EOF
+                
+                COMMAND_ID=$(aws ssm send-command \
+                  --instance-ids "${{ steps.get-instance.outputs.instance_id }}" \
+                  --document-name "AWS-RunShellScript" \
+                  --cli-input-json file://r-update-commands.json \
+                  --query "Command.CommandId" \
+                  --output text)
+                
+                echo "SSM Command ID: $COMMAND_ID"
+                
+                # Wait for completion
+                echo "Waiting for R package update to complete..."
+                for i in {1..60}; do
+                  STATUS=$(aws ssm get-command-invocation \
+                    --command-id "$COMMAND_ID" \
+                    --instance-id "${{ steps.get-instance.outputs.instance_id }}" \
+                    --query "Status" \
+                    --output text)
+                  
+                  echo "Status: $STATUS (attempt $i/60)"
+                  
+                  if [[ "$STATUS" == "Success" ]]; then
+                    echo "✅ R packages updated successfully!"
+                    break
+                  elif [[ "$STATUS" =~ ^(Failed|Cancelled|TimedOut)$ ]]; then
+                    echo "❌ R package update failed with status: $STATUS"
+                    aws ssm get-command-invocation \
+                      --command-id "$COMMAND_ID" \
+                      --instance-id "${{ steps.get-instance.outputs.instance_id }}" \
+                      --query "StandardErrorContent" \
+                      --output text
+                    exit 1
+                  fi
+                  
+                  sleep 5
+                done
+                
+                # Get the output
+                aws ssm get-command-invocation \
+                  --command-id "$COMMAND_ID" \
+                  --instance-id "${{ steps.get-instance.outputs.instance_id }}" \
+                  --query "StandardOutputContent" \
+                  --output text
+
+            - name: Deployment summary
+              if: success()
+              run: |
+                echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+                echo "- **Application**: microarray" >> $GITHUB_STEP_SUMMARY
+                echo "- **Environment**: ${{ inputs.tier }}" >> $GITHUB_STEP_SUMMARY
+                echo "- **Git Reference**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+                echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+                echo "- **App Port**: ${{ env.APP_PORT }}" >> $GITHUB_STEP_SUMMARY
+                echo "- **R Packages Updated**: ${{ inputs.update_r_packages }}" >> $GITHUB_STEP_SUMMARY
+                echo "- **EC2 Instance**: ${{ steps.get-instance.outputs.instance_id }}" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "✅ Deployment completed successfully!" >> $GITHUB_STEP_SUMMARY
