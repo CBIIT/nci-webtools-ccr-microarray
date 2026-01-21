@@ -17,6 +17,11 @@ on:
                 required: false
                 default: false
                 type: boolean
+            l2p_version:
+                description: "L2P package version"
+                required: false
+                default: "l2p_0.0-6.tar.gz"
+                type: string
 
 env:
     APP: microarray
@@ -186,7 +191,7 @@ jobs:
                       "echo '=== Installing mpstr package ==='",
                       "sudo R -e \"devtools::install_github('CCBR/MicroArrayPipeline', subdir='mpstr', force=TRUE)\"",
                       "echo '=== Installing l2p package ==='",
-                      "sudo R -e \"install.packages('https://github.com/CCBR/l2p/raw/master/l2p_latest.tar.gz', repos=NULL, type='source', force=TRUE)\"",
+                      "sudo R -e \"install.packages('https://github.com/CCBR/l2p/raw/master/${{ inputs.l2p_version }}', repos=NULL, type='source', force=TRUE)\"",
                       "echo '=== Copying mpstr configuration files ==='",
                       "sudo rm -rf ${{ env.APP_ROOT }}/data",
                       "sudo mkdir -p ${{ env.APP_ROOT }}/data",
@@ -254,6 +259,7 @@ jobs:
                 echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
                 echo "- **App Port**: ${{ env.APP_PORT }}" >> $GITHUB_STEP_SUMMARY
                 echo "- **R Packages Updated**: ${{ inputs.update_r_packages }}" >> $GITHUB_STEP_SUMMARY
+                echo "- **L2P Version**: ${{ inputs.l2p_version }}" >> $GITHUB_STEP_SUMMARY
                 echo "- **EC2 Instance**: ${{ steps.get-instance.outputs.instance_id }}" >> $GITHUB_STEP_SUMMARY
                 echo "" >> $GITHUB_STEP_SUMMARY
                 echo "✅ Deployment completed successfully!" >> $GITHUB_STEP_SUMMARY
