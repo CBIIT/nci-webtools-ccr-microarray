@@ -33,10 +33,7 @@ jobs:
         permissions:
             id-token: write
             contents: read
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v5
-
+        steps:            
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v5.1.0
               with:
