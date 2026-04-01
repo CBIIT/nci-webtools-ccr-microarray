@@ -10,3 +10,7 @@ yarn-error.log*
 /mpstr_pathworks_linux/
 *.log
 config/microarray_setting.json
+server/config/microarray_setting.json
+data/
+*.gmt
+.env

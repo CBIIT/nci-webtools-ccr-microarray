@@ -2,14 +2,14 @@ FROM public.ecr.aws/amazonlinux/amazonlinux:2023
 
 RUN dnf -y update \
     && dnf -y install \
-    nodejs20 \
-    nodejs20-npm \
+    nodejs22 \
+    nodejs22-npm \
     gcc-c++ \
     make \
-    nginx \
+    httpd \
     && dnf clean all
 
-RUN ln -s -f /usr/bin/node-20 /usr/bin/node; ln -s -f /usr/bin/npm-20 /usr/bin/npm;
+RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/npm;
 RUN mkdir -p /app/client
 
 WORKDIR /app/client
@@ -25,13 +25,14 @@ COPY client/ ./
 ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN npm run build
 
-# Copy nginx config
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy httpd config and move build output to serve directory
+COPY docker/httpd.conf /etc/httpd/conf.d/app.conf
+RUN cp -r build/* /var/www/html/
 
-# Move build output to nginx serve directory
-RUN mkdir -p /usr/share/nginx/html
-RUN cp -r build/* /usr/share/nginx/html/
+# Forward httpd logs to docker stdout/stderr
+RUN ln -sf /dev/stdout /var/log/httpd/access_log \
+    && ln -sf /dev/stderr /var/log/httpd/error_log
 
 EXPOSE 3000
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["httpd", "-D", "FOREGROUND"]
