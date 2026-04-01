@@ -1,20 +1,17 @@
-# R version 3.4.4
-library(devtools)
-
 install.packages(
-    c("jsonlite", "gplots", "rglwidget", "DT", "getopt", "knitr",
-    "reshape", "RColorBrewer", "calibrate", "rmarkdown", "ggplot2", "ggfortify", 
-    "shinyRGL", "plotly", "htmltools", "heatmaply", "pheatmap", "viridis", "dendsort", 
-    "amap", "RCurl", "BiocManager"), 
+    c("remotes", "jsonlite", "gplots", "rglwidget", "DT", "getopt", "knitr",
+    "reshape", "RColorBrewer", "calibrate", "rmarkdown", "ggplot2", "ggfortify",
+    "shinyRGL", "plotly", "htmltools", "heatmaply", "pheatmap", "viridis", "dendsort",
+    "amap", "RCurl", "mvtnorm", "BiocManager"),
     repos = c(CRAN="http://cran.r-project.org"))
 
 install.packages("rgl", repo="http://cran.r-project.org", configure.args="--disable-ftgl")
-install_version("mvtnorm", version = "1.0-8", repos = "http://cran.r-project.org")
-install_github("CCBR/MicroArrayPipeline/mpstr")
+remotes::install_github("CCBR/MicroArrayPipeline/mpstr")
 
 # Use latest version from https://github.com/CCBR/l2p
 tryCatch({
-    install.packages("https://github.com/CCBR/l2p/raw/master/l2p_0.0-1.tar.gz", repos=NULL) 
+    install.packages("https://github.com/CCBR/l2p/raw/master/l2p_0.0-14.tar.gz", repos=NULL)
+    install.packages("https://github.com/CCBR/l2p/raw/master/l2psupp_0.0-14.tar.gz", repos=NULL)
 }, error = function(e) {
     print('L2P install failed. Make sure URL is up-to-date')
 })

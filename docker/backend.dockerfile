@@ -6,24 +6,29 @@ RUN dnf -y update \
     nodejs22-npm \
     tar \
     gzip \
-    R-4.5.3 \
+    R-4.3.2 \
     gcc-c++ \
     gcc-gfortran \
     make \
     libcurl-devel \
     openssl-devel \
     libxml2-devel \
+    harfbuzz-devel \
+    fribidi-devel \
+    freetype-devel \
+    libtiff-devel \
+    libgit2-devel \
     git \
     && dnf clean all
 
 RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/npm;
+
 RUN mkdir -p /app/server
 
 WORKDIR /app/server
 
 # Install R packages (slow layer — cached unless setup.R changes)
 COPY server/setup/setup.R /app/server/setup/setup.R
-RUN Rscript -e "install.packages('devtools', repos='https://cran.r-project.org')"
 RUN Rscript setup/setup.R
 
 # Install server npm dependencies
