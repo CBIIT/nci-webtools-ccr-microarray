@@ -19,7 +19,7 @@ on:
 
 jobs:
   deploy-microarray-app:
-    timeout-minutes: 60
+    timeout-minutes: 90
     runs-on: ubuntu-latest
     environment: ${{ inputs.tier }}
     env:
