@@ -261,7 +261,7 @@ export class MicroarrayStack extends cdk.Stack {
     });
 
     const tg = new elbv2.ApplicationTargetGroup(this, "WebTG", {
-      targetGroupName: `${tier}-${appName}-${ms.name}`,
+      targetGroupName: `${tier}-${appName}-${appService}`,
       port: 80,
       protocol: elbv2.ApplicationProtocol.HTTP,
       targetType: elbv2.TargetType.IP,
@@ -289,7 +289,7 @@ export class MicroarrayStack extends cdk.Stack {
     });
 
     const service = new ecs.FargateService(this, "WebService", {
-      serviceName: `${tier}-${appName}-${ms.name}`,
+      serviceName: `${tier}-${appName}-${appService}`,
       cluster,
       taskDefinition: taskDef,
       desiredCount: ms.desiredCount,
