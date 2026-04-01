@@ -232,7 +232,7 @@ export class MicroarrayStack extends cdk.Stack {
     const logGroup = new logs.LogGroup(this, "WebLogGroup", {
       logGroupName: `/${appNamespace}/${tier}/${appName}/${ms.name}`,
       retention: logs.RetentionDays.SIX_MONTHS,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      // removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
 
     const taskDef = new ecs.FargateTaskDefinition(this, "WebTaskDef", {
@@ -399,7 +399,7 @@ export class MicroarrayStack extends cdk.Stack {
     const workerLogGroup = new logs.LogGroup(this, "WorkerLogGroup", {
       logGroupName: `/${appNamespace}/${tier}/${appName}/${et.name}`,
       retention: logs.RetentionDays.SIX_MONTHS,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      // removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
 
     const workerTaskDef = new ecs.FargateTaskDefinition(this, "WorkerTaskDef", {
