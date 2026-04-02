@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
@@ -15,11 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="d-flex flex-column min-vh-100">
-        <nav className="navbar navbar-dark bg-dark">
-          <div className="app-container w-100">
-            <span className="navbar-brand">MAAPster</span>
-          </div>
-        </nav>
+        <Header />
         <main className="app-container py-3 flex-grow-1">{children}</main>
         <Footer />
       </body>

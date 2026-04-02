@@ -1,0 +1,87 @@
+/* ── NCI Logo Bar ── */
+.headerNci {
+  background: #fff;
+  padding: 0.75rem 0;
+}
+
+.headerNci img {
+  height: 60px;
+}
+
+/* ── App Banner ── */
+.headerBanner {
+  background-color: #2971a5;
+  line-height: 3em;
+}
+
+.info {
+  color: #fff;
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.infoHighlight {
+  color: #ffc90e;
+}
+
+.infoAffix {
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* ── Navigation Bar ── */
+.headerNav {
+  background: #2a303f;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  padding: 0 1.5rem;
+  line-height: 3.5em;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.navItem a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.navItemActive a {
+  background-color: #ffc90e;
+  color: #000 !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 575px) {
+  .headerBanner {
+    line-height: 2em;
+    padding: 0.5rem 0;
+  }
+
+  .info {
+    font-size: 1.1em;
+    display: block;
+  }
+
+  .infoAffix {
+    font-size: 0.9em;
+    display: block;
+  }
+
+  .headerNci img {
+    height: 45px;
+  }
+}

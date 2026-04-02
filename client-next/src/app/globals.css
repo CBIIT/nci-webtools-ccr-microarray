@@ -1,7 +1,7 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 
 .app-container {
-  max-width: 80rem;
+  max-width: 95rem;
   margin: 0 auto;
   padding: 0 1.5rem;
 }

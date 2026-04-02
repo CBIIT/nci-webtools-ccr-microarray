@@ -1,8 +1,6 @@
-// Legacy: client/src/components/Analysis/Analysis.js
+// Landing page — shows About content
+import About from "./about/page";
+
 export default function Home() {
-  return (
-    <div>
-      <h1>Analysis</h1>
-    </div>
-  );
+  return <About />;
 }
