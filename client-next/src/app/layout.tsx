@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MAAPster - MicroArray Analysis Platform",
+  title: "CCBR Microarray Analysis Workflow",
   description: "MicroArray Analysis for Affymetrix human and mouse data",
 };
 
