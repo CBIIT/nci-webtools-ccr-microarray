@@ -10,7 +10,7 @@ export default function Analysis() {
     <div className="content-board">
       <div className="d-flex flex-column flex-lg-row gap-3">
         {/* Left Panel — Workflow */}
-        <div style={{ minWidth: "270px", maxWidth: "300px", border: "1px solid #eee" }}>
+        <div style={{ width: "270px", minWidth: "270px", maxWidth: "270px", border: "1px solid #eee" }}>
           {/* Block 1: Project */}
           <div className="workflow-block">
             <label className="title" htmlFor="analysisType">Choose Analysis Type</label>
@@ -52,18 +52,36 @@ export default function Analysis() {
 
           {/* Block 2: Contrast */}
           <div className="workflow-block">
-            <label className="title">Chip:<span className="required"> *</span></label>
-            <label className="title">Choose Contrast To Show:<span className="required"> *</span></label>
+            <label className="title mb-2" htmlFor="selectGroup1">Choose Contrast To Show:<span className="required"> *</span></label>
+            <select className="form-select form-select-sm mb-1" id="selectGroup1">
+              <option value="-1">-- Select Group 1 --</option>
+            </select>
+            <select className="form-select form-select-sm" id="selectGroup2">
+              <option value="-1">-- Select Group 2 --</option>
+            </select>
           </div>
 
           {/* Block 3: Normalization */}
           <div className="workflow-block">
-            <label className="title">Choose Normalization<br />Method:</label>
+            <label className="title mb-2" htmlFor="selectNormal">Choose Normalization<br />Method:</label>
+            <select className="form-select form-select-sm" id="selectNormal">
+              <option value="RMA">RMA</option>
+              <option value="RMA_Loess">RMA plus Cyclic Loess</option>
+            </select>
           </div>
 
-          {/* Block 4: Queue & Run */}
+          {/* Block 4: Queue */}
           <div className="workflow-block">
-            <label className="title">Email<span className="required"> *</span></label>
+            <div className="form-check mb-1">
+              <input className="form-check-input" type="checkbox" id="queueCheckbox" defaultChecked />
+              <label className="form-check-label" style={{ fontSize: "0.85em" }} htmlFor="queueCheckbox">Submit this job to a Queue</label>
+            </div>
+            <small className="text-muted fst-italic d-block mb-2" style={{ fontSize: "0.75em" }}>(Jobs currently enqueued: 0)</small>
+
+            <label className="title" htmlFor="inputEmail">Email<span className="required"> *</span></label>
+            <input className="form-control form-control-sm mb-2" id="inputEmail" type="email" placeholder="-- Enter Email --" />
+
+            <small className="text-muted fst-italic" style={{ fontSize: "0.75em" }}>Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</small>
           </div>
 
           {/* Run / Reset buttons (outside sub-boxes) */}
