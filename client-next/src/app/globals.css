@@ -5,6 +5,7 @@ body {
 }
 
 .app-container {
+  width: 100%;
   max-width: 80rem;
   margin: 0 auto;
   padding: 0 1.5rem;
@@ -24,7 +25,7 @@ body {
 
 .content-board h1 {
   color: #2971a5;
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   line-height: 45px;
   border-bottom: 2px solid #eeeef1;
   margin-top: 1rem;
@@ -33,7 +34,7 @@ body {
 
 .content-board h2 {
   color: #2971a5;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   line-height: 45px;
   border-bottom: 2px solid #eeeef1;
   margin-top: 1rem;
@@ -42,7 +43,7 @@ body {
 
 .content-board h3 {
   color: #2971a5;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   line-height: 45px;
   border-bottom: 2px solid #eeeef1;
   margin-top: 1rem;
@@ -54,4 +55,68 @@ body {
   height: auto;
   margin-top: 0.5rem;
   margin-bottom: 1.5rem;
+}
+
+.workflow-block {
+  border: 1px solid #eee;
+  margin: 10px;
+  padding: 8px 5px 10px 5px;
+}
+
+.file-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 4px 15px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.65);
+  background: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.file-upload-btn:hover,
+.file-upload-btn:active {
+  color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.file-upload-icon {
+  color: inherit;
+  font-size: 14px;
+}
+
+.workflow-block input::placeholder {
+  color: #aaa;
+  opacity: 1;
+}
+
+.workflow-block .title {
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 5px;
+  color: rgba(0, 0, 0, 0.65);
+  display: block;
+}
+
+.btn-nci-primary {
+  color: #fff;
+  background-color: #2971a5;
+  border-color: #2971a5;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.btn-nci-primary:hover {
+  color: #fff;
+  background-color: #235d8a;
+  border-color: #235d8a;
+}
+
+.workflow-block .required {
+  color: #e41d3d;
+  padding-left: 5px;
 }

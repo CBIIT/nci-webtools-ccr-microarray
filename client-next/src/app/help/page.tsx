@@ -2,7 +2,7 @@
 export default function Help() {
   return (
     <section className="content-board">
-      <h2>Microarrays</h2>
+      <h1>Microarrays</h1>
       <p>
         MicroArray Analysis Pipeline (MAAPster) is a comprehensive web tool designed by the CCR
         Collaborative Bioinformatics Resource (CCBR) that performs transcriptome analysis of
@@ -17,7 +17,7 @@ export default function Help() {
         GSEA analysis.
       </p>
 
-      <h3>Input</h3>
+      <h2>Input</h2>
       <p>There are 2 input options:</p>
       <ol>
         <li>
@@ -53,7 +53,7 @@ export default function Help() {
         </li>
       </ol>
 
-      <h3>Human</h3>
+      <h2>Human</h2>
       <ul>
         <li>Human Genome U133 Plus 2.0 Array</li>
         <li>GeneChip™ Human Genome U133A Array</li>
@@ -73,7 +73,7 @@ export default function Help() {
         <li>Clariom™ D Assay, human</li>
       </ul>
 
-      <h3>Mouse</h3>
+      <h2>Mouse</h2>
       <ul>
         <li>GeneChip™ Mouse Gene 1.0 ST Array</li>
         <li>GeneChip™ Mouse Gene 1.1 ST Array</li>
@@ -87,7 +87,7 @@ export default function Help() {
         <li>Mouse Exon 1.0 ST Array</li>
       </ul>
 
-      <h3>Analysis</h3>
+      <h2>Analysis</h2>
       <p>
         Once the files are uploaded, choose groups for each sample. At least 2 groups must be
         created. The control group should be entered last. For example:
@@ -107,19 +107,19 @@ export default function Help() {
         titled <a href="#qualityControl"><b>Sample Quality Control.</b></a>
       </p>
 
-      <h4 id="manualGroups">Manually Add Groups and Batches:</h4>
+      <h2 id="manualGroups">Manually Add Groups and Batches:</h2>
       <video preload="metadata" controls>
         <source src="/assets/img/manualGroup.mp4" type="video/mp4" />
         Sorry, your browser doesn&apos;t support embedded videos.
       </video>
 
-      <h4>Upload Groups and Batches:</h4>
+      <h2>Upload Groups and Batches:</h2>
       <video preload="metadata" controls>
         <source src="/assets/img/csvGroup.mp4" type="video/mp4" />
         Sorry, your browser doesn&apos;t support embedded videos.
       </video>
 
-      <h4>Array Probe Quality Control:</h4>
+      <h2>Array Probe Quality Control:</h2>
       <p>
         Two plots, NUSE and RLE, display quality control metrics for the microarray probes. Plots
         are created with the oligo package:
@@ -154,7 +154,7 @@ export default function Help() {
         </a>
       </p>
 
-      <h3>Normalization</h3>
+      <h2>Normalization</h2>
       <p>
         Each sample is normalized to correct for technical artifacts using the Robust Multichip
         Averaging (RMA) method described in (Irizarry et al., 2003). Optional cyclic loess is also
@@ -206,13 +206,13 @@ export default function Help() {
         </a>
       </p>
 
-      <h3 id="qualityControl">Sample Quality Control</h3>
+      <h2 id="qualityControl">Sample Quality Control</h2>
       <p>
         Two plots, the sample similarity heatmap and 3D PCA, provide information about the quality
         of replicates in the groups.
       </p>
 
-      <h4>3D PCA:</h4>
+      <h2>3D PCA:</h2>
       <p>
         In general, samples in the same group should cluster together, and groups of samples
         should cluster separately from other groups. If batch effects are present, re-run the
@@ -241,13 +241,13 @@ export default function Help() {
         implemented.
       </p>
 
-      <h4>Sample Similarity Heatmap:</h4>
+      <h2>Sample Similarity Heatmap:</h2>
       <video preload="metadata" controls>
         <source src="/assets/img/heatmap.mp4" type="video/mp4" />
         Sorry, your browser doesn&apos;t support embedded videos.
       </video>
 
-      <h3>Differential Gene Expression</h3>
+      <h2>Differential Gene Expression</h2>
       <p>
         The DEG-Enrichments Results tab displays differentially expressed genes between groups.
         MAAPster runs analysis in the background with the limma package. Linear modeling is
@@ -265,7 +265,7 @@ export default function Help() {
         Sorry, your browser doesn&apos;t support embedded videos.
       </video>
 
-      <h3>Pathway Analysis</h3>
+      <h2>Pathway Analysis</h2>
       <p>
         The top 500 significantly upregulated and top 500 significantly downregulated genes are
         extracted for pathway analysis (significance is determined as unadjusted p-value &lt;
@@ -275,7 +275,7 @@ export default function Help() {
         </a>.
       </p>
 
-      <h4>Gene Heatmaps:</h4>
+      <h2>Gene Heatmaps:</h2>
       <p>
         Click on a pathway to generate a heatmap for the genes in the pathway. The heatmap will
         include groups selected in the contrast and will display scaled normalized gene expression
@@ -286,7 +286,7 @@ export default function Help() {
         Sorry, your browser doesn&apos;t support embedded videos.
       </video>
 
-      <h3>Single-sample GSEA (ssGSEA)</h3>
+      <h2>Single-sample GSEA (ssGSEA)</h2>
       <p>
         ssGSEA is performed using the gsva package as previously described (Hanzelmann et al.,
         2013). Pathway enrichment scores are then analyzed to determine fold changes and p-values
@@ -307,10 +307,10 @@ export default function Help() {
         Sorry, your browser doesn&apos;t support embedded videos.
       </video>
 
-      <h3>Download Results</h3>
+      <h2>Download Results</h2>
       <p>All tables and plots generated may be downloaded.</p>
 
-      <h3>References</h3>
+      <h2>References</h2>
       <ul>
         <li>
           Ballman, K. V., Grill, D. E., Oberg, A. L., &amp; Therneau, T. M. (2004). Faster cyclic

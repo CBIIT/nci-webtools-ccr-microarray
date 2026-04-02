@@ -20,7 +20,7 @@ export default function About() {
         upon request.
       </p>
 
-      <h2>Human</h2>
+      <h1>Human</h1>
       <ul>
         <li>Human Genome U133 Plus 2.0 Array</li>
         <li>GeneChip™ Human Genome U133A Array</li>
@@ -40,7 +40,7 @@ export default function About() {
         <li>Clariom™ D Assay, human</li>
       </ul>
 
-      <h2>Mouse</h2>
+      <h1>Mouse</h1>
       <ul>
         <li>GeneChip™ Mouse Gene 1.0 ST Array</li>
         <li>GeneChip™ Mouse Gene 1.1 ST Array</li>
