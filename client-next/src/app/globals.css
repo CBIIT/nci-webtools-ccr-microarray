@@ -19,5 +19,39 @@ body {
 .content-board {
   background: #fff;
   box-shadow: 0px 1px 1px 1px #ccc;
-  padding: 20px;
+  padding: 2.5rem;
+}
+
+.content-board h1 {
+  color: #2971a5;
+  font-size: 1.75rem;
+  line-height: 45px;
+  border-bottom: 2px solid #eeeef1;
+  margin-top: 1rem;
+  padding-bottom: 0.25rem;
+}
+
+.content-board h2 {
+  color: #2971a5;
+  font-size: 1.5rem;
+  line-height: 45px;
+  border-bottom: 2px solid #eeeef1;
+  margin-top: 1rem;
+  padding-bottom: 0.25rem;
+}
+
+.content-board h3 {
+  color: #2971a5;
+  font-size: 1.3rem;
+  line-height: 45px;
+  border-bottom: 2px solid #eeeef1;
+  margin-top: 1rem;
+  padding-bottom: 0.25rem;
+}
+
+.content-board video {
+  max-width: 100%;
+  height: auto;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
 }
