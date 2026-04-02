@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,11 +14,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <nav className="navbar navbar-dark bg-dark px-3">
-          <span className="navbar-brand">MAAPster</span>
+      <body className="d-flex flex-column min-vh-100">
+        <nav className="navbar navbar-dark bg-dark">
+          <div className="app-container w-100">
+            <span className="navbar-brand">MAAPster</span>
+          </div>
         </nav>
-        <main className="container-fluid py-3">{children}</main>
+        <main className="app-container py-3 flex-grow-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );
