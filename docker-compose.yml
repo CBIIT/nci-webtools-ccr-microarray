@@ -5,9 +5,9 @@ services:
       dockerfile: "./docker/backend.dockerfile"
     env_file: .env
     volumes:
-      - ./data:/data
-      - ./log:/log
-      - ./tmp:/tmp
+      - ./data:/app/data
+      - ./log:/app/log
+      - ./tmp:/app/tmp
     ports:
       - "9220:9220"
 

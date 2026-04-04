@@ -2,20 +2,12 @@ install.packages(
     c("remotes", "jsonlite", "gplots", "rglwidget", "DT", "getopt", "knitr",
     "reshape", "RColorBrewer", "calibrate", "rmarkdown", "ggplot2", "ggfortify",
     "shinyRGL", "plotly", "htmltools", "heatmaply", "pheatmap", "viridis", "dendsort",
-    "amap", "RCurl", "mvtnorm", "BiocManager"),
-    repos = c(CRAN="http://cran.r-project.org"))
+    "amap", "RCurl", "mvtnorm", "BiocManager")
+)
 
-install.packages("rgl", repo="http://cran.r-project.org", configure.args="--disable-ftgl")
-remotes::install_github("CCBR/MicroArrayPipeline/mpstr")
+install.packages("rgl", configure.args="--disable-ftgl")
 
-# Use latest version from https://github.com/CCBR/l2p
-tryCatch({
-    install.packages("https://github.com/CCBR/l2p/raw/master/l2p_0.0-14.tar.gz", repos=NULL)
-    install.packages("https://github.com/CCBR/l2p/raw/master/l2psupp_0.0-14.tar.gz", repos=NULL)
-}, error = function(e) {
-    print('L2P install failed. Make sure URL is up-to-date')
-})
-
+# Install Bioconductor packages BEFORE mpstr (mpstr depends on these)
 BiocManager::install(
     c("Biobase", "GEOquery", "GSEABase", "GSVA", "annotate", "sva",
     "clariomshumanhttranscriptcluster.db", "clariomshumantranscriptcluster.db",
@@ -34,7 +26,19 @@ BiocManager::install(
     "pd.hg.u133a", "pd.hg.u133a.2", "pd.hg.u133b", "pd.hg.u219",
     "pd.hg.u95av2", "pd.hta.2.0", "pd.huex.1.0.st.v2", "pd.hugene.1.0.st.v1",
     "pd.hugene.1.1.st.v1", "pd.hugene.2.0.st", "pd.hugene.2.1.st",
-    "pd.mg.u74av2", "pd.moe430a", "pd.moex.1.0.st.v1", "pd.mogene.1.0.st.v1", 
+    "pd.mg.u74av2", "pd.moe430a", "pd.moex.1.0.st.v1", "pd.mogene.1.0.st.v1",
     "pd.mogene.1.1.st.v1", "pd.mogene.2.0.st", "pd.mouse430.2", "pd.mouse430a.2",
-    "pd.ht.hg.u133a", "hthgu133a.db", "pd.clariom.d.human", 
+    "pd.ht.hg.u133a", "hthgu133a.db", "pd.clariom.d.human",
     "clariomdhumantranscriptcluster.db"))
+
+# Install mpstr AFTER Bioconductor (mpstr depends on packages above)
+remotes::install_github("CCBR/MicroArrayPipeline/mpstr")
+if (!requireNamespace("mpstr", quietly = TRUE)) stop("mpstr package failed to install")
+
+# Use latest version from https://github.com/CCBR/l2p
+tryCatch({
+    install.packages("https://github.com/CCBR/l2p/raw/master/l2p_0.0-14.tar.gz", repos=NULL)
+    install.packages("https://github.com/CCBR/l2p/raw/master/l2psupp_0.0-14.tar.gz", repos=NULL)
+}, error = function(e) {
+    print('L2P install failed. Make sure URL is up-to-date')
+})

@@ -93,7 +93,7 @@ process = function(){
               listGroups<-toString(args[5])
             }
 
-            if(projectId==""||listGroups==""){
+            if(projectId=="" || any(listGroups=="")){
               return ("Request field(s) is missing")
             }
           celfiles = processCELfiles(projectId=projectId,listGroups=listGroups,listBatches=NULL,workspace=data_repo_path) 

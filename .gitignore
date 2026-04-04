@@ -12,5 +12,7 @@ yarn-error.log*
 config/microarray_setting.json
 server/config/microarray_setting.json
 data/
+tmp/
+log/
 *.gmt
 .env
