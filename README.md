@@ -1,5 +1,69 @@
 # MicroArray Dev Environment Setup
 
+## Updated Instructions
+
+### Prerequisites
+- Docker Desktop installed and running
+
+### Setup
+
+**1. Config files (not in repo — gitignored)**
+
+Create `.env` in the project root (copy from `.env.example`):
+```bash
+cp .env.example .env
+```
+AWS credentials are optional for local testing (queue/S3 features won't work but GEO loading and CEL uploads will).
+
+**2. Data directory**
+
+Create `data/`, `tmp/`, `log/` directories in the project root (gitignored):
+```bash
+mkdir -p data tmp log
+```
+The `data/` directory holds GMT reference files. For local testing, this can be empty — it's only needed for the contrast/pathway analysis steps.
+
+**3. Build and run the backend container**
+```bash
+docker compose build backend
+docker compose up backend
+```
+
+Verify the backend is running:
+```bash
+curl http://localhost:9220/ping
+# Should return: true
+```
+
+**4. Run the Next.js frontend (dev mode)**
+```bash
+cd client-next
+npm install
+echo "NEXT_PUBLIC_API_URL=http://localhost:9220/api/analysis" > .env.local
+npm run dev
+```
+Frontend available at `http://localhost:3000`
+
+**5. Run the legacy frontend (optional, for comparison)**
+```bash
+cd client
+npm install
+NODE_OPTIONS=--openssl-legacy-provider npm start
+```
+Legacy frontend available at `http://localhost:3001` (CRA auto-picks next available port)
+
+### Testing
+
+- Go to `http://localhost:3000/analysis`
+- Enter a GEO accession code (e.g. `GSE781`) and click Load
+- A spinner shows while R processes the data
+- GSM Data table should populate with sample metadata
+- CEL file upload: switch to "CEL Files" mode, select `.CEL` files, click Load
+
+---
+
+## Legacy Instructions
+
 ## Prerequisite System Packages
 
 | Component          | Version            | Note                                                                                                           |
