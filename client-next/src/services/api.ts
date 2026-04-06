@@ -3,6 +3,7 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "/api/analysis",
   headers: { "Content-Type": "application/json" },
+  timeout: 300000,
 });
 
 // ── Response types ──────────────────────────────────────────────
@@ -45,12 +46,38 @@ export interface PaginationParams {
 
 // ── Response parsers ────────────────────────────────────────────
 
+export interface GSEResult {
+  files: Sample[];
+  multichip: boolean;
+  chips: string[];
+  chipData: Record<string, Sample[]>;
+}
+
 /** Parse loadGSE response: extract JSON after 'wrapperReturn' delimiter */
-function parseGSEResponse(raw: string): { files: Sample[] } {
+function parseGSEResponse(raw: string): GSEResult {
   const idx = raw.indexOf("wrapperReturn");
   if (idx === -1) throw new Error("Invalid GEO response: missing wrapperReturn delimiter");
   const json = raw.substring(idx + 15);
-  return JSON.parse(decodeURIComponent(json));
+  const parsed = JSON.parse(decodeURIComponent(json));
+
+  // Single-chip: { files: [...] }
+  if (parsed.files) {
+    return { files: parsed.files, multichip: false, chips: [], chipData: {} };
+  }
+
+  // Multi-chip: { GPL96: [...], GPL97: [...] }
+  if (typeof parsed === "object" && Object.keys(parsed).length) {
+    const chips = Object.keys(parsed);
+    chips.forEach((chip) => {
+      parsed[chip].forEach((sample: Sample) => {
+        sample.groups = "";
+      });
+    });
+    const firstChip = chips[0];
+    return { files: parsed[firstChip], multichip: true, chips, chipData: parsed };
+  }
+
+  throw new Error("Invalid GEO response format");
 }
 
 /** Parse CEL upload response: extract JSON after '+++getCELfiles+++"' delimiter */
@@ -62,8 +89,14 @@ function parseCELResponse(raw: string): { files: Sample[] } {
 
 // ── Data Loading ────────────────────────────────────────────────
 
-export async function loadGSE(code: string, projectId: string) {
-  const res = await api.post<ApiResponse<string>>("/loadGSE", { code, projectId });
+export async function loadGSE(code: string, projectId: string, chip?: string) {
+  const res = await api.post<ApiResponse<string>>("/loadGSE", {
+    code,
+    projectId,
+    groups: [],
+    batches: [],
+    chip: chip || "",
+  });
   if (res.data.status !== 200 || !res.data.data) {
     throw new Error(res.data.msg || "Failed to load GEO data");
   }

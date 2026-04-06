@@ -1,10 +1,64 @@
 // Legacy: client/src/components/Analysis/Analysis.js
 "use client";
 
-import { useState } from "react";
+import { useRef } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useAnalysisStore } from "@/stores/analysisStore";
+import { loadGSE, uploadCEL } from "@/services/api";
 
 export default function Analysis() {
-  const [analysisType, setAnalysisType] = useState("0");
+  const store = useAnalysisStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const geoMutation = useMutation({
+    mutationFn: () => loadGSE(store.accessionCode, store.projectId, store.chip),
+    onMutate: () => store.setLoading(true, "Loading GEO data..."),
+    onSuccess: (data) => {
+      store.setDataList(data.files);
+      store.setDataLoaded(true);
+      store.setLoading(false);
+    },
+    onError: (err: Error) => {
+      store.setLoading(false);
+      alert(err.message);
+    },
+  });
+
+  const celMutation = useMutation({
+    mutationFn: () => uploadCEL(store.projectId, store.fileList),
+    onMutate: () => store.setLoading(true, "Uploading CEL files..."),
+    onSuccess: (data) => {
+      store.setDataList(data.files);
+      store.setDataLoaded(true);
+      store.setLoading(false);
+    },
+    onError: (err: Error) => {
+      store.setLoading(false);
+      alert(err.message);
+    },
+  });
+
+  function handleLoadGEO() {
+    if (!store.accessionCode.trim()) return alert("Please enter an accession code.");
+    geoMutation.mutate();
+  }
+
+  function handleLoadCEL() {
+    if (store.fileList.length === 0) return alert("Please select CEL files.");
+    celMutation.mutate();
+  }
+
+  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (files) store.setFileList(Array.from(files));
+  }
+
+  function handleReset() {
+    store.reset();
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  const isLoading = store.loading || geoMutation.isPending || celMutation.isPending;
 
   return (
     <div className="content-board">
@@ -17,34 +71,60 @@ export default function Analysis() {
             <select
               className="form-select form-select-sm mb-2"
               id="analysisType"
-              value={analysisType}
-              onChange={(e) => setAnalysisType(e.target.value)}
+              value={store.analysisType}
+              onChange={(e) => store.setAnalysisType(e.target.value as "0" | "1")}
             >
               <option value="0">GEO Data</option>
               <option value="1">CEL Files</option>
             </select>
 
-            {analysisType === "0" ? (
+            {store.analysisType === "0" ? (
               <>
                 <label className="title" htmlFor="accessionCode">Accession Code<span className="required"> *</span></label>
-                <input className="form-control form-control-sm mb-2" id="accessionCode" type="text" />
+                <input
+                  className="form-control form-control-sm mb-2"
+                  id="accessionCode"
+                  type="text"
+                  value={store.accessionCode}
+                  onChange={(e) => store.setAccessionCode(e.target.value)}
+                />
 
                 <label className="title" htmlFor="chip">Include Chip(s)</label>
-                <input className="form-control form-control-sm mb-2" id="chip" type="text" placeholder="<All Chips>" />
+                <input
+                  className="form-control form-control-sm mb-2"
+                  id="chip"
+                  type="text"
+                  placeholder="<All Chips>"
+                  value={store.chip}
+                  onChange={(e) => store.setChip(e.target.value)}
+                />
 
-                <button className="btn btn-nci-primary w-100 mt-2">Load</button>
-                <button className="btn btn-nci-primary w-100 mt-2">Reset</button>
+                <button className="btn btn-nci-primary w-100 mt-2" onClick={handleLoadGEO} disabled={isLoading}>
+                  {geoMutation.isPending ? "Loading..." : "Load"}
+                </button>
+                <button className="btn btn-nci-primary w-100 mt-2" onClick={handleReset} disabled={isLoading}>Reset</button>
               </>
             ) : (
               <>
                 <label className="file-upload-btn my-1" htmlFor="celUpload">
-                  <svg className="file-upload-icon" viewBox="64 64 896 896" width="1em" height="1em" fill="currentColor"><path d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"/></svg> Select File
+                  <svg className="file-upload-icon" viewBox="64 64 896 896" width="1em" height="1em" fill="currentColor"><path d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"/></svg>
+                  {store.fileList.length > 0 ? `${store.fileList.length} file(s) selected` : "Select File"}
                 </label>
-                <input className="d-none" id="celUpload" type="file" accept=".cel,.CEL,.gz" multiple />
+                <input
+                  ref={fileInputRef}
+                  className="d-none"
+                  id="celUpload"
+                  type="file"
+                  accept=".cel,.CEL,.gz"
+                  multiple
+                  onChange={handleFileSelect}
+                />
 
                 <div className="d-flex gap-4 mt-2">
-                  <button className="btn btn-nci-primary flex-fill">Load</button>
-                  <button className="btn btn-nci-primary flex-fill">Reset</button>
+                  <button className="btn btn-nci-primary flex-fill" onClick={handleLoadCEL} disabled={isLoading}>
+                    {celMutation.isPending ? "Loading..." : "Load"}
+                  </button>
+                  <button className="btn btn-nci-primary flex-fill" onClick={handleReset} disabled={isLoading}>Reset</button>
                 </div>
               </>
             )}
@@ -53,18 +133,39 @@ export default function Analysis() {
           {/* Block 2: Contrast */}
           <div className="workflow-block">
             <label className="title mb-2" htmlFor="selectGroup1">Choose Contrast To Show:<span className="required"> *</span></label>
-            <select className="form-select form-select-sm mb-1" id="selectGroup1">
-              <option value="-1">-- Select Group 1 --</option>
+            <select
+              className="form-select form-select-sm mb-1"
+              id="selectGroup1"
+              value={store.group1}
+              onChange={(e) => store.setGroup1(e.target.value)}
+            >
+              <option value="">-- Select Group 1 --</option>
+              {store.availableGroups.map((g) => (
+                <option key={g} value={g}>{g}</option>
+              ))}
             </select>
-            <select className="form-select form-select-sm" id="selectGroup2">
-              <option value="-1">-- Select Group 2 --</option>
+            <select
+              className="form-select form-select-sm"
+              id="selectGroup2"
+              value={store.group2}
+              onChange={(e) => store.setGroup2(e.target.value)}
+            >
+              <option value="">-- Select Group 2 --</option>
+              {store.availableGroups.map((g) => (
+                <option key={g} value={g}>{g}</option>
+              ))}
             </select>
           </div>
 
           {/* Block 3: Normalization */}
           <div className="workflow-block">
             <label className="title mb-2" htmlFor="selectNormal">Choose Normalization<br />Method:</label>
-            <select className="form-select form-select-sm" id="selectNormal">
+            <select
+              className="form-select form-select-sm"
+              id="selectNormal"
+              value={store.normal}
+              onChange={(e) => store.setNormal(e.target.value)}
+            >
               <option value="RMA">RMA</option>
               <option value="RMA_Loess">RMA plus Cyclic Loess</option>
             </select>
@@ -73,21 +174,34 @@ export default function Analysis() {
           {/* Block 4: Queue */}
           <div className="workflow-block">
             <div className="form-check mb-1">
-              <input className="form-check-input" type="checkbox" id="queueCheckbox" defaultChecked />
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="queueCheckbox"
+                checked={store.useQueue}
+                onChange={(e) => store.setUseQueue(e.target.checked)}
+              />
               <label className="form-check-label" style={{ fontSize: "0.85em" }} htmlFor="queueCheckbox">Submit this job to a Queue</label>
             </div>
             <small className="text-muted fst-italic d-block mb-2" style={{ fontSize: "0.75em" }}>(Jobs currently enqueued: 0)</small>
 
             <label className="title" htmlFor="inputEmail">Email<span className="required"> *</span></label>
-            <input className="form-control form-control-sm mb-2" id="inputEmail" type="email" placeholder="-- Enter Email --" />
+            <input
+              className="form-control form-control-sm mb-2"
+              id="inputEmail"
+              type="email"
+              placeholder="-- Enter Email --"
+              value={store.email}
+              onChange={(e) => store.setEmail(e.target.value)}
+            />
 
             <small className="text-muted fst-italic" style={{ fontSize: "0.75em" }}>Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</small>
           </div>
 
           {/* Run / Reset buttons (outside sub-boxes) */}
           <div className="mx-2 mb-2">
-            <button className="btn btn-nci-primary w-100 mb-2">Run Contrast</button>
-            <button className="btn btn-nci-primary w-100">Reset</button>
+            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading}>Run Contrast</button>
+            <button className="btn btn-nci-primary w-100" onClick={handleReset} disabled={isLoading}>Reset</button>
           </div>
         </div>
 
@@ -95,30 +209,90 @@ export default function Analysis() {
         <div className="flex-grow-1">
           <h2>Results</h2>
 
+          {/* Loading indicator */}
+          {isLoading && (
+            <div className="text-center py-4">
+              <div className="spinner-border text-primary" role="status" />
+              <p className="mt-2 text-muted">{store.loadingMessage}</p>
+            </div>
+          )}
+
           {/* Tab Navigation */}
           <ul className="nav nav-tabs mb-3">
             <li className="nav-item">
-              <span className="nav-link active">GSM Data</span>
+              <span
+                className={`nav-link ${store.activeTab === "gsm" ? "active" : ""}`}
+                role="button"
+                onClick={() => store.setActiveTab("gsm")}
+              >GSM Data</span>
             </li>
             <li className="nav-item">
-              <span className="nav-link">Pre-Normalization QC</span>
+              <span
+                className={`nav-link ${store.activeTab === "pre" ? "active" : ""}`}
+                role="button"
+                onClick={() => store.setActiveTab("pre")}
+              >Pre-Normalization QC</span>
             </li>
             <li className="nav-item">
-              <span className="nav-link">Post-Normalization</span>
+              <span
+                className={`nav-link ${store.activeTab === "post" ? "active" : ""}`}
+                role="button"
+                onClick={() => store.setActiveTab("post")}
+              >Post-Normalization</span>
             </li>
             <li className="nav-item">
-              <span className="nav-link">DEG-Enrichments</span>
+              <span
+                className={`nav-link ${store.activeTab === "deg" ? "active" : ""}`}
+                role="button"
+                onClick={() => store.setActiveTab("deg")}
+              >DEG-Enrichments</span>
             </li>
             <li className="nav-item">
-              <span className="nav-link">ssGSEA</span>
+              <span
+                className={`nav-link ${store.activeTab === "ssgsea" ? "active" : ""}`}
+                role="button"
+                onClick={() => store.setActiveTab("ssgsea")}
+              >ssGSEA</span>
             </li>
           </ul>
 
-          {/* Tab Content */}
-          <div>
-            <h3>GSM Data</h3>
-            <p>Sample metadata table placeholder</p>
-          </div>
+          {/* Tab Content — GSM Data */}
+          {store.activeTab === "gsm" && (
+            <div>
+              <h3>GSM Data</h3>
+              {!store.dataLoaded ? (
+                <p className="text-muted">Load GEO data or upload CEL files to view samples.</p>
+              ) : (
+                <div className="table-responsive">
+                  <table className="table table-sm table-striped table-bordered">
+                    <thead>
+                      <tr>
+                        <th>GSM</th>
+                        <th>Title</th>
+                        <th>Group</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {store.dataList.map((sample, i) => (
+                        <tr key={sample.gsm || i}>
+                          <td>{sample.gsm}</td>
+                          <td>{sample.title}</td>
+                          <td>{sample.groups || "Others"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <p className="text-muted small">{store.dataList.length} sample(s) loaded</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Placeholder for other tabs */}
+          {store.activeTab === "pre" && <p className="text-muted">Pre-normalization QC plots will appear here after analysis.</p>}
+          {store.activeTab === "post" && <p className="text-muted">Post-normalization plots will appear here after analysis.</p>}
+          {store.activeTab === "deg" && <p className="text-muted">DEG-Enrichments results will appear here after analysis.</p>}
+          {store.activeTab === "ssgsea" && <p className="text-muted">ssGSEA results will appear here after analysis.</p>}
         </div>
       </div>
     </div>

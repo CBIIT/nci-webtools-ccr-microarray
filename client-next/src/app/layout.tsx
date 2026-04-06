@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Providers from "@/components/Providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="d-flex flex-column min-vh-100">
-        <Header />
-        <main className="app-container flex-grow-1">{children}</main>
-        <Footer />
+        <Providers>
+          <Header />
+          <main className="app-container flex-grow-1">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
