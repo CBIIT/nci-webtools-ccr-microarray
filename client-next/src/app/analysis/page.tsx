@@ -232,28 +232,28 @@ export default function Analysis() {
                 className={`nav-link ${store.activeTab === "pre" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
                 onClick={() => store.contrastComplete && store.setActiveTab("pre")}
-              >Pre-Normalization QC</span>
+              >Pre-Normalization QC Plots</span>
             </li>
             <li className="nav-item">
               <span
                 className={`nav-link ${store.activeTab === "post" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
                 onClick={() => store.contrastComplete && store.setActiveTab("post")}
-              >Post-Normalization</span>
+              >Post-Normalization Plots</span>
             </li>
             <li className="nav-item">
               <span
                 className={`nav-link ${store.activeTab === "deg" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
                 onClick={() => store.contrastComplete && store.setActiveTab("deg")}
-              >DEG-Enrichments</span>
+              >DEG-Enrichments Results</span>
             </li>
             <li className="nav-item">
               <span
                 className={`nav-link ${store.activeTab === "ssgsea" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
                 onClick={() => store.contrastComplete && store.setActiveTab("ssgsea")}
-              >ssGSEA</span>
+              >ssGSEA Results</span>
             </li>
           </ul>
 

@@ -168,19 +168,138 @@ body {
 }
 
 /* GSM table — bottom border only */
+.gsm-table {
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 0;
+}
+
 .gsm-table thead th {
   background: #fafafa;
   border-bottom: 2px solid #dee2e6;
-  font-size: 0.85rem;
+  font-size: 1rem;
   padding: 8px 5px;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.sort-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sort-arrows {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-left: 6px;
+}
+
+.sort-arrow-up,
+.sort-arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.sort-arrow-up {
+  border-bottom: 6px solid #ccc;
+}
+
+.sort-arrow-down {
+  border-top: 6px solid #ccc;
+}
+
+.sort-arrow-up.active {
+  border-bottom-color: #1890ff;
+}
+
+.sort-arrow-down.active {
+  border-top-color: #1890ff;
 }
 
 .gsm-table tbody tr {
   border-bottom: 1px solid #eee;
+  transition: background-color 0.1s;
+}
+
+.gsm-table {
+  --bs-table-hover-bg: #e6f7ff;
 }
 
 .gsm-table tbody td {
   border: none;
+  padding: 8px 5px;
+  font-size: 0.9rem;
+}
+
+.gsm-table th:first-child,
+.gsm-table td:first-child {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.gsm-table th:first-child input,
+.gsm-table td:first-child input {
+  vertical-align: middle;
+  margin: 0;
+  accent-color: #1890ff;
+  transition: transform 0.15s ease;
+}
+
+.gsm-table td:first-child input.checkbox-pulse {
+  animation: checkbox-pulse 0.5s ease;
+}
+
+@keyframes checkbox-pulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.header-checkbox-animate {
+  animation: checkbox-fade 0.25s ease;
+}
+
+@keyframes checkbox-fade {
+  0% { opacity: 0.5; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.single-line {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: default;
+}
+
+.cell-tooltip-popup {
+  position: fixed;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  white-space: normal;
+  word-break: break-word;
+  max-width: 350px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  z-index: 1050;
+  pointer-events: none;
+}
+
+.cell-tooltip-arrow {
+  position: absolute;
+  top: -12px;
+  left: 16px;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-bottom-color: #fff;
+  z-index: 1;
 }
 
 /* Loading overlay */
