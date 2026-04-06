@@ -12,7 +12,7 @@ export default function Analysis() {
 
   const geoMutation = useMutation({
     mutationFn: () => loadGSE(store.accessionCode, store.projectId, store.chip),
-    onMutate: () => store.setLoading(true, "Loading GEO data..."),
+    onMutate: () => store.setLoading(true, "Loading GEO Data..."),
     onSuccess: (data) => {
       store.setDataList(data.files);
       store.setDataLoaded(true);
@@ -26,7 +26,7 @@ export default function Analysis() {
 
   const celMutation = useMutation({
     mutationFn: () => uploadCEL(store.projectId, store.fileList),
-    onMutate: () => store.setLoading(true, "Uploading CEL files..."),
+    onMutate: () => store.setLoading(true, "Loading"),
     onSuccess: (data) => {
       store.setDataList(data.files);
       store.setDataLoaded(true);
@@ -205,16 +205,18 @@ export default function Analysis() {
           </div>
         </div>
 
+        {/* Loading overlay */}
+        {isLoading && (
+          <div className="loading-overlay">
+            <div className="loading-card">
+              <div className="spinner-border text-primary mb-3" role="status" />
+              <p className="mb-0">{store.loadingMessage}</p>
+            </div>
+          </div>
+        )}
+
         {/* Right Panel — Results */}
         <div className="flex-grow-1">
-          {/* Loading indicator */}
-          {isLoading && (
-            <div className="text-center py-4">
-              <div className="spinner-border text-primary" role="status" />
-              <p className="mt-2 text-muted">{store.loadingMessage}</p>
-            </div>
-          )}
-
           {/* Tab Navigation */}
           <ul className="nav nav-tabs results-tabs">
             <li className="nav-item">
