@@ -167,6 +167,22 @@ body {
   min-height: 200px;
 }
 
+/* GSM table — bottom border only */
+.gsm-table thead th {
+  background: #fafafa;
+  border-bottom: 2px solid #dee2e6;
+  font-size: 0.85rem;
+  padding: 8px 5px;
+}
+
+.gsm-table tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+.gsm-table tbody td {
+  border: none;
+}
+
 /* Loading overlay */
 .loading-overlay {
   position: fixed;

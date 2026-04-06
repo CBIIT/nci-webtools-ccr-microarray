@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { loadGSE, uploadCEL } from "@/services/api";
+import GSMData from "@/components/DataBox/GSMData";
 
 export default function Analysis() {
   const store = useAnalysisStore();
@@ -258,35 +259,7 @@ export default function Analysis() {
 
           {/* Tab Content */}
           <div className="tab-content-panel">
-            {store.activeTab === "gsm" && (
-              <div>
-                {!store.dataLoaded ? (
-                  <p className="text-muted">Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here.</p>
-                ) : (
-                  <div className="table-responsive">
-                    <table className="table table-sm table-striped table-bordered">
-                      <thead>
-                        <tr>
-                          <th>GSM</th>
-                          <th>Title</th>
-                          <th>Group</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {store.dataList.map((sample, i) => (
-                          <tr key={sample.gsm || i}>
-                            <td>{sample.gsm}</td>
-                            <td>{sample.title}</td>
-                            <td>{sample.groups || "Others"}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    <p className="text-muted small">{store.dataList.length} sample(s) loaded</p>
-                  </div>
-                )}
-              </div>
-            )}
+            {store.activeTab === "gsm" && <GSMData />}
 
             {store.activeTab === "pre" && <p className="text-muted">Pre-normalization QC plots will appear here after analysis.</p>}
             {store.activeTab === "post" && <p className="text-muted">Post-normalization plots will appear here after analysis.</p>}
