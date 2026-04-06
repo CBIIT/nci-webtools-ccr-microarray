@@ -207,8 +207,6 @@ export default function Analysis() {
 
         {/* Right Panel — Results */}
         <div className="flex-grow-1">
-          <h2>Results</h2>
-
           {/* Loading indicator */}
           {isLoading && (
             <div className="text-center py-4">
@@ -218,7 +216,7 @@ export default function Analysis() {
           )}
 
           {/* Tab Navigation */}
-          <ul className="nav nav-tabs mb-3">
+          <ul className="nav nav-tabs results-tabs">
             <li className="nav-item">
               <span
                 className={`nav-link ${store.activeTab === "gsm" ? "active" : ""}`}
@@ -228,71 +226,71 @@ export default function Analysis() {
             </li>
             <li className="nav-item">
               <span
-                className={`nav-link ${store.activeTab === "pre" ? "active" : ""}`}
+                className={`nav-link ${store.activeTab === "pre" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
-                onClick={() => store.setActiveTab("pre")}
+                onClick={() => store.contrastComplete && store.setActiveTab("pre")}
               >Pre-Normalization QC</span>
             </li>
             <li className="nav-item">
               <span
-                className={`nav-link ${store.activeTab === "post" ? "active" : ""}`}
+                className={`nav-link ${store.activeTab === "post" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
-                onClick={() => store.setActiveTab("post")}
+                onClick={() => store.contrastComplete && store.setActiveTab("post")}
               >Post-Normalization</span>
             </li>
             <li className="nav-item">
               <span
-                className={`nav-link ${store.activeTab === "deg" ? "active" : ""}`}
+                className={`nav-link ${store.activeTab === "deg" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
-                onClick={() => store.setActiveTab("deg")}
+                onClick={() => store.contrastComplete && store.setActiveTab("deg")}
               >DEG-Enrichments</span>
             </li>
             <li className="nav-item">
               <span
-                className={`nav-link ${store.activeTab === "ssgsea" ? "active" : ""}`}
+                className={`nav-link ${store.activeTab === "ssgsea" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
-                onClick={() => store.setActiveTab("ssgsea")}
+                onClick={() => store.contrastComplete && store.setActiveTab("ssgsea")}
               >ssGSEA</span>
             </li>
           </ul>
 
-          {/* Tab Content — GSM Data */}
-          {store.activeTab === "gsm" && (
-            <div>
-              <h3>GSM Data</h3>
-              {!store.dataLoaded ? (
-                <p className="text-muted">Load GEO data or upload CEL files to view samples.</p>
-              ) : (
-                <div className="table-responsive">
-                  <table className="table table-sm table-striped table-bordered">
-                    <thead>
-                      <tr>
-                        <th>GSM</th>
-                        <th>Title</th>
-                        <th>Group</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {store.dataList.map((sample, i) => (
-                        <tr key={sample.gsm || i}>
-                          <td>{sample.gsm}</td>
-                          <td>{sample.title}</td>
-                          <td>{sample.groups || "Others"}</td>
+          {/* Tab Content */}
+          <div className="tab-content-panel">
+            {store.activeTab === "gsm" && (
+              <div>
+                {!store.dataLoaded ? (
+                  <p className="text-muted">Choose an Analysis Type on the left panel and click on the Load button to see a list of GSM displayed here.</p>
+                ) : (
+                  <div className="table-responsive">
+                    <table className="table table-sm table-striped table-bordered">
+                      <thead>
+                        <tr>
+                          <th>GSM</th>
+                          <th>Title</th>
+                          <th>Group</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <p className="text-muted small">{store.dataList.length} sample(s) loaded</p>
-                </div>
-              )}
-            </div>
-          )}
+                      </thead>
+                      <tbody>
+                        {store.dataList.map((sample, i) => (
+                          <tr key={sample.gsm || i}>
+                            <td>{sample.gsm}</td>
+                            <td>{sample.title}</td>
+                            <td>{sample.groups || "Others"}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    <p className="text-muted small">{store.dataList.length} sample(s) loaded</p>
+                  </div>
+                )}
+              </div>
+            )}
 
-          {/* Placeholder for other tabs */}
-          {store.activeTab === "pre" && <p className="text-muted">Pre-normalization QC plots will appear here after analysis.</p>}
-          {store.activeTab === "post" && <p className="text-muted">Post-normalization plots will appear here after analysis.</p>}
-          {store.activeTab === "deg" && <p className="text-muted">DEG-Enrichments results will appear here after analysis.</p>}
-          {store.activeTab === "ssgsea" && <p className="text-muted">ssGSEA results will appear here after analysis.</p>}
+            {store.activeTab === "pre" && <p className="text-muted">Pre-normalization QC plots will appear here after analysis.</p>}
+            {store.activeTab === "post" && <p className="text-muted">Post-normalization plots will appear here after analysis.</p>}
+            {store.activeTab === "deg" && <p className="text-muted">DEG-Enrichments results will appear here after analysis.</p>}
+            {store.activeTab === "ssgsea" && <p className="text-muted">ssGSEA results will appear here after analysis.</p>}
+          </div>
         </div>
       </div>
     </div>
