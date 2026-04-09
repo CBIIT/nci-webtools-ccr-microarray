@@ -4,6 +4,7 @@
 import { useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useAnalysisStore } from "@/stores/analysisStore";
+import GroupBatchModal from "./GroupBatchModal";
 
 interface TooltipState {
   text: string;
@@ -73,6 +74,7 @@ export default function GSMData() {
   const { dataList, dataLoaded } = useAnalysisStore();
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [lastToggled, setLastToggled] = useState<number | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const [sortKey, setSortKey] = useState<string>("gsm");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [searchText, setSearchText] = useState("");
@@ -172,7 +174,7 @@ export default function GSMData() {
     <div>
       {/* Action buttons */}
       <div className="d-flex justify-content-between mb-2">
-        <button className="btn btn-sm btn-nci-primary px-3">Manage Groups/Batches</button>
+        <button className="btn btn-sm btn-nci-primary px-3" onClick={() => setModalVisible(true)}>Manage Groups/Batches</button>
         <button className="btn btn-sm btn-nci-primary px-3">Export</button>
       </div>
 
@@ -272,6 +274,13 @@ export default function GSMData() {
           </tbody>
         </table>
       </div>
+
+      <GroupBatchModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        selectedIndices={Array.from(selected)}
+        onClearSelection={() => { setSelected(new Set()); setLastToggled(null); }}
+      />
     </div>
   );
 }

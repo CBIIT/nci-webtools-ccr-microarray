@@ -86,7 +86,7 @@ export default function Analysis() {
                   className="form-control form-control-sm mb-2"
                   id="accessionCode"
                   type="text"
-                  value={store.accessionCode}
+                  value={store.accessionCode ?? ""}
                   onChange={(e) => store.setAccessionCode(e.target.value)}
                 />
 
@@ -96,7 +96,7 @@ export default function Analysis() {
                   id="chip"
                   type="text"
                   placeholder="<All Chips>"
-                  value={store.chip}
+                  value={store.chip ?? ""}
                   onChange={(e) => store.setChip(e.target.value)}
                 />
 
@@ -137,7 +137,7 @@ export default function Analysis() {
             <select
               className="form-select form-select-sm mb-1"
               id="selectGroup1"
-              value={store.group1}
+              value={store.group1 ?? ""}
               onChange={(e) => store.setGroup1(e.target.value)}
             >
               <option value="">-- Select Group 1 --</option>
@@ -148,7 +148,7 @@ export default function Analysis() {
             <select
               className="form-select form-select-sm"
               id="selectGroup2"
-              value={store.group2}
+              value={store.group2 ?? ""}
               onChange={(e) => store.setGroup2(e.target.value)}
             >
               <option value="">-- Select Group 2 --</option>
@@ -192,7 +192,7 @@ export default function Analysis() {
               id="inputEmail"
               type="email"
               placeholder="-- Enter Email --"
-              value={store.email}
+              value={store.email ?? ""}
               onChange={(e) => store.setEmail(e.target.value)}
             />
 
