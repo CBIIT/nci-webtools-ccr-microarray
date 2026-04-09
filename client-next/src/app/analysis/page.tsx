@@ -69,6 +69,7 @@ export default function Analysis() {
   }
 
   const [contrastError, setContrastError] = useState("");
+  const [panelCollapsed, setPanelCollapsed] = useState(false);
 
   const contrastMutation = useMutation({
     mutationFn: runContrast,
@@ -83,6 +84,7 @@ export default function Analysis() {
       store.setDoneGsea(true);
       store.setDisableContrast(true);
       store.setLoading(false);
+      setPanelCollapsed(true);
     },
     onError: (err: Error) => {
       store.setLoading(false);
@@ -167,6 +169,7 @@ export default function Analysis() {
     <div className="content-board">
       <div className="d-flex flex-column flex-lg-row gap-3">
         {/* Left Panel — Workflow */}
+        {!panelCollapsed && (
         <div style={{ width: "270px", minWidth: "270px", maxWidth: "270px", border: "1px solid #eee" }}>
           {/* Block 1: Project */}
           <div className="workflow-block">
@@ -352,6 +355,7 @@ export default function Analysis() {
             )}
           </div>
         </div>
+        )}
 
         {/* Loading overlay */}
         {isLoading && (
@@ -364,7 +368,24 @@ export default function Analysis() {
         )}
 
         {/* Right Panel — Results */}
-        <div className="flex-grow-1">
+        <div className="flex-grow-1" style={{ position: "relative" }}>
+          {/* Panel toggle */}
+          <button
+            onClick={() => setPanelCollapsed((prev) => !prev)}
+            style={{ position: "absolute", left: "-12px", top: "16px", background: "none", border: "none", cursor: "pointer", padding: "4px 2px", zIndex: 10 }}
+            title={panelCollapsed ? "Show workflow panel" : "Hide workflow panel"}
+          >
+            <span style={{
+              display: "inline-block",
+              width: 0,
+              height: 0,
+              borderTop: "5px solid transparent",
+              borderBottom: "5px solid transparent",
+              ...(panelCollapsed
+                ? { borderLeft: "7px solid #2971a5" }
+                : { borderRight: "7px solid #2971a5" }),
+            }} />
+          </button>
           {/* Tab Navigation */}
           <ul className="nav nav-tabs results-tabs">
             <li className="nav-item">
