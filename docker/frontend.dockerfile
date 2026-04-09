@@ -22,6 +22,7 @@ COPY client-next/ ./
 ENV API_BASE_URL=http://backend:9220
 RUN npm run build
 
-EXPOSE 3000
+ENV PORT=80
+EXPOSE 80
 
 CMD ["npm", "run", "start"]
