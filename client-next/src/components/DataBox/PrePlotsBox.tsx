@@ -264,7 +264,7 @@ function PlotlyBoxPlot({ data, groups, group1, group2 }: PlotlyBoxPlotProps) {
 
   const layout: Partial<Plotly.Layout> = {
     yaxis: {
-      title: data.ylable?.[0] || "",
+      title: { text: data.ylable?.[0] || "" },
       zeroline: false,
     },
     legend: {

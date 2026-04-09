@@ -284,7 +284,7 @@ function PlotlyBoxPlot({ data, groups, group1, group2 }: PlotlyBoxPlotProps) {
   }));
 
   const layout: Partial<Plotly.Layout> = {
-    yaxis: { title: data.ylable?.[0] || "", zeroline: false },
+    yaxis: { title: { text: data.ylable?.[0] || "" }, zeroline: false },
     legend: { x: 1, y: 1, yanchor: "top", xanchor: "center" },
     autosize: true,
   };
@@ -347,21 +347,21 @@ function PCAPlot({ data, group1, group2 }: PCAPlotProps) {
     scene: {
       camera: { eye: { x: 0, y: 2, z: 1 } },
       xaxis: {
-        title: `${data.col[0]} (${data.xlable}%)`,
+        title: { text: `${data.col[0]} (${data.xlable}%)` },
         backgroundcolor: "#DDDDDD",
         gridcolor: "rgb(255,255,255)",
         showbackground: true,
         zerolinecolor: "rgb(255,255,255)",
       },
       yaxis: {
-        title: `${data.col[2]} (${data.ylable}%)`,
+        title: { text: `${data.col[2]} (${data.ylable}%)` },
         backgroundcolor: "#EEEEEE",
         gridcolor: "rgb(255,255,255)",
         showbackground: true,
         zerolinecolor: "rgb(255,255,255)",
       },
       zaxis: {
-        title: `${data.col[1]} (${data.zlable}%)`,
+        title: { text: `${data.col[1]} (${data.zlable}%)` },
         backgroundcolor: "#cccccc",
         gridcolor: "rgb(255,255,255)",
         showbackground: true,
