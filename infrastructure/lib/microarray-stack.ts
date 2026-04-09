@@ -193,7 +193,7 @@ export class MicroarrayStack extends cdk.Stack {
     const ms = props.microservice;
 
     const logGroup = new logs.LogGroup(this, "WebLogGroup", {
-      logGroupName: `/${appNamespace}/${tier}/${appName}/${ms.name}`,
+      logGroupName: `/${appNamespace}/${tier}/${appName}/web`,
       retention: logs.RetentionDays.SIX_MONTHS,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
@@ -360,7 +360,7 @@ export class MicroarrayStack extends cdk.Stack {
     const et = props.extraTask;
 
     const workerLogGroup = new logs.LogGroup(this, "WorkerLogGroup", {
-      logGroupName: `/${appNamespace}/${tier}/${appName}/${et.name}`,
+      logGroupName: `/${appNamespace}/${tier}/${appName}/worker`,
       retention: logs.RetentionDays.SIX_MONTHS,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
