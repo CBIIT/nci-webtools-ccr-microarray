@@ -5,6 +5,7 @@ import { useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import GroupBatchModal from "./GroupBatchModal";
+import ExcelJS from "exceljs";
 
 interface TooltipState {
   text: string;
@@ -71,7 +72,8 @@ function SortHeader({ width, label, field, sortKey, sortDir, onSort }: SortHeade
 const PAGE_SIZE_OPTIONS = [10, 15, 25, 50, 100, 200];
 
 export default function GSMData() {
-  const { dataList, dataLoaded } = useAnalysisStore();
+  const store = useAnalysisStore();
+  const { dataList, dataLoaded } = store;
   const [selected, setSelected] = useState<Set<number>>(new Set());
   const [lastToggled, setLastToggled] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -160,6 +162,35 @@ export default function GSMData() {
     setCurrentPage(1);
   }
 
+  async function handleExport() {
+    const wb = new ExcelJS.Workbook();
+
+    // Sheet 1: Settings
+    const settingsSheet = wb.addWorksheet("Settings");
+    settingsSheet.addRow(["Analysis Type", store.analysisType === "0" ? "GEO Data" : "CEL Files"]);
+    if (store.analysisType === "0") {
+      settingsSheet.addRow(["Accession Code", store.accessionCode]);
+    } else {
+      settingsSheet.addRow(["Upload Data", store.fileList.map((f: File) => f.name).join(", ")]);
+    }
+
+    // Sheet 2: Results
+    const resultsSheet = wb.addWorksheet("Results");
+    resultsSheet.addRow(["id", "gsm", "title", "description", "group"]);
+    dataList.forEach((sample, i) => {
+      resultsSheet.addRow([i + 1, sample.gsm, sample.title, sample.description, sample.groups || "Others"]);
+    });
+
+    const buffer = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `GSM_${store.projectId}.xlsx`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   // Build page numbers
   const pageNumbers: number[] = [];
   const maxVisible = 5;
@@ -175,7 +206,7 @@ export default function GSMData() {
       {/* Action buttons */}
       <div className="d-flex justify-content-between mb-2">
         <button className="btn btn-sm btn-nci-primary px-3" onClick={() => setModalVisible(true)}>Manage Groups/Batches</button>
-        <button className="btn btn-sm btn-nci-primary px-3">Export</button>
+        <button className="btn btn-sm btn-nci-primary px-3" onClick={handleExport}>Export</button>
       </div>
 
       {/* Search + Pagination controls */}
