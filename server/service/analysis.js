@@ -7,20 +7,28 @@ var logger = require('../components/logger');
 var formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
-var rimraf = require('rimraf');
 var queue = require('../components/queue');
-const AWS = require('aws-sdk');
-var dateFormat = require('dateformat');
 var emailer = require('../components/mail');
 
-//use for generate UUID
-function uuidv4() {
-  return 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    var r = (Math.random() * 16) | 0,
-      v = c == 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
+function formatDate(date, fmt) {
+  var y = date.getFullYear();
+  var mo = String(date.getMonth() + 1).padStart(2, '0');
+  var d = String(date.getDate()).padStart(2, '0');
+  var h = date.getHours();
+  var mi = String(date.getMinutes()).padStart(2, '0');
+  var s = String(date.getSeconds()).padStart(2, '0');
+  if (fmt === 'submit') {
+    // "2026-04-08, 3:05:09 PM"
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    var h12 = h % 12 || 12;
+    return y + '-' + mo + '-' + d + ', ' + h12 + ':' + mi + ':' + s + ' ' + ampm;
+  }
+  // "2026_04_08_3_05"
+  var h12 = h % 12 || 12;
+  return y + '_' + mo + '_' + d + '_' + h12 + '_' + mi;
 }
+
+var { v4: uuidv4 } = require('uuid');
 
 // remove previous result.
 // ssgseaHeatmap1.jpg
@@ -89,9 +97,7 @@ function restoreSession(req, path) {
 router.post('/upload', function (req, res) {
   logger.info('[start] upload files');
   // create an incoming form object
-  var form = new formidable.IncomingForm();
-  // specify that we want to allow the user to upload multiple files in a single request
-  form.multiples = true;
+  var form = formidable({ multiples: true });
   var pid = '';
   // Emitted whenever a field / value pair has been received.
   form.on('field', function (name, value) {
@@ -101,7 +107,7 @@ router.post('/upload', function (req, res) {
       if (!fs.existsSync(form.uploadDir)) {
         fs.mkdirSync(form.uploadDir);
       } else {
-        rimraf(form.uploadDir, function () {
+        fs.rm(form.uploadDir, { recursive: true, force: true }, function () {
           fs.mkdirSync(form.uploadDir);
         });
       }
@@ -112,7 +118,7 @@ router.post('/upload', function (req, res) {
   // rename it to it's orignal name
   form.on('file', function (field, file) {
     number_of_files = number_of_files + 1;
-    fs.rename(file.path, path.join(form.uploadDir, file.name), (err) => {
+    fs.rename(file.filepath, path.join(form.uploadDir, file.originalFilename), (err) => {
       if (err) throw logger.info('Rename  file name err' + err);
     });
   });
@@ -281,7 +287,7 @@ router.post('/qAnalysis', function (req, res) {
   data.source = req.body.source;
   data.email = req.body.email;
   data.domain = 'microarray';
-  data.submit = dateFormat(now, 'yyyy-mm-dd, h:MM:ss TT');
+  data.submit = formatDate(now, 'submit');
   data.dataList = req.body.dataList;
   data.normal = req.body.normal;
   data.realGroup = req.body.realGroup.join('@');
@@ -314,7 +320,7 @@ router.post('/qAnalysis', function (req, res) {
         logger.info('[Queue] Send fails message  to client ', data.email);
         let subject =
           'MicroArray Contrast Results -' +
-          dateFormat(now, 'yyyy_mm_dd_h_MM') +
+          formatDate(now, 'subject') +
           '(FAILED) ';
         let html = emailer.emailFailedTemplate(
           code,
@@ -351,7 +357,7 @@ router.post('/qAnalysis', function (req, res) {
         logger.info('[S3] upload files to S3 fails');
         let subject =
           'MicroArray Contrast Results -' +
-          dateFormat(now, 'yyyy_mm_dd_h_MM') +
+          formatDate(now, 'subject') +
           '(FAILED) ';
         let html = emailer.emailFailedTemplate(
           code,

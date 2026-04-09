@@ -4,14 +4,13 @@
 
 'use strict';
 
-var _ = require("underscore"),
-    child_process = require("child_process");
+var child_process = require("child_process");
 var config = require('../config');
 var logger = require('./logger');
 
 var execute = function(file, data, callback){
 	let options = {
-		env: _.extend({DIRNAME: config.root}, process.env),
+		env: Object.assign({DIRNAME: config.root}, process.env),
 		encoding: "utf8"
 	}
 	let args =  ["--vanilla", config.root + "/service/"+file, '--args'];
