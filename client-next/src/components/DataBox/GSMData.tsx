@@ -5,7 +5,7 @@ import { useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import GroupBatchModal from "./GroupBatchModal";
-import ExcelJS from "exceljs";
+import writeXlsxFile from "write-excel-file/browser";
 
 interface TooltipState {
   text: string;
@@ -163,32 +163,30 @@ export default function GSMData() {
   }
 
   async function handleExport() {
-    const wb = new ExcelJS.Workbook();
-
     // Sheet 1: Settings
-    const settingsSheet = wb.addWorksheet("Settings");
-    settingsSheet.addRow(["Analysis Type", store.analysisType === "0" ? "GEO Data" : "CEL Files"]);
-    if (store.analysisType === "0") {
-      settingsSheet.addRow(["Accession Code", store.accessionCode]);
-    } else {
-      settingsSheet.addRow(["Upload Data", store.fileList.map((f: File) => f.name).join(", ")]);
-    }
+    const settingsData: (string | null)[][] = [
+      ["Analysis Type", store.analysisType === "0" ? "GEO Data" : "CEL Files"],
+      store.analysisType === "0"
+        ? ["Accession Code", store.accessionCode]
+        : ["Upload Data", store.fileList.map((f: File) => f.name).join(", ")],
+    ];
 
     // Sheet 2: Results
-    const resultsSheet = wb.addWorksheet("Results");
-    resultsSheet.addRow(["id", "gsm", "title", "description", "group"]);
-    dataList.forEach((sample, i) => {
-      resultsSheet.addRow([i + 1, sample.gsm, sample.title, sample.description, sample.groups || "Others"]);
-    });
+    const resultsData: (string | number | null)[][] = [
+      ["id", "gsm", "title", "description", "group"],
+      ...dataList.map((sample, i) => [
+        i + 1,
+        sample.gsm,
+        sample.title || "",
+        (sample.description as string) || "",
+        sample.groups || "Others",
+      ]),
+    ];
 
-    const buffer = await wb.xlsx.writeBuffer();
-    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `GSM_${store.projectId}.xlsx`;
-    a.click();
-    URL.revokeObjectURL(url);
+    await writeXlsxFile([settingsData, resultsData], {
+      sheets: ["Settings", "Results"],
+      fileName: `GSM_${store.projectId}.xlsx`,
+    });
   }
 
   // Build page numbers
