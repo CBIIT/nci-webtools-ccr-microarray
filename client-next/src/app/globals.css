@@ -221,7 +221,7 @@ body {
 }
 
 .results-tabs .nav-link.disabled {
-  color: #bbb;
+  color: #6b6b6b;
   background: #f5f5f5;
   cursor: not-allowed;
   pointer-events: none;
@@ -233,6 +233,8 @@ body {
   padding: 1rem;
   background: #fff;
   min-height: 200px;
+  overflow-x: scroll;
+  overflow-y: visible;
 }
 
 /* GSM table — bottom border only */

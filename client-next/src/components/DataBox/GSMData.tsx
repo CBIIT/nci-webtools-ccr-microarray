@@ -269,6 +269,7 @@ export default function GSMData() {
                   type="checkbox"
                   checked={allSelected}
                   onChange={toggleAll}
+                  aria-label="Select all samples"
                 />
               </th>
               <SortHeader width="16%" label="GSM" field="gsm" sortKey={sortKey} sortDir={sortDir} onSort={handleSort} />
@@ -290,6 +291,7 @@ export default function GSMData() {
                     type="checkbox"
                     checked={selected.has(globalIdx)}
                     onChange={() => toggleRow(globalIdx)}
+                    aria-label={`Select ${sample.gsm}`}
                   />
                 </td>
                 <Cell>{sample.gsm}</Cell>

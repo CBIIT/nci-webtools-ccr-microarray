@@ -368,7 +368,7 @@ export default function Analysis() {
         )}
 
         {/* Right Panel — Results */}
-        <div className="flex-grow-1" style={{ position: "relative" }}>
+        <div className="flex-grow-1" style={{ position: "relative", minWidth: 0 }}>
           {/* Panel toggle */}
           <button
             onClick={() => setPanelCollapsed((prev) => !prev)}

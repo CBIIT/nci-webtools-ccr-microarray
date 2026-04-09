@@ -120,7 +120,7 @@ export default function DEGTable() {
       </div>
 
       {/* Table */}
-      <div style={{ overflowX: "auto" }}>
+      <div style={{ overflowX: "auto", maxWidth: "100%" }}>
         <table className="table table-sm table-hover table-bordered mb-0" style={{ fontSize: "0.8rem" }}>
           <thead>
             {/* Search row */}

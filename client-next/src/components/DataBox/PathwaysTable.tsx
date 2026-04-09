@@ -137,7 +137,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
         </div>
       </div>
 
-      <div style={{ overflowX: "auto" }}>
+      <div style={{ overflowX: "auto", maxWidth: "100%" }}>
         <table className="table table-sm table-hover table-bordered mb-0" style={{ fontSize: "0.75rem" }}>
           <thead>
             <tr>
