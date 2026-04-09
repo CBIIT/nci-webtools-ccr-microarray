@@ -1,10 +1,10 @@
 // Legacy: client/src/components/Analysis/Analysis.js
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAnalysisStore } from "@/stores/analysisStore";
-import { loadGSE, uploadCEL } from "@/services/api";
+import { loadGSE, uploadCEL, runContrast } from "@/services/api";
 import GSMData from "@/components/DataBox/GSMData";
 
 export default function Analysis() {
@@ -62,6 +62,94 @@ export default function Analysis() {
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (files) store.setFileList(Array.from(files));
+  }
+
+  const [contrastError, setContrastError] = useState("");
+
+  const contrastMutation = useMutation({
+    mutationFn: runContrast,
+    onSuccess: (data) => {
+      store.setContrastResults({
+        histplotBN: data.histplotBN,
+        histplotAN: data.histplotAN,
+        heatmap: data.heatmapolt,
+      });
+      store.setContrastComplete(true);
+      store.setCompared(true);
+      store.setDoneGsea(true);
+      store.setDisableContrast(true);
+      store.setLoading(false);
+    },
+    onError: (err: Error) => {
+      store.setLoading(false);
+      setContrastError(err.message);
+    },
+  });
+
+  function handleRunContrast() {
+    setContrastError("");
+
+    if (!store.group1 || !store.group2) {
+      setContrastError("Please select both Group 1 and Group 2 for contrast.");
+      return;
+    }
+    if (store.group1 === store.group2) {
+      setContrastError("Group 1 and Group 2 must be different.");
+      return;
+    }
+
+    const payload = store.buildContrastPayload();
+    if ("error" in payload) {
+      setContrastError(payload.error);
+      return;
+    }
+
+    // Validate batches: each batch must have samples from both groups
+    const batchSamples: Record<string, [boolean, boolean]> = {};
+    let allOthers = true;
+    store.dataList.forEach((sample, i) => {
+      const batch = sample.batch || "Others";
+      if (batch !== "Others") {
+        allOthers = false;
+        if (!batchSamples[batch]) batchSamples[batch] = [false, false];
+        if (payload.groups[i] === store.group1) batchSamples[batch][0] = true;
+        if (payload.groups[i] === store.group2) batchSamples[batch][1] = true;
+      }
+    });
+    for (const batch of Object.keys(batchSamples)) {
+      if (!batchSamples[batch][0] || !batchSamples[batch][1]) {
+        setContrastError("Cannot run contrasts when batches do not contain samples from each group.");
+        return;
+      }
+    }
+
+    // Compute index (1-based indices of samples in group1 or group2)
+    const index: number[] = [];
+    payload.groups.forEach((g, i) => {
+      if (g === store.group1 || g === store.group2) {
+        index.push(i + 1);
+      }
+    });
+
+    const batches = allOthers ? [] : payload.batches;
+
+    store.setLoading(true, "Running Contrast...");
+
+    contrastMutation.mutate({
+      projectId: store.projectId,
+      code: store.accessionCode,
+      groups: payload.groups,
+      group_1: store.group1,
+      group_2: store.group2,
+      species: store.species,
+      genSet: store.genSet,
+      normal: store.normal,
+      source: store.uploaded ? "upload" : "fetch",
+      realGroup: payload.realGroup,
+      index,
+      batches,
+      chip: store.chip,
+    });
   }
 
   function handleReset() {
@@ -253,8 +341,11 @@ export default function Analysis() {
 
           {/* Run / Reset buttons (outside sub-boxes) */}
           <div className="mx-2 mb-2">
-            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading}>Run Contrast</button>
+            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading || store.disableContrast} onClick={handleRunContrast}>Run Contrast</button>
             <button className="btn btn-nci-primary w-100" onClick={handleReset} disabled={isLoading}>Reset</button>
+            {contrastError && (
+              <p style={{ color: "#b22222", fontSize: "0.85rem" }} className="mt-1 mb-0">{contrastError}</p>
+            )}
           </div>
         </div>
 
