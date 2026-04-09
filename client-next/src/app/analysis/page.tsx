@@ -8,6 +8,8 @@ import { loadGSE, uploadCEL, runContrast } from "@/services/api";
 import GSMData from "@/components/DataBox/GSMData";
 import PrePlotsBox from "@/components/DataBox/PrePlotsBox";
 import PostPlotsBox from "@/components/DataBox/PostPlotsBox";
+import DEGBox from "@/components/DataBox/DEGBox";
+import SSGSEABox from "@/components/DataBox/SSGSEABox";
 
 export default function Analysis() {
   const store = useAnalysisStore();
@@ -408,8 +410,8 @@ export default function Analysis() {
 
             {store.activeTab === "pre" && <PrePlotsBox />}
             {store.activeTab === "post" && <PostPlotsBox />}
-            {store.activeTab === "deg" && <p className="text-muted">DEG-Enrichments results will appear here after analysis.</p>}
-            {store.activeTab === "ssgsea" && <p className="text-muted">ssGSEA results will appear here after analysis.</p>}
+            {store.activeTab === "deg" && <DEGBox />}
+            {store.activeTab === "ssgsea" && <SSGSEABox />}
           </div>
         </div>
       </div>
