@@ -162,6 +162,7 @@ export interface AnalysisActions {
 
   // Upload
   setFileList: (files: File[]) => void;
+  removeFile: (index: number) => void;
 
   // UI
   setLoading: (loading: boolean, message?: string) => void;
@@ -484,6 +485,11 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
 
   // ── Upload ──────────────────────────────────────────────────
   setFileList: (files) => set({ fileList: files }),
+  removeFile: (index) => {
+    const newList = [...get().fileList];
+    newList.splice(index, 1);
+    set({ fileList: newList });
+  },
 
   // ── UI ──────────────────────────────────────────────────────
   setLoading: (loading, message = "") => set({ loading, loadingMessage: message }),
