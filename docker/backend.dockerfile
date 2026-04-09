@@ -24,6 +24,7 @@ RUN dnf -y update \
     libgit2-devel \
     mesa-libGLU \
     pcre \
+    pandoc \
     && dnf clean all
 
 RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/npm;

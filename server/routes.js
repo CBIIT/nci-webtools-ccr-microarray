@@ -10,8 +10,8 @@ var config = require('./config');
 var path = require('path');
 
 
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
+
+
 var session = require('./components/session');
 //var session =require("express-session");
 var FastSessionStore = require('./components/fastsessionstore')(session)
@@ -29,7 +29,7 @@ module.exports = function(app) {
     //     limit: '40mb', // 100kb default is too small
     //     extended: false
     // }));
-    app.use(bodyParser.json({
+    app.use(express.json({
         limit: '40mb' // 100kb default is too small
     }));
 
