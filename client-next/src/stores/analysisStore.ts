@@ -312,7 +312,7 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
   selectChip: (chip) => {
     const chipData = get().dataListChip[chip];
     if (chipData) {
-      set({ loadChip: chip, dataList: chipData });
+      set({ chip, dataList: chipData });
       get().updateAvailableGroups();
     }
   },

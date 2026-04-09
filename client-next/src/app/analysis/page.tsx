@@ -11,11 +11,21 @@ export default function Analysis() {
   const store = useAnalysisStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+
   const geoMutation = useMutation({
-    mutationFn: () => loadGSE(store.accessionCode, store.projectId, store.chip),
+    mutationFn: () => loadGSE(store.accessionCode, store.projectId, store.loadChip),
     onMutate: () => store.setLoading(true, "Loading GEO Data..."),
     onSuccess: (data) => {
-      store.setDataList(data.files);
+      if (data.multichip) {
+        store.setMultichip(true);
+        Object.entries(data.chipData).forEach(([chip, samples]) => {
+          store.setDataListChip(chip, samples as import("@/services/api").Sample[]);
+        });
+        store.setChip(data.chips[0]);
+        store.selectChip(data.chips[0]);
+      } else {
+        store.setDataList(data.files);
+      }
       store.setDataLoaded(true);
       store.setLoading(false);
     },
@@ -73,6 +83,7 @@ export default function Analysis() {
               className="form-select form-select-sm mb-2"
               id="analysisType"
               value={store.analysisType}
+              disabled={store.dataLoaded}
               onChange={(e) => store.setAnalysisType(e.target.value as "0" | "1")}
             >
               <option value="0">GEO Data</option>
@@ -80,13 +91,14 @@ export default function Analysis() {
             </select>
 
             {store.analysisType === "0" ? (
-              <>
+              <div key="geo-inputs">
                 <label className="title" htmlFor="accessionCode">Accession Code<span className="required"> *</span></label>
                 <input
                   className="form-control form-control-sm mb-2"
                   id="accessionCode"
                   type="text"
                   value={store.accessionCode ?? ""}
+                  disabled={store.fileList.length > 0}
                   onChange={(e) => store.setAccessionCode(e.target.value)}
                 />
 
@@ -96,18 +108,20 @@ export default function Analysis() {
                   id="chip"
                   type="text"
                   placeholder="<All Chips>"
-                  value={store.chip ?? ""}
-                  onChange={(e) => store.setChip(e.target.value)}
+                  value={store.loadChip ?? ""}
+                  disabled={store.dataLoaded || store.multichip}
+                  onChange={(e) => store.setChip(e.target.value.toUpperCase())}
                 />
 
-                <button className="btn btn-nci-primary w-100 mt-2" onClick={handleLoadGEO} disabled={isLoading}>
-                  {geoMutation.isPending ? "Loading..." : "Load"}
+                <button className={`btn btn-nci-primary w-100 mt-2${geoMutation.isPending ? " btn-loading" : ""}`} onClick={handleLoadGEO} disabled={isLoading || store.dataLoaded || store.fileList.length > 0}>
+                  {geoMutation.isPending && <span className="spinner-border spinner-border-sm me-1" role="status" />}
+                  Load
                 </button>
                 <button className="btn btn-nci-primary w-100 mt-2" onClick={handleReset} disabled={isLoading}>Reset</button>
-              </>
+              </div>
             ) : (
-              <>
-                <label className="file-upload-btn my-1" htmlFor="celUpload">
+              <div key="cel-inputs">
+                <label className={`file-upload-btn my-1${store.dataLoaded ? " disabled" : ""}`} htmlFor={store.dataLoaded ? undefined : "celUpload"} style={store.dataLoaded ? { opacity: 0.5, pointerEvents: "none" } : undefined}>
                   <svg className="file-upload-icon" viewBox="64 64 896 896" width="1em" height="1em" fill="currentColor"><path d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"/></svg>
                   {store.fileList.length > 0 ? `${store.fileList.length} file(s) selected` : "Select File"}
                 </label>
@@ -122,22 +136,40 @@ export default function Analysis() {
                 />
 
                 <div className="d-flex gap-4 mt-2">
-                  <button className="btn btn-nci-primary flex-fill" onClick={handleLoadCEL} disabled={isLoading}>
-                    {celMutation.isPending ? "Loading..." : "Load"}
+                  <button className={`btn btn-nci-primary flex-fill${celMutation.isPending ? " btn-loading" : ""}`} onClick={handleLoadCEL} disabled={isLoading || store.dataLoaded || store.fileList.length === 0}>
+                    {celMutation.isPending && <span className="spinner-border spinner-border-sm me-1" role="status" />}
+                    Load
                   </button>
                   <button className="btn btn-nci-primary flex-fill" onClick={handleReset} disabled={isLoading}>Reset</button>
                 </div>
-              </>
+              </div>
             )}
           </div>
 
           {/* Block 2: Contrast */}
           <div className="workflow-block">
+            {store.multichip && (
+              <>
+                <label className="title mb-1" htmlFor="selectChip">Chip:<span className="required"> *</span></label>
+                <select
+                  className="form-select form-select-sm mb-2"
+                  id="selectChip"
+                  value={store.chip ?? ""}
+                  onChange={(e) => store.selectChip(e.target.value)}
+                  disabled={store.disableContrast}
+                >
+                  {Object.keys(store.dataListChip).map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </>
+            )}
             <label className="title mb-2" htmlFor="selectGroup1">Choose Contrast To Show:<span className="required"> *</span></label>
             <select
               className="form-select form-select-sm mb-1"
               id="selectGroup1"
               value={store.group1 ?? ""}
+              disabled={store.disableContrast}
               onChange={(e) => store.setGroup1(e.target.value)}
             >
               <option value="">-- Select Group 1 --</option>
@@ -149,6 +181,7 @@ export default function Analysis() {
               className="form-select form-select-sm"
               id="selectGroup2"
               value={store.group2 ?? ""}
+              disabled={store.disableContrast}
               onChange={(e) => store.setGroup2(e.target.value)}
             >
               <option value="">-- Select Group 2 --</option>
@@ -165,6 +198,7 @@ export default function Analysis() {
               className="form-select form-select-sm"
               id="selectNormal"
               value={store.normal}
+              disabled={store.disableContrast}
               onChange={(e) => store.setNormal(e.target.value)}
             >
               <option value="RMA">RMA</option>
@@ -193,6 +227,7 @@ export default function Analysis() {
               type="email"
               placeholder="-- Enter Email --"
               value={store.email ?? ""}
+              disabled={!store.useQueue}
               onChange={(e) => store.setEmail(e.target.value)}
             />
 

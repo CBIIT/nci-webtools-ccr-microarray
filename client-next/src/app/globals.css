@@ -116,6 +116,23 @@ body {
   border-color: #235d8a;
 }
 
+.btn-nci-primary:disabled,
+.btn-nci-primary.disabled {
+  color: rgba(0, 0, 0, 0.25);
+  background-color: #f5f5f5;
+  border-color: #d9d9d9;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.btn-nci-primary.btn-loading {
+  color: #fff;
+  background-color: #5a9fcf;
+  border-color: #5a9fcf;
+  cursor: default;
+  opacity: 1;
+}
+
 .workflow-block .required {
   color: #e41d3d;
   padding-left: 5px;
