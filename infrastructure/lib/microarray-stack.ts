@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import * as cdk from "aws-cdk-lib";
-import * as ecr from "aws-cdk-lib/aws-ecr";
 import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as efs from "aws-cdk-lib/aws-efs";
@@ -77,10 +76,6 @@ export interface MicroarrayStackProps extends cdk.StackProps {
 
   healthCheckPath: string;
   gracePeriod: number;
-
-  /** ECR */
-  ecrRepoName: string;
-  ecrCountNumber: number;
 
   /** Web microservice */
   microservice: MicroserviceConfig;
@@ -193,46 +188,14 @@ export class MicroarrayStack extends cdk.Stack {
       );
 
     // ==================================================================
-    // 1. ECR
-    // ==================================================================
-    if (tier === "dev" || tier === "stage") {
-      const repo = new ecr.Repository(this, "EcrRepo", {
-        repositoryName: props.ecrRepoName,
-        imageScanOnPush: true,
-        imageTagMutability: ecr.TagMutability.MUTABLE,
-        removalPolicy: cdk.RemovalPolicy.RETAIN,
-      });
-
-      repo.addToResourcePolicy(
-        new iam.PolicyStatement({
-          sid: "LambdaAccess",
-          effect: iam.Effect.ALLOW,
-          principals: [new iam.ServicePrincipal("lambda.amazonaws.com")],
-          actions: ["ecr:BatchGetImage", "ecr:GetDownloadUrlForLayer"],
-        }),
-      );
-
-      if (tier === "dev") {
-        repo.addLifecycleRule({
-          description: `Keep last ${props.ecrCountNumber} images`,
-          maxImageCount: props.ecrCountNumber,
-          rulePriority: 1,
-          tagStatus: ecr.TagStatus.ANY,
-        });
-      }
-
-      new cdk.CfnOutput(this, "EcrRepoUri", { value: repo.repositoryUri });
-    }
-
-    // ==================================================================
-    // 2. ECS Web Service
+    // 1. ECS Web Service
     // ==================================================================
     const ms = props.microservice;
 
     const logGroup = new logs.LogGroup(this, "WebLogGroup", {
       logGroupName: `/${appNamespace}/${tier}/${appName}/${ms.name}`,
       retention: logs.RetentionDays.SIX_MONTHS,
-      // removalPolicy: cdk.RemovalPolicy.RETAIN,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     const taskDef = new ecs.FargateTaskDefinition(this, "WebTaskDef", {
@@ -392,14 +355,14 @@ export class MicroarrayStack extends cdk.Stack {
     });
 
     // ==================================================================
-    // 3. ECS Non-Web Worker
+    // 2. ECS Non-Web Worker
     // ==================================================================
     const et = props.extraTask;
 
     const workerLogGroup = new logs.LogGroup(this, "WorkerLogGroup", {
       logGroupName: `/${appNamespace}/${tier}/${appName}/${et.name}`,
       retention: logs.RetentionDays.SIX_MONTHS,
-      // removalPolicy: cdk.RemovalPolicy.RETAIN,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     const workerTaskDef = new ecs.FargateTaskDefinition(this, "WorkerTaskDef", {
@@ -472,7 +435,7 @@ export class MicroarrayStack extends cdk.Stack {
     }
 
     // ==================================================================
-    // 4. EFS Access Point + SSM params for EFS IDs
+    // 3. EFS Access Point + SSM params for EFS IDs
     // ==================================================================
     const cfnAccessPoint = new efs.CfnAccessPoint(this, "EfsAccessPoint", {
       fileSystemId: props.efsId,
@@ -516,7 +479,7 @@ export class MicroarrayStack extends cdk.Stack {
     });
 
     // ==================================================================
-    // 5. SSM Parameters (from app.env file)
+    // 4. SSM Parameters (from app.env file)
     // ==================================================================
     const appEnvVars = parseEnvFile(props.appEnvFile);
     for (const [key, value] of Object.entries(appEnvVars)) {

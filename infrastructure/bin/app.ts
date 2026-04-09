@@ -70,7 +70,7 @@ const extraTask: ExtraTaskConfig = {
 };
 
 const stackProps: MicroarrayStackProps = {
-  stackName: `${tier}-${appName}`,
+  stackName: `${tier}-${appName}-ecs-efs`,
   env: { account: accountId, region: awsRegion },
 
   tier,
@@ -90,9 +90,6 @@ const stackProps: MicroarrayStackProps = {
 
   healthCheckPath: optional("HEALTH_CHECK_PATH", "/api/ping"),
   gracePeriod: num("GRACE_PERIOD", 60),
-
-  ecrRepoName: optional("ECR_REPO_NAME", appName),
-  ecrCountNumber: num("ECR_COUNT_NUMBER", 30),
 
   microservice,
 
@@ -118,6 +115,6 @@ const stackProps: MicroarrayStackProps = {
   appEnvFile: required("APP_ENV_FILE"),
 };
 
-new MicroarrayStack(app, `${tier}-${appName}`, stackProps);
+new MicroarrayStack(app, `${tier}-${appName}-ecs-efs`, stackProps);
 
 app.synth();
