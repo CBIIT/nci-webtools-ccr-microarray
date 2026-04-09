@@ -1,7 +1,7 @@
 family: "${ECS_WORKER_TASK}"
 networkMode: awsvpc
-cpu: "${ECS_WORKER_TASK_CPU_UNITS}"
-memory: "${ECS_WORKER_TASK_MEMORY_UNITS}"
+cpu: ${ECS_WORKER_TASK_CPU_UNITS}
+memory: ${ECS_WORKER_TASK_MEMORY_UNITS}
 executionRoleArn: "${ROLE_ARN}"
 taskRoleArn: "${ROLE_ARN}"
 requiresCompatibilities:
