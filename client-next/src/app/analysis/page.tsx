@@ -6,6 +6,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { loadGSE, uploadCEL, runContrast } from "@/services/api";
 import GSMData from "@/components/DataBox/GSMData";
+import PrePlotsBox from "@/components/DataBox/PrePlotsBox";
+import PostPlotsBox from "@/components/DataBox/PostPlotsBox";
 
 export default function Analysis() {
   const store = useAnalysisStore();
@@ -404,8 +406,8 @@ export default function Analysis() {
           <div className="tab-content-panel">
             {store.activeTab === "gsm" && <GSMData />}
 
-            {store.activeTab === "pre" && <p className="text-muted">Pre-normalization QC plots will appear here after analysis.</p>}
-            {store.activeTab === "post" && <p className="text-muted">Post-normalization plots will appear here after analysis.</p>}
+            {store.activeTab === "pre" && <PrePlotsBox />}
+            {store.activeTab === "post" && <PostPlotsBox />}
             {store.activeTab === "deg" && <p className="text-muted">DEG-Enrichments results will appear here after analysis.</p>}
             {store.activeTab === "ssgsea" && <p className="text-muted">ssGSEA results will appear here after analysis.</p>}
           </div>

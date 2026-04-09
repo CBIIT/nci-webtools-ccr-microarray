@@ -527,8 +527,8 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
     if (results.histplotBN !== undefined) updates.histplotBN = results.histplotBN;
     if (results.histplotAN !== undefined) updates.histplotAN = results.histplotAN;
     if (results.heatmap !== undefined) updates.heatmap = results.heatmap;
-    if (results.maplotsBN !== undefined) updates.maplotsBN = results.maplotsBN;
-    if (results.maplotsAN !== undefined) updates.maplotsAN = results.maplotsAN;
+    if (results.maplotsBN !== undefined) updates.maplotsBN = results.maplotsBN as string;
+    if (results.maplotsAN !== undefined) updates.maplotsAN = results.maplotsAN as string;
     if (results.boxplotBN) updates.boxplotBN = results.boxplotBN;
     if (results.boxplotAN) updates.boxplotAN = results.boxplotAN;
     if (results.rle) updates.rle = results.rle;
