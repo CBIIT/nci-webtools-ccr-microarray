@@ -1,3 +1,19 @@
+/* ── US Government Banner ── */
+.govBanner {
+  background-color: #f0f0f0;
+  height: 46px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.govBannerText {
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+  margin-left: 15px;
+}
+
 /* ── NCI Logo Bar ── */
 .headerNci {
   background: #fff;
@@ -83,7 +99,7 @@
   font-size: 0.85rem;
   outline: none !important;
   box-shadow: none !important;
-  width: 220px;
+  width: clamp(120px, 20vw, 220px);
 }
 
 .searchInput:focus {
@@ -131,5 +147,15 @@
 
   .headerNci img {
     height: 45px;
+  }
+
+  .searchGroup {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .searchInput {
+    flex: 1;
+    width: auto;
   }
 }

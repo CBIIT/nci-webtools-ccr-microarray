@@ -17,9 +17,18 @@ export default function Header() {
 
   return (
     <header>
+      {/* US Government Banner */}
+      <div className={styles.govBanner}>
+        <div className="app-container d-flex align-items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/assets/img/us_flag_small.png" alt="US Flag" width="16" height="11" />
+          <span className={styles.govBannerText}>An official website of the United States government</span>
+        </div>
+      </div>
+
       {/* NCI Logo Bar */}
       <div className={styles.headerNci}>
-        <div className="app-container d-flex align-items-center justify-content-between">
+        <div className={`app-container d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between`}>
           <a href="https://ccr.cancer.gov/" target="_blank" rel="noopener noreferrer">
             <img src="/assets/img/nci-ccr-logo.png" alt="National Cancer Institute" />
           </a>
