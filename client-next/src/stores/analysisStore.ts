@@ -212,6 +212,7 @@ export interface AnalysisActions {
 
   // Reset
   reset: () => void;
+  resetContrast: () => void;
 }
 
 // ── Initial state ───────────────────────────────────────────────
@@ -553,6 +554,36 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
         : {}),
     }));
   },
+
+  // ── Reset Contrast (keep data, re-enable contrast inputs) ──
+  resetContrast: () =>
+    set({
+      group1: "",
+      group2: "",
+      normal: "RMA",
+      disableContrast: false,
+      compared: false,
+      contrastComplete: false,
+      doneGsea: false,
+      activeTab: "gsm",
+      histplotBN: "",
+      histplotAN: "",
+      heatmap: "",
+      maplotsBN: "",
+      maplotsAN: "",
+      volcanoPlot: "",
+      volcanoPlotName: "",
+      geneHeatmap: "",
+      boxplotBN: { ...emptyPlot },
+      boxplotAN: { ...emptyPlot },
+      rle: { ...emptyPlot },
+      nuse: { ...emptyPlot },
+      pca: { ...emptyPlot },
+      diffExprGenes: { ...emptyTable },
+      ssGSEA: { ...emptyTable },
+      pathwaysUp: { ...emptyTable },
+      pathwaysDown: { ...emptyTable },
+    }),
 
   // ── Reset ───────────────────────────────────────────────────
   reset: () =>

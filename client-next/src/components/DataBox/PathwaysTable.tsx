@@ -47,7 +47,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
   const [search, setSearch] = useState<Record<string, string>>({
     Pathway_Name: "",
     Category: "",
-    P_Value: "",
+    P_Value: "0.05",
     FDR: "",
     Enrichment_Score: "",
     Percent_Gene_Hits_per_Pathway: "",
