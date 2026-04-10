@@ -280,6 +280,7 @@ export default function Analysis() {
             <select
               className="form-select form-select-sm mb-1"
               id="selectGroup1"
+              aria-label="Select Group 1"
               value={store.group1 ?? ""}
               disabled={store.disableContrast}
               onChange={(e) => store.setGroup1(e.target.value)}
@@ -292,6 +293,7 @@ export default function Analysis() {
             <select
               className="form-select form-select-sm"
               id="selectGroup2"
+              aria-label="Select Group 2"
               value={store.group2 ?? ""}
               disabled={store.disableContrast}
               onChange={(e) => store.setGroup2(e.target.value)}

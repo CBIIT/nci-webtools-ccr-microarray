@@ -64,6 +64,10 @@
   color: #000 !important;
 }
 
+.navItemActive a:hover {
+  color: #fff !important;
+}
+
 /* ── Responsive ── */
 @media (max-width: 575px) {
   .headerBanner {
