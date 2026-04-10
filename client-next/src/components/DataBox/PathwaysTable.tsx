@@ -53,7 +53,6 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
     Percent_Gene_Hits_per_Pathway: "",
     Significant_Genes_IN_Pathway: "",
     "Non-Significant_genes_IN_Pathway": "",
-    Significant_genes_NOT_IN_Pathway: "",
     "Non-Significant_Genes_NOT_IN_Pathway": "",
     Pathway_ID: "",
     Gene_List: "",
