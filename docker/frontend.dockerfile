@@ -1,12 +1,5 @@
-FROM public.ecr.aws/amazonlinux/amazonlinux:2023
+FROM node:22-slim
 
-RUN dnf -y update \
-    && dnf -y install \
-    nodejs22 \
-    nodejs22-npm \
-    && dnf clean all
-
-RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/npm;
 RUN mkdir -p /app/client
 
 WORKDIR /app/client
