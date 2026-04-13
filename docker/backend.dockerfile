@@ -4,6 +4,8 @@ RUN dnf -y update \
     && dnf -y install spal-release \
     && dnf -y install \
     dnf-plugins-core \
+    nodejs22 \
+    nodejs22-npm \
     tar \
     gzip \
     git \
@@ -25,10 +27,7 @@ RUN dnf -y update \
     pandoc \
     && dnf clean all
 
-# Install Node.js 22 via NodeSource (replaces dnf nodejs22-npm to avoid bundled npm vuln deps)
-RUN curl -fsSL https://rpm.nodesource.com/setup_22.x | bash - \
-    && dnf install -y nodejs \
-    && dnf clean all
+RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/npm;
 
 # Install R via Posit RPM (matching docker branch)
 ENV R_VER="4.5.3"

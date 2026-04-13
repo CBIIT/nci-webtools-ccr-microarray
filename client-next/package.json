@@ -11,9 +11,9 @@
   "dependencies": {
     "@tanstack/react-query": "^5.96.1",
     "@tanstack/react-table": "^8.21.3",
-    "axios": "^1.15.0",
+    "axios": "^1.14.0",
     "bootstrap": "^5.3.8",
-    "next": "16.2.3",
+    "next": "16.2.2",
     "papaparse": "^5.5.3",
     "plotly.js": "^3.4.0",
     "react": "19.2.4",
@@ -25,10 +25,6 @@
     "write-excel-file": "^3.0.8",
     "zustand": "^5.0.12"
   },
-  "overrides": {
-    "minimatch": ">=10.2.5",
-    "picomatch": ">=4.0.4"
-  },
   "devDependencies": {
     "@types/node": "^20",
     "@types/papaparse": "^5.5.2",
@@ -37,7 +33,7 @@
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.2.3",
+    "eslint-config-next": "16.2.2",
     "typescript": "^5"
   }
 }
