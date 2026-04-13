@@ -101,21 +101,63 @@ export default function DEGTable() {
   const startRow = (pageNumber - 1) * pageSize + 1;
   const endRow = Math.min(pageNumber * pageSize, totalCount);
 
+  // Build page items with ellipsis (first/last always visible)
+  const pageItems: (number | null)[] = [];
+  const windowSize = 5;
+  if (totalPages <= windowSize + 2) {
+    for (let i = 1; i <= totalPages; i++) pageItems.push(i);
+  } else {
+    const halfWin = Math.floor(windowSize / 2);
+    let start = Math.max(2, pageNumber - halfWin);
+    let end = Math.min(totalPages - 1, pageNumber + halfWin);
+    if (start <= 2) end = Math.min(totalPages - 1, windowSize + 1);
+    if (end >= totalPages - 1) start = Math.max(2, totalPages - windowSize);
+    pageItems.push(1);
+    if (start > 2) pageItems.push(null);
+    for (let i = start; i <= end; i++) pageItems.push(i);
+    if (end < totalPages - 1) pageItems.push(null);
+    pageItems.push(totalPages);
+  }
+
   return (
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
 
       {/* Controls row */}
-      <div className="d-flex justify-content-between align-items-center mb-2" style={{ fontSize: "0.8rem" }}>
-        <div>
-          Show{" "}
-          <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setPageNumber(1); }} className="form-select form-select-sm d-inline-block" style={{ width: "auto" }}>
+      <div className="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2" style={{ fontSize: "0.8rem" }}>
+        <div className="d-flex align-items-center gap-1">
+          <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setPageNumber(1); }} className="form-select form-select-sm" style={{ width: "auto" }}>
             {PAGE_SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>{" "}
-          entries
+          </select>
+          <span className="text-muted" style={{ whiteSpace: "nowrap" }}>rows per page</span>
         </div>
-        <div className="text-muted">
-          {totalCount > 0 ? `Showing ${startRow}-${endRow} of ${totalCount} records` : "No records"}
+        <div className="d-flex align-items-center gap-3">
+          <span className="text-muted" style={{ whiteSpace: "nowrap" }}>
+            {totalCount > 0 ? `Showing ${startRow}-${endRow} of ${totalCount} records` : "No records"}
+          </span>
+          {totalPages > 1 && (
+            <nav>
+              <ul className="pagination pagination-sm mb-0">
+                <li className={`page-item ${pageNumber <= 1 ? "disabled" : ""}`}>
+                  <button className="page-link" onClick={() => setPageNumber((p) => Math.max(1, p - 1))}>&lsaquo;</button>
+                </li>
+                {pageItems.map((item, idx) =>
+                  item === null ? (
+                    <li key={`ellipsis-${idx}`} className="page-item disabled">
+                      <span className="page-link">&hellip;</span>
+                    </li>
+                  ) : (
+                    <li key={item} className={`page-item ${item === pageNumber ? "active" : ""}`}>
+                      <button className="page-link" onClick={() => setPageNumber(item)}>{item}</button>
+                    </li>
+                  )
+                )}
+                <li className={`page-item ${pageNumber >= totalPages ? "disabled" : ""}`}>
+                  <button className="page-link" onClick={() => setPageNumber((p) => Math.min(totalPages, p + 1))}>&rsaquo;</button>
+                </li>
+              </ul>
+            </nav>
+          )}
         </div>
       </div>
 
@@ -175,36 +217,6 @@ export default function DEGTable() {
         </table>
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <nav className="d-flex justify-content-center mt-2">
-          <ul className="pagination pagination-sm mb-0">
-            <li className={`page-item ${pageNumber <= 1 ? "disabled" : ""}`}>
-              <button className="page-link" onClick={() => setPageNumber((p) => Math.max(1, p - 1))}>‹</button>
-            </li>
-            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
-              let page: number;
-              if (totalPages <= 7) {
-                page = i + 1;
-              } else if (pageNumber <= 4) {
-                page = i + 1;
-              } else if (pageNumber >= totalPages - 3) {
-                page = totalPages - 6 + i;
-              } else {
-                page = pageNumber - 3 + i;
-              }
-              return (
-                <li key={page} className={`page-item ${page === pageNumber ? "active" : ""}`}>
-                  <button className="page-link" onClick={() => setPageNumber(page)}>{page}</button>
-                </li>
-              );
-            })}
-            <li className={`page-item ${pageNumber >= totalPages ? "disabled" : ""}`}>
-              <button className="page-link" onClick={() => setPageNumber((p) => Math.min(totalPages, p + 1))}>›</button>
-            </li>
-          </ul>
-        </nav>
-      )}
     </div>
   );
 }
