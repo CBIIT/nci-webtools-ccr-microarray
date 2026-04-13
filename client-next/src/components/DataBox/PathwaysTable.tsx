@@ -2,10 +2,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { getUpPathways, getDownPathways, getPathwayHeatmap } from "@/services/api";
-
-const PAGE_SIZES = [15, 25, 50, 100, 200];
+import TableControls from "./TableControls";
+import formatCell from "./formatCell";
 
 const COLUMNS = [
   { key: "Pathway_Name", label: "Pathway Name", search: "Pathway_Name", wide: true },
@@ -21,15 +22,6 @@ const COLUMNS = [
   { key: "Pathway_ID", label: "Pathway ID", search: "Pathway_ID" },
   { key: "Gene_List", label: "Gene List", search: "Gene_List" },
 ];
-
-function formatCell(value: unknown, fmt?: string): React.ReactNode {
-  if (value == null || value === "") return "";
-  if (fmt === "exp") {
-    const n = Number(value);
-    return isNaN(n) ? String(value) : n === 0 ? "0" : n.toExponential(3);
-  }
-  return String(value);
-}
 
 interface PathwaysTableProps {
   direction: "up" | "down";
@@ -119,64 +111,20 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
   const startRow = (pageNumber - 1) * pageSize + 1;
   const endRow = Math.min(pageNumber * pageSize, totalCount);
 
-  // Build page items with ellipsis (first/last always visible)
-  const pageItems: (number | null)[] = [];
-  const windowSize = 5;
-  if (totalPages <= windowSize + 2) {
-    for (let i = 1; i <= totalPages; i++) pageItems.push(i);
-  } else {
-    const halfWin = Math.floor(windowSize / 2);
-    let start = Math.max(2, pageNumber - halfWin);
-    let end = Math.min(totalPages - 1, pageNumber + halfWin);
-    if (start <= 2) end = Math.min(totalPages - 1, windowSize + 1);
-    if (end >= totalPages - 1) start = Math.max(2, totalPages - windowSize);
-    pageItems.push(1);
-    if (start > 2) pageItems.push(null);
-    for (let i = start; i <= end; i++) pageItems.push(i);
-    if (end < totalPages - 1) pageItems.push(null);
-    pageItems.push(totalPages);
-  }
-
   return (
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
 
-      <div className="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2" style={{ fontSize: "0.8rem" }}>
-        <div className="d-flex align-items-center gap-1">
-          <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setPageNumber(1); }} className="form-select form-select-sm" style={{ width: "auto" }}>
-            {PAGE_SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
-          <span className="text-muted" style={{ whiteSpace: "nowrap" }}>rows per page</span>
-        </div>
-        <div className="d-flex align-items-center gap-3">
-          <span className="text-muted" style={{ whiteSpace: "nowrap" }}>
-            {totalCount > 0 ? `Showing ${startRow}-${endRow} of ${totalCount} records` : "No records"}
-          </span>
-          {totalPages > 1 && (
-            <nav>
-              <ul className="pagination pagination-sm mb-0">
-                <li className={`page-item ${pageNumber <= 1 ? "disabled" : ""}`}>
-                  <button className="page-link" onClick={() => setPageNumber((p) => Math.max(1, p - 1))}>&lsaquo;</button>
-                </li>
-                {pageItems.map((item, idx) =>
-                  item === null ? (
-                    <li key={`ellipsis-${idx}`} className="page-item disabled">
-                      <span className="page-link">&hellip;</span>
-                    </li>
-                  ) : (
-                    <li key={item} className={`page-item ${item === pageNumber ? "active" : ""}`}>
-                      <button className="page-link" onClick={() => setPageNumber(item)}>{item}</button>
-                    </li>
-                  )
-                )}
-                <li className={`page-item ${pageNumber >= totalPages ? "disabled" : ""}`}>
-                  <button className="page-link" onClick={() => setPageNumber((p) => Math.min(totalPages, p + 1))}>&rsaquo;</button>
-                </li>
-              </ul>
-            </nav>
-          )}
-        </div>
-      </div>
+      <TableControls
+        pageSize={pageSize}
+        onPageSizeChange={(s) => { setPageSize(s); setPageNumber(1); }}
+        currentPage={pageNumber}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        startRow={startRow}
+        endRow={endRow}
+        onPageChange={setPageNumber}
+      />
 
       <div style={{ overflowX: "auto", maxWidth: "100%" }}>
         <table className="table table-sm table-hover table-bordered mb-0" style={{ fontSize: "0.75rem" }}>
@@ -246,8 +194,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
       {heatmapLoading && <p className="text-muted mt-2" style={{ fontSize: "0.85rem" }}>Generating heatmap...</p>}
       {heatmapUrl && (
         <div className="mt-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={heatmapUrl} alt="Pathway Heatmap" style={{ maxWidth: "100%" }} />
+          <Image src={heatmapUrl} alt="Pathway Heatmap" unoptimized width={800} height={600} style={{ maxWidth: "100%", height: "auto" }} />
         </div>
       )}
     </div>

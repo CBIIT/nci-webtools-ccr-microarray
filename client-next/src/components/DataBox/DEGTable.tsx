@@ -4,8 +4,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { getDEG } from "@/services/api";
-
-const PAGE_SIZES = [15, 25, 50, 100, 200];
+import TableControls from "./TableControls";
+import formatCell from "./formatCell";
 
 const COLUMNS = [
   { key: "SYMBOL", label: "SYMBOL", search: "search_symbol" },
@@ -20,22 +20,6 @@ const COLUMNS = [
   { key: "t", label: "t", search: "search_t", fmt: "num3" },
   { key: "B", label: "B", search: "search_b", fmt: "num3" },
 ];
-
-function formatCell(value: unknown, fmt?: string, link?: boolean): React.ReactNode {
-  if (value == null || value === "") return "";
-  if (link) {
-    return <a href={`https://www.ncbi.nlm.nih.gov/gene/${value}`} target="_blank" rel="noopener noreferrer">{String(value)}</a>;
-  }
-  if (fmt === "exp") {
-    const n = Number(value);
-    return isNaN(n) ? String(value) : n === 0 ? "0" : n.toExponential(3);
-  }
-  if (fmt === "num3") {
-    const n = Number(value);
-    return isNaN(n) ? String(value) : n.toFixed(3);
-  }
-  return String(value);
-}
 
 export default function DEGTable() {
   const store = useAnalysisStore();
@@ -101,65 +85,20 @@ export default function DEGTable() {
   const startRow = (pageNumber - 1) * pageSize + 1;
   const endRow = Math.min(pageNumber * pageSize, totalCount);
 
-  // Build page items with ellipsis (first/last always visible)
-  const pageItems: (number | null)[] = [];
-  const windowSize = 5;
-  if (totalPages <= windowSize + 2) {
-    for (let i = 1; i <= totalPages; i++) pageItems.push(i);
-  } else {
-    const halfWin = Math.floor(windowSize / 2);
-    let start = Math.max(2, pageNumber - halfWin);
-    let end = Math.min(totalPages - 1, pageNumber + halfWin);
-    if (start <= 2) end = Math.min(totalPages - 1, windowSize + 1);
-    if (end >= totalPages - 1) start = Math.max(2, totalPages - windowSize);
-    pageItems.push(1);
-    if (start > 2) pageItems.push(null);
-    for (let i = start; i <= end; i++) pageItems.push(i);
-    if (end < totalPages - 1) pageItems.push(null);
-    pageItems.push(totalPages);
-  }
-
   return (
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
 
-      {/* Controls row */}
-      <div className="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2" style={{ fontSize: "0.8rem" }}>
-        <div className="d-flex align-items-center gap-1">
-          <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setPageNumber(1); }} className="form-select form-select-sm" style={{ width: "auto" }}>
-            {PAGE_SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>
-          <span className="text-muted" style={{ whiteSpace: "nowrap" }}>rows per page</span>
-        </div>
-        <div className="d-flex align-items-center gap-3">
-          <span className="text-muted" style={{ whiteSpace: "nowrap" }}>
-            {totalCount > 0 ? `Showing ${startRow}-${endRow} of ${totalCount} records` : "No records"}
-          </span>
-          {totalPages > 1 && (
-            <nav>
-              <ul className="pagination pagination-sm mb-0">
-                <li className={`page-item ${pageNumber <= 1 ? "disabled" : ""}`}>
-                  <button className="page-link" onClick={() => setPageNumber((p) => Math.max(1, p - 1))}>&lsaquo;</button>
-                </li>
-                {pageItems.map((item, idx) =>
-                  item === null ? (
-                    <li key={`ellipsis-${idx}`} className="page-item disabled">
-                      <span className="page-link">&hellip;</span>
-                    </li>
-                  ) : (
-                    <li key={item} className={`page-item ${item === pageNumber ? "active" : ""}`}>
-                      <button className="page-link" onClick={() => setPageNumber(item)}>{item}</button>
-                    </li>
-                  )
-                )}
-                <li className={`page-item ${pageNumber >= totalPages ? "disabled" : ""}`}>
-                  <button className="page-link" onClick={() => setPageNumber((p) => Math.min(totalPages, p + 1))}>&rsaquo;</button>
-                </li>
-              </ul>
-            </nav>
-          )}
-        </div>
-      </div>
+      <TableControls
+        pageSize={pageSize}
+        onPageSizeChange={(s) => { setPageSize(s); setPageNumber(1); }}
+        currentPage={pageNumber}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        startRow={startRow}
+        endRow={endRow}
+        onPageChange={setPageNumber}
+      />
 
       {/* Table */}
       <div style={{ overflowX: "auto", maxWidth: "100%" }}>
@@ -216,7 +155,6 @@ export default function DEGTable() {
           </tbody>
         </table>
       </div>
-
     </div>
   );
 }
