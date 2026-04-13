@@ -216,6 +216,7 @@ export default function GSMData() {
               style={{ width: "auto" }}
               value={pageSize}
               onChange={(e) => handlePageSize(Number(e.target.value))}
+              aria-label="Rows per page"
             >
               {PAGE_SIZE_OPTIONS.map((n) => (
                 <option key={n} value={n}>{n}</option>

@@ -33,6 +33,7 @@ export default function TableControls({
           onChange={(e) => onPageSizeChange(Number(e.target.value))}
           className="form-select form-select-sm"
           style={{ width: "auto" }}
+          aria-label="Rows per page"
         >
           {pageSizes.map((s) => (
             <option key={s} value={s}>{s}</option>
