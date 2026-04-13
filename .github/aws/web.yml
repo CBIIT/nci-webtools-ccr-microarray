@@ -32,9 +32,6 @@ containerDefinitions:
     portMappings:
       - protocol: tcp
         containerPort: ${FRONTEND_CONTAINER_PORT}
-    environment:
-      - name: API_BASE_URL
-        value: http://localhost:${BACKEND_CONTAINER_PORT}
     secrets:
       - name: APP_PATH
         valueFrom: "/analysistools/${TIER}/${APP}/application_path"
