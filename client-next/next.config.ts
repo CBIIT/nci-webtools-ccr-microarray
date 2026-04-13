@@ -9,11 +9,11 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: `${process.env.API_BASE_URL || "http://localhost:9220"}/api/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:9220"}/api/:path*`,
       },
       {
         source: "/images/:path*",
-        destination: `${process.env.API_BASE_URL || "http://localhost:9220"}/images/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:9220"}/images/:path*`,
       },
       {
         source: "/ping",
