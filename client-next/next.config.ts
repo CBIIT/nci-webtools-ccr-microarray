@@ -15,10 +15,6 @@ const nextConfig: NextConfig = {
         source: "/images/:path*",
         destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:9220"}/images/:path*`,
       },
-      {
-        source: "/api/ping",
-        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:9220"}/ping`,
-      },
     ];
   },
 };
