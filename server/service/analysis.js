@@ -323,6 +323,26 @@ router.post('/getJobStatus', function (req, res) {
   }
 });
 
+router.post('/getResultByProjectId', function (req, res) {
+  if (!validate(req.body.projectId))
+    return res.json({ status: 404, msg: 'Invalid project ID' });
+
+  var resultPath = path.join(config.uploadPath, req.body.projectId, 'result.txt');
+
+  if (!fs.existsSync(resultPath)) {
+    return res.json({ status: 404, msg: 'Results not found for this project ID' });
+  }
+
+  try {
+    var return_data = restoreSession(req, resultPath);
+    logger.info('[getResultByProjectId] Loaded results for ' + req.body.projectId);
+    res.json({ status: 200, data: return_data });
+  } catch (err) {
+    logger.error('[getResultByProjectId] Error: ' + err.message);
+    res.json({ status: 500, msg: 'Error reading results' });
+  }
+});
+
 router.post('/runContrast', function (req, res) {
   if (!validate(req.body.projectId))
     res.json({ status: 404, msg: 'Invalid project ID' });

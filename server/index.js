@@ -3,7 +3,6 @@
 var express = require('express');
 var config = require('./config');
 var app = express();
-var fs = require('fs');
 require('./routes')(app);
 
 // In server envs, the node express is behind a proxy (i.e. Apache mod proxy), set the ip-address of
@@ -17,14 +16,7 @@ const server = app.listen(config.port, function() {
 
 server.timeout=config.timeout;
 
-let logDirectory = config.development.log_dir;
-// ensure log directory exists
-fs.existsSync("../"+logDirectory) || fs.mkdirSync("../"+logDirectory);
-
-// when shutdown signal is received, do graceful shutdown
-let fileDirectory = config.development.upload_path;
-// ensure log directory exists
-fs.existsSync("../"+fileDirectory) || fs.mkdirSync("../"+fileDirectory);
+// Directories are created by config/index.js on load
 
 
 

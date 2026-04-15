@@ -172,7 +172,7 @@ export async function queueAnalysis(params: QueueAnalysisParams) {
 }
 
 export async function getResultByProjectId(projectId: string) {
-  const res = await api.post<ApiResponse>("/getResultByProjectId", { projectId });
+  const res = await api.post<ApiResponse<ContrastResult>>("/getResultByProjectId", { projectId });
   if (res.data.status !== 200 || !res.data.data) {
     throw new Error(res.data.msg || "Failed to load results");
   }
