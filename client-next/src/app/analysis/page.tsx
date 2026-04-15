@@ -4,7 +4,7 @@
 import { useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useAnalysisStore } from "@/stores/analysisStore";
-import { loadGSE, uploadCEL, runContrast } from "@/services/api";
+import { loadGSE, uploadCEL, runContrast, queueAnalysis } from "@/services/api";
 import GSMData from "@/components/DataBox/GSMData";
 import PrePlotsBox from "@/components/DataBox/PrePlotsBox";
 import PostPlotsBox from "@/components/DataBox/PostPlotsBox";
@@ -139,9 +139,7 @@ export default function Analysis() {
 
     const batches = allOthers ? [] : payload.batches;
 
-    store.setLoading(true, "Running Contrast...");
-
-    contrastMutation.mutate({
+    const contrastPayload = {
       projectId: store.projectId,
       code: store.accessionCode,
       groups: payload.groups,
@@ -150,12 +148,38 @@ export default function Analysis() {
       species: store.species,
       genSet: store.genSet,
       normal: store.normal,
-      source: store.uploaded ? "upload" : "fetch",
+      source: store.uploaded ? "upload" as const : "fetch" as const,
       realGroup: payload.realGroup,
       index,
       batches,
       chip: store.chip,
-    });
+    };
+
+    if (store.useQueue) {
+      // Async worker path
+      if (!store.email || !store.email.trim()) {
+        setContrastError("Please enter an email address for queue notifications.");
+        return;
+      }
+      store.setLoading(true, "Submitting to Queue...");
+      queueAnalysis({
+        ...contrastPayload,
+        email: store.email,
+        dataList: store.dataList.map((d) => d.gsm || ""),
+      })
+        .then(() => {
+          store.setLoading(false);
+          alert("Job submitted! You will receive an email when the analysis is complete.");
+        })
+        .catch((err: Error) => {
+          store.setLoading(false);
+          setContrastError(err.message);
+        });
+    } else {
+      // Synchronous path
+      store.setLoading(true, "Running Contrast...");
+      contrastMutation.mutate(contrastPayload);
+    }
   }
 
   function handleReset() {

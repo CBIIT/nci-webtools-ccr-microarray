@@ -55,8 +55,9 @@ COPY server/config ./config
 RUN cp config/microarray_setting-local.json config/microarray_setting.json
 
 # Copy server source
-COPY server/index.js server/routes.js ./
+COPY server/index.js server/routes.js server/worker.js ./
 COPY server/service ./service
+COPY server/services ./services
 COPY server/components ./components
 
 EXPOSE 9220

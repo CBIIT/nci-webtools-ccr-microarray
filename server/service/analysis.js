@@ -7,6 +7,7 @@ var logger = require('../components/logger');
 var formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
+var { getWorker } = require('../services/workers');
 
 // remove previous result.
 // ssgseaHeatmap1.jpg
@@ -250,6 +251,76 @@ router.post('/getssGSEAWithDiffGenSet', function (req, res) {
     logger.info('Get Contrast result success');
     res.json({ status: 200, data: '' });
   });
+});
+
+router.post('/qAnalysis', function (req, res) {
+  if (!validate(req.body.projectId))
+    return res.json({ status: 404, msg: 'Invalid project ID' });
+
+  var projectDir = path.join(config.uploadPath, req.body.projectId);
+
+  // Write params.json for the worker
+  var params = {
+    projectId: req.body.projectId,
+    code: req.body.code,
+    groups: req.body.groups,
+    group_1: req.body.group_1,
+    group_2: req.body.group_2,
+    species: req.body.species,
+    genSet: req.body.genSet,
+    normal: req.body.normal,
+    source: req.body.source,
+    realGroup: req.body.realGroup.join('@'),
+    index: req.body.index,
+    batches: req.body.batches,
+    chip: req.body.chip || '',
+    email: req.body.email,
+    dataList: req.body.dataList,
+    submittedAt: new Date().toISOString(),
+  };
+
+  if (!fs.existsSync(projectDir)) {
+    fs.mkdirSync(projectDir, { recursive: true });
+  }
+
+  fs.writeFileSync(
+    path.join(projectDir, 'params.json'),
+    JSON.stringify(params, null, 2)
+  );
+
+  // Write initial status
+  fs.writeFileSync(
+    path.join(projectDir, 'status.json'),
+    JSON.stringify({ id: req.body.projectId, status: 'SUBMITTED', submittedAt: params.submittedAt })
+  );
+
+  // Fire worker (async — don't await)
+  var workerType = process.env.WORKER_TYPE || 'local';
+  var worker = getWorker(workerType);
+  worker(req.body.projectId).catch(function (err) {
+    logger.error('[qAnalysis] Worker failed: ' + err.message);
+  });
+
+  logger.info('[qAnalysis] Job submitted: ' + req.body.projectId + ' (worker: ' + workerType + ')');
+  res.json({ status: 200 });
+});
+
+router.post('/getJobStatus', function (req, res) {
+  if (!validate(req.body.projectId))
+    return res.json({ status: 404, msg: 'Invalid project ID' });
+
+  var statusPath = path.join(config.uploadPath, req.body.projectId, 'status.json');
+
+  if (!fs.existsSync(statusPath)) {
+    return res.json({ status: 404, msg: 'No job found for this project ID' });
+  }
+
+  try {
+    var status = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
+    res.json({ status: 200, data: status });
+  } catch (err) {
+    res.json({ status: 500, msg: 'Error reading job status' });
+  }
 });
 
 router.post('/runContrast', function (req, res) {
