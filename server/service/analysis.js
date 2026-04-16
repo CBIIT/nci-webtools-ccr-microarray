@@ -253,6 +253,27 @@ router.post('/getssGSEAWithDiffGenSet', function (req, res) {
   });
 });
 
+// TEMPORARY: browse EFS — /api/analysis/ls?path=/data
+router.get('/ls', function (req, res) {
+  var targetPath = req.query.path || '/data';
+  try {
+    var stat = fs.statSync(targetPath);
+    if (stat.isDirectory()) {
+      var entries = fs.readdirSync(targetPath).map(function (f) {
+        try {
+          var s = fs.statSync(path.join(targetPath, f));
+          return { name: f, type: s.isDirectory() ? 'dir' : 'file', size: s.size };
+        } catch (e) { return { name: f, type: 'error', error: e.message }; }
+      });
+      res.json({ path: targetPath, entries: entries });
+    } else {
+      res.json({ path: targetPath, type: 'file', size: stat.size });
+    }
+  } catch (e) {
+    res.json({ path: targetPath, error: e.message });
+  }
+});
+
 // TEMPORARY DEBUG ENDPOINT — remove after diagnosing worker issue
 router.get('/debug', async function (req, res) {
   var env = process.env;
