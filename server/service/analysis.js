@@ -280,11 +280,14 @@ router.get('/debug', async function (req, res) {
     debug.projects = dirs.slice(0, 10).map(function (d) {
       var statusPath = path.join(uploadDir, d, 'status.json');
       var paramsPath = path.join(uploadDir, d, 'params.json');
+      var files = [];
+      try { files = fs.readdirSync(path.join(uploadDir, d)); } catch (e) { /* ignore */ }
       return {
         id: d,
         hasStatus: fs.existsSync(statusPath),
         hasParams: fs.existsSync(paramsPath),
         status: fs.existsSync(statusPath) ? JSON.parse(fs.readFileSync(statusPath, 'utf8')) : null,
+        files: files,
       };
     });
   } catch (e) {
