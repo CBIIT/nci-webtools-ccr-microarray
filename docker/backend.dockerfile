@@ -32,6 +32,7 @@ RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/n
 # Install R via Posit RPM (matching docker branch)
 ENV R_VER="4.5.3"
 ENV PATH="/opt/R/${R_VER}/bin:${PATH}"
+ENV TAR="/usr/bin/tar --no-same-owner"
 RUN ARCH=$(uname -m) \
     && curl -O https://cdn.posit.co/r/rhel-9/pkgs/R-${R_VER}-1-1.${ARCH}.rpm \
     && dnf install -y R-${R_VER}-1-1.${ARCH}.rpm \
