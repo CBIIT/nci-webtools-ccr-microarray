@@ -1,5 +1,5 @@
 // Results page — loaded via email link: /{projectId}
-// Loads results into the store, then renders the full Analysis page
+// Renders the full Analysis page with loading overlay while fetching results
 "use client";
 
 import { useEffect, useState, use } from "react";
@@ -13,48 +13,57 @@ export default function AnalysisWithCode({
   params: Promise<{ code: string }>;
 }) {
   const { code } = use(params);
-  const store = useAnalysisStore();
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const s = useAnalysisStore.getState();
+    s.setLoading(true, "Loading...");
+
     async function loadResults() {
       try {
         const data = await getResultByProjectId(code);
+        const s = useAnalysisStore.getState();
+
+        // Populate project info (matching legacy getResultByProjectId flow)
         useAnalysisStore.setState({ projectId: code });
-        store.setContrastResults({
+        s.setAccessionCode(data.accessionCode as string || "");
+        s.setGroup1(data.group_1 as string || "");
+        s.setGroup2(data.group_2 as string || "");
+        s.setNormal(data.normal as string || "");
+        s.setChip(data.chip as string || "");
+        if (data.source === "upload") s.setUploaded(true);
+
+        // Populate GSM table with group assignments from results
+        const samples = Object.values(data.gsm as Record<string, Sample>);
+        const groups = data.groups as string[];
+        if (groups) {
+          samples.forEach((sample, i) => {
+            const g = groups[i];
+            sample.groups = (g && g.toLowerCase() !== "others" && g.toLowerCase() !== "ctl") ? g : "";
+          });
+        }
+        s.setDataList(samples);
+        s.setDataLoaded(true);
+
+        // Populate contrast results
+        s.setContrastResults({
           histplotBN: data.histplotBN,
           histplotAN: data.histplotAN,
           heatmap: data.heatmapolt,
         });
-        // Populate GSM table data
-        const samples = Object.values(data.gsm as Record<string, Sample>);
-        store.setDataList(samples);
-        store.setDataLoaded(true);
-
-        store.setContrastComplete(true);
-        store.setCompared(true);
-        store.setDoneGsea(true);
-        store.setActiveTab("gsm");
-        setLoading(false);
+        s.setContrastComplete(true);
+        s.setCompared(true);
+        s.setDoneGsea(true);
+        s.setDisableContrast(true);
+        s.setActiveTab("gsm");
+        s.setLoading(false);
       } catch (err) {
+        useAnalysisStore.getState().setLoading(false);
         setError(err instanceof Error ? err.message : "Failed to load results");
-        setLoading(false);
       }
     }
     loadResults();
   }, [code]);
-
-  if (loading) {
-    return (
-      <div className="app-container py-4 text-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-        <p className="mt-2 text-muted">Loading analysis results...</p>
-      </div>
-    );
-  }
 
   if (error) {
     return (
