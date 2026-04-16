@@ -253,6 +253,83 @@ router.post('/getssGSEAWithDiffGenSet', function (req, res) {
   });
 });
 
+// TEMPORARY DEBUG ENDPOINT — remove after diagnosing worker issue
+router.get('/debug', async function (req, res) {
+  var env = process.env;
+  var uploadDir = config.uploadPath;
+  var debug = {
+    workerEnvVars: {
+      WORKER_TYPE: env.WORKER_TYPE || '(not set)',
+      ECS_CLUSTER: env.ECS_CLUSTER || '(not set)',
+      WORKER_TASK_NAME: env.WORKER_TASK_NAME || '(not set)',
+      SUBNET_IDS: env.SUBNET_IDS || '(not set)',
+      SECURITY_GROUP_IDS: env.SECURITY_GROUP_IDS || '(not set)',
+      INPUT_FOLDER: env.INPUT_FOLDER || '(not set)',
+      APP_BASE_URL: env.APP_BASE_URL || '(not set)',
+      EMAIL_SMTP_HOST: env.EMAIL_SMTP_HOST || '(not set)',
+    },
+    uploadPath: uploadDir,
+    uploadPathExists: fs.existsSync(uploadDir),
+    projects: [],
+    runTaskTest: null,
+  };
+
+  // List project dirs with status.json
+  try {
+    var dirs = fs.readdirSync(uploadDir);
+    debug.projects = dirs.slice(0, 10).map(function (d) {
+      var statusPath = path.join(uploadDir, d, 'status.json');
+      var paramsPath = path.join(uploadDir, d, 'params.json');
+      return {
+        id: d,
+        hasStatus: fs.existsSync(statusPath),
+        hasParams: fs.existsSync(paramsPath),
+        status: fs.existsSync(statusPath) ? JSON.parse(fs.readFileSync(statusPath, 'utf8')) : null,
+      };
+    });
+  } catch (e) {
+    debug.projects = 'Error listing: ' + e.message;
+  }
+
+  // Test RunTask call
+  if (env.WORKER_TYPE === 'fargate' && env.ECS_CLUSTER) {
+    try {
+      var { ECSClient, RunTaskCommand } = require('@aws-sdk/client-ecs');
+      var client = new ECSClient();
+      var response = await client.send(new RunTaskCommand({
+        cluster: env.ECS_CLUSTER,
+        count: 1,
+        launchType: 'FARGATE',
+        networkConfiguration: {
+          awsvpcConfiguration: {
+            securityGroups: (env.SECURITY_GROUP_IDS || '').split(','),
+            subnets: (env.SUBNET_IDS || '').split(','),
+          },
+        },
+        taskDefinition: env.WORKER_TASK_NAME,
+        propagateTags: 'TASK_DEFINITION',
+        overrides: {
+          containerOverrides: [{
+            name: 'worker',
+            command: ['echo', 'debug-test'],
+          }],
+        },
+      }));
+      debug.runTaskTest = {
+        success: true,
+        tasks: (response.tasks || []).map(function (t) { return { taskArn: t.taskArn, lastStatus: t.lastStatus }; }),
+        failures: response.failures || [],
+      };
+    } catch (e) {
+      debug.runTaskTest = { success: false, error: e.message, code: e.Code || e.name };
+    }
+  } else {
+    debug.runTaskTest = 'Skipped — WORKER_TYPE is not fargate or ECS_CLUSTER not set';
+  }
+
+  res.json(debug);
+});
+
 router.post('/qAnalysis', function (req, res) {
   if (!validate(req.body.projectId))
     return res.json({ status: 404, msg: 'Invalid project ID' });
