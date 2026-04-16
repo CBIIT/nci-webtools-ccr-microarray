@@ -281,13 +281,24 @@ router.get('/debug', async function (req, res) {
       var statusPath = path.join(uploadDir, d, 'status.json');
       var paramsPath = path.join(uploadDir, d, 'params.json');
       var files = [];
+      var errFiles = {};
       try { files = fs.readdirSync(path.join(uploadDir, d)); } catch (e) { /* ignore */ }
+      // Read .err files for diagnostics
+      files.filter(function (f) { return f.endsWith('.err'); }).forEach(function (f) {
+        try { errFiles[f] = fs.readFileSync(path.join(uploadDir, d, f), 'utf8').substring(0, 2000); } catch (e) { /* ignore */ }
+      });
+      // Read overall_error.txt if present
+      var overallErrorPath = path.join(uploadDir, d, 'overall_error.txt');
+      if (fs.existsSync(overallErrorPath)) {
+        try { errFiles['overall_error.txt'] = fs.readFileSync(overallErrorPath, 'utf8').substring(0, 2000); } catch (e) { /* ignore */ }
+      }
       return {
         id: d,
         hasStatus: fs.existsSync(statusPath),
         hasParams: fs.existsSync(paramsPath),
         status: fs.existsSync(statusPath) ? JSON.parse(fs.readFileSync(statusPath, 'utf8')) : null,
         files: files,
+        errFiles: errFiles,
       };
     });
   } catch (e) {
