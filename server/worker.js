@@ -100,7 +100,8 @@ function run(id) {
 
       // Send success email
       if (params.email) {
-        var link = (config.microarray_link || '') + '?' + id;
+        var baseUrl = (config.microarray_link || '').replace(/\/+$/, '');
+        var link = baseUrl + '/analysis?' + id;
         var code = '';
         if (params.source === 'fetch') {
           code = '<p>&nbsp;&nbsp;Accession Code: <b>' + params.code + '</b></p>';

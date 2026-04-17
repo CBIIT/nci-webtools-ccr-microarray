@@ -1,15 +1,72 @@
 // Legacy: client/src/components/Analysis/Analysis.js
 "use client";
 
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useAnalysisStore } from "@/stores/analysisStore";
-import { loadGSE, uploadCEL, runContrast, queueAnalysis } from "@/services/api";
+import { loadGSE, uploadCEL, runContrast, queueAnalysis, getResultByProjectId, type Sample } from "@/services/api";
 import GSMData from "@/components/DataBox/GSMData";
 import PrePlotsBox from "@/components/DataBox/PrePlotsBox";
 import PostPlotsBox from "@/components/DataBox/PostPlotsBox";
 import DEGBox from "@/components/DataBox/DEGBox";
 import SSGSEABox from "@/components/DataBox/SSGSEABox";
+
+// Loads results from query param: /analysis?projectId
+function ResultLoader() {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const projectId = searchParams.get("projectId") || searchParams.keys().next().value;
+    if (!projectId || projectId.length !== 32) return;
+
+    const s = useAnalysisStore.getState();
+    s.setLoading(true, "Loading...");
+
+    async function loadResults() {
+      try {
+        const data = await getResultByProjectId(projectId!);
+        const s = useAnalysisStore.getState();
+
+        useAnalysisStore.setState({ projectId });
+        s.setAccessionCode(data.accessionCode as string || "");
+        s.setGroup1(data.group_1 as string || "");
+        s.setGroup2(data.group_2 as string || "");
+        s.setNormal(data.normal as string || "");
+        s.setChip(data.chip as string || "");
+        if (data.source === "upload") s.setUploaded(true);
+
+        const samples = Object.values(data.gsm as Record<string, Sample>);
+        const groups = data.groups as string[];
+        if (groups) {
+          samples.forEach((sample, i) => {
+            const g = groups[i];
+            sample.groups = (g && g.toLowerCase() !== "others" && g.toLowerCase() !== "ctl") ? g : "";
+          });
+        }
+        s.setDataList(samples);
+        s.setDataLoaded(true);
+
+        s.setContrastResults({
+          histplotBN: data.histplotBN,
+          histplotAN: data.histplotAN,
+          heatmap: data.heatmapolt,
+        });
+        s.setContrastComplete(true);
+        s.setCompared(true);
+        s.setDoneGsea(true);
+        s.setDisableContrast(true);
+        s.setActiveTab("gsm");
+        s.setLoading(false);
+      } catch (err) {
+        useAnalysisStore.getState().setLoading(false);
+      }
+    }
+    loadResults();
+  }, [searchParams]);
+
+  return null;
+}
 
 export default function Analysis() {
   const store = useAnalysisStore();
@@ -191,6 +248,7 @@ export default function Analysis() {
 
   return (
     <div className="content-board">
+      <Suspense><ResultLoader /></Suspense>
       <div className="d-flex flex-column flex-lg-row gap-3">
         {/* Left Panel — Workflow */}
         {!panelCollapsed && (
