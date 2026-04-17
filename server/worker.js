@@ -120,9 +120,13 @@ function run(id) {
           params.email,
           subject,
           '',
-          html
+          html,
+          function () {
+            logger.info('[Worker] Success email sent to ' + params.email);
+            process.exit(0);
+          }
         );
-        logger.info('[Worker] Success email sent to ' + params.email);
+        return; // Wait for email callback before exiting
       }
 
       process.exit(0);
@@ -159,9 +163,13 @@ function run(id) {
           params.email,
           subject,
           '',
-          html
+          html,
+          function () {
+            logger.info('[Worker] Failure email sent to ' + params.email);
+            process.exit(1);
+          }
         );
-        logger.info('[Worker] Failure email sent to ' + params.email);
+        return; // Wait for email callback before exiting
       }
 
       process.exit(1);

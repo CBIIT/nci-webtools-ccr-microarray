@@ -46,7 +46,7 @@ let emailFailedTemplate = function (code,time,submit_time,project_id){
         "<p>MicroArray Web Tool</p>";
     }
 
-var sendMail = function(from, to, subject, text, html) {
+var sendMail = function(from, to, subject, text, html, callback) {
     let mailOptions = {
         from: from, // sender address
         to: to, // list of receivers
@@ -57,11 +57,10 @@ var sendMail = function(from, to, subject, text, html) {
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             logger.error(error);
-            //next();
         } else {
             logger.info('Message %s sent: %s', info.messageId, info.response);
-            //next(info);
         }
+        if (callback) callback(error, info);
     });
 };
 
