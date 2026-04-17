@@ -204,6 +204,10 @@ export class MicroarrayStack extends cdk.Stack {
       memoryLimitMiB: ms.memory,
       executionRole,
       taskRole,
+      runtimePlatform: {
+        cpuArchitecture: ecs.CpuArchitecture.ARM64,
+        operatingSystemFamily: ecs.OperatingSystemFamily.LINUX,
+      },
     });
 
     taskDef.addContainer("WebContainer", {
@@ -371,6 +375,10 @@ export class MicroarrayStack extends cdk.Stack {
       memoryLimitMiB: et.memory,
       executionRole,
       taskRole,
+      runtimePlatform: {
+        cpuArchitecture: ecs.CpuArchitecture.ARM64,
+        operatingSystemFamily: ecs.OperatingSystemFamily.LINUX,
+      },
     });
 
     workerTaskDef.addContainer("WorkerContainer", {
