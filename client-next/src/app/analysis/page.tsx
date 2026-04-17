@@ -127,6 +127,8 @@ export default function Analysis() {
 
   const [contrastError, setContrastError] = useState("");
   const [panelCollapsed, setPanelCollapsed] = useState(false);
+  const [showQueueWarning, setShowQueueWarning] = useState(false);
+  const [showQueueSuccess, setShowQueueSuccess] = useState(false);
 
   const contrastMutation = useMutation({
     mutationFn: runContrast,
@@ -226,7 +228,7 @@ export default function Analysis() {
       })
         .then(() => {
           store.setLoading(false);
-          alert("Job submitted! You will receive an email when the analysis is complete.");
+          setShowQueueSuccess(true);
         })
         .catch((err: Error) => {
           store.setLoading(false);
@@ -410,7 +412,13 @@ export default function Analysis() {
                 type="checkbox"
                 id="queueCheckbox"
                 checked={store.useQueue}
-                onChange={(e) => store.setUseQueue(e.target.checked)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    store.setUseQueue(true);
+                  } else {
+                    setShowQueueWarning(true);
+                  }
+                }}
               />
               <label className="form-check-label" style={{ fontSize: "0.85em" }} htmlFor="queueCheckbox">Submit this job to a Queue</label>
             </div>
@@ -520,6 +528,43 @@ export default function Analysis() {
           </div>
         </div>
       </div>
+
+      {/* Interactive Mode Warning Modal */}
+      {showQueueWarning && (
+        <div className="modal-backdrop-custom" onClick={() => setShowQueueWarning(false)}>
+          <div className="modal-content-custom" style={{ maxWidth: "500px", minWidth: "auto" }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header-custom">
+              <h5 className="mb-0">Enabling Interactive Mode</h5>
+            </div>
+            <div className="modal-body-custom">
+              <p>Contrasts with large data sets may timeout and not complete in the browser.</p>
+              <p>Click OK to enable Interactive mode.</p>
+              <div className="d-flex justify-content-end gap-2 mt-3">
+                <button className="btn btn-sm btn-outline-secondary px-3" onClick={() => setShowQueueWarning(false)}>Cancel</button>
+                <button className="btn btn-sm btn-nci-primary px-3" onClick={() => { store.setUseQueue(false); setShowQueueWarning(false); }}>OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Queue Submission Success Modal */}
+      {showQueueSuccess && (
+        <div className="modal-backdrop-custom" onClick={() => setShowQueueSuccess(false)}>
+          <div className="modal-content-custom" style={{ maxWidth: "500px", minWidth: "auto" }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header-custom">
+              <h5 className="mb-0">MicroArray Queue</h5>
+            </div>
+            <div className="modal-body-custom">
+              <p>Your job will be sent to the queuing system for processing. Results will be sent to you via email when all model runs are completed.</p>
+              <p>Please note: Depending on model complexity and queue length it could be up to a day before you receive your results.</p>
+              <div className="d-flex justify-content-end mt-3">
+                <button className="btn btn-sm btn-nci-primary px-3" onClick={() => setShowQueueSuccess(false)}>Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
