@@ -6,6 +6,7 @@ import { useAnalysisStore } from "@/stores/analysisStore";
 import { getGSEA } from "@/services/api";
 import TableControls from "./TableControls";
 import formatCell from "./formatCell";
+import { buildSettingsRows, exportTableToXlsx } from "@/utils/exportTable";
 
 const COLUMNS = [
   { key: "V1", label: "NAME", search: "name", wide: true },
@@ -73,6 +74,31 @@ export default function SSGSEATable() {
     setPageNumber(1);
   }
 
+  const [exporting, setExporting] = useState(false);
+
+  async function handleExport() {
+    setExporting(true);
+    try {
+      const result = await getGSEA({
+        projectId: store.projectId,
+        page_size: 100000,
+        page_number: 1,
+        sorting,
+        search_keyword: search,
+      });
+      await exportTableToXlsx(
+        buildSettingsRows(store),
+        COLUMNS,
+        result.records,
+        `ssGSEA_${store.projectId}.xlsx`
+      );
+    } catch (err) {
+      console.error("Export failed:", err);
+    } finally {
+      setExporting(false);
+    }
+  }
+
   const totalPages = Math.ceil(totalCount / pageSize);
   const startRow = (pageNumber - 1) * pageSize + 1;
   const endRow = Math.min(pageNumber * pageSize, totalCount);
@@ -80,6 +106,12 @@ export default function SSGSEATable() {
   return (
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
+
+      <div className="d-flex justify-content-end mb-2">
+        <button className="btn btn-sm btn-nci-primary px-3" onClick={handleExport} disabled={exporting}>
+          {exporting ? "Exporting..." : "Export"}
+        </button>
+      </div>
 
       <TableControls
         pageSize={pageSize}

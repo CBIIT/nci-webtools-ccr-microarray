@@ -3,9 +3,25 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAnalysisStore } from "@/stores/analysisStore";
-import { getDEG } from "@/services/api";
+import { getDEG, getNormalAll } from "@/services/api";
 import TableControls from "./TableControls";
 import formatCell from "./formatCell";
+import { buildSettingsRows, exportTableToXlsx, exportNormalizedXlsx, exportNormalizedTsv } from "@/utils/exportTable";
+
+const EXPORT_COLUMNS = [
+  { key: "SYMBOL", label: "SYMBOL" },
+  { key: "FC", label: "FC" },
+  { key: "logFC", label: "logFC" },
+  { key: "P.Value", label: "P.Value" },
+  { key: "adj.P.Val", label: "adj.P.Val" },
+  { key: "AveExpr", label: "AveExpr" },
+  { key: "ACCNUM", label: "ACCNUM" },
+  { key: "DESC", label: "DESC" },
+  { key: "ENTREZ", label: "ENTREZ" },
+  { key: "probsetID", label: "probsetID" },
+  { key: "t", label: "t" },
+  { key: "B", label: "B" },
+];
 
 const COLUMNS = [
   { key: "SYMBOL", label: "SYMBOL", search: "search_symbol" },
@@ -81,6 +97,55 @@ export default function DEGTable() {
     setPageNumber(1);
   }
 
+  const [exporting, setExporting] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  async function handleExportDEG() {
+    setExporting(true);
+    setDropdownOpen(false);
+    try {
+      const result = await getDEG({
+        projectId: store.projectId,
+        page_size: 100000,
+        page_number: 1,
+        sorting,
+        search_keyword: search,
+      });
+      await exportTableToXlsx(
+        buildSettingsRows(store),
+        EXPORT_COLUMNS,
+        result.records,
+        `DEG_${store.projectId}.xlsx`
+      );
+    } catch (err) {
+      console.error("Export failed:", err);
+    } finally {
+      setExporting(false);
+    }
+  }
+
+  async function handleExportNormalXlsx() {
+    setExporting(true);
+    setDropdownOpen(false);
+    try {
+      const data = await getNormalAll(store.projectId);
+      await exportNormalizedXlsx(data, `DEG_Normalized_Data_for_All_Samples${store.projectId}.xlsx`);
+    } catch (err) {
+      console.error("Export failed:", err);
+    } finally {
+      setExporting(false);
+    }
+  }
+
+  function handleExportNormalTsv() {
+    setExporting(true);
+    setDropdownOpen(false);
+    getNormalAll(store.projectId)
+      .then((data) => exportNormalizedTsv(data, `DEG_Normalized_Data_for_All_Samples${store.projectId}.tsv`))
+      .catch((err) => console.error("Export failed:", err))
+      .finally(() => setExporting(false));
+  }
+
   const totalPages = Math.ceil(totalCount / pageSize);
   const startRow = (pageNumber - 1) * pageSize + 1;
   const endRow = Math.min(pageNumber * pageSize, totalCount);
@@ -88,6 +153,26 @@ export default function DEGTable() {
   return (
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
+
+      <div className="d-flex justify-content-end align-items-center mb-2">
+        <div className="dropdown">
+          <button
+            className="btn btn-sm btn-nci-primary dropdown-toggle px-3"
+
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            disabled={exporting}
+          >
+            {exporting ? "Exporting..." : "Export"}
+          </button>
+          {dropdownOpen && (
+            <ul className="dropdown-menu show" style={{ right: 0, left: "auto" }}>
+              <li><button className="dropdown-item" onClick={handleExportDEG}>DEG Table Results (.xlsx)</button></li>
+              <li><button className="dropdown-item" onClick={handleExportNormalXlsx}>Normalized Data (.xlsx)</button></li>
+              <li><button className="dropdown-item" onClick={handleExportNormalTsv}>Normalized Data (.tsv)</button></li>
+            </ul>
+          )}
+        </div>
+      </div>
 
       <TableControls
         pageSize={pageSize}

@@ -213,6 +213,16 @@ export async function getDownPathways(params: PaginationParams) {
   return res.data.data;
 }
 
+// ── Normalized Data ─────────────────────────────────────────────
+
+export async function getNormalAll(projectId: string) {
+  const res = await api.post<ApiResponse<Record<string, unknown>[]>>("/getNormalAll", { projectId });
+  if (res.data.status !== 200 || !res.data.data) {
+    throw new Error(res.data.msg || "Failed to load normalized data");
+  }
+  return res.data.data;
+}
+
 // ── Plots ───────────────────────────────────────────────────────
 
 export async function getPlot(endpoint: string, projectId: string) {

@@ -4,9 +4,10 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useAnalysisStore } from "@/stores/analysisStore";
-import { getUpPathways, getDownPathways, getPathwayHeatmap } from "@/services/api";
+import { getUpPathways, getDownPathways, getPathwayHeatmap, getNormalAll } from "@/services/api";
 import TableControls from "./TableControls";
 import formatCell from "./formatCell";
+import { buildSettingsRows, exportTableToXlsx, exportNormalizedXlsx, exportNormalizedTsv } from "@/utils/exportTable";
 
 const COLUMNS = [
   { key: "Pathway_Name", label: "Pathway Name", search: "Pathway_Name", wide: true },
@@ -107,6 +108,56 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
     }
   }
 
+  const [exporting, setExporting] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dirLabel = direction === "up" ? "Upregulated" : "Downregulated";
+
+  async function handleExportPathways() {
+    setExporting(true);
+    setDropdownOpen(false);
+    try {
+      const result = await fetchFn({
+        projectId: store.projectId,
+        page_size: 100000,
+        page_number: 1,
+        sorting,
+        search_keyword: search,
+      });
+      await exportTableToXlsx(
+        buildSettingsRows(store),
+        COLUMNS,
+        result.records,
+        `Pathways_${dirLabel}_${store.projectId}.xlsx`
+      );
+    } catch (err) {
+      console.error("Export failed:", err);
+    } finally {
+      setExporting(false);
+    }
+  }
+
+  async function handleExportNormalXlsx() {
+    setExporting(true);
+    setDropdownOpen(false);
+    try {
+      const data = await getNormalAll(store.projectId);
+      await exportNormalizedXlsx(data, `DEG_Normalized_Data_for_All_Samples${store.projectId}.xlsx`);
+    } catch (err) {
+      console.error("Export failed:", err);
+    } finally {
+      setExporting(false);
+    }
+  }
+
+  function handleExportNormalTsv() {
+    setExporting(true);
+    setDropdownOpen(false);
+    getNormalAll(store.projectId)
+      .then((data) => exportNormalizedTsv(data, `DEG_Normalized_Data_for_All_Samples${store.projectId}.tsv`))
+      .catch((err) => console.error("Export failed:", err))
+      .finally(() => setExporting(false));
+  }
+
   const totalPages = Math.ceil(totalCount / pageSize);
   const startRow = (pageNumber - 1) * pageSize + 1;
   const endRow = Math.min(pageNumber * pageSize, totalCount);
@@ -114,6 +165,26 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
   return (
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
+
+      <div className="d-flex justify-content-end align-items-center mb-2">
+        <div className="dropdown">
+          <button
+            className="btn btn-sm btn-nci-primary dropdown-toggle px-3"
+
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            disabled={exporting}
+          >
+            {exporting ? "Exporting..." : "Export"}
+          </button>
+          {dropdownOpen && (
+            <ul className="dropdown-menu show" style={{ right: 0, left: "auto" }}>
+              <li><button className="dropdown-item" onClick={handleExportPathways}>Pathways for {dirLabel} Genes (.xlsx)</button></li>
+              <li><button className="dropdown-item" onClick={handleExportNormalXlsx}>Normalized Data (.xlsx)</button></li>
+              <li><button className="dropdown-item" onClick={handleExportNormalTsv}>Normalized Data (.tsv)</button></li>
+            </ul>
+          )}
+        </div>
+      </div>
 
       <TableControls
         pageSize={pageSize}

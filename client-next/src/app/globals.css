@@ -152,6 +152,10 @@ body {
   display: block;
 }
 
+.dropdown-toggle::after {
+  margin-left: 0.5em;
+}
+
 .btn-nci-primary {
   color: #fff;
   background-color: #2971a5;
