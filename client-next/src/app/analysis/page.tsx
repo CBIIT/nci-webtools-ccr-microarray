@@ -296,7 +296,7 @@ export default function Analysis() {
                   {geoMutation.isPending && <span className="spinner-border spinner-border-sm me-1" role="status" />}
                   Load
                 </button>
-                <button className="btn btn-nci-primary w-100 mt-2" onClick={handleReset} disabled={isLoading}>Reset</button>
+                <button className="btn btn-nci-primary w-100 mt-2" onClick={handleReset} disabled={isLoading} data-tooltip="Reset to start a new GEO Analysis">Reset</button>
               </div>
             ) : (
               <div key="cel-inputs">
@@ -336,7 +336,7 @@ export default function Analysis() {
                     {celMutation.isPending && <span className="spinner-border spinner-border-sm me-1" role="status" />}
                     Load
                   </button>
-                  <button className="btn btn-nci-primary flex-fill" onClick={handleReset} disabled={isLoading}>Reset</button>
+                  <button className="btn btn-nci-primary flex-fill" onClick={handleReset} disabled={isLoading} data-tooltip="Reset to start a new CEL File Analysis">Reset</button>
                 </div>
               </div>
             )}
@@ -441,7 +441,7 @@ export default function Analysis() {
           {/* Run / Reset buttons (outside sub-boxes) */}
           <div className="mx-2 mb-2">
             <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading || store.disableContrast} onClick={handleRunContrast}>Run Contrast</button>
-            <button className="btn btn-nci-primary w-100" onClick={() => { store.resetContrast(); setContrastError(""); setPanelCollapsed(false); }} disabled={isLoading}>Reset</button>
+            <button className="btn btn-nci-primary w-100" onClick={() => { store.resetContrast(); setContrastError(""); setPanelCollapsed(false); }} disabled={isLoading} data-tooltip="Reset to start a new contrast analysis">Reset</button>
             {contrastError && (
               <p style={{ color: "#b22222", fontSize: "0.85rem" }} className="mt-1 mb-0">{contrastError}</p>
             )}
