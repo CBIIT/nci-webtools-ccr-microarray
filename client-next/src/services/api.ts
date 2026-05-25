@@ -57,24 +57,37 @@ export interface GSEResult {
 function parseGSEResponse(raw: string): GSEResult {
   const idx = raw.indexOf("wrapperReturn");
   if (idx === -1) throw new Error("Invalid GEO response: missing wrapperReturn delimiter");
-  const json = raw.substring(idx + 15);
-  const parsed = JSON.parse(decodeURIComponent(json));
+  const after = raw.substring(idx + 15);
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(decodeURIComponent(after));
+  } catch {
+    // R returned an error string, not JSON — surface it as the error message
+    const cleaned = after.replace(/^["'\s]+|["'\s]+$/g, "").trim();
+    throw new Error(cleaned || "Invalid GEO response format");
+  }
+
+  // R returned an error string (not a data object) — throw it as the error message
+  if (typeof parsed === "string") {
+    throw new Error(parsed);
+  }
 
   // Single-chip: { files: [...] }
-  if (parsed.files) {
-    return { files: parsed.files, multichip: false, chips: [], chipData: {} };
+  if (typeof parsed === "object" && parsed !== null && "files" in parsed) {
+    return { files: (parsed as { files: Sample[] }).files, multichip: false, chips: [], chipData: {} };
   }
 
   // Multi-chip: { GPL96: [...], GPL97: [...] }
-  if (typeof parsed === "object" && Object.keys(parsed).length) {
+  if (typeof parsed === "object" && parsed !== null && Object.keys(parsed).length) {
     const chips = Object.keys(parsed);
     chips.forEach((chip) => {
-      parsed[chip].forEach((sample: Sample) => {
+      (parsed as Record<string, Sample[]>)[chip].forEach((sample: Sample) => {
         sample.groups = "";
       });
     });
     const firstChip = chips[0];
-    return { files: parsed[firstChip], multichip: true, chips, chipData: parsed };
+    return { files: (parsed as Record<string, Sample[]>)[firstChip], multichip: true, chips, chipData: parsed as Record<string, Sample[]> };
   }
 
   throw new Error("Invalid GEO response format");

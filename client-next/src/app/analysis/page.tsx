@@ -71,11 +71,11 @@ function ResultLoader() {
 export default function Analysis() {
   const store = useAnalysisStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const [loadError, setLoadError] = useState("");
 
   const geoMutation = useMutation({
     mutationFn: () => loadGSE(store.accessionCode, store.projectId, store.loadChip),
-    onMutate: () => store.setLoading(true, "Loading GEO Data..."),
+    onMutate: () => { store.setLoading(true, "Loading GEO Data..."); setLoadError(""); },
     onSuccess: (data) => {
       if (data.multichip) {
         store.setMultichip(true);
@@ -92,7 +92,7 @@ export default function Analysis() {
     },
     onError: (err: Error) => {
       store.setLoading(false);
-      alert(err.message);
+      setLoadError(err.message);
     },
   });
 
@@ -106,12 +106,13 @@ export default function Analysis() {
     },
     onError: (err: Error) => {
       store.setLoading(false);
-      alert(err.message);
+      setLoadError(err.message);
     },
   });
 
   function handleLoadGEO() {
-    if (!store.accessionCode.trim()) return alert("Please enter an accession code.");
+    if (!store.accessionCode.trim()) return setLoadError("Accession Code is required.");
+    setLoadError("");
     geoMutation.mutate();
   }
 
@@ -243,6 +244,7 @@ export default function Analysis() {
 
   function handleReset() {
     store.reset();
+    setLoadError("");
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
@@ -519,7 +521,12 @@ export default function Analysis() {
 
           {/* Tab Content */}
           <div className="tab-content-panel">
-            {store.activeTab === "gsm" && <GSMData />}
+            {store.activeTab === "gsm" && (
+              <>
+                {loadError && <p style={{ color: "#b22222", fontSize: "1.1rem", margin: "1rem" }}>{loadError}</p>}
+                {(!loadError || store.dataLoaded) && <GSMData />}
+              </>
+            )}
 
             {store.activeTab === "pre" && <PrePlotsBox />}
             {store.activeTab === "post" && <PostPlotsBox />}
