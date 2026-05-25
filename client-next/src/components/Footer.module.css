@@ -67,13 +67,13 @@
 .usaFooterNciListHeader {
   font-weight: 600;
   font-size: 1rem;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.2rem;
   display: block;
 }
 
 .usaFooterSecondaryLink {
   list-style: none;
-  padding: 0.4rem 0;
+  padding: 0;
 }
 
 .usaFooterSecondaryLink a {
@@ -111,6 +111,14 @@
 @media (min-width: 992px) {
   .desktopNav {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .desktopNav > :nth-child(2) {
+    justify-self: center;
+  }
+
+  .desktopNav > :last-child {
+    justify-self: end;
   }
 }
 
