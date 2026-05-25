@@ -101,6 +101,7 @@ export default function GroupBatchModal({
       complete: (results) => {
         const rows = (results.data as string[][])
           .filter((row) => row.length >= 2)
+          .filter((row, i) => i > 0 || !["gsm", "group", "batch"].includes(row[0]?.trim().toLowerCase()))
           .map((row) => ({
             gsm: row[0]?.trim() || "",
             group: row[1]?.trim() || "",
