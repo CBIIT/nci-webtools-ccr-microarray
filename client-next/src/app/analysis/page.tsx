@@ -277,7 +277,7 @@ export default function Analysis() {
                   id="accessionCode"
                   type="text"
                   value={store.accessionCode ?? ""}
-                  disabled={store.fileList.length > 0}
+                  disabled={store.dataLoaded || store.fileList.length > 0}
                   onChange={(e) => store.setAccessionCode(e.target.value)}
                 />
 
