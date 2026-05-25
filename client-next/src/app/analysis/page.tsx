@@ -420,9 +420,8 @@ export default function Analysis() {
                   }
                 }}
               />
-              <label className="form-check-label" style={{ fontSize: "0.85em" }} htmlFor="queueCheckbox">Submit this job to a Queue</label>
+              <label className="form-check-label" style={{ fontSize: "0.85em" }} htmlFor="queueCheckbox">Long-running Job</label>
             </div>
-            <small className="text-muted fst-italic d-block mb-2" style={{ fontSize: "0.75em" }}>(Jobs currently enqueued: 0)</small>
 
             <label className="title" htmlFor="inputEmail">Email<span className="required"> *</span></label>
             <input
@@ -435,7 +434,7 @@ export default function Analysis() {
               onChange={(e) => store.setEmail(e.target.value)}
             />
 
-            <small className="text-muted fst-italic" style={{ fontSize: "0.75em" }}>Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</small>
+            <small className="text-muted fst-italic" style={{ fontSize: "0.75em" }}>You will receive an email when analysis is complete.</small>
           </div>
 
           {/* Run / Reset buttons (outside sub-boxes) */}
