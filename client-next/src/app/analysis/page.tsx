@@ -228,6 +228,7 @@ export default function Analysis() {
       })
         .then(() => {
           store.setLoading(false);
+          store.setDisableContrast(true);
           setShowQueueSuccess(true);
         })
         .catch((err: Error) => {
