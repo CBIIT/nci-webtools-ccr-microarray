@@ -173,8 +173,8 @@ export default function Analysis() {
     const batchSamples: Record<string, [boolean, boolean]> = {};
     let allOthers = true;
     store.dataList.forEach((sample, i) => {
-      const batch = sample.batch || "Others";
-      if (batch !== "Others") {
+      const batch = sample.batch || "";
+      if (batch) {
         allOthers = false;
         if (!batchSamples[batch]) batchSamples[batch] = [false, false];
         if (payload.groups[i] === store.group1) batchSamples[batch][0] = true;
