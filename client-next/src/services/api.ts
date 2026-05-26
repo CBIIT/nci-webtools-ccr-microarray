@@ -103,13 +103,21 @@ export async function loadGSE(code: string, projectId: string, chip?: string) {
   return parseGSEResponse(res.data.data);
 }
 
+const MAX_UPLOAD_SIZE = 100 * 1024 * 1024; // must match next.config.ts proxyClientMaxBodySize
+
 export async function uploadCEL(projectId: string, files: File[]) {
+  const totalSize = files.reduce((sum, f) => sum + f.size, 0);
+  if (totalSize > MAX_UPLOAD_SIZE) {
+    throw new Error(`Total file size (${Math.round(totalSize / (1024 * 1024))}MB) exceeds the ${Math.round(MAX_UPLOAD_SIZE / (1024 * 1024))}MB upload limit.`);
+  }
+
   const formData = new FormData();
   formData.append("projectId", projectId);
   files.forEach((file) => formData.append("cels", file));
 
   const res = await api.post<ApiResponse<string>>("/upload", formData, {
     headers: { "Content-Type": "multipart/form-data" },
+    timeout: 0,
   });
   if (res.data.status !== 200 || !res.data.data) {
     throw new Error(res.data.msg || "Failed to upload CEL files");

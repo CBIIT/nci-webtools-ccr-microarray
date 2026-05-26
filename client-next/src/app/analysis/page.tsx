@@ -68,6 +68,15 @@ function ResultLoader() {
   return null;
 }
 
+function formatErrorMessage(msg: string): string {
+  const match = msg.match(/timeout of (\d+)ms/);
+  if (match) {
+    const minutes = Math.round(parseInt(match[1]) / 60000);
+    return `Request timed out after ${minutes} minute${minutes !== 1 ? "s" : ""}. Please try again or submit as a queue job.`;
+  }
+  return msg;
+}
+
 export default function Analysis() {
   const store = useAnalysisStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -92,7 +101,7 @@ export default function Analysis() {
     },
     onError: (err: Error) => {
       store.setLoading(false);
-      alert(err.message);
+      alert(formatErrorMessage(err.message));
     },
   });
 
@@ -106,7 +115,7 @@ export default function Analysis() {
     },
     onError: (err: Error) => {
       store.setLoading(false);
-      alert(err.message);
+      alert(formatErrorMessage(err.message));
     },
   });
 
