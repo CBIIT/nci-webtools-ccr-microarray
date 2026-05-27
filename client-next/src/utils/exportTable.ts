@@ -15,9 +15,9 @@ interface StoreInfo {
 
 export function buildSettingsRows(store: StoreInfo): (string | null)[][] {
   const rows: (string | null)[][] = [
-    ["Analysis Type", store.analysisType === "0" ? "GEO Data" : "CEL Files"],
+    ["Analysis Type", store.analysisType === "GEO" ? "GEO Data" : "CEL Files"],
   ];
-  if (store.analysisType === "0") {
+  if (store.analysisType === "GEO") {
     rows.push(["Accession Code", store.accessionCode]);
   } else {
     rows.push(["Upload Data", store.fileList.map((f) => f.name).join(", ")]);

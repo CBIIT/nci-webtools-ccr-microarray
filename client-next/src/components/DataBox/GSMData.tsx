@@ -166,8 +166,8 @@ export default function GSMData() {
   async function handleExport() {
     // Sheet 1: Settings
     const settingsData: (string | null)[][] = [
-      ["Analysis Type", store.analysisType === "0" ? "GEO Data" : "CEL Files"],
-      store.analysisType === "0"
+      ["Analysis Type", store.analysisType === "GEO" ? "GEO Data" : "CEL Files"],
+      store.analysisType === "GEO"
         ? ["Accession Code", store.accessionCode]
         : ["Upload Data", store.fileList.map((f: File) => f.name).join(", ")],
     ];
