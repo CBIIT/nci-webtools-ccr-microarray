@@ -407,6 +407,39 @@ body {
   cursor: default;
 }
 
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-left: 10px;
+  background: #fff;
+  color: #000;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+[data-tooltip]:hover::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-left: -2px;
+  border: 6px solid transparent;
+  border-right-color: #000;
+  z-index: 1001;
+  pointer-events: none;
+}
+
 .cell-tooltip-popup {
   position: fixed;
   background: #fff;
