@@ -220,7 +220,7 @@ export default function Analysis() {
         setContrastError("Please enter an email address for queue notifications.");
         return;
       }
-      store.setLoading(true, "Submitting to Queue...");
+      store.setLoading(true, "Submitting job...");
       queueAnalysis({
         ...contrastPayload,
         email: store.email,
@@ -553,11 +553,11 @@ export default function Analysis() {
         <div className="modal-backdrop-custom" onClick={() => setShowQueueSuccess(false)}>
           <div className="modal-content-custom" style={{ maxWidth: "500px", minWidth: "auto" }} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header-custom">
-              <h5 className="mb-0">MicroArray Queue</h5>
+              <h5 className="mb-0">MicroArray Job</h5>
             </div>
             <div className="modal-body-custom">
-              <p>Your job will be sent to the queuing system for processing. Results will be sent to you via email when all model runs are completed.</p>
-              <p>Please note: Depending on model complexity and queue length it could be up to a day before you receive your results.</p>
+              <p>Your job was submitted for processing. Results will be sent to you via email when all model runs are completed.</p>
+              <p>Please note: Depending on model complexity it could be up to a day before you receive your results.</p>
               <div className="d-flex justify-content-end mt-3">
                 <button className="btn btn-sm btn-nci-primary px-3" onClick={() => setShowQueueSuccess(false)}>Close</button>
               </div>
