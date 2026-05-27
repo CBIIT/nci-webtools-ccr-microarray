@@ -220,7 +220,7 @@ export default function Analysis() {
         setContrastError("Please enter an email address for queue notifications.");
         return;
       }
-      store.setLoading(true, "Submitting to Queue...");
+      store.setLoading(true, "Submitting job...");
       queueAnalysis({
         ...contrastPayload,
         email: store.email,
@@ -296,7 +296,7 @@ export default function Analysis() {
                   {geoMutation.isPending && <span className="spinner-border spinner-border-sm me-1" role="status" />}
                   Load
                 </button>
-                <button className="btn btn-nci-primary w-100 mt-2" onClick={handleReset} disabled={isLoading}>Reset</button>
+                <button className="btn btn-nci-primary w-100 mt-2" onClick={handleReset} disabled={isLoading} data-tooltip="Reset to start a new GEO Analysis">Reset</button>
               </div>
             ) : (
               <div key="cel-inputs">
@@ -336,7 +336,7 @@ export default function Analysis() {
                     {celMutation.isPending && <span className="spinner-border spinner-border-sm me-1" role="status" />}
                     Load
                   </button>
-                  <button className="btn btn-nci-primary flex-fill" onClick={handleReset} disabled={isLoading}>Reset</button>
+                  <button className="btn btn-nci-primary flex-fill" onClick={handleReset} disabled={isLoading} data-tooltip="Reset to start a new CEL File Analysis">Reset</button>
                 </div>
               </div>
             )}
@@ -420,9 +420,8 @@ export default function Analysis() {
                   }
                 }}
               />
-              <label className="form-check-label" style={{ fontSize: "0.85em" }} htmlFor="queueCheckbox">Submit this job to a Queue</label>
+              <label className="form-check-label" style={{ fontSize: "0.85em" }} htmlFor="queueCheckbox">Long-running Job</label>
             </div>
-            <small className="text-muted fst-italic d-block mb-2" style={{ fontSize: "0.75em" }}>(Jobs currently enqueued: 0)</small>
 
             <label className="title" htmlFor="inputEmail">Email<span className="required"> *</span></label>
             <input
@@ -435,13 +434,13 @@ export default function Analysis() {
               onChange={(e) => store.setEmail(e.target.value)}
             />
 
-            <small className="text-muted fst-italic" style={{ fontSize: "0.75em" }}>Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</small>
+            <small className="text-muted fst-italic" style={{ fontSize: "0.75em" }}>You will receive an email when analysis is complete.</small>
           </div>
 
           {/* Run / Reset buttons (outside sub-boxes) */}
           <div className="mx-2 mb-2">
-            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading || store.disableContrast} onClick={handleRunContrast}>Run Contrast</button>
-            <button className="btn btn-nci-primary w-100" onClick={() => { store.resetContrast(); setContrastError(""); setPanelCollapsed(false); }} disabled={isLoading}>Reset</button>
+            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading || store.disableContrast || !store.group1 || !store.group2 || store.group1 === store.group2} onClick={handleRunContrast}>Run Contrast</button>
+            <button className="btn btn-nci-primary w-100" onClick={() => { store.resetContrast(); setContrastError(""); setPanelCollapsed(false); }} disabled={isLoading} data-tooltip="Reset to start a new contrast analysis">Reset</button>
             {contrastError && (
               <p style={{ color: "#b22222", fontSize: "0.85rem" }} className="mt-1 mb-0">{contrastError}</p>
             )}
@@ -553,11 +552,11 @@ export default function Analysis() {
         <div className="modal-backdrop-custom" onClick={() => setShowQueueSuccess(false)}>
           <div className="modal-content-custom" style={{ maxWidth: "500px", minWidth: "auto" }} onClick={(e) => e.stopPropagation()}>
             <div className="modal-header-custom">
-              <h5 className="mb-0">MicroArray Queue</h5>
+              <h5 className="mb-0">MicroArray Job</h5>
             </div>
             <div className="modal-body-custom">
-              <p>Your job will be sent to the queuing system for processing. Results will be sent to you via email when all model runs are completed.</p>
-              <p>Please note: Depending on model complexity and queue length it could be up to a day before you receive your results.</p>
+              <p>Your job was submitted for processing. Results will be sent to you via email when all model runs are completed.</p>
+              <p>Please note: Depending on model complexity it could be up to a day before you receive your results.</p>
               <div className="d-flex justify-content-end mt-3">
                 <button className="btn btn-sm btn-nci-primary px-3" onClick={() => setShowQueueSuccess(false)}>Close</button>
               </div>
