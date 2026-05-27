@@ -179,13 +179,13 @@ export default function Analysis() {
               id="analysisType"
               value={store.analysisType}
               disabled={store.dataLoaded}
-              onChange={(e) => store.setAnalysisType(e.target.value as "0" | "1")}
+              onChange={(e) => store.setAnalysisType(e.target.value as "GEO" | "CEL")}
             >
-              <option value="0">GEO Data</option>
-              <option value="1">CEL Files</option>
+              <option value="GEO">GEO Data</option>
+              <option value="CEL">CEL Files</option>
             </select>
 
-            {store.analysisType === "0" ? (
+            {store.analysisType === "GEO" ? (
               <div key="geo-inputs">
                 <label className="title" htmlFor="accessionCode">Accession Code<span className="required"> *</span></label>
                 <input

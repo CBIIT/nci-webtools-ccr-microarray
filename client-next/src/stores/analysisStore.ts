@@ -3,7 +3,7 @@ import type { Sample } from "@/services/api";
 
 // ── Types ───────────────────────────────────────────────────────
 
-export type AnalysisType = "0" | "1"; // 0 = GEO, 1 = CEL
+export type AnalysisType = "GEO" | "CEL";
 
 export interface PlotData {
   data: unknown[];
@@ -223,7 +223,7 @@ function generateId(): string {
 
 const initialState: AnalysisState = {
   projectId: generateId(),
-  analysisType: "0",
+  analysisType: "GEO",
   accessionCode: "",
   chip: "",
   init: false,
