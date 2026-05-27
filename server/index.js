@@ -5,7 +5,6 @@ var config = require('./config');
 var app = express();
 var logger = require('./components/logger');
 var fs = require('fs');
-const AWS = require('aws-sdk');
 var queue = require('./components/queue');
 
 require('./routes')(app);

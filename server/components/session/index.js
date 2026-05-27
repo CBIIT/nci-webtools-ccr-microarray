@@ -14,7 +14,7 @@
  */
 
 var cookie = require('cookie');
-var crc = require('crc').crc32;
+var crypto = require('crypto');
 var debug = require('debug')('express-session');
 var deprecate = require('depd')('express-session');
 var parseUrl = require('parseurl');
@@ -577,14 +577,14 @@ function getcookie(req, name, secrets) {
  */
 
 function hash(sess) {
-  return crc(JSON.stringify("sess", function (key, val) {
+  return crypto.createHash('sha256').update(JSON.stringify(sess, function (key, val) {
     // ignore sess.cookie property
     if (this === sess && key === 'cookie') {
       return
     }
 
     return val
-  }))
+  })).digest('hex')
 }
 
 /**

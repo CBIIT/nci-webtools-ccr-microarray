@@ -23,11 +23,12 @@ mkdir -p data tmp log
 ```
 The `data/` directory holds GMT reference files. For local testing, this can be empty — it's only needed for the contrast/pathway analysis steps.
 
-**3. Build and run the backend container**
+**3. Build and run both containers**
 ```bash
-docker compose build backend
-docker compose up backend
+docker compose build
+docker compose up
 ```
+This starts the backend (port 9220) and the Next.js frontend (port 3000).
 
 Verify the backend is running:
 ```bash
@@ -35,14 +36,24 @@ curl http://localhost:9220/ping
 # Should return: true
 ```
 
-**4. Run the Next.js frontend (dev mode)**
+Frontend available at `http://localhost:3000`
+
+You can also build/run them individually:
+```bash
+docker compose build backend
+docker compose up backend        # backend only
+```
+
+**4. Dev mode (optional — hot reload for frontend development)**
+
+If you're actively developing the frontend and want hot reload instead of the container:
 ```bash
 cd client-next
 npm install
 echo "NEXT_PUBLIC_API_URL=http://localhost:9220/api/analysis" > .env.local
 npm run dev
 ```
-Frontend available at `http://localhost:3000`
+This runs the Next.js dev server at `http://localhost:3000` against the containerized backend. Stop the frontend container first if it's running to free port 3000.
 
 **5. Run the legacy frontend (optional, for comparison)**
 ```bash

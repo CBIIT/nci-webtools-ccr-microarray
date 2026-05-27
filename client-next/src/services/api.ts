@@ -38,8 +38,8 @@ export interface ContrastResult {
 
 export interface PaginationParams {
   projectId: string;
-  sorting?: string;
-  search_keyword?: string;
+  sorting?: { name: string; order: string };
+  search_keyword?: Record<string, string>;
   page_size?: number;
   page_number?: number;
 }

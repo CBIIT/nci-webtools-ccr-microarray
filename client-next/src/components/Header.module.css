@@ -1,3 +1,19 @@
+/* ── US Government Banner ── */
+.govBanner {
+  background-color: #f0f0f0;
+  height: 46px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.govBannerText {
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+  margin-left: 15px;
+}
+
 /* ── NCI Logo Bar ── */
 .headerNci {
   background: #fff;
@@ -64,6 +80,54 @@
   color: #000 !important;
 }
 
+.navItemActive a:hover {
+  color: #fff !important;
+}
+
+/* ── Search ── */
+.searchGroup {
+  display: flex;
+  align-items: stretch;
+}
+
+.searchInput {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 20px 0 0 20px;
+  color: #212529;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  outline: none !important;
+  box-shadow: none !important;
+  width: clamp(120px, 20vw, 220px);
+}
+
+.searchInput:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: #dee2e6;
+}
+
+.searchInput::placeholder {
+  color: #212529;
+}
+
+.searchButton {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0 20px 20px 0;
+  margin-left: -1px;
+  color: #212529;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+  outline: none;
+  box-shadow: none;
+}
+
+.searchButton:hover {
+  color: rgba(33, 37, 41, 0.7);
+}
+
 /* ── Responsive ── */
 @media (max-width: 575px) {
   .headerBanner {
@@ -83,5 +147,15 @@
 
   .headerNci img {
     height: 45px;
+  }
+
+  .searchGroup {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .searchInput {
+    flex: 1;
+    width: auto;
   }
 }

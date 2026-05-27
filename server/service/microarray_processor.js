@@ -4,8 +4,21 @@ var logger = require('../components/queue_logger');
 var queue = require('../components/queue');
 var emailer = require('../components/mail');
 var fs = require('fs');
-var AsyncPolling = require('async-polling');
-var dateFormat = require('dateformat');
+function formatDate(date, fmt) {
+  var y = date.getFullYear();
+  var mo = String(date.getMonth() + 1).padStart(2, '0');
+  var d = String(date.getDate()).padStart(2, '0');
+  var h = date.getHours();
+  var mi = String(date.getMinutes()).padStart(2, '0');
+  if (fmt === 'submit') {
+    var s = String(date.getSeconds()).padStart(2, '0');
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    var h12 = h % 12 || 12;
+    return y + '-' + mo + '-' + d + ', ' + h12 + ':' + mi + ':' + s + ' ' + ampm;
+  }
+  var h12 = h % 12 || 12;
+  return y + '_' + mo + '_' + d + '_' + h12 + '_' + mi;
+}
 
 queue.awsHander.getQueueUrl(function (flag) {
   if (flag) {
@@ -32,20 +45,17 @@ queue.awsHander.getQueueUrl(function (flag) {
 });
 
 function polling() {
-  AsyncPolling(function (end) {
+  setInterval(function () {
     try {
-      queue.awsHander.receiver(qAnalysis, end, function (err) {
+      queue.awsHander.receiver(qAnalysis, function () {}, function (err) {
         logger.info(err);
         logger.info('receiver err');
-        end();
       });
     } catch (err) {
       logger.info(err);
       logger.info('receiver err');
-      end();
     }
-    // Then notify the polling when your job is done:
-  }, config.queue_request_interval * 1000).run();
+  }, config.queue_request_interval * 1000);
 }
 
 function qAnalysis(data, emailto, endCallback) {
@@ -142,7 +152,7 @@ function r(data, endCallback) {
           logger.info('[Queue] Send fails message  to client ', data.email);
           let subject =
             'MicroArray Contrast Results -' +
-            dateFormat(now, 'yyyy_mm_dd_h_MM') +
+            formatDate(now, 'subject') +
             '(FAILED)';
           let html = emailer.emailFailedTemplate(
             code,
@@ -175,7 +185,7 @@ function r(data, endCallback) {
                 );
                 let subject =
                   'MicroArray Contrast Results -' +
-                  dateFormat(now, 'yyyy_mm_dd_h_MM');
+                  formatDate(now, 'subject');
                 // emailer.sendMail(config.mail.web_admin_email,data.email,subject, "", html)
                 emailer.sendMail(
                   config.mail.web_admin_email,
@@ -192,7 +202,7 @@ function r(data, endCallback) {
                 );
                 let subject =
                   'MicroArray Contrast Results -' +
-                  dateFormat(now, 'yyyy_mm_dd_h_MM') +
+                  formatDate(now, 'subject') +
                   '(FAILED)';
                 let html = emailer.emailFailedTemplate(
                   code,

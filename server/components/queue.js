@@ -1,39 +1,38 @@
-const AWS = require('aws-sdk');
-var uuid = require('uuid');
+const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { SQSClient, GetQueueUrlCommand, GetQueueAttributesCommand, SendMessageCommand, ReceiveMessageCommand, DeleteMessageCommand, ChangeMessageVisibilityCommand } = require('@aws-sdk/client-sqs');
+var { v4: uuid } = require('uuid');
 const fs = require('fs');
 var config = require('../config');
 var logger = require('../components/queue_logger');
 var bucketName = config.bucketName;
-AWS.config.update({ region: 'us-east-1' });
+
 var awsHander = {};
 // s3 connect timeout set to be 30 minutes
 if (!config.s3_timeout) {
   config.s3_timeout = 30 * 60000;
 }
-var s3 = new AWS.S3({
-  apiVersion: '2006-03-01',
-  httpOptions: {
-    timeout: config.s3_timeout,
+var s3 = new S3Client({
+  region: 'us-east-1',
+  requestHandler: {
+    requestTimeout: config.s3_timeout,
   },
 });
-var sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
+var sqs = new SQSClient({ region: 'us-east-1' });
 var AdmZip = require('adm-zip');
 
 awsHander.getQueueUrl = function (next) {
   var params = {
     QueueName: config.queue_name,
   };
-  sqs.getQueueUrl(params, function (err, data) {
-    if (err) {
-      console.log(err, err.stack); // an error occurred
-      logger.info('[Queue]Get QueueUrl Fails ' + err.stack);
-      global.queue_url = 'none';
-      next(false);
-    } else {
-      logger.info('[Queue] Queue URL is ' + data.QueueUrl);
-      global.queue_url = data.QueueUrl;
-      next(true);
-    }
+  sqs.send(new GetQueueUrlCommand(params)).then(function (data) {
+    logger.info('[Queue] Queue URL is ' + data.QueueUrl);
+    global.queue_url = data.QueueUrl;
+    next(true);
+  }).catch(function (err) {
+    console.log(err, err.stack);
+    logger.info('[Queue]Get QueueUrl Fails ' + err.stack);
+    global.queue_url = 'none';
+    next(false);
   });
 };
 
@@ -51,24 +50,18 @@ awsHander.upload = function (path, prex, next) {
     zip.writeZip(path + '/queue_upload.zip');
     let fileStream = fs.createReadStream(path + '/queue_upload.zip');
     logger.info('uplad file :' + path);
-    s3.upload(
-      {
-        Bucket: bucketName,
-        Key: prex + 'queue_upload.zip',
-        Body: fileStream,
-      },
-      { queueSize: 20 },
-      function (err, data) {
-        if (err) {
-          logger.info('uplad err:' + err);
-          logger.info('uplad err stack:' + err.stack);
-          next(false);
-        } else {
-          logger.info('uplad file success');
-          next(true);
-        }
-      }
-    );
+    s3.send(new PutObjectCommand({
+      Bucket: bucketName,
+      Key: prex + 'queue_upload.zip',
+      Body: fileStream,
+    })).then(function () {
+      logger.info('uplad file success');
+      next(true);
+    }).catch(function (err) {
+      logger.info('uplad err:' + err);
+      logger.info('uplad err stack:' + err.stack);
+      next(false);
+    });
   });
 };
 
@@ -77,14 +70,11 @@ awsHander.getQueueAttributes = function (attr, callback) {
     QueueUrl: global.queue_url,
     AttributeNames: attr,
   };
-  sqs.getQueueAttributes(params, function (err, data) {
-    if (err) {
-      console.log(err, err.stack);
-      callback(-1);
-    } else {
-      msg = data;
-      callback(data);
-    }
+  sqs.send(new GetQueueAttributesCommand(params)).then(function (data) {
+    callback(data);
+  }).catch(function (err) {
+    console.log(err, err.stack);
+    callback(-1);
   });
 };
 
@@ -99,16 +89,14 @@ awsHander.sender = function (message, to, errHandler) {
       MessageDeduplicationId: uuid(),
       MessageGroupId: uuid(),
     };
-    sqs.sendMessage(params, function (err, data) {
-      if (err) {
-        logger.info('[Queue] Send Messages to Queue fails');
-        logger.info('Err');
-        logger.info(err.stack);
-        errHandler(true, err, data);
-      } else {
-        logger.info('[Queue] Send Messages to Queue success');
-        errHandler(false, err, data);
-      }
+    sqs.send(new SendMessageCommand(params)).then(function (data) {
+      logger.info('[Queue] Send Messages to Queue success');
+      errHandler(false, null, data);
+    }).catch(function (err) {
+      logger.info('[Queue] Send Messages to Queue fails');
+      logger.info('Err');
+      logger.info(err.stack);
+      errHandler(true, err, null);
     });
   }
   if (global.queue_url == null) {
@@ -128,28 +116,25 @@ awsHander.receiver = function (next, endCallback, errHandler) {
     VisibilityTimeout: config.visibility_timeout || 30,
     WaitTimeSeconds: config.queue_long_pull_time || 20,
   };
-  let re = sqs.receiveMessage(params, function (err, data) {
-    // once get message , del message from queue
-    if (err) {
-      console.log(err, err.stack);
-      logger.info('[Queue] Receive Messages from S3 fails');
-      logger.info('Err');
-      logger.info(err.stack);
-      errHandler(err);
-    } else {
-      console.log(data);
-      if (data.Messages) {
-        let message = JSON.parse(data.Messages[0].Body);
+  sqs.send(new ReceiveMessageCommand(params)).then(function (data) {
+    console.log(data);
+    if (data.Messages) {
+      let message = JSON.parse(data.Messages[0].Body);
 
-        if (message.domain && message.domain == 'microarray') {
-          next(data, data.email, endCallback);
-        }
-      } else {
-        if (endCallback) {
-          endCallback();
-        }
+      if (message.domain && message.domain == 'microarray') {
+        next(data, data.email, endCallback);
+      }
+    } else {
+      if (endCallback) {
+        endCallback();
       }
     }
+  }).catch(function (err) {
+    console.log(err, err.stack);
+    logger.info('[Queue] Receive Messages from S3 fails');
+    logger.info('Err');
+    logger.info(err.stack);
+    errHandler(err);
   });
 };
 
@@ -158,13 +143,11 @@ awsHander.del = function (rec) {
     QueueUrl: global.queue_url,
     ReceiptHandle: rec,
   };
-  sqs.deleteMessage(params, function (err, data) {
-    if (err) {
-      console.log(err, err.stack);
-      logger.info('[Queue] Delete Messages from S3 fails');
-      logger.info('Err');
-      logger.info(err.stack);
-    }
+  sqs.send(new DeleteMessageCommand(params)).catch(function (err) {
+    console.log(err, err.stack);
+    logger.info('[Queue] Delete Messages from S3 fails');
+    logger.info('Err');
+    logger.info(err.stack);
   });
 };
 
@@ -175,10 +158,8 @@ awsHander.changeMessageVisibility = function (receiptHandle, timeout) {
     ReceiptHandle: receiptHandle,
     VisibilityTimeout: timeout,
   };
-  sqs.changeMessageVisibility(visibilityParams, function (err, data) {
-    if (err) {
-      logger.info('queue visibility change fails: ' + err);
-    }
+  sqs.send(new ChangeMessageVisibilityCommand(visibilityParams)).catch(function (err) {
+    logger.info('queue visibility change fails: ' + err);
   });
 };
 
@@ -190,40 +171,43 @@ awsHander.download = (projectId, filePath, next) => {
   };
   logger.info('[Queue] Download file from S3 ');
   logger.info('Key:', key);
-  s3.getObject(params, (err, data) => {
-    if (err) {
-      logger.info('[Queue] Download file from S3 fails');
-      logger.info(params);
-      logger.info(err.stack);
-      next(false);
-    } else {
-      //logger.info("[Queue] Download file from S3")
-      //logger.info("file")
-      logger.info(filePath + '/' + projectId + '/');
-      if (!fs.existsSync(filePath + '/' + projectId + '/')) {
-        fs.mkdir(filePath + '/' + projectId + '/', function (err) {
-          if (err) {
-            logger.info(
-              'create dir' + filePath + '/' + projectId + '/' + '  fails'
-            );
-            logger.info(err);
-            next(false);
-          } else {
-            saveFile(filePath, projectId, data, next);
-          }
-        });
-      } else {
-        // if the directory exist
-        saveFile(filePath, projectId, data, next);
-      }
+  s3.send(new GetObjectCommand(params)).then(async function (data) {
+    // In AWS SDK v3, Body is a readable stream — collect into Buffer
+    var chunks = [];
+    for await (var chunk of data.Body) {
+      chunks.push(chunk);
     }
+    var body = Buffer.concat(chunks);
+
+    logger.info(filePath + '/' + projectId + '/');
+    if (!fs.existsSync(filePath + '/' + projectId + '/')) {
+      fs.mkdir(filePath + '/' + projectId + '/', function (err) {
+        if (err) {
+          logger.info(
+            'create dir' + filePath + '/' + projectId + '/' + '  fails'
+          );
+          logger.info(err);
+          next(false);
+        } else {
+          saveFile(filePath, projectId, body, next);
+        }
+      });
+    } else {
+      // if the directory exist
+      saveFile(filePath, projectId, body, next);
+    }
+  }).catch(function (err) {
+    logger.info('[Queue] Download file from S3 fails');
+    logger.info(params);
+    logger.info(err.stack);
+    next(false);
   });
 };
 
-function saveFile(filePath, projectId, data, next) {
+function saveFile(filePath, projectId, body, next) {
   fs.writeFile(
     filePath + '/' + projectId + '/queue_upload.zip',
-    data.Body,
+    body,
     function (err) {
       if (err) {
         logger.info('write file to disk fails');

@@ -6,7 +6,23 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./Footer.module.css";
 
+function parseVersionAndDate(versionString: string | undefined) {
+  if (!versionString || versionString === "local")
+    return { version: "dev", date: new Date().toISOString().split("T")[0] };
+
+  const versionMatch = versionString.match(/(\d+\.\d+\.\d+)(_dev)?/);
+  const version = versionMatch ? versionMatch[1] + (versionMatch[2] || "") : versionString;
+
+  const dateMatch = versionString.match(/(\d{8})/)?.[1];
+  const date = dateMatch
+    ? `${dateMatch.slice(0, 4)}-${dateMatch.slice(4, 6)}-${dateMatch.slice(6, 8)}`
+    : new Date().toISOString().split("T")[0];
+
+  return { version, date };
+}
+
 export default function Footer() {
+  const { version, date } = parseVersionAndDate(process.env.NEXT_PUBLIC_APP_VERSION);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
@@ -38,6 +54,10 @@ export default function Footer() {
                 <a href="mailto:NCIMicroArrayWebAdmin@mail.nih.gov">Contact Us</a>
               </li>
             </ul>
+            <div className={styles.versionInfo}>
+              <div>Version: {version}</div>
+              <div>Last Updated: {date}</div>
+            </div>
           </details>
           <details className={styles.usaFooterPrimaryContentCollapsible}>
             <summary>Resources</summary>
@@ -85,6 +105,10 @@ export default function Footer() {
                 <a href="mailto:NCIMicroArrayWebAdmin@mail.nih.gov">Contact Us</a>
               </li>
             </ul>
+            <div className={styles.versionInfo}>
+              <div>Version: {version}</div>
+              <div>Last Updated: {date}</div>
+            </div>
           </div>
           <div>
             <span className={styles.usaFooterNciListHeader}>Resources</span>
