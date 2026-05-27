@@ -60,7 +60,7 @@ export default function GroupBatchModal({
       return;
     }
     if (!isValidGroupName(trimmed)) {
-      setMessage("The group name only allows ASCII letters, numbers, or underscores and cannot start with numbers. Valid example: RNA_1");
+      setMessage("The group name only allows letters, numbers, and one underscore (cannot be placed after a number). Must start with a letter. Valid Group Name Example: RNA_1");
       return;
     }
     if (selectedIndices.length === 0) {
@@ -220,7 +220,7 @@ export default function GroupBatchModal({
               <input
                 type="text"
                 className="form-control form-control-sm"
-                placeholder="Name (Must start with an ASCII letter, a-z or A-Z)"
+                placeholder="Name (Must start with a letter, a-z or A-Z)"
                 value={name}
                 disabled={selectedGsms.length === 0}
                 onChange={(e) => { setName(e.target.value); setMessage(""); }}
