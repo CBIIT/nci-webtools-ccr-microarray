@@ -18,8 +18,8 @@ RUN npm install
 # Copy source
 COPY client-next/ ./
 
-# Build Next.js app — API_BASE_URL tells rewrites where to proxy
-ENV API_BASE_URL=http://backend:9220
+ARG API_BASE_URL
+ENV API_BASE_URL=${API_BASE_URL}
 
 ARG NEXT_PUBLIC_APP_VERSION=local
 ENV NEXT_PUBLIC_APP_VERSION=${NEXT_PUBLIC_APP_VERSION}

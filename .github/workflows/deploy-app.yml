@@ -20,7 +20,7 @@ on:
 jobs:
   deploy-microarray-app:
     timeout-minutes: 90
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     environment: ${{ inputs.tier }}
     env:
       APP: microarray
@@ -105,6 +105,7 @@ jobs:
         with:
           context: .
           file: docker/backend.dockerfile
+          platforms: linux/arm64
           pull: true
           push: true
           tags: |
@@ -118,6 +119,7 @@ jobs:
         with:
           context: .
           file: docker/frontend.dockerfile
+          platforms: linux/arm64
           pull: true
           push: true
           tags: |
@@ -125,6 +127,7 @@ jobs:
             ${{ env.FRONTEND_IMAGE_LATEST }}
           build-args: |
             NEXT_PUBLIC_APP_VERSION=${{ github.ref_name }}
+            API_BASE_URL=http://localhost:${{ env.BACKEND_CONTAINER_PORT }}
           cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE_LATEST }}
           cache-to: type=inline
 

@@ -36,13 +36,13 @@ export default function GroupBatchModal({
       if (sample.groups) {
         sample.groups.split(",").forEach((g) => {
           const trimmed = g.trim();
-          if (trimmed && trimmed !== "Others") {
+          if (trimmed) {
             if (!gMap.has(trimmed)) gMap.set(trimmed, []);
             gMap.get(trimmed)!.push(sample.gsm);
           }
         });
       }
-      if (sample.batch && sample.batch !== "Others") {
+      if (sample.batch) {
         if (!bMap.has(sample.batch)) bMap.set(sample.batch, []);
         bMap.get(sample.batch)!.push(sample.gsm);
       }
@@ -60,7 +60,7 @@ export default function GroupBatchModal({
       return;
     }
     if (!isValidGroupName(trimmed)) {
-      setMessage("The group name only allows ASCII letters, numbers, or underscores and cannot start with numbers. Valid example: RNA_1");
+      setMessage("The group name only allows letters, numbers, and one underscore (cannot be placed after a number). Must start with a letter. Valid Group Name Example: RNA_1");
       return;
     }
     if (selectedIndices.length === 0) {
@@ -96,16 +96,15 @@ export default function GroupBatchModal({
     if (!file) return;
 
     Papa.parse(file, {
-      header: false,
+      header: true,
       skipEmptyLines: true,
+      transformHeader: (h: string) => h.trim().toLowerCase(),
       complete: (results) => {
-        const rows = (results.data as string[][])
-          .filter((row) => row.length >= 2)
-          .map((row) => ({
-            gsm: row[0]?.trim() || "",
-            group: row[1]?.trim() || "",
-            batch: row[2]?.trim() || "",
-          }));
+        const rows = (results.data as Record<string, string>[]).map((row) => ({
+          gsm: row.gsm?.trim() || "",
+          group: row.group?.trim() || "",
+          batch: row.batch?.trim() || "",
+        }));
 
         const error = store.importGroupsCsv(rows);
         if (error) {
@@ -220,7 +219,7 @@ export default function GroupBatchModal({
               <input
                 type="text"
                 className="form-control form-control-sm"
-                placeholder="Name (Must start with an ASCII letter, a-z or A-Z)"
+                placeholder="Name (Must start with a letter, a-z or A-Z)"
                 value={name}
                 disabled={selectedGsms.length === 0}
                 onChange={(e) => { setName(e.target.value); setMessage(""); }}

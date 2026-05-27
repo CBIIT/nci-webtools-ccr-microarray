@@ -4,31 +4,10 @@ var router = express.Router();
 var R = require('../components/R');
 var config = require('../config');
 var logger = require('../components/logger');
-var formidable = require('formidable');
+var { formidable } = require('formidable');
 var fs = require('fs');
 var path = require('path');
-var queue = require('../components/queue');
-var emailer = require('../components/mail');
-
-function formatDate(date, fmt) {
-  var y = date.getFullYear();
-  var mo = String(date.getMonth() + 1).padStart(2, '0');
-  var d = String(date.getDate()).padStart(2, '0');
-  var h = date.getHours();
-  var mi = String(date.getMinutes()).padStart(2, '0');
-  var s = String(date.getSeconds()).padStart(2, '0');
-  if (fmt === 'submit') {
-    // "2026-04-08, 3:05:09 PM"
-    var ampm = h >= 12 ? 'PM' : 'AM';
-    var h12 = h % 12 || 12;
-    return y + '-' + mo + '-' + d + ', ' + h12 + ':' + mi + ':' + s + ' ' + ampm;
-  }
-  // "2026_04_08_3_05"
-  var h12 = h % 12 || 12;
-  return y + '_' + mo + '_' + d + '_' + h12 + '_' + mi;
-}
-
-var { v4: uuidv4 } = require('uuid');
+var { getWorker } = require('../services/workers');
 
 // remove previous result.
 // ssgseaHeatmap1.jpg
@@ -275,146 +254,93 @@ router.post('/getssGSEAWithDiffGenSet', function (req, res) {
 });
 
 router.post('/qAnalysis', function (req, res) {
-  var now = new Date();
-  let data = {};
-  data.projectId = req.body.projectId;
-  data.code = req.body.code;
-  data.groups = req.body.groups;
-  data.group_1 = req.body.group_1;
-  data.group_2 = req.body.group_2;
-  data.species = req.body.species;
-  data.genSet = req.body.genSet;
-  data.source = req.body.source;
-  data.email = req.body.email;
-  data.domain = 'microarray';
-  data.submit = formatDate(now, 'submit');
-  data.dataList = req.body.dataList;
-  data.normal = req.body.normal;
-  data.realGroup = req.body.realGroup.join('@');
-  data.index = req.body.index;
-  data.batches = req.body.batches;
-  data.chip = req.body.chip;
-  let CEL = '';
-  for (let i in req.body.dataList) {
-    CEL = req.body.dataList[i] + ',' + CEL;
-  }
-  let code = '';
-  if (req.body.source == 'fetch') {
-    code = '<p>&nbsp;&nbsp;Accession Code: <b>' + data.code + '</b></p>';
-  } else {
-    code = '<p>&nbsp;&nbsp;CEL Files: <b>' + CEL + '</b></p>';
-  }
-  logger.info('[Queue] Start Using Queue for Analysis');
-  logger.info('Input:');
-  logger.info(JSON.stringify(data));
+  if (!validate(req.body.projectId))
+    return res.json({ status: 404, msg: 'Invalid project ID' });
 
-  function send(d) {
-    logger.info('[Queue] Send Message to Queue', JSON.stringify(d));
-    queue.awsHander.sender(JSON.stringify(d), d.email, function (
-      flag,
-      err,
-      data
-    ) {
-      if (flag) {
-        logger.info('[Queue] Send Message to Queue fails', JSON.stringify(err));
-        logger.info('[Queue] Send fails message  to client ', data.email);
-        let subject =
-          'MicroArray Contrast Results -' +
-          formatDate(now, 'subject') +
-          '(FAILED) ';
-        let html = emailer.emailFailedTemplate(
-          code,
-          0,
-          data.submit,
-          data.projectId
-        );
-        emailer.sendMail(
-          config.mail.web_admin_email,
-          data.email,
-          subject,
-          'text',
-          html
-        );
-        // res.json({ status: 404, msg: 'Send Message to Queue fails' });
-      } else {
-        logger.info('[Queue] Send Message to Queue success');
-      }
-    });
+  var projectDir = path.join(config.uploadPath, req.body.projectId);
+
+  // Write params.json for the worker
+  var params = {
+    projectId: req.body.projectId,
+    code: req.body.code,
+    groups: req.body.groups,
+    group_1: req.body.group_1,
+    group_2: req.body.group_2,
+    species: req.body.species,
+    genSet: req.body.genSet,
+    normal: req.body.normal,
+    source: req.body.source,
+    realGroup: req.body.realGroup.join('@'),
+    index: req.body.index,
+    batches: req.body.batches,
+    chip: req.body.chip || '',
+    email: req.body.email,
+    dataList: req.body.dataList,
+    submittedAt: new Date().toISOString(),
+  };
+
+  if (!fs.existsSync(projectDir)) {
+    fs.mkdirSync(projectDir, { recursive: true });
   }
-  logger.info('[S3]upload file to S3');
-  logger.info('[S3]File Path:' + config.uploadPath + '/' + data.projectId);
-  // // upload data
-  var tmp_project_id = uuidv4(); // using tmp_project id for creating different project for each qanalysis.  so when user run constrast (queue mode) based on one project multiple times. That allows to create project for each run constrast.
-  queue.awsHander.upload(
-    config.uploadPath + '/' + data.projectId,
-    config.queue_input_path + '/' + tmp_project_id + '/',
-    function (flag) {
-      if (flag) {
-        logger.info('[S3] upload files to S3 success');
-        data.projectId = tmp_project_id;
-        send(data);
-      } else {
-        logger.info('[S3] upload files to S3 fails');
-        let subject =
-          'MicroArray Contrast Results -' +
-          formatDate(now, 'subject') +
-          '(FAILED) ';
-        let html = emailer.emailFailedTemplate(
-          code,
-          0,
-          data.submit,
-          data.projectId
-        );
-        emailer.sendMail(
-          config.mail.web_admin_email,
-          data.email,
-          subject,
-          'text',
-          html
-        );
-        // res.json({ status: 404, msg: 'upload files to S3 fails' });
-      }
-    }
+
+  fs.writeFileSync(
+    path.join(projectDir, 'params.json'),
+    JSON.stringify(params, null, 2)
   );
+
+  // Write initial status
+  fs.writeFileSync(
+    path.join(projectDir, 'status.json'),
+    JSON.stringify({ id: req.body.projectId, status: 'SUBMITTED', submittedAt: params.submittedAt })
+  );
+
+  // Fire worker (async — don't await)
+  var workerType = process.env.WORKER_TYPE || 'local';
+  var worker = getWorker(workerType);
+  worker(req.body.projectId).catch(function (err) {
+    logger.error('[qAnalysis] Worker failed: ' + err.message);
+  });
+
+  logger.info('[qAnalysis] Job submitted: ' + req.body.projectId + ' (worker: ' + workerType + ')');
   res.json({ status: 200 });
 });
 
-router.post('/getCurrentNumberOfJobsinQueue', function (req, res) {
-  let d = queue.awsHander.getQueueAttributes(
-    ['ApproximateNumberOfMessages'],
-    function (result) {
-      if (result != -1) {
-        res.json({
-          status: 200,
-          data: result.Attributes.ApproximateNumberOfMessages,
-        });
-      } else {
-        res.json({ status: 404, msg: -1 });
-      }
-    }
-  );
+router.post('/getJobStatus', function (req, res) {
+  if (!validate(req.body.projectId))
+    return res.json({ status: 404, msg: 'Invalid project ID' });
+
+  var statusPath = path.join(config.uploadPath, req.body.projectId, 'status.json');
+
+  if (!fs.existsSync(statusPath)) {
+    return res.json({ status: 404, msg: 'No job found for this project ID' });
+  }
+
+  try {
+    var status = JSON.parse(fs.readFileSync(statusPath, 'utf8'));
+    res.json({ status: 200, data: status });
+  } catch (err) {
+    res.json({ status: 500, msg: 'Error reading job status' });
+  }
 });
 
 router.post('/getResultByProjectId', function (req, res) {
-  logger.info(
-    '[Get contrast result from file]',
-    'projectId:',
-    req.body.projectId
-  );
-  queue.awsHander.download(req.body.projectId, config.uploadPath, function (
-    flag
-  ) {
-    if (flag) {
-      let return_data = restoreSession(
-        req,
-        config.uploadPath + '/' + req.body.projectId + '/result.txt'
-      );
-      logger.info('Get Contrast result success');
-      res.json({ status: 200, data: return_data });
-    } else {
-      res.json({ status: 404, msg: 'err' });
-    }
-  });
+  if (!validate(req.body.projectId))
+    return res.json({ status: 404, msg: 'Invalid project ID' });
+
+  var resultPath = path.join(config.uploadPath, req.body.projectId, 'result.txt');
+
+  if (!fs.existsSync(resultPath)) {
+    return res.json({ status: 404, msg: 'Results not found for this project ID' });
+  }
+
+  try {
+    var return_data = restoreSession(req, resultPath);
+    logger.info('[getResultByProjectId] Loaded results for ' + req.body.projectId);
+    res.json({ status: 200, data: return_data });
+  } catch (err) {
+    logger.error('[getResultByProjectId] Error: ' + err.message);
+    res.json({ status: 500, msg: 'Error reading results' });
+  }
 });
 
 router.post('/runContrast', function (req, res) {

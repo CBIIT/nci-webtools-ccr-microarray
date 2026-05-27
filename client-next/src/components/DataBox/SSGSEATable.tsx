@@ -4,8 +4,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { getGSEA } from "@/services/api";
-
-const PAGE_SIZES = [15, 25, 50, 100, 200];
+import TableControls from "./TableControls";
+import formatCell from "./formatCell";
+import { buildSettingsRows, exportTableToXlsx } from "@/utils/exportTable";
 
 const COLUMNS = [
   { key: "V1", label: "NAME", search: "name", wide: true },
@@ -16,19 +17,6 @@ const COLUMNS = [
   { key: "V4", label: "t", search: "search_t", fmt: "num3" },
   { key: "V7", label: "b", search: "search_b", fmt: "num3" },
 ];
-
-function formatCell(value: unknown, fmt?: string): React.ReactNode {
-  if (value == null || value === "") return "";
-  if (fmt === "exp") {
-    const n = Number(value);
-    return isNaN(n) ? String(value) : n === 0 ? "0" : n.toExponential(3);
-  }
-  if (fmt === "num3") {
-    const n = Number(value);
-    return isNaN(n) ? String(value) : n.toFixed(3);
-  }
-  return String(value);
-}
 
 export default function SSGSEATable() {
   const store = useAnalysisStore();
@@ -86,6 +74,31 @@ export default function SSGSEATable() {
     setPageNumber(1);
   }
 
+  const [exporting, setExporting] = useState(false);
+
+  async function handleExport() {
+    setExporting(true);
+    try {
+      const result = await getGSEA({
+        projectId: store.projectId,
+        page_size: 100000,
+        page_number: 1,
+        sorting,
+        search_keyword: search,
+      });
+      await exportTableToXlsx(
+        buildSettingsRows(store),
+        COLUMNS,
+        result.records,
+        `ssGSEA_${store.projectId}.xlsx`
+      );
+    } catch (err) {
+      console.error("Export failed:", err);
+    } finally {
+      setExporting(false);
+    }
+  }
+
   const totalPages = Math.ceil(totalCount / pageSize);
   const startRow = (pageNumber - 1) * pageSize + 1;
   const endRow = Math.min(pageNumber * pageSize, totalCount);
@@ -94,18 +107,22 @@ export default function SSGSEATable() {
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
 
-      <div className="d-flex justify-content-between align-items-center mb-2" style={{ fontSize: "0.8rem" }}>
-        <div>
-          Show{" "}
-          <select value={pageSize} onChange={(e) => { setPageSize(Number(e.target.value)); setPageNumber(1); }} className="form-select form-select-sm d-inline-block" style={{ width: "auto" }}>
-            {PAGE_SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
-          </select>{" "}
-          entries
-        </div>
-        <div className="text-muted">
-          {totalCount > 0 ? `Showing ${startRow}-${endRow} of ${totalCount} records` : "No records"}
-        </div>
+      <div className="d-flex justify-content-end mb-2">
+        <button className="btn btn-sm btn-nci-primary px-3" onClick={handleExport} disabled={exporting}>
+          {exporting ? "Exporting..." : "Export"}
+        </button>
       </div>
+
+      <TableControls
+        pageSize={pageSize}
+        onPageSizeChange={(s) => { setPageSize(s); setPageNumber(1); }}
+        currentPage={pageNumber}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        startRow={startRow}
+        endRow={endRow}
+        onPageChange={setPageNumber}
+      />
 
       <div style={{ overflowX: "auto" }}>
         <table className="table table-sm table-hover table-bordered mb-0" style={{ fontSize: "0.8rem" }}>
@@ -159,31 +176,6 @@ export default function SSGSEATable() {
           </tbody>
         </table>
       </div>
-
-      {totalPages > 1 && (
-        <nav className="d-flex justify-content-center mt-2">
-          <ul className="pagination pagination-sm mb-0">
-            <li className={`page-item ${pageNumber <= 1 ? "disabled" : ""}`}>
-              <button className="page-link" onClick={() => setPageNumber((p) => Math.max(1, p - 1))}>‹</button>
-            </li>
-            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
-              let page: number;
-              if (totalPages <= 7) page = i + 1;
-              else if (pageNumber <= 4) page = i + 1;
-              else if (pageNumber >= totalPages - 3) page = totalPages - 6 + i;
-              else page = pageNumber - 3 + i;
-              return (
-                <li key={page} className={`page-item ${page === pageNumber ? "active" : ""}`}>
-                  <button className="page-link" onClick={() => setPageNumber(page)}>{page}</button>
-                </li>
-              );
-            })}
-            <li className={`page-item ${pageNumber >= totalPages ? "disabled" : ""}`}>
-              <button className="page-link" onClick={() => setPageNumber((p) => Math.min(totalPages, p + 1))}>›</button>
-            </li>
-          </ul>
-        </nav>
-      )}
     </div>
   );
 }

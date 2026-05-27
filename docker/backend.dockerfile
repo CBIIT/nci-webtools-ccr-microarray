@@ -32,6 +32,7 @@ RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/n
 # Install R via Posit RPM (matching docker branch)
 ENV R_VER="4.5.3"
 ENV PATH="/opt/R/${R_VER}/bin:${PATH}"
+ENV TAR="/usr/bin/tar --no-same-owner"
 RUN ARCH=$(uname -m) \
     && curl -O https://cdn.posit.co/r/rhel-9/pkgs/R-${R_VER}-1-1.${ARCH}.rpm \
     && dnf install -y R-${R_VER}-1-1.${ARCH}.rpm \
@@ -55,8 +56,9 @@ COPY server/config ./config
 RUN cp config/microarray_setting-local.json config/microarray_setting.json
 
 # Copy server source
-COPY server/index.js server/routes.js ./
+COPY server/index.js server/routes.js server/worker.js ./
 COPY server/service ./service
+COPY server/services ./services
 COPY server/components ./components
 
 EXPOSE 9220

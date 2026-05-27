@@ -15,8 +15,8 @@ services:
     build:
       context: "."
       dockerfile: "./docker/frontend.dockerfile"
-    environment:
-      - API_BASE_URL=http://backend:9220
+      args:
+        - API_BASE_URL=http://backend:9220
     ports:
       - "3000:80"
     depends_on:

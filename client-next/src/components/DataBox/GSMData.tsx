@@ -5,6 +5,7 @@ import { useState, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import GroupBatchModal from "./GroupBatchModal";
+import Pagination from "./Pagination";
 import writeXlsxFile from "write-excel-file/browser";
 
 interface TooltipState {
@@ -179,7 +180,7 @@ export default function GSMData() {
         sample.gsm,
         sample.title || "",
         (sample.description as string) || "",
-        sample.groups || "Others",
+        sample.groups || "",
       ]),
     ];
 
@@ -188,16 +189,6 @@ export default function GSMData() {
       fileName: `GSM_${store.projectId}.xlsx`,
     });
   }
-
-  // Build page numbers
-  const pageNumbers: number[] = [];
-  const maxVisible = 5;
-  let startPage = Math.max(1, safePage - Math.floor(maxVisible / 2));
-  const endPage = Math.min(totalPages, startPage + maxVisible - 1);
-  if (endPage - startPage < maxVisible - 1) {
-    startPage = Math.max(1, endPage - maxVisible + 1);
-  }
-  for (let i = startPage; i <= endPage; i++) pageNumbers.push(i);
 
   return (
     <div>
@@ -225,6 +216,7 @@ export default function GSMData() {
               style={{ width: "auto" }}
               value={pageSize}
               onChange={(e) => handlePageSize(Number(e.target.value))}
+              aria-label="Rows per page"
             >
               {PAGE_SIZE_OPTIONS.map((n) => (
                 <option key={n} value={n}>{n}</option>
@@ -239,21 +231,7 @@ export default function GSMData() {
             Showing {totalRecords > 0 ? startIdx + 1 : 0}-{endIdx} of {totalRecords} records
           </span>
 
-          <nav>
-          <ul className="pagination pagination-sm mb-0">
-            <li className={`page-item ${safePage <= 1 ? "disabled" : ""}`}>
-              <button className="page-link" onClick={() => setCurrentPage(safePage - 1)}>&lsaquo;</button>
-            </li>
-            {pageNumbers.map((n) => (
-              <li key={n} className={`page-item ${n === safePage ? "active" : ""}`}>
-                <button className="page-link" onClick={() => setCurrentPage(n)}>{n}</button>
-              </li>
-            ))}
-            <li className={`page-item ${safePage >= totalPages ? "disabled" : ""}`}>
-              <button className="page-link" onClick={() => setCurrentPage(safePage + 1)}>&rsaquo;</button>
-            </li>
-          </ul>
-        </nav>
+          <Pagination currentPage={safePage} totalPages={totalPages} onPageChange={setCurrentPage} />
         </div>
       </div>
 

@@ -1,24 +1,89 @@
 // Legacy: client/src/components/Analysis/Analysis.js
 "use client";
 
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useAnalysisStore } from "@/stores/analysisStore";
-import { loadGSE, uploadCEL, runContrast } from "@/services/api";
+import { loadGSE, uploadCEL, runContrast, queueAnalysis, getResultByProjectId, type Sample } from "@/services/api";
 import GSMData from "@/components/DataBox/GSMData";
 import PrePlotsBox from "@/components/DataBox/PrePlotsBox";
 import PostPlotsBox from "@/components/DataBox/PostPlotsBox";
 import DEGBox from "@/components/DataBox/DEGBox";
 import SSGSEABox from "@/components/DataBox/SSGSEABox";
 
+// Loads results from query param: /analysis?projectId
+function ResultLoader() {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const projectId = searchParams.get("projectId") || searchParams.keys().next().value;
+    if (!projectId || projectId.length !== 32) return;
+
+    const s = useAnalysisStore.getState();
+    s.setLoading(true, "Loading...");
+
+    async function loadResults() {
+      try {
+        const data = await getResultByProjectId(projectId!);
+        const s = useAnalysisStore.getState();
+
+        useAnalysisStore.setState({ projectId });
+        s.setAccessionCode(data.accessionCode as string || "");
+        s.setGroup1(data.group_1 as string || "");
+        s.setGroup2(data.group_2 as string || "");
+        s.setNormal(data.normal as string || "");
+        s.setChip(data.chip as string || "");
+        if (data.source === "upload") s.setUploaded(true);
+
+        const samples = Object.values(data.gsm as Record<string, Sample>);
+        const groups = data.groups as string[];
+        if (groups) {
+          samples.forEach((sample, i) => {
+            const g = groups[i];
+            sample.groups = (g && g.toLowerCase() !== "others" && g.toLowerCase() !== "ctl") ? g : "";
+          });
+        }
+        s.setDataList(samples);
+        s.setDataLoaded(true);
+
+        s.setContrastResults({
+          histplotBN: data.histplotBN,
+          histplotAN: data.histplotAN,
+          heatmap: data.heatmapolt,
+        });
+        s.setContrastComplete(true);
+        s.setCompared(true);
+        s.setDoneGsea(true);
+        s.setActiveTab("gsm");
+        s.setLoading(false);
+      } catch (err) {
+        useAnalysisStore.getState().setLoading(false);
+      }
+    }
+    loadResults();
+  }, [searchParams]);
+
+  return null;
+}
+
+function formatErrorMessage(msg: string): string {
+  const match = msg.match(/timeout of (\d+)ms/);
+  if (match) {
+    const minutes = Math.round(parseInt(match[1]) / 60000);
+    return `Request timed out after ${minutes} minute${minutes !== 1 ? "s" : ""}. Please try again or submit as a long-running job.`;
+  }
+  return msg;
+}
+
 export default function Analysis() {
   const store = useAnalysisStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const [loadError, setLoadError] = useState("");
 
   const geoMutation = useMutation({
     mutationFn: () => loadGSE(store.accessionCode, store.projectId, store.loadChip),
-    onMutate: () => store.setLoading(true, "Loading GEO Data..."),
+    onMutate: () => { store.setLoading(true, "Loading GEO Data..."); setLoadError(""); },
     onSuccess: (data) => {
       if (data.multichip) {
         store.setMultichip(true);
@@ -35,7 +100,7 @@ export default function Analysis() {
     },
     onError: (err: Error) => {
       store.setLoading(false);
-      alert(err.message);
+      setLoadError(formatErrorMessage(err.message));
     },
   });
 
@@ -49,12 +114,13 @@ export default function Analysis() {
     },
     onError: (err: Error) => {
       store.setLoading(false);
-      alert(err.message);
+      setLoadError(formatErrorMessage(err.message));
     },
   });
 
   function handleLoadGEO() {
-    if (!store.accessionCode.trim()) return alert("Please enter an accession code.");
+    if (!store.accessionCode.trim()) return setLoadError("Accession Code is required.");
+    setLoadError("");
     geoMutation.mutate();
   }
 
@@ -70,6 +136,8 @@ export default function Analysis() {
 
   const [contrastError, setContrastError] = useState("");
   const [panelCollapsed, setPanelCollapsed] = useState(false);
+  const [showQueueWarning, setShowQueueWarning] = useState(false);
+  const [showQueueSuccess, setShowQueueSuccess] = useState(false);
 
   const contrastMutation = useMutation({
     mutationFn: runContrast,
@@ -82,7 +150,6 @@ export default function Analysis() {
       store.setContrastComplete(true);
       store.setCompared(true);
       store.setDoneGsea(true);
-      store.setDisableContrast(true);
       store.setLoading(false);
       setPanelCollapsed(true);
     },
@@ -114,8 +181,8 @@ export default function Analysis() {
     const batchSamples: Record<string, [boolean, boolean]> = {};
     let allOthers = true;
     store.dataList.forEach((sample, i) => {
-      const batch = sample.batch || "Others";
-      if (batch !== "Others") {
+      const batch = sample.batch || "";
+      if (batch) {
         allOthers = false;
         if (!batchSamples[batch]) batchSamples[batch] = [false, false];
         if (payload.groups[i] === store.group1) batchSamples[batch][0] = true;
@@ -139,9 +206,7 @@ export default function Analysis() {
 
     const batches = allOthers ? [] : payload.batches;
 
-    store.setLoading(true, "Running Contrast...");
-
-    contrastMutation.mutate({
+    const contrastPayload = {
       projectId: store.projectId,
       code: store.accessionCode,
       groups: payload.groups,
@@ -150,16 +215,44 @@ export default function Analysis() {
       species: store.species,
       genSet: store.genSet,
       normal: store.normal,
-      source: store.uploaded ? "upload" : "fetch",
+      source: store.uploaded ? "upload" as const : "fetch" as const,
       realGroup: payload.realGroup,
       index,
       batches,
       chip: store.chip,
-    });
+    };
+
+    if (store.useQueue) {
+      // Async worker path
+      if (!store.email || !store.email.trim()) {
+        setContrastError("Please enter an email address for queue notifications.");
+        return;
+      }
+      store.setLoading(true, "Submitting job...");
+      queueAnalysis({
+        ...contrastPayload,
+        email: store.email,
+        dataList: store.dataList.map((d) => d.gsm || ""),
+      })
+        .then(() => {
+          store.setLoading(false);
+          store.setContrastComplete(true);
+          setShowQueueSuccess(true);
+        })
+        .catch((err: Error) => {
+          store.setLoading(false);
+          setContrastError(err.message);
+        });
+    } else {
+      // Synchronous path
+      store.setLoading(true, "Running Contrast...");
+      contrastMutation.mutate(contrastPayload);
+    }
   }
 
   function handleReset() {
     store.reset();
+    setLoadError("");
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
@@ -167,6 +260,7 @@ export default function Analysis() {
 
   return (
     <div className="content-board">
+      <Suspense><ResultLoader /></Suspense>
       <div className="d-flex flex-column flex-lg-row gap-3">
         {/* Left Panel — Workflow */}
         {!panelCollapsed && (
@@ -193,7 +287,7 @@ export default function Analysis() {
                   id="accessionCode"
                   type="text"
                   value={store.accessionCode ?? ""}
-                  disabled={store.fileList.length > 0}
+                  disabled={store.dataLoaded || store.fileList.length > 0}
                   onChange={(e) => store.setAccessionCode(e.target.value)}
                 />
 
@@ -212,7 +306,7 @@ export default function Analysis() {
                   {geoMutation.isPending && <span className="spinner-border spinner-border-sm me-1" role="status" />}
                   Load
                 </button>
-                <button className="btn btn-nci-primary w-100 mt-2" onClick={handleReset} disabled={isLoading}>Reset</button>
+                <button className="btn btn-nci-primary w-100 mt-2" onClick={handleReset} disabled={isLoading} data-tooltip="Reset to start a new GEO Analysis">Reset</button>
               </div>
             ) : (
               <div key="cel-inputs">
@@ -252,7 +346,7 @@ export default function Analysis() {
                     {celMutation.isPending && <span className="spinner-border spinner-border-sm me-1" role="status" />}
                     Load
                   </button>
-                  <button className="btn btn-nci-primary flex-fill" onClick={handleReset} disabled={isLoading}>Reset</button>
+                  <button className="btn btn-nci-primary flex-fill" onClick={handleReset} disabled={isLoading} data-tooltip="Reset to start a new CEL File Analysis">Reset</button>
                 </div>
               </div>
             )}
@@ -268,7 +362,7 @@ export default function Analysis() {
                   id="selectChip"
                   value={store.chip ?? ""}
                   onChange={(e) => store.selectChip(e.target.value)}
-                  disabled={store.disableContrast}
+                  disabled={store.contrastComplete}
                 >
                   {Object.keys(store.dataListChip).map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -282,7 +376,7 @@ export default function Analysis() {
               id="selectGroup1"
               aria-label="Select Group 1"
               value={store.group1 ?? ""}
-              disabled={store.disableContrast}
+              disabled={store.contrastComplete}
               onChange={(e) => store.setGroup1(e.target.value)}
             >
               <option value="">-- Select Group 1 --</option>
@@ -295,7 +389,7 @@ export default function Analysis() {
               id="selectGroup2"
               aria-label="Select Group 2"
               value={store.group2 ?? ""}
-              disabled={store.disableContrast}
+              disabled={store.contrastComplete}
               onChange={(e) => store.setGroup2(e.target.value)}
             >
               <option value="">-- Select Group 2 --</option>
@@ -312,7 +406,7 @@ export default function Analysis() {
               className="form-select form-select-sm"
               id="selectNormal"
               value={store.normal}
-              disabled={store.disableContrast}
+              disabled={store.contrastComplete}
               onChange={(e) => store.setNormal(e.target.value)}
             >
               <option value="RMA">RMA</option>
@@ -328,11 +422,16 @@ export default function Analysis() {
                 type="checkbox"
                 id="queueCheckbox"
                 checked={store.useQueue}
-                onChange={(e) => store.setUseQueue(e.target.checked)}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    store.setUseQueue(true);
+                  } else {
+                    setShowQueueWarning(true);
+                  }
+                }}
               />
-              <label className="form-check-label" style={{ fontSize: "0.85em" }} htmlFor="queueCheckbox">Submit this job to a Queue</label>
+              <label className="form-check-label" style={{ fontSize: "0.85em" }} htmlFor="queueCheckbox">Long-running Job</label>
             </div>
-            <small className="text-muted fst-italic d-block mb-2" style={{ fontSize: "0.75em" }}>(Jobs currently enqueued: 0)</small>
 
             <label className="title" htmlFor="inputEmail">Email<span className="required"> *</span></label>
             <input
@@ -345,13 +444,13 @@ export default function Analysis() {
               onChange={(e) => store.setEmail(e.target.value)}
             />
 
-            <small className="text-muted fst-italic" style={{ fontSize: "0.75em" }}>Note: if sending to queue, when computation is completed, a notification will be sent to the e-mail entered above.</small>
+            <small className="text-muted fst-italic" style={{ fontSize: "0.75em" }}>You will receive an email when analysis is complete.</small>
           </div>
 
           {/* Run / Reset buttons (outside sub-boxes) */}
           <div className="mx-2 mb-2">
-            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading || store.disableContrast} onClick={handleRunContrast}>Run Contrast</button>
-            <button className="btn btn-nci-primary w-100" onClick={() => { store.resetContrast(); setContrastError(""); setPanelCollapsed(false); }} disabled={isLoading}>Reset</button>
+            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading || store.contrastComplete || !store.group1 || !store.group2 || store.group1 === store.group2} onClick={handleRunContrast}>Run Contrast</button>
+            <button className="btn btn-nci-primary w-100" onClick={() => { store.resetContrast(); setContrastError(""); setPanelCollapsed(false); }} disabled={isLoading} data-tooltip="Reset to start a new contrast analysis">Reset</button>
             {contrastError && (
               <p style={{ color: "#b22222", fontSize: "0.85rem" }} className="mt-1 mb-0">{contrastError}</p>
             )}
@@ -429,7 +528,12 @@ export default function Analysis() {
 
           {/* Tab Content */}
           <div className="tab-content-panel">
-            {store.activeTab === "gsm" && <GSMData />}
+            {store.activeTab === "gsm" && (
+              <>
+                {loadError && <p style={{ color: "#b22222", fontSize: "1.1rem", margin: "1rem" }}>{loadError}</p>}
+                {(!loadError || store.dataLoaded) && <GSMData />}
+              </>
+            )}
 
             {store.activeTab === "pre" && <PrePlotsBox />}
             {store.activeTab === "post" && <PostPlotsBox />}
@@ -438,6 +542,43 @@ export default function Analysis() {
           </div>
         </div>
       </div>
+
+      {/* Interactive Mode Warning Modal */}
+      {showQueueWarning && (
+        <div className="modal-backdrop-custom" onClick={() => setShowQueueWarning(false)}>
+          <div className="modal-content-custom" style={{ maxWidth: "500px", minWidth: "auto" }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header-custom">
+              <h5 className="mb-0">Enabling Interactive Mode</h5>
+            </div>
+            <div className="modal-body-custom">
+              <p>Contrasts with large data sets may timeout and not complete in the browser.</p>
+              <p>Click OK to enable Interactive mode.</p>
+              <div className="d-flex justify-content-end gap-2 mt-3">
+                <button className="btn btn-sm btn-outline-secondary px-3" onClick={() => setShowQueueWarning(false)}>Cancel</button>
+                <button className="btn btn-sm btn-nci-primary px-3" onClick={() => { store.setUseQueue(false); setShowQueueWarning(false); }}>OK</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Queue Submission Success Modal */}
+      {showQueueSuccess && (
+        <div className="modal-backdrop-custom" onClick={() => setShowQueueSuccess(false)}>
+          <div className="modal-content-custom" style={{ maxWidth: "500px", minWidth: "auto" }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header-custom">
+              <h5 className="mb-0">MicroArray Job</h5>
+            </div>
+            <div className="modal-body-custom">
+              <p>Your job was submitted for processing. Results will be sent to you via email when all model runs are completed.</p>
+              <p>Please note: Depending on model complexity it could be up to a day before you receive your results.</p>
+              <div className="d-flex justify-content-end mt-3">
+                <button className="btn btn-sm btn-nci-primary px-3" onClick={() => setShowQueueSuccess(false)}>Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   experimental: {
     proxyTimeout: 1000 * 60 * 15, // 15 minutes — matching reference project
+    proxyClientMaxBodySize: "100mb", // CEL file uploads can exceed default 10MB
   },
   async rewrites() {
     return [
@@ -14,10 +15,6 @@ const nextConfig: NextConfig = {
       {
         source: "/images/:path*",
         destination: `${process.env.API_BASE_URL || "http://localhost:9220"}/images/:path*`,
-      },
-      {
-        source: "/ping",
-        destination: `${process.env.API_BASE_URL || "http://localhost:9220"}/ping`,
       },
     ];
   },

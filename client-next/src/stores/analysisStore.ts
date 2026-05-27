@@ -312,9 +312,14 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
       dataListChip: { ...state.dataListChip, [chip]: samples },
     })),
   selectChip: (chip) => {
-    const chipData = get().dataListChip[chip];
+    const { chip: currentChip, dataList, dataListChip } = get();
+    // Save current dataList (with group/batch edits) back before switching
+    const updated = currentChip && dataList.length > 0
+      ? { ...dataListChip, [currentChip]: dataList }
+      : dataListChip;
+    const chipData = updated[chip];
     if (chipData) {
-      set({ chip, dataList: chipData });
+      set({ chip, dataList: chipData, dataListChip: updated });
       get().updateAvailableGroups();
     }
   },
@@ -372,12 +377,12 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
     set({ dataList });
   },
 
-  // Clear batch for selected samples (reset to "Others")
+  // Clear batch for selected samples
   deleteBatch: (indices) => {
     const dataList = [...get().dataList];
     indices.forEach((i) => {
       if (dataList[i]) {
-        dataList[i] = { ...dataList[i], batch: "Others" };
+        dataList[i] = { ...dataList[i], batch: "" };
       }
     });
     set({ dataList });
@@ -432,7 +437,7 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
       if (s.groups) {
         s.groups.split(",").forEach((g) => {
           const trimmed = g.trim();
-          if (trimmed && trimmed !== "Others") groups.add(trimmed);
+          if (trimmed) groups.add(trimmed);
         });
       }
     });

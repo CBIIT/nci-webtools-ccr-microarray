@@ -6,6 +6,9 @@ executionRoleArn: "${ROLE_ARN}"
 taskRoleArn: "${ROLE_ARN}"
 requiresCompatibilities:
   - FARGATE
+runtimePlatform:
+  cpuArchitecture: ARM64
+  operatingSystemFamily: LINUX
 volumes:
   - name: data
     efsVolumeConfiguration:
