@@ -377,12 +377,12 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
     set({ dataList });
   },
 
-  // Clear batch for selected samples (reset to "Others")
+  // Clear batch for selected samples
   deleteBatch: (indices) => {
     const dataList = [...get().dataList];
     indices.forEach((i) => {
       if (dataList[i]) {
-        dataList[i] = { ...dataList[i], batch: "Others" };
+        dataList[i] = { ...dataList[i], batch: "" };
       }
     });
     set({ dataList });
@@ -437,7 +437,7 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
       if (s.groups) {
         s.groups.split(",").forEach((g) => {
           const trimmed = g.trim();
-          if (trimmed && trimmed !== "Others") groups.add(trimmed);
+          if (trimmed) groups.add(trimmed);
         });
       }
     });

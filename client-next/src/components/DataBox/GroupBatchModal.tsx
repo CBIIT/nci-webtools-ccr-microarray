@@ -36,13 +36,13 @@ export default function GroupBatchModal({
       if (sample.groups) {
         sample.groups.split(",").forEach((g) => {
           const trimmed = g.trim();
-          if (trimmed && trimmed !== "Others") {
+          if (trimmed) {
             if (!gMap.has(trimmed)) gMap.set(trimmed, []);
             gMap.get(trimmed)!.push(sample.gsm);
           }
         });
       }
-      if (sample.batch && sample.batch !== "Others") {
+      if (sample.batch) {
         if (!bMap.has(sample.batch)) bMap.set(sample.batch, []);
         bMap.get(sample.batch)!.push(sample.gsm);
       }

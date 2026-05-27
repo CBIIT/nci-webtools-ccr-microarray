@@ -79,11 +79,11 @@ function formatErrorMessage(msg: string): string {
 export default function Analysis() {
   const store = useAnalysisStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  const [loadError, setLoadError] = useState("");
 
   const geoMutation = useMutation({
     mutationFn: () => loadGSE(store.accessionCode, store.projectId, store.loadChip),
-    onMutate: () => store.setLoading(true, "Loading GEO Data..."),
+    onMutate: () => { store.setLoading(true, "Loading GEO Data..."); setLoadError(""); },
     onSuccess: (data) => {
       if (data.multichip) {
         store.setMultichip(true);
@@ -100,7 +100,7 @@ export default function Analysis() {
     },
     onError: (err: Error) => {
       store.setLoading(false);
-      alert(formatErrorMessage(err.message));
+      setLoadError(formatErrorMessage(err.message));
     },
   });
 
@@ -114,12 +114,13 @@ export default function Analysis() {
     },
     onError: (err: Error) => {
       store.setLoading(false);
-      alert(formatErrorMessage(err.message));
+      setLoadError(formatErrorMessage(err.message));
     },
   });
 
   function handleLoadGEO() {
-    if (!store.accessionCode.trim()) return alert("Please enter an accession code.");
+    if (!store.accessionCode.trim()) return setLoadError("Accession Code is required.");
+    setLoadError("");
     geoMutation.mutate();
   }
 
@@ -180,8 +181,8 @@ export default function Analysis() {
     const batchSamples: Record<string, [boolean, boolean]> = {};
     let allOthers = true;
     store.dataList.forEach((sample, i) => {
-      const batch = sample.batch || "Others";
-      if (batch !== "Others") {
+      const batch = sample.batch || "";
+      if (batch) {
         allOthers = false;
         if (!batchSamples[batch]) batchSamples[batch] = [false, false];
         if (payload.groups[i] === store.group1) batchSamples[batch][0] = true;
@@ -251,6 +252,7 @@ export default function Analysis() {
 
   function handleReset() {
     store.reset();
+    setLoadError("");
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
@@ -285,7 +287,7 @@ export default function Analysis() {
                   id="accessionCode"
                   type="text"
                   value={store.accessionCode ?? ""}
-                  disabled={store.fileList.length > 0}
+                  disabled={store.dataLoaded || store.fileList.length > 0}
                   onChange={(e) => store.setAccessionCode(e.target.value)}
                 />
 
@@ -526,7 +528,12 @@ export default function Analysis() {
 
           {/* Tab Content */}
           <div className="tab-content-panel">
-            {store.activeTab === "gsm" && <GSMData />}
+            {store.activeTab === "gsm" && (
+              <>
+                {loadError && <p style={{ color: "#b22222", fontSize: "1.1rem", margin: "1rem" }}>{loadError}</p>}
+                {(!loadError || store.dataLoaded) && <GSMData />}
+              </>
+            )}
 
             {store.activeTab === "pre" && <PrePlotsBox />}
             {store.activeTab === "post" && <PostPlotsBox />}

@@ -180,7 +180,7 @@ export default function GSMData() {
         sample.gsm,
         sample.title || "",
         (sample.description as string) || "",
-        sample.groups || "Others",
+        sample.groups || "",
       ]),
     ];
 
