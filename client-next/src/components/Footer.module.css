@@ -1,0 +1,278 @@
+.footer {
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ── Primary Section ── */
+.usaFooterPrimarySection {
+  background-color: #004971;
+  color: #fff;
+}
+
+@media (min-width: 576px) {
+  .usaFooterPrimarySection {
+    padding: 2.5rem 0;
+  }
+}
+
+/* Mobile: accordion via <details> */
+.usaFooterPrimaryContentCollapsible {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.usaFooterPrimaryContentCollapsible summary {
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.usaFooterPrimaryContentCollapsible summary::-webkit-details-marker {
+  display: none;
+}
+
+.usaFooterPrimaryContentCollapsible summary::before {
+  content: "›";
+  display: inline-block;
+  font-size: 1.3rem;
+  font-weight: 300;
+  margin-right: 0.5rem;
+  transition: transform 0.2s ease;
+  transform: rotate(0deg);
+}
+
+.usaFooterPrimaryContentCollapsible[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.usaFooterPrimaryContentCollapsible[open] summary {
+  padding-bottom: 0.1rem;
+}
+
+.usaFooterPrimaryContentCollapsible ul {
+  list-style: none;
+  padding: 0 0 1rem 2rem;
+  margin: 0;
+}
+
+.desktopNav ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Desktop: grid columns */
+.usaFooterNciListHeader {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.usaFooterSecondaryLink {
+  list-style: none;
+  padding: 0.4rem 0;
+}
+
+.usaFooterSecondaryLink a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.usaFooterSecondaryLink a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile/desktop toggle */
+.mobileNav {
+  display: block;
+}
+
+.desktopNav {
+  display: none;
+}
+
+@media (min-width: 576px) {
+  .mobileNav {
+    display: none;
+  }
+
+  .desktopNav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .desktopNav {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── Secondary Section ── */
+.usaFooterSecondarySection {
+  background-color: #00314b;
+  color: #fff;
+  padding: 1rem 0;
+}
+
+.usaFooterSecondarySectionRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.usaFooterSecondarySectionRow + .usaFooterSecondarySectionRow {
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 992px) {
+  .usaFooterSecondarySectionRow {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .usaFooterSecondarySectionRight {
+    text-align: right;
+  }
+}
+
+/* Logo heading */
+.logoAgencyName {
+  font-weight: 700;
+  font-size: 1.6rem;
+  display: block;
+}
+
+.logoParentOrganization {
+  font-size: 1.25rem;
+  display: block;
+}
+
+.versionInfo {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  color: #fff;
+}
+
+/* Contact */
+.usaFooterContactHeading {
+  font-weight: 700;
+  font-size: 1.47rem;
+  margin-bottom: 0.25rem;
+}
+
+.usaFooterContactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.usaFooterContactInfo a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.usaFooterContactInfo a:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .usaFooterContactInfo {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+}
+
+/* Social */
+.usaFooterSocialHeading {
+  font-weight: 700;
+  font-size: 1.47rem;
+  margin-bottom: 0.25rem;
+}
+
+.usaFooterSocialLinks {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.usaSocialLink {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.usaSocialLink svg {
+  fill: #face00;
+  width: 40px;
+  height: 40px;
+  transition: fill 0.2s;
+}
+
+.usaSocialLink:hover svg {
+  fill: #ddaa01;
+}
+
+/* Government links */
+.usaFooterAddress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.usaFooterAddress a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.usaFooterAddress a:hover {
+  text-decoration: underline;
+}
+
+/* ── Back to Top ── */
+.usaFooterReturnToTop {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 85px;
+  height: 85px;
+  background-color: #027bbd;
+  border-top-left-radius: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0.5rem;
+  transition: opacity 0.3s;
+}
+
+.usaFooterReturnToTop a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.usaFooterReturnToTop a:hover {
+  color: #e0e0e0;
+}
+
+.usaFooterReturnToTopHidden {
+  opacity: 0;
+  pointer-events: none;
+}

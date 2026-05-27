@@ -1,0 +1,161 @@
+/* ── US Government Banner ── */
+.govBanner {
+  background-color: #f0f0f0;
+  height: 46px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.govBannerText {
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+  margin-left: 15px;
+}
+
+/* ── NCI Logo Bar ── */
+.headerNci {
+  background: #fff;
+  padding: 0.75rem 0;
+}
+
+.headerNci img {
+  height: 60px;
+}
+
+/* ── App Banner ── */
+.headerBanner {
+  background-color: #2971a5;
+  line-height: 3em;
+}
+
+.info {
+  color: #fff;
+  font-size: 1.4em;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.infoHighlight {
+  color: #ffc90e;
+}
+
+.infoAffix {
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* ── Navigation Bar ── */
+.headerNav {
+  background: #2a303f;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem a {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  padding: 0 1.5rem;
+  line-height: 3.5em;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.navItem a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.navItemActive a {
+  background-color: #ffc90e;
+  color: #000 !important;
+}
+
+.navItemActive a:hover {
+  color: #fff !important;
+}
+
+/* ── Search ── */
+.searchGroup {
+  display: flex;
+  align-items: stretch;
+}
+
+.searchInput {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 20px 0 0 20px;
+  color: #212529;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  outline: none !important;
+  box-shadow: none !important;
+  width: clamp(120px, 20vw, 220px);
+}
+
+.searchInput:focus {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: #dee2e6;
+}
+
+.searchInput::placeholder {
+  color: #212529;
+}
+
+.searchButton {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0 20px 20px 0;
+  margin-left: -1px;
+  color: #212529;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+  outline: none;
+  box-shadow: none;
+}
+
+.searchButton:hover {
+  color: rgba(33, 37, 41, 0.7);
+}
+
+/* ── Responsive ── */
+@media (max-width: 575px) {
+  .headerBanner {
+    line-height: 2em;
+    padding: 0.5rem 0;
+  }
+
+  .info {
+    font-size: 1.1em;
+    display: block;
+  }
+
+  .infoAffix {
+    font-size: 0.9em;
+    display: block;
+  }
+
+  .headerNci img {
+    height: 45px;
+  }
+
+  .searchGroup {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .searchInput {
+    flex: 1;
+    width: auto;
+  }
+}
