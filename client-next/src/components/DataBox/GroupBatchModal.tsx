@@ -96,17 +96,15 @@ export default function GroupBatchModal({
     if (!file) return;
 
     Papa.parse(file, {
-      header: false,
+      header: true,
       skipEmptyLines: true,
+      transformHeader: (h: string) => h.trim().toLowerCase(),
       complete: (results) => {
-        const rows = (results.data as string[][])
-          .filter((row) => row.length >= 2)
-          .filter((row, i) => i > 0 || !["gsm", "group", "batch"].includes(row[0]?.trim().toLowerCase()))
-          .map((row) => ({
-            gsm: row[0]?.trim() || "",
-            group: row[1]?.trim() || "",
-            batch: row[2]?.trim() || "",
-          }));
+        const rows = (results.data as Record<string, string>[]).map((row) => ({
+          gsm: row.gsm?.trim() || "",
+          group: row.group?.trim() || "",
+          batch: row.batch?.trim() || "",
+        }));
 
         const error = store.importGroupsCsv(rows);
         if (error) {
