@@ -55,7 +55,6 @@ function ResultLoader() {
         s.setContrastComplete(true);
         s.setCompared(true);
         s.setDoneGsea(true);
-        s.setDisableContrast(true);
         s.setActiveTab("gsm");
         s.setLoading(false);
       } catch (err) {
@@ -66,6 +65,15 @@ function ResultLoader() {
   }, [searchParams]);
 
   return null;
+}
+
+function formatErrorMessage(msg: string): string {
+  const match = msg.match(/timeout of (\d+)ms/);
+  if (match) {
+    const minutes = Math.round(parseInt(match[1]) / 60000);
+    return `Request timed out after ${minutes} minute${minutes !== 1 ? "s" : ""}. Please try again or submit as a long-running job.`;
+  }
+  return msg;
 }
 
 export default function Analysis() {
@@ -92,7 +100,7 @@ export default function Analysis() {
     },
     onError: (err: Error) => {
       store.setLoading(false);
-      setLoadError(err.message);
+      setLoadError(formatErrorMessage(err.message));
     },
   });
 
@@ -106,7 +114,7 @@ export default function Analysis() {
     },
     onError: (err: Error) => {
       store.setLoading(false);
-      setLoadError(err.message);
+      setLoadError(formatErrorMessage(err.message));
     },
   });
 
@@ -142,7 +150,6 @@ export default function Analysis() {
       store.setContrastComplete(true);
       store.setCompared(true);
       store.setDoneGsea(true);
-      store.setDisableContrast(true);
       store.setLoading(false);
       setPanelCollapsed(true);
     },
@@ -229,6 +236,7 @@ export default function Analysis() {
       })
         .then(() => {
           store.setLoading(false);
+          store.setContrastComplete(true);
           setShowQueueSuccess(true);
         })
         .catch((err: Error) => {
@@ -354,7 +362,7 @@ export default function Analysis() {
                   id="selectChip"
                   value={store.chip ?? ""}
                   onChange={(e) => store.selectChip(e.target.value)}
-                  disabled={store.disableContrast}
+                  disabled={store.contrastComplete}
                 >
                   {Object.keys(store.dataListChip).map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -368,7 +376,7 @@ export default function Analysis() {
               id="selectGroup1"
               aria-label="Select Group 1"
               value={store.group1 ?? ""}
-              disabled={store.disableContrast}
+              disabled={store.contrastComplete}
               onChange={(e) => store.setGroup1(e.target.value)}
             >
               <option value="">-- Select Group 1 --</option>
@@ -381,7 +389,7 @@ export default function Analysis() {
               id="selectGroup2"
               aria-label="Select Group 2"
               value={store.group2 ?? ""}
-              disabled={store.disableContrast}
+              disabled={store.contrastComplete}
               onChange={(e) => store.setGroup2(e.target.value)}
             >
               <option value="">-- Select Group 2 --</option>
@@ -398,7 +406,7 @@ export default function Analysis() {
               className="form-select form-select-sm"
               id="selectNormal"
               value={store.normal}
-              disabled={store.disableContrast}
+              disabled={store.contrastComplete}
               onChange={(e) => store.setNormal(e.target.value)}
             >
               <option value="RMA">RMA</option>
@@ -441,7 +449,7 @@ export default function Analysis() {
 
           {/* Run / Reset buttons (outside sub-boxes) */}
           <div className="mx-2 mb-2">
-            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading || store.disableContrast || !store.group1 || !store.group2 || store.group1 === store.group2} onClick={handleRunContrast}>Run Contrast</button>
+            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading || store.contrastComplete || !store.group1 || !store.group2 || store.group1 === store.group2} onClick={handleRunContrast}>Run Contrast</button>
             <button className="btn btn-nci-primary w-100" onClick={() => { store.resetContrast(); setContrastError(""); setPanelCollapsed(false); }} disabled={isLoading} data-tooltip="Reset to start a new contrast analysis">Reset</button>
             {contrastError && (
               <p style={{ color: "#b22222", fontSize: "0.85rem" }} className="mt-1 mb-0">{contrastError}</p>
