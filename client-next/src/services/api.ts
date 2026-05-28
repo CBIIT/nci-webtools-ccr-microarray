@@ -116,13 +116,14 @@ export async function loadGSE(code: string, projectId: string, chip?: string) {
   return parseGSEResponse(res.data.data);
 }
 
-const MAX_UPLOAD_SIZE = 100 * 1024 * 1024; // must match next.config.ts proxyClientMaxBodySize
+// TODO: consider re-adding upload size limit if needed
+// const MAX_UPLOAD_SIZE = 100 * 1024 * 1024;
 
 export async function uploadCEL(projectId: string, files: File[]) {
-  const totalSize = files.reduce((sum, f) => sum + f.size, 0);
-  if (totalSize > MAX_UPLOAD_SIZE) {
-    throw new Error(`Total file size (${Math.round(totalSize / (1024 * 1024))}MB) exceeds the ${Math.round(MAX_UPLOAD_SIZE / (1024 * 1024))}MB upload limit.`);
-  }
+  // const totalSize = files.reduce((sum, f) => sum + f.size, 0);
+  // if (totalSize > MAX_UPLOAD_SIZE) {
+  //   throw new Error(`Total file size (${Math.round(totalSize / (1024 * 1024))}MB) exceeds the ${Math.round(MAX_UPLOAD_SIZE / (1024 * 1024))}MB upload limit.`);
+  // }
 
   const formData = new FormData();
   formData.append("projectId", projectId);
