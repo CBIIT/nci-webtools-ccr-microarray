@@ -225,7 +225,7 @@ export default function Analysis() {
     if (store.useQueue) {
       // Async worker path
       if (!store.email || !store.email.trim()) {
-        setContrastError("Please enter an email address for queue notifications.");
+        setContrastError("Please enter an email address to receive job completion notification.");
         return;
       }
       store.setLoading(true, "Submitting job...");
