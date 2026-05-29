@@ -563,6 +563,7 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
   // ── Reset Contrast (keep data, re-enable contrast inputs) ──
   resetContrast: () =>
     set({
+      email: "",
       group1: "",
       group2: "",
       normal: "RMA",
