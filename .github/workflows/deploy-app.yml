@@ -20,7 +20,7 @@ on:
 jobs:
   deploy-microarray-app:
     timeout-minutes: 90
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-latest
     environment: ${{ inputs.tier }}
     env:
       APP: microarray
@@ -106,7 +106,6 @@ jobs:
         with:
           context: .
           file: docker/backend.dockerfile
-          platforms: linux/arm64
           pull: true
           push: true
           tags: |
@@ -120,7 +119,6 @@ jobs:
         with:
           context: .
           file: docker/frontend.dockerfile
-          platforms: linux/arm64
           pull: true
           push: true
           tags: |
