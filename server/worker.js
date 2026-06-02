@@ -32,6 +32,41 @@ function writeStatus(projectDir, status) {
   fs.writeFileSync(statusPath, JSON.stringify(status, null, 2));
 }
 
+function moveInputFilesToError(projectDir, id) {
+  try {
+    var errorDir = path.join(config.uploadPath, 'error', id);
+    if (!fs.existsSync(errorDir)) fs.mkdirSync(errorDir, { recursive: true });
+    var entries = fs.readdirSync(projectDir);
+    entries.forEach(function (name) {
+      var lower = name.toLowerCase();
+      if (lower.endsWith('.cel') || lower.endsWith('.cel.gz') || lower.endsWith('.gz')) {
+        var src = path.join(projectDir, name);
+        var dest = path.join(errorDir, name);
+        fs.renameSync(src, dest);
+        logger.info('[Worker] Moved input file to error: ' + dest);
+      }
+    });
+  } catch (err) {
+    logger.error('[Worker] Failed to move input files to error: ' + err.message);
+  }
+}
+
+function removeInputFiles(projectDir) {
+  try {
+    var entries = fs.readdirSync(projectDir);
+    entries.forEach(function (name) {
+      var lower = name.toLowerCase();
+      if (lower.endsWith('.cel') || lower.endsWith('.cel.gz') || lower.endsWith('.gz')) {
+        var fullPath = path.join(projectDir, name);
+        fs.unlinkSync(fullPath);
+        logger.info('[Worker] Removed input file: ' + fullPath);
+      }
+    });
+  } catch (err) {
+    logger.error('[Worker] Failed to clean input files: ' + err.message);
+  }
+}
+
 function removeGSEAheatmap(projectDir) {
   var plot = path.join(projectDir, 'ssgseaHeatmap1.jpg');
   var txt = path.join(projectDir, 'ss_result.txt');
@@ -98,6 +133,8 @@ function run(id) {
         durationSeconds: durationSec,
       });
 
+      removeInputFiles(projectDir);
+
       // Send success email
       if (params.email) {
         var baseUrl = (config.microarray_link || '').replace(/\/+$/, '');
@@ -143,6 +180,8 @@ function run(id) {
         failedAt: end.toISOString(),
         error: errorMsg,
       });
+
+      moveInputFilesToError(projectDir, id);
 
       // Send failure email
       if (params.email) {
