@@ -25,19 +25,16 @@ RUN dnf -y update \
     mesa-libGLU \
     pcre \
     pandoc \
+    libuv-devel \
     && dnf clean all
 
 RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/npm;
 
-# Install R via Posit RPM (matching docker branch)
-ENV R_VER="4.5.3"
-ENV PATH="/opt/R/${R_VER}/bin:${PATH}"
+# Install R (Amazon Linux 2023 native — x86_64 compatible, no Posit SIGSEGV)
 ENV TAR="/usr/bin/tar --no-same-owner"
-RUN ARCH=$(uname -m) \
-    && curl -O https://cdn.posit.co/r/rhel-9/pkgs/R-${R_VER}-1-1.${ARCH}.rpm \
-    && dnf install -y R-${R_VER}-1-1.${ARCH}.rpm \
-    && echo 'options(repos = c(CRAN = sprintf("https://packagemanager.posit.co/cran/latest/bin/linux/rhel9-%s/%s", R.version["arch"], substr(getRversion(), 1, 3))))' \
-       >> /opt/R/${R_VER}/lib/R/etc/Rprofile.site
+RUN dnf install -y R \
+    && echo 'options(repos = c(CRAN = "https://cloud.r-project.org"))' \
+       >> /usr/lib64/R/etc/Rprofile.site
 
 RUN mkdir -p /app/server
 
