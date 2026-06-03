@@ -16,15 +16,21 @@ var emailer = require('./components/mail');
 var logger = require('./components/logger');
 
 function formatDate(date) {
-  var y = date.getFullYear();
-  var mo = String(date.getMonth() + 1).padStart(2, '0');
-  var d = String(date.getDate()).padStart(2, '0');
-  var h = date.getHours();
-  var mi = String(date.getMinutes()).padStart(2, '0');
-  var s = String(date.getSeconds()).padStart(2, '0');
-  var ampm = h >= 12 ? 'PM' : 'AM';
-  var h12 = h % 12 || 12;
-  return y + '-' + mo + '-' + d + ', ' + h12 + ':' + mi + ':' + s + ' ' + ampm;
+  var parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+    timeZoneName: 'shortOffset',
+  }).formatToParts(date);
+  var p = {};
+  parts.forEach(function (part) { p[part.type] = part.value; });
+  var offset = (p.timeZoneName || 'GMT+0').replace('GMT', 'UTC');
+  return p.year + '-' + p.month + '-' + p.day + ' ' + p.hour + ':' + p.minute + ':' + p.second + ' ' + p.dayPeriod + ' ' + offset;
 }
 
 function writeStatus(projectDir, status) {
@@ -112,8 +118,9 @@ function run(id) {
         var html = emailer.emailTemplate(
           code,
           durationSec + ' seconds',
+          formatDate(end),
           link,
-          params.submittedAt,
+          formatDate(new Date(params.submittedAt)),
           id
         );
         emailer.sendMail(
@@ -156,7 +163,8 @@ function run(id) {
         var html = emailer.emailFailedTemplate(
           code,
           durationSec + ' seconds',
-          params.submittedAt,
+          formatDate(end),
+          formatDate(new Date(params.submittedAt)),
           id
         );
         emailer.sendMail(
