@@ -63,8 +63,8 @@ export default function GroupBatchModal({
       setMessage("The group name only allows letters, numbers, and one underscore (cannot be placed after a number). Must start with a letter. Valid Group Name Example: RNA_1");
       return;
     }
-    if (selectedIndices.length === 0) {
-      setMessage("Please select some GSM(s) before adding");
+    if (selectedIndices.length < 2) {
+      setMessage("Select at least 2 GSM to add a group");
       return;
     }
 
