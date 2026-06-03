@@ -290,5 +290,8 @@ export async function getssGSEAWithDiffGenSet(
   const res = await api.post<ApiResponse>("/getssGSEAWithDiffGenSet", {
     projectId, species, genSet, group1, group2,
   });
+  if (res.data.status !== 200) {
+    throw new Error(res.data.msg || "Failed to generate ssGSEA data");
+  }
   return res.data.data;
 }

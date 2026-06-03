@@ -222,34 +222,38 @@ router.post('/pathwaysHeapMap', function (req, res) {
 
 router.post('/getssGSEAWithDiffGenSet', function (req, res) {
   if (!validate(req.body.projectId))
-    res.json({ status: 404, msg: 'Invalid project ID' });
+    return res.json({ status: 404, msg: 'Invalid project ID' });
   let data = [];
-  //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push('runSSGSEA'); // action
   data.push(req.body.projectId);
-  //data path
   data.push(config.uploadPath);
   data.push(req.body.species);
-  data.push(req.body.genSet);
+  // Strip "human$" / "mouse$" prefix — R expects the bare gene set name
+  const genSet = req.body.genSet.includes('$') ? req.body.genSet.split('$')[1] : req.body.genSet;
+  data.push(genSet);
   data.push(req.body.group1);
   data.push(req.body.group2);
   data.push(config.configPath);
   removeGSEAheatmap(config.uploadPath, req.body.projectId);
   R.execute('wrapper.R', data, function (err, returnValue) {
-    returnValue = fs.readFileSync(
-      config.uploadPath + '/' + req.body.projectId + '/ss_result.txt',
-      'utf8'
-    );
-
-    let re = JSON.parse(returnValue);
-    // store return value in session (deep copy)
-    let d = JsonToObject(re);
-    // save result into session
-    if (req.session[req.body.projectId].ssGSEA) {
-      req.session[req.body.projectId].ssGSEA = d.ssGSEA;
+    const ssResultPath = config.uploadPath + '/' + req.body.projectId + '/ss_result.txt';
+    const errPath = config.uploadPath + '/' + req.body.projectId + '/ssgseaPathways.err';
+    if (fs.existsSync(errPath)) {
+      logger.error('[getssGSEAWithDiffGenSet] R error:\n' + fs.readFileSync(errPath, 'utf8'));
     }
-    logger.info('Get Contrast result success');
-    res.json({ status: 200, data: '' });
+    if (!fs.existsSync(ssResultPath)) {
+      return res.json({ status: 500, msg: 'ssGSEA computation failed. Check server logs.' });
+    }
+    try {
+      returnValue = fs.readFileSync(ssResultPath, 'utf8');
+      let re = JSON.parse(returnValue);
+      let d = JsonToObject(re);
+      req.session[req.body.projectId].ssGSEA = d.ssGSEA;
+      logger.info('Get Contrast result success');
+      res.json({ status: 200, data: '' });
+    } catch (e) {
+      res.json({ status: 500, msg: 'Failed to parse ssGSEA results.' });
+    }
   });
 });
 

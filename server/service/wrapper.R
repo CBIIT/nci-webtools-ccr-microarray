@@ -298,19 +298,21 @@ process = function(){
           ssGSEA_results = ssgseaPathways(diff_expr_genes,species,geneSet,data_repo_path,projectId,config_path)
          
            },error =function(cond){
-                # message(cond)
+                write(paste0("runSSGSEA error: ", conditionMessage(cond)),
+                      paste0(data_repo_path, "/ssgseaPathways.err"), append=TRUE)
            },finally={
                    message("runSSGSEA finally")
                    file<-paste0(data_repo_path,"/",projectId,"_",cons,"_ssGSEA_pathways.txt")
                    if (file.exists(file)) {
-                     ss_result<-read.table(file, header = FALSE, sep = "", dec = ".") 
+                     ss_result<-read.table(file, header = FALSE, sep = "", dec = ".")
                     re<-list(
                     ss_name=names(ss_result),
                     ss_data= ss_result[2:length(ss_result[,1]),]
                     )
-                    write(toJSON(re),paste0(data_repo_path,"/ss_result.txt",sep=""))
+                  } else {
+                    re<-list(ss_name="", ss_data="")
                   }
-                  
+                  write(toJSON(re),paste0(data_repo_path,"/ss_result.txt",sep=""))
             })
         }
 
