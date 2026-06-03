@@ -85,8 +85,8 @@ export default function SSGSEABox() {
     <div>
       <div className="d-flex gap-3 mb-3 flex-wrap align-items-end">
         <div>
-          <label htmlFor="ssgsea-view" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)" }}>
-            Select ssGSEA View
+          <label htmlFor="ssgsea-view" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)", fontWeight: "bold" }}>
+            ssGSEA section selection
           </label>
           <select
             id="ssgsea-view"
@@ -100,8 +100,8 @@ export default function SSGSEABox() {
           </select>
         </div>
         <div>
-          <label htmlFor="gene-set" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)" }}>
-            Gene Set
+          <label htmlFor="gene-set" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)", fontWeight: "bold" }}>
+            ssGSEA Gene Sets selection
           </label>
           <select
             id="gene-set"
