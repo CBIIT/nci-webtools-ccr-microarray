@@ -31,10 +31,28 @@ async function removeOldEntries(dir) {
   }
 }
 
+function isSafePath(dir) {
+  if (!dir || typeof dir !== 'string' || !dir.trim()) return false;
+  const resolved = path.resolve(dir);
+  // Require at least 2 path segments (e.g. /data/input) — reject / or single-level paths
+  return resolved.split(path.sep).filter(Boolean).length >= 2;
+}
+
 async function cleanup(config) {
-  await removeOldEntries(path.resolve(config.uploadPath));
+  const uploadPath = path.resolve(config.uploadPath);
+  if (!isSafePath(uploadPath)) {
+    console.error(`Refusing cleanup: unsafe uploadPath "${config.uploadPath}"`);
+  } else {
+    await removeOldEntries(uploadPath);
+  }
+
   if (process.env.OUTPUT_FOLDER) {
-    await removeOldEntries(path.resolve(process.env.OUTPUT_FOLDER));
+    const outputPath = path.resolve(process.env.OUTPUT_FOLDER);
+    if (!isSafePath(outputPath)) {
+      console.error(`Refusing cleanup: unsafe OUTPUT_FOLDER "${process.env.OUTPUT_FOLDER}"`);
+    } else {
+      await removeOldEntries(outputPath);
+    }
   }
 }
 
