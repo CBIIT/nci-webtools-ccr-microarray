@@ -2,6 +2,7 @@
 
 var express = require('express');
 var config = require('./config');
+var { startCron } = require('./services/cron');
 var app = express();
 require('./routes')(app);
 
@@ -16,7 +17,7 @@ const server = app.listen(config.port, function() {
 
 server.timeout=config.timeout;
 
-// Directories are created by config/index.js on load
+startCron(config);
 
 
 
