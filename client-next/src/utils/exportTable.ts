@@ -1,4 +1,5 @@
 import writeXlsxFile from "write-excel-file/browser";
+import type { Sample } from "@/services/api";
 
 interface Column {
   key: string;
@@ -11,9 +12,13 @@ interface StoreInfo {
   fileList: File[];
   group1: string;
   group2: string;
+  dataList: Sample[];
 }
 
-export function buildSettingsRows(store: StoreInfo): (string | null)[][] {
+export function buildSettingsRows(
+  store: StoreInfo,
+  opts?: { type?: string; filters?: [string, string, boolean?][] }
+): (string | null)[][] {
   const rows: (string | null)[][] = [
     ["Analysis Type", store.analysisType === "GEO" ? "GEO Data" : "CEL Files"],
   ];
@@ -22,7 +27,18 @@ export function buildSettingsRows(store: StoreInfo): (string | null)[][] {
   } else {
     rows.push(["Upload Data", store.fileList.map((f) => f.name).join(", ")]);
   }
-  rows.push(["Contrast", `${store.group1} vs ${store.group2}`]);
+  rows.push(["Contrasts", `${store.group1} vs ${store.group2}`]);
+  const g1gsms = store.dataList.filter((s) => s.groups === store.group1).map((s) => s.gsm).join(",") + ",";
+  const g2gsms = store.dataList.filter((s) => s.groups === store.group2).map((s) => s.gsm).join(",") + ",";
+  rows.push([store.group1, g1gsms]);
+  rows.push([store.group2, g2gsms]);
+  if (opts?.type) rows.push(["Type", opts.type]);
+  if (opts?.filters?.length) {
+    rows.push(["Filters", ""]);
+    for (const [label, value, force] of opts.filters) {
+      if (value || force) rows.push([label, value]);
+    }
+  }
   return rows;
 }
 
@@ -79,7 +95,7 @@ export function exportNormalizedTsv(
     cols.join("\t"),
     ...records.map((row) => Object.values(row).map((v) => (v == null ? "" : String(v))).join("\t")),
   ];
-  const blob = new Blob([lines.join("\n")], { type: "text/tab-separated-values" });
+  const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/tab-separated-values" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;

@@ -14,7 +14,7 @@ const EXPORT_COLUMNS = [
   { key: "FC", label: "FC" },
   { key: "logFC", label: "logFC" },
   { key: "P.Value", label: "P.Value" },
-  { key: "adj.P.Val", label: "adj.P.Val" },
+  { key: "adj.P.Val", label: "adj.P.value" },
   { key: "AveExpr", label: "AveExpr" },
   { key: "ACCNUM", label: "ACCNUM" },
   { key: "DESC", label: "DESC" },
@@ -28,7 +28,7 @@ const COLUMNS = [
   { key: "SYMBOL", label: "SYMBOL", search: "search_symbol" },
   { key: "FC", label: "FC", search: "search_fc", fmt: "num3" },
   { key: "P.Value", label: "P.Value", search: "search_p_value", fmt: "exp" },
-  { key: "adj.P.Val", label: "adj.P.Val", search: "search_adj_p_value", fmt: "exp" },
+  { key: "adj.P.Val", label: "adj.P.value", search: "search_adj_p_value", fmt: "exp" },
   { key: "AveExpr", label: "AveExpr", search: "search_aveexpr", fmt: "num3" },
   { key: "ACCNUM", label: "ACCNUM", search: "search_accnum" },
   { key: "DESC", label: "DESC", search: "search_desc" },
@@ -113,7 +113,22 @@ export default function DEGTable() {
         search_keyword: search,
       });
       await exportTableToXlsx(
-        buildSettingsRows(store),
+        buildSettingsRows(store, {
+          type: "Differentially Expressed Genes",
+          filters: [
+            ["SYMBOL", search.search_symbol],
+            ["fc", search.search_fc],
+            ["P.Value", search.search_p_value],
+            ["adj.P.value", search.search_adj_p_value],
+            ["AveExpr", search.search_aveexpr],
+            ["ACCNUM", search.search_accnum, true],
+            ["DESC", search.search_desc],
+            ["ENTREZ", search.search_entrez],
+            ["probsetID", search.search_probsetid],
+            ["t", search.search_t],
+            ["B", search.search_b],
+          ],
+        }),
         EXPORT_COLUMNS,
         result.records,
         `DEG_${store.projectId}.xlsx`
