@@ -48,6 +48,14 @@ export default function SSGSEABox() {
     generateSSGSEA(genSet);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Show spinner only when the user is on the ssGSEA tab while still generating
+  useEffect(() => {
+    if (store.activeTab === "ssgsea" && generating) {
+      store.setLoading(true, "Running Analysis");
+      return () => store.setLoading(false);
+    }
+  }, [store.activeTab, generating]); // eslint-disable-line react-hooks/exhaustive-deps
+
   async function generateSSGSEA(gs: string) {
     setGenerating(true);
     setHeatmapError("");

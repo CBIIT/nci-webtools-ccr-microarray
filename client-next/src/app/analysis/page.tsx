@@ -537,8 +537,16 @@ export default function Analysis() {
 
             {store.activeTab === "pre" && <PrePlotsBox />}
             {store.activeTab === "post" && <PostPlotsBox />}
-            {store.activeTab === "deg" && <DEGBox />}
-            {store.activeTab === "ssgsea" && <SSGSEABox />}
+            {store.contrastComplete && (
+              <div style={{ display: store.activeTab === "deg" ? "" : "none" }}>
+                <DEGBox />
+              </div>
+            )}
+            {store.contrastComplete && (
+              <div style={{ display: store.activeTab === "ssgsea" ? "" : "none" }}>
+                <SSGSEABox />
+              </div>
+            )}
           </div>
         </div>
       </div>
