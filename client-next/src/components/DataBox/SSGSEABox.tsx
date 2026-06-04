@@ -34,7 +34,6 @@ export default function SSGSEABox() {
   const [selected, setSelected] = useState<SubView>("table");
   const [genSet, setGenSet] = useState("human$H: Hallmark Gene Sets");
   const [heatmapUrl, setHeatmapUrl] = useState("");
-  const [heatmapLoading, setHeatmapLoading] = useState(false);
   const [heatmapError, setHeatmapError] = useState("");
   const [generating, setGenerating] = useState(false);
   // Increment to force SSGSEATable re-mount after data generation
@@ -53,7 +52,7 @@ export default function SSGSEABox() {
     setGenerating(true);
     setHeatmapError("");
     try {
-      await getssGSEAWithDiffGenSet(
+      const result = await getssGSEAWithDiffGenSet(
         store.projectId,
         gs.startsWith("mouse$") ? "mouse" : "human",
         gs,
@@ -61,6 +60,9 @@ export default function SSGSEABox() {
         store.group2
       );
       setTableKey((k) => k + 1);
+      if (result?.heatmap) {
+        setHeatmapUrl(`/images/${store.projectId}/${result.heatmap}?t=${Date.now()}`);
+      }
     } catch (err) {
       setHeatmapError(err instanceof Error ? err.message : "Failed to generate ssGSEA data");
     } finally {
@@ -130,7 +132,7 @@ export default function SSGSEABox() {
 
       {selected === "heatmap" && !generating && (
         <div>
-          {heatmapLoading && <p className="text-muted" style={{ fontSize: "0.85rem" }}>Loading heatmap...</p>}
+
           {heatmapUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={heatmapUrl} alt="ssGSEA Pathway Heatmap" style={{ maxWidth: "100%" }} />
