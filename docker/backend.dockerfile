@@ -60,8 +60,18 @@ WORKDIR /app/server
 COPY server/setup/setup.R /app/server/setup/setup.R
 RUN Rscript setup/setup.R
 
-# Remove webshot (transitive dep — not used, bundles casperjs CVE-2020-7679 with no upstream fix)
-RUN Rscript -e "remove.packages('webshot')"
+# Replace webshot (bundles casperjs/CVE-2020-7679) with webshot2-backed stub
+# webshot2 uses Chrome instead of PhantomJS — no CVE
+# Stub named 'webshot' satisfies heatmaply's Imports: webshot requirement
+RUN set -e; \
+    Rscript -e "install.packages('webshot2')"; \
+    PKG=/tmp/webshot_stub; \
+    mkdir -p "${PKG}/R"; \
+    printf 'Package: webshot\nVersion: 0.5.5\nTitle: Stub\nDescription: Delegates to webshot2.\nLicense: MIT\nImports: webshot2\n' > "${PKG}/DESCRIPTION"; \
+    printf 'importFrom(webshot2,webshot)\nimportFrom(webshot2,appshot)\nimportFrom(webshot2,resize)\nimportFrom(webshot2,shrink)\nimportFrom(webshot2,rmdshot)\nexport(webshot)\nexport(appshot)\nexport(resize)\nexport(shrink)\nexport(rmdshot)\nexport(install_phantomjs)\nexport(is_phantomjs_installed)\n' > "${PKG}/NAMESPACE"; \
+    printf 'install_phantomjs <- function(...) invisible(NULL)\nis_phantomjs_installed <- function(...) FALSE\n' > "${PKG}/R/stubs.R"; \
+    Rscript -e "remove.packages('webshot'); install.packages('${PKG}', repos=NULL, type='source')"; \
+    rm -rf "${PKG}"
 
 # Install server npm dependencies
 COPY server/package.json server/package-lock.json ./
