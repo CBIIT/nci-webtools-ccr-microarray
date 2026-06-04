@@ -11,6 +11,9 @@
   },
   "author": "Wei Yu",
   "license": "ISC",
+  "overrides": {
+    "qs": ">=6.15.2"
+  },
   "dependencies": {
     "@aws-sdk/client-ecs": "^3.750.0",
     "cookie": "^0.7.2",

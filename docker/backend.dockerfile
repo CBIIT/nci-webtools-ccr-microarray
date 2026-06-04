@@ -30,6 +30,9 @@ RUN dnf -y update \
 
 RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/npm;
 
+# Restrict Python 3.9 to root only (security mitigation)
+RUN chmod 700 /usr/bin/python3.9
+
 # Install R (Amazon Linux 2023 native — x86_64 compatible, no Posit SIGSEGV)
 ENV TAR="/usr/bin/tar --no-same-owner"
 RUN dnf install -y R \
