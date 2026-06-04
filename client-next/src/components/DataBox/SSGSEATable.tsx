@@ -137,7 +137,7 @@ const SSGSEATable = forwardRef<SSGSEATableHandle, SSGSEATableProps>(function SSG
                     type="text"
                     className="form-control form-control-sm"
                     style={{ fontSize: "0.85rem" }}
-                    placeholder="Search"
+                    placeholder={col.label}
                     value={search[col.search] || ""}
                     onChange={(e) => handleSearch(col.search, e.target.value)}
                   />
