@@ -156,6 +156,10 @@ export default function SSGSEABox() {
           {heatmapUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={heatmapUrl} alt="ssGSEA Pathway Heatmap" style={{ maxWidth: "100%" }} />
+          ) : tableKey > 0 ? (
+            <p className="text-muted" style={{ fontSize: "0.85rem" }}>
+              Not enough significant pathways available with p-value &lt; 0.05.
+            </p>
           ) : (
             <p className="text-muted" style={{ fontSize: "0.85rem" }}>
               Heatmap will be available after ssGSEA generation completes. Check the Pathway Heatmap view or change the gene set.
