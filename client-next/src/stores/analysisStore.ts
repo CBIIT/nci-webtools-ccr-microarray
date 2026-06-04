@@ -80,6 +80,7 @@ export interface AnalysisState {
   uploaded: boolean;
   compared: boolean;
   contrastComplete: boolean;
+  jobQueued: boolean;
   doneGsea: boolean;
   disableContrast: boolean;
   activeTab: string;
@@ -172,6 +173,7 @@ export interface AnalysisActions {
   setUploaded: (uploaded: boolean) => void;
   setCompared: (compared: boolean) => void;
   setContrastComplete: (complete: boolean) => void;
+  setJobQueued: (queued: boolean) => void;
   setDoneGsea: (done: boolean) => void;
   setDisableContrast: (disable: boolean) => void;
   setActiveTab: (tab: string) => void;
@@ -259,6 +261,7 @@ const initialState: AnalysisState = {
   uploaded: false,
   compared: false,
   contrastComplete: false,
+  jobQueued: false,
   doneGsea: false,
   disableContrast: false,
   activeTab: "gsm",
@@ -505,6 +508,7 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
   setUploaded: (uploaded) => set({ uploaded }),
   setCompared: (compared) => set({ compared }),
   setContrastComplete: (complete) => set({ contrastComplete: complete }),
+  setJobQueued: (queued) => set({ jobQueued: queued }),
   setDoneGsea: (done) => set({ doneGsea: done }),
   setDisableContrast: (disable) => set({ disableContrast: disable }),
   setActiveTab: (tab) => set({ activeTab: tab }),
@@ -570,6 +574,7 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
       disableContrast: false,
       compared: false,
       contrastComplete: false,
+      jobQueued: false,
       doneGsea: false,
       activeTab: "gsm",
       histplotBN: "",

@@ -236,7 +236,7 @@ export default function Analysis() {
       })
         .then(() => {
           store.setLoading(false);
-          store.setContrastComplete(true);
+          store.setJobQueued(true);
           setShowQueueSuccess(true);
         })
         .catch((err: Error) => {
@@ -362,7 +362,7 @@ export default function Analysis() {
                   id="selectChip"
                   value={store.chip ?? ""}
                   onChange={(e) => store.selectChip(e.target.value)}
-                  disabled={store.contrastComplete}
+                  disabled={store.contrastComplete || store.jobQueued}
                 >
                   {Object.keys(store.dataListChip).map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -376,7 +376,7 @@ export default function Analysis() {
               id="selectGroup1"
               aria-label="Select Group 1"
               value={store.group1 ?? ""}
-              disabled={store.contrastComplete}
+              disabled={store.contrastComplete || store.jobQueued}
               onChange={(e) => store.setGroup1(e.target.value)}
             >
               <option value="">-- Select Group 1 --</option>
@@ -389,7 +389,7 @@ export default function Analysis() {
               id="selectGroup2"
               aria-label="Select Group 2"
               value={store.group2 ?? ""}
-              disabled={store.contrastComplete}
+              disabled={store.contrastComplete || store.jobQueued}
               onChange={(e) => store.setGroup2(e.target.value)}
             >
               <option value="">-- Select Group 2 --</option>
@@ -406,7 +406,7 @@ export default function Analysis() {
               className="form-select form-select-sm"
               id="selectNormal"
               value={store.normal}
-              disabled={store.contrastComplete}
+              disabled={store.contrastComplete || store.jobQueued}
               onChange={(e) => store.setNormal(e.target.value)}
             >
               <option value="RMA">RMA</option>
@@ -449,7 +449,7 @@ export default function Analysis() {
 
           {/* Run / Reset buttons (outside sub-boxes) */}
           <div className="mx-2 mb-2">
-            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading || store.contrastComplete || !store.group1 || !store.group2 || store.group1 === store.group2} onClick={handleRunContrast}>Run Contrast</button>
+            <button className="btn btn-nci-primary w-100 mb-2" disabled={!store.dataLoaded || isLoading || store.contrastComplete || store.jobQueued || !store.group1 || !store.group2 || store.group1 === store.group2} onClick={handleRunContrast}>Run Contrast</button>
             <button className="btn btn-nci-primary w-100" onClick={() => { store.resetContrast(); setContrastError(""); setPanelCollapsed(false); }} disabled={isLoading} data-tooltip="Reset to start a new contrast analysis">Reset</button>
             {contrastError && (
               <p style={{ color: "#b22222", fontSize: "0.85rem" }} className="mt-1 mb-0">{contrastError}</p>
