@@ -425,6 +425,8 @@ body {
 [data-tooltip] {
   position: relative;
 }
+
+/* Default placement: right — white bg, black text */
 [data-tooltip]:hover::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -455,6 +457,7 @@ body {
   pointer-events: none;
 }
 
+
 .cell-tooltip-popup {
   position: fixed;
   background: #fff;
@@ -473,7 +476,7 @@ body {
 .cell-tooltip-arrow {
   position: absolute;
   top: -12px;
-  left: 16px;
+  left: 12px;
   width: 0;
   height: 0;
   border: 6px solid transparent;

@@ -11,6 +11,15 @@ type SubView = "deg" | "pathUp" | "pathDown" | "volcano";
 export default function DEGBox() {
   const store = useAnalysisStore();
   const [selected, setSelected] = useState<SubView>("deg");
+  const [volcanoMounted, setVolcanoMounted] = useState(false);
+
+  function handleViewChange(value: SubView) {
+    setSelected(value);
+    if (value === "volcano" && !volcanoMounted) {
+      setVolcanoMounted(true);
+      store.setLoading(true, "Loading Plot");
+    }
+  }
 
   return (
     <div>
@@ -23,7 +32,7 @@ export default function DEGBox() {
           className="form-select form-select-sm"
           style={{ maxWidth: "350px" }}
           value={selected}
-          onChange={(e) => setSelected(e.target.value as SubView)}
+          onChange={(e) => handleViewChange(e.target.value as SubView)}
         >
           <option value="deg">Differentially Expressed Genes</option>
           <option value="pathUp">Pathways for Upregulated Genes</option>
@@ -32,17 +41,20 @@ export default function DEGBox() {
         </select>
       </div>
 
-      {selected === "deg" && <DEGTable />}
-      {selected === "pathUp" && <PathwaysTable direction="up" />}
-      {selected === "pathDown" && <PathwaysTable direction="down" />}
-      {selected === "volcano" && (
-        <iframe
-          title="Volcano Plot"
-          src={`/images/${store.projectId}/volcano.html`}
-          width="100%"
-          height="980px"
-          style={{ border: "none" }}
-        />
+      <div style={{ display: selected === "deg" ? "" : "none" }}><DEGTable /></div>
+      <div style={{ display: selected === "pathUp" ? "" : "none" }}><PathwaysTable direction="up" /></div>
+      <div style={{ display: selected === "pathDown" ? "" : "none" }}><PathwaysTable direction="down" /></div>
+      {volcanoMounted && (
+        <div style={{ display: selected === "volcano" ? "" : "none" }}>
+          <iframe
+            title="Volcano Plot"
+            src={`/images/${store.projectId}/volcano.html`}
+            width="100%"
+            height="980px"
+            style={{ border: "none" }}
+            onLoad={() => store.setLoading(false)}
+          />
+        </div>
       )}
     </div>
   );

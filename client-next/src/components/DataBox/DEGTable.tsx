@@ -6,6 +6,7 @@ import { useAnalysisStore } from "@/stores/analysisStore";
 import { getDEG, getNormalAll } from "@/services/api";
 import TableControls from "./TableControls";
 import formatCell from "./formatCell";
+import CellTooltip from "./CellTooltip";
 import { buildSettingsRows, exportTableToXlsx, exportNormalizedXlsx, exportNormalizedTsv } from "@/utils/exportTable";
 
 const EXPORT_COLUMNS = [
@@ -230,9 +231,9 @@ export default function DEGTable() {
               records.map((row, i) => (
                 <tr key={i}>
                   {COLUMNS.map((col) => (
-                    <td key={col.key} style={{ maxWidth: col.key === "DESC" ? "200px" : undefined, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <CellTooltip key={col.key} content={String(row[col.key] ?? "")} tdStyle={{ maxWidth: col.key === "DESC" ? "200px" : undefined }}>
                       {formatCell(row[col.key], col.fmt, col.link)}
-                    </td>
+                    </CellTooltip>
                   ))}
                 </tr>
               ))

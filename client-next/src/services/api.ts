@@ -287,7 +287,7 @@ export async function getssGSEAWithDiffGenSet(
   group1: string,
   group2: string
 ) {
-  const res = await api.post<ApiResponse>("/getssGSEAWithDiffGenSet", {
+  const res = await api.post<ApiResponse<{ heatmap: string | null }>>("/getssGSEAWithDiffGenSet", {
     projectId, species, genSet, group1, group2,
   });
   if (res.data.status !== 200) {

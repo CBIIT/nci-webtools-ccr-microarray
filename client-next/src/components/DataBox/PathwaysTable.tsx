@@ -7,6 +7,7 @@ import { useAnalysisStore } from "@/stores/analysisStore";
 import { getUpPathways, getDownPathways, getPathwayHeatmap, getNormalAll } from "@/services/api";
 import TableControls from "./TableControls";
 import formatCell from "./formatCell";
+import CellTooltip from "./CellTooltip";
 import { buildSettingsRows, exportTableToXlsx, exportNormalizedXlsx, exportNormalizedTsv } from "@/utils/exportTable";
 
 const COLUMNS = [
@@ -239,20 +240,19 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
               records.map((row, i) => (
                 <tr key={i}>
                   {COLUMNS.map((col) => (
-                    <td key={col.key} style={{ maxWidth: col.wide ? "200px" : "120px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <CellTooltip key={col.key} content={String(row[col.key] ?? "")} tdStyle={{ maxWidth: col.wide ? "200px" : "120px" }}>
                       {col.key === "Pathway_ID" ? (
                         <button
                           className="btn btn-link btn-sm p-0"
                           style={{ fontSize: "0.75rem" }}
                           onClick={() => handleHeatmap(String(row.Pathway_Name || ""))}
-                          title="View Heatmap"
                         >
                           {String(row[col.key] || "")}
                         </button>
                       ) : (
                         formatCell(row[col.key], col.fmt)
                       )}
-                    </td>
+                    </CellTooltip>
                   ))}
                 </tr>
               ))

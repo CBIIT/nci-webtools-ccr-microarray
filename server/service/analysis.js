@@ -250,7 +250,9 @@ router.post('/getssGSEAWithDiffGenSet', function (req, res) {
       let d = JsonToObject(re);
       req.session[req.body.projectId].ssGSEA = d.ssGSEA;
       logger.info('Get Contrast result success');
-      res.json({ status: 200, data: '' });
+      const heatmapPath = config.uploadPath + '/' + req.body.projectId + '/ssgseaHeatmap1.jpg';
+      const heatmap = fs.existsSync(heatmapPath) ? 'ssgseaHeatmap1.jpg' : null;
+      res.json({ status: 200, data: { heatmap } });
     } catch (e) {
       res.json({ status: 500, msg: 'Failed to parse ssGSEA results.' });
     }
