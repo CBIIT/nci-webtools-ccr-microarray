@@ -28,7 +28,7 @@ export default function TableControls({
   children,
 }: TableControlsProps) {
   return (
-    <div className="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2" style={{ fontSize: "0.8rem" }}>
+    <div className="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2" style={{ fontSize: "0.875rem" }}>
       <div className="d-flex align-items-center gap-1">
         <select
           value={pageSize}
