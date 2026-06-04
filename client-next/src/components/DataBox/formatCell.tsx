@@ -1,6 +1,6 @@
 export default function formatCell(value: unknown, fmt?: string, link?: boolean): React.ReactNode {
   if (value == null || value === "") return "";
-  if (link) {
+  if (link && value !== "NA") {
     return (
       <a href={`https://www.ncbi.nlm.nih.gov/gene/${value}`} target="_blank" rel="noopener noreferrer">
         {String(value)}

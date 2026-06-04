@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
+import { AiOutlineAreaChart } from "react-icons/ai";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { getUpPathways, getDownPathways, getPathwayHeatmap, getNormalAll } from "@/services/api";
 import TableControls from "./TableControls";
@@ -53,8 +53,6 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [heatmapLoading, setHeatmapLoading] = useState(false);
-  const [heatmapUrl, setHeatmapUrl] = useState("");
 
   const fetchData = useCallback(async (page: number, size: number, sort: { name: string; order: string }, searchKw: Record<string, string>) => {
     setLoading(true);
@@ -94,18 +92,22 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
   }
 
   async function handleHeatmap(pathwayName: string) {
-    setHeatmapLoading(true);
-    setHeatmapUrl("");
+    const newTab = window.open("/assets/loading.html", "_blank");
     try {
       const upOrDown = direction === "up" ? "upregulated_pathways" : "downregulated_pathways";
       const result = await getPathwayHeatmap(store.projectId, store.group1, store.group2, upOrDown, pathwayName);
-      if (result) {
-        setHeatmapUrl(`/images/${store.projectId}/${result}`);
+      if (newTab) {
+        const parsed = typeof result === "string" ? JSON.parse(result) : result;
+        const picName = parsed?.pic_name;
+        if (picName) {
+          newTab.location.href = `${window.location.origin}/images/${store.projectId}/${picName}`;
+        } else {
+          newTab.location.href = `${window.location.origin}/assets/noheatmap.html`;
+        }
       }
     } catch {
+      if (newTab) newTab.location.href = `${window.location.origin}/assets/noheatmap.html`;
       setError("Failed to generate heatmap");
-    } finally {
-      setHeatmapLoading(false);
     }
   }
 
@@ -247,6 +249,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
                           style={{ fontSize: "0.75rem" }}
                           onClick={() => handleHeatmap(String(row.Pathway_Name || ""))}
                         >
+                          <AiOutlineAreaChart style={{ marginRight: "3px", verticalAlign: "middle" }} />
                           {String(row[col.key] || "")}
                         </button>
                       ) : (
@@ -261,13 +264,6 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
         </table>
       </div>
 
-      {/* Heatmap display */}
-      {heatmapLoading && <p className="text-muted mt-2" style={{ fontSize: "0.85rem" }}>Generating heatmap...</p>}
-      {heatmapUrl && (
-        <div className="mt-3">
-          <Image src={heatmapUrl} alt="Pathway Heatmap" unoptimized width={800} height={600} style={{ maxWidth: "100%", height: "auto" }} />
-        </div>
-      )}
     </div>
   );
 }
