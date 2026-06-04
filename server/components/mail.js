@@ -10,7 +10,7 @@ const nodeMailer = require('nodemailer');
 const transporter = nodeMailer.createTransport(config.mail);
 
 
-let emailTemplate = function (code,time,link,submit_time,project_id){ 
+let emailTemplate = function (code,time,completed_time,link,submit_time,project_id){
 
 	return "<b>Dear User:</b><br/>" +
         "<p>&nbsp;&nbsp;The job you submitted to the MicroArray processor has been processed successfully using the MicroArrayPipeline R Package.</p>" +
@@ -18,6 +18,7 @@ let emailTemplate = function (code,time,link,submit_time,project_id){
         "<p>&nbsp;&nbsp;Job Name: <b>"+project_id+"</b></p>" + code +
         "<p>&nbsp;&nbsp;Submitted Time: <b>" +submit_time+ "</b> </p>"+
         "<p>&nbsp;&nbsp;Execution Time: <b>" +time+ "</b> </p>"+
+        "<p>&nbsp;&nbsp;Job Completed Time: <b>" +completed_time+ "</b> </p>"+
         "<br/>" +
         "<p><b>&nbsp;&nbsp;Results</b></p>" +
         "<p>&nbsp;&nbsp;The results of your job are available through the following link.</p>" +
@@ -31,7 +32,7 @@ let emailTemplate = function (code,time,link,submit_time,project_id){
     }
 
 
-let emailFailedTemplate = function (code,time,submit_time,project_id){ 
+let emailFailedTemplate = function (code,time,completed_time,submit_time,project_id){
 
     return "<b>Dear User:</b><br/>" +
         "<p>&nbsp;&nbsp;The job you submitted to the MicroArray processor failed to be processed using the MicroArrayPipeline R Package. Please correct and resubmit your data set.</p>" +
@@ -39,6 +40,7 @@ let emailFailedTemplate = function (code,time,submit_time,project_id){
         "<p>&nbsp;&nbsp;Job Name: <b>"+project_id+"</b></p>" + code+
         "<p>&nbsp;&nbsp;Submitted Time: <b>" +submit_time+ "</b> </p>"+
         "<p>&nbsp;&nbsp;Execution Time: <b>" +time+ "</b> </p>"+
+        "<p>&nbsp;&nbsp;Job Completed Time: <b>" +completed_time+ "</b> </p>"+
         "<br/>" +
         "<p>Please contact us at <a href=\""+config.mail.web_admin_email+"\" target=\"_top\"> "+config.mail.web_admin_email+"</a> for more information or if you have any questions.</p>"+
         "<br/>"+
