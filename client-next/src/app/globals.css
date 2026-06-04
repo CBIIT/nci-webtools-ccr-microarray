@@ -215,7 +215,6 @@ body {
 
 .workflow-block .required {
   color: #e41d3d;
-  padding-left: 5px;
 }
 
 /* Card-style tabs with bordered content area */
@@ -279,6 +278,10 @@ body {
   border-bottom: 2px solid #dee2e6;
   font-weight: normal;
   padding: 8px 5px;
+}
+
+.analysis-table thead th input::placeholder {
+  color: #b0b0b0;
 }
 
 .analysis-table tbody tr {
