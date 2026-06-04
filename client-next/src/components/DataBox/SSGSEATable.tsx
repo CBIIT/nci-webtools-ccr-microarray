@@ -20,11 +20,11 @@ interface SSGSEATableProps {
 const COLUMNS = [
   { key: "V1", label: "NAME", search: "name", wide: true },
   { key: "V2", label: "logFC", search: "search_logFC", fmt: "num3" },
-  { key: "V5", label: "P.Value", search: "search_p_value", fmt: "exp" },
-  { key: "V6", label: "adj.P.Value", search: "search_adj_p_value", fmt: "exp" },
   { key: "V3", label: "Avg.Enrichment.Score", search: "search_Avg_Enrichment_Score" },
   { key: "V4", label: "t", search: "search_t", fmt: "num3" },
-  { key: "V7", label: "b", search: "search_b", fmt: "num3" },
+  { key: "V5", label: "P.Value", search: "search_p_value", fmt: "exp" },
+  { key: "V6", label: "adj.P.Val", search: "search_adj_p_value", fmt: "exp" },
+  { key: "V7", label: "B", search: "search_b", fmt: "num3" },
 ];
 
 const SSGSEATable = forwardRef<SSGSEATableHandle, SSGSEATableProps>(function SSGSEATable({ onExportingChange }, ref) {
@@ -94,7 +94,18 @@ const SSGSEATable = forwardRef<SSGSEATableHandle, SSGSEATableProps>(function SSG
         search_keyword: search,
       });
       await exportTableToXlsx(
-        buildSettingsRows(store),
+        buildSettingsRows(store, {
+          type: "Single Sample GSEA",
+          filters: [
+            ["name", search.name],
+            ["logFC", search.search_logFC],
+            ["P.Value", search.search_p_value],
+            ["adj.P.value", search.search_adj_p_value],
+            ["Avg.Enrichment.Score", search.search_Avg_Enrichment_Score],
+            ["B", search.search_b],
+            ["t", search.search_t],
+          ],
+        }),
         COLUMNS,
         result.records,
         `ssGSEA_${store.projectId}.xlsx`

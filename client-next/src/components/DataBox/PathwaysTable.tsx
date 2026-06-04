@@ -10,6 +10,21 @@ import formatCell from "./formatCell";
 import CellTooltip from "./CellTooltip";
 import { buildSettingsRows, exportTableToXlsx, exportNormalizedXlsx, exportNormalizedTsv } from "@/utils/exportTable";
 
+const EXPORT_COLUMNS = [
+  { key: "Pathway_Name", label: "Pathway_Name" },
+  { key: "Category", label: "Category" },
+  { key: "P_Value", label: "P_Value" },
+  { key: "FDR", label: "FDR" },
+  { key: "Enrichment_Score", label: "Enrichment_Score" },
+  { key: "Percent_Gene_Hits_per_Pathway", label: "Percent_Gene_Hits_per_Pathway" },
+  { key: "Significant_Genes_IN_Pathway", label: "Significant_Genes_IN_Pathway" },
+  { key: "Non-Significant_genes_IN_Pathway", label: "Non-Significant_genes_IN_Pathway" },
+  { key: "Significant_genes_NOT_IN_Pathway", label: "Significant_genes_NOT_IN_Pathway" },
+  { key: "Non-Significant_Genes_NOT_IN_Pathway", label: "Non-Significant_Genes_NOT_IN_Pathway" },
+  { key: "Pathway_ID", label: "Pathway_ID" },
+  { key: "Gene_List", label: "Gene_List" },
+];
+
 const COLUMNS = [
   { key: "Pathway_Name", label: "Pathway Name", search: "Pathway_Name", wide: true },
   { key: "Category", label: "Category", search: "Category" },
@@ -47,6 +62,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
     Percent_Gene_Hits_per_Pathway: "",
     Significant_Genes_IN_Pathway: "",
     "Non-Significant_genes_IN_Pathway": "",
+    Significant_genes_NOT_IN_Pathway: "",
     "Non-Significant_Genes_NOT_IN_Pathway": "",
     Pathway_ID: "",
     Gene_List: "",
@@ -127,8 +143,24 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
         search_keyword: search,
       });
       await exportTableToXlsx(
-        buildSettingsRows(store),
-        COLUMNS,
+        buildSettingsRows(store, {
+          type: direction === "up" ? "Pathways_For_Upregulated_Genes" : "Pathways_For_Downregulated_Genes",
+          filters: [
+            ["Pathway_Name", search.Pathway_Name],
+            ["Category", search.Category],
+            ["P_Value", search.P_Value],
+            ["FDR", search.FDR],
+            ["Enrichment_Score", search.Enrichment_Score],
+            ["Percent_Gene_Hits_per_Pathway", search.Percent_Gene_Hits_per_Pathway],
+            ["Significant_Genes_IN_Pathway", search.Significant_Genes_IN_Pathway],
+            ["Non-Significant_genes_IN_Pathway", search["Non-Significant_genes_IN_Pathway"]],
+            ["Significant_genes_NOT_IN_Pathway", search.Significant_genes_NOT_IN_Pathway],
+            ["Non-Significant_Genes_NOT_IN_Pathway", search["Non-Significant_Genes_NOT_IN_Pathway"]],
+            ["Pathway_ID", search.Pathway_ID],
+            ["Gene_List", search.Gene_List],
+          ],
+        }),
+        EXPORT_COLUMNS,
         result.records,
         `Pathways_${dirLabel}_${store.projectId}.xlsx`
       );
