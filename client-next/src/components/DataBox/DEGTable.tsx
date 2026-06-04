@@ -154,11 +154,19 @@ export default function DEGTable() {
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
 
-      <div className="d-flex justify-content-end align-items-center mb-2">
+      <TableControls
+        pageSize={pageSize}
+        onPageSizeChange={(s) => { setPageSize(s); setPageNumber(1); }}
+        currentPage={pageNumber}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        startRow={startRow}
+        endRow={endRow}
+        onPageChange={setPageNumber}
+      >
         <div className="dropdown">
           <button
             className="btn btn-sm btn-nci-primary dropdown-toggle px-3"
-
             onClick={() => setDropdownOpen(!dropdownOpen)}
             disabled={exporting}
           >
@@ -172,18 +180,7 @@ export default function DEGTable() {
             </ul>
           )}
         </div>
-      </div>
-
-      <TableControls
-        pageSize={pageSize}
-        onPageSizeChange={(s) => { setPageSize(s); setPageNumber(1); }}
-        currentPage={pageNumber}
-        totalPages={totalPages}
-        totalCount={totalCount}
-        startRow={startRow}
-        endRow={endRow}
-        onPageChange={setPageNumber}
-      />
+      </TableControls>
 
       {/* Table */}
       <div style={{ overflowX: "auto", maxWidth: "100%" }}>

@@ -1,12 +1,20 @@
 // Legacy: client/src/components/DataBox/SSGSEATable.js
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { getGSEA } from "@/services/api";
 import TableControls from "./TableControls";
 import formatCell from "./formatCell";
 import { buildSettingsRows, exportTableToXlsx } from "@/utils/exportTable";
+
+export interface SSGSEATableHandle {
+  triggerExport: () => Promise<void>;
+}
+
+interface SSGSEATableProps {
+  onExportingChange?: (exporting: boolean) => void;
+}
 
 const COLUMNS = [
   { key: "V1", label: "NAME", search: "name", wide: true },
@@ -18,7 +26,7 @@ const COLUMNS = [
   { key: "V7", label: "b", search: "search_b", fmt: "num3" },
 ];
 
-export default function SSGSEATable() {
+const SSGSEATable = forwardRef<SSGSEATableHandle, SSGSEATableProps>(function SSGSEATable({ onExportingChange }, ref) {
   const store = useAnalysisStore();
   const [records, setRecords] = useState<Record<string, unknown>[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -74,10 +82,8 @@ export default function SSGSEATable() {
     setPageNumber(1);
   }
 
-  const [exporting, setExporting] = useState(false);
-
-  async function handleExport() {
-    setExporting(true);
+  const handleExport = useCallback(async () => {
+    onExportingChange?.(true);
     try {
       const result = await getGSEA({
         projectId: store.projectId,
@@ -95,9 +101,11 @@ export default function SSGSEATable() {
     } catch (err) {
       console.error("Export failed:", err);
     } finally {
-      setExporting(false);
+      onExportingChange?.(false);
     }
-  }
+  }, [store, sorting, search, onExportingChange]);
+
+  useImperativeHandle(ref, () => ({ triggerExport: handleExport }), [handleExport]);
 
   const totalPages = Math.ceil(totalCount / pageSize);
   const startRow = (pageNumber - 1) * pageSize + 1;
@@ -106,12 +114,6 @@ export default function SSGSEATable() {
   return (
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
-
-      <div className="d-flex justify-content-end mb-2">
-        <button className="btn btn-sm btn-nci-primary px-3" onClick={handleExport} disabled={exporting}>
-          {exporting ? "Exporting..." : "Export"}
-        </button>
-      </div>
 
       <TableControls
         pageSize={pageSize}
@@ -178,4 +180,6 @@ export default function SSGSEATable() {
       </div>
     </div>
   );
-}
+});
+
+export default SSGSEATable;

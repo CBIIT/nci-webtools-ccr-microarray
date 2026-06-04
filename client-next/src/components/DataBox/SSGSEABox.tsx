@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { getssGSEAWithDiffGenSet } from "@/services/api";
-import SSGSEATable from "./SSGSEATable";
+import SSGSEATable, { SSGSEATableHandle } from "./SSGSEATable";
 
 type SubView = "table" | "heatmap";
 
@@ -37,9 +37,11 @@ export default function SSGSEABox() {
   const [heatmapLoading, setHeatmapLoading] = useState(false);
   const [heatmapError, setHeatmapError] = useState("");
   const [generating, setGenerating] = useState(false);
+  const [exporting, setExporting] = useState(false);
   // Increment to force SSGSEATable re-mount after data generation
   const [tableKey, setTableKey] = useState(0);
   const initialized = useRef(false);
+  const tableRef = useRef<SSGSEATableHandle>(null);
 
   const isHuman = store.species !== "mouse";
   const geneSets = isHuman ? HUMAN_GENE_SETS : MOUSE_GENE_SETS;
@@ -116,12 +118,22 @@ export default function SSGSEABox() {
             ))}
           </select>
         </div>
+        {selected === "table" && (
+          <button
+            className="btn btn-sm btn-nci-primary px-3 ms-auto"
+            style={{ alignSelf: "flex-start" }}
+            onClick={() => tableRef.current?.triggerExport()}
+            disabled={exporting || generating}
+          >
+            {exporting ? "Exporting..." : "Export"}
+          </button>
+        )}
       </div>
 
       {generating && <p className="text-muted" style={{ fontSize: "0.85rem" }}>Generating ssGSEA data (this may take a moment)...</p>}
       {heatmapError && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{heatmapError}</p>}
 
-      {selected === "table" && !generating && tableKey > 0 && <SSGSEATable key={tableKey} />}
+      {selected === "table" && !generating && tableKey > 0 && <SSGSEATable key={tableKey} ref={tableRef} onExportingChange={setExporting} />}
 
       {selected === "heatmap" && !generating && (
         <div>
