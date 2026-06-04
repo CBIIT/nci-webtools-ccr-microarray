@@ -194,7 +194,7 @@ export default function DEGTable() {
                   <input
                     type="text"
                     className="form-control form-control-sm"
-                    style={{ fontSize: "0.85rem" }}
+                    style={{ fontSize: "0.85rem", textOverflow: "ellipsis" }}
                     placeholder={col.label}
                     value={search[col.search] || ""}
                     onChange={(e) => handleSearch(col.search, e.target.value)}
