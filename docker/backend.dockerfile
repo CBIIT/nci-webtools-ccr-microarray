@@ -47,6 +47,9 @@ WORKDIR /app/server
 COPY server/setup/setup.R /app/server/setup/setup.R
 RUN Rscript setup/setup.R
 
+# Remove webshot (transitive dep — not used, bundles casperjs CVE-2020-7679 with no upstream fix)
+RUN Rscript -e "remove.packages('webshot')"
+
 # Install server npm dependencies
 COPY server/package.json server/package-lock.json ./
 RUN npm install
