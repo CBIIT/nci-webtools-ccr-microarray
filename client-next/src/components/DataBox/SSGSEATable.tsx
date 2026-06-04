@@ -6,6 +6,7 @@ import { useAnalysisStore } from "@/stores/analysisStore";
 import { getGSEA } from "@/services/api";
 import TableControls from "./TableControls";
 import formatCell from "./formatCell";
+import CellTooltip from "./CellTooltip";
 import { buildSettingsRows, exportTableToXlsx } from "@/utils/exportTable";
 
 const COLUMNS = [
@@ -166,9 +167,9 @@ export default function SSGSEATable() {
               records.map((row, i) => (
                 <tr key={i}>
                   {COLUMNS.map((col) => (
-                    <td key={col.key} style={{ maxWidth: col.wide ? "250px" : undefined, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <CellTooltip key={col.key} content={String(row[col.key] ?? "")} tdStyle={{ maxWidth: col.wide ? "250px" : undefined }}>
                       {formatCell(row[col.key], col.fmt)}
-                    </td>
+                    </CellTooltip>
                   ))}
                 </tr>
               ))
