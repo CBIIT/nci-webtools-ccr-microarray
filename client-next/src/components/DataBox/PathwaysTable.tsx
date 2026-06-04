@@ -252,7 +252,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
                   key={col.key}
                   role="button"
                   onClick={() => handleSort(col.key)}
-                  style={{ whiteSpace: "nowrap", cursor: "pointer", userSelect: "none", background: "#fafafa", fontSize: "0.85rem" }}
+                  style={{ whiteSpace: "nowrap", cursor: "pointer", userSelect: "none", background: "#fafafa", fontSize: "0.85rem", fontWeight: 500 }}
                 >
                   {col.label}
                   {sorting.name === col.key && (

@@ -224,7 +224,7 @@ export default function DEGTable() {
                   key={col.key}
                   role="button"
                   onClick={() => handleSort(col.key)}
-                  style={{ whiteSpace: "nowrap", cursor: "pointer", userSelect: "none", background: "#fafafa" }}
+                  style={{ whiteSpace: "nowrap", cursor: "pointer", userSelect: "none", background: "#fafafa", fontWeight: 500 }}
                 >
                   {col.label}
                   {sorting.name === col.key && (

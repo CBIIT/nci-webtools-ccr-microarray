@@ -58,7 +58,7 @@ interface SortHeaderProps {
 function SortHeader({ width, label, field, sortKey, sortDir, onSort }: SortHeaderProps) {
   const isActive = sortKey === field;
   return (
-    <th style={{ width, cursor: "pointer" }} onClick={() => onSort(field)}>
+    <th style={{ width, cursor: "pointer", fontWeight: 500 }} onClick={() => onSort(field)}>
       <span className="sort-header">
         {label}
         <span className="sort-arrows">

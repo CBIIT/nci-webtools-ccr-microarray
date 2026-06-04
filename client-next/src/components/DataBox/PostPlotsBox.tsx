@@ -103,7 +103,7 @@ export default function PostPlotsBox() {
   return (
     <div>
       <div className="mb-3">
-        <label htmlFor="post-plot-select" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)" }}>
+        <label htmlFor="post-plot-select" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)", fontWeight: 500 }}>
           Select Post-Normalization Plots
         </label>
         <select

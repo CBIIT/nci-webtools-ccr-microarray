@@ -90,7 +90,7 @@ export default function PrePlotsBox() {
   return (
     <div>
       <div className="mb-3">
-        <label htmlFor="pre-plot-select" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)" }}>
+        <label htmlFor="pre-plot-select" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)", fontWeight: 500 }}>
           Select Pre-Normalization QC Plots
         </label>
         <select
