@@ -41,8 +41,6 @@ export default function SSGSEABox() {
   const [tableKey, setTableKey] = useState(0);
   const initialized = useRef(false);
 
-  const isHuman = store.species !== "mouse";
-  const geneSets = isHuman ? HUMAN_GENE_SETS : MOUSE_GENE_SETS;
 
   // On mount, generate ssGSEA data with default gene set
   useEffect(() => {
@@ -57,7 +55,7 @@ export default function SSGSEABox() {
     try {
       await getssGSEAWithDiffGenSet(
         store.projectId,
-        isHuman ? "human" : "mouse",
+        gs.startsWith("mouse$") ? "mouse" : "human",
         gs,
         store.group1,
         store.group2
@@ -111,9 +109,16 @@ export default function SSGSEABox() {
             disabled={generating}
             onChange={(e) => handleGenSetChange(e.target.value)}
           >
-            {geneSets.map((gs) => (
-              <option key={gs.value} value={gs.value}>{gs.label}</option>
-            ))}
+            <optgroup label="Human">
+              {HUMAN_GENE_SETS.map((gs) => (
+                <option key={gs.value} value={gs.value}>{gs.label}</option>
+              ))}
+            </optgroup>
+            <optgroup label="Mouse">
+              {MOUSE_GENE_SETS.map((gs) => (
+                <option key={gs.value} value={gs.value}>{gs.label}</option>
+              ))}
+            </optgroup>
           </select>
         </div>
       </div>
