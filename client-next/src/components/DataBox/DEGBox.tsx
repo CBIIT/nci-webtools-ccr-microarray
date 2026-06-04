@@ -24,7 +24,7 @@ export default function DEGBox() {
   return (
     <div>
       <div className="mb-3">
-        <label htmlFor="deg-select" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)" }}>
+        <label htmlFor="deg-select" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)", fontWeight: "bold" }}>
           Select DEG-Enrichments View
         </label>
         <select
