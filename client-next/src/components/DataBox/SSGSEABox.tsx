@@ -34,7 +34,6 @@ export default function SSGSEABox() {
   const [selected, setSelected] = useState<SubView>("table");
   const [genSet, setGenSet] = useState("human$H: Hallmark Gene Sets");
   const [heatmapUrl, setHeatmapUrl] = useState("");
-  const [heatmapLoading, setHeatmapLoading] = useState(false);
   const [heatmapError, setHeatmapError] = useState("");
   const [generating, setGenerating] = useState(false);
   const [exporting, setExporting] = useState(false);
@@ -43,8 +42,6 @@ export default function SSGSEABox() {
   const initialized = useRef(false);
   const tableRef = useRef<SSGSEATableHandle>(null);
 
-  const isHuman = store.species !== "mouse";
-  const geneSets = isHuman ? HUMAN_GENE_SETS : MOUSE_GENE_SETS;
 
   // On mount, generate ssGSEA data with default gene set
   useEffect(() => {
@@ -53,18 +50,29 @@ export default function SSGSEABox() {
     generateSSGSEA(genSet);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Show spinner only when the user is on the ssGSEA tab while still generating
+  useEffect(() => {
+    if (store.activeTab === "ssgsea" && generating) {
+      store.setLoading(true, "Running Analysis");
+      return () => store.setLoading(false);
+    }
+  }, [store.activeTab, generating]); // eslint-disable-line react-hooks/exhaustive-deps
+
   async function generateSSGSEA(gs: string) {
     setGenerating(true);
     setHeatmapError("");
     try {
-      await getssGSEAWithDiffGenSet(
+      const result = await getssGSEAWithDiffGenSet(
         store.projectId,
-        isHuman ? "human" : "mouse",
+        gs.startsWith("mouse$") ? "mouse" : "human",
         gs,
         store.group1,
         store.group2
       );
       setTableKey((k) => k + 1);
+      if (result?.heatmap) {
+        setHeatmapUrl(`/images/${store.projectId}/${result.heatmap}?t=${Date.now()}`);
+      }
     } catch (err) {
       setHeatmapError(err instanceof Error ? err.message : "Failed to generate ssGSEA data");
     } finally {
@@ -87,8 +95,8 @@ export default function SSGSEABox() {
     <div>
       <div className="d-flex gap-3 mb-3 flex-wrap align-items-end">
         <div>
-          <label htmlFor="ssgsea-view" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)" }}>
-            Select ssGSEA View
+          <label htmlFor="ssgsea-view" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)", fontWeight: "bold" }}>
+            ssGSEA section selection
           </label>
           <select
             id="ssgsea-view"
@@ -102,8 +110,8 @@ export default function SSGSEABox() {
           </select>
         </div>
         <div>
-          <label htmlFor="gene-set" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)" }}>
-            Gene Set
+          <label htmlFor="gene-set" className="form-label" style={{ fontSize: "0.85rem", color: "rgba(0,0,0,0.65)", fontWeight: "bold" }}>
+            ssGSEA Gene Sets selection
           </label>
           <select
             id="gene-set"
@@ -113,9 +121,16 @@ export default function SSGSEABox() {
             disabled={generating}
             onChange={(e) => handleGenSetChange(e.target.value)}
           >
-            {geneSets.map((gs) => (
-              <option key={gs.value} value={gs.value}>{gs.label}</option>
-            ))}
+            <optgroup label="Human">
+              {HUMAN_GENE_SETS.map((gs) => (
+                <option key={gs.value} value={gs.value}>{gs.label}</option>
+              ))}
+            </optgroup>
+            <optgroup label="Mouse">
+              {MOUSE_GENE_SETS.map((gs) => (
+                <option key={gs.value} value={gs.value}>{gs.label}</option>
+              ))}
+            </optgroup>
           </select>
         </div>
         {selected === "table" && (
@@ -137,7 +152,7 @@ export default function SSGSEABox() {
 
       {selected === "heatmap" && !generating && (
         <div>
-          {heatmapLoading && <p className="text-muted" style={{ fontSize: "0.85rem" }}>Loading heatmap...</p>}
+
           {heatmapUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={heatmapUrl} alt="ssGSEA Pathway Heatmap" style={{ maxWidth: "100%" }} />
