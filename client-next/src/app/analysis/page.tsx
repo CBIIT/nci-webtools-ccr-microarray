@@ -500,6 +500,7 @@ export default function Analysis() {
               <span
                 className={`nav-link ${store.activeTab === "pre" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
+                aria-disabled={!store.contrastComplete}
                 onClick={() => store.contrastComplete && store.setActiveTab("pre")}
               >Pre-Normalization QC Plots</span>
             </li>
@@ -507,6 +508,7 @@ export default function Analysis() {
               <span
                 className={`nav-link ${store.activeTab === "post" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
+                aria-disabled={!store.contrastComplete}
                 onClick={() => store.contrastComplete && store.setActiveTab("post")}
               >Post-Normalization Plots</span>
             </li>
@@ -514,6 +516,7 @@ export default function Analysis() {
               <span
                 className={`nav-link ${store.activeTab === "deg" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
+                aria-disabled={!store.contrastComplete}
                 onClick={() => store.contrastComplete && store.setActiveTab("deg")}
               >DEG-Enrichments Results</span>
             </li>
@@ -521,6 +524,7 @@ export default function Analysis() {
               <span
                 className={`nav-link ${store.activeTab === "ssgsea" ? "active" : ""} ${!store.contrastComplete ? "disabled" : ""}`}
                 role="button"
+                aria-disabled={!store.contrastComplete}
                 onClick={() => store.contrastComplete && store.setActiveTab("ssgsea")}
               >ssGSEA Results</span>
             </li>
