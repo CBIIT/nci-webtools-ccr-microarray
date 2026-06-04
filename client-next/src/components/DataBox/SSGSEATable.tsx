@@ -1,7 +1,7 @@
 // Legacy: client/src/components/DataBox/SSGSEATable.js
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { getGSEA } from "@/services/api";
 import TableControls from "./TableControls";
@@ -9,17 +9,25 @@ import formatCell from "./formatCell";
 import CellTooltip from "./CellTooltip";
 import { buildSettingsRows, exportTableToXlsx } from "@/utils/exportTable";
 
+export interface SSGSEATableHandle {
+  triggerExport: () => Promise<void>;
+}
+
+interface SSGSEATableProps {
+  onExportingChange?: (exporting: boolean) => void;
+}
+
 const COLUMNS = [
   { key: "V1", label: "NAME", search: "name", wide: true },
   { key: "V2", label: "logFC", search: "search_logFC", fmt: "num3" },
-  { key: "V5", label: "P.Value", search: "search_p_value", fmt: "exp" },
-  { key: "V6", label: "adj.P.Value", search: "search_adj_p_value", fmt: "exp" },
   { key: "V3", label: "Avg.Enrichment.Score", search: "search_Avg_Enrichment_Score" },
   { key: "V4", label: "t", search: "search_t", fmt: "num3" },
-  { key: "V7", label: "b", search: "search_b", fmt: "num3" },
+  { key: "V5", label: "P.Value", search: "search_p_value", fmt: "exp" },
+  { key: "V6", label: "adj.P.Val", search: "search_adj_p_value", fmt: "exp" },
+  { key: "V7", label: "B", search: "search_b", fmt: "num3" },
 ];
 
-export default function SSGSEATable() {
+const SSGSEATable = forwardRef<SSGSEATableHandle, SSGSEATableProps>(function SSGSEATable({ onExportingChange }, ref) {
   const store = useAnalysisStore();
   const [records, setRecords] = useState<Record<string, unknown>[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -75,10 +83,8 @@ export default function SSGSEATable() {
     setPageNumber(1);
   }
 
-  const [exporting, setExporting] = useState(false);
-
-  async function handleExport() {
-    setExporting(true);
+  const handleExport = useCallback(async () => {
+    onExportingChange?.(true);
     try {
       const result = await getGSEA({
         projectId: store.projectId,
@@ -88,7 +94,18 @@ export default function SSGSEATable() {
         search_keyword: search,
       });
       await exportTableToXlsx(
-        buildSettingsRows(store),
+        buildSettingsRows(store, {
+          type: "Single Sample GSEA",
+          filters: [
+            ["name", search.name],
+            ["logFC", search.search_logFC],
+            ["P.Value", search.search_p_value],
+            ["adj.P.value", search.search_adj_p_value],
+            ["Avg.Enrichment.Score", search.search_Avg_Enrichment_Score],
+            ["B", search.search_b],
+            ["t", search.search_t],
+          ],
+        }),
         COLUMNS,
         result.records,
         `ssGSEA_${store.projectId}.xlsx`
@@ -96,9 +113,11 @@ export default function SSGSEATable() {
     } catch (err) {
       console.error("Export failed:", err);
     } finally {
-      setExporting(false);
+      onExportingChange?.(false);
     }
-  }
+  }, [store, sorting, search, onExportingChange]);
+
+  useImperativeHandle(ref, () => ({ triggerExport: handleExport }), [handleExport]);
 
   const totalPages = Math.ceil(totalCount / pageSize);
   const startRow = (pageNumber - 1) * pageSize + 1;
@@ -107,12 +126,6 @@ export default function SSGSEATable() {
   return (
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
-
-      <div className="d-flex justify-content-end mb-2">
-        <button className="btn btn-sm btn-nci-primary px-3" onClick={handleExport} disabled={exporting}>
-          {exporting ? "Exporting..." : "Export"}
-        </button>
-      </div>
 
       <TableControls
         pageSize={pageSize}
@@ -126,7 +139,7 @@ export default function SSGSEATable() {
       />
 
       <div style={{ overflowX: "auto" }}>
-        <table className="table table-sm table-hover table-bordered mb-0" style={{ fontSize: "0.8rem" }}>
+        <table className="table table-sm table-striped table-hover table-borderless mb-0 analysis-table" style={{ fontSize: "1rem" }}>
           <thead>
             <tr>
               {COLUMNS.map((col) => (
@@ -134,8 +147,8 @@ export default function SSGSEATable() {
                   <input
                     type="text"
                     className="form-control form-control-sm"
-                    style={{ fontSize: "0.75rem" }}
-                    placeholder="Search"
+                    style={{ fontSize: "0.85rem", textOverflow: "ellipsis" }}
+                    placeholder={col.label}
                     value={search[col.search] || ""}
                     onChange={(e) => handleSearch(col.search, e.target.value)}
                   />
@@ -179,4 +192,6 @@ export default function SSGSEATable() {
       </div>
     </div>
   );
-}
+});
+
+export default SSGSEATable;

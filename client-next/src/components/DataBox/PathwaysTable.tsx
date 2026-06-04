@@ -2,13 +2,28 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
+import { AiOutlineAreaChart } from "react-icons/ai";
 import { useAnalysisStore } from "@/stores/analysisStore";
 import { getUpPathways, getDownPathways, getPathwayHeatmap, getNormalAll } from "@/services/api";
 import TableControls from "./TableControls";
 import formatCell from "./formatCell";
 import CellTooltip from "./CellTooltip";
 import { buildSettingsRows, exportTableToXlsx, exportNormalizedXlsx, exportNormalizedTsv } from "@/utils/exportTable";
+
+const EXPORT_COLUMNS = [
+  { key: "Pathway_Name", label: "Pathway_Name" },
+  { key: "Category", label: "Category" },
+  { key: "P_Value", label: "P_Value" },
+  { key: "FDR", label: "FDR" },
+  { key: "Enrichment_Score", label: "Enrichment_Score" },
+  { key: "Percent_Gene_Hits_per_Pathway", label: "Percent_Gene_Hits_per_Pathway" },
+  { key: "Significant_Genes_IN_Pathway", label: "Significant_Genes_IN_Pathway" },
+  { key: "Non-Significant_genes_IN_Pathway", label: "Non-Significant_genes_IN_Pathway" },
+  { key: "Significant_genes_NOT_IN_Pathway", label: "Significant_genes_NOT_IN_Pathway" },
+  { key: "Non-Significant_Genes_NOT_IN_Pathway", label: "Non-Significant_Genes_NOT_IN_Pathway" },
+  { key: "Pathway_ID", label: "Pathway_ID" },
+  { key: "Gene_List", label: "Gene_List" },
+];
 
 const COLUMNS = [
   { key: "Pathway_Name", label: "Pathway Name", search: "Pathway_Name", wide: true },
@@ -47,14 +62,13 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
     Percent_Gene_Hits_per_Pathway: "",
     Significant_Genes_IN_Pathway: "",
     "Non-Significant_genes_IN_Pathway": "",
+    Significant_genes_NOT_IN_Pathway: "",
     "Non-Significant_Genes_NOT_IN_Pathway": "",
     Pathway_ID: "",
     Gene_List: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [heatmapLoading, setHeatmapLoading] = useState(false);
-  const [heatmapUrl, setHeatmapUrl] = useState("");
 
   const fetchData = useCallback(async (page: number, size: number, sort: { name: string; order: string }, searchKw: Record<string, string>) => {
     setLoading(true);
@@ -94,18 +108,22 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
   }
 
   async function handleHeatmap(pathwayName: string) {
-    setHeatmapLoading(true);
-    setHeatmapUrl("");
+    const newTab = window.open("/assets/loading.html", "_blank");
     try {
       const upOrDown = direction === "up" ? "upregulated_pathways" : "downregulated_pathways";
       const result = await getPathwayHeatmap(store.projectId, store.group1, store.group2, upOrDown, pathwayName);
-      if (result) {
-        setHeatmapUrl(`/images/${store.projectId}/${result}`);
+      if (newTab) {
+        const parsed = typeof result === "string" ? JSON.parse(result) : result;
+        const picName = parsed?.pic_name;
+        if (picName) {
+          newTab.location.href = `${window.location.origin}/images/${store.projectId}/${picName}`;
+        } else {
+          newTab.location.href = `${window.location.origin}/assets/noheatmap.html`;
+        }
       }
     } catch {
+      if (newTab) newTab.location.href = `${window.location.origin}/assets/noheatmap.html`;
       setError("Failed to generate heatmap");
-    } finally {
-      setHeatmapLoading(false);
     }
   }
 
@@ -125,8 +143,24 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
         search_keyword: search,
       });
       await exportTableToXlsx(
-        buildSettingsRows(store),
-        COLUMNS,
+        buildSettingsRows(store, {
+          type: direction === "up" ? "Pathways_For_Upregulated_Genes" : "Pathways_For_Downregulated_Genes",
+          filters: [
+            ["Pathway_Name", search.Pathway_Name],
+            ["Category", search.Category],
+            ["P_Value", search.P_Value],
+            ["FDR", search.FDR],
+            ["Enrichment_Score", search.Enrichment_Score],
+            ["Percent_Gene_Hits_per_Pathway", search.Percent_Gene_Hits_per_Pathway],
+            ["Significant_Genes_IN_Pathway", search.Significant_Genes_IN_Pathway],
+            ["Non-Significant_genes_IN_Pathway", search["Non-Significant_genes_IN_Pathway"]],
+            ["Significant_genes_NOT_IN_Pathway", search.Significant_genes_NOT_IN_Pathway],
+            ["Non-Significant_Genes_NOT_IN_Pathway", search["Non-Significant_Genes_NOT_IN_Pathway"]],
+            ["Pathway_ID", search.Pathway_ID],
+            ["Gene_List", search.Gene_List],
+          ],
+        }),
+        EXPORT_COLUMNS,
         result.records,
         `Pathways_${dirLabel}_${store.projectId}.xlsx`
       );
@@ -167,11 +201,19 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
 
-      <div className="d-flex justify-content-end align-items-center mb-2">
+      <TableControls
+        pageSize={pageSize}
+        onPageSizeChange={(s) => { setPageSize(s); setPageNumber(1); }}
+        currentPage={pageNumber}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        startRow={startRow}
+        endRow={endRow}
+        onPageChange={setPageNumber}
+      >
         <div className="dropdown">
           <button
             className="btn btn-sm btn-nci-primary dropdown-toggle px-3"
-
             onClick={() => setDropdownOpen(!dropdownOpen)}
             disabled={exporting}
           >
@@ -185,21 +227,10 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
             </ul>
           )}
         </div>
-      </div>
-
-      <TableControls
-        pageSize={pageSize}
-        onPageSizeChange={(s) => { setPageSize(s); setPageNumber(1); }}
-        currentPage={pageNumber}
-        totalPages={totalPages}
-        totalCount={totalCount}
-        startRow={startRow}
-        endRow={endRow}
-        onPageChange={setPageNumber}
-      />
+      </TableControls>
 
       <div style={{ overflowX: "auto", maxWidth: "100%" }}>
-        <table className="table table-sm table-hover table-bordered mb-0" style={{ fontSize: "0.75rem" }}>
+        <table className="table table-sm table-striped table-hover table-borderless mb-0 analysis-table" style={{ fontSize: "1rem" }}>
           <thead>
             <tr>
               {COLUMNS.map((col) => (
@@ -207,8 +238,8 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
                   <input
                     type="text"
                     className="form-control form-control-sm"
-                    style={{ fontSize: "0.7rem" }}
-                    placeholder="Search"
+                    style={{ fontSize: "0.85rem", textOverflow: "ellipsis" }}
+                    placeholder={col.label}
                     value={search[col.search] || ""}
                     onChange={(e) => handleSearch(col.search, e.target.value)}
                   />
@@ -221,7 +252,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
                   key={col.key}
                   role="button"
                   onClick={() => handleSort(col.key)}
-                  style={{ whiteSpace: "nowrap", cursor: "pointer", userSelect: "none", background: "#fafafa", fontSize: "0.75rem" }}
+                  style={{ whiteSpace: "nowrap", cursor: "pointer", userSelect: "none", background: "#fafafa", fontSize: "0.85rem" }}
                 >
                   {col.label}
                   {sorting.name === col.key && (
@@ -244,9 +275,10 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
                       {col.key === "Pathway_ID" ? (
                         <button
                           className="btn btn-link btn-sm p-0"
-                          style={{ fontSize: "0.75rem" }}
+                          style={{ fontSize: "0.85rem" }}
                           onClick={() => handleHeatmap(String(row.Pathway_Name || ""))}
                         >
+                          <AiOutlineAreaChart style={{ marginRight: "3px", verticalAlign: "middle" }} />
                           {String(row[col.key] || "")}
                         </button>
                       ) : (
@@ -261,13 +293,6 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
         </table>
       </div>
 
-      {/* Heatmap display */}
-      {heatmapLoading && <p className="text-muted mt-2" style={{ fontSize: "0.85rem" }}>Generating heatmap...</p>}
-      {heatmapUrl && (
-        <div className="mt-3">
-          <Image src={heatmapUrl} alt="Pathway Heatmap" unoptimized width={800} height={600} style={{ maxWidth: "100%", height: "auto" }} />
-        </div>
-      )}
     </div>
   );
 }

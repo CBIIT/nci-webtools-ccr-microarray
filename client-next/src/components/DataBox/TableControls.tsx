@@ -12,6 +12,7 @@ interface TableControlsProps {
   endRow: number;
   onPageChange: (page: number) => void;
   pageSizes?: number[];
+  children?: React.ReactNode;
 }
 
 export default function TableControls({
@@ -24,6 +25,7 @@ export default function TableControls({
   endRow,
   onPageChange,
   pageSizes = DEFAULT_PAGE_SIZES,
+  children,
 }: TableControlsProps) {
   return (
     <div className="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2" style={{ fontSize: "0.8rem" }}>
@@ -46,6 +48,7 @@ export default function TableControls({
           {totalCount > 0 ? `Showing ${startRow}-${endRow} of ${totalCount} records` : "No records"}
         </span>
         <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+        {children}
       </div>
     </div>
   );

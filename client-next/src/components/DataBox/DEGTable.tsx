@@ -14,7 +14,7 @@ const EXPORT_COLUMNS = [
   { key: "FC", label: "FC" },
   { key: "logFC", label: "logFC" },
   { key: "P.Value", label: "P.Value" },
-  { key: "adj.P.Val", label: "adj.P.Val" },
+  { key: "adj.P.Val", label: "adj.P.value" },
   { key: "AveExpr", label: "AveExpr" },
   { key: "ACCNUM", label: "ACCNUM" },
   { key: "DESC", label: "DESC" },
@@ -28,7 +28,7 @@ const COLUMNS = [
   { key: "SYMBOL", label: "SYMBOL", search: "search_symbol" },
   { key: "FC", label: "FC", search: "search_fc", fmt: "num3" },
   { key: "P.Value", label: "P.Value", search: "search_p_value", fmt: "exp" },
-  { key: "adj.P.Val", label: "adj.P.Val", search: "search_adj_p_value", fmt: "exp" },
+  { key: "adj.P.Val", label: "adj.P.value", search: "search_adj_p_value", fmt: "exp" },
   { key: "AveExpr", label: "AveExpr", search: "search_aveexpr", fmt: "num3" },
   { key: "ACCNUM", label: "ACCNUM", search: "search_accnum" },
   { key: "DESC", label: "DESC", search: "search_desc" },
@@ -113,7 +113,22 @@ export default function DEGTable() {
         search_keyword: search,
       });
       await exportTableToXlsx(
-        buildSettingsRows(store),
+        buildSettingsRows(store, {
+          type: "Differentially Expressed Genes",
+          filters: [
+            ["SYMBOL", search.search_symbol],
+            ["fc", search.search_fc],
+            ["P.Value", search.search_p_value],
+            ["adj.P.value", search.search_adj_p_value],
+            ["AveExpr", search.search_aveexpr],
+            ["ACCNUM", search.search_accnum, true],
+            ["DESC", search.search_desc],
+            ["ENTREZ", search.search_entrez],
+            ["probsetID", search.search_probsetid],
+            ["t", search.search_t],
+            ["B", search.search_b],
+          ],
+        }),
         EXPORT_COLUMNS,
         result.records,
         `DEG_${store.projectId}.xlsx`
@@ -155,11 +170,19 @@ export default function DEGTable() {
     <div>
       {error && <p style={{ color: "#b22222", fontSize: "0.85rem" }}>{error}</p>}
 
-      <div className="d-flex justify-content-end align-items-center mb-2">
+      <TableControls
+        pageSize={pageSize}
+        onPageSizeChange={(s) => { setPageSize(s); setPageNumber(1); }}
+        currentPage={pageNumber}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        startRow={startRow}
+        endRow={endRow}
+        onPageChange={setPageNumber}
+      >
         <div className="dropdown">
           <button
             className="btn btn-sm btn-nci-primary dropdown-toggle px-3"
-
             onClick={() => setDropdownOpen(!dropdownOpen)}
             disabled={exporting}
           >
@@ -173,22 +196,11 @@ export default function DEGTable() {
             </ul>
           )}
         </div>
-      </div>
-
-      <TableControls
-        pageSize={pageSize}
-        onPageSizeChange={(s) => { setPageSize(s); setPageNumber(1); }}
-        currentPage={pageNumber}
-        totalPages={totalPages}
-        totalCount={totalCount}
-        startRow={startRow}
-        endRow={endRow}
-        onPageChange={setPageNumber}
-      />
+      </TableControls>
 
       {/* Table */}
       <div style={{ overflowX: "auto", maxWidth: "100%" }}>
-        <table className="table table-sm table-hover table-bordered mb-0" style={{ fontSize: "0.8rem" }}>
+        <table className="table table-sm table-striped table-hover table-borderless mb-0 analysis-table" style={{ fontSize: "1rem" }}>
           <thead>
             {/* Search row */}
             <tr>
@@ -197,8 +209,8 @@ export default function DEGTable() {
                   <input
                     type="text"
                     className="form-control form-control-sm"
-                    style={{ fontSize: "0.75rem" }}
-                    placeholder="Search"
+                    style={{ fontSize: "0.85rem", textOverflow: "ellipsis" }}
+                    placeholder={col.label}
                     value={search[col.search] || ""}
                     onChange={(e) => handleSearch(col.search, e.target.value)}
                   />
