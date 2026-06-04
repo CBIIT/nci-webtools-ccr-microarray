@@ -76,7 +76,7 @@ function restoreSession(req, path) {
 router.post('/upload', function (req, res) {
   logger.info('[start] upload files');
   // create an incoming form object
-  var form = formidable({ multiples: true });
+  var form = formidable({ multiples: true, maxTotalFileSize: Infinity });
   var pid = '';
   // Emitted whenever a field / value pair has been received.
   form.on('field', function (name, value) {
