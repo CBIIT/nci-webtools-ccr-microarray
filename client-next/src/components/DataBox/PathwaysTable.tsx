@@ -201,7 +201,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
       />
 
       <div style={{ overflowX: "auto", maxWidth: "100%" }}>
-        <table className="table table-sm table-hover table-bordered mb-0" style={{ fontSize: "0.75rem" }}>
+        <table className="table table-sm table-striped table-hover table-borderless mb-0 analysis-table" style={{ fontSize: "1rem" }}>
           <thead>
             <tr>
               {COLUMNS.map((col) => (
@@ -209,7 +209,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
                   <input
                     type="text"
                     className="form-control form-control-sm"
-                    style={{ fontSize: "0.7rem" }}
+                    style={{ fontSize: "0.85rem" }}
                     placeholder="Search"
                     value={search[col.search] || ""}
                     onChange={(e) => handleSearch(col.search, e.target.value)}
@@ -223,7 +223,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
                   key={col.key}
                   role="button"
                   onClick={() => handleSort(col.key)}
-                  style={{ whiteSpace: "nowrap", cursor: "pointer", userSelect: "none", background: "#fafafa", fontSize: "0.75rem" }}
+                  style={{ whiteSpace: "nowrap", cursor: "pointer", userSelect: "none", background: "#fafafa", fontSize: "0.85rem" }}
                 >
                   {col.label}
                   {sorting.name === col.key && (
@@ -246,7 +246,7 @@ export default function PathwaysTable({ direction }: PathwaysTableProps) {
                       {col.key === "Pathway_ID" ? (
                         <button
                           className="btn btn-link btn-sm p-0"
-                          style={{ fontSize: "0.75rem" }}
+                          style={{ fontSize: "0.85rem" }}
                           onClick={() => handleHeatmap(String(row.Pathway_Name || ""))}
                         >
                           <AiOutlineAreaChart style={{ marginRight: "3px", verticalAlign: "middle" }} />
