@@ -10,14 +10,14 @@ type Mode = "group" | "batch" | "upload";
 interface GroupBatchModalProps {
   visible: boolean;
   onClose: () => void;
-  selectedIndices: number[];
+  selectedGsms: string[];
   onClearSelection: () => void;
 }
 
 export default function GroupBatchModal({
   visible,
   onClose,
-  selectedIndices,
+  selectedGsms,
   onClearSelection,
 }: GroupBatchModalProps) {
   const store = useAnalysisStore();
@@ -51,8 +51,6 @@ export default function GroupBatchModal({
     return { groupMap: gMap, batchMap: bMap };
   }, [store.dataList]);
 
-  const selectedGsms = selectedIndices.map((i) => store.dataList[i]?.gsm).filter(Boolean);
-
   function handleAdd() {
     const trimmed = name.trim();
     if (!trimmed) {
@@ -63,15 +61,18 @@ export default function GroupBatchModal({
       setMessage("The group name only allows letters, numbers, and one underscore (cannot be placed after a number). Must start with a letter. Valid Group Name Example: RNA_1");
       return;
     }
-    if (selectedIndices.length < 2) {
+    if (selectedGsms.length < 2) {
       setMessage("Select at least 2 GSM to add a group");
       return;
     }
 
+    const gsmSet = new Set(selectedGsms);
+    const indices = store.dataList.map((s, i) => (gsmSet.has(s.gsm) ? i : -1)).filter((i) => i !== -1);
+
     if (mode === "group") {
-      store.assignGroup(selectedIndices, trimmed);
+      store.assignGroup(indices, trimmed);
     } else {
-      store.assignBatch(selectedIndices, trimmed);
+      store.assignBatch(indices, trimmed);
     }
 
     setMessage("");

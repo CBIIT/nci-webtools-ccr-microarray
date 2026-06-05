@@ -75,15 +75,15 @@ const PAGE_SIZE_OPTIONS = [10, 15, 25, 50, 100, 200];
 export default function GSMData() {
   const store = useAnalysisStore();
   const { dataList, dataLoaded } = store;
-  const [selected, setSelected] = useState<Set<number>>(new Set());
-  const [lastToggled, setLastToggled] = useState<number | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [lastToggled, setLastToggled] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [sortKey, setSortKey] = useState<string>("gsm");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [searchText, setSearchText] = useState("");
   const [pageSize, setPageSize] = useState(25);
   const [currentPage, setCurrentPage] = useState(1);
-  const allSelected = dataList.length > 0 && selected.size === dataList.length;
+  const allSelected = dataList.length > 0 && dataList.every((s) => selected.has(s.gsm));
   const someSelected = selected.size > 0 && !allSelected;
 
   const headerCheckboxRef = useCallback((el: HTMLInputElement | null) => {
@@ -95,18 +95,18 @@ export default function GSMData() {
     if (allSelected) {
       setSelected(new Set());
     } else {
-      setSelected(new Set(dataList.map((_, i) => i)));
+      setSelected(new Set(dataList.map((s) => s.gsm)));
     }
   }
 
-  function toggleRow(index: number) {
-    setLastToggled(index);
+  function toggleRow(gsm: string) {
+    setLastToggled(gsm);
     setSelected((prev) => {
       const next = new Set(prev);
-      if (next.has(index)) {
-        next.delete(index);
+      if (next.has(gsm)) {
+        next.delete(gsm);
       } else {
-        next.add(index);
+        next.add(gsm);
       }
       return next;
     });
@@ -259,16 +259,16 @@ export default function GSMData() {
           </thead>
           <tbody>
             {pagedData.map((sample, i) => {
-              const globalIdx = startIdx + i;
+              const rowKey = sample.gsm || String(startIdx + i);
               return (
-              <tr key={sample.gsm || globalIdx}>
+              <tr key={rowKey}>
                 <td>
                   <input
-                    key={lastToggled === globalIdx && selected.has(globalIdx) ? `${globalIdx}-pulse` : `${globalIdx}`}
-                    className={lastToggled === globalIdx && selected.has(globalIdx) ? "checkbox-pulse" : ""}
+                    key={lastToggled === sample.gsm && selected.has(sample.gsm) ? `${sample.gsm}-pulse` : sample.gsm}
+                    className={lastToggled === sample.gsm && selected.has(sample.gsm) ? "checkbox-pulse" : ""}
                     type="checkbox"
-                    checked={selected.has(globalIdx)}
-                    onChange={() => toggleRow(globalIdx)}
+                    checked={selected.has(sample.gsm)}
+                    onChange={() => toggleRow(sample.gsm)}
                     aria-label={`Select ${sample.gsm}`}
                   />
                 </td>
@@ -287,7 +287,7 @@ export default function GSMData() {
       <GroupBatchModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        selectedIndices={Array.from(selected)}
+        selectedGsms={Array.from(selected)}
         onClearSelection={() => { setSelected(new Set()); setLastToggled(null); }}
       />
     </div>
