@@ -67,6 +67,7 @@ module.exports = {
     workerType: env.WORKER_TYPE || 'local',
 
     // Application
+    tier: env.APP_TIER || 'dev',
     microarray_link: env.APP_BASE_URL || setting.microarray_link,
 
     // Email (ECS template names: EMAIL_SMTP_HOST, EMAIL_SMTP_PORT, EMAIL_ADMIN)

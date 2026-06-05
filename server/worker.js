@@ -151,7 +151,8 @@ function run(id) {
         } else {
           code = '<p>&nbsp;&nbsp;CEL Files: <b>' + (params.dataList || []).join(', ') + '</b></p>';
         }
-        var subject = 'MicroArray Contrast Results - ' + formatDate(end);
+        var tierPrefix = config.tier !== 'prod' ? '[' + config.tier.toUpperCase() + '] ' : '';
+        var subject = tierPrefix + 'MicroArray Contrast Results - ' + formatDate(end);
         var html = emailer.emailTemplate(
           code,
           durationSec + ' seconds',
@@ -198,7 +199,8 @@ function run(id) {
         } else {
           code = '<p>&nbsp;&nbsp;CEL Files: <b>' + (params.dataList || []).join(', ') + '</b></p>';
         }
-        var subject = 'MicroArray Contrast Results - ' + formatDate(end) + ' (FAILED)';
+        var tierPrefix = config.tier !== 'prod' ? '[' + config.tier.toUpperCase() + '] ' : '';
+        var subject = tierPrefix + 'MicroArray Contrast Results - ' + formatDate(end) + ' (FAILED)';
         var html = emailer.emailFailedTemplate(
           code,
           durationSec + ' seconds',
