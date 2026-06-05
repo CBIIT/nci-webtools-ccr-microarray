@@ -536,7 +536,7 @@ export default function Analysis() {
             {store.activeTab === "gsm" && (
               <>
                 {loadError && <p style={{ color: "#b22222", fontSize: "1.1rem", margin: "1rem" }}>{loadError}</p>}
-                {(!loadError || store.dataLoaded) && <GSMData />}
+                {(!loadError || store.dataLoaded) && <GSMData key={store.projectId} />}
               </>
             )}
 
