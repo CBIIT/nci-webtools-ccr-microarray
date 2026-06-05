@@ -32,7 +32,7 @@ BiocManager::install(
     "clariomdhumantranscriptcluster.db"))
 
 # Install mpstr AFTER Bioconductor (mpstr depends on packages above)
-remotes::install_github("CBIIT/MAAPster/mpstr")
+remotes::install_github("CBIIT/MAAPster/mpstr", force = TRUE)
 if (!requireNamespace("mpstr", quietly = TRUE)) stop("mpstr package failed to install")
 
 # Use latest version from https://github.com/CCBR/l2p

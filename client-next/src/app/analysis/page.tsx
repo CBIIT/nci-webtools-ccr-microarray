@@ -110,6 +110,7 @@ export default function Analysis() {
     onSuccess: (data) => {
       store.setDataList(data.files);
       store.setDataLoaded(true);
+      store.setUploaded(true);
       store.setLoading(false);
     },
     onError: (err: Error) => {
