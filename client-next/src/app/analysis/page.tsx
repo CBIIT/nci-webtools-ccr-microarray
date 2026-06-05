@@ -464,7 +464,7 @@ export default function Analysis() {
           <div className="loading-overlay">
             <div className="loading-card">
               <div className="spinner-border text-primary mb-3" role="status" />
-              <p className="mb-0">{store.loadingMessage}</p>
+              <p className="mb-0 fw-bold">{store.loadingMessage}</p>
             </div>
           </div>
         )}
