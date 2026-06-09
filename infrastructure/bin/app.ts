@@ -51,8 +51,8 @@ const microservice: MicroserviceConfig = {
   port: num("WEB_CONTAINER_PORT", 80),
   healthCheckPath: optional("HEALTH_CHECK_PATH", "/api/ping"),
   imageUrl: required("WEB_IMAGE_URL"),
-  cpu: num("WEB_CPU", 1024),
-  memory: num("WEB_MEMORY", 2048),
+  cpu: num("WEB_CPU", 2048),
+  memory: num("WEB_MEMORY", 4096),
   path: csvList("WEB_PATH", ["/"]),
   desiredCount: num("WEB_DESIRED_COUNT", 1),
   nonProdSchedule: bool("WEB_NON_PROD_SCHEDULE", true),
@@ -63,8 +63,8 @@ const microservice: MicroserviceConfig = {
 const extraTask: ExtraTaskConfig = {
   name: optional("WORKER_NAME", "worker"),
   imageUrl: required("WORKER_IMAGE_URL"),
-  cpu: num("WORKER_CPU", 1024),
-  memory: num("WORKER_MEMORY", 2048),
+  cpu: num("WORKER_CPU", 4096),
+  memory: num("WORKER_MEMORY", 16384),
   createService: bool("WORKER_CREATE_SERVICE", false),
   nonProdSchedule: bool("WORKER_NON_PROD_SCHEDULE", true),
 };
