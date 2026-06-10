@@ -53,8 +53,58 @@ export interface GSEResult {
   chipData: Record<string, Sample[]>;
 }
 
-/** Parse loadGSE response: extract JSON after 'wrapperReturn' delimiter */
+/**
+ * Parse loadGSE response: extract JSON after the 'wrapperReturn' delimiter.
+ *
+ * This mirrors the legacy client (client/src/components/Analysis/Analysis.js ~L2355) exactly,
+ * including its quirks, so dev and prod surface identical errors. Notably, legacy does NOT guard
+ * against a missing 'wrapperReturn' delimiter: when the R load fails (empty `{}` response),
+ * `substring(indexOf(...) + 15)` slices mid-string and JSON.parse throws a cryptic
+ * "Unexpected token" SyntaxError, which is then wrapped as "Caught Exception:".
+ *
+ * TODO: a clearer implementation is preserved in parseGSEResponseClear() below — switch to it
+ * once prod parity is no longer required.
+ */
 function parseGSEResponse(raw: string): GSEResult {
+  const data = raw.substring(raw.indexOf("wrapperReturn") + 15);
+
+  // Single-chip: { files: [...] }
+  if (data.indexOf('{"files":') > -1) {
+    const list = JSON.parse(decodeURIComponent(data)) as { files: Sample[] };
+    if (!list || !list.files || list.files.length === 0) {
+      throw new Error(data);
+    }
+    return { files: list.files, multichip: false, chips: [], chipData: {} };
+  }
+
+  // Multi-chip: { GPL96: [...], GPL97: [...] }
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(decodeURIComponent(data));
+  } catch (e) {
+    throw new Error(`Caught Exception:\n${e}\n${data}`);
+  }
+
+  if (typeof parsed === "object" && parsed !== null && Object.entries(parsed).length) {
+    const chips = Object.keys(parsed);
+    chips.forEach((chip) => {
+      (parsed as Record<string, Sample[]>)[chip].forEach((sample: Sample) => {
+        sample.groups = "";
+      });
+    });
+    const firstChip = chips[0];
+    return { files: (parsed as Record<string, Sample[]>)[firstChip], multichip: true, chips, chipData: parsed as Record<string, Sample[]> };
+  } else if (typeof parsed === "string" && parsed.length) {
+    throw new Error(parsed);
+  } else {
+    throw new Error(`An error has occured\n${parsed}`);
+  }
+}
+
+/*
+// Clearer parser — guards the missing-delimiter case with a readable error instead of letting
+// JSON.parse choke on a mid-string slice. Restore this once prod parity is no longer required.
+function parseGSEResponseClear(raw: string): GSEResult {
   const idx = raw.indexOf("wrapperReturn");
   if (idx === -1) throw new Error("Invalid GEO response: missing wrapperReturn delimiter");
   const after = raw.substring(idx + 15);
@@ -92,6 +142,7 @@ function parseGSEResponse(raw: string): GSEResult {
 
   throw new Error("Invalid GEO response format");
 }
+*/
 
 /** Parse CEL upload response: extract JSON after '+++getCELfiles+++"' delimiter */
 function parseCELResponse(raw: string): { files: Sample[] } {
