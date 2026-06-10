@@ -83,21 +83,6 @@ export default function GSMData() {
   const [searchText, setSearchText] = useState("");
   const [pageSize, setPageSize] = useState(25);
   const [currentPage, setCurrentPage] = useState(1);
-  const allSelected = dataList.length > 0 && dataList.every((s) => selected.has(s.gsm));
-  const someSelected = selected.size > 0 && !allSelected;
-
-  const headerCheckboxRef = useCallback((el: HTMLInputElement | null) => {
-    if (el) el.indeterminate = someSelected;
-  }, [someSelected]);
-
-  function toggleAll() {
-    setLastToggled(null);
-    if (allSelected) {
-      setSelected(new Set());
-    } else {
-      setSelected(new Set(dataList.map((s) => s.gsm)));
-    }
-  }
 
   function toggleRow(gsm: string) {
     setLastToggled(gsm);
@@ -143,6 +128,22 @@ export default function GSMData() {
   const startIdx = (safePage - 1) * pageSize;
   const endIdx = Math.min(startIdx + pageSize, totalRecords);
   const pagedData = sortedData.slice(startIdx, endIdx);
+
+  const allSelected = sortedData.length > 0 && sortedData.every((s) => selected.has(s.gsm));
+  const someSelected = selected.size > 0 && !allSelected;
+
+  const headerCheckboxRef = useCallback((el: HTMLInputElement | null) => {
+    if (el) el.indeterminate = someSelected;
+  }, [someSelected]);
+
+  function toggleAll() {
+    setLastToggled(null);
+    if (allSelected) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(sortedData.map((s) => s.gsm)));
+    }
+  }
 
   if (!dataLoaded) {
     return (
