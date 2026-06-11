@@ -131,6 +131,7 @@ export interface AnalysisActions {
   setAnalysisType: (type: AnalysisType) => void;
   setAccessionCode: (code: string) => void;
   setChip: (chip: string) => void;
+  setLoadChip: (loadChip: string) => void;
   generateProjectId: () => void;
   setInit: (init: boolean) => void;
 
@@ -305,6 +306,7 @@ export const useAnalysisStore = create<AnalysisState & AnalysisActions>((set, ge
   setAnalysisType: (type) => set({ analysisType: type }),
   setAccessionCode: (code) => set({ accessionCode: code }),
   setChip: (chip) => set({ chip }),
+  setLoadChip: (loadChip) => set({ loadChip }),
   generateProjectId: () => set({ projectId: generateId() }),
   setInit: (init) => set({ init }),
 

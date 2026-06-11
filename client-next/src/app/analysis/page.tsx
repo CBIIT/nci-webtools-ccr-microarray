@@ -300,7 +300,7 @@ export default function Analysis() {
                   placeholder="<All Chips>"
                   value={store.loadChip ?? ""}
                   disabled={store.dataLoaded || store.multichip}
-                  onChange={(e) => store.setChip(e.target.value.toUpperCase())}
+                  onChange={(e) => store.setLoadChip(e.target.value.toUpperCase())}
                 />
 
                 <button className={`btn btn-nci-primary w-100 mt-2${geoMutation.isPending ? " btn-loading" : ""}`} onClick={handleLoadGEO} disabled={isLoading || store.dataLoaded || store.fileList.length > 0}>
