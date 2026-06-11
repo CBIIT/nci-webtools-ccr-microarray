@@ -11,6 +11,7 @@ RUN dnf -y update \
     git \
     glpk \
     ImageMagick-c++ \
+    ImageMagick-c++-devel \
     gcc-c++ \
     gcc-gfortran \
     make \
