@@ -41,6 +41,7 @@ jobs:
           role-to-assume: ${{ env.CICD_ROLE_ARN }}
           role-session-name: ${{ env.TIER }}-${{ env.APP }}-deploy-${{ github.ref_name }}
           aws-region: ${{ env.AWS_REGION }}
+          role-duration-seconds: 5400
 
       - name: Set dynamic environment variables
         run: |

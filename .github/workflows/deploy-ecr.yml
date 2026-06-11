@@ -36,6 +36,7 @@ jobs:
           role-to-assume: ${{ env.CICD_ROLE_ARN }}
           role-session-name: ${{ env.TIER }}-microarray-ecr-${{ github.run_id }}
           aws-region: ${{ env.AWS_REGION }}
+          role-duration-seconds: 5400
 
       - name: Download env file from S3
         run: |
