@@ -20,9 +20,13 @@
        new winston.transports.Console({
             level: 'debug',
             handleExceptions: true,
+            // Structured JSON (no colorize) so Datadog/Fluent Bit can parse the
+            // level into status: previously the ANSI color codes leaked into the
+            // shipped logs (e.g. "[32minfo[39m") and every line landed as status:info.
             format: winston.format.combine(
-              winston.format.colorize(),
-              winston.format.simple()
+              winston.format.timestamp(),
+              winston.format.errors({ stack: true }),
+              winston.format.json()
             )
         })
     ],
