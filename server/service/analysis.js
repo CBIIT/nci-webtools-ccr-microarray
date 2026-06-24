@@ -453,6 +453,10 @@ router.post('/runContrast', function (req, res) {
               .replace(/\"/g, '');
         }
       }
+      logger.error('runContrast returned R Internal Error', {
+        projectId: req.body.projectId,
+        detail: return_data,
+      });
       res.json({ status: 404, msg: return_data });
     }
   });
