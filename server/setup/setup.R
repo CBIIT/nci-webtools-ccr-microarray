@@ -7,6 +7,12 @@ install.packages(
 
 install.packages("rgl", configure.args="--disable-ftgl")
 
+# Pin the Bioconductor release for reproducible builds. Bioc 3.18 pairs with R 4.3
+# and yields oligo 1.66 (known-good). Without this, BiocManager follows the installed
+# R to the newest Bioc -> oligo 1.74, which SIGSEGVs in the CEL reader.
+# See docs/incident-2026-06-24-r-sigsegv.md.
+BiocManager::install(version = "3.18", update = FALSE, ask = FALSE)
+
 # Install Bioconductor packages BEFORE mpstr (mpstr depends on these)
 BiocManager::install(
     c("Biobase", "GEOquery", "GSEABase", "GSVA", "annotate", "sva",
@@ -29,10 +35,13 @@ BiocManager::install(
     "pd.mg.u74av2", "pd.moe430a", "pd.moex.1.0.st.v1", "pd.mogene.1.0.st.v1",
     "pd.mogene.1.1.st.v1", "pd.mogene.2.0.st", "pd.mouse430.2", "pd.mouse430a.2",
     "pd.ht.hg.u133a", "hthgu133a.db", "pd.clariom.d.human",
-    "clariomdhumantranscriptcluster.db"))
+    "clariomdhumantranscriptcluster.db"),
+    version = "3.18", update = FALSE, ask = FALSE)
 
-# Install mpstr AFTER Bioconductor (mpstr depends on packages above)
-remotes::install_github("CBIIT/MAAPster/mpstr")
+# Install mpstr AFTER Bioconductor (mpstr depends on packages above).
+# Pinned to a commit (was floating on master) so rebuilds are reproducible.
+# 5cf10ee = mpstr 1.4.3, the known-good build.
+remotes::install_github("CBIIT/MAAPster/mpstr@5cf10ee216b44f56d1cc2d8bfb2741072ba5e4ae")
 if (!requireNamespace("mpstr", quietly = TRUE)) stop("mpstr package failed to install")
 
 # Use latest version from https://github.com/CCBR/l2p

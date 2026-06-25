@@ -47,9 +47,14 @@ RUN set -eux; \
     cp -a /tmp/npm-patch/node_modules/ip-address "${npm_root}/npm/node_modules/ip-address"; \
     rm -rf /tmp/npm-patch
 
-# Install R (Amazon Linux 2023 native — x86_64 compatible, no Posit SIGSEGV)
+# Install R — PINNED to 4.3.2 (Amazon Linux 2023 native; no Posit SIGSEGV).
+# Pinning R is the linchpin for reproducible builds: BiocManager selects the
+# Bioconductor release from the installed R, so an unpinned `dnf install R` lets a
+# clean (cache-free) rebuild pull a newer R -> newer Bioconductor -> newer oligo,
+# which regressed with a SIGSEGV in oligo's CEL reader on 2026-06-24.
+# See docs/incident-2026-06-24-r-sigsegv.md.
 ENV TAR="/usr/bin/tar --no-same-owner"
-RUN dnf install -y R \
+RUN dnf install -y R-4.3.2 \
     && echo 'options(repos = c(CRAN = "https://cloud.r-project.org"))' \
        >> /usr/lib64/R/etc/Rprofile.site
 
