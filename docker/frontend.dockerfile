@@ -29,11 +29,11 @@ RUN mkdir -p /app/client
 WORKDIR /app/client
 
 # Install dependencies
-COPY client-next/package.json client-next/package-lock.json ./
+COPY client/package.json client/package-lock.json ./
 RUN npm install
 
 # Copy source
-COPY client-next/ ./
+COPY client/ ./
 
 ARG API_BASE_URL
 ENV API_BASE_URL=${API_BASE_URL}
