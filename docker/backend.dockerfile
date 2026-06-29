@@ -34,18 +34,11 @@ RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/n
 # Restrict Python 3.9 to root only (security mitigation)
 RUN chmod 700 /usr/bin/python3.9
 
-# Patch vulnerable packages bundled in system npm
-RUN set -eux; \
-    npm_root="$(npm root -g)"; \
-    npm install --prefix /tmp/npm-patch --install-strategy=nested --ignore-scripts --no-audit --no-fund \
-        picomatch@4.0.4 brace-expansion@2.0.3 ip-address@10.1.1; \
-    rm -rf "${npm_root}/npm/node_modules/picomatch"; \
-    cp -a /tmp/npm-patch/node_modules/picomatch "${npm_root}/npm/node_modules/picomatch"; \
-    rm -rf "${npm_root}/npm/node_modules/brace-expansion"; \
-    cp -a /tmp/npm-patch/node_modules/brace-expansion "${npm_root}/npm/node_modules/brace-expansion"; \
-    rm -rf "${npm_root}/npm/node_modules/ip-address"; \
-    cp -a /tmp/npm-patch/node_modules/ip-address "${npm_root}/npm/node_modules/ip-address"; \
-    rm -rf /tmp/npm-patch
+# Upgrade bundled npm to a pinned current version whose vendored deps are
+# non-vulnerable. This supersedes the prior hand-maintained surgical patches for
+# picomatch / brace-expansion / ip-address, and also clears tar + @sigstore/core
+# flagged in the image scan (all shipped inside npm's own node_modules).
+RUN npm install -g npm@11.16.0
 
 # Install R — PINNED to 4.3.2 (Amazon Linux 2023 native; no Posit SIGSEGV).
 # Pinning R is the linchpin for reproducible builds: BiocManager selects the
