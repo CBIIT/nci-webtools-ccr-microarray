@@ -38,7 +38,7 @@ RUN chmod 700 /usr/bin/python3.9
 # non-vulnerable. This supersedes the prior hand-maintained surgical patches for
 # picomatch / brace-expansion / ip-address, and also clears tar + @sigstore/core
 # flagged in the image scan (all shipped inside npm's own node_modules).
-RUN npm install -g npm@11.16.0
+RUN npm install -g npm@11.18.0
 
 # Install R — PINNED to 4.3.2 (Amazon Linux 2023 native; no Posit SIGSEGV).
 # Pinning R is the linchpin for reproducible builds: BiocManager selects the
