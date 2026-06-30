@@ -32,7 +32,7 @@ This starts the backend (port 9220) and the Next.js frontend (port 3000).
 
 Verify the backend is running:
 ```bash
-curl http://localhost:9220/ping
+curl http://localhost:9220/api/ping
 # Should return: true
 ```
 
@@ -54,14 +54,6 @@ echo "NEXT_PUBLIC_API_URL=http://localhost:9220/api/analysis" > .env.local
 npm run dev
 ```
 This runs the Next.js dev server at `http://localhost:3000` against the containerized backend. Stop the frontend container first if it's running to free port 3000.
-
-**5. Run the legacy frontend (optional, for comparison)**
-```bash
-cd client
-npm install
-NODE_OPTIONS=--openssl-legacy-provider npm start
-```
-Legacy frontend available at `http://localhost:3001` (CRA auto-picks next available port)
 
 ### Testing
 
