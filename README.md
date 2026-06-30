@@ -48,7 +48,7 @@ docker compose up backend        # backend only
 
 If you're actively developing the frontend and want hot reload instead of the container:
 ```bash
-cd client-next
+cd client
 npm install
 echo "NEXT_PUBLIC_API_URL=http://localhost:9220/api/analysis" > .env.local
 npm run dev

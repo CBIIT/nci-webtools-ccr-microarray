@@ -6,14 +6,12 @@
 var express = require("express");
 var m_analysis = require("./service/analysis");
 var config = require("./config");
-var path = require("path");
 
 var session = require("./components/session");
 //var session =require("express-session");
 var FastSessionStore = require("./components/fastsessionstore")(session);
 
 module.exports = function (app) {
-  app.use(express.static(path.join(config.root, "client/www")));
   //Serves all the request which includes /images in the url from Images folder
   app.use("/images", express.static(config.uploadPath));
 
@@ -62,7 +60,5 @@ module.exports = function (app) {
   });
 
   // All other routes should redirect to error page
-  app.get("/*", function (req, res) {
-    // res.sendFile(path.join(config.root, 'client/www', 'error.html'));
-  });
+  app.get("/*", function (req, res) {});
 };

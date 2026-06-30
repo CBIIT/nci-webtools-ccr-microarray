@@ -1,9 +1,0 @@
-@import '~antd/dist/antd.css';
-.ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-sorters, .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-filters{
-    padding-right: 10px !important;
-};
-
-
-.ant-tabs.ant-tabs-card .ant-tabs-card-content>.ant-tabs-tabpane-inactive, .ant-tabs.ant-tabs-editable-card .ant-tabs-card-content>.ant-tabs-tabpane-inactive {
-	display: none; 
-}
