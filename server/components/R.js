@@ -38,10 +38,12 @@ var execute = function(file, data, callback){
 
 	})
 
-	child.on('error',(Error)=>{
-		logger.info(Error.prototype.message)
-		logger.info(Error.prototype.name)
-
+	child.on('error',(err)=>{
+		logger.error("R spawn error: " + (err && err.message), {
+			file: file,
+			name: err && err.name,
+			stack: err && err.stack
+		});
 	})
 
 	child.on('exit',(code, signal)=>{
@@ -54,6 +56,16 @@ var execute = function(file, data, callback){
 		logger.info("close code:"+code);
 		logger.info("close signal:"+signal);
 		if(code!=0){
+			// Surface the actual failure so it is filterable in Datadog (status:error).
+			// signal is set (e.g. SIGKILL/137) when the worker is killed (OOM / timeout)
+			// rather than exiting with an R error, which otherwise leaves no trace.
+			logger.error("R script failed", {
+				file: file,
+				code: code,
+				signal: signal,
+				stderr: err_message,
+				stdoutTail: body.slice(-2000)
+			});
 			callback(true, err_message);
 		}
 		else{
