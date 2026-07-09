@@ -19,7 +19,7 @@ on:
 
 jobs:
   deploy-microarray-app:
-    timeout-minutes: 90
+    timeout-minutes: 105
     runs-on: ubuntu-latest
     environment: ${{ inputs.tier }}
     env:
@@ -41,7 +41,7 @@ jobs:
           role-to-assume: ${{ env.CICD_ROLE_ARN }}
           role-session-name: ${{ env.TIER }}-${{ env.APP }}-deploy-${{ github.ref_name }}
           aws-region: ${{ env.AWS_REGION }}
-          role-duration-seconds: 5400
+          role-duration-seconds: 7200
 
       - name: Set dynamic environment variables
         run: |
