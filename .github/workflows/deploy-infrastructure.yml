@@ -19,7 +19,7 @@ on:
 
 jobs:
   deploy-microarray-infra:
-    timeout-minutes: 30
+    timeout-minutes: 90
     runs-on: ubuntu-latest
     environment: ${{ inputs.tier }}
     env:
@@ -38,7 +38,8 @@ jobs:
           role-to-assume: ${{ env.CICD_ROLE_ARN }}
           role-session-name: ${{ env.TIER }}-microarray-infra-${{ github.run_id }}
           aws-region: ${{ env.AWS_REGION }}
-          role-duration-seconds: 5400
+          # 2 hours — well past the 90-min job timeout so creds never expire mid-run
+          role-duration-seconds: 7200
 
       - name: Download env files from S3
         run: |
