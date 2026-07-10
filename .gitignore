@@ -5,8 +5,14 @@ yarn-error.log*
 .DS_Store
 .Rproj.user
 /bak/
-/client/www/
 /mpstr_pathworks_mac/
 /mpstr_pathworks_linux/
 *.log
 config/microarray_setting.json
+server/config/microarray_setting.json
+data/
+tmp/
+log/
+*.gmt
+.env
+/docs

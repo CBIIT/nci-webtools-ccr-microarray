@@ -1,0 +1,18 @@
+{
+  "timeout": 300000,
+  "microarray_link": "https://maap-dev.ccr.cancer.gov/",
+  "development": {
+    "log_dir": "log",
+    "upload_path": "tmp",
+    "config_path": "data"
+  },
+  "mail": {
+    "host": "mailfwd.nih.gov",
+    "port": 25,
+    "web_admin_email": "NCIMicroArrayWebAdmin@mail.nih.gov",
+    "support_email": "kai-ling.chen@nih.gov",
+    "tls": {
+      "rejectUnauthorized": false
+    }
+  }
+}
