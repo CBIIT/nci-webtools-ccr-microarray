@@ -6,9 +6,10 @@ var { startCron } = require('./services/cron');
 var app = express();
 require('./routes')(app);
 
-// In server envs, the node express is behind a proxy (i.e. Apache mod proxy), set the ip-address of
-// your trusted reverse proxy server configured as proxy or others.
-app.set('trust proxy', 'loopback');
+// In server envs, the node express is behind private-network proxies (ALB, and the
+// Next.js frontend container which proxies /api). Trust loopback and private-range
+// hops so req.ip resolves to the real client address — express-rate-limit keys on it.
+app.set('trust proxy', 'loopback, linklocal, uniquelocal');
 
 
 const server = app.listen(config.port, function() {
