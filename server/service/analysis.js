@@ -1,5 +1,6 @@
 var express = require('express');
 var session = require('express-session');
+var rateLimit = require('express-rate-limit');
 var router = express.Router();
 var R = require('../components/R');
 var config = require('../config');
@@ -9,12 +10,32 @@ var fs = require('fs');
 var path = require('path');
 var { getWorker } = require('../services/workers');
 
+// Rate limiter applied to all analysis API routes.
+// Window/limit are review knobs: 300 requests per 60s per client.
+var apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  limit: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+router.use(apiLimiter);
+
+// Resolve a path underneath a base directory, refusing any resolved path
+// that escapes the base directory (path traversal guard).
+function resolveWithin(base, ...segments) {
+  const resolvedBase = path.resolve(base);
+  const resolved = path.resolve(resolvedBase, ...segments);
+  if (!resolved.startsWith(resolvedBase + path.sep)) {
+    throw new Error('Invalid path');
+  }
+  return resolved;
+}
+
 // remove previous result.
 // ssgseaHeatmap1.jpg
-function removeGSEAheatmap(uploadPath, projectId) {
-  const localPath = uploadPath + '/' + projectId;
-  const plot = path.resolve(localPath + '/ssgseaHeatmap1.jpg');
-  const txt = path.resolve(localPath + '/ss_result.txt');
+function removeGSEAheatmap(projectDir) {
+  const plot = resolveWithin(projectDir, 'ssgseaHeatmap1.jpg');
+  const txt = resolveWithin(projectDir, 'ss_result.txt');
 
   [plot, txt].map((file) => {
     if (fs.existsSync(file)) fs.unlinkSync(file);
@@ -26,8 +47,8 @@ function validate(id) {
   return regex.test(id);
 }
 
-function restoreSession(req, path) {
-  let returnValue = fs.readFileSync(path, 'utf8');
+function restoreSession(req, resultFilePath) {
+  let returnValue = fs.readFileSync(resultFilePath, 'utf8');
   let re = JSON.parse(returnValue);
   if (re.GSM) {
     // store return value in session (deep copy)
@@ -78,11 +99,19 @@ router.post('/upload', function (req, res) {
   // create an incoming form object
   var form = formidable({ multiples: true, maxTotalFileSize: Infinity });
   var pid = '';
+  // Set when projectId is missing or fails validation. Nothing touches the
+  // filesystem under the upload path until the id has been validated.
+  var invalidProjectId = false;
   // Emitted whenever a field / value pair has been received.
   form.on('field', function (name, value) {
     if (name == 'projectId') {
+      if (!validate(value)) {
+        invalidProjectId = true;
+        logger.warn('API:/upload ', 'rejected project ID');
+        return;
+      }
       pid = value;
-      form.uploadDir = path.join(config.uploadPath, '/' + value);
+      form.uploadDir = resolveWithin(config.uploadPath, value);
       if (!fs.existsSync(form.uploadDir)) {
         fs.mkdirSync(form.uploadDir);
       } else {
@@ -96,8 +125,16 @@ router.post('/upload', function (req, res) {
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
   form.on('file', function (field, file) {
+    // No validated project directory: discard the parsed temp file.
+    if (invalidProjectId || !pid) {
+      fs.rm(file.filepath, { force: true }, function () {});
+      return;
+    }
     number_of_files = number_of_files + 1;
-    fs.rename(file.filepath, path.join(form.uploadDir, file.originalFilename), (err) => {
+    // basename strips any directory component in the client-supplied name;
+    // resolveWithin is the backstop.
+    var destination = resolveWithin(form.uploadDir, path.basename(file.originalFilename));
+    fs.rename(file.filepath, destination, (err) => {
       if (err) throw logger.info('Rename  file name err' + err);
     });
   });
@@ -110,6 +147,10 @@ router.post('/upload', function (req, res) {
   });
   // once all the files have been uploaded, send a response to the client
   form.on('end', function () {
+    if (invalidProjectId || !pid) {
+      logger.info('API:/upload result ', 'status 404 ');
+      return res.json({ status: 404, msg: 'Invalid project ID' });
+    }
     let data = [];
     data.push('loadCEL'); // action
     data.push(pid);
@@ -146,6 +187,8 @@ router.post('/getConfiguration', function (req, res) {
 });
 
 router.post('/loadGSE', function (req, res) {
+  if (!validate(req.body.projectId))
+    return res.json({ status: 404, msg: 'Invalid project ID' });
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   // action
@@ -181,6 +224,8 @@ router.post('/loadGSE', function (req, res) {
 });
 
 router.post('/pathwaysHeapMap', function (req, res) {
+  if (!validate(req.body.projectId))
+    return res.json({ status: 404, msg: 'Invalid project ID' });
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push('pathwaysHeapMap');
@@ -234,10 +279,11 @@ router.post('/getssGSEAWithDiffGenSet', function (req, res) {
   data.push(req.body.group1);
   data.push(req.body.group2);
   data.push(config.configPath);
-  removeGSEAheatmap(config.uploadPath, req.body.projectId);
+  const ssProjectDir = resolveWithin(config.uploadPath, req.body.projectId);
+  removeGSEAheatmap(ssProjectDir);
   R.execute('wrapper.R', data, function (err, returnValue) {
-    const ssResultPath = config.uploadPath + '/' + req.body.projectId + '/ss_result.txt';
-    const errPath = config.uploadPath + '/' + req.body.projectId + '/ssgseaPathways.err';
+    const ssResultPath = path.join(ssProjectDir, 'ss_result.txt');
+    const errPath = path.join(ssProjectDir, 'ssgseaPathways.err');
     if (fs.existsSync(errPath)) {
       logger.error('[getssGSEAWithDiffGenSet] R error:\n' + fs.readFileSync(errPath, 'utf8'));
     }
@@ -250,7 +296,7 @@ router.post('/getssGSEAWithDiffGenSet', function (req, res) {
       let d = JsonToObject(re);
       req.session[req.body.projectId].ssGSEA = d.ssGSEA;
       logger.info('Get Contrast result success');
-      const heatmapPath = config.uploadPath + '/' + req.body.projectId + '/ssgseaHeatmap1.jpg';
+      const heatmapPath = path.join(ssProjectDir, 'ssgseaHeatmap1.jpg');
       const heatmap = fs.existsSync(heatmapPath) ? 'ssgseaHeatmap1.jpg' : null;
       res.json({ status: 200, data: { heatmap } });
     } catch (e) {
@@ -263,7 +309,7 @@ router.post('/qAnalysis', function (req, res) {
   if (!validate(req.body.projectId))
     return res.json({ status: 404, msg: 'Invalid project ID' });
 
-  var projectDir = path.join(config.uploadPath, req.body.projectId);
+  var projectDir = resolveWithin(config.uploadPath, req.body.projectId);
 
   // Write params.json for the worker
   var params = {
@@ -315,7 +361,7 @@ router.post('/getJobStatus', function (req, res) {
   if (!validate(req.body.projectId))
     return res.json({ status: 404, msg: 'Invalid project ID' });
 
-  var statusPath = path.join(config.uploadPath, req.body.projectId, 'status.json');
+  var statusPath = resolveWithin(config.uploadPath, req.body.projectId, 'status.json');
 
   if (!fs.existsSync(statusPath)) {
     return res.json({ status: 404, msg: 'No job found for this project ID' });
@@ -333,7 +379,7 @@ router.post('/getResultByProjectId', function (req, res) {
   if (!validate(req.body.projectId))
     return res.json({ status: 404, msg: 'Invalid project ID' });
 
-  var resultPath = path.join(config.uploadPath, req.body.projectId, 'result.txt');
+  var resultPath = resolveWithin(config.uploadPath, req.body.projectId, 'result.txt');
 
   if (!fs.existsSync(resultPath)) {
     return res.json({ status: 404, msg: 'Results not found for this project ID' });
@@ -351,8 +397,9 @@ router.post('/getResultByProjectId', function (req, res) {
 
 router.post('/runContrast', function (req, res) {
   if (!validate(req.body.projectId))
-    res.json({ status: 404, msg: 'Invalid project ID' });
+    return res.json({ status: 404, msg: 'Invalid project ID' });
   req.setTimeout(0); // no timeout
+  const contrastProjectDir = resolveWithin(config.uploadPath, req.body.projectId);
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push('runContrast'); // action
@@ -372,17 +419,13 @@ router.post('/runContrast', function (req, res) {
   data.push(req.body.index);
   data.push(req.body.batches);
   data.push(req.body.chip || '');
-  removeGSEAheatmap(config.uploadPath, req.body.projectId);
+  removeGSEAheatmap(contrastProjectDir);
   logger.info('runContrast  R code ');
   R.execute('wrapper.R', data, function (err, returnValue) {
-    if (
-      fs.existsSync(
-        config.uploadPath + '/' + req.body.projectId + '/result.txt'
-      )
-    ) {
+    if (fs.existsSync(path.join(contrastProjectDir, 'result.txt'))) {
       let return_data = restoreSession(
         req,
-        config.uploadPath + '/' + req.body.projectId + '/result.txt'
+        path.join(contrastProjectDir, 'result.txt')
       );
       if (return_data.gsm) {
         logger.info('Get Contrast result success');
@@ -405,13 +448,9 @@ router.post('/runContrast', function (req, res) {
         'diffExprGenes.err',
       ];
       for (var i = paths.length - 1; i >= 0; i--) {
-        if (
-          fs.existsSync(
-            config.uploadPath + '/' + req.body.projectId + '/' + paths[i]
-          )
-        ) {
+        if (fs.existsSync(path.join(contrastProjectDir, paths[i]))) {
           let returnValue = fs.readFileSync(
-            config.uploadPath + '/' + req.body.projectId + '/' + paths[i],
+            path.join(contrastProjectDir, paths[i]),
             'utf8'
           );
           if (returnValue.indexOf('halted') > 0) {
@@ -420,13 +459,9 @@ router.post('/runContrast', function (req, res) {
         }
       }
       if (return_data == 'R Internal Error') {
-        if (
-          fs.existsSync(
-            config.uploadPath + '/' + req.body.projectId + '/overall_error.txt'
-          )
-        ) {
+        if (fs.existsSync(path.join(contrastProjectDir, 'overall_error.txt'))) {
           let returnValue = fs.readFileSync(
-            config.uploadPath + '/' + req.body.projectId + '/overall_error.txt',
+            path.join(contrastProjectDir, 'overall_error.txt'),
             'utf8'
           );
           if (returnValue != '' && returnValue != []) {
