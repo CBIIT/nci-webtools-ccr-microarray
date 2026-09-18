@@ -25,7 +25,7 @@ router.use(apiLimiter);
 function resolveWithin(base, ...segments) {
   const resolvedBase = path.resolve(base);
   const resolved = path.resolve(resolvedBase, ...segments);
-  if (resolved !== resolvedBase && !resolved.startsWith(resolvedBase + path.sep)) {
+  if (!resolved.startsWith(resolvedBase + path.sep)) {
     throw new Error('Invalid path');
   }
   return resolved;
@@ -33,10 +33,9 @@ function resolveWithin(base, ...segments) {
 
 // remove previous result.
 // ssgseaHeatmap1.jpg
-function removeGSEAheatmap(uploadPath, projectId) {
-  const localPath = resolveWithin(uploadPath, projectId);
-  const plot = resolveWithin(localPath, 'ssgseaHeatmap1.jpg');
-  const txt = resolveWithin(localPath, 'ss_result.txt');
+function removeGSEAheatmap(projectDir) {
+  const plot = resolveWithin(projectDir, 'ssgseaHeatmap1.jpg');
+  const txt = resolveWithin(projectDir, 'ss_result.txt');
 
   [plot, txt].map((file) => {
     if (fs.existsSync(file)) fs.unlinkSync(file);
@@ -100,11 +99,19 @@ router.post('/upload', function (req, res) {
   // create an incoming form object
   var form = formidable({ multiples: true, maxTotalFileSize: Infinity });
   var pid = '';
+  // Set when projectId is missing or fails validation. Nothing touches the
+  // filesystem under the upload path until the id has been validated.
+  var invalidProjectId = false;
   // Emitted whenever a field / value pair has been received.
   form.on('field', function (name, value) {
     if (name == 'projectId') {
+      if (!validate(value)) {
+        invalidProjectId = true;
+        logger.warn('API:/upload ', 'rejected project ID');
+        return;
+      }
       pid = value;
-      form.uploadDir = path.join(config.uploadPath, '/' + value);
+      form.uploadDir = resolveWithin(config.uploadPath, value);
       if (!fs.existsSync(form.uploadDir)) {
         fs.mkdirSync(form.uploadDir);
       } else {
@@ -118,8 +125,16 @@ router.post('/upload', function (req, res) {
   // every time a file has been uploaded successfully,
   // rename it to it's orignal name
   form.on('file', function (field, file) {
+    // No validated project directory: discard the parsed temp file.
+    if (invalidProjectId || !pid) {
+      fs.rm(file.filepath, { force: true }, function () {});
+      return;
+    }
     number_of_files = number_of_files + 1;
-    fs.rename(file.filepath, path.join(form.uploadDir, file.originalFilename), (err) => {
+    // basename strips any directory component in the client-supplied name;
+    // resolveWithin is the backstop.
+    var destination = resolveWithin(form.uploadDir, path.basename(file.originalFilename));
+    fs.rename(file.filepath, destination, (err) => {
       if (err) throw logger.info('Rename  file name err' + err);
     });
   });
@@ -132,6 +147,10 @@ router.post('/upload', function (req, res) {
   });
   // once all the files have been uploaded, send a response to the client
   form.on('end', function () {
+    if (invalidProjectId || !pid) {
+      logger.info('API:/upload result ', 'status 404 ');
+      return res.json({ status: 404, msg: 'Invalid project ID' });
+    }
     let data = [];
     data.push('loadCEL'); // action
     data.push(pid);
@@ -168,6 +187,8 @@ router.post('/getConfiguration', function (req, res) {
 });
 
 router.post('/loadGSE', function (req, res) {
+  if (!validate(req.body.projectId))
+    return res.json({ status: 404, msg: 'Invalid project ID' });
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   // action
@@ -203,6 +224,8 @@ router.post('/loadGSE', function (req, res) {
 });
 
 router.post('/pathwaysHeapMap', function (req, res) {
+  if (!validate(req.body.projectId))
+    return res.json({ status: 404, msg: 'Invalid project ID' });
   let data = [];
   //the content in data array should follow the order. Code projectId groups action pDEGs foldDEGs pPathways
   data.push('pathwaysHeapMap');
@@ -257,7 +280,7 @@ router.post('/getssGSEAWithDiffGenSet', function (req, res) {
   data.push(req.body.group2);
   data.push(config.configPath);
   const ssProjectDir = resolveWithin(config.uploadPath, req.body.projectId);
-  removeGSEAheatmap(config.uploadPath, req.body.projectId);
+  removeGSEAheatmap(ssProjectDir);
   R.execute('wrapper.R', data, function (err, returnValue) {
     const ssResultPath = path.join(ssProjectDir, 'ss_result.txt');
     const errPath = path.join(ssProjectDir, 'ssgseaPathways.err');
@@ -396,7 +419,7 @@ router.post('/runContrast', function (req, res) {
   data.push(req.body.index);
   data.push(req.body.batches);
   data.push(req.body.chip || '');
-  removeGSEAheatmap(config.uploadPath, req.body.projectId);
+  removeGSEAheatmap(contrastProjectDir);
   logger.info('runContrast  R code ');
   R.execute('wrapper.R', data, function (err, returnValue) {
     if (fs.existsSync(path.join(contrastProjectDir, 'result.txt'))) {
