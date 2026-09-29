@@ -102,6 +102,8 @@ router.post('/upload', function (req, res) {
   // Set when projectId is missing or fails validation. Nothing touches the
   // filesystem under the upload path until the id has been validated.
   var invalidProjectId = false;
+  // Set when an uploaded part carries a filename that cannot name a file.
+  var invalidFilename = false;
   // Emitted whenever a field / value pair has been received.
   form.on('field', function (name, value) {
     if (name == 'projectId') {
@@ -130,12 +132,25 @@ router.post('/upload', function (req, res) {
       fs.rm(file.filepath, { force: true }, function () {});
       return;
     }
+    // basename strips any directory component in the client-supplied name,
+    // but returns '..', '.' and '' unchanged — and a throw here (inside a
+    // formidable event, outside Express error handling) would kill the
+    // process. Reject those names and keep resolveWithin as the backstop.
+    var safeName =
+      typeof file.originalFilename === 'string' ? path.basename(file.originalFilename) : '';
+    var destination;
+    try {
+      if (!safeName || safeName === '.' || safeName === '..') throw new Error('Invalid path');
+      destination = resolveWithin(form.uploadDir, safeName);
+    } catch (e) {
+      invalidFilename = true;
+      logger.warn('API:/upload ', 'rejected upload filename');
+      fs.rm(file.filepath, { force: true }, function () {});
+      return;
+    }
     number_of_files = number_of_files + 1;
-    // basename strips any directory component in the client-supplied name;
-    // resolveWithin is the backstop.
-    var destination = resolveWithin(form.uploadDir, path.basename(file.originalFilename));
     fs.rename(file.filepath, destination, (err) => {
-      if (err) throw logger.info('Rename  file name err' + err);
+      if (err) logger.warn('API:/upload ', 'rename failed: ' + err);
     });
   });
   // log any errors that occur
@@ -150,6 +165,10 @@ router.post('/upload', function (req, res) {
     if (invalidProjectId || !pid) {
       logger.info('API:/upload result ', 'status 404 ');
       return res.json({ status: 404, msg: 'Invalid project ID' });
+    }
+    if (invalidFilename) {
+      logger.info('API:/upload result ', 'status 404 ');
+      return res.json({ status: 404, msg: 'Invalid file name' });
     }
     let data = [];
     data.push('loadCEL'); // action
