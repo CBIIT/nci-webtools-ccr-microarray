@@ -104,6 +104,9 @@ router.post('/upload', function (req, res) {
   var invalidProjectId = false;
   // Set when an uploaded part carries a filename that cannot name a file.
   var invalidFilename = false;
+  // One promise per accepted file; the analysis starts only after all settle.
+  var pendingRenames = [];
+  var renameFailed = false;
   // Emitted whenever a field / value pair has been received.
   form.on('field', function (name, value) {
     if (name == 'projectId') {
@@ -149,9 +152,20 @@ router.post('/upload', function (req, res) {
       return;
     }
     number_of_files = number_of_files + 1;
-    fs.rename(file.filepath, destination, (err) => {
-      if (err) logger.warn('API:/upload ', 'rename failed: ' + err);
-    });
+    // The rename is asynchronous and 'end' fires when parsing ends, so the
+    // analysis must wait on every rename (and fail the request if one fails)
+    // rather than read a directory with files still in transit.
+    pendingRenames.push(
+      new Promise((resolve) => {
+        fs.rename(file.filepath, destination, (err) => {
+          if (err) {
+            renameFailed = true;
+            logger.warn('API:/upload ', 'rename failed: ' + err);
+          }
+          resolve();
+        });
+      })
+    );
   });
   // log any errors that occur
   form.on('error', function (err) {
@@ -161,7 +175,7 @@ router.post('/upload', function (req, res) {
     });
   });
   // once all the files have been uploaded, send a response to the client
-  form.on('end', function () {
+  form.on('end', async function () {
     if (invalidProjectId || !pid) {
       logger.info('API:/upload result ', 'status 404 ');
       return res.json({ status: 404, msg: 'Invalid project ID' });
@@ -169,6 +183,11 @@ router.post('/upload', function (req, res) {
     if (invalidFilename) {
       logger.info('API:/upload result ', 'status 404 ');
       return res.json({ status: 404, msg: 'Invalid file name' });
+    }
+    await Promise.all(pendingRenames);
+    if (renameFailed) {
+      logger.info('API:/upload result ', 'status 404 ');
+      return res.json({ status: 404, msg: 'File upload failed' });
     }
     let data = [];
     data.push('loadCEL'); // action
