@@ -59,7 +59,10 @@ test("deployment surfaces pass the controlled date into the frontend build", asy
     "utf8",
   );
 
-  assert.match(workflow, /DEPLOY_DATE=\$\(date \+"%Y-%m-%d"\)/);
+  assert.match(
+    workflow,
+    /DEPLOY_DATE=\$\(TZ=America\/New_York date \+"%Y-%m-%d"\)/,
+  );
   assert.match(
     workflow,
     /NEXT_PUBLIC_DEPLOY_DATE=\$\{\{ env\.DEPLOY_DATE \}\}/,
