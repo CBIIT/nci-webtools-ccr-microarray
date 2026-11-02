@@ -5,24 +5,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./Footer.module.css";
-
-function parseVersionAndDate(versionString: string | undefined) {
-  if (!versionString || versionString === "local")
-    return { version: "dev", date: new Date().toISOString().split("T")[0] };
-
-  const versionMatch = versionString.match(/(\d+\.\d+\.\d+)(_dev)?/);
-  const version = versionMatch ? versionMatch[1] + (versionMatch[2] || "") : versionString;
-
-  const dateMatch = versionString.match(/(\d{8})/)?.[1];
-  const date = dateMatch
-    ? `${dateMatch.slice(0, 4)}-${dateMatch.slice(4, 6)}-${dateMatch.slice(6, 8)}`
-    : new Date().toISOString().split("T")[0];
-
-  return { version, date };
-}
+import { parseFooterMetadata } from "./footerMetadata.mjs";
 
 export default function Footer() {
-  const { version, date } = parseVersionAndDate(process.env.NEXT_PUBLIC_APP_VERSION);
+  const { version, date } = parseFooterMetadata(
+    process.env.NEXT_PUBLIC_APP_VERSION,
+    process.env.NEXT_PUBLIC_DEPLOY_DATE,
+  );
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {

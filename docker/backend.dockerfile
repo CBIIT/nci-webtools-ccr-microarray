@@ -4,8 +4,8 @@ RUN dnf -y update \
     && dnf -y install spal-release \
     && dnf -y install \
     dnf-plugins-core \
-    nodejs22 \
-    nodejs22-npm \
+    nodejs24 \
+    nodejs24-npm \
     tar \
     gzip \
     git \
@@ -29,16 +29,7 @@ RUN dnf -y update \
     libuv-devel \
     && dnf clean all
 
-RUN ln -s -f /usr/bin/node-22 /usr/bin/node; ln -s -f /usr/bin/npm-22 /usr/bin/npm;
-
-# Restrict Python 3.9 to root only (security mitigation)
-RUN chmod 700 /usr/bin/python3.9
-
-# Upgrade bundled npm to a pinned current version whose vendored deps are
-# non-vulnerable. This supersedes the prior hand-maintained surgical patches for
-# picomatch / brace-expansion / ip-address, and also clears tar + @sigstore/core
-# flagged in the image scan (all shipped inside npm's own node_modules).
-RUN npm install -g npm@11.18.0
+RUN ln -s -f /usr/bin/node-24 /usr/bin/node; ln -s -f /usr/bin/npm-24 /usr/bin/npm;
 
 # Install R — PINNED to 4.3.2 (Amazon Linux 2023 native; no Posit SIGSEGV).
 # Pinning R is the linchpin for reproducible builds: BiocManager selects the
@@ -72,9 +63,18 @@ RUN set -e; \
     Rscript -e "remove.packages('webshot'); install.packages('${PKG}', repos=NULL, type='source')"; \
     rm -rf "${PKG}"
 
-# Install server npm dependencies
+# Install server npm dependencies, then strip the build-only tooling from the
+# image: npm (its vendored node_modules keep carrying CVEs) and Python 3.9
+# (only there for dnf; AL2023's build carries unfixed CVEs). The app runs only
+# `node` and `Rscript`, so no dnf/npm/python step may come after this one.
 COPY server/package.json server/package-lock.json ./
-RUN npm install
+RUN npm ci \
+    && npm cache clean --force \
+    && dnf remove -y nodejs24-npm \
+    && dnf clean all \
+    && rm -f /usr/bin/npm /usr/bin/npx \
+    && rpm -e --nodeps $(rpm -qa 'python3*') \
+    && rm -rf /usr/lib/python3.9 /usr/lib64/python3.9 /var/cache/dnf
 
 # Copy config and create microarray_setting.json
 COPY server/config ./config

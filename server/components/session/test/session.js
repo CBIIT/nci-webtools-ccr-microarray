@@ -1572,6 +1572,7 @@ describe('session()', function(){
           req.session.url = req.url
 
           if (req.url === '/bar') {
+            res.setHeader('Content-Type', 'text/plain')
             res.end('saw ' + req.session.url)
             return
           }
@@ -1583,6 +1584,7 @@ describe('session()', function(){
             if (err) return done(err)
             req.session.reload(function (err) {
               if (err) return done(err)
+              res.setHeader('Content-Type', 'text/plain')
               res.end('saw ' + req.session.url)
             })
           })

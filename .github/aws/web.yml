@@ -102,20 +102,29 @@ containerDefinitions:
         containerPath: "/data"
         readOnly: false
     logConfiguration:
-      logDriver: awsfirelens
+      # TEMP (debug): awslogs captures the backend's startup stderr directly, which
+      # firelens loses on a fast crash. Revert to the awsfirelens/datadog block below
+      # once the crash is diagnosed.
+      logDriver: awslogs
       options:
-        Name: datadog
-        tls: "on"
-        tls.verify: "off"
-        dd_service: "${TIER}-${APP}-backend"
-        dd_source: "nodejs"
-        dd_tags: "project:${APP} tier:${TIER}"
-        provider: ecs
-      secretOptions:
-        - name: Host
-          valueFrom: /analysistools/${TIER}/datadog/log_endpoint_host
-        - name: apikey
-          valueFrom: /analysistools/${TIER}/datadog/api_key
+        awslogs-group: "/analysistools/${TIER}/${APP}/web"
+        awslogs-region: "${AWS_REGION}"
+        awslogs-stream-prefix: backend
+        awslogs-create-group: "true"
+      # logDriver: awsfirelens
+      # options:
+      #   Name: datadog
+      #   tls: "on"
+      #   tls.verify: "off"
+      #   dd_service: "${TIER}-${APP}-backend"
+      #   dd_source: "nodejs"
+      #   dd_tags: "project:${APP} tier:${TIER}"
+      #   provider: ecs
+      # secretOptions:
+      #   - name: Host
+      #     valueFrom: /analysistools/${TIER}/datadog/log_endpoint_host
+      #   - name: apikey
+      #     valueFrom: /analysistools/${TIER}/datadog/api_key
 tags:
   - key: Project
     value: "${APP}"
