@@ -37,9 +37,12 @@ RUN ln -s -f /usr/bin/node-24 /usr/bin/node; ln -s -f /usr/bin/npm-24 /usr/bin/n
 # clean (cache-free) rebuild pull a newer R -> newer Bioconductor -> newer oligo,
 # which regressed with a SIGSEGV in oligo's CEL reader on 2026-06-24.
 # See docs/incident-2026-06-24-r-sigsegv.md.
+# CRAN is pinned to a dated snapshot for the same reason: live CRAN can publish a
+# package that needs a newer R, which R 4.3.2 then reports as unavailable (rsvd 2.0.0
+# broke the build this way on 2026-11-02). Bump the date deliberately to take updates.
 ENV TAR="/usr/bin/tar --no-same-owner"
 RUN dnf install -y R-4.3.2 \
-    && echo 'options(repos = c(CRAN = "https://cloud.r-project.org"))' \
+    && echo 'options(repos = c(CRAN = "https://packagemanager.posit.co/cran/2026-10-29"))' \
        >> /usr/lib64/R/etc/Rprofile.site
 
 RUN mkdir -p /app/server
